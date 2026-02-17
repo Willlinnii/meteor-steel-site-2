@@ -63,6 +63,32 @@
   fill-opacity: 1 !important;
 }
 
+/* ===== LIVE TOGGLE ===== */
+
+.live-toggle {
+  position: absolute;
+  bottom: -30px;
+  right: 20px;
+  background: none;
+  border: 1px solid var(--accent-ember);
+  color: var(--accent-ember);
+  font-size: 1.5rem;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  opacity: 0.7;
+}
+
+.live-toggle:hover {
+  opacity: 1;
+  background: rgba(196, 113, 58, 0.1);
+  box-shadow: 0 0 10px rgba(196, 113, 58, 0.3);
+}
+
 /* ===== ALIGN TOGGLE ===== */
 
 .align-toggle {
@@ -87,6 +113,59 @@
   opacity: 1;
   background: rgba(196, 113, 58, 0.1);
   box-shadow: 0 0 10px rgba(196, 113, 58, 0.3);
+}
+
+/* ===== CALENDAR TOGGLE ===== */
+
+.calendar-toggle {
+  position: absolute;
+  bottom: -30px;
+  right: -80px;
+  background: none;
+  border: 1px solid rgba(139, 195, 170, 0.5);
+  color: rgba(139, 195, 170, 0.8);
+  font-size: 1.2rem;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  opacity: 0.7;
+}
+
+.calendar-toggle:hover {
+  opacity: 1;
+  background: rgba(139, 195, 170, 0.1);
+  box-shadow: 0 0 10px rgba(139, 195, 170, 0.3);
+}
+
+/* ===== MONTH RING ===== */
+
+.month-segment text {
+  transition: fill 0.3s ease;
+}
+
+.month-segment:hover text {
+  fill: rgba(139, 195, 170, 0.85) !important;
+}
+
+.month-segment.active text {
+  fill: #5acea0 !important;
+}
+
+/* ===== MONTH MOOD ===== */
+
+.month-mood {
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: var(--text-primary);
+  font-style: italic;
+  padding: 14px 18px;
+  background: rgba(139, 195, 170, 0.05);
+  border-left: 3px solid rgba(139, 195, 170, 0.4);
+  margin-bottom: 16px;
 }
 
 /* ===== ZODIAC SIGNS ===== */
@@ -577,7 +656,21 @@
 
   .align-toggle {
     right: auto;
-    left: 50%;
+    left: calc(50% + 25px);
+    transform: translateX(-50%);
+    bottom: -40px;
+  }
+
+  .live-toggle {
+    right: auto;
+    left: calc(50% - 25px);
+    transform: translateX(-50%);
+    bottom: -40px;
+  }
+
+  .calendar-toggle {
+    right: auto;
+    left: calc(50% + 75px);
     transform: translateX(-50%);
     bottom: -40px;
   }

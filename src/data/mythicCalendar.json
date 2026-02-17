@@ -1,0 +1,530 @@
+[
+  {
+    "month": "January",
+    "shortName": "Jan",
+    "order": 1,
+    "stone": {
+      "name": "Garnet",
+      "description": "Garnet, glowing in deep reds and embers, has long symbolized protection, vitality, and safe passage through darkness. Ancient travelers carried garnets as talismans, believing they could light the night and guide the way home. Its color evokes both the warmth of the hearth and the hidden fire beneath winter's stillness. Mythically, garnet is the coal carried forward from the old year — the enduring spark that sustains life as a new cycle begins."
+    },
+    "flower": {
+      "name": "Carnation & Snowdrop",
+      "description": "Carnations symbolize devotion, endurance, and love that persists through hardship, while snowdrops are among the first flowers to bloom through snow, heralding hope and renewal. Together they represent resilience in winter and the promise of life returning beneath the frost. Mythically, they are the quiet messengers of perseverance and faith in the coming spring."
+    },
+    "holidays": [
+      {
+        "name": "New Year's Day",
+        "description": "New Year's Day marks the turning of the calendar and the ritual reset of time itself. Across cultures, it has been a moment for reflection, resolution, and the symbolic cleansing of the past. Mythically, it represents the opening of the cosmic gate — the threshold where endings dissolve and possibility begins anew."
+      },
+      {
+        "name": "Martin Luther King Jr. Day",
+        "description": "Martin Luther King Jr. Day honors the life and legacy of the civil rights leader whose vision of equality and justice reshaped American history. The day reflects the power of nonviolence, courage, and moral clarity in the pursuit of a more just world. Mythically, it celebrates the archetype of the prophetic voice — the figure who calls society toward its highest ideals."
+      },
+      {
+        "name": "Bodhi Day",
+        "description": "Bodhi Day commemorates the enlightenment of Siddhartha Gautama, the Buddha, who attained awakening beneath the Bodhi tree. It represents the possibility of liberation through insight, compassion, and inner transformation. Mythically, Bodhi Day symbolizes the awakening of consciousness — the realization that clarity can arise even in the depths of winter."
+      },
+      {
+        "name": "Lunar New Year (sometimes in late January)",
+        "description": "Lunar New Year marks the beginning of the year in many Asian cultures, guided by lunar cycles and zodiac traditions. Celebrations include family gatherings, renewal rituals, and the honoring of ancestors. Mythically, it represents the rebirth of time through cosmic rhythm — the renewal of fortune, family bonds, and shared hope."
+      }
+    ],
+    "mood": "January is the month of beginnings and quiet resolve. The world remains still and cold, yet the new year has opened its gates. Mythically, January represents intention and potential — the first steps into an unknown journey, guided by the ember of hope carried forward from the past."
+  },
+  {
+    "month": "February",
+    "shortName": "Feb",
+    "order": 2,
+    "stone": {
+      "name": "Amethyst",
+      "description": "Amethyst, the violet stone of clarity and spiritual insight, has long been associated with sobriety, protection, and sacred wisdom. In Greek tradition it was believed to guard against intoxication, while in Christian symbolism it became a stone of devotion and spiritual balance. Its deep purple evokes twilight — the meeting place of night and day. Mythically, amethyst represents inner clarity and the calming of the mind before the year begins to stir toward spring."
+    },
+    "flower": {
+      "name": "Violet & Primrose",
+      "description": "Violets symbolize humility, faithfulness, and quiet devotion, blooming low to the ground yet rich in color and fragrance. Primroses, among the earliest spring flowers, represent young love and the first stirring of new life. Together they embody gentle affection and the subtle awakening of the heart as winter begins to soften. Mythically, they are the first whispers of spring."
+    },
+    "holidays": [
+      {
+        "name": "Black History Month",
+        "description": "Black History Month honors the history, culture, and achievements of Black communities, recognizing stories that have shaped nations and the world. It is a time of remembrance, education, and celebration of resilience and creativity. Mythically, it reflects the archetype of remembrance and restoration — the reclaiming of stories that must be told so the collective story can be whole."
+      },
+      {
+        "name": "Sangha Day",
+        "description": "Sangha Day, celebrated in Buddhist traditions, honors the community of monks and practitioners who preserve and share the teachings of the Buddha. It recognizes the importance of spiritual community and collective support on the path of awakening. Mythically, it represents the power of shared journey — the truth that transformation is sustained through community."
+      },
+      {
+        "name": "Lent (sometimes begins in February)",
+        "description": "When Lent begins in February, it introduces the season of fasting, reflection, and preparation for renewal. It is a period of humility and inward focus that precedes the rebirth of spring. Mythically, it marks the early descent — the first step into the inner wilderness before transformation emerges."
+      },
+      {
+        "name": "Valentine's Day",
+        "description": "Valentine's Day celebrates love, affection, and romantic connection. Its roots trace to both Christian tradition and older spring fertility rituals. Mythically, it represents the awakening of the heart and the reemergence of love and connection after winter's isolation."
+      },
+      {
+        "name": "Lunar New Year (often in February)",
+        "description": "Lunar New Year celebrates renewal, family, and the turning of the zodiac cycle. It emphasizes reunion, good fortune, and the honoring of ancestors. Mythically, it represents the rebirth of time through cosmic rhythm and the renewal of hope and prosperity."
+      }
+    ],
+    "mood": "February is the quiet turning point between winter and spring. Beneath the cold, life begins to stir, and the heart begins to awaken. Mythically, February represents love, remembrance, and the first signs of transformation — the moment before the year begins to bloom."
+  },
+  {
+    "month": "March",
+    "shortName": "Mar",
+    "order": 3,
+    "stone": {
+      "name": "Aquamarine",
+      "description": "Aquamarine, the pale blue-green gem of the sea, has long been associated with sailors, mermaids, and the promise of safe passage through uncertain waters. In mythic symbolism it represents clarity after turbulence — the moment when winter's storms begin to calm and the horizon becomes visible again. Ancient Romans believed it came from the treasure chests of sea spirits and carried the power to soothe fear and sharpen perception. As March stands on the threshold between seasons, Aquamarine becomes a stone of courage and emotional renewal, encouraging truth-telling, purification, and the gentle return of hope."
+    },
+    "flower": {
+      "name": "Daffodil",
+      "description": "The daffodil is one of the first flowers to break through the cold soil, making it a universal symbol of rebirth and awakening. Its mythic roots reach back to the Greek story of Narcissus, where the flower marks the boundary between self-absorption and transformation, reminding us that identity must periodically dissolve to be reborn. Across cultures, the daffodil signals the return of sunlight and the reanimation of the living world. In the calendar of the year, it stands as a trumpet announcing spring's arrival — a bright, golden messenger proclaiming that life persists beneath the surface even in the darkest months."
+    },
+    "holidays": [
+      {
+        "name": "International Women's Month",
+        "description": "International Women's Month celebrates the achievements, struggles, and contributions of women across cultures and history. Its mythic resonance lies in honoring the generative and creative forces often symbolized by the feminine — birth, resilience, protection, and transformation. From ancient goddesses of fertility and wisdom to modern movements for equality and justice, the observance reflects a long arc of cultural evolution. In the mythic calendar, it marks a time of honoring the power that gives life, sustains communities, and remembers voices that history has often overlooked."
+      },
+      {
+        "name": "Easter (sometimes in March)",
+        "description": "When Easter falls in March, it aligns directly with the spring equinox season, reinforcing its central theme of resurrection and renewal. Rooted in the Christian story of the resurrection of Jesus, the holiday echoes older seasonal myths of dying and rising gods tied to agricultural cycles. Easter symbolizes the triumph of life over death and hope over despair, mirroring the natural world's reawakening after winter. It is a festival of emergence, forgiveness, and the promise that endings can give way to new beginnings."
+      },
+      {
+        "name": "St. Patrick's Day",
+        "description": "St. Patrick's Day commemorates the Irish patron saint traditionally credited with spreading Christianity across Ireland. Over time, the celebration has grown into a broader festival of Irish culture, heritage, and the arrival of spring. Mythically, the holiday is tied to the greening of the land, the banishing of serpents as symbols of chaos, and the transformation of wilderness into sacred landscape. It celebrates cultural identity, storytelling, and the joy of communal belonging."
+      },
+      {
+        "name": "Nowruz (Persian / Zoroastrian New Year)",
+        "description": "Nowruz, meaning \"new day,\" marks the Persian New Year at the spring equinox and has been celebrated for over three thousand years. Rooted in Zoroastrian cosmology, it honors the triumph of light over darkness and the renewal of the world. Rituals such as the Haft-Seen table symbolize prosperity, health, patience, and rebirth. In mythic terms, Nowruz represents the cosmic reset — the moment when time begins again and balance returns to the universe."
+      },
+      {
+        "name": "Lent (continues through March)",
+        "description": "Lent is the Christian season of fasting, reflection, and spiritual preparation leading up to Easter. Inspired by the forty days Jesus spent in the wilderness, it represents the archetypal descent into introspection and self-discipline. This period emphasizes humility, sacrifice, and the clearing away of excess in order to prepare for renewal. Mythically, Lent is the journey into the inner desert, where transformation begins in stillness and restraint."
+      }
+    ],
+    "mood": "March is the threshold month, the liminal crossing from winter's inwardness to spring's outward expression. It carries the energy of emergence, courage, and preparation for growth. The earth softens, waters run again, and the world begins to breathe outward. Mythically, March is the hero's return from the underworld — not yet triumphant, but alive, cleansed, and ready to begin the next chapter. It is a time of courage, clarity, and quiet beginnings, when the year remembers how to start again."
+  },
+  {
+    "month": "April",
+    "shortName": "Apr",
+    "order": 4,
+    "stone": {
+      "name": "Diamond",
+      "description": "Diamond has long symbolized invincibility, purity, and the paradox of strength born from pressure. Formed deep within the earth under immense heat and force, it represents the mythic idea that clarity and brilliance emerge through endurance. In ancient India, diamonds were believed to hold lightning within them, linking the stone to divine illumination and spiritual power. As April opens fully into spring, the diamond reflects the sharpening light of the year — clarity of vision, commitment, and the courage to embody truth without compromise."
+    },
+    "flower": {
+      "name": "Daisy",
+      "description": "The daisy, with its radiant center and white petals, has symbolized innocence, renewal, and the simplicity of joy across many cultures. Its name comes from \"day's eye,\" reflecting how it opens with the sun and closes at night, embodying the rhythm of waking life. In mythic symbolism, the daisy represents childlike wonder and the reawakening of trust after winter's severity. In April's unfolding world, it becomes a quiet reminder that renewal is not only grand and dramatic — it is also gentle, playful, and rooted in the everyday miracle of light returning."
+    },
+    "holidays": [
+      {
+        "name": "Earth Day",
+        "description": "Earth Day, celebrated on April 22, is a modern ritual of planetary awareness that emerged from the environmental movement of the late 20th century. Its mythic resonance lies in reframing the Earth as a living, shared home rather than a backdrop for human activity. It invites a collective remembering that humans belong to the web of life, echoing ancient traditions that honored the Earth as mother, goddess, or sacred ground. In the mythic calendar, Earth Day marks a moment of renewed covenant between humanity and the living world."
+      },
+      {
+        "name": "Nuzul al-Qur'an",
+        "description": "Nuzul al-Qur'an commemorates the night when the first verses of the Qur'an were revealed to the Prophet Muhammad during Ramadan. The event symbolizes divine revelation entering human history, the moment when sacred speech descends into language and culture. In the mythic sense, it represents the archetype of illumination — the arrival of guidance in times of uncertainty. This observance reminds the world that wisdom is not only discovered but also received, and that revelation transforms both the individual and the collective."
+      },
+      {
+        "name": "Easter (sometimes in April)",
+        "description": "When Easter falls in April, it lands squarely within the blossoming of spring, reinforcing its central theme of resurrection and rebirth. Rooted in the Christian story of the resurrection of Jesus, the holiday echoes older seasonal myths of dying and rising gods tied to agricultural renewal. Easter symbolizes the triumph of life over death and hope over despair, aligning the spiritual narrative of renewal with the visible rebirth of the natural world."
+      },
+      {
+        "name": "Ramadan (sometimes overlapping April)",
+        "description": "Ramadan is the Islamic month of fasting, prayer, and spiritual reflection, observed from dawn to sunset each day. Beyond discipline, it represents purification of the heart and the strengthening of compassion and generosity. Mythically, Ramadan mirrors the archetypal journey inward — the voluntary descent into restraint and reflection so that the soul can emerge clearer and more aligned. It is a sacred rhythm of self-mastery, empathy, and devotion."
+      },
+      {
+        "name": "Ram Navami",
+        "description": "Ram Navami celebrates the birth of Lord Rama, a central hero of the Hindu epic Ramayana. Rama embodies righteousness, moral courage, and the triumph of justice over chaos. His birth is seen as the arrival of divine order into the human world. Within the mythic calendar, this festival symbolizes the reappearance of the noble hero archetype — the reminder that integrity, duty, and compassion remain guiding lights in times of uncertainty."
+      },
+      {
+        "name": "Mahavir Jayanti",
+        "description": "Mahavir Jayanti honors the birth of Mahavira, the 24th Tirthankara of Jainism and a teacher of nonviolence, truth, and liberation from worldly attachment. His life represents radical compassion and the possibility of spiritual freedom through disciplined ethical living. Mythically, this observance highlights the archetype of the sage who renounces power and violence to embody peace. It offers a vision of strength expressed through gentleness and restraint."
+      }
+    ],
+    "mood": "April is the month of full awakening, when the promise of spring becomes undeniable. Where March was threshold, April is emergence into action. The world is green, the days lengthen, and life insists on participation. Mythically, April represents revelation and commitment — the moment when insight becomes responsibility and renewal becomes stewardship. It is the season of vows, awakenings, and the realization that the reborn world now asks something of us in return."
+  },
+  {
+    "month": "May",
+    "shortName": "May",
+    "order": 5,
+    "stone": {
+      "name": "Emerald",
+      "description": "Emerald, with its deep and luminous green, has long symbolized fertility, rebirth, and the flourishing of life. In ancient Egypt it was sacred to Isis, goddess of magic and motherhood, while in medieval Europe it was believed to grant foresight and protect the heart. Its color mirrors the full return of vegetation in late spring, when the earth reaches peak renewal. Mythically, emerald represents the heart awakened — growth not just of the land but of love, compassion, and vitality."
+    },
+    "flower": {
+      "name": "Lily of the Valley",
+      "description": "Lily of the valley, with its delicate white bells and sweet fragrance, symbolizes humility, joy, and the return of happiness. In Christian symbolism it is associated with purity and the tears of Mary, while in European folklore it was believed to bring luck and protect gardens from evil spirits. Blooming in the fullness of spring, it represents quiet beauty and the gentle rewards of patience. In the mythic calendar, it speaks to the subtle, intimate joys that emerge once life has fully returned."
+    },
+    "holidays": [
+      {
+        "name": "Mythic Association — Maia / Maya",
+        "description": "The month of May takes its name from Maia, a Roman goddess of growth and nurturing warmth, later connected with the Greek Maia, mother of Hermes and associated with springtime abundance. Across cultures, the name echoes the archetype of the Great Mother and the generative power of the earth. May thus carries a deep mythic resonance as a month of fertility, creativity, and flourishing. It marks the season when the world not only awakens but begins to thrive."
+      },
+      {
+        "name": "May Day",
+        "description": "May Day, celebrated on May 1, has roots in ancient European spring festivals such as Beltane, which honored fertility, fire, and the blossoming of life. Traditions like dancing around the maypole and crowning a May Queen symbolized the union of earth and sky and the generative power of nature. In modern times, May Day also became associated with labor movements and workers' rights, adding a layer of social renewal and solidarity. Mythically, it celebrates vitality, joy, and the communal celebration of life's abundance."
+      },
+      {
+        "name": "Cinco de Mayo",
+        "description": "Cinco de Mayo commemorates the Mexican victory over French forces at the Battle of Puebla in 1862. While often mistaken for Mexican Independence Day, it symbolizes resilience, cultural pride, and the triumph of the underdog. In the mythic calendar, it represents courage in the face of overwhelming odds and the preservation of identity and heritage through collective strength."
+      },
+      {
+        "name": "Graduation Rituals",
+        "description": "Graduation ceremonies mark the transition from one life stage to another, echoing ancient rites of passage found in cultures around the world. The caps, gowns, and processions mirror initiation rituals that symbolized entry into adulthood or new social roles. Mythically, graduation represents the crossing of a threshold — the hero leaving the training ground and stepping into the wider world equipped with knowledge and responsibility."
+      },
+      {
+        "name": "Mother's Day",
+        "description": "Mother's Day honors the role of mothers and caregivers, echoing ancient festivals dedicated to mother goddesses such as Rhea, Cybele, and Isis. The holiday celebrates nurturing, sacrifice, and the generative forces that sustain life. In mythic terms, it is a tribute to the archetypal Mother — the source of care, protection, and unconditional love."
+      },
+      {
+        "name": "Memorial Day",
+        "description": "Memorial Day is a day of remembrance for those who died in military service. Emerging after the American Civil War, it became a national ritual of honoring sacrifice and collective memory. Mythically, it reflects the archetype of the honored dead and the sacred duty of remembrance. It calls communities to pause, reflect, and acknowledge the cost of conflict and the value of peace."
+      },
+      {
+        "name": "Star Wars Day (May the 4th)",
+        "description": "Star Wars Day celebrates the cultural phenomenon of the Star Wars saga and its enduring mythic storytelling. The phrase \"May the Force be with you\" echoes themes of destiny, balance, and the hero's journey. Though modern and playful, the celebration reflects humanity's timeless love of epic narratives, archetypal heroes, and the struggle between light and darkness."
+      }
+    ],
+    "mood": "May is the month of flourishing, when spring reaches its fullest expression and life bursts into color and activity. It is a time of celebration, transitions, and gratitude for the forces that nurture and sustain growth. Mythically, May represents abundance, courage, and the crossing of thresholds into new phases of life. It is the season when the promise of spring becomes the fullness of living."
+  },
+  {
+    "month": "June",
+    "shortName": "Jun",
+    "order": 6,
+    "stone": {
+      "name": "Moonstone",
+      "description": "Moonstone has long been associated with intuition, dreams, and the rhythms of the moon. In Roman tradition it was believed to be formed from solidified moonlight, and in India it has been revered as a sacred stone of love and spiritual insight. Its luminous sheen evokes the changing phases of the moon and the mysteries of the night sky. Mythically, moonstone symbolizes emotional depth, cyclical renewal, and the unseen forces that guide transformation."
+    },
+    "flower": {
+      "name": "Rose & Honeysuckle",
+      "description": "The rose has been a universal symbol of love, beauty, and devotion for millennia, sacred to goddesses such as Aphrodite and Venus and deeply woven into poetry and romance. Honeysuckle, with its sweet fragrance and climbing vines, symbolizes bonds of affection and the enduring ties of love. Together, these flowers represent both passionate and enduring love — romance, connection, and the flourishing of relationships under the warmth of early summer."
+    },
+    "holidays": [
+      {
+        "name": "Pride Month",
+        "description": "Pride Month commemorates the ongoing struggle for LGBTQ+ rights and celebrates identity, visibility, and community. Its roots trace to the Stonewall uprising of 1969, a turning point in the fight for equality. Mythically, Pride reflects the archetype of authenticity and self-revelation — the courage to step into one's true identity and to celebrate diversity as a source of collective strength. It marks a season of visibility, celebration, and the affirmation of belonging."
+      },
+      {
+        "name": "Aquarium Month",
+        "description": "Aquarium Month highlights the world beneath the waves, encouraging awareness of oceans, marine life, and aquatic ecosystems. Symbolically, it invites attention to the hidden realms of the planet and the delicate balance of life sustained by water. In mythic terms, it connects to ancient stories of sea gods, mermaids, and the primordial waters from which life emerges, reminding us of humanity's deep relationship with the ocean."
+      },
+      {
+        "name": "Myth of Juno / Hera",
+        "description": "June is traditionally associated with Juno, the Roman queen of the gods, known as Hera in Greek mythology. She presided over marriage, family, and the protection of women, which is why June has long been considered an auspicious month for weddings. Mythically, Juno represents commitment, partnership, and the sacred bonds that hold families and communities together."
+      },
+      {
+        "name": "Juneteenth",
+        "description": "Juneteenth commemorates June 19, 1865, when enslaved people in Texas were finally informed of their freedom following the American Civil War. It celebrates emancipation, resilience, and the ongoing pursuit of justice and equality. Mythically, Juneteenth reflects the archetype of liberation — the breaking of chains and the affirmation of human dignity."
+      },
+      {
+        "name": "Midsummer / Summer Solstice Traditions",
+        "description": "The summer solstice marks the longest day of the year in the Northern Hemisphere and has been celebrated across cultures for thousands of years. Festivals of fire, feasting, and community honor the sun at its peak strength. Mythically, it represents abundance, vitality, and the full expression of life's energy."
+      },
+      {
+        "name": "Dragon Boat Festival",
+        "description": "The Dragon Boat Festival, rooted in Chinese tradition, commemorates the poet Qu Yuan and celebrates cultural heritage through boat races, rituals, and communal gatherings. Mythically, the dragon symbolizes power, protection, and the life-giving force of water, making the festival a celebration of courage, loyalty, and collective memory."
+      },
+      {
+        "name": "Father's Day",
+        "description": "Father's Day honors fathers and paternal figures, celebrating guidance, protection, and support. Mythically, it connects to the archetype of the protector and mentor, recognizing the role of fathers in shaping families and communities."
+      },
+      {
+        "name": "Inti Raymi (Festival of the Sun)",
+        "description": "Inti Raymi is an ancient Incan festival honoring Inti, the sun god, and celebrating the winter solstice in the Southern Hemisphere. The festival symbolizes renewal, gratitude, and the sustaining power of the sun. Mythically, it represents humanity's enduring relationship with the celestial forces that sustain life."
+      }
+    ],
+    "mood": "June is the month of light and fullness, when the sun reaches its peak and the world feels expansive and alive. It celebrates love, identity, liberation, and the bonds that connect individuals and communities. Mythically, June represents illumination and connection — the season when life stands fully in the light."
+  },
+  {
+    "month": "July",
+    "shortName": "Jul",
+    "order": 7,
+    "stone": {
+      "name": "Ruby",
+      "description": "Ruby, with its deep crimson glow, has long symbolized vitality, courage, and the fire of the heart. In ancient India it was called the \"king of precious stones\" and believed to contain an inner flame that could never be extinguished. Warriors wore rubies for protection in battle, and many cultures linked the gem to life force, passion, and leadership. Mythically, ruby represents the blazing center of summer — the courage to live boldly, the heat of devotion, and the power of the heart at full intensity."
+    },
+    "flower": {
+      "name": "Water Lily",
+      "description": "The water lily rises from murky waters to bloom in serene beauty, making it a powerful symbol of spiritual awakening and transformation. In Egyptian mythology it was linked to the sun and rebirth, opening each morning and closing at night. Across cultures, the flower represents purity emerging from chaos and the unfolding of inner potential. In the mythic calendar, the water lily mirrors the sunlit stillness of midsummer and the quiet depth beneath the surface of life."
+    },
+    "holidays": [
+      {
+        "name": "Julius Caesar Associations",
+        "description": "July is named after Julius Caesar, the Roman leader whose reforms reshaped the calendar and left a lasting imprint on Western history. His name marks the month as one associated with leadership, ambition, and the transformation of political order. Mythically, Caesar represents the archetype of the ruler and reformer — the figure who reshapes time itself and leaves a legacy that outlives the individual."
+      },
+      {
+        "name": "American Independence Day",
+        "description": "Celebrated on July 4, this holiday commemorates the adoption of the Declaration of Independence in 1776. It symbolizes the birth of a nation founded on ideals of liberty and self-governance. Mythically, Independence Day reflects the archetype of the revolutionary hero — the moment when a people step into self-determination and claim a new identity."
+      },
+      {
+        "name": "International Independence Themes",
+        "description": "July resonates globally with themes of independence and national identity, as many countries celebrate liberation and self-governance throughout the summer months. These observances collectively highlight humanity's recurring story of resistance, self-definition, and the formation of new societies. Mythically, this is the season of sovereignty — the assertion of identity on both personal and collective levels."
+      },
+      {
+        "name": "First Moon Landing Anniversary",
+        "description": "The anniversary of the Apollo 11 moon landing on July 20, 1969 marks humanity's first steps on another world. This event represents technological achievement, exploration, and the expansion of human horizons. Mythically, it echoes ancient dreams of reaching the heavens and stepping beyond earthly boundaries, transforming the moon from a distant symbol into a place touched by human feet."
+      },
+      {
+        "name": "Eid al-Adha (sometimes in July)",
+        "description": "Eid al-Adha, the Islamic Festival of Sacrifice, honors the willingness of Ibrahim (Abraham) to sacrifice his son in obedience to God. The holiday emphasizes faith, generosity, and compassion, with acts of charity and communal celebration. Mythically, it represents devotion and the profound trust required in moments of spiritual testing."
+      },
+      {
+        "name": "Abraham & Isaac Associations",
+        "description": "The story of Abraham and Isaac, central to Jewish, Christian, and Islamic traditions, explores faith, sacrifice, and divine mercy. The narrative culminates in the sparing of Isaac and the reaffirmation of covenant. Mythically, it represents the tension between devotion and compassion, and the transformation of sacrifice into trust."
+      },
+      {
+        "name": "UFO Day",
+        "description": "World UFO Day, celebrated in early July, reflects modern fascination with the possibility of life beyond Earth. Rooted in mid-20th century sightings and cultural imagination, it speaks to humanity's enduring curiosity about the unknown. Mythically, it represents the archetype of cosmic mystery — the sense that humanity is part of a much larger universe waiting to be explored."
+      }
+    ],
+    "mood": "July is the month of sovereignty, courage, and exploration. The heat of summer reaches its peak, mirroring themes of independence, leadership, and the expansion of human horizons. Mythically, July represents the hero stepping into authority and venturing beyond known boundaries, guided by the fire of purpose and the call of the unknown."
+  },
+  {
+    "month": "August",
+    "shortName": "Aug",
+    "order": 8,
+    "stone": {
+      "name": "Sardonyx",
+      "description": "Sardonyx, a layered stone of red, white, and brown bands, has been associated since antiquity with strength, protection, and eloquence. Roman soldiers wore sardonyx talismans engraved with heroes and gods to inspire courage and victory, while ancient speakers believed it granted persuasive power. Its layered structure mirrors the complexity of character forged over time. Mythically, sardonyx represents integrity, resilience, and the shaping of identity through experience."
+    },
+    "flower": {
+      "name": "Poppy & Gladiolus",
+      "description": "The poppy has long symbolized sleep, dreams, and remembrance, tied to ancient myths of the god Morpheus and later to collective memory and sacrifice. Gladiolus, named after the Latin word for sword, symbolizes strength, honor, and moral integrity. Together they represent both remembrance and courage — honoring the past while standing upright in the present. In the mythic calendar, they speak to the balance of reflection and bravery."
+    },
+    "holidays": [
+      {
+        "name": "Ghost Month (Hungry Ghost Festival Season)",
+        "description": "In many East Asian traditions, the seventh lunar month is believed to be a time when the boundary between the living and the spirit world grows thin. During the Hungry Ghost Festival, offerings are made to wandering spirits and ancestors to ensure harmony and respect between realms. Mythically, this season acknowledges the unseen world and the importance of remembrance, gratitude, and balance between past and present."
+      },
+      {
+        "name": "Islamic New Year (Hijri New Year)",
+        "description": "The Islamic New Year marks the beginning of the Hijri calendar, commemorating the migration (Hijra) of the Prophet Muhammad from Mecca to Medina in 622 CE. This event represents renewal, courage, and the formation of community under faith. Mythically, it symbolizes the journey of transformation — the willingness to leave the familiar in order to begin a new chapter guided by purpose."
+      },
+      {
+        "name": "Assumption of Mary",
+        "description": "Celebrated on August 15 in many Christian traditions, the Assumption of Mary commemorates the belief that Mary was taken body and soul into heaven. The feast honors purity, devotion, and the sacred feminine elevated to the divine realm. Mythically, it reflects the archetype of ascension and the honoring of the nurturing, compassionate force embodied by Mary."
+      }
+    ],
+    "mood": "August is a month of reflection and maturity, when summer begins to soften and the first hints of transition appear. It holds themes of remembrance, spiritual awareness, and the honoring of ancestors and tradition. Mythically, August represents the thinning veil between worlds and the recognition that the visible and invisible are always intertwined."
+  },
+  {
+    "month": "September",
+    "shortName": "Sep",
+    "order": 9,
+    "stone": {
+      "name": "Sapphire",
+      "description": "Sapphire has long symbolized wisdom, truth, and divine favor. In ancient Persia it was believed the sky itself was painted blue by the reflection of a giant sapphire, while medieval clergy wore it as a sign of heavenly devotion and moral clarity. Associated with insight and integrity, sapphire represents the sharpening of mind and spirit. As autumn approaches, the stone reflects the season's shift toward reflection, discernment, and the pursuit of truth."
+    },
+    "flower": {
+      "name": "Aster",
+      "description": "The aster, whose name means \"star,\" blooms as many summer flowers begin to fade, symbolizing endurance, wisdom, and the quiet beauty of transition. In Greek myth, asters were said to grow from the tears of the goddess Astraea as she looked down upon the earth. Their star-like shape connects them to hope and guidance, making them a fitting emblem for the season when the year begins to turn inward."
+    },
+    "holidays": [
+      {
+        "name": "Labor Day",
+        "description": "Labor Day honors the contributions and achievements of workers and the labor movement. Emerging in the late 19th century during the rise of industrialization, it became a recognition of collective effort and the dignity of work. Mythically, the holiday represents the archetype of the builder — the countless hands that shape societies and sustain communities."
+      },
+      {
+        "name": "Rosh Hashanah",
+        "description": "Rosh Hashanah, the Jewish New Year, marks the beginning of the High Holy Days and the start of a period of reflection and renewal. It is traditionally understood as the day the world was created, making it a cosmic anniversary of creation itself. Symbolically, it invites self-examination and the renewal of intention as a new spiritual year begins."
+      },
+      {
+        "name": "Yom Kippur",
+        "description": "Yom Kippur, the Day of Atonement, is the holiest day in Judaism, dedicated to fasting, repentance, and reconciliation. It concludes the Ten Days of Awe that begin with Rosh Hashanah. Mythically, it represents the archetype of purification and forgiveness — the moment of reckoning that allows renewal and healing to take place."
+      },
+      {
+        "name": "Constitution Day",
+        "description": "Constitution Day commemorates the signing of the United States Constitution on September 17, 1787. It marks the creation of a framework for governance and the ideals of law, order, and shared responsibility. Mythically, it represents the formation of social covenant — the collective agreement that shapes how a society chooses to live together."
+      }
+    ],
+    "mood": "September is the threshold of autumn, when the energy of the year turns from expansion to reflection. It carries themes of wisdom, accountability, and the renewal of social and spiritual contracts. Mythically, it represents the season of evaluation and intention, when the year pauses to consider what has been built and what must be carried forward."
+  },
+  {
+    "month": "October",
+    "shortName": "Oct",
+    "order": 10,
+    "stone": {
+      "name": "Opal",
+      "description": "Opal has long been seen as a stone of mystery, transformation, and hidden fire. Ancient Romans believed it contained the virtues of all gemstones, while medieval folklore considered it a gem of prophecy and shifting fate. Its play of colors evokes the changing leaves and twilight skies of autumn. Mythically, opal represents the liminal — moments of transition, magic, and the unseen forces that shimmer beneath the surface of ordinary life."
+    },
+    "flower": {
+      "name": "Marigold",
+      "description": "Marigolds have been associated across cultures with remembrance, protection, and the honoring of the dead. In Mexican traditions they guide spirits during Dia de los Muertos, while in India they are sacred to deities and used in festivals and rituals. Their golden color reflects the sun even as the days grow shorter. Mythically, marigolds symbolize warmth in the face of darkness and the enduring bond between the living and the departed."
+    },
+    "holidays": [
+      {
+        "name": "Gandhi's Birthday",
+        "description": "Observed on October 2, Gandhi's birthday honors the life and legacy of Mahatma Gandhi, whose philosophy of nonviolence and civil resistance inspired movements for justice around the world. The day reflects the power of peaceful action and moral courage. Mythically, it celebrates the archetype of the peaceful reformer — the figure who transforms the world through truth and compassion."
+      },
+      {
+        "name": "Bat Appreciation Month",
+        "description": "Bat Appreciation Month highlights the ecological importance of bats as pollinators and guardians of nighttime ecosystems. Long associated with mystery and the night, bats have been both feared and revered across cultures. Mythically, they represent the threshold between darkness and insight — the ability to navigate unseen realms and adapt to the unknown."
+      },
+      {
+        "name": "Overseas Chinese Day",
+        "description": "This observance recognizes the contributions of Chinese diaspora communities around the world. It celebrates cultural continuity, migration, and the blending of traditions across borders. Mythically, it reflects the archetype of the traveler and cultural bridge-builder, connecting distant lands through shared heritage."
+      },
+      {
+        "name": "United Nations Day",
+        "description": "United Nations Day commemorates the founding of the UN on October 24, emphasizing international cooperation and peace. It represents humanity's collective effort to resolve conflict and build shared frameworks for the future. Mythically, it symbolizes the dream of global unity and cooperation among nations."
+      },
+      {
+        "name": "Columbus Day",
+        "description": "Columbus Day marks the arrival of Christopher Columbus in the Americas in 1492. Historically framed as a celebration of exploration, it also invites reflection on the complex consequences of colonization. Mythically, it represents the archetype of exploration and the opening of new worlds — alongside the lessons and reckonings that follow."
+      },
+      {
+        "name": "Indigenous Peoples' Day",
+        "description": "Indigenous Peoples' Day honors the cultures, histories, and resilience of Indigenous communities. It reframes the narrative of discovery by centering the voices and traditions of those who lived on the land long before colonization. Mythically, it celebrates the archetype of the first peoples and the deep ancestral connection to place."
+      },
+      {
+        "name": "Lord of Miracles (Peru)",
+        "description": "The Lord of Miracles festival in Peru honors a revered image of Christ associated with healing and protection. Celebrated with large processions, it emphasizes faith, community, and devotion. Mythically, it represents collective faith and the power of shared ritual."
+      },
+      {
+        "name": "Samhain",
+        "description": "Samhain, an ancient Celtic festival marking the end of the harvest season, is believed to be a time when the boundary between the living and the spirit world grows thin. Bonfires, feasting, and remembrance rituals marked the turning of the year. Mythically, Samhain represents the descent into winter and the honoring of ancestors."
+      },
+      {
+        "name": "Halloween",
+        "description": "Halloween evolved from Samhain and later traditions into a celebration of costumes, storytelling, and playful encounters with the supernatural. It embraces the eerie and the imaginative, allowing communities to explore fear in a safe and festive way. Mythically, it celebrates the playful side of the unknown and the human fascination with mystery."
+      }
+    ],
+    "mood": "October is the month of the veil, when light fades and the mystery of the unseen grows closer. It carries themes of remembrance, transformation, and the honoring of both past and future. Mythically, October represents the threshold between worlds, where reflection, imagination, and reverence for the unseen take center stage."
+  },
+  {
+    "month": "November",
+    "shortName": "Nov",
+    "order": 11,
+    "stone": {
+      "name": "Topaz",
+      "description": "Topaz has long been associated with warmth, protection, and the sustaining fire of life as the year darkens. Ancient cultures believed it held the power of the sun and could ward off fear, illness, and misfortune. Often golden or amber in color, it mirrors the last glow of autumn light before winter arrives. Mythically, topaz represents stored warmth — the inner fire carried forward when the outer world grows cold."
+    },
+    "flower": {
+      "name": "Chrysanthemum",
+      "description": "The chrysanthemum blooms as many other flowers fade, making it a symbol of endurance, remembrance, and the cycle of life and death. In East Asia it represents longevity and nobility, while in parts of Europe it is closely tied to honoring the dead. Its autumn bloom speaks to beauty that appears at the edge of winter. Mythically, the chrysanthemum represents dignity in endings and the grace of life's final chapters."
+    },
+    "holidays": [
+      {
+        "name": "Dia de los Muertos",
+        "description": "Dia de los Muertos, celebrated primarily in Mexico, honors ancestors and loved ones who have passed. Altars, marigolds, candles, and offerings invite the spirits to return and be welcomed with joy. Unlike somber mourning traditions, this festival embraces death as part of the ongoing relationship between generations. Mythically, it reflects the belief that the dead remain part of the community and that memory keeps them alive."
+      },
+      {
+        "name": "All Souls' Day",
+        "description": "All Souls' Day is dedicated to praying for and remembering the faithful departed. Emerging from Christian traditions, it focuses on compassion, remembrance, and the hope of spiritual peace. Mythically, it represents the continuity of the human story across generations and the enduring bond between the living and the dead."
+      },
+      {
+        "name": "All Saints' Day",
+        "description": "All Saints' Day honors saints and spiritual exemplars who are seen as models of faith and virtue. It celebrates those who lived lives of devotion and service, offering inspiration to others. Mythically, it represents the archetype of the perfected human — the individuals whose lives become guiding lights for future generations."
+      },
+      {
+        "name": "Veterans Day",
+        "description": "Veterans Day honors those who served in military service. It recognizes sacrifice, courage, and the lasting impact of service. Mythically, it reflects the archetype of the warrior who returns home, carrying the weight of experience and the memory of conflict."
+      },
+      {
+        "name": "Daylight Saving Time Shift",
+        "description": "The shift away from Daylight Saving Time marks the visible shortening of days and the deepening of night. This annual change is a modern ritual acknowledging the seasonal movement toward winter. Mythically, it signals the descent into darkness and the turning inward of the year."
+      },
+      {
+        "name": "Diwali (Ramayana Associations)",
+        "description": "Diwali, the Festival of Lights, celebrates the victory of light over darkness and good over evil. In Hindu tradition it commemorates the return of Rama to Ayodhya after defeating Ravana, as told in the Ramayana. Lamps are lit to guide the way home and to symbolize hope and renewal. Mythically, it represents the triumph of righteousness and the return of the hero."
+      },
+      {
+        "name": "Thanksgiving",
+        "description": "Thanksgiving is a harvest festival centered on gratitude, abundance, and communal gathering. Rooted in early colonial history and older harvest traditions, it celebrates the sharing of food and the acknowledgment of blessings. Mythically, it represents the harvest feast — the ritual of giving thanks for survival and sustenance."
+      },
+      {
+        "name": "Black Friday",
+        "description": "Black Friday marks the beginning of the holiday shopping season, symbolizing the cultural transition into winter commerce and preparation for year-end celebrations. While modern and commercial, it reflects the seasonal gathering of resources and preparation for the colder months. Mythically, it represents the marketplace awakening — the ritual of exchange that prepares communities for winter."
+      }
+    ],
+    "mood": "November is the month of remembrance and gratitude, when the year turns inward and communities gather close. It is a season of honoring ancestors, lighting lamps against the dark, and giving thanks for what sustains life. Mythically, November represents the hearth — the gathering of warmth, memory, and gratitude before winter arrives."
+  },
+  {
+    "month": "December",
+    "shortName": "Dec",
+    "order": 12,
+    "stone": {
+      "name": "Turquoise",
+      "description": "Turquoise is one of humanity's oldest sacred stones, treasured across cultures from ancient Egypt and Persia to the Indigenous peoples of the Americas. Often associated with the sky and water, it symbolizes protection, truth, and the bridge between heaven and earth. Travelers carried turquoise as a guardian stone, believing it safeguarded journeys and strengthened the spirit. Mythically, turquoise is the winter sky made tangible — the promise of protection and guidance during the darkest stretch of the year."
+    },
+    "flower": {
+      "name": "Narcissus",
+      "description": "The narcissus blooms in winter and early spring, making it a paradoxical flower of both sleep and awakening. Its myth comes from the story of Narcissus, whose reflection drew him into transformation and rebirth. In winter symbolism, the flower represents hope emerging from stillness and the quiet promise that life continues beneath the frost. Mythically, narcissus is the dream of spring held within winter's silence."
+    },
+    "holidays": [
+      {
+        "name": "Hanukkah",
+        "description": "Hanukkah commemorates the rededication of the Second Temple in Jerusalem and the miracle of the oil that burned for eight days when only enough for one remained. The lighting of the menorah transforms darkness night by night into increasing light. Mythically, Hanukkah is the triumph of sacred persistence — the belief that even a small flame can outlast overwhelming darkness. It is a celebration of endurance, faith, and the miracle of sustained light."
+      },
+      {
+        "name": "St. Nicholas Eve",
+        "description": "St. Nicholas Eve, celebrated on December 5, honors the legacy of the generous bishop known for secret gift-giving and acts of kindness. Stories of St. Nicholas emphasize protection of children, generosity, and quiet charity. Mythically, this night introduces the archetype of the winter gift-bringer — the figure who brings warmth and generosity during the coldest season."
+      },
+      {
+        "name": "St. Lucia Day (Little Yule)",
+        "description": "St. Lucia Day, celebrated on December 13, honors a Christian martyr associated with light. In Nordic countries, processions of candle-crowned figures bring brightness into the dark winter. Mythically, this festival embodies the return of light in the heart of darkness — the luminous maiden guiding communities through the longest nights."
+      },
+      {
+        "name": "Winter Solstice Celebrations",
+        "description": "The winter solstice marks the longest night and the turning point when daylight begins to return. Across cultures, fires, feasts, and rituals honor the rebirth of the sun. Mythically, it represents the cosmic turning point — the death and rebirth of light itself."
+      },
+      {
+        "name": "Dongzhi Festival",
+        "description": "The Chinese Dongzhi Festival celebrates the winter solstice as a time of family unity and balance between yin and yang. Gathering, warmth, and shared meals symbolize harmony and the return of longer days. Mythically, Dongzhi reflects the restoration of balance and the quiet strengthening of life during winter."
+      },
+      {
+        "name": "Soyal (Hopi Winter Solstice)",
+        "description": "Soyal marks the Hopi winter solstice ceremony welcoming the return of the sun and the renewal of life. Rituals of purification, prayer, and masked Kachina dances reaffirm harmony between the human community and the cosmic order. It is a ceremony of recommitment to balance — between people, land, ancestors, and the cycles of the universe. Mythically, Soyal is the moment when the world is ritually reset and the sun is invited back into relationship with humanity."
+      },
+      {
+        "name": "Yalda Night",
+        "description": "Yalda Night, celebrated in Persian culture on the longest night of the year, honors the triumph of light over darkness. Families gather to share poetry, fruits like pomegranates and watermelon, and stories that carry warmth into the winter night. Rooted in ancient Zoroastrian symbolism, Yalda marks the rebirth of the sun after its longest absence. Mythically, it is the vigil of hope — the night humanity stays awake together, trusting that dawn will return."
+      },
+      {
+        "name": "Saturnalia",
+        "description": "Saturnalia was the Roman festival of reversal and revelry honoring Saturn, god of agriculture and the Golden Age. Social roles were inverted, gifts were exchanged, and the normal order of society loosened. The festival celebrated abundance, laughter, and temporary freedom from hierarchy. Mythically, Saturnalia is the sacred chaos before renewal — the joyful disorder that reminds society of its shared humanity."
+      },
+      {
+        "name": "Sol Invictus",
+        "description": "Sol Invictus, the \"Unconquered Sun,\" was celebrated in late December as the rebirth of the sun's strength after the solstice. The festival proclaimed that the sun, though diminished, would never be defeated. Mythically, Sol Invictus is the declaration of cosmic resilience — the promise that light inevitably returns after darkness reaches its peak."
+      },
+      {
+        "name": "Birthday of Mithras",
+        "description": "Mithras, a solar deity worshipped in the Roman world, was believed to be born from a rock and associated with light, covenant, and cosmic order. His midwinter birth symbolized the emergence of divine light into the world. Mythically, Mithras represents the hidden sun — born in darkness yet destined to rise."
+      },
+      {
+        "name": "Yuletide",
+        "description": "Yule, rooted in ancient Germanic traditions, celebrated the winter solstice with feasting, fires, evergreen decorations, and the Yule log. Evergreens symbolized life enduring through winter, while the burning log represented warmth and continuity. Mythically, Yuletide is the hearth festival — the gathering of family and community to protect life through the cold season."
+      },
+      {
+        "name": "Green Knight / Yule Traditions",
+        "description": "The Green Knight of Arthurian legend embodies the wild, untamed force of nature that survives winter's test. His challenge to King Arthur is a ritual of courage, renewal, and the acceptance of life's cycles. At Yule, the Green Man and Green Knight traditions remind us that life never disappears — it retreats, waits, and returns. Mythically, he is the spirit of nature enduring through winter's trial."
+      },
+      {
+        "name": "Christmas",
+        "description": "Christmas celebrates the birth of Jesus, a story of divine light entering the world in humility and vulnerability. The imagery of the manger, the star, and the gathering of shepherds and wise men speaks to hope arriving quietly in dark times. Mythically, Christmas is the birth of sacred light in the human world — the promise that love and renewal arrive even in the coldest night."
+      },
+      {
+        "name": "Boxing Day",
+        "description": "Boxing Day, observed on December 26, traditionally involved giving gifts or alms to workers and the poor. It emphasizes generosity, charity, and the sharing of abundance after celebration. Mythically, it is the continuation of the gift cycle — the reminder that prosperity gains meaning when shared."
+      },
+      {
+        "name": "St. Stephen's Day",
+        "description": "St. Stephen's Day honors the first Christian martyr, remembered for compassion and charity. Celebrations often emphasize community, kindness, and care for the vulnerable. Mythically, it represents the courage to live one's values even in the face of hardship."
+      },
+      {
+        "name": "Kwanzaa",
+        "description": "Kwanzaa celebrates African heritage, culture, and community through seven guiding principles focused on unity, creativity, and collective responsibility. Lighting the kinara candles reflects growing light and shared purpose. Mythically, Kwanzaa represents cultural continuity and the power of community to create meaning and resilience."
+      },
+      {
+        "name": "Toji (Japanese Winter Solstice)",
+        "description": "Toji marks the winter solstice in Japan, celebrated with hot baths, seasonal foods, and rituals to welcome the return of sunlight. It emphasizes health, renewal, and preparation for the coming year. Mythically, Toji is the quiet restoration of strength before the new cycle begins."
+      },
+      {
+        "name": "Omisoka (Japanese New Year's Eve)",
+        "description": "Omisoka is a night of purification and closure in Japan, marked by cleaning, reflection, and rituals to release the past year. As bells ring to welcome the new year, the focus is on renewal and fresh beginnings. Mythically, Omisoka is the final threshold — the closing of one cycle and the opening of another."
+      }
+    ],
+    "mood": "December is the season of lights in the darkness. Across cultures, small flames appear — candles, lanterns, and fires — symbolizing hope and endurance. It is a time of gathering, generosity, and sacred rest. Mythically, December represents the great turning — the longest night giving way to the promise of returning light, and the warmth of community carrying humanity through the cold."
+  }
+]

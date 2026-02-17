@@ -1,5 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
+import { Body, GeoVector, Ecliptic, MoonPhase } from 'astronomy-engine';
 import PlanetNode from './PlanetNode';
+
+const BODY_MAP = {
+  Moon: Body.Moon,
+  Mercury: Body.Mercury,
+  Venus: Body.Venus,
+  Sun: Body.Sun,
+  Mars: Body.Mars,
+  Jupiter: Body.Jupiter,
+  Saturn: Body.Saturn,
+};
+
+const SIGN_SYMBOLS = ['♈','♉','♊','♋','♌','♍','♎','♏','♐','♑','♒','♓'];
+
+function getEclipticLongitude(planet) {
+  const vec = GeoVector(BODY_MAP[planet], new Date(), true);
+  return Ecliptic(vec).elon;
+}
+
+function lonToSignLabel(lon) {
+  const signIndex = Math.floor(lon / 30) % 12;
+  const deg = Math.floor(lon % 30);
+  return `${deg}° ${SIGN_SYMBOLS[signIndex]}`;
+}
 
 const ORBITS = [
   { planet: 'Moon',    metal: 'Silver',  r: 55,  angle: -90 },
@@ -52,8 +76,42 @@ function arcPath(cx, cy, r, startDeg, endDeg, sweep) {
   return `M ${x1},${y1} A ${r},${r} 0 0,${sweep} ${x2},${y2}`;
 }
 
-export default function OrbitalDiagram({ selectedPlanet, onSelectPlanet, selectedSign, onSelectSign, selectedCardinal, onSelectCardinal, selectedEarth, onSelectEarth }) {
+const MONTHS = [
+  'January','February','March','April','May','June',
+  'July','August','September','October','November','December',
+];
+const MONTH_RING_INNER = 260;
+const MONTH_RING_OUTER = 295;
+const MONTH_TEXT_R = 278;
+// Offset so months align astronomically with zodiac:
+// Jan 1 Sun ≈ 280° ecliptic → SVG angle = -280° = 80°
+const MONTH_OFFSET = 80;
+
+export default function OrbitalDiagram({ selectedPlanet, onSelectPlanet, selectedSign, onSelectSign, selectedCardinal, onSelectCardinal, selectedEarth, onSelectEarth, showCalendar, onToggleCalendar, selectedMonth, onSelectMonth }) {
   const [aligned, setAligned] = useState(false);
+  const [livePositions, setLivePositions] = useState(false);
+
+  const liveAngles = useMemo(() => {
+    if (!livePositions) return null;
+    const angles = {};
+    for (const planet of Object.keys(BODY_MAP)) {
+      const lon = getEclipticLongitude(planet);
+      angles[planet] = { svgAngle: -lon, lon };
+    }
+    return angles;
+  }, [livePositions]);
+
+  const moonPhaseAngle = useMemo(() => MoonPhase(new Date()), []);
+
+  const toggleLive = () => {
+    if (!livePositions) setAligned(false);
+    setLivePositions(!livePositions);
+  };
+
+  const toggleAlign = () => {
+    if (!aligned) setLivePositions(false);
+    setAligned(!aligned);
+  };
 
   return (
     <div style={{ position: 'relative', display: 'inline-block' }}>
@@ -106,7 +164,100 @@ export default function OrbitalDiagram({ selectedPlanet, onSelectPlanet, selecte
               />
             );
           })}
+          {/* Arc paths for month text */}
+          {showCalendar && MONTHS.map((m, i) => {
+            const startBoundary = -(i * 30) + MONTH_OFFSET;
+            const endBoundary = -(i * 30 + 30) + MONTH_OFFSET;
+            const inset = 2;
+            // Determine which half needs reversed text (bottom = SVG y positive)
+            const midAngle = (startBoundary + endBoundary) / 2;
+            const normMid = ((midAngle % 360) + 360) % 360;
+            const isBottom = normMid > 0 && normMid < 180;
+            if (!isBottom) {
+              return (
+                <path
+                  key={`mpath-${m}`}
+                  id={`mpath-${m}`}
+                  d={arcPath(CX, CY, MONTH_TEXT_R, startBoundary - inset, endBoundary + inset, 0)}
+                  fill="none"
+                />
+              );
+            }
+            return (
+              <path
+                key={`mpath-${m}`}
+                id={`mpath-${m}`}
+                d={arcPath(CX, CY, MONTH_TEXT_R, endBoundary + inset, startBoundary - inset, 1)}
+                fill="none"
+              />
+            );
+          })}
         </defs>
+
+        {/* Month calendar ring (inside zodiac) */}
+        {showCalendar && (
+          <g className="month-ring" style={{ opacity: 1, transition: 'opacity 0.4s ease' }}>
+            <circle cx={CX} cy={CY} r={MONTH_RING_INNER} fill="none" stroke="rgba(139, 195, 170, 0.18)" strokeWidth="0.8" />
+            <circle cx={CX} cy={CY} r={MONTH_RING_OUTER} fill="none" stroke="rgba(139, 195, 170, 0.18)" strokeWidth="0.8" />
+            {/* 12 divider lines */}
+            {MONTHS.map((_, i) => {
+              const angle = -(i * 30) + MONTH_OFFSET;
+              const rad = (angle * Math.PI) / 180;
+              return (
+                <line
+                  key={`mdiv-${i}`}
+                  x1={CX + MONTH_RING_INNER * Math.cos(rad)} y1={CY + MONTH_RING_INNER * Math.sin(rad)}
+                  x2={CX + MONTH_RING_OUTER * Math.cos(rad)} y2={CY + MONTH_RING_OUTER * Math.sin(rad)}
+                  stroke="rgba(139, 195, 170, 0.2)"
+                  strokeWidth="0.6"
+                />
+              );
+            })}
+            {/* Month labels on curved paths */}
+            {MONTHS.map((m, i) => {
+              const isSelected = selectedMonth === m;
+              const centerAngle = -(i * 30 + 15) + MONTH_OFFSET;
+              const rad = (centerAngle * Math.PI) / 180;
+              const hx = CX + MONTH_TEXT_R * Math.cos(rad);
+              const hy = CY + MONTH_TEXT_R * Math.sin(rad);
+              // Highlight current month
+              const now = new Date();
+              const isCurrent = now.getMonth() === i;
+
+              return (
+                <g
+                  key={m}
+                  className={`month-segment${isSelected ? ' active' : ''}`}
+                  onClick={() => onSelectMonth && onSelectMonth(isSelected ? null : m)}
+                  style={{ cursor: 'pointer' }}
+                >
+                  <circle cx={hx} cy={hy} r="18" fill="transparent" />
+                  {isSelected && (
+                    <circle cx={hx} cy={hy} r="14" fill="none" stroke="rgba(139, 195, 170, 0.5)" strokeWidth="0.8">
+                      <animate attributeName="r" values="12;16;12" dur="2s" repeatCount="indefinite" />
+                      <animate attributeName="opacity" values="0.5;0.2;0.5" dur="2s" repeatCount="indefinite" />
+                    </circle>
+                  )}
+                  <text
+                    fill={isSelected ? '#5acea0' : isCurrent ? 'rgba(139, 195, 170, 0.8)' : 'rgba(139, 195, 170, 0.5)'}
+                    fontSize="10"
+                    fontFamily="Cinzel, serif"
+                    fontWeight={isSelected ? '700' : isCurrent ? '600' : '400'}
+                    letterSpacing="0.5"
+                  >
+                    <textPath
+                      href={`#mpath-${m}`}
+                      startOffset="50%"
+                      textAnchor="middle"
+                    >
+                      {m}
+                    </textPath>
+                  </text>
+                </g>
+              );
+            })}
+          </g>
+        )}
 
         {/* Zodiac band — two concentric circles */}
         <circle cx={CX} cy={CY} r={ZODIAC_INNER_R} fill="none" stroke="rgba(201, 169, 97, 0.18)" strokeWidth="0.8" />
@@ -277,29 +428,59 @@ export default function OrbitalDiagram({ selectedPlanet, onSelectPlanet, selecte
 
         {/* Planet nodes */}
         {ORBITS.map(o => {
-          const angle = aligned ? ALIGN_ANGLE : o.angle;
+          const angle = aligned ? ALIGN_ANGLE : liveAngles ? liveAngles[o.planet].svgAngle : o.angle;
           const rad = (angle * Math.PI) / 180;
           const px = CX + o.r * Math.cos(rad);
           const py = CY + o.r * Math.sin(rad);
           return (
-            <PlanetNode
-              key={o.planet}
-              planet={o.planet}
-              metal={o.metal}
-              cx={px}
-              cy={py}
-              selected={selectedPlanet === o.planet}
-              onClick={() => onSelectPlanet(o.planet)}
-            />
+            <g key={o.planet}>
+              <PlanetNode
+                planet={o.planet}
+                metal={o.metal}
+                cx={px}
+                cy={py}
+                selected={selectedPlanet === o.planet}
+                onClick={() => onSelectPlanet(o.planet)}
+                moonPhase={o.planet === 'Moon' ? moonPhaseAngle : undefined}
+              />
+              {liveAngles && (
+                <g style={{ transform: `translate(${px}px, ${py}px)`, transition: 'transform 0.8s ease-in-out' }}>
+                  <text
+                    x={0}
+                    y={-18}
+                    textAnchor="middle"
+                    fill="rgba(201, 169, 97, 0.8)"
+                    fontSize="8"
+                    fontFamily="Crimson Pro, serif"
+                  >
+                    {lonToSignLabel(liveAngles[o.planet].lon)}
+                  </text>
+                </g>
+              )}
+            </g>
           );
         })}
       </svg>
       <button
+        className="live-toggle"
+        onClick={toggleLive}
+        title={livePositions ? 'Decorative positions' : 'Live planetary positions'}
+      >
+        {livePositions ? '◉' : '◎'}
+      </button>
+      <button
         className="align-toggle"
-        onClick={() => setAligned(!aligned)}
+        onClick={toggleAlign}
         title={aligned ? 'Scatter planets' : 'Align planets'}
       >
         {aligned ? '⊙' : '☍'}
+      </button>
+      <button
+        className="calendar-toggle"
+        onClick={() => onToggleCalendar && onToggleCalendar()}
+        title={showCalendar ? 'Hide mythic calendar' : 'Show mythic calendar'}
+      >
+        {showCalendar ? '📅' : '📆'}
       </button>
     </div>
   );

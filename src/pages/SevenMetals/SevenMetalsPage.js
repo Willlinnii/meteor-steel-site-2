@@ -17,6 +17,7 @@ import zodiacData from '../../data/sevenMetalsZodiac.json';
 import cardinalsData from '../../data/sevenMetalsCardinals.json';
 import planetaryCultures from '../../data/sevenMetalsPlanetaryCultures.json';
 import elementsData from '../../data/sevenMetalsElements.json';
+import calendarData from '../../data/mythicCalendar.json';
 
 function findBySin(arr, sin) {
   return arr.find(item => item.sin === sin) || null;
@@ -134,6 +135,73 @@ function CardinalContent({ cardinalId, activeCulture }) {
   );
 }
 
+function MonthContent({ month, activeTab, onSelectTab }) {
+  const m = calendarData.find(d => d.month === month);
+  if (!m) return <p className="metals-empty">No data for {month}.</p>;
+
+  // Build tab list: stone, flower, then each holiday
+  const tabs = [];
+  if (m.stone) tabs.push({ id: 'stone', label: m.stone.name });
+  if (m.flower) tabs.push({ id: 'flower', label: m.flower.name });
+  if (m.holidays) {
+    m.holidays.forEach((h, i) => {
+      tabs.push({ id: `holiday-${i}`, label: h.name });
+    });
+  }
+
+  // Resolve active tab content
+  let content = null;
+  if (activeTab === 'stone' && m.stone) {
+    content = (
+      <div className="modern-section">
+        <h5>Stone of the Month — {m.stone.name}</h5>
+        <p>{m.stone.description}</p>
+      </div>
+    );
+  } else if (activeTab === 'flower' && m.flower) {
+    content = (
+      <div className="modern-section">
+        <h5>Flower of the Month — {m.flower.name}</h5>
+        <p>{m.flower.description}</p>
+      </div>
+    );
+  } else if (activeTab?.startsWith('holiday-') && m.holidays) {
+    const idx = parseInt(activeTab.split('-')[1], 10);
+    const h = m.holidays[idx];
+    if (h) {
+      content = (
+        <div className="modern-section">
+          <h5>{h.name}</h5>
+          <p>{h.description}</p>
+        </div>
+      );
+    }
+  }
+
+  // If active tab doesn't exist for this month, show first tab
+  if (!content && tabs.length > 0 && activeTab !== tabs[0].id) {
+    onSelectTab(tabs[0].id);
+  }
+
+  return (
+    <div className="tab-content">
+      {m.mood && <p className="month-mood">{m.mood}</p>}
+      <div className="metal-tabs">
+        {tabs.map(t => (
+          <button
+            key={t.id}
+            className={`metal-tab${activeTab === t.id ? ' active' : ''}`}
+            onClick={() => onSelectTab(t.id)}
+          >
+            {t.label}
+          </button>
+        ))}
+      </div>
+      {content}
+    </div>
+  );
+}
+
 function PlanetCultureContent({ planet, activeCulture }) {
   const planetData = planetaryCultures[planet];
   if (!planetData) return null;
@@ -183,6 +251,9 @@ export default function SevenMetalsPage() {
   const [selectedCardinal, setSelectedCardinal] = useState(null);
   const [selectedEarth, setSelectedEarth] = useState(false);
   const [devEntries, setDevEntries] = useState({});
+  const [showCalendar, setShowCalendar] = useState(false);
+  const [selectedMonth, setSelectedMonth] = useState(null);
+  const [activeMonthTab, setActiveMonthTab] = useState('stone');
 
   const mergedData = useMemo(() => {
     const map = {};
@@ -209,17 +280,35 @@ export default function SevenMetalsPage() {
       <div className="metals-diagram-center">
         <OrbitalDiagram
           selectedPlanet={selectedPlanet}
-          onSelectPlanet={(p) => { setSelectedPlanet(p); setSelectedSign(null); setSelectedCardinal(null); setSelectedEarth(false); }}
+          onSelectPlanet={(p) => { setSelectedPlanet(p); setSelectedSign(null); setSelectedCardinal(null); setSelectedEarth(false); setSelectedMonth(null); }}
           selectedSign={selectedSign}
-          onSelectSign={(sign) => { setSelectedSign(sign); setSelectedCardinal(null); setSelectedEarth(false); }}
+          onSelectSign={(sign) => { setSelectedSign(sign); setSelectedCardinal(null); setSelectedEarth(false); setSelectedMonth(null); }}
           selectedCardinal={selectedCardinal}
-          onSelectCardinal={(c) => { setSelectedCardinal(c); setSelectedSign(null); setSelectedEarth(false); }}
+          onSelectCardinal={(c) => { setSelectedCardinal(c); setSelectedSign(null); setSelectedEarth(false); setSelectedMonth(null); }}
           selectedEarth={selectedEarth}
-          onSelectEarth={(e) => { setSelectedEarth(e); setSelectedSign(null); setSelectedCardinal(null); }}
+          onSelectEarth={(e) => { setSelectedEarth(e); setSelectedSign(null); setSelectedCardinal(null); setSelectedMonth(null); }}
+          showCalendar={showCalendar}
+          onToggleCalendar={() => setShowCalendar(!showCalendar)}
+          selectedMonth={selectedMonth}
+          onSelectMonth={(m) => { setSelectedMonth(m); setActiveMonthTab('stone'); if (m) { setSelectedSign(null); setSelectedCardinal(null); setSelectedEarth(false); } }}
         />
       </div>
 
-      {selectedEarth ? (
+      {selectedMonth ? (
+        <>
+          <h2 className="metals-heading">
+            {selectedMonth}
+            <span className="metals-sub">Mythic Calendar</span>
+          </h2>
+          <div className="container">
+            <div id="content-container">
+              <div className="metal-detail-panel">
+                <MonthContent month={selectedMonth} activeTab={activeMonthTab} onSelectTab={setActiveMonthTab} />
+              </div>
+            </div>
+          </div>
+        </>
+      ) : selectedEarth ? (
         <>
           <h2 className="metals-heading">
             Earth
