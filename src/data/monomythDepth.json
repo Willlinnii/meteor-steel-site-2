@@ -1,0 +1,186 @@
+{
+  "golden-age": {
+    "geometry": {
+      "title": "The Circle at Zenith",
+      "description": "The full circle — complete, bounded, self-contained. The sphere of the known world. The dome of the sky at noon. The ouroboros of self-referential normality, where the end meets the beginning in a closed loop of status quo."
+    },
+    "depth": {
+      "title": "Persona & Surface Self",
+      "description": "The ego identifies with its persona — the mask self. Like Narcissus, it identifies with its face in reflection. The conscious mind is in full control, and anything inconsistent with its self-image is repressed into shadow. The parent complex transfers parental authority to common sense.",
+      "concepts": ["Persona", "Ego", "Narcissism", "Parent Complex", "Repression", "Shadow (hidden)"]
+    },
+    "philosophy": {
+      "title": "Materialism & Common Sense",
+      "description": "The surface world is that of common sensory experience — what Kant calls Nature. Plato's world of particulars. Democritus' world of atoms. Everything is separate, everyone is separate. The atomistic worldview as the philosophical foundation of the wasteland.",
+      "themes": ["Atomism", "Materialism", "Common Sense", "Determinism", "Thou Shalt", "Status Quo"]
+    },
+    "symbols": {
+      "light": "Full sun, full moon, high noon",
+      "nature": "Summer, full bloom, ripe fruit, mature organism",
+      "architecture": "The palace, the cave, the Matrix, the Shire, Eden",
+      "figures": "The dragon Thou Shalt, the All-Seeing Eye, Santa, the Nursery",
+      "state": "Normality, denial, fine, everything is awesome, explosive armor"
+    }
+  },
+  "falling-star": {
+    "geometry": {
+      "title": "The Crack / The Descending Line",
+      "description": "A crack appears in the circle. A line descends from the zenith. The first diagonal — the falling trajectory of a meteor, a star, a disruption. The geometry of separation begins as something splits from the whole."
+    },
+    "depth": {
+      "title": "Shadow Disruption & Blunders",
+      "description": "The shadow makes itself known through slips, synchronicities, and anomalies. Freudian blunders reveal what has been repressed. The unconscious sends disruptions into the ordered world of ego — dreams that don't fit, desires that contradict the persona, encounters that crack the shell.",
+      "concepts": ["Shadow", "Freudian Slip", "Synchronicity", "Anomaly", "Projection", "Wish Fulfillment"]
+    },
+    "philosophy": {
+      "title": "Anomaly & Paradigm Crisis",
+      "description": "Problems with the status quo present themselves as anomalies beyond permitted explanation. Like the Michelson-Morley experiment ignored for decades until Einstein accepted it as a call. Like Hume's attack on causality that woke Kant from dogmatic slumber. The crack in the paradigm.",
+      "themes": ["Anomaly", "Paradigm Shift", "Dramatic Question", "Disequilibrium", "Increased Awareness"]
+    },
+    "symbols": {
+      "light": "Afternoon shadows, waning gibbous, lengthening darkness",
+      "nature": "Autumn colors, harvest, ripening fruit, mating calls",
+      "architecture": "The oracle, the crack, the telegram, the knock at the door",
+      "figures": "The Mentor, the Herald, the Fool (Tarot), the Sphinx",
+      "state": "Restlessness, calling, disruption, the first question"
+    }
+  },
+  "impact-crater": {
+    "geometry": {
+      "title": "The Threshold / The Horizon Line",
+      "description": "The horizontal line of the horizon — the boundary between above and below, known and unknown, day and night. The threshold is a liminal geometry: neither here nor there. The gate, the door, the mouth of the whale, the surface of the sea."
+    },
+    "depth": {
+      "title": "Descent into the Unconscious",
+      "description": "The ego crosses into the domain of the unconscious. Water represents the unconscious — to be swallowed by the sea is to enter dream logic. The blindfold of initiation removes familiar orientation. Oedipal separation trauma is evoked by every departure from safety.",
+      "concepts": ["Unconscious", "Oedipal Separation", "Liminal Space", "Disorientation", "Initiation"]
+    },
+    "philosophy": {
+      "title": "Crossing Between Worlds",
+      "description": "The departure from the phenomenal world of Kant's Nature into the noumenal realm of things-in-themselves. The philosopher leaves Plato's cave. The boundary between the material and the immaterial, the seen and the unseen, the rational and the mythic.",
+      "themes": ["Liminality", "Departure", "Disorientation", "Act 1 to Act 2", "Known to Unknown"]
+    },
+    "symbols": {
+      "light": "Sunset, half-moon, fall equinox",
+      "nature": "Falling asleep, planting of seed, death, autumn equinox",
+      "architecture": "The gate, the coffin, the whale's mouth, the river Styx, the cave entrance",
+      "figures": "The Threshold Guardian, Charon, Seth with his adze, the Veil",
+      "state": "Commitment, farewell, descent, the point of no return"
+    }
+  },
+  "forge": {
+    "geometry": {
+      "title": "The Spiral Descent",
+      "description": "The descending spiral — gate after gate, level after level. Like Inanna's seven gates or Dante's nine circles. Each revolution strips another layer. The geometry of progressive deepening, of the labyrinth that seems to turn away from the center while making the only path there."
+    },
+    "depth": {
+      "title": "Shadow Work & Ego Deconstruction",
+      "description": "The ego is progressively deconstructed. Inferior functions of the Shadow and Unconscious are developed while the will begins to fail. Each trial strips another article of identity — like Inanna losing her me at each gate. The ascetic path: resisting bodily influence to purify consciousness.",
+      "concepts": ["Shadow Integration", "Inferior Functions", "Ego Deconstruction", "Anima/Animus", "Progressive Stripping"]
+    },
+    "philosophy": {
+      "title": "Progressive Complications & Testing",
+      "description": "The initiatory trials that test and transform. The ascetic's path of purification. The Buddha's emaciation. The hero's progressive encounters with helpers and enemies. Each obstacle raises the stakes and deepens engagement with truth.",
+      "themes": ["Initiation", "Asceticism", "Progressive Complications", "Testing", "Confrontation"]
+    },
+    "symbols": {
+      "light": "Deep night, waning crescent, winter approaching",
+      "nature": "Dream journey, gestation, decomposition, approaching winter",
+      "architecture": "The labyrinth, the Duat, Dante's circles, the forest, the desert",
+      "figures": "Helpers, shapeshifters, tests, the whale's interior",
+      "state": "Endurance, stripping, testing, progressive deepening"
+    }
+  },
+  "quenching": {
+    "geometry": {
+      "title": "The Point / The Axis Mundi",
+      "description": "The single point — the center, the nadir, the axis mundi. The world navel where all lines converge. The innermost chamber. The zero point from which new coordinates emerge. The parentheses of the two crescents — last light going out and first light coming back. Between them: the whispered mystery."
+    },
+    "depth": {
+      "title": "Ego Death & Sacred Marriage",
+      "description": "The ego is annihilated. In its wake, we meet the Self — the totality of being and inner image of God. The hieros gamos (sacred marriage) — the union of opposites. Masculine integrates feminine. The shadow is not defeated but embraced. Atonement with the Father. Meeting with the Goddess. Sunyata (emptiness), Anatman (no-self), Paticca Samuppada (dependent co-arising).",
+      "concepts": ["Ego Death", "The Self", "Hieros Gamos", "Atonement", "Anima Integration", "Kenosis", "Nirvana", "Individuation"]
+    },
+    "philosophy": {
+      "title": "Extinguishing & Enlightenment",
+      "description": "Nirvana means 'the Extinguishing of the Threefold Fire of Desire, Hostility, and Delusion.' When we put out our fires we can see the stars. The via negativa — truth through annihilation of delusion. Wave-particle duality resolves the paradox of one and many. The empty cup reflects the whole cosmos. The concave mirror Grail projects the light of broader reality into the headspace of the empty self.",
+      "themes": ["Nirvana", "Emptiness", "Dependent Co-arising", "Wave-Particle Duality", "Dark Night of the Soul", "Kenosis", "Via Negativa", "Union of Opposites"]
+    },
+    "symbols": {
+      "light": "Midnight, new moon, winter solstice, extinguished flame, first spark",
+      "nature": "Conception, seed germination, deepest dream, death-rebirth pivot",
+      "architecture": "Aker, the Bodhi Tree, the innermost cave, the Green Chapel burial mound, the Death Star",
+      "figures": "Mara, the Father, the Goddess, the Crescent (death/birth), the Grail, the Sword in Stone",
+      "state": "Surrender, annihilation, illumination, the choice, the sacred yes"
+    }
+  },
+  "integration": {
+    "geometry": {
+      "title": "The Rising Arc / Reassembly",
+      "description": "The ascending arc — the curve of the waxing moon. The 14 pieces reassembled. The Megazord maneuver — disparate parts coming together into a unified whole. The geometry of return: not a straight line but a spiral upward, revisiting familiar territory from a new height."
+    },
+    "depth": {
+      "title": "Confronting Regression & Reassembly",
+      "description": "The demons of regression pursue the returning hero. Old patterns try to reassert themselves — neuroses, addictions, habits that were challenged may rebound in desperate defense. But the Self is being reassembled: shadow integrated, anima welcomed, inferior functions developed. The gathering of inner forces for the final push.",
+      "concepts": ["Regression", "Reassembly", "Integration", "Refusal of Return", "False Return", "Inner Gathering"]
+    },
+    "philosophy": {
+      "title": "The Road Back & Obstacles",
+      "description": "The challenge of translating transcendent insight into worldly language. Plato's philosopher dreads returning to the cave. Newton feared ridicule. The hero must find motivation beyond the compulsion of defeated complexes. Project Pirate Ship — how to transform the systems from within.",
+      "themes": ["Return", "Translation", "Regression", "Obstacles", "Gathering Forces", "Magic Flight"]
+    },
+    "symbols": {
+      "light": "Pre-dawn, waxing crescent, late winter, approaching spring",
+      "nature": "Labor, gestation complete, rising from deep sleep, thawing",
+      "architecture": "The road back, the chase sequence, the gathering hall, the pirate ship",
+      "figures": "Khepri (scarab), pursuing demons, the team, ants who remember kindness",
+      "state": "Momentum, pursuit, gathering, the long climb, paving the way behind you"
+    }
+  },
+  "drawing": {
+    "geometry": {
+      "title": "The Horizon Crossed / Mountain Sunrise",
+      "description": "The ascending line crosses the threshold — sunrise over the mountain. The geometry of emergence: the vertical axis of the fully risen self intersecting the horizontal plane of the world. The climactic horizon where all elements converge in a single transformative instant."
+    },
+    "depth": {
+      "title": "Individuation Complete / Master of Two Worlds",
+      "description": "The ego is reassembled upon a new foundation — not the old narcissistic ego but one centered in Self. The Master of Two Worlds can move between conscious and unconscious, between the mythic and the mundane, between the game and the knowledge that it is a game. The old Self is proven completely dead; the new Self is immune to old temptations.",
+      "concepts": ["Individuation", "Resurrection", "Transfiguration", "Master of Two Worlds", "Freedom to Live", "Catharsis"]
+    },
+    "philosophy": {
+      "title": "Climax & Delivery",
+      "description": "The delivery of the elixir that redeems the wasteland. The passage from the mythological hero is inward — into depths where obscure resistances are overcome and long lost powers are revivified for the transfiguration of the world. The essence of oneself and the essence of the world: these two are one. Wherever the hero may wander, he is ever in the presence of his own essence.",
+      "themes": ["Resurrection", "Delivery of Elixir", "Redemption of Wasteland", "Transfiguration", "Climax", "Catharsis", "Apotheosis"]
+    },
+    "symbols": {
+      "light": "Sunrise, first quarter moon waxing, spring equinox, Easter",
+      "nature": "Birth, sprouting, awakening, spring equinox, green-up",
+      "architecture": "The mountain summit, the horizon, the return threshold, the shimenawa",
+      "figures": "Horus, the risen Christ, the newborn child, the butterfly, the drawn sword",
+      "state": "Arrival, transformation, delivery, the inevitable-unexpected climax"
+    }
+  },
+  "new-age": {
+    "geometry": {
+      "title": "The New Circle / The Spiral Complete",
+      "description": "A new circle begins — but at a higher level of the spiral. The geometry of renewal: not a closed loop but an open spiral that encompasses the old while transcending it. The Blue Marble seen from space — no lines, no boundaries, a civilization on the way to wholeness."
+    },
+    "depth": {
+      "title": "The Realized Self / Freedom to Live",
+      "description": "The fully individuated person — the Knight of Faith who returns to life as a clerk. The Zen master at home, smoking cigarettes, drinking a beer. The one who knows the game is a game but plays it fully. The Cosmic Dancer who does not rest heavily in a single spot but gaily, lightly, turns and leaps from one position to another.",
+      "concepts": ["Freedom to Live", "Cosmic Dancer", "Knight of Faith", "Immanence", "Heaven on Earth", "Sacred Yes"]
+    },
+    "philosophy": {
+      "title": "Renewal & The Eternal Return",
+      "description": "The world is regenerated. The wasteland is redeemed. But the happy ending is not a literal promise — it is a transcendence of universal tragedy. The reconciliation of individual consciousness with universal will. The shift from transcendence to immanence — seeing the sacred everywhere, even in the mundane. This our worldly life is an activity of nirvana itself.",
+      "themes": ["Renewal", "Eternal Return", "Immanence", "Eucatastrophe", "Resolution", "New Myth", "Global Identity"]
+    },
+    "symbols": {
+      "light": "Morning, waxing gibbous, spring into summer, growing days",
+      "nature": "Growth, nurturing, the garden renewed, children at play",
+      "architecture": "The renewed kingdom, Platform 9¾, the Shire restored, the new world",
+      "figures": "The Child (Nietzsche), the Bodhisattva, Sam Gamgee, the next generation",
+      "state": "Presence, play, continuity, the first step again, freedom"
+    }
+  }
+}

@@ -1,0 +1,545 @@
+{
+  "golden-age": {
+    "mythological": {
+      "campbell": {
+        "name": "Joseph Campbell",
+        "concept": "The Ordinary World / Status Quo",
+        "description": "The mythological hero, setting forth from his commonday hut or castle, is lured, carried away, or else voluntarily proceeds, to the threshold of adventure. This is the world of common day — the wasteland, the status quo, the world that will be redeemed by the hero's journey."
+      },
+      "jung": {
+        "name": "Carl Jung",
+        "concept": "Persona / Ego Identification",
+        "description": "The ego identifies with its persona — the mask self, the social role. Like Narcissus, it identifies with its face in reflection. The conscious mind is in full control, and anything inconsistent with its self-image is repressed into the shadow."
+      },
+      "nietzsche": {
+        "name": "Friedrich Nietzsche",
+        "concept": "The Camel / Thou Shalt",
+        "description": "In Zarathustra's Three Metamorphoses, the camel represents the spirit that kneels down and wants to be well loaded. It asks 'What is the heaviest thing?' and takes it upon itself. The dragon of 'Thou Shalt' rules this domain — all established values gleam like gold."
+      },
+      "frobenius": {
+        "name": "Leo Frobenius",
+        "concept": "Noon / Full Sun",
+        "description": "The point of departure in the solar myth: noon, the sun at its height, the seafarer upon calm waters. Full light, full consciousness, the world as it appears before the night-sea journey begins."
+      },
+      "eliade": {
+        "name": "Mircea Eliade",
+        "concept": "Profane Time / The Old Year",
+        "description": "The profane world before sacred time erupts. The old year accumulating its sins and impurities. The world growing tired and heavy, ready for the periodic regeneration that myth provides."
+      },
+      "huxley": {
+        "name": "Aldous Huxley",
+        "concept": "The Perennial Surface",
+        "description": "The outward world of multiplicity, separation, and common sensory experience. What Kant calls Nature. The surface level where the perennial philosophy has not yet been recognized — the many without awareness of the One."
+      },
+      "plato": {
+        "name": "Plato",
+        "concept": "The Cave / Shadows",
+        "description": "The prisoners in Plato's cave, mistaking shadows on the wall for reality. People in the cave have no idea they are in a cave, that they are bound, or that they are mistaking shadows for truth."
+      },
+      "hegel": {
+        "name": "G.W.F. Hegel",
+        "concept": "Thesis",
+        "description": "The thesis — the established order, the status quo that will encounter its antithesis. The world-historical moment before the dialectical process disrupts it."
+      },
+      "freud": {
+        "name": "Sigmund Freud",
+        "concept": "Ego / Repression",
+        "description": "The ego in its established state, maintaining repression of unconscious material. The superego enforces the rules of the status quo. Everything uncomfortable is kept below the threshold of awareness."
+      },
+      "steiner": {
+        "name": "Rudolf Steiner",
+        "concept": "Ordinary Consciousness",
+        "description": "The ordinary state of consciousness before initiation. The world as perceived through the senses alone, before higher knowledge reveals the spiritual dimensions behind the material."
+      }
+    },
+    "screenplay": {
+      "vogler": {
+        "name": "Christopher Vogler",
+        "concept": "The Ordinary World",
+        "description": "Most stories take the hero out of the ordinary, mundane world and into a Special World, new and alien. Before the adventure can begin, the audience needs to know the hero's Ordinary World — the baseline against which all change will be measured."
+      },
+      "field": {
+        "name": "Syd Field",
+        "concept": "Act 1 / Setup",
+        "description": "Act I is a unit of dramatic action that sets up the story. The first 10 pages must grab your audience, establish the main character, the dramatic premise, and the situation. The set-up is the most important part of the screenplay."
+      },
+      "mckee": {
+        "name": "Robert McKee",
+        "concept": "The Ordinary World / Exposition",
+        "description": "A world in balance — an imperfect balance, perhaps, but the protagonist's life is in relative control. The world as it is before the inciting incident disrupts it."
+      },
+      "snyder": {
+        "name": "Blake Snyder",
+        "concept": "Opening Image / Set-up / Theme Stated",
+        "description": "The opening image is a snapshot of the main character's problem before the journey begins. The Set-up establishes the hero, stakes, and the goal. On page 5, the theme is stated — someone will say to the main character something that is the movie's thematic premise."
+      },
+      "harmon": {
+        "name": "Dan Harmon",
+        "concept": "You (A character is in a zone of comfort)",
+        "description": "A character is in their zone of comfort. This is who they are before the journey begins — established, comfortable, in stasis."
+      },
+      "daniels": {
+        "name": "Daniels",
+        "concept": "Status Quo / Latent Antagonism",
+        "description": "All stories begin in a world of status quo. Latent antagonism brews beneath the surface, waiting for an inciting incident to activate it."
+      },
+      "aristotle": {
+        "name": "Aristotle",
+        "concept": "Complication (beginning)",
+        "description": "The beginning of the complication — establishing the characters and circumstances from which the dramatic action will unfold. A whole is what has a beginning, middle, and end."
+      }
+    }
+  },
+  "falling-star": {
+    "mythological": {
+      "campbell": {
+        "name": "Joseph Campbell",
+        "concept": "Call to Adventure",
+        "description": "That which has to be faced, and is somehow profoundly familiar to the unconscious — though unknown, surprising, and even frightening to the conscious personality — makes itself known; and what formerly was meaningful may become strangely emptied of value. The hero also often refuses the call."
+      },
+      "jung": {
+        "name": "Carl Jung",
+        "concept": "Shadow Disruption",
+        "description": "The individual experiences an unconscious impulse towards the great voice within. This can look like the disruption of an individual or collective ego by its shadow. Individuation concerns the Self's journey towards wholeness."
+      },
+      "nietzsche": {
+        "name": "Friedrich Nietzsche",
+        "concept": "The Beast of Burden",
+        "description": "The beast of burden feels called to champion the values of its homeland by accepting the burden of a perilous journey on its behalf. This is the camel phase — the spirit that would bear much."
+      },
+      "hegel": {
+        "name": "G.W.F. Hegel",
+        "concept": "Unconscious Impulse / Great Leader",
+        "description": "History sees an unconscious impulse come forward in the voice of a great leader. Thesis begins to encounter its antithesis."
+      },
+      "freud": {
+        "name": "Sigmund Freud",
+        "concept": "Blunders / Slips",
+        "description": "Freudian slips — when something slips from the repressed domain of the unconscious into that of the spoken. The return of the repressed disrupts the ego's careful construction of normality."
+      },
+      "gennep": {
+        "name": "Arnold van Gennep",
+        "concept": "Preliminary Rites",
+        "description": "The preliminary rites of passage — what we do to prepare for a rite of passage. The stage of separation that prepares the initiate for the liminal experience ahead."
+      },
+      "eliade": {
+        "name": "Mircea Eliade",
+        "concept": "Disruption of Sacred Time",
+        "description": "The awareness that one may be entering sacred time — that a myth of renewal may be beginning. The disruption of profane time by something that calls toward the center."
+      },
+      "huxley": {
+        "name": "Aldous Huxley",
+        "concept": "Paradox & Anomaly",
+        "description": "Some spiritual writers highlight unavoidable paradoxes and add deliberate enormities of language designed to startle and shock the reader out of self-satisfied complacency. Masters of Taoism and Zen Buddhism use paradox to break through rational defenses."
+      }
+    },
+    "screenplay": {
+      "vogler": {
+        "name": "Christopher Vogler",
+        "concept": "Call to Adventure / Increased Awareness",
+        "description": "The Call to Adventure sets the story rolling by disrupting the comfort of the Hero's Ordinary World. A new person, condition or information shakes up the situation and the hero can never return to the original comfort of the Ordinary World."
+      },
+      "field": {
+        "name": "Syd Field",
+        "concept": "Inciting Incident",
+        "description": "The inciting incident is the dramatic hook that propels the story forward. It is the question that propels the story to its final resolution, and it is all set up from the very beginning."
+      },
+      "mckee": {
+        "name": "Robert McKee",
+        "concept": "Inciting Incident",
+        "description": "An event occurs that radically upsets the balance of forces in the protagonist's life. The impact creates our opportunity to reach the limits of life. It's a kind of explosion that must upset the status quo."
+      },
+      "snyder": {
+        "name": "Blake Snyder",
+        "concept": "Catalyst",
+        "description": "Catalyst moments: telegrams, getting fired, catching the wife in bed with another man, news that you have three days to live. In the set-up you have told us what the world is like and now in the catalyst moment you knock it all down. Boom!"
+      },
+      "harmon": {
+        "name": "Dan Harmon",
+        "concept": "Need (But they want something)",
+        "description": "The character becomes aware of a want or need. Something disrupts their comfort zone and creates desire for change."
+      },
+      "daniels": {
+        "name": "Daniels",
+        "concept": "Inciting Incident / First Cause",
+        "description": "The Inciting Incident entangles the destiny of characters with a first cause that will necessitate a conclusory effect in an obligatory scene."
+      }
+    }
+  },
+  "impact-crater": {
+    "mythological": {
+      "campbell": {
+        "name": "Joseph Campbell",
+        "concept": "Crossing the Threshold / Belly of the Whale",
+        "description": "The hero ventures beyond the known into the unknown. The adventurer still must return with his life-transmuting trophy. Crossing the first threshold is the passage into the zone of magnified power. The Belly of the Whale represents the hero's willingness to undergo metamorphosis."
+      },
+      "jung": {
+        "name": "Carl Jung",
+        "concept": "Descent into the Unconscious",
+        "description": "Water represents the unconscious. To be swallowed by the sea or overwhelmed by waves is to be taken into the space of dream — into an inner reality not familiar to a conscious ego."
+      },
+      "frobenius": {
+        "name": "Leo Frobenius",
+        "concept": "Sunset / Swallowed by the Sea",
+        "description": "This was the sunset — the moment when the seafarer is swallowed into the sea, into the whale. The beginning of the night-sea journey."
+      },
+      "nietzsche": {
+        "name": "Friedrich Nietzsche",
+        "concept": "Into the Desert",
+        "description": "The Beast of Burden crosses into the desert in an effort to prove that he can be the greatest champion of status quo values. The departure from the familiar into the wasteland of testing."
+      },
+      "gennep": {
+        "name": "Arnold van Gennep",
+        "concept": "Rites of Separation",
+        "description": "A stage of departure — of leaving home. The threshold between the familiar and the liminal space where transformation occurs."
+      },
+      "steiner": {
+        "name": "Rudolf Steiner",
+        "concept": "Threshold of Initiation",
+        "description": "The Way of Initiation describes a crossing of an initiatory threshold — sometimes with a disorienting blindfold. The departure from ordinary consciousness into higher knowledge."
+      }
+    },
+    "screenplay": {
+      "vogler": {
+        "name": "Christopher Vogler",
+        "concept": "Crossing the Threshold",
+        "description": "The hero commits to leaving the Ordinary World and entering a new region or condition — the Special World. This may look like a choice to accept the call and confront the conflict ahead."
+      },
+      "field": {
+        "name": "Syd Field",
+        "concept": "Plot Point 1",
+        "description": "The point between Act 1 and Act 2 — it hooks and spins the action in a new amped-up direction. A turning point that propels the story into the confrontation of Act 2."
+      },
+      "snyder": {
+        "name": "Blake Snyder",
+        "concept": "Break into 2",
+        "description": "The protagonist leaves the thesis world of Act 1 and enters the upside-down antithesis world of Act 2. The world is turned on its head."
+      },
+      "harmon": {
+        "name": "Dan Harmon",
+        "concept": "Go (They enter an unfamiliar situation)",
+        "description": "The characters cross a threshold and begin an exploration into an unfamiliar situation. They leave the known and enter the unknown."
+      },
+      "marks": {
+        "name": "Dara Marks",
+        "concept": "First Turn / Awakening",
+        "description": "The first turn, which comes with a sort of awakening to newly discovered reality. A new identification with previously unrecognized aspects of self."
+      }
+    }
+  },
+  "forge": {
+    "mythological": {
+      "campbell": {
+        "name": "Joseph Campbell",
+        "concept": "Road of Trials",
+        "description": "The hero meets helpers and grows from tests. This is the dangerous aspect of the gods. Once having traversed the threshold, the hero moves in a dream landscape of curiously fluid, ambiguous forms, where he must survive a succession of trials."
+      },
+      "jung": {
+        "name": "Carl Jung",
+        "concept": "Shadow Integration / Inferior Functions",
+        "description": "In the process of individuation, this is when we develop inferior functions of the Shadow and Unconscious while the ego begins to be deconstructed and the will begins to fail."
+      },
+      "nietzsche": {
+        "name": "Friedrich Nietzsche",
+        "concept": "Deep in the Desert",
+        "description": "The Beast of Burden journeys deep into the desert, where the introspections begin to define the landscape. Progressive confrontation with inner truths."
+      },
+      "frobenius": {
+        "name": "Leo Frobenius",
+        "concept": "In the Whale's Belly",
+        "description": "The seafarer now travels in and with the whale — down, into the depths of the sea. The journey within the monster."
+      },
+      "gennep": {
+        "name": "Arnold van Gennep",
+        "concept": "Liminal Rites",
+        "description": "The rites we experience in the liminal space to which we have journeyed. This is when we initiate. The in-between state where transformation occurs."
+      },
+      "murdoch": {
+        "name": "Maureen Murdoch",
+        "concept": "Road of Trials, Ogres and Demons",
+        "description": "The heroine's journey through trials, confronting ogres and demons that represent internalized oppression and inherited patterns."
+      }
+    },
+    "screenplay": {
+      "vogler": {
+        "name": "Christopher Vogler",
+        "concept": "Tests, Allies, Enemies",
+        "description": "The hero is tested, finds allies and meets enemies. As in the Wizard of Oz, characters begin to meet friends, some of which may prove to be enemies."
+      },
+      "field": {
+        "name": "Syd Field",
+        "concept": "Act 2 / Confrontation",
+        "description": "The heart of Act 2 is defined by confrontation. Driven by their dramatic need, protagonists work through a series of obstacles."
+      },
+      "mckee": {
+        "name": "Robert McKee",
+        "concept": "Progressive Complications",
+        "description": "Progressive complications continue to raise the level of antagonism and conflict. Each complication escalates the stakes and deepens the hero's engagement."
+      },
+      "snyder": {
+        "name": "Blake Snyder",
+        "concept": "Fun and Games",
+        "description": "The moments and montages that tend to find their way into trailers. This is where the premise of the movie is explored in its fullest."
+      },
+      "harmon": {
+        "name": "Dan Harmon",
+        "concept": "Search (Adapt to it)",
+        "description": "After having been swallowed into an unknown world, the characters begin to adapt. They search for what they need."
+      }
+    }
+  },
+  "quenching": {
+    "mythological": {
+      "campbell": {
+        "name": "Joseph Campbell",
+        "concept": "Atonement / Meeting with the Goddess / Boon",
+        "description": "The Ordeal signifies the death of the ego. Atonement (at-one-ment) consists in the abandonment of self-generated double monster. The hero discovers and assimilates his opposite. The boon is simply a symbol of life energy stepped down to the requirements of a certain specific case."
+      },
+      "jung": {
+        "name": "Carl Jung",
+        "concept": "Ego Death / Hieros Gamos / The Self",
+        "description": "When the ego dies, we meet the Self — the totality of our being and inner image of God. The mysterium conjunctionis — the mysterious conjunction of opposites. In alchemy, the sacred marriage of opposites that produces the philosopher's stone."
+      },
+      "nietzsche": {
+        "name": "Friedrich Nietzsche",
+        "concept": "The Lion's Roar / Nirvana",
+        "description": "The Lion roars 'No!' — the defender of the status quo is heroically confronted. The Superman is a fully realized individual, free from the tyranny of an inner Thou Shalt. Nirvana means 'the Extinguishing of the Threefold Fire of Desire, Hostility, and Delusion.'"
+      },
+      "frobenius": {
+        "name": "Leo Frobenius",
+        "concept": "Fire from the Whale's Belly",
+        "description": "Fire is seized from the belly or heart of the whale, once it's come to rest on the seafloor. This is what we see in Pinocchio. The retrieval of the essential spark from the deepest point."
+      },
+      "eliade": {
+        "name": "Mircea Eliade",
+        "concept": "Center & Source / New Year Renewal",
+        "description": "Every New Year is a resumption of time from the beginning — a repetition of the cosmogony. A periodic regeneration of time presupposes a new Creation. Life grows from its center and source."
+      },
+      "huxley": {
+        "name": "Aldous Huxley",
+        "concept": "Dark Night / Desirelessness",
+        "description": "The path to passive or infused contemplation is a hard and painful passage through successive Dark Nights — dying to the life of sense, to thinking and believing, and finally to the separate individualized will. Desirelessness is the condition of deliverance."
+      },
+      "freud": {
+        "name": "Sigmund Freud",
+        "concept": "Father Complex / Oedipal Confrontation",
+        "description": "In the Freudian drama, the thou shalt tyrant is the father. This moment can look like a confrontation with the devouring father — like Cronos, like Darth Vader (Dark Father)."
+      },
+      "kripal": {
+        "name": "Jeff Kripal",
+        "concept": "From Victimhood to Authorship",
+        "description": "The tipping point from victimhood to agency, to authorship. The moment when the hero stops being written by their story and begins to write it."
+      },
+      "tolkien": {
+        "name": "J.R.R. Tolkien",
+        "concept": "Eucatastrophe / Cauldron of Stories",
+        "description": "Recovery — regaining a clear view, seeing things as we are meant to see them. The Cauldron of Stories — stories ladled from an indivisible soup of myth, history, rumor and life. The Happy Ending as consolation and transcendence."
+      }
+    },
+    "screenplay": {
+      "vogler": {
+        "name": "Christopher Vogler",
+        "concept": "Ordeal / Reward (Seizing the Sword)",
+        "description": "The hero faces the greatest challenge yet, the Ordeal in the Inmost Cave. Heroes must die so that they can be reborn. The dramatic movement audiences enjoy more than any other is death and rebirth. The hero seizes the sword — takes possession of the treasure."
+      },
+      "field": {
+        "name": "Syd Field",
+        "concept": "Plot Point 2",
+        "description": "The Plot Point at the end of Act II spins the action around into Act III. The big turning point that launches the resolution."
+      },
+      "mckee": {
+        "name": "Robert McKee",
+        "concept": "Crisis / Climax of Act 2",
+        "description": "Crisis with a capital C is the ultimate decision. The Chinese ideogram for Crisis is Danger/Opportunity. The protagonist must make a decision to take one action or another in a last effort. The dominant motive, the central value, comes to the fore."
+      },
+      "snyder": {
+        "name": "Blake Snyder",
+        "concept": "Dark Night of the Soul / Break into 3",
+        "description": "The Dark Night of the Soul — 'We must be beaten and know it to get the lesson.' This is followed by the Break into 3. His 'whiff of death' — something here does die."
+      },
+      "harmon": {
+        "name": "Dan Harmon",
+        "concept": "Find (Find what they needed)",
+        "description": "The character finds what they were searching for — but it may come at a great cost. The discovery that changes everything."
+      },
+      "daniels": {
+        "name": "Daniels",
+        "concept": "Dark Moment / Third Act Tension",
+        "description": "This moment, the climax of Act Two, is the moment of greatest tension and should set the story on the final path to resolution in Act Three."
+      }
+    }
+  },
+  "integration": {
+    "mythological": {
+      "campbell": {
+        "name": "Joseph Campbell",
+        "concept": "Refusal of the Return / Magic Flight",
+        "description": "The hero may refuse the return — even the Buddha doubted whether the message could be communicated. If the trophy has been attained against opposition, the last stage becomes a lively pursuit — the Magic Flight. The hero must return with his life-transmuting trophy."
+      },
+      "jung": {
+        "name": "Carl Jung",
+        "concept": "Confronting Regression",
+        "description": "After finding a new understanding of Self and union of opposites, we confront the demons of regression — the challenge of annihilating all the old ways of seeing that we now see through."
+      },
+      "nietzsche": {
+        "name": "Friedrich Nietzsche",
+        "concept": "After the Dragon",
+        "description": "After the Dragon has been confronted, but the new world has not yet been created. The lion has roared but has not yet become the child. The transformation is underway but incomplete."
+      },
+      "gennep": {
+        "name": "Arnold van Gennep",
+        "concept": "Post-liminal Rites",
+        "description": "The rites of return — the emphasis on overcoming the refusal to return and reintegrating with the world left behind. The transition from liminal back to structured society."
+      },
+      "eliade": {
+        "name": "Mircea Eliade",
+        "concept": "Reassembly / New Year Ceremony",
+        "description": "The reassembly of the 14 slivers of moon. The new year ceremony as the regeneration of time. The purging of sins and the rekindling of sacred fires."
+      }
+    },
+    "screenplay": {
+      "vogler": {
+        "name": "Christopher Vogler",
+        "concept": "The Road Back",
+        "description": "This stage marks the decision to return to the Ordinary World. There are still dangers, temptations, and tests ahead. The story's energy is revved up again. Racing for the curtain."
+      },
+      "field": {
+        "name": "Syd Field",
+        "concept": "Act 3 / Resolution (First Half)",
+        "description": "Act III becomes an entire sequence — a full and complete unit of action. The first half of the resolution, building momentum toward the final climax."
+      },
+      "mckee": {
+        "name": "Robert McKee",
+        "concept": "Building to Climax",
+        "description": "The consequences of the crisis decision begin to unfold. The protagonist deals with the fallout and builds toward the final confrontation."
+      },
+      "snyder": {
+        "name": "Blake Snyder",
+        "concept": "Gathering the Team / Storming the Castle",
+        "description": "This is when we gather the team to storm the castle. The forces of protagonism rally for the final push."
+      },
+      "harmon": {
+        "name": "Dan Harmon",
+        "concept": "Take (Pay a heavy price for it)",
+        "description": "The character must pay a heavy price for what they've found. The road back is paved with sacrifice and consequence."
+      }
+    }
+  },
+  "drawing": {
+    "mythological": {
+      "campbell": {
+        "name": "Joseph Campbell",
+        "concept": "Crossing the Return Threshold / Master of Two Worlds",
+        "description": "The final crisis — the paradoxical, supremely difficult threshold-crossing of the hero's return from the mystic realm into the land of common day. Freedom to pass back and forth across the world division. The Cosmic Dancer does not rest heavily in a single spot."
+      },
+      "jung": {
+        "name": "Carl Jung",
+        "concept": "Individuation / Reassembly of Ego",
+        "description": "An expression of Individuation — a reassembly of ego upon the completion of a journey meant to break, expand and actuate who we can be. The integration of all aspects of self into a new wholeness."
+      },
+      "nietzsche": {
+        "name": "Friedrich Nietzsche",
+        "concept": "The Child / Übermensch",
+        "description": "The lion becomes a child — innocence and forgetting, a new beginning, a game, a self-propelling wheel, a first movement, a sacred Yes. The Superman — a fully realized individual free from the tyranny of inner Thou Shalt."
+      },
+      "frobenius": {
+        "name": "Leo Frobenius",
+        "concept": "Return to Surface",
+        "description": "The whale returns to the surface. The seafarer emerges from the night-sea journey, transformed, carrying fire. The completion of the solar cycle."
+      },
+      "eliade": {
+        "name": "Mircea Eliade",
+        "concept": "New King / Restoration of Fertility",
+        "description": "A new king restores fertility and life to the land. The old king is sacrificed for the anointing of a new king whose youthful fertile body brings youthful fertility to the new land."
+      },
+      "kierkegaard": {
+        "name": "Søren Kierkegaard",
+        "concept": "Knight of Faith",
+        "description": "The Knight of Faith who, having completed the quest, returns to life as a clerk. The leap of faith that enables the return to the mundane world while carrying transcendent understanding."
+      }
+    },
+    "screenplay": {
+      "vogler": {
+        "name": "Christopher Vogler",
+        "concept": "Resurrection / Return with the Elixir",
+        "description": "The hero is transformed by moments of death-and-rebirth and returns to ordinary life reborn. The hero returns with the Elixir — something to share with others or heal a wounded land. The climax as a ladder to the highest peak of energy."
+      },
+      "field": {
+        "name": "Syd Field",
+        "concept": "Climax / Resolution",
+        "description": "The ending comes out of the beginning. Someone initiates an action, and how that action is resolved becomes the story line. For every action there's an equal and opposite reaction."
+      },
+      "mckee": {
+        "name": "Robert McKee",
+        "concept": "Story Climax / Irreversible Change",
+        "description": "A story is a series of acts that build to a last act climax which brings about absolute and irreversible change. The ending must be both inevitable and unexpected. Spectacle and Truth combined."
+      },
+      "snyder": {
+        "name": "Blake Snyder",
+        "concept": "High Tower Surprise / Final Image",
+        "description": "The High Tower Surprise at the threshold. The final image should mirror and contrast with the opening image, showing how much has changed."
+      },
+      "harmon": {
+        "name": "Dan Harmon",
+        "concept": "Return (Having changed)",
+        "description": "Return to the familiar having changed. The character comes back but is fundamentally different from who they were at the start."
+      },
+      "aristotle": {
+        "name": "Aristotle",
+        "concept": "Resolution / Catharsis",
+        "description": "The resolution — the completion of the complication. Catharsis through the experience of pity and terror. The purification and purgation of the spectator's emotions."
+      }
+    }
+  },
+  "new-age": {
+    "mythological": {
+      "campbell": {
+        "name": "Joseph Campbell",
+        "concept": "Freedom to Live",
+        "description": "The goal of the myth is to dispel life ignorance by effecting a reconciliation of the individual consciousness with the universal will. The hero no longer tries to live but willingly relaxes to whatever may come. He becomes an anonymity. The Law lives in him."
+      },
+      "jung": {
+        "name": "Carl Jung",
+        "concept": "The Realized Self",
+        "description": "The fully individuated person — one who has integrated shadow, anima/animus, and Self. The master of two worlds who can move between conscious and unconscious, between the mythic and the mundane."
+      },
+      "nietzsche": {
+        "name": "Friedrich Nietzsche",
+        "concept": "Sacred Yes",
+        "description": "For the game of creating, a sacred 'yes' to life is needed: the spirit now wills its own will; the one who had lost the world now attains its own world. The child plays the game of creation."
+      },
+      "tolkien": {
+        "name": "J.R.R. Tolkien",
+        "concept": "Eucatastrophe / Consolation",
+        "description": "The Consolation of the Happy Ending — the sudden joyous turn. Man, finally redeemed, will be like and unlike the fallen that we know. Not a return to the old, but the arrival of something genuinely new."
+      },
+      "eliade": {
+        "name": "Mircea Eliade",
+        "concept": "The Renewed World",
+        "description": "The world is regenerated. New Year ceremonies accomplish the periodic regeneration of time — a new creation, a repetition of the cosmogony. The renewal of all things."
+      }
+    },
+    "screenplay": {
+      "vogler": {
+        "name": "Christopher Vogler",
+        "concept": "Elixir & Epilogue",
+        "description": "The journey is meaningless unless she brings back some Elixir, treasure, or lesson from the Special World. Epilogues project ahead to show how characters turned out. Their spirit is the Elixir that revives the hero and the audience."
+      },
+      "mckee": {
+        "name": "Robert McKee",
+        "concept": "Resolution / Denouement",
+        "description": "The resolution shows the spread of climactic effects. A Story Climax of absolute irreversible change that answers all questions and satisfies all audience emotion is a Closed Ending. The slow curtain allows the audience to catch its breath."
+      },
+      "field": {
+        "name": "Syd Field",
+        "concept": "Resolution Complete",
+        "description": "All films need a Resolution as a courtesy to the audience. An ending should resolve all the main story points. No loose ends. Everything is resolved dramatically."
+      },
+      "snyder": {
+        "name": "Blake Snyder",
+        "concept": "Final Image",
+        "description": "The opposite of the Opening Image. The final image shows the change that has taken place in the story and serves as proof that change has occurred."
+      }
+    }
+  }
+}

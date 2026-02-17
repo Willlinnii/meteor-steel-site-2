@@ -18,6 +18,8 @@ import cardinalsData from '../../data/sevenMetalsCardinals.json';
 import planetaryCultures from '../../data/sevenMetalsPlanetaryCultures.json';
 import elementsData from '../../data/sevenMetalsElements.json';
 import calendarData from '../../data/mythicCalendar.json';
+import wheelData from '../../data/medicineWheels.json';
+import wheelContent from '../../data/medicineWheelContent.json';
 
 function findBySin(arr, sin) {
   return arr.find(item => item.sin === sin) || null;
@@ -254,6 +256,8 @@ export default function SevenMetalsPage() {
   const [showCalendar, setShowCalendar] = useState(false);
   const [selectedMonth, setSelectedMonth] = useState(null);
   const [activeMonthTab, setActiveMonthTab] = useState('stone');
+  const [showMedicineWheel, setShowMedicineWheel] = useState(false);
+  const [selectedWheelItem, setSelectedWheelItem] = useState(null);
 
   const mergedData = useMemo(() => {
     const map = {};
@@ -275,6 +279,15 @@ export default function SevenMetalsPage() {
 
   const currentData = mergedData[selectedPlanet] || null;
 
+  let wheelContentData = null;
+  if (selectedWheelItem) {
+    const [wId, wDir] = selectedWheelItem.split(':');
+    const wheel = wheelData.wheels.find(w => w.id === wId);
+    const pos = wheel?.positions.find(p => p.dir === wDir);
+    const content = wheelContent[selectedWheelItem] || null;
+    if (wheel && pos) wheelContentData = { wheel, pos, content };
+  }
+
   return (
     <div className="seven-metals-page">
       <div className="metals-diagram-center">
@@ -291,10 +304,69 @@ export default function SevenMetalsPage() {
           onToggleCalendar={() => setShowCalendar(!showCalendar)}
           selectedMonth={selectedMonth}
           onSelectMonth={(m) => { setSelectedMonth(m); setActiveMonthTab('stone'); if (m) { setSelectedSign(null); setSelectedCardinal(null); setSelectedEarth(false); } }}
+          showMedicineWheel={showMedicineWheel}
+          onToggleMedicineWheel={() => {
+            const next = !showMedicineWheel;
+            setShowMedicineWheel(next);
+            setSelectedWheelItem(null);
+            if (next) { setSelectedSign(null); setSelectedCardinal(null); setSelectedEarth(false); setSelectedMonth(null); setShowCalendar(false); }
+            else { setSelectedPlanet('Sun'); }
+          }}
+          selectedWheelItem={selectedWheelItem}
+          onSelectWheelItem={(item) => { setSelectedWheelItem(item); if (item) { setSelectedSign(null); setSelectedCardinal(null); setSelectedEarth(false); setSelectedMonth(null); } }}
         />
       </div>
 
-      {selectedMonth ? (
+      {showMedicineWheel ? (
+        wheelContentData ? (
+          <>
+            <h2 className="metals-heading">
+              {wheelContentData.pos.label}
+              <span className="metals-sub">{wheelContentData.wheel.title}</span>
+            </h2>
+            <div className="container">
+              <div id="content-container">
+                <div className="metal-detail-panel">
+                  <div className="tab-content">
+                    {wheelContentData.pos.sublabel && <h5>{wheelContentData.pos.sublabel}</h5>}
+                    {wheelContentData.pos.num != null && (
+                      <p className="attr-list">Position {wheelContentData.pos.num} · {wheelContentData.pos.dir}</p>
+                    )}
+                    {wheelContentData.content ? (
+                      <div className="modern-section">
+                        <p><em>{wheelContentData.content.summary}</em></p>
+                        <p>{wheelContentData.content.teaching}</p>
+                        {wheelContentData.content.pages && (
+                          <p className="attr-list">Lightningbolt pp. {wheelContentData.content.pages.join(', ')}</p>
+                        )}
+                      </div>
+                    ) : (
+                      <p className="metals-empty">Content coming soon.</p>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </>
+        ) : (
+          <>
+            <h2 className="metals-heading">
+              Medicine Wheel
+              <span className="metals-sub">Hyemeyohsts Storm</span>
+            </h2>
+            <div className="container">
+              <div id="content-container">
+                <div className="metal-detail-panel">
+                  <div className="tab-content">
+                    <p>Select a position on the medicine wheel to explore its teachings.</p>
+                    <p className="attr-list">Human Self · Perspective · Elements · Spheres of the Body · Mathematics</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </>
+        )
+      ) : selectedMonth ? (
         <>
           <h2 className="metals-heading">
             {selectedMonth}

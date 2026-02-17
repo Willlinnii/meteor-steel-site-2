@@ -1,0 +1,298 @@
+{
+  "golden-age": {
+    "stageName": "Surface",
+    "stageNumber": 1,
+    "summary": "The world at its zenith — noon, full moon, summer solstice, full maturity.",
+    "cycles": {
+      "solarDay": {
+        "label": "Solar Day",
+        "phase": "Noon / Zenith",
+        "description": "The sun reaches its apex at noon. Humans are in the prime of their adulthood, at the zenith where the Sun rests at noon. This is the brightest, most visible moment of the daily cycle — full wakefulness, full activity."
+      },
+      "lunarMonth": {
+        "label": "Lunar Month",
+        "phase": "Full Moon",
+        "description": "The moon is full, completely illuminated. This represents the apex of the monthly cycle — maximum visibility, maximum reflected light."
+      },
+      "solarYear": {
+        "label": "Solar Year",
+        "phase": "Summer Solstice",
+        "description": "The longest day of the year. Summer brings the year to its fullness of illumination. Plants and animals are in full flower. The world is at maximum warmth, light, and life."
+      },
+      "lifeDeath": {
+        "label": "Life & Death",
+        "phase": "Prime of Life",
+        "description": "A fully mature adult is in the prime of life. Animals are sexually mature. Plants are in full flower. This is the highpoint of vitality before the inevitable decline."
+      },
+      "procreation": {
+        "label": "Procreation",
+        "phase": "Full Maturity",
+        "description": "The organism at full reproductive maturity — the fruit is ripe, the flower is in bloom. The fullness before the calling toward fertilization and the next generation."
+      },
+      "wakingDreaming": {
+        "label": "Waking & Dreaming",
+        "phase": "Full Wakefulness",
+        "description": "Fully awake and alert. The conscious ego is in full control. The world of phenomena is experienced with maximum clarity and orientation."
+      }
+    }
+  },
+  "falling-star": {
+    "stageName": "Calling",
+    "stageNumber": 2,
+    "summary": "The descent begins — afternoon, waning moon, autumn, the mating call.",
+    "cycles": {
+      "solarDay": {
+        "label": "Solar Day",
+        "phase": "Afternoon",
+        "description": "The sun enters its afternoon hours, during which time shadows grow. The descent from the zenith has begun. Light is still strong but clearly waning."
+      },
+      "lunarMonth": {
+        "label": "Lunar Month",
+        "phase": "Waning Gibbous",
+        "description": "Slivers of darkness displace the moon's brightness, allowing nights to grow darker again. The monthly waning has begun."
+      },
+      "solarYear": {
+        "label": "Solar Year",
+        "phase": "Late Summer / Early Autumn",
+        "description": "Days grow shorter. Autumn colors the world. The harvest approaches. This is when the grain, entering its golden age, calls to be mowed down."
+      },
+      "lifeDeath": {
+        "label": "Life & Death",
+        "phase": "Weary Wilting",
+        "description": "A call towards sleep and death. The time of weary wilting. Parents are biologically called towards death as the organism ages past its prime."
+      },
+      "procreation": {
+        "label": "Procreation",
+        "phase": "Mating Call",
+        "description": "This is the time of the mating call. Animals engage in mating rituals. The flower seduces fertilization. The fruit ripens. New awareness of sexuality shifts priorities from growth to reproduction."
+      },
+      "wakingDreaming": {
+        "label": "Waking & Dreaming",
+        "phase": "Drowsiness",
+        "description": "The first stirrings of sleepiness. The conscious mind begins to encounter disruptions — Freudian slips, synchronicities, anomalies that crack the surface of waking normality."
+      }
+    }
+  },
+  "impact-crater": {
+    "stageName": "Crossing",
+    "stageNumber": 3,
+    "summary": "The threshold — sunset, half moon, autumn equinox, falling asleep, penetration.",
+    "cycles": {
+      "solarDay": {
+        "label": "Solar Day",
+        "phase": "Sunset",
+        "description": "The sun sets across the horizon, descending from above to below. This is the threshold crossing of the daily cycle — the boundary between the known world of day and the unknown world of night."
+      },
+      "lunarMonth": {
+        "label": "Lunar Month",
+        "phase": "Half Moon (Waning)",
+        "description": "The half-moon wanes towards empty. Half the face is dark. This is the threshold of the monthly cycle — equally illuminated and shadowed."
+      },
+      "solarYear": {
+        "label": "Solar Year",
+        "phase": "Autumn Equinox",
+        "description": "Shortening days are as short as they are long at the Fall Equinox. This is the threshold of the annual cycle. From here, darkness overtakes light."
+      },
+      "lifeDeath": {
+        "label": "Life & Death",
+        "phase": "Death / Departure",
+        "description": "Consciousness departs from the body upon death. The organism crosses the threshold from living to dying. The crossing from one state of being to another."
+      },
+      "procreation": {
+        "label": "Procreation",
+        "phase": "Penetration / Planting",
+        "description": "Mother and Earth are penetrated for the planting of seed. This is the moment of conception's threshold — the seed enters the womb, the pollen enters the pistil, the sperm crosses into the egg."
+      },
+      "wakingDreaming": {
+        "label": "Waking & Dreaming",
+        "phase": "Falling Asleep",
+        "description": "Falling asleep, we depart from wakefulness. The conscious ego crosses the threshold into the world of the unconscious, the realm of dream."
+      }
+    }
+  },
+  "forge": {
+    "stageName": "Initiating / Road of Trials",
+    "stageNumber": 4,
+    "summary": "The deep journey — night deepens, moon wanes, winter approaches, dreaming, gestation.",
+    "cycles": {
+      "solarDay": {
+        "label": "Solar Day",
+        "phase": "Evening to Deep Night",
+        "description": "The sun journeys from sunset towards its nadir. Shadow grows as darkness deepens. The world of night is fully entered — a world of different rules, different perceptions."
+      },
+      "lunarMonth": {
+        "label": "Lunar Month",
+        "phase": "Waning Crescent",
+        "description": "Shadow grows as the moon wanes toward its final slivers. The light diminishes progressively, like articles of identity being stripped away."
+      },
+      "solarYear": {
+        "label": "Solar Year",
+        "phase": "Late Autumn / Early Winter",
+        "description": "Days darken and cool. Fall dies to Winter. The world enters its season of trials — cold, scarcity, endurance. The progressive complications of survival."
+      },
+      "lifeDeath": {
+        "label": "Life & Death",
+        "phase": "Journey Through Death",
+        "description": "The body becomes dust as the soul journeys through death. The trials of the afterlife, the stages of decomposition, the progressive dissolution of the former self."
+      },
+      "procreation": {
+        "label": "Procreation",
+        "phase": "Journey of Seed",
+        "description": "Seed, sperm and pollen journey to the womb of conception. The long road through the birth canal, the fallopian tube. The progressive complications of gestation."
+      },
+      "wakingDreaming": {
+        "label": "Waking & Dreaming",
+        "phase": "Dreaming",
+        "description": "The sleeper journeys through dream. Progressive encounters with unconscious material. Tests, helpers, and shape-shifters populate the dreamscape."
+      }
+    }
+  },
+  "quenching": {
+    "stageName": "Nadir / Ordeal",
+    "stageNumber": 5,
+    "summary": "The darkest hour — midnight, new moon, winter solstice, deepest dream, conception, ego death.",
+    "cycles": {
+      "solarDay": {
+        "label": "Solar Day",
+        "phase": "Midnight",
+        "description": "Midnight is the darkest moment of the daily cycle. This is when 11:59 PM gives way to 12:01 AM — the pivot from the last light to the first. The nadir of the day where direction changes from darker to lighter."
+      },
+      "lunarMonth": {
+        "label": "Lunar Month",
+        "phase": "New Moon",
+        "description": "The new moon is the darkest moment in the monthly cycle. From the last crescent to the new, this is the moment when the light goes out and returns. The moon is extinguished before the first sliver of new light appears."
+      },
+      "solarYear": {
+        "label": "Solar Year",
+        "phase": "Winter Solstice",
+        "description": "The winter solstice is the darkest day of the year — the shortest day, the longest night. This is when direction changes from days getting shorter and darker to days growing in warmth, light and life. This is when holidays like Christmas, Yule, Sol Invictus, and Hanukkah celebrate the miracle of returning light."
+      },
+      "lifeDeath": {
+        "label": "Life & Death",
+        "phase": "Moment of Death / Spark of New Life",
+        "description": "The moment between death and the first spark of new life. The Nadir of life where the old is fully extinguished and the new begins. In Egyptian myth, this is the 9th Hour when Osiris receives the first spark of resurrection in the depths of Aker."
+      },
+      "procreation": {
+        "label": "Procreation",
+        "phase": "Conception",
+        "description": "The moment of conception — when the sperm reaches the egg, when the seed germinates, when the radical first root of a still seed sparks. This is the pivotal moment from which all new life grows."
+      },
+      "wakingDreaming": {
+        "label": "Waking & Dreaming",
+        "phase": "Deepest Dream / Lucidity",
+        "description": "The deepest point of sleep where the most profound dreams occur. This is where lucid dreaming or ego-dissolving visions take place. The moment of deepest unconscious contact before the return to waking begins."
+      }
+    }
+  },
+  "integration": {
+    "stageName": "Return",
+    "stageNumber": 6,
+    "summary": "The ascent begins — pre-dawn, waxing crescent, late winter, labor, waking.",
+    "cycles": {
+      "solarDay": {
+        "label": "Solar Day",
+        "phase": "Pre-Dawn",
+        "description": "From midnight on, the sun begins to return. The world is still dark but momentum is shifting. The first hints of approaching dawn encourage the return journey."
+      },
+      "lunarMonth": {
+        "label": "Lunar Month",
+        "phase": "Waxing Crescent",
+        "description": "After the new moon, nights brighten with waxing light. The first sliver of the new crescent moon appears — symbol of new hope, new life, new direction."
+      },
+      "solarYear": {
+        "label": "Solar Year",
+        "phase": "Late Winter",
+        "description": "After the Winter Solstice, the days begin to lengthen, the world begins to warm. Snow thaws and life takes start. The promise of spring is ahead but the road is still cold."
+      },
+      "lifeDeath": {
+        "label": "Life & Death",
+        "phase": "Resurrection / Gestation",
+        "description": "The soul begins to ascend towards rebirth. New life is gestating. The reassembly begins — the 14 pieces of Osiris are gathered, the scattered self comes back together."
+      },
+      "procreation": {
+        "label": "Procreation",
+        "phase": "Labor",
+        "description": "Mothers go into labor with gestated children. The long push toward delivery has begun. The child is fully formed but must traverse the birth canal."
+      },
+      "wakingDreaming": {
+        "label": "Waking & Dreaming",
+        "phase": "Rising from Sleep",
+        "description": "The sleeper ascends from the depths of their dreams. The return toward waking consciousness begins. Dreams become lighter, more connected to waking reality."
+      }
+    }
+  },
+  "drawing": {
+    "stageName": "Resurrection & Arrival",
+    "stageNumber": 7,
+    "summary": "The climactic crossing — sunrise, half moon waxing, spring equinox, birth, awakening.",
+    "cycles": {
+      "solarDay": {
+        "label": "Solar Day",
+        "phase": "Sunrise",
+        "description": "Sun rises, delivering light to bring a new day, and with that light, visible safety and order. The climactic horizon crossing — the threshold of return is the horizon itself."
+      },
+      "lunarMonth": {
+        "label": "Lunar Month",
+        "phase": "First Quarter (Waxing)",
+        "description": "The moon becomes a glass half full after spending three quarters of its time half empty or waning. This begins the quarter of the month when the moon waxes — from half full to fully illuminated."
+      },
+      "solarYear": {
+        "label": "Solar Year",
+        "phase": "Spring Equinox",
+        "description": "For the first time in three quarters of the year, the days are longer than the nights and lengthening. This is Oestara, the goddess of spring and sunrise. The wasteland of winter gives way to new life."
+      },
+      "lifeDeath": {
+        "label": "Life & Death",
+        "phase": "Birth / Resurrection",
+        "description": "The conflation of sunrise with awakening and birth — of ourselves, offspring, and the next generation. Fully formed when emerging, like a butterfly from its chrysalis. Adam and Eve fully grown at the mountain at sunrise in Eden."
+      },
+      "procreation": {
+        "label": "Procreation",
+        "phase": "Birth / Delivery",
+        "description": "The child is born. The seed breaks through soil. The delivery of new life across the threshold into the world. Inanna goes into labor. Isis conceives Horus. The elixir is delivered."
+      },
+      "wakingDreaming": {
+        "label": "Waking & Dreaming",
+        "phase": "Awakening",
+        "description": "The moment of waking. Eyes open to the familiar world, but transformed by the journey of dream. The return to consciousness with the gifts of the unconscious."
+      }
+    }
+  },
+  "new-age": {
+    "stageName": "Renewal",
+    "stageNumber": 8,
+    "summary": "The new day — morning, waxing gibbous, spring/summer, new world, growth.",
+    "cycles": {
+      "solarDay": {
+        "label": "Solar Day",
+        "phase": "Morning",
+        "description": "The new day unfolds. Light increases. Activity resumes. The world is renewed by the journey through night. A new cycle begins with the lessons of the last."
+      },
+      "lunarMonth": {
+        "label": "Lunar Month",
+        "phase": "Waxing Gibbous",
+        "description": "The moon continues to fill with light, approaching fullness again. The renewal is underway. The cycle continues its eternal return."
+      },
+      "solarYear": {
+        "label": "Solar Year",
+        "phase": "Spring / Early Summer",
+        "description": "New life grows. Crops return. The wasteland is redeemed. After the climax of equinox, the spread of climactic effects transforms the world into verdure and abundance."
+      },
+      "lifeDeath": {
+        "label": "Life & Death",
+        "phase": "Coming of Age / New World",
+        "description": "The child grows. The new world takes shape. Harry's children go to Platform 9¾. Sam raises children in the Shire. The new generation inherits the renewed world."
+      },
+      "procreation": {
+        "label": "Procreation",
+        "phase": "Growth / Nurturing",
+        "description": "The newborn grows and develops. The seedling reaches toward light. The cycle of nurturing and growth that follows delivery. The spread of new life's effects."
+      },
+      "wakingDreaming": {
+        "label": "Waking & Dreaming",
+        "phase": "Full Wakefulness (Renewed)",
+        "description": "Fully awake again, but transformed. The Master of Two Worlds — one who can move freely between the dreaming and waking states, between the mythic and the mundane."
+      }
+    }
+  }
+}

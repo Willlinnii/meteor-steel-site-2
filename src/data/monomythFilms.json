@@ -1,0 +1,383 @@
+{
+  "golden-age": {
+    "wizardOfOz": {
+      "title": "The Wizard of Oz",
+      "year": 1939,
+      "description": "Perhaps the most famous cinematic example of establishing initial normality. The film spends considerable time showing Dorothy's drab life in Kansas (shot in black and white) before she arrives in Oz (shot in Technicolor), creating a sharp contrast between the Ordinary World and the Special World."
+    },
+    "starWars": {
+      "title": "Star Wars",
+      "year": 1977,
+      "description": "Luke's life at the Empire's edge conveys his starting state of despair over not yet participating in the story. He is sheltered and raised at the fringes. The cinematic introduction communicates the situation and status quo of the ordinary world."
+    },
+    "matrix": {
+      "title": "The Matrix",
+      "year": 1999,
+      "description": "The commonality of life in the Matrix expresses the common state of unenlightened slumber. The question 'What is the Matrix?' defines the entire surface reality as illusion — connecting to Plato's Cave and Cartesian doubt."
+    },
+    "lordOfTheRings": {
+      "title": "The Lord of the Rings: The Fellowship of the Ring",
+      "year": 2001,
+      "description": "The Shire expresses Bilbo and Frodo's inner reality. Middle Earth begins in relative peace with a rising threat. The film's opening establishes the history of the ring and sets up all three films. The origin story of the ring defines normality while threatening recurrence."
+    },
+    "legoMovie": {
+      "title": "The Lego Movie",
+      "year": 2014,
+      "description": "The protagonist's embeddedness in the oppressive status quo is conveyed through his cheerful participation in the city's normal activities ('Everything is Awesome'). The audience can see the world is oppressive to imagination even when the protagonist has no idea."
+    },
+    "equilibrium": {
+      "title": "Equilibrium",
+      "year": 2002,
+      "description": "Christian Bale's character enforces state standards by killing those who won't repress emotions. The film's origin story explains that everyone doses themselves with emotion-suppressing chemicals because it was the elixir that redeemed a previous wasteland of violence. A dystopian origin story that defines and justifies normality."
+    },
+    "vForVendetta": {
+      "title": "V for Vendetta",
+      "year": 2005,
+      "description": "Different characters represent a prismatic array of structural relationships with normality — participant, beneficiary, enforcer, sufferer — giving dimensionality to the transformation of norms. Evey begins as a regular citizen, an unwitting participant."
+    },
+    "trumanShow": {
+      "title": "The Truman Show",
+      "year": 1998,
+      "description": "Living in a constructed illusion, connecting to the Cartesian Evil Demon idea and Plato's Cave — the notion that what we see does not give us key information about what really is."
+    },
+    "spaceOdyssey": {
+      "title": "2001: A Space Odyssey",
+      "year": 1968,
+      "description": "Nietzsche's allegory of 'Thou Shalt' was brought to the film by Arthur C. Clarke and Stanley Kubrick, whose use of 'Thus Spake Zarathustra' is one of the most memorable scoring choices in film history. HAL is the tyrant in control, the withholder of oxygen, the voice of 'thou shalt.'"
+    },
+    "alien": {
+      "title": "Alien",
+      "year": 1979,
+      "description": "Interpreted as a 'compensatory nightmare' — a response to the myth of dead matter. The maternal alien is 'Mater alienated,' like Eve or Pandora 5000 years later, post-repression. The alien is a boogey monster for those who treat mater as lifeless stuff to be extracted and objectified."
+    }
+  },
+  "falling-star": {
+    "matrix": {
+      "title": "The Matrix",
+      "year": 1999,
+      "description": "Morpheus and Trinity wake Neo with questions and mystery as the call to adventure. Neo is 'the anomaly' discovered at the beginning. Trinity tells Neo 'you've been down that road' — a call that makes returning to normality impossible."
+    },
+    "starWars": {
+      "title": "Star Wars",
+      "year": 1977,
+      "description": "Obi-Wan and Yoda serve as mentor figures. Luke on the farm is a protagonist not yet ready. His uncle resists his journey, representing the voice of resistance. Princess Leia's abduction serves as the call to adventure."
+    },
+    "harryPotter": {
+      "title": "Harry Potter and the Philosopher's Stone",
+      "year": 2001,
+      "description": "Harry receives an invitation to Hogwarts as a call to adventure. His uncle works harder and harder to shut out his letters — the refusal of the call. Under the steps, Harry is an underdog not yet ready."
+    },
+    "hungerGames": {
+      "title": "The Hunger Games",
+      "year": 2012,
+      "description": "Katniss Everdeen, a victim of systemic marginalization, finds the weak link in her culture's construction through a selfless choice. Her sister is called by lottery. The mentor Haymitch, who had been through the games before, must find compassion to fulfill the mentor role."
+    },
+    "bruceAlmighty": {
+      "title": "Bruce Almighty",
+      "year": 2003,
+      "description": "Bruce is begging for a sign while signs are everywhere — a truckload of traffic signals — but he refuses the synchronicity. His refusal of the call leads to his inciting crash."
+    },
+    "ironMan": {
+      "title": "Iron Man",
+      "year": 2008,
+      "description": "Tony Stark cratered into the earth at the climax of his creation story with a heart of palladium — the most common trace material in nickel-iron meteorites. His origin from an iron missile connects to the meteor-iron mythic constellation."
+    },
+    "joker": {
+      "title": "Joker",
+      "year": 2019,
+      "description": "Shows what goes wrong when the wrong spirit is tread on and under-nurtured in too many ways for too long. The shadow as a product of neglect, not pure evil."
+    },
+    "beautyAndTheBeast": {
+      "title": "Beauty and the Beast",
+      "year": 1991,
+      "description": "Belle's father resists her adventure, like Luke's uncle. Belle is told she has the run of the Beast's household except one door she must never enter — the Law of the Secret Door."
+    },
+    "greenKnight": {
+      "title": "The Green Knight",
+      "year": 2021,
+      "description": "The mother's blessing at the beginning is the mentor's knowing call to a necessary journey for the hero and for Camelot. With awareness beyond Arthur's wildest dreams, she calls the journey to start."
+    },
+    "aliceInWonderland": {
+      "title": "Alice in Wonderland",
+      "year": 1951,
+      "description": "Alice mutters to herself as she crawls toward the rabbit hole — a charming example of refusal of the call. The curiosity pulls her forward despite hesitation."
+    }
+  },
+  "impact-crater": {
+    "wizardOfOz": {
+      "title": "The Wizard of Oz",
+      "year": 1939,
+      "description": "Dorothy's tornado crossing hurls her over the First Threshold into a Special World where familiar sights appear in unfamiliar circumstances — cows flying, Miss Gulch transforming into the Wicked Witch. Her last name 'Gale' is wordplay linking her to the storm — her own stirred-up emotions generated the twister."
+    },
+    "matrix": {
+      "title": "The Matrix",
+      "year": 1999,
+      "description": "Neo swallowing the red pill is an expression of the will's willingness to journey — an act of commitment to crossing the threshold. After Morpheus welcomes Neo, he pukes — illustrating the shock of crossing into the deep end of the other world."
+    },
+    "harryPotter": {
+      "title": "Harry Potter and the Philosopher's Stone",
+      "year": 2001,
+      "description": "Fluffy, the three-headed dog, is a clear reference to Cerberus as a threshold guardian. Rowling went further by having Fluffy lulled to sleep by music, drawing from Orpheus who played Cerberus to sleep. The train to Hogwarts is a threshold-crossing vessel, paralleling Charon's boat."
+    },
+    "starWars": {
+      "title": "Star Wars",
+      "year": 1977,
+      "description": "The Millennium Falcon carries Luke from his home world, serving as a ferry that crosses the threshold, analogous to Charon's boat or the solar barque. 'A Galaxy Far Far Away' is the classic other world."
+    },
+    "lordOfTheRings": {
+      "title": "The Lord of the Rings",
+      "year": 2001,
+      "description": "Boats carry elves, Gandalf, and the Hobbit heroes into the west where the sun sets. Earlier, Frodo's departure from the Shire is represented by his crossing on Buckleberry Ferry — a threshold-crossing vessel motif."
+    },
+    "thelmaAndLouise": {
+      "title": "Thelma & Louise",
+      "year": 1991,
+      "description": "Louise's impulsive killing pushes them to cross the First Threshold into a new world of being on the run. Sometimes you enter an entirely new world without physically going anywhere."
+    },
+    "jurassicPark": {
+      "title": "Jurassic Park",
+      "year": 1993,
+      "description": "From the moment the mission is accepted with a toast to the moment they arrive, the company crosses many thresholds — the sea and then gate after gate, site after site. The rabbit hole can be an extended passage rather than a single moment."
+    },
+    "nightmareBeforeChristmas": {
+      "title": "The Nightmare Before Christmas",
+      "year": 1993,
+      "description": "Halloween Town is other to Christmas Town and vice versa — otherness is definitively relative. What is the Special World depends entirely on whose perspective you occupy."
+    },
+    "darkKnightRises": {
+      "title": "The Dark Knight Rises",
+      "year": 2012,
+      "description": "Bane says 'I was born in the shadows.' Where Batman had entered into and integrated the other (darkness/shadow), that other was Bane's normal — illustrating the relativity of the other world."
+    },
+    "pinocchio": {
+      "title": "Pinocchio",
+      "year": 1940,
+      "description": "The audience member who fears commitment or parenthood might feel the threshold of being swallowed when watching Pinocchio get swallowed and dragged to the ocean floor — the Doors of Perception."
+    }
+  },
+  "forge": {
+    "wizardOfOz": {
+      "title": "The Wizard of Oz",
+      "year": 1939,
+      "description": "Dorothy meets the Scarecrow, Tinman, and Lion on the Yellow Brick Road — characters in her dream who represent dormant parts of herself. She is on a journey to find that the heart, brains, and courage she needs have been in her all along."
+    },
+    "terminator": {
+      "title": "The Terminator",
+      "year": 1984,
+      "description": "Sarah Connor confronts the half-man/half-robot Terminator in LA's labyrinth of roads. She progresses from waitress to goddess. The film represents the threat of mechanization taking over human consciousness — Skynet replacing our decision-making function."
+    },
+    "starWars": {
+      "title": "Star Wars",
+      "year": 1977,
+      "description": "At the midpoint, the Millennium Falcon is gripped by the Death Star's tractor beam — completely losing control. Their plan destroyed since Alderaan has been destroyed. The trash compactor scene illustrates the 'splitting up' where everyone turns on each other."
+    },
+    "matrix": {
+      "title": "The Matrix",
+      "year": 1999,
+      "description": "At the midpoint, Neo meets the Oracle, who prophesies him into breaking a vase and then tells him he's NOT the One — a fundamental challenge to the audience's expectations and sense of control. Later, Cypher's betrayal illustrates how nothing cuts deeper than one capable of betraying."
+    },
+    "aliceInWonderland": {
+      "title": "Alice in Wonderland",
+      "year": 1951,
+      "description": "The Mad Tea Party is perhaps the ultimate example in all of literature of losing control at the midpoint. Not only is Alice rearranged and told where to go, logic breaks down entirely. At the Mad Hatter's table, it is definitively unreasonable."
+    },
+    "harryPotter": {
+      "title": "Harry Potter and the Philosopher's Stone",
+      "year": 2001,
+      "description": "At the midpoint, Harry loses control on his broom, which tugs him every which way — illustrating the midpoint's characteristic loss of control."
+    },
+    "menInBlack": {
+      "title": "Men in Black",
+      "year": 1997,
+      "description": "Tommy Lee Jones' character dives into the giant roach's mouth, setting up the final climax — the defeat of the antagonist from within the belly of the beast, illustrating Campbell's belly of the whale concept."
+    },
+    "homeAlone": {
+      "title": "Home Alone",
+      "year": 1990,
+      "description": "Kevin setting booby traps is a beloved example of the Approach to the Inmost Cave — audience preparation built through the hero's planning before the central event."
+    },
+    "neverEndingStory": {
+      "title": "The NeverEnding Story",
+      "year": 1984,
+      "description": "At the midpoint, Atreyu reaches the great turtle, climbs to its top, and tumbles back down like Sisyphus — his will proves worthless and his plan proves impotent. Hopes are dashed."
+    }
+  },
+  "quenching": {
+    "matrix": {
+      "title": "The Matrix",
+      "year": 1999,
+      "description": "Neo's journey to the Architect reveals the path was a contrived construct and there had been a succession of 'the ones.' His ego explodes while his true Self continues. At the bottom of the Nadir, with a hand wrapping around Morpheus' lifeline, Neo's choice to stop, submit, and sacrifice himself shows who he really is. Until the Neo who could make this sacrifice emerged, he was not the one."
+    },
+    "starWars": {
+      "title": "Star Wars (original trilogy)",
+      "year": 1977,
+      "description": "The Death Star is the Inmost Cave, where Luke and company are sucked in to face Darth Vader. Luke's realization that he projects his own Shadow onto Vader — his outer struggle is only an expression of an inner battle. He gives up dependence on machines and learns to 'Trust the Force.'"
+    },
+    "lastJedi": {
+      "title": "Star Wars: The Last Jedi",
+      "year": 2017,
+      "description": "'I let it happen, because I was LUKE SKYWALKER... a legend.' The movie is about the death of ego and emptiness of self at countless levels. Rey goes into the dark hole, looks into the mirror to see only her own reflection. Yoda's ghost appears and the Jedi tree is burned. 'Failure is the greatest teacher of all.'"
+    },
+    "darkKnight": {
+      "title": "The Dark Knight",
+      "year": 2008,
+      "description": "Batman de-others his shadow and accepts his own inner villainy by crossing lines he would never have crossed before, gaining an ability to 'see in the dark' through echolocation. His willingness to sacrifice ego and persona — to be seen as a villain to do what he thought was right — is Self affirmation."
+    },
+    "greenKnight": {
+      "title": "The Green Knight",
+      "year": 2021,
+      "description": "Built around the alignment of nadirs. It begins on Christmas/Winter Solstice. The crescent axe and decapitation motifs connect to the waning moon. Gawain's choice to lay down his head for decapitation at the Green Chapel represents self-submission over feigned valor — the ultimate challenge of choosing ego death."
+    },
+    "pinocchio": {
+      "title": "Pinocchio",
+      "year": 1940,
+      "description": "A prime example of fire being seized from the belly of the whale on the seafloor, following Frobenius's pattern. The fire comes as 'an idea,' as knowledge and cleverness — the elixir retrieved from the deepest darkness."
+    },
+    "et": {
+      "title": "E.T. the Extra-Terrestrial",
+      "year": 1982,
+      "description": "E.T. dies before our eyes but is reborn through alien magic and a boy's love — a prime example of the Nadir turning point from death to life."
+    },
+    "waterworld": {
+      "title": "Waterworld",
+      "year": 1995,
+      "description": "The Mariner, wielding a flare, swims his companion down to the bottom of the sea, where she sees his source of dry land and reflecting glass. She learns the truth — compared to the Native American motif of bringing a handful of dirt from the bottom of the sea for the making of a new world."
+    },
+    "neverEndingStory": {
+      "title": "The NeverEnding Story",
+      "year": 1984,
+      "description": "Atreyu looks through the mirror to see Bastian, his authoring deity and reader. Bastian sees that the hero is his own. 'The author is the authored.' This illustrates the mystery of the concave mirror and the unity of seeker and found."
+    },
+    "aliceInWonderland": {
+      "title": "Alice in Wonderland",
+      "year": 1951,
+      "description": "'If I'd listened earlier, I wouldn't be here.' This is Alice's darkest, saddest moment after the Tea Party. The Cheshire Cat's crescent smile falls from the sky as a symbol of the crescent moon. The elixir this moment represents is agency."
+    }
+  },
+  "integration": {
+    "apollo13": {
+      "title": "Apollo 13",
+      "year": 1995,
+      "description": "A key example of 'slingshotting the nadir.' When the astronauts were low on energy and all looked lost, NASA devised the idea of slingshotting around the moon using its gravity. Symbolically, this represents using the momentum of the nadir's lowest point to propel the hero forward on the return journey."
+    },
+    "starWars": {
+      "title": "Star Wars",
+      "year": 1977,
+      "description": "Luke and Leia swinging over an abyss on the Death Star is compared to the lunar slingshot of Apollo 13. Luke and company evading the Death Star before rallying to attack illustrates how the Road Back often begins as an escape before becoming an offensive campaign."
+    },
+    "batmanBegins": {
+      "title": "Batman Begins",
+      "year": 2005,
+      "description": "The Batmobile is a favorite example of the Magic Flight. It was 'made for it — literally a bridge jumper.' The tumbler flies from roof to roof through the night, 'sometimes dark, sometimes spotlighted, like the moon, returning with love' — carrying both Rachel and the elixir."
+    },
+    "hook": {
+      "title": "Hook",
+      "year": 1991,
+      "description": "Jack says to his father, 'I am home,' illustrating how Peter Pan became deeply acclimated to the other world (Neverland) and didn't want to leave — the hero's refusal to return."
+    },
+    "shapeOfWater": {
+      "title": "The Shape of Water",
+      "year": 2017,
+      "description": "Praised for not rushing the return journey. After the escape with the creature, the film takes a long time before delivering him to the sea — possibly 'the best part of the film,' appreciating the extended integration period rather than a hurried Act 3."
+    },
+    "harryPotter": {
+      "title": "Harry Potter",
+      "year": 2001,
+      "description": "The frustration of a 'false return' where the world simply resets to its prior state. When the world just went back to normal, it can feel like the journey didn't matter — the tension between ordinary life and transformed self."
+    },
+    "backToTheFuture": {
+      "title": "Back to the Future",
+      "year": 1985,
+      "description": "Doc's time machine returning to 1985 — the return qualifies as a magic flight even when flying isn't an important detail. The journey home carries the gifts of the adventure."
+    },
+    "excalibur": {
+      "title": "Excalibur",
+      "year": 1981,
+      "description": "Knights rally with Arthur — the gathering of forces for the final offensive. A symbolic representation of one's gathering of inner forces for the climactic confrontation."
+    }
+  },
+  "drawing": {
+    "starWars": {
+      "title": "Star Wars",
+      "year": 1977,
+      "description": "Luke's destruction of the Death Star is the ultimate climactic moment. 'There is no missing, for Luke' — he pierces the Achilles heel of the Death Star, becoming who he's meant to be, delivering the elixir of his destined participation, destroying 'thou shalt,' and bringing a new day."
+    },
+    "beautyAndTheBeast": {
+      "title": "Beauty and the Beast",
+      "year": 1991,
+      "description": "A brilliantly tight climax. Gaston is defeated at the precipice, but Beast has been stabbed. He dies at the threshold, only to be reborn across it. Belle kisses him, delivering the elixir of love. As he is restored to life, the curse lifts and the castle transforms alongside his body."
+    },
+    "matrix": {
+      "title": "The Matrix",
+      "year": 1999,
+      "description": "Neo's resurrection at the threshold leads immediately into an expression of his new self and anomalous capacities. When he delivers the elixir of his anomalous being, it destroys the antagonist and ripples out into the world. In the trilogy's climax, he defeats his antithesis once and for all."
+    },
+    "lordOfTheRings": {
+      "title": "The Lord of the Rings: The Two Towers",
+      "year": 2002,
+      "description": "The climax when Theoden and Aragorn ride out against the invaders. Simultaneously, the sun rises from behind the mountains, and with it Gandalf arrives with the cavalry — a great example of generational alignment, the synergizing of old and new protagonism."
+    },
+    "lordOfTheRingsROTK": {
+      "title": "The Lord of the Rings: The Return of the King",
+      "year": 2003,
+      "description": "Frodo cannot relinquish the ring at the precipice of a new day. He balks, unable to let it go. Only through Gollum's intervention — the inner golem annihilating itself — is the ring destroyed. Salvation sometimes requires grace, not just individual will."
+    },
+    "casablanca": {
+      "title": "Casablanca",
+      "year": 1942,
+      "description": "An extraordinary film experience. Rick, through his words and actions, sacrifices his life for the higher good. His action of self-sacrifice elevates him to the stature of a contemporary hero — the hero gives their life to something bigger than oneself."
+    },
+    "goldfinger": {
+      "title": "Goldfinger",
+      "year": 1964,
+      "description": "James Bond battles villains and races against time to disarm the atomic bomb at the climax, threatening millions of lives. Bond or his ally manages to yank the right wire and save us all from destruction — the classic ticking clock climax."
+    },
+    "trumanShow": {
+      "title": "The Truman Show",
+      "year": 1998,
+      "description": "Ends right after Truman crosses the threshold — illustrating the problem of a too-abrupt ending that doesn't give the audience a 'slow curtain' to catch their breath after an emotional climax."
+    }
+  },
+  "new-age": {
+    "harryPotter": {
+      "title": "Harry Potter",
+      "year": 2011,
+      "description": "After Harry completes his journey, he returns to Platform 9 and 3/4 to see his children where he once was — the return of the rounds to its reset, demonstrating the new cycle beginning. His relinquishing of the Elder Wand symbolizes overcoming the temptation of immortality."
+    },
+    "lordOfTheRings": {
+      "title": "The Lord of the Rings: The Return of the King",
+      "year": 2003,
+      "description": "Frodo sails across the western sea rather than staying in the mundane world. Sam raises children in the Shire — the renewal and continuation of ordinary life after the heroic journey. The dissolution of the ring's power represents the unlocking and release of the flow of life into the body of the world."
+    },
+    "interstellar": {
+      "title": "Interstellar",
+      "year": 2014,
+      "description": "The father's perpetual quest in space illustrates the danger of never completing the return — of being endlessly adrift rather than grounding oneself back in the ordinary world."
+    },
+    "darkKnight": {
+      "title": "The Dark Knight",
+      "year": 2008,
+      "description": "'If a hero lives long enough, they will become the villain.' The danger of heroism becoming tyranny — the West's power narrative and the cycle that begins again."
+    },
+    "neverEndingStory": {
+      "title": "The NeverEnding Story",
+      "year": 1984,
+      "description": "The world of the imagination desperately needs Bastian, the reader, to give the princess a new name. If the new name isn't screamed from the window soon, Fantasia will surely die — the call for renewal in our own cultural moment."
+    },
+    "spaceOdyssey": {
+      "title": "2001: A Space Odyssey",
+      "year": 1968,
+      "description": "One of the major films Joseph Campbell influenced. The entire arc from ape to Starchild represents the full cycle of renewal — humanity transformed and reborn through the journey."
+    },
+    "marvel": {
+      "title": "The Avengers / Endgame",
+      "year": 2019,
+      "description": "The entire arc of The Avengers is ultimately resolved through mastery of the Quantum Realm. Marvel grounds its presentation of magic, mysticism, and superpowers in theoretical physics — the adult imagination reborn through post-materialist science."
+    },
+    "gravity": {
+      "title": "Gravity",
+      "year": 2013,
+      "description": "The danger of not returning — of being endlessly adrift. The hero must ground themselves back in the ordinary world, transformed by the journey but present for the new life that follows."
+    }
+  }
+}

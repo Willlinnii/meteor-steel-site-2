@@ -656,7 +656,8 @@
 
   .live-toggle,
   .align-toggle,
-  .calendar-toggle {
+  .calendar-toggle,
+  .medicine-wheel-toggle {
     transform: none;
     width: 32px;
     height: 32px;
@@ -677,6 +678,10 @@
 
   .calendar-toggle {
     right: 80px;
+  }
+
+  .medicine-wheel-toggle {
+    right: 120px;
   }
 }
 
@@ -704,4 +709,48 @@
 
 .planet-culture-wrapper .culture-selector {
   margin-bottom: 12px;
+}
+
+/* ===== MEDICINE WHEEL TOGGLE ===== */
+
+.medicine-wheel-toggle {
+  position: absolute;
+  bottom: -30px;
+  right: -130px;
+  background: none;
+  border: 1px solid rgba(180, 140, 80, 0.5);
+  color: rgba(180, 140, 80, 0.8);
+  font-size: 1.3rem;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  opacity: 0.7;
+}
+
+.medicine-wheel-toggle:hover {
+  opacity: 1;
+  background: rgba(180, 140, 80, 0.1);
+  box-shadow: 0 0 10px rgba(180, 140, 80, 0.3);
+}
+
+/* ===== MEDICINE WHEEL POSITIONS ===== */
+
+.mw-position text {
+  transition: fill 0.3s ease;
+}
+
+.mw-position:hover text {
+  fill: rgba(240, 192, 64, 0.95) !important;
+}
+
+.mw-position.active text {
+  fill: #f0c040 !important;
+}
+
+.mw-position:hover circle:first-child {
+  fill: rgba(180, 140, 80, 0.05);
 }

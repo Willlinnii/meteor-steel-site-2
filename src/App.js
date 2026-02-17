@@ -2,8 +2,10 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Routes, Route, Link, useLocation } from 'react-router-dom';
 import './App.css';
 import ChatPanel from './components/ChatPanel';
+import CircleNav from './components/CircleNav';
 import DevelopmentPanel from './components/DevelopmentPanel';
 import SevenMetalsPage from './pages/SevenMetals/SevenMetalsPage';
+import MonomythPage from './pages/Monomyth/MonomythPage';
 import figures from './data/figures.json';
 import modernFigures from './data/modernFigures.json';
 import stageOverviews from './data/stageOverviews.json';
@@ -18,95 +20,15 @@ import fallenStarlightData from './data/fallenStarlight.json';
 const STAGES = [
   { id: 'golden-age', label: 'Golden Age' },
   { id: 'falling-star', label: 'Calling Star' },
-  { id: 'impact-crater', label: 'Crater Crossing' },
+  { id: 'impact-crater', label: 'Crater Crossing', flipLabel: true },
   { id: 'forge', label: 'Trials of Forge' },
   { id: 'quenching', label: 'Quench' },
   { id: 'integration', label: 'Integration' },
-  { id: 'drawing', label: 'Draw' },
+  { id: 'drawing', label: 'Draw', flipLabel: true },
   { id: 'new-age', label: 'Age of Steel' },
 ];
 
-function getStageAngles(clockwise) {
-  // Counter-clockwise (default): Golden Age at top, proceeding left
-  // Clockwise: Golden Age at top, proceeding right
-  const step = clockwise ? 45 : -45;
-  return STAGES.map((s, i) => {
-    const angle = -90 + step * i;
-    // Tangent rotation for text along the circle
-    const tangent = angle + 90;
-    // Normalize to -180..180
-    let norm = ((tangent + 180) % 360 + 360) % 360 - 180;
-    // Flip if upside down (outside -90..90 range)
-    let labelRotation = norm;
-    if (norm > 90) labelRotation = norm - 180;
-    if (norm < -90) labelRotation = norm + 180;
-    // Flip Draw and Crater Crossing to read the other way around the circle
-    if (s.id === 'drawing' || s.id === 'impact-crater') {
-      labelRotation += 180;
-    }
-    return { ...s, angle, labelRotation };
-  });
-}
-
-function CircleNav({ currentStage, onSelectStage, clockwise, onToggleDirection, centerLine1, centerLine2, centerLine3, showAuthor = true }) {
-  const radius = 42;
-  const stages = getStageAngles(clockwise);
-
-  return (
-    <div className="circle-nav-wrapper">
-      <div className="circle-nav">
-        <svg viewBox="0 0 100 100" className="circle-rings">
-          <circle cx="50" cy="50" r="47" className="ring ring-outer" />
-          <circle cx="50" cy="50" r="38" className="ring ring-inner" />
-        </svg>
-
-        <div
-          className={`circle-center ${currentStage === 'overview' ? 'active' : ''}`}
-          onClick={() => onSelectStage('overview')}
-        >
-          <span className="center-title-journey">{centerLine1 || 'Journey'}</span>
-          <span className="center-title-of">{centerLine2 || 'of'}</span>
-          <span className="center-title-fallen">{centerLine3 || 'Fallen Starlight'}</span>
-          {showAuthor && (
-            <span
-              className={`center-author ${currentStage === 'bio' ? 'active' : ''}`}
-              onClick={(e) => { e.stopPropagation(); onSelectStage('bio'); }}
-            >
-              Will Linn
-            </span>
-          )}
-        </div>
-
-        {stages.map(s => {
-          const rad = (s.angle * Math.PI) / 180;
-          const x = 50 + radius * Math.cos(rad);
-          const y = 50 + radius * Math.sin(rad);
-          return (
-            <div
-              key={s.id}
-              className={`circle-stage ${currentStage === s.id ? 'active' : ''}`}
-              style={{
-                left: `${x}%`,
-                top: `${y}%`,
-              }}
-              onClick={() => onSelectStage(s.id)}
-            >
-              <span
-                className="circle-stage-label"
-                style={{ transform: `rotate(${s.labelRotation}deg)` }}
-              >
-                {s.label}
-              </span>
-            </div>
-          );
-        })}
-      </div>
-      <button className="direction-toggle" onClick={onToggleDirection}>
-        {clockwise ? '\u21BB' : '\u21BA'}
-      </button>
-    </div>
-  );
-}
+/* CircleNav extracted to ./components/CircleNav.js */
 
 const SECTION_TABS = [
   { id: 'technology', label: 'Meteor Steel Technology' },
@@ -334,6 +256,7 @@ function MeteorSteelHome() {
     <>
       <MeteorShower active={showMeteors} />
       <CircleNav
+        stages={STAGES}
         currentStage={currentStage}
         onSelectStage={handleSelectStage}
         clockwise={clockwise}
@@ -391,6 +314,7 @@ function FallenStarlightHome() {
     <>
       <MeteorShower active={showMeteors} />
       <CircleNav
+        stages={STAGES}
         currentStage={currentStage}
         onSelectStage={handleSelectStage}
         clockwise={clockwise}
@@ -580,6 +504,7 @@ function StoryForgeHome() {
       <>
         <MeteorShower active={showMeteors} />
         <CircleNav
+          stages={STAGES}
           currentStage={currentStage}
           onSelectStage={handleSelectStage}
           clockwise={clockwise}
@@ -764,6 +689,7 @@ function StoryForgeHome() {
 
 const NAV_ITEMS = [
   { path: '/', label: 'Meteor Steel' },
+  { path: '/monomyth', label: 'Monomyth' },
   { path: '/metals', label: 'Celestial Wheels' },
   { path: '/fallen-starlight', label: 'Fallen Starlight' },
   { path: '/story-forge', label: 'Story Forge' },
@@ -818,6 +744,7 @@ function App() {
         <Route path="/metals" element={<SevenMetalsPage />} />
         <Route path="/fallen-starlight" element={<FallenStarlightHome />} />
         <Route path="/story-forge" element={<StoryForgeHome />} />
+        <Route path="/monomyth" element={<MonomythPage />} />
       </Routes>
       <ChatPanel />
     </div>

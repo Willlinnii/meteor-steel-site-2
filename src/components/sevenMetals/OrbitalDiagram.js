@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { Body, GeoVector, Ecliptic, MoonPhase } from 'astronomy-engine';
 import PlanetNode from './PlanetNode';
+import wheelData from '../../data/medicineWheels.json';
 
 const BODY_MAP = {
   Moon: Body.Moon,
@@ -87,7 +88,29 @@ const MONTH_TEXT_R = 278;
 // Jan 1 Sun ≈ 280° ecliptic → SVG angle = -280° = 80°
 const MONTH_OFFSET = 80;
 
-export default function OrbitalDiagram({ selectedPlanet, onSelectPlanet, selectedSign, onSelectSign, selectedCardinal, onSelectCardinal, selectedEarth, onSelectEarth, showCalendar, onToggleCalendar, selectedMonth, onSelectMonth }) {
+const WHEEL_RINGS = [
+  { idx: 0, innerR: 0, outerR: 55, textR: 38 },
+  { idx: 1, innerR: 55, outerR: 110, textR: 82 },
+  { idx: 2, innerR: 110, outerR: 165, textR: 138 },
+  { idx: 3, innerR: 165, outerR: 220, textR: 192 },
+  { idx: 4, innerR: 220, outerR: 280, textR: 250 },
+];
+const MW_OUTER_R = 290;
+
+const MW_QUADRANTS = [
+  { dir: 'N', startDeg: -135, endDeg: -45 },
+  { dir: 'E', startDeg: -45, endDeg: 45 },
+  { dir: 'S', startDeg: 45, endDeg: 135 },
+  { dir: 'W', startDeg: 135, endDeg: 225 },
+];
+
+function quadrantArc(cx, cy, r, startDeg, endDeg) {
+  const s = (startDeg * Math.PI) / 180;
+  const e = (endDeg * Math.PI) / 180;
+  return `M ${cx},${cy} L ${cx + r * Math.cos(s)},${cy + r * Math.sin(s)} A ${r},${r} 0 0,1 ${cx + r * Math.cos(e)},${cy + r * Math.sin(e)} Z`;
+}
+
+export default function OrbitalDiagram({ selectedPlanet, onSelectPlanet, selectedSign, onSelectSign, selectedCardinal, onSelectCardinal, selectedEarth, onSelectEarth, showCalendar, onToggleCalendar, selectedMonth, onSelectMonth, showMedicineWheel, onToggleMedicineWheel, selectedWheelItem, onSelectWheelItem }) {
   const [aligned, setAligned] = useState(false);
   const [livePositions, setLivePositions] = useState(false);
 
@@ -115,7 +138,124 @@ export default function OrbitalDiagram({ selectedPlanet, onSelectPlanet, selecte
 
   return (
     <div style={{ position: 'relative', display: 'inline-block' }}>
-      <svg viewBox="0 0 700 700" className="orbital-svg" role="img" aria-label="Geocentric orbital diagram with zodiac">
+      <svg viewBox="0 0 700 700" className="orbital-svg" role="img" aria-label={showMedicineWheel ? "Medicine wheel diagram" : "Geocentric orbital diagram with zodiac"}>
+        {showMedicineWheel ? (
+          <g className="medicine-wheel">
+            {/* Quadrant background sectors */}
+            {MW_QUADRANTS.map(q => (
+              <path key={q.dir} d={quadrantArc(CX, CY, MW_OUTER_R, q.startDeg, q.endDeg)} fill={wheelData.quadrantColors[q.dir]} />
+            ))}
+
+            {/* Cross-hair lines (N-S and E-W axes) */}
+            <line x1={CX} y1={CY - MW_OUTER_R - 12} x2={CX} y2={CY + MW_OUTER_R + 12} stroke="rgba(180, 140, 80, 0.2)" strokeWidth="0.8" />
+            <line x1={CX - MW_OUTER_R - 12} y1={CY} x2={CX + MW_OUTER_R + 12} y2={CY} stroke="rgba(180, 140, 80, 0.2)" strokeWidth="0.8" />
+
+            {/* Subtle diagonal lines */}
+            {[45, -45].map(deg => {
+              const rd = (deg * Math.PI) / 180;
+              return (
+                <line key={deg}
+                  x1={CX - MW_OUTER_R * Math.cos(rd)} y1={CY - MW_OUTER_R * Math.sin(rd)}
+                  x2={CX + MW_OUTER_R * Math.cos(rd)} y2={CY + MW_OUTER_R * Math.sin(rd)}
+                  stroke="rgba(180, 140, 80, 0.08)" strokeWidth="0.5"
+                />
+              );
+            })}
+
+            {/* Concentric ring circles */}
+            {WHEEL_RINGS.map(ring => ring.outerR > 0 && (
+              <circle key={ring.idx} cx={CX} cy={CY} r={ring.outerR} fill="none" stroke="rgba(180, 140, 80, 0.25)" strokeWidth="0.8" />
+            ))}
+            <circle cx={CX} cy={CY} r={MW_OUTER_R} fill="none" stroke="rgba(180, 140, 80, 0.35)" strokeWidth="1.2" />
+
+            {/* Ring title labels (faint, along top of each ring) */}
+            {wheelData.wheels.map((wheel, wi) => {
+              const ring = WHEEL_RINGS[wi];
+              const titleR = ring.outerR - 6;
+              return (
+                <text key={`title-${wheel.id}`}
+                  x={CX + titleR * Math.cos(-1.2)} y={CY + titleR * Math.sin(-1.2)}
+                  textAnchor="middle" dominantBaseline="central"
+                  fill="rgba(180, 140, 80, 0.18)" fontSize="6" fontFamily="Cinzel, serif"
+                  fontWeight="400" letterSpacing="0.5"
+                  transform={`rotate(${-1.2 * 180 / Math.PI}, ${CX + titleR * Math.cos(-1.2)}, ${CY + titleR * Math.sin(-1.2)})`}
+                >
+                  {wheel.id === 'humanSelf' ? '' : wheel.title.replace('The Medicine Wheel of ', '').replace('The ', '')}
+                </text>
+              );
+            })}
+
+            {/* Position labels and hit targets */}
+            {wheelData.wheels.map((wheel, wi) => {
+              const ring = WHEEL_RINGS[wi];
+              const fontSize = wi <= 2 ? 9.5 : wi === 3 ? 8 : 8.5;
+              return (
+                <g key={wheel.id}>
+                  {wheel.positions.map(pos => {
+                    const rad = (pos.angle * Math.PI) / 180;
+                    const px = CX + ring.textR * Math.cos(rad);
+                    const py = CY + ring.textR * Math.sin(rad);
+                    const itemKey = `${wheel.id}:${pos.dir}`;
+                    const isSelected = selectedWheelItem === itemKey;
+                    const displayLabel = pos.num != null ? String(pos.num) : pos.label;
+
+                    return (
+                      <g key={itemKey}
+                        className={`mw-position${isSelected ? ' active' : ''}`}
+                        onClick={() => onSelectWheelItem && onSelectWheelItem(isSelected ? null : itemKey)}
+                        style={{ cursor: 'pointer' }}
+                      >
+                        <circle cx={px} cy={py} r={pos.num != null ? 12 : 18} fill="transparent" />
+                        {isSelected && (
+                          <circle cx={px} cy={py} r="14" fill="none" stroke="rgba(218, 165, 32, 0.6)" strokeWidth="0.8">
+                            <animate attributeName="r" values="12;16;12" dur="2s" repeatCount="indefinite" />
+                            <animate attributeName="opacity" values="0.6;0.2;0.6" dur="2s" repeatCount="indefinite" />
+                          </circle>
+                        )}
+                        {pos.num != null && (
+                          <circle cx={px} cy={py} r="9"
+                            fill={isSelected ? 'rgba(218, 165, 32, 0.15)' : 'rgba(180, 140, 80, 0.08)'}
+                            stroke={isSelected ? 'rgba(218, 165, 32, 0.5)' : 'rgba(180, 140, 80, 0.25)'}
+                            strokeWidth="0.6"
+                          />
+                        )}
+                        <text x={px} y={py}
+                          textAnchor="middle" dominantBaseline="central"
+                          fill={isSelected ? '#f0c040' : 'rgba(220, 190, 120, 0.8)'}
+                          fontSize={fontSize} fontFamily="Cinzel, serif"
+                          fontWeight={isSelected ? '700' : '500'}
+                          style={{ transition: 'fill 0.3s' }}
+                        >
+                          {displayLabel}
+                        </text>
+                      </g>
+                    );
+                  })}
+                </g>
+              );
+            })}
+
+            {/* Center label */}
+            <text x={CX} y={CY - 4} textAnchor="middle" dominantBaseline="central"
+              fill="rgba(220, 190, 120, 0.9)" fontSize="12" fontFamily="Cinzel, serif" fontWeight="700">
+              Self
+            </text>
+            <text x={CX} y={CY + 10} textAnchor="middle" dominantBaseline="central"
+              fill="rgba(220, 190, 120, 0.4)" fontSize="7" fontFamily="Crimson Pro, serif" fontWeight="400" fontStyle="italic">
+              Hyemeyohsts Storm
+            </text>
+
+            {/* Compass direction labels */}
+            <text x={CX} y={CY - MW_OUTER_R - 18} textAnchor="middle"
+              fill="rgba(255, 255, 255, 0.8)" fontSize="16" fontFamily="Cinzel, serif" fontWeight="700" letterSpacing="2">N</text>
+            <text x={CX + MW_OUTER_R + 18} y={CY + 1} textAnchor="start" dominantBaseline="central"
+              fill="rgba(218, 165, 32, 0.8)" fontSize="16" fontFamily="Cinzel, serif" fontWeight="700" letterSpacing="2">E</text>
+            <text x={CX} y={CY + MW_OUTER_R + 24} textAnchor="middle"
+              fill="rgba(178, 34, 34, 0.8)" fontSize="16" fontFamily="Cinzel, serif" fontWeight="700" letterSpacing="2">S</text>
+            <text x={CX - MW_OUTER_R - 18} y={CY + 1} textAnchor="end" dominantBaseline="central"
+              fill="rgba(150, 150, 150, 0.8)" fontSize="16" fontFamily="Cinzel, serif" fontWeight="700" letterSpacing="2">W</text>
+          </g>
+        ) : (<>
         <defs>
           {ORBITS.map(o => (
             <filter key={o.planet} id={`glow-${o.planet}`}>
@@ -460,27 +600,39 @@ export default function OrbitalDiagram({ selectedPlanet, onSelectPlanet, selecte
             </g>
           );
         })}
+        </>)}
       </svg>
+      {!showMedicineWheel && (
+        <>
+          <button
+            className="live-toggle"
+            onClick={toggleLive}
+            title={livePositions ? 'Decorative positions' : 'Live planetary positions'}
+          >
+            {livePositions ? '◉' : '◎'}
+          </button>
+          <button
+            className="align-toggle"
+            onClick={toggleAlign}
+            title={aligned ? 'Scatter planets' : 'Align planets'}
+          >
+            {aligned ? '⊙' : '☍'}
+          </button>
+          <button
+            className="calendar-toggle"
+            onClick={() => onToggleCalendar && onToggleCalendar()}
+            title={showCalendar ? 'Hide mythic calendar' : 'Show mythic calendar'}
+          >
+            {showCalendar ? '📅' : '📆'}
+          </button>
+        </>
+      )}
       <button
-        className="live-toggle"
-        onClick={toggleLive}
-        title={livePositions ? 'Decorative positions' : 'Live planetary positions'}
+        className="medicine-wheel-toggle"
+        onClick={() => onToggleMedicineWheel && onToggleMedicineWheel()}
+        title={showMedicineWheel ? 'Show celestial wheels' : 'Show medicine wheel'}
       >
-        {livePositions ? '◉' : '◎'}
-      </button>
-      <button
-        className="align-toggle"
-        onClick={toggleAlign}
-        title={aligned ? 'Scatter planets' : 'Align planets'}
-      >
-        {aligned ? '⊙' : '☍'}
-      </button>
-      <button
-        className="calendar-toggle"
-        onClick={() => onToggleCalendar && onToggleCalendar()}
-        title={showCalendar ? 'Hide mythic calendar' : 'Show mythic calendar'}
-      >
-        {showCalendar ? '📅' : '📆'}
+        {showMedicineWheel ? '✦' : '✧'}
       </button>
     </div>
   );

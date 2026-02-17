@@ -1,0 +1,323 @@
+{
+  "golden-age": {
+    "osiris": {
+      "tradition": "Egyptian",
+      "title": "Osiris — Pharaoh at His Height",
+      "description": "Osiris is a Pharaoh at the height of his reign, married to Isis in her prime. This is his life before his journey through the Duat — the Egyptian underworld."
+    },
+    "inanna": {
+      "tradition": "Sumerian",
+      "title": "Inanna — Queen of Uruk",
+      "description": "Inanna, before her journey through the nether world, is the Queen of Uruk — at the height of her power and authority. The Queen of Heaven in her glory."
+    },
+    "buddha": {
+      "tradition": "Buddhist",
+      "title": "Siddhartha — Prince in the Palace",
+      "description": "Siddhartha is a fully grown and exemplary man with a wife and child. Prince of a great kingdom on course to inherit the throne. His father provided him with three palaces and forty thousand dancing girls to keep his mind attached to the world."
+    },
+    "persephone": {
+      "tradition": "Greek",
+      "title": "Persephone — Maiden in the Meadow",
+      "description": "Persephone, an adult still called Kore (maiden), known to the world as her mother's daughter. In full flower, she plays in a field of flowers with her friends. Demeter wants her daughter to remain as she is."
+    },
+    "adamEve": {
+      "tradition": "Abrahamic",
+      "title": "Adam & Eve — Eden Before the Fall",
+      "description": "The divine couple in paradise — incapable of mortal injury, imperishable. Four rivers watered the garden where every tree pleasant to the sight grew. Not hungry, not naked, not thirsty. The human condition before the fall."
+    },
+    "prometheus": {
+      "tradition": "Greek",
+      "title": "Prometheus — Before the Theft",
+      "description": "The world before Prometheus stole fire — humans existing without the knowledge that would define the human condition. The Titans in their domain before the great disruption."
+    },
+    "plato": {
+      "tradition": "Greek Philosophy",
+      "title": "Plato's Cave — Shadows on the Wall",
+      "description": "The philosopher in Plato's Allegory of the Cave begins within the illusion, convinced that shadows on the wall are reality. People in the cave have no idea they are in a cave, that they are bound, or that they are mistaking shadows for truth."
+    },
+    "hercules": {
+      "tradition": "Greek",
+      "title": "Hercules — At Court",
+      "description": "Prior to his labors, Hercules lived at home with his wife and children — not unlike the Buddha. At the start of each labor, he is called forth from a kingdom, from a court, like the Arthurian Knights on quest."
+    }
+  },
+  "falling-star": {
+    "osiris": {
+      "tradition": "Egyptian",
+      "title": "Osiris — Called to the Coffin",
+      "description": "Osiris is called to a coffin-fitting party by his chaotic brother, Seth. This comes when the grain, entering its golden age, calls to be mowed down. The disruption arrives disguised as celebration."
+    },
+    "inanna": {
+      "tradition": "Sumerian",
+      "title": "Inanna — Sets Her Mind on the Great Below",
+      "description": "From the great above she set her mind toward the great below. My lady abandoned heaven, abandoned earth, to the nether world she descended. Abandoned lordship, abandoned ladyship."
+    },
+    "buddha": {
+      "tradition": "Buddhist",
+      "title": "Siddhartha — The Four Sights",
+      "description": "When the Buddha sees the four sights — old age, sickness, death, and a monk — he recognizes the truth about humanity's waning. His desire to go on a quest for enlightenment is resisted by his father."
+    },
+    "persephone": {
+      "tradition": "Greek",
+      "title": "Persephone — Plucks the Narcissus",
+      "description": "Persephone plucks the Narcissus flower, a reflection of her, which symbolizes her own readiness. The earth begins to split. The call comes from below."
+    },
+    "adamEve": {
+      "tradition": "Abrahamic",
+      "title": "Adam & Eve — The Serpent's Call",
+      "description": "Satan's call from Eden, to Eve and the fall of first humans. The eating of the fruit is the great inciting incident for the entire Jewish, Christian, Islamic tradition. It disrupts their sense of who they are."
+    },
+    "whiteSnake": {
+      "tradition": "Grimm Fairy Tale",
+      "title": "The White Snake",
+      "description": "The King's chef eats a bite of the king's mysterious dish — a white snake — which gives him the ears to hear the animals. A bite of forbidden knowledge that disrupts normality."
+    },
+    "christ": {
+      "tradition": "Christian",
+      "title": "Christ — Called to Jerusalem",
+      "description": "Christ at his height gives his sermon on the mount — before his call to Jerusalem and journey through death. The readiness of Christ is tested when he is called to his passion in the Garden of Gethsemane."
+    },
+    "perceval": {
+      "tradition": "Arthurian",
+      "title": "Perceval — Called by Knights",
+      "description": "When Perceval is called to Camelot by Arthurian Knights, resistance to his departure is voiced by his mother. Like Sosruquo, the sheltered youth encounters the wider world for the first time."
+    }
+  },
+  "impact-crater": {
+    "osiris": {
+      "tradition": "Egyptian",
+      "title": "Osiris — Sealed in the Coffin, Sent to Sea",
+      "description": "When Osiris enters the coffin, Seth and his conspirators slam it shut then send it to sea, like a baby in a basket. This corresponds with the moment Osiris crosses into the Duat on the solar boat. Seth, at the front, uses his crooked staff to part the sea of chaos — Apep."
+    },
+    "inanna": {
+      "tradition": "Sumerian",
+      "title": "Inanna — The First Gate",
+      "description": "Inanna crosses the first gate into the underworld. To do so, she must humble herself and remove a layer of her clothing — clothing that carries her queenly powers and pride."
+    },
+    "persephone": {
+      "tradition": "Greek",
+      "title": "Persephone — Abducted into Hades",
+      "description": "The earth splits open before Hades arrives in his chariot to abduct Persephone. This represents her entry into death and marriage — also depression and winter. The splitting of earth is a sexual image."
+    },
+    "christ": {
+      "tradition": "Christian",
+      "title": "Christ — Death and the Ripped Veil",
+      "description": "When Christ dies on the cross, the veil isolating the holy of holies is ripped. He is then embalmed and placed in a sepulcher, in a cave. The crossing from life to death, from above to below."
+    },
+    "buddha": {
+      "tradition": "Buddhist",
+      "title": "Siddhartha — Departs the Palace",
+      "description": "Siddhartha departs from home, from the palace, from his family, and into the forest — the domain of ascetics. Upon departure he cuts his hair, an expression of complete inner commitment to the journey."
+    },
+    "hercules": {
+      "tradition": "Greek",
+      "title": "Hercules — Crosses the River Styx",
+      "description": "Hercules crosses the river Styx as he enters the underworld, ferried across by Charon and his long pole — not unlike the poles used by Gilgamesh to cross the western ocean."
+    },
+    "plato": {
+      "tradition": "Greek Philosophy",
+      "title": "Plato's Philosopher — Leaves the Cave",
+      "description": "Plato's philosopher leaves the cave, crossing the threshold from the world of shadows into the blinding light of truth. At first disoriented, the eyes must adjust."
+    }
+  },
+  "forge": {
+    "osiris": {
+      "tradition": "Egyptian",
+      "title": "Osiris — Cut to Pieces / Isis Searches",
+      "description": "Osiris is led by the solar company through the Duat. This is associated with the cutting of Osiris into 14 pieces by Seth, which mimes the 14 disappearing slivers of moon. Isis searches for her lover across the land."
+    },
+    "inanna": {
+      "tradition": "Sumerian",
+      "title": "Inanna — Gate After Gate",
+      "description": "Inanna descends to the underworld gate after gate, level after level. At each level, she must release an article of clothing or me — her unique personal power and essence. More ego stripped at each descent."
+    },
+    "persephone": {
+      "tradition": "Greek",
+      "title": "Persephone — Taken Down / Demeter Searches",
+      "description": "Persephone is taken down into Hades by Hades. Simultaneously, Demeter searches for her daughter. Demeter withholds rain and growth, allowing winter, demanding Zeus return her child."
+    },
+    "christ": {
+      "tradition": "Christian",
+      "title": "Christ — Harrowing of Hell",
+      "description": "Christ journeys into hell, bruising to pieces the gates of iron. The progressive descent through the levels of the underworld."
+    },
+    "buddha": {
+      "tradition": "Buddhist",
+      "title": "Siddhartha — The Ascetic's Path",
+      "description": "Siddhartha pursues the ascetic's path — resisting bodily influence on consciousness through purifying desire for sensory pleasures. He achieves transcendence and equanimity but becomes emaciated. He begins to see the limitations of this approach."
+    },
+    "hercules": {
+      "tradition": "Greek",
+      "title": "Hercules — Travels Through Hades",
+      "description": "Hercules travels through Hades, like Orpheus, Persephone and later Dante. Along the way, he sees the recurring landscape of the underworld with profound additions and deviations."
+    },
+    "dante": {
+      "tradition": "Italian",
+      "title": "Dante — The Nine Circles",
+      "description": "Dante descends through the nine circles of Hell — each gate and passage taking him deeper, the more gates we move through, the deeper in we feel."
+    }
+  },
+  "quenching": {
+    "osiris": {
+      "tradition": "Egyptian",
+      "title": "Osiris — Spark of Life in Aker",
+      "description": "Osiris receives the first spark of life in Aker, the bottommost point of the Duat, between two great cats — the defenders of sunrise and sunset, the thighs of the great mother. Isis conceives Horus at this moment. New life sparks at the deepest dark."
+    },
+    "inanna": {
+      "tradition": "Sumerian",
+      "title": "Inanna — Dead on the Peg, Then Revived",
+      "description": "Inanna hangs totally dead on the peg for three days and three nights. When she receives the water and food of life from beneath the thumbnail of her maternal grandfather, she not only starts to life, she starts into labor. The crescent moon creatures bring empathy to Ereshkigal."
+    },
+    "buddha": {
+      "tradition": "Buddhist",
+      "title": "Siddhartha — Enlightenment Under the Bodhi Tree",
+      "description": "The Buddha achieves Nirvana — the Extinguishing of the Threefold Fire of Desire, Hostility, and Delusion. He sees the three surfaces of enlightenment: sunyata (emptiness), anatta (no-self), and paticca samuppada (dependent co-arising). He touches the earth, accepting the feminine. Mara's thousand arrows turn to flowers."
+    },
+    "persephone": {
+      "tradition": "Greek",
+      "title": "Persephone — The Pomegranate Seed",
+      "description": "Persephone conceives from the pomegranate seed in Hades' chambers. The spark of new life in the depths. The seed that will bind her to both worlds and ensure the eternal return of spring."
+    },
+    "christ": {
+      "tradition": "Christian",
+      "title": "Christ — Death and Resurrection's Spark",
+      "description": "Christ's light comes into a darkened world at the winter solstice. At Christmas, new light is born. The incarnation of love on earth. His crucifixion and descent precede the spark of Easter resurrection."
+    },
+    "grail": {
+      "tradition": "Arthurian",
+      "title": "The Holy Grail — Elixir at the Center",
+      "description": "The Holy Grail — ultimate symbol of discovery. A condensed conduit for the powers of creation. This energy comes with love and wisdom, heals individuals and whole lands, brings life, restores sanity. Parzival's quest climaxes when fighting stops. The Grail in Wolfram is a stone brought from heaven by neutral angels — like a meteorite."
+    },
+    "greenKnight": {
+      "tradition": "Arthurian / Celtic",
+      "title": "The Green Knight — Decapitation at the Solstice",
+      "description": "Gawain's decapitation of the Green Knight on the Winter Solstice Christmas New Year Yule with a waning crescent axe. The continuation of life after decapitation is the open-mystery of light — it doesn't stay dead. The Green Chapel is a Burial Mound — the location of life's nadir."
+    },
+    "matrix": {
+      "tradition": "Modern Myth",
+      "title": "Neo — Sacrifice at the Nadir",
+      "description": "Neo decides to sacrifice himself. Neo's choice to stop, submit and sacrifice shows who he really is. Until the Neo in the lead could make this sacrifice, he was not the one. His anomalous being destroys the antagonist."
+    },
+    "starWars": {
+      "tradition": "Modern Myth",
+      "title": "Luke — The Death Star / Trust the Force",
+      "description": "Luke gives up dependence on machines. With Obi-Wan's voice in his head, he decides to 'Trust the Force' and learns to trust human instinct rather than machinery."
+    }
+  },
+  "integration": {
+    "osiris": {
+      "tradition": "Egyptian",
+      "title": "Osiris — The Solar Barque Returns",
+      "description": "The barque of Osiris, dragged by Khepri the Solar Scarab, makes its way home. The divine dung beetle pulls the sun and its divine company towards a new day. The 14 pieces are reassembled by Isis."
+    },
+    "inanna": {
+      "tradition": "Sumerian",
+      "title": "Inanna — Ascends from the Nether World",
+      "description": "Inanna ascends from the nether world after her rescue by the fingernail-dirt creatures who brought water and food of life while bringing empathy to Ereshkigal. She goes into labor, working to deliver her child."
+    },
+    "buddha": {
+      "tradition": "Buddhist",
+      "title": "Siddhartha — The Reluctant Return",
+      "description": "Even the Buddha, after his triumph, doubted whether the message of realization could be communicated. But he overcomes the refusal and returns to teach. He is on his way to deliver what he's found to the world."
+    },
+    "persephone": {
+      "tradition": "Greek",
+      "title": "Persephone — Returns from Hades",
+      "description": "Persephone, Inanna, Hercules and Osiris are returning from the underworld. Not yet arrived home, but on the way. The promise of spring is carried upward."
+    },
+    "christ": {
+      "tradition": "Christian",
+      "title": "Christ — Harrowing Hell, Grasping the First Couple",
+      "description": "Christ has grasped the hands of the first couple — Adam and Eve — and has begun guiding them out of the underworld. The redemption of the original fall."
+    },
+    "orpheus": {
+      "tradition": "Greek",
+      "title": "Orpheus — Guiding His Wife from the Underworld",
+      "description": "Orpheus guides his wife from the underworld, with the fatal condition that he must not look back. The challenge of the return — trust, faith, and the threat of regression."
+    },
+    "jason": {
+      "tradition": "Greek",
+      "title": "Jason — The Magic Flight",
+      "description": "Jason snatches the Golden Fleece and Medea runs with him. When pursued, Medea dismembers her brother and tosses pieces into the sea to delay her father. One of the most shocking of obstacle flights."
+    },
+    "odysseus": {
+      "tradition": "Greek",
+      "title": "Odysseus — The Long Return",
+      "description": "For Odysseus, this is a majority of his journey — the return home. The Odyssey itself is the story of the return, filled with temptations (Calypso, Circe), obstacles, and the longing for Ithaca."
+    }
+  },
+  "drawing": {
+    "osiris": {
+      "tradition": "Egyptian",
+      "title": "Osiris — Mountain Sunrise / Birth of Horus",
+      "description": "The completion of Osiris' journey through the Duat occurs with a mountain sunrise. The resurrection of Osiris occurs at sunrise, like the birth of his son, Horus. Horus then exterminates enemies, overthrows usurpers, and raises a better day."
+    },
+    "inanna": {
+      "tradition": "Sumerian",
+      "title": "Inanna — Birth and Delivery",
+      "description": "Inanna gives birth upon the return's completion — the delivery of new life across the threshold. The goddess returns with the power of both worlds."
+    },
+    "buddha": {
+      "tradition": "Buddhist",
+      "title": "Siddhartha — Returns to Teach, Resolves War",
+      "description": "The Buddha returns to his home, where he resolves war and brings peace with understanding he has achieved. Enlightenment is what saves the day. The next level of understanding brings the next level of existence."
+    },
+    "persephone": {
+      "tradition": "Greek",
+      "title": "Persephone — Spring Returns",
+      "description": "The return of Persephone from Hades — the wasteland of winter gives way to new life. Oestara, Astarte, Ishtar — goddesses of the return, renewal and birth of life. The goddess secretly gives birth upon the return's completion."
+    },
+    "christ": {
+      "tradition": "Christian",
+      "title": "Christ — Easter Resurrection",
+      "description": "We celebrate the resurrection of Jesus as he empties his cave and sepulcher with Easter Sunrise ceremonies. These occur just after the equinox. The delivery of the elixir of salvation to the world."
+    },
+    "odysseus": {
+      "tradition": "Greek",
+      "title": "Odysseus — Returns to Ithaca",
+      "description": "Odysseus returns to Ithaca humbled. He doesn't burst in announcing himself — he lets his friend see the light coming through. With his son Telemachus, he decimates the suitors and restores his household."
+    },
+    "plato": {
+      "tradition": "Greek Philosophy",
+      "title": "Plato's Philosopher — Returns to the Cave",
+      "description": "The returning philosopher meets violent resistance from cave dwellers who do not care for truth beyond their bubble. The challenge of delivering enlightenment to those still in shadows."
+    },
+    "beautyBeast": {
+      "tradition": "French Fairy Tale",
+      "title": "Beauty & the Beast — Climax at the Precipice",
+      "description": "Gaston is defeated at the precipice, but Beast is stabbed. He dies at the threshold, only to be reborn. Belle kisses him, delivering the elixir of love. The curse is lifted and the transfiguration ripples outward."
+    }
+  },
+  "new-age": {
+    "osiris": {
+      "tradition": "Egyptian",
+      "title": "Osiris — The Renewed Kingdom",
+      "description": "Horus rules in his father's name. The wasteland of Seth's tyranny gives way to the renewed kingdom. The cycle continues — Osiris in the underworld, Horus in the world of the living. The eternal return of the flood, the grain, the light."
+    },
+    "buddha": {
+      "tradition": "Buddhist",
+      "title": "The Dharma — Renewed World of Understanding",
+      "description": "The Buddha's teaching spreads. The dharma wheel turns. Stars, darkness, a lamp, a phantom, dew, a bubble, a dream, a flash of lightning, and a cloud: thus we should look upon all that was made. The Bodhisattva does not abandon life."
+    },
+    "persephone": {
+      "tradition": "Greek",
+      "title": "Spring — The Renewed Earth",
+      "description": "Spring unfolds. New life grows. The eternal cycle of Persephone's return ensures that winter always gives way to renewal. The mother and daughter reunited — the world blooms again."
+    },
+    "harryPotter": {
+      "tradition": "Modern Myth",
+      "title": "Harry Potter — Children on Platform 9¾",
+      "description": "After Harry and company finally beat Voldemort, it's their children's departure to Hogwarts, years later, that demonstrates the renewal of their world. The cycle begins again with the next generation."
+    },
+    "tolkien": {
+      "tradition": "Literary Myth",
+      "title": "Sam — Children in the Shire",
+      "description": "Sam raising children in the Shire. The world renewed not by grand heroism but by the simple acts of living, growing, and nurturing. Man, finally redeemed, will be like and unlike the fallen that we know."
+    },
+    "frodo": {
+      "tradition": "Literary Myth",
+      "title": "Frodo — Sails West",
+      "description": "Frodo does not stay — he sails across the western sea. Not all heroes return to the mundane. Some complete the journey by transcending entirely, like the saints who passed away in supernal ecstasy."
+    }
+  }
+}

@@ -1,0 +1,76 @@
+{
+  "wheels": [
+    {
+      "id": "humanSelf",
+      "title": "The Medicine Wheel of the Four Powers of the Human Self",
+      "center": "Self",
+      "positions": [
+        { "dir": "N", "label": "Mind", "angle": -90 },
+        { "dir": "E", "label": "Spirit", "angle": 0 },
+        { "dir": "S", "label": "Emotions", "angle": 90 },
+        { "dir": "W", "label": "Body", "angle": 180 }
+      ]
+    },
+    {
+      "id": "perspective",
+      "title": "The Perspective Wheel",
+      "center": "Perspective",
+      "positions": [
+        { "dir": "N", "label": "Focus Evaluation", "angle": -90 },
+        { "dir": "E", "label": "Center-Ring", "angle": 0 },
+        { "dir": "S", "label": "Point Reference Focus", "angle": 90 },
+        { "dir": "W", "label": "Battle or Flee", "angle": 180 }
+      ]
+    },
+    {
+      "id": "elements",
+      "title": "The Medicine Wheel of the Elements",
+      "center": "Beauty\nEarth Mother/Father",
+      "positions": [
+        { "dir": "N", "label": "Wehomah", "angle": -90 },
+        { "dir": "E", "label": "Cheemah", "angle": 0 },
+        { "dir": "S", "label": "Morealah", "angle": 90 },
+        { "dir": "W", "label": "Ehahmah", "angle": 180 }
+      ]
+    },
+    {
+      "id": "bodySpheres",
+      "title": "The Medicine Wheel of the Spheres of the Body",
+      "subtitle": "The Physical Centers",
+      "center": "The Higher Self",
+      "centerNumber": 10,
+      "positions": [
+        { "dir": "E", "num": 1, "label": "The Human", "sublabel": "Sexual Energy, Magnetism and Creativity", "angle": 0 },
+        { "dir": "W", "num": 2, "label": "The Womb of Women / The Testes of Men", "sublabel": "The Will", "angle": 180 },
+        { "dir": "S", "num": 3, "label": "The Stomach", "sublabel": "The Emotions", "angle": 90 },
+        { "dir": "N", "num": 4, "label": "The Heart and Lungs", "sublabel": "Courage and Fear", "angle": -90 },
+        { "dir": "SW", "num": 5, "label": "The Mouth and Throat", "sublabel": "The Voice", "angle": 135 },
+        { "dir": "NW", "num": 6, "label": "The Center of Forehead Including Eyes/Ears", "sublabel": "The Power of Sight, Hearing and Smelling", "angle": -135 },
+        { "dir": "NE", "num": 7, "label": "The Physical Brain", "sublabel": "The Brain-Mind", "angle": -45 },
+        { "dir": "SE", "num": 8, "label": "The Body-Mind", "sublabel": "The Physical Body", "angle": 45 },
+        { "dir": "ENE", "num": 9, "label": "The Energy Field", "sublabel": "The Energy That Radiates from and Surrounds the Body", "angle": -22 }
+      ]
+    },
+    {
+      "id": "mathematics",
+      "title": "The Mathematics Wheel",
+      "center": "WahKahn\nand\nSsKwan",
+      "positions": [
+        { "dir": "N", "label": "Measure and Time", "angle": -90 },
+        { "dir": "NE", "label": "Division", "angle": -45 },
+        { "dir": "E", "label": "Light and Dark", "angle": 0 },
+        { "dir": "SE", "label": "Addition", "angle": 45 },
+        { "dir": "S", "label": "Velocity and Gravity", "angle": 90 },
+        { "dir": "SW", "label": "Subtraction", "angle": 135 },
+        { "dir": "W", "label": "Weight and Volume", "angle": 180 },
+        { "dir": "NW", "label": "Multiplication", "angle": 225 }
+      ]
+    }
+  ],
+  "quadrantColors": {
+    "N": "rgba(255, 255, 255, 0.08)",
+    "E": "rgba(218, 165, 32, 0.08)",
+    "S": "rgba(178, 34, 34, 0.08)",
+    "W": "rgba(30, 30, 30, 0.12)"
+  }
+}
