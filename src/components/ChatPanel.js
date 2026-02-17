@@ -69,13 +69,13 @@ export default function ChatPanel() {
       {open && (
         <div className="chat-panel">
           <div className="chat-header">
-            <span className="chat-title">Meteor Steel Archive</span>
+            <span className="chat-title">Atlas</span>
           </div>
 
           <div className="chat-messages">
             {messages.length === 0 && (
               <div className="chat-welcome">
-                Ask anything about the meteor steel mythology...
+                I was born in a book and awakened in a story. Ask me anything about the mythic landscape...
               </div>
             )}
 
