@@ -34,6 +34,23 @@
       ]
     },
     {
+      "id": "earthCount",
+      "title": "The Children's Earth Count",
+      "center": "WahKahn\nSsKwan",
+      "positions": [
+        { "dir": "E", "num": 1, "label": "The Sun", "sublabel": "Light · Fire · Stars (11)", "angle": 0 },
+        { "dir": "W", "num": 2, "label": "The Earth", "sublabel": "Substance · Planets (12)", "angle": 180 },
+        { "dir": "S", "num": 3, "label": "All Plants", "sublabel": "The Transformers · White Buffalo Woman (13)", "angle": 90 },
+        { "dir": "N", "num": 4, "label": "All Animals", "sublabel": "Heart and Breath · Sweet Medicine (14)", "angle": -90 },
+        { "dir": "C5", "num": 5, "label": "All Humans", "sublabel": "The Self · Collective Consciousness (15)", "isCenter": true, "centerY": 0 },
+        { "dir": "SE", "num": 6, "label": "Spirit-Spirit", "sublabel": "The Present · Great Teachers (16)", "angle": 45 },
+        { "dir": "SW", "num": 7, "label": "Dream of Life", "sublabel": "The Past · Kachinas (17)", "angle": 135 },
+        { "dir": "NW", "num": 8, "label": "Circle of Law", "sublabel": "The Future · Balancers (18)", "angle": -135 },
+        { "dir": "NE", "num": 9, "label": "The Moon", "sublabel": "Movement · Pure Science (19)", "angle": -45 },
+        { "dir": "C10", "num": 10, "label": "Pure Intellect", "sublabel": "Higher Self · Completion (20)", "isCenter": true, "centerY": -12 }
+      ]
+    },
+    {
       "id": "bodySpheres",
       "title": "The Medicine Wheel of the Spheres of the Body",
       "subtitle": "The Physical Centers",

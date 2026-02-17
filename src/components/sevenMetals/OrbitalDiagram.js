@@ -89,13 +89,26 @@ const MONTH_TEXT_R = 278;
 const MONTH_OFFSET = 80;
 
 const WHEEL_RINGS = [
-  { idx: 0, innerR: 0, outerR: 55, textR: 38 },
-  { idx: 1, innerR: 55, outerR: 110, textR: 82 },
-  { idx: 2, innerR: 110, outerR: 165, textR: 138 },
-  { idx: 3, innerR: 165, outerR: 220, textR: 192 },
-  { idx: 4, innerR: 220, outerR: 280, textR: 250 },
+  { idx: 0, innerR: 0, outerR: 42, textR: 28 },
+  { idx: 1, innerR: 42, outerR: 82, textR: 62 },
+  { idx: 2, innerR: 82, outerR: 124, textR: 103 },
+  { idx: 3, innerR: 124, outerR: 172, textR: 148 },
+  { idx: 4, innerR: 172, outerR: 226, textR: 199 },
+  { idx: 5, innerR: 226, outerR: 282, textR: 254 },
 ];
-const MW_OUTER_R = 290;
+const MW_OUTER_R = 292;
+
+/* Rotate text so it follows the circle tangent, always right-side up */
+function tangentRotation(angleDeg) {
+  if (angleDeg == null) return 0;
+  let rot = angleDeg + 90;
+  while (rot > 180) rot -= 360;
+  while (rot < -180) rot += 360;
+  if (rot > 90 || rot < -90) rot += 180;
+  while (rot > 180) rot -= 360;
+  while (rot < -180) rot += 360;
+  return rot;
+}
 
 const MW_QUADRANTS = [
   { dir: 'N', startDeg: -135, endDeg: -45 },
@@ -188,7 +201,7 @@ export default function OrbitalDiagram({ selectedPlanet, onSelectPlanet, selecte
             {/* Position labels and hit targets */}
             {wheelData.wheels.map((wheel, wi) => {
               const ring = WHEEL_RINGS[wi];
-              const fontSize = wi <= 2 ? 9.5 : wi === 3 ? 8 : 8.5;
+              const fontSize = wi <= 2 ? 8.5 : 7.5;
               return (
                 <g key={wheel.id}>
                   {wheel.positions.map(pos => {
@@ -204,6 +217,7 @@ export default function OrbitalDiagram({ selectedPlanet, onSelectPlanet, selecte
                     const itemKey = `${wheel.id}:${pos.dir}`;
                     const isSelected = selectedWheelItem === itemKey;
                     const displayLabel = pos.num != null ? String(pos.num) : pos.label;
+                    const rot = pos.isCenter ? 0 : tangentRotation(pos.angle);
 
                     return (
                       <g key={itemKey}
@@ -211,15 +225,15 @@ export default function OrbitalDiagram({ selectedPlanet, onSelectPlanet, selecte
                         onClick={() => onSelectWheelItem && onSelectWheelItem(isSelected ? null : itemKey)}
                         style={{ cursor: 'pointer' }}
                       >
-                        <circle cx={px} cy={py} r={pos.num != null ? 12 : 18} fill="transparent" />
+                        <circle cx={px} cy={py} r={pos.num != null ? 11 : 16} fill="transparent" />
                         {isSelected && (
-                          <circle cx={px} cy={py} r="14" fill="none" stroke="rgba(218, 165, 32, 0.6)" strokeWidth="0.8">
-                            <animate attributeName="r" values="12;16;12" dur="2s" repeatCount="indefinite" />
+                          <circle cx={px} cy={py} r="13" fill="none" stroke="rgba(218, 165, 32, 0.6)" strokeWidth="0.8">
+                            <animate attributeName="r" values="11;15;11" dur="2s" repeatCount="indefinite" />
                             <animate attributeName="opacity" values="0.6;0.2;0.6" dur="2s" repeatCount="indefinite" />
                           </circle>
                         )}
                         {pos.num != null && (
-                          <circle cx={px} cy={py} r="9"
+                          <circle cx={px} cy={py} r="8"
                             fill={isSelected ? 'rgba(218, 165, 32, 0.15)' : 'rgba(180, 140, 80, 0.08)'}
                             stroke={isSelected ? 'rgba(218, 165, 32, 0.5)' : 'rgba(180, 140, 80, 0.25)'}
                             strokeWidth="0.6"
@@ -230,6 +244,7 @@ export default function OrbitalDiagram({ selectedPlanet, onSelectPlanet, selecte
                           fill={isSelected ? '#f0c040' : 'rgba(220, 190, 120, 0.8)'}
                           fontSize={fontSize} fontFamily="Cinzel, serif"
                           fontWeight={isSelected ? '700' : '500'}
+                          transform={rot ? `rotate(${rot}, ${px}, ${py})` : undefined}
                           style={{ transition: 'fill 0.3s' }}
                         >
                           {displayLabel}
