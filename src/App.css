@@ -1,0 +1,341 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Pro:wght@300;400;500&display=swap');
+
+:root {
+  --bg-dark: #0a0a0f;
+  --bg-medium: #1a1a24;
+  --bg-light: #2a2a38;
+  --accent-steel: #8b9dc3;
+  --accent-fire: #d4a574;
+  --accent-gold: #c9a961;
+  --accent-ember: #c4713a;
+  --text-primary: #e8e8f0;
+  --text-secondary: #a8a8b8;
+  --border-subtle: rgba(139, 157, 195, 0.2);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Crimson Pro', serif;
+  background: var(--bg-dark);
+  color: var(--text-primary);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+.app {
+  min-height: 100vh;
+}
+
+/* ===== CIRCLE NAVIGATION ===== */
+
+.circle-nav-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 20px 20px;
+}
+
+.circle-nav {
+  position: relative;
+  width: 520px;
+  height: 520px;
+}
+
+.circle-rings {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.ring {
+  fill: none;
+  stroke: var(--accent-ember);
+  stroke-width: 0.4;
+  filter: drop-shadow(0 0 3px rgba(196, 113, 58, 0.5));
+}
+
+.ring-outer {
+  stroke-width: 0.5;
+}
+
+.ring-inner {
+  stroke-width: 0.3;
+  opacity: 0.7;
+}
+
+/* Center title — clickable for overview */
+.circle-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 30px;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  z-index: 2;
+}
+
+.circle-center:hover {
+  background: rgba(196, 113, 58, 0.08);
+}
+
+.circle-center.active {
+  background: rgba(196, 113, 58, 0.12);
+}
+
+.center-title-journey {
+  font-family: 'Cinzel', serif;
+  font-size: 2.2rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--accent-ember);
+  text-shadow: 0 0 20px rgba(196, 113, 58, 0.6), 0 0 40px rgba(196, 113, 58, 0.3);
+}
+
+.center-title-of {
+  font-family: 'Cinzel', serif;
+  font-size: 1.1rem;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--accent-ember);
+  opacity: 0.8;
+}
+
+.center-title-fallen {
+  font-family: 'Cinzel', serif;
+  font-size: 1.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--accent-ember);
+  text-shadow: 0 0 20px rgba(196, 113, 58, 0.6), 0 0 40px rgba(196, 113, 58, 0.3);
+}
+
+.center-author {
+  font-family: 'Cinzel', serif;
+  font-size: 0.9rem;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--accent-ember);
+  opacity: 0.7;
+  margin-top: 6px;
+}
+
+/* Stage labels around the circle */
+.circle-stage {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+  z-index: 3;
+  padding: 8px;
+}
+
+.circle-stage-label {
+  display: block;
+  font-family: 'Cinzel', serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--accent-ember);
+  white-space: nowrap;
+  transition: all 0.3s ease;
+  text-shadow: 0 0 8px rgba(196, 113, 58, 0.4);
+}
+
+.circle-stage:hover .circle-stage-label {
+  color: #e8944a;
+  text-shadow: 0 0 15px rgba(196, 113, 58, 0.8), 0 0 30px rgba(196, 113, 58, 0.4);
+}
+
+.circle-stage.active .circle-stage-label {
+  color: #f0a860;
+  text-shadow: 0 0 20px rgba(240, 168, 96, 0.9), 0 0 40px rgba(240, 168, 96, 0.5);
+  font-size: 0.95rem;
+}
+
+/* Stage heading below the circle */
+.stage-heading {
+  text-align: center;
+  font-family: 'Cinzel', serif;
+  font-size: 1.8rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent-fire);
+  margin-bottom: 10px;
+  padding: 0 20px;
+}
+
+/* ===== CONTENT ===== */
+
+.container {
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 20px 20px 40px;
+}
+
+.dropdown-section {
+  margin-bottom: 40px;
+  border: 1px solid var(--border-subtle);
+  background: var(--bg-medium);
+  overflow: hidden;
+}
+
+.dropdown-header {
+  padding: 20px 30px;
+  background: var(--bg-light);
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: background 0.2s ease;
+  border-bottom: 1px solid var(--border-subtle);
+  user-select: none;
+}
+
+.dropdown-header:hover {
+  background: rgba(139, 157, 195, 0.1);
+}
+
+.dropdown-header h3 {
+  font-family: 'Cinzel', serif;
+  font-size: 1.3rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent-steel);
+}
+
+.dropdown-arrow {
+  font-size: 1.5rem;
+  transition: transform 0.3s ease;
+  color: var(--accent-steel);
+}
+
+.dropdown-header.active .dropdown-arrow {
+  transform: rotate(180deg);
+}
+
+.dropdown-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease;
+}
+
+.dropdown-content.active {
+  max-height: 5000px;
+}
+
+.content-area {
+  padding: 40px 30px;
+  max-height: 600px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent-steel) var(--bg-dark);
+}
+
+.figure-card {
+  margin-bottom: 50px;
+  padding-bottom: 40px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.figure-card:last-child {
+  border-bottom: none;
+}
+
+.figure-name {
+  font-family: 'Cinzel', serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--accent-gold);
+  margin-bottom: 24px;
+  letter-spacing: 0.05em;
+}
+
+.figure-content p {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  margin-bottom: 16px;
+  color: var(--text-primary);
+}
+
+.figure-content p:last-child {
+  margin-bottom: 0;
+}
+
+.overview-text {
+  font-size: 1.15rem;
+  line-height: 1.9;
+  color: var(--text-primary);
+  padding: 20px;
+  background: rgba(139, 157, 195, 0.05);
+  border-left: 3px solid var(--accent-fire);
+  margin-bottom: 20px;
+}
+
+.empty-content {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  font-style: italic;
+  padding: 20px;
+}
+
+/* ===== RESPONSIVE ===== */
+
+@media (max-width: 600px) {
+  .circle-nav {
+    width: 340px;
+    height: 340px;
+  }
+
+  .center-title-journey {
+    font-size: 1.4rem;
+  }
+
+  .center-title-fallen {
+    font-size: 1.1rem;
+  }
+
+  .center-title-of {
+    font-size: 0.8rem;
+  }
+
+  .center-author {
+    font-size: 0.7rem;
+  }
+
+  .circle-stage-label {
+    font-size: 0.65rem;
+  }
+
+  .circle-stage.active .circle-stage-label {
+    font-size: 0.72rem;
+  }
+
+  .stage-heading {
+    font-size: 1.3rem;
+  }
+
+  .figure-name {
+    font-size: 1.6rem;
+  }
+}
