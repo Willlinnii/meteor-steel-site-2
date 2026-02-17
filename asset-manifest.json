@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/meteor-steel-site-2/static/css/main.d17aaa5a.css",
-    "main.js": "/meteor-steel-site-2/static/js/main.1eeaba2f.js",
+    "main.js": "/meteor-steel-site-2/static/js/main.ed795088.js",
     "index.html": "/meteor-steel-site-2/index.html",
     "main.d17aaa5a.css.map": "/meteor-steel-site-2/static/css/main.d17aaa5a.css.map",
-    "main.1eeaba2f.js.map": "/meteor-steel-site-2/static/js/main.1eeaba2f.js.map"
+    "main.ed795088.js.map": "/meteor-steel-site-2/static/js/main.ed795088.js.map"
   },
   "entrypoints": [
     "static/css/main.d17aaa5a.css",
-    "static/js/main.1eeaba2f.js"
+    "static/js/main.ed795088.js"
   ]
 }
