@@ -52,7 +52,7 @@ function arcPath(cx, cy, r, startDeg, endDeg, sweep) {
   return `M ${x1},${y1} A ${r},${r} 0 0,${sweep} ${x2},${y2}`;
 }
 
-export default function OrbitalDiagram({ selectedPlanet, onSelectPlanet, selectedSign, onSelectSign, selectedCardinal, onSelectCardinal }) {
+export default function OrbitalDiagram({ selectedPlanet, onSelectPlanet, selectedSign, onSelectSign, selectedCardinal, onSelectCardinal, selectedEarth, onSelectEarth }) {
   const [aligned, setAligned] = useState(false);
 
   return (
@@ -258,11 +258,22 @@ export default function OrbitalDiagram({ selectedPlanet, onSelectPlanet, selecte
         )}
 
         {/* Earth at center */}
-        <circle cx={CX} cy={CY} r="28" fill="url(#earth-glow)" />
-        <circle cx={CX} cy={CY} r="12" fill="#3a7a6a" fillOpacity="0.8" stroke="#5aaa9a" strokeWidth="1.5" />
-        <text x={CX} y={CY + 24} textAnchor="middle" fill="#5aaa9a" fontSize="10" fontFamily="Cinzel, serif" fontWeight="600">
-          Earth
-        </text>
+        <g
+          style={{ cursor: 'pointer' }}
+          onClick={() => onSelectEarth && onSelectEarth(!selectedEarth)}
+        >
+          <circle cx={CX} cy={CY} r="28" fill="url(#earth-glow)" />
+          <circle cx={CX} cy={CY} r="12" fill={selectedEarth ? '#5acea0' : '#3a7a6a'} fillOpacity="0.8" stroke={selectedEarth ? '#7aeac0' : '#5aaa9a'} strokeWidth="1.5" />
+          {selectedEarth && (
+            <circle cx={CX} cy={CY} r="18" fill="none" stroke="#5acea0" strokeWidth="0.8" opacity="0.5">
+              <animate attributeName="r" values="16;22;16" dur="2s" repeatCount="indefinite" />
+              <animate attributeName="opacity" values="0.5;0.2;0.5" dur="2s" repeatCount="indefinite" />
+            </circle>
+          )}
+          <text x={CX} y={CY + 24} textAnchor="middle" fill={selectedEarth ? '#7aeac0' : '#5aaa9a'} fontSize="10" fontFamily="Cinzel, serif" fontWeight="600">
+            Earth
+          </text>
+        </g>
 
         {/* Planet nodes */}
         {ORBITS.map(o => {

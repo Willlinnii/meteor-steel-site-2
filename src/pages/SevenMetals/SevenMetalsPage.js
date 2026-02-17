@@ -148,12 +148,40 @@ function PlanetCultureContent({ planet, activeCulture }) {
   );
 }
 
+function EarthContent({ activeCulture }) {
+  const cultureKey = CULTURE_KEY_MAP[activeCulture];
+  const earthElement = elementsData['Earth'];
+  const earthCulture = earthElement?.cultures?.[cultureKey];
+
+  return (
+    <div className="tab-content">
+      <div className="overview-grid">
+        <div className="overview-item"><span className="ov-label">Role</span><span className="ov-value">Geocentric Center</span></div>
+        <div className="overview-item"><span className="ov-label">Element</span><span className="ov-value">Earth</span></div>
+        <div className="overview-item"><span className="ov-label">Signs</span><span className="ov-value">Taurus · Virgo · Capricorn</span></div>
+        <div className="overview-item"><span className="ov-label">Qualities</span><span className="ov-value">{earthElement?.qualities || 'Stability, material form, patience, endurance'}</span></div>
+      </div>
+      <div className="modern-section">
+        <h5>The Still Point</h5>
+        <p>In the classical geocentric model, Earth stands at the center of the celestial spheres — not as a planet among planets, but as the fixed ground upon which all cosmic motion is measured. The seven metals orbit around it, each tracing a sphere of influence. Earth is the stage, the body, the material vessel through which all heavenly forces are received and expressed.</p>
+      </div>
+      {earthCulture && (
+        <div className="modern-section">
+          <h5>{activeCulture} Tradition</h5>
+          <CultureBlock cultureData={earthCulture} />
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function SevenMetalsPage() {
   const [selectedPlanet, setSelectedPlanet] = useState('Sun');
   const [activeTab, setActiveTab] = useState('overview');
   const [activeCulture, setActiveCulture] = useState('Greek');
   const [selectedSign, setSelectedSign] = useState(null);
   const [selectedCardinal, setSelectedCardinal] = useState(null);
+  const [selectedEarth, setSelectedEarth] = useState(false);
   const [devEntries, setDevEntries] = useState({});
 
   const mergedData = useMemo(() => {
@@ -181,15 +209,32 @@ export default function SevenMetalsPage() {
       <div className="metals-diagram-center">
         <OrbitalDiagram
           selectedPlanet={selectedPlanet}
-          onSelectPlanet={(p) => { setSelectedPlanet(p); setSelectedSign(null); setSelectedCardinal(null); }}
+          onSelectPlanet={(p) => { setSelectedPlanet(p); setSelectedSign(null); setSelectedCardinal(null); setSelectedEarth(false); }}
           selectedSign={selectedSign}
-          onSelectSign={(sign) => { setSelectedSign(sign); setSelectedCardinal(null); }}
+          onSelectSign={(sign) => { setSelectedSign(sign); setSelectedCardinal(null); setSelectedEarth(false); }}
           selectedCardinal={selectedCardinal}
-          onSelectCardinal={(c) => { setSelectedCardinal(c); setSelectedSign(null); }}
+          onSelectCardinal={(c) => { setSelectedCardinal(c); setSelectedSign(null); setSelectedEarth(false); }}
+          selectedEarth={selectedEarth}
+          onSelectEarth={(e) => { setSelectedEarth(e); setSelectedSign(null); setSelectedCardinal(null); }}
         />
       </div>
 
-      {selectedCardinal ? (
+      {selectedEarth ? (
+        <>
+          <h2 className="metals-heading">
+            Earth
+            <span className="metals-sub">The Still Point · Geocentric Center</span>
+          </h2>
+          <div className="container">
+            <div id="content-container">
+              <div className="metal-detail-panel">
+                <CultureSelector activeCulture={activeCulture} onSelectCulture={setActiveCulture} />
+                <EarthContent activeCulture={activeCulture} />
+              </div>
+            </div>
+          </div>
+        </>
+      ) : selectedCardinal ? (
         <>
           <h2 className="metals-heading">
             {cardinalsData[selectedCardinal]?.label || selectedCardinal}

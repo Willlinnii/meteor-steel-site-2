@@ -88,7 +88,8 @@ function SinsTab({ data }) {
   const m = data?.modern;
   const artists = data?.artists;
   const t = data?.theology;
-  if (!a && !m && !artists && !t) return <p className="metals-empty">No sin/virtue data available.</p>;
+  const s = data?.stories;
+  if (!a && !m && !artists && !t && !s) return <p className="metals-empty">No sin/virtue data available.</p>;
 
   const artistFields = [
     ['bosch', 'Hieronymus Bosch'],
@@ -157,6 +158,29 @@ function SinsTab({ data }) {
           </ul>
         </div>
       )}
+      {s && (
+        <div className="modern-section">
+          <h5>Literary Depictions</h5>
+          {[
+            ['castleOfPerseverance', 'The Castle of Perseverance'],
+            ['faerieQueene', 'The Faerie Queene'],
+            ['danteInferno', "Dante's Inferno"],
+            ['canterburyTales', 'Canterbury Tales'],
+            ['drFaustus', 'Doctor Faustus'],
+            ['decameron', 'The Decameron'],
+            ['arthurian', 'Arthurian Legend'],
+            ['weillBallet', 'Weill Ballet'],
+            ['seven', 'Se7en'],
+            ['devilsAdvocate', "The Devil's Advocate"],
+            ['shazam', 'Shazam!'],
+          ].map(([key, label]) => s[key] ? (
+            <div key={key} className="story-section">
+              <h5>{label}</h5>
+              <p>{s[key]}</p>
+            </div>
+          ) : null)}
+        </div>
+      )}
       {t && (
         <>
           {t.desertFathers && <div className="theology-section"><h5>Desert Fathers</h5><p>{t.desertFathers}</p></div>}
@@ -195,34 +219,6 @@ function DayTab({ data }) {
           <p>{m.planetConnection}</p>
         </div>
       )}
-    </div>
-  );
-}
-
-function StoriesTab({ data }) {
-  if (!data?.stories) return <p className="metals-empty">No story data available.</p>;
-  const s = data.stories;
-  const fields = [
-    ['castleOfPerseverance', 'The Castle of Perseverance'],
-    ['faerieQueene', 'The Faerie Queene'],
-    ['danteInferno', "Dante's Inferno"],
-    ['canterburyTales', 'Canterbury Tales'],
-    ['drFaustus', 'Doctor Faustus'],
-    ['decameron', 'The Decameron'],
-    ['arthurian', 'Arthurian Legend'],
-    ['weillBallet', 'Weill Ballet'],
-    ['seven', 'Se7en'],
-    ['devilsAdvocate', "The Devil's Advocate"],
-    ['shazam', 'Shazam!'],
-  ];
-  return (
-    <div className="tab-content">
-      {fields.map(([key, label]) => s[key] ? (
-        <div key={key} className="story-section">
-          <h5>{label}</h5>
-          <p>{s[key]}</p>
-        </div>
-      ) : null)}
     </div>
   );
 }
@@ -305,7 +301,6 @@ export default function MetalDetailPanel({ data, activeTab, onSelectTab, activeC
         {activeTab === 'deities' && <DeitiesTab data={data} activeCulture={activeCulture} />}
         {activeTab === 'sins' && <SinsTab data={data} />}
         {activeTab === 'day' && <DayTab data={data} />}
-        {activeTab === 'stories' && <StoriesTab data={data} />}
         {activeTab === 'body' && <BodyTab data={data} />}
         {activeTab === 'hebrew' && <HebrewTab data={data} />}
         {activeTab === 'synthesis' && <SynthesisTab data={data} />}
