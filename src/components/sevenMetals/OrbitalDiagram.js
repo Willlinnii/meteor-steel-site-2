@@ -192,9 +192,15 @@ export default function OrbitalDiagram({ selectedPlanet, onSelectPlanet, selecte
               return (
                 <g key={wheel.id}>
                   {wheel.positions.map(pos => {
-                    const rad = (pos.angle * Math.PI) / 180;
-                    const px = CX + ring.textR * Math.cos(rad);
-                    const py = CY + ring.textR * Math.sin(rad);
+                    let px, py;
+                    if (pos.isCenter) {
+                      px = CX;
+                      py = CY + (pos.centerY || 0);
+                    } else {
+                      const rad = (pos.angle * Math.PI) / 180;
+                      px = CX + ring.textR * Math.cos(rad);
+                      py = CY + ring.textR * Math.sin(rad);
+                    }
                     const itemKey = `${wheel.id}:${pos.dir}`;
                     const isSelected = selectedWheelItem === itemKey;
                     const displayLabel = pos.num != null ? String(pos.num) : pos.label;
@@ -240,8 +246,10 @@ export default function OrbitalDiagram({ selectedPlanet, onSelectPlanet, selecte
               fill="rgba(220, 190, 120, 0.9)" fontSize="12" fontFamily="Cinzel, serif" fontWeight="700">
               Self
             </text>
-            <text x={CX} y={CY + 10} textAnchor="middle" dominantBaseline="central"
-              fill="rgba(220, 190, 120, 0.4)" fontSize="7" fontFamily="Crimson Pro, serif" fontWeight="400" fontStyle="italic">
+
+            {/* Storm attribution — bottom right */}
+            <text x={CX + MW_OUTER_R + 10} y={CY + MW_OUTER_R + 22} textAnchor="end"
+              fill="rgba(220, 190, 120, 0.45)" fontSize="8" fontFamily="Crimson Pro, serif" fontWeight="400" fontStyle="italic">
               Hyemeyohsts Storm
             </text>
 

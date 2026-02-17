@@ -37,18 +37,17 @@
       "id": "bodySpheres",
       "title": "The Medicine Wheel of the Spheres of the Body",
       "subtitle": "The Physical Centers",
-      "center": "The Higher Self",
-      "centerNumber": 10,
       "positions": [
         { "dir": "E", "num": 1, "label": "The Human", "sublabel": "Sexual Energy, Magnetism and Creativity", "angle": 0 },
         { "dir": "W", "num": 2, "label": "The Womb of Women / The Testes of Men", "sublabel": "The Will", "angle": 180 },
         { "dir": "S", "num": 3, "label": "The Stomach", "sublabel": "The Emotions", "angle": 90 },
         { "dir": "N", "num": 4, "label": "The Heart and Lungs", "sublabel": "Courage and Fear", "angle": -90 },
-        { "dir": "SW", "num": 5, "label": "The Mouth and Throat", "sublabel": "The Voice", "angle": 135 },
-        { "dir": "NW", "num": 6, "label": "The Center of Forehead Including Eyes/Ears", "sublabel": "The Power of Sight, Hearing and Smelling", "angle": -135 },
-        { "dir": "NE", "num": 7, "label": "The Physical Brain", "sublabel": "The Brain-Mind", "angle": -45 },
-        { "dir": "SE", "num": 8, "label": "The Body-Mind", "sublabel": "The Physical Body", "angle": 45 },
-        { "dir": "ENE", "num": 9, "label": "The Energy Field", "sublabel": "The Energy That Radiates from and Surrounds the Body", "angle": -22 }
+        { "dir": "C5", "num": 5, "label": "The Mouth and Throat", "sublabel": "The Voice", "isCenter": true, "centerY": 8 },
+        { "dir": "SE", "num": 6, "label": "The Center of Forehead Including Eyes/Ears", "sublabel": "The Power of Sight, Hearing and Smelling", "angle": 45 },
+        { "dir": "SW", "num": 7, "label": "The Physical Brain", "sublabel": "The Brain-Mind", "angle": 135 },
+        { "dir": "NW", "num": 8, "label": "The Body-Mind", "sublabel": "The Physical Body", "angle": -135 },
+        { "dir": "NE", "num": 9, "label": "The Energy Field", "sublabel": "The Energy That Radiates from and Surrounds the Body", "angle": -45 },
+        { "dir": "C10", "num": 10, "label": "The Higher Self", "sublabel": "Pure Intellect and Measure", "isCenter": true, "centerY": -8 }
       ]
     },
     {
