@@ -1,4 +1,4 @@
-const OpenAI = require('openai');
+const Anthropic = require('@anthropic-ai/sdk');
 
 // Import JSON data directly so Vercel's bundler includes them
 // --- Meteor Steel Archive ---
@@ -249,28 +249,38 @@ module.exports = async function handler(req, res) {
   }
 
   // Validate: cap at 20 messages, 4000 chars each
-  const trimmed = messages.slice(-20).map((m) => ({
+  // Anthropic requires alternating user/assistant roles; merge consecutive same-role messages
+  const raw = messages.slice(-20).map((m) => ({
     role: m.role === 'assistant' ? 'assistant' : 'user',
     content: String(m.content || '').slice(0, 4000),
   }));
+  const trimmed = [];
+  for (const msg of raw) {
+    if (trimmed.length > 0 && trimmed[trimmed.length - 1].role === msg.role) {
+      trimmed[trimmed.length - 1].content += '\n' + msg.content;
+    } else {
+      trimmed.push({ ...msg });
+    }
+  }
+  // Anthropic requires the first message to be from the user
+  if (trimmed.length > 0 && trimmed[0].role !== 'user') {
+    trimmed.shift();
+  }
 
-  const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+  const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
   try {
-    const completion = await openai.chat.completions.create({
-      model: 'gpt-4o-mini',
-      messages: [
-        { role: 'system', content: getSystemPrompt() },
-        ...trimmed,
-      ],
+    const response = await anthropic.messages.create({
+      model: 'claude-haiku-4-5-20251001',
+      system: getSystemPrompt(),
+      messages: trimmed,
       max_tokens: 1024,
-      temperature: 0.7,
     });
 
-    const reply = completion.choices[0]?.message?.content || 'No response generated.';
+    const reply = response.content?.[0]?.text || 'No response generated.';
     return res.status(200).json({ reply });
   } catch (err) {
-    console.error('OpenAI API error:', err?.message, err?.status, err?.code);
+    console.error('Anthropic API error:', err?.message, err?.status);
     if (err.status === 401) {
       return res.status(500).json({ error: 'API configuration error.' });
     }
