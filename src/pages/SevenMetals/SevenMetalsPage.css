@@ -1,0 +1,515 @@
+/* ===== SEVEN METALS PAGE ===== */
+
+.seven-metals-page {
+  padding: 20px 20px 60px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* ===== LAYOUT ===== */
+
+.metals-layout {
+  display: grid;
+  grid-template-columns: 480px 1fr;
+  gap: 40px;
+  align-items: start;
+}
+
+.metals-diagram-col {
+  position: sticky;
+  top: 20px;
+}
+
+.metals-detail-col {
+  min-width: 0;
+}
+
+/* ===== ORBITAL SVG ===== */
+
+.orbital-svg {
+  width: 100%;
+  max-width: 480px;
+  display: block;
+  margin: 0 auto;
+}
+
+.planet-node {
+  transition: opacity 0.2s;
+}
+
+.planet-node:hover circle {
+  fill-opacity: 1 !important;
+}
+
+/* ===== HEADING ===== */
+
+.metals-heading {
+  font-family: 'Cinzel', serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--accent-fire);
+  letter-spacing: 0.06em;
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.metals-sub {
+  font-family: 'Crimson Pro', serif;
+  font-size: 0.95rem;
+  font-weight: 400;
+  color: var(--text-secondary);
+  letter-spacing: 0.02em;
+}
+
+.metals-empty {
+  color: var(--text-secondary);
+  font-style: italic;
+  padding: 40px 20px;
+  text-align: center;
+  font-size: 1.1rem;
+}
+
+/* ===== TABS ===== */
+
+.metal-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.metal-tab {
+  font-family: 'Cinzel', serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--accent-steel);
+  background: var(--bg-medium);
+  border: 1px solid var(--border-subtle);
+  padding: 8px 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.metal-tab:hover {
+  background: rgba(139, 157, 195, 0.1);
+  border-color: var(--accent-steel);
+}
+
+.metal-tab.active {
+  color: var(--accent-ember);
+  border-color: var(--accent-ember);
+  background: rgba(196, 113, 58, 0.1);
+  box-shadow: 0 0 10px rgba(196, 113, 58, 0.15);
+}
+
+/* ===== CULTURE SELECTOR ===== */
+
+.culture-selector {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.culture-btn {
+  font-family: 'Cinzel', serif;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--accent-gold);
+  background: none;
+  border: 1px solid rgba(201, 169, 97, 0.25);
+  padding: 6px 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.culture-btn:hover {
+  color: #ddc06e;
+  border-color: var(--accent-gold);
+  background: rgba(201, 169, 97, 0.06);
+}
+
+.culture-btn.active {
+  color: var(--accent-ember);
+  border-color: var(--accent-ember);
+  background: rgba(196, 113, 58, 0.1);
+}
+
+/* ===== DETAIL PANEL ===== */
+
+.metal-detail-panel {
+  border: 1px solid var(--border-subtle);
+  background: var(--bg-medium);
+  padding: 20px;
+}
+
+.metal-content-scroll {
+  max-height: 600px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent-steel) var(--bg-dark);
+  padding-right: 8px;
+}
+
+/* ===== TAB CONTENT ===== */
+
+.tab-content {
+  padding: 8px 0;
+}
+
+.tab-content p {
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: var(--text-primary);
+  margin-bottom: 12px;
+}
+
+.tab-content h4 {
+  font-family: 'Cinzel', serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--accent-gold);
+  margin-bottom: 12px;
+}
+
+.tab-content h5 {
+  font-family: 'Cinzel', serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--accent-fire);
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* ===== OVERVIEW TAB ===== */
+
+.metal-desc {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: var(--text-primary);
+  padding: 14px 18px;
+  background: rgba(139, 157, 195, 0.05);
+  border-left: 3px solid var(--accent-fire);
+  margin-bottom: 20px;
+}
+
+.combined-figure {
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: var(--text-primary);
+  padding: 16px 20px;
+  margin: 0 0 20px;
+  background: rgba(201, 169, 97, 0.05);
+  border-left: 3px solid var(--accent-gold);
+  font-style: italic;
+}
+
+.overview-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.overview-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 10px 16px;
+  background: rgba(139, 157, 195, 0.05);
+  border: 1px solid var(--border-subtle);
+  min-width: 100px;
+}
+
+.ov-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-secondary);
+}
+
+.ov-value {
+  font-size: 1rem;
+  color: var(--text-primary);
+}
+
+.astrology-note {
+  font-style: italic;
+  color: var(--text-secondary);
+  margin-bottom: 20px;
+}
+
+.quick-deities {
+  margin-bottom: 20px;
+}
+
+.quick-deity {
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: var(--text-primary);
+  margin-bottom: 6px;
+}
+
+.qd-culture {
+  font-family: 'Cinzel', serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: capitalize;
+  color: var(--accent-steel);
+}
+
+.philosophies {
+  margin-bottom: 20px;
+}
+
+.philosophy-item {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+  padding: 8px 12px;
+  background: rgba(139, 157, 195, 0.03);
+  border-left: 2px solid var(--border-subtle);
+}
+
+.phil-key {
+  font-family: 'Cinzel', serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: capitalize;
+  color: var(--accent-steel);
+}
+
+.phil-desc {
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+/* ===== DEITY CARD ===== */
+
+.deity-card {
+  padding: 16px 18px;
+  margin-bottom: 16px;
+  background: rgba(139, 157, 195, 0.04);
+  border: 1px solid var(--border-subtle);
+}
+
+.deity-name {
+  font-family: 'Cinzel', serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--accent-gold);
+  margin-bottom: 4px;
+}
+
+.deity-culture {
+  font-family: 'Cinzel', serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--accent-steel);
+  display: inline-block;
+  margin-bottom: 8px;
+}
+
+.deity-domain {
+  font-size: 1rem;
+  font-style: italic;
+  color: var(--text-secondary);
+  margin-bottom: 10px;
+}
+
+.deity-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.deity-field {
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--text-primary);
+}
+
+.deity-field-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--accent-steel);
+}
+
+.deity-field-value {
+  color: var(--text-primary);
+}
+
+/* ===== DEITY GALLERY ===== */
+
+.deity-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px;
+}
+
+.gallery-card {
+  padding: 14px;
+  background: rgba(139, 157, 195, 0.04);
+  border: 1px solid var(--border-subtle);
+  transition: border-color 0.2s;
+}
+
+.gallery-card:hover {
+  border-color: var(--accent-steel);
+}
+
+.gallery-name {
+  font-family: 'Cinzel', serif;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--accent-gold);
+  margin-bottom: 2px;
+}
+
+.gallery-culture {
+  font-family: 'Cinzel', serif;
+  font-size: 0.6rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--accent-steel);
+}
+
+.gallery-domain {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-top: 6px;
+  margin-bottom: 4px;
+}
+
+.gallery-animals {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+/* ===== THEOLOGY / STORIES / ARTISTS / SECTIONS ===== */
+
+.theology-section,
+.story-section,
+.artist-section,
+.modern-section,
+.body-section,
+.hebrew-section,
+.archetype-section,
+.essay-block {
+  padding: 12px 16px;
+  margin-bottom: 14px;
+  background: rgba(139, 157, 195, 0.03);
+  border-left: 2px solid var(--border-subtle);
+}
+
+.thematic-essays {
+  margin-bottom: 24px;
+}
+
+.essay-title {
+  text-transform: capitalize !important;
+}
+
+/* ===== ARCHETYPE ===== */
+
+.archetype-name {
+  font-size: 1.4rem !important;
+}
+
+/* ===== MODERN ===== */
+
+.attr-list {
+  font-size: 0.9rem;
+  color: var(--accent-gold);
+  letter-spacing: 0.02em;
+  margin-bottom: 6px;
+}
+
+.film-list {
+  list-style: none;
+  padding: 0;
+}
+
+.film-list li {
+  font-size: 0.95rem;
+  color: var(--text-primary);
+  padding: 4px 0;
+  border-bottom: 1px solid rgba(139, 157, 195, 0.08);
+}
+
+.film-list li:last-child {
+  border-bottom: none;
+}
+
+/* ===== HEBREW ===== */
+
+.hebrew-day {
+  font-size: 1.3rem !important;
+  margin-bottom: 16px !important;
+}
+
+/* ===== RESPONSIVE ===== */
+
+@media (max-width: 900px) {
+  .metals-layout {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .metals-diagram-col {
+    position: static;
+  }
+
+  .orbital-svg {
+    max-width: 360px;
+  }
+
+  .metal-content-scroll {
+    max-height: none;
+  }
+}
+
+@media (max-width: 600px) {
+  .seven-metals-page {
+    padding: 10px 10px 40px;
+  }
+
+  .orbital-svg {
+    max-width: 300px;
+  }
+
+  .metals-heading {
+    font-size: 1.2rem;
+  }
+
+  .metal-tab {
+    font-size: 0.6rem;
+    padding: 6px 10px;
+  }
+
+  .culture-btn {
+    font-size: 0.58rem;
+    padding: 5px 8px;
+  }
+
+  .deity-gallery {
+    grid-template-columns: 1fr;
+  }
+}

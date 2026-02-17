@@ -1,0 +1,555 @@
+[
+  {
+    "number": 7,
+    "metal": "Gold",
+    "planet": "Sun",
+    "day": "Sunday",
+    "sin": "Pride",
+    "virtue": "Humility",
+    "astrology": "The Sun symbolizes vitality, ego, and individuality.",
+    "body": {
+      "organ": "Skin",
+      "organDescription": "Skin regulates temperature and acts as a protective barrier.",
+      "chakra": "Crown Chakra",
+      "chakraDescription": "Crown Chakra connects to spirituality and consciousness."
+    },
+    "deities": {
+      "greek": {
+        "name": "Apollo",
+        "description": "Represents light, arts, healing, and prophecy."
+      },
+      "roman": {
+        "name": "Sol",
+        "description": "The personification of the Sun, revered for bringing vitality and prosperity, illuminating the world with its radiance."
+      },
+      "hindu": {
+        "name": "Surya",
+        "description": "The solar god, symbolizes life force and enlightenment, illuminating the world with his radiance and providing energy to all living beings."
+      },
+      "norse": {
+        "name": "Sol",
+        "description": "The sun goddess, represented light and life, guiding the course of the day and seasons with her chariot."
+      },
+      "babylonian": {
+        "name": "Shamash",
+        "description": "The solar deity, symbolized light and justice, embodying principles of law and equity."
+      },
+      "jewish": {
+        "name": "Yom Rishon",
+        "description": "The first day, marks the beginning of the workweek and is associated with the creation of light in Genesis."
+      }
+    },
+    "philosophies": {
+      "christian": {
+        "sin": "Vainglory/Pride",
+        "virtue": "Humility",
+        "description": "Contrasts ego with modesty."
+      },
+      "hinduArishadvarga": {
+        "vice": "Mada (Pride)",
+        "counter": "Dharma",
+        "description": "Mada (Pride) is tempered by the pursuit of Dharma."
+      },
+      "taoist": {
+        "excess": "Pride",
+        "virtue": "Modesty",
+        "description": "Pride and Modesty balance personal ambition and humility."
+      },
+      "stoic": {
+        "vice": "Tyranny/Anarchy",
+        "virtue": "Justice (Dikaiosyne)",
+        "description": "Justice, through fairness and integrity, addresses the distress arising from injustices. By treating others well and acting morally, one avoids contributing to distress, both in oneself and in others."
+      },
+      "buddhistKlesha": {
+        "affliction": "Pride (asmitā)",
+        "description": "Egoism or inflated sense of self. Overcome by recognizing ego's illusions."
+      },
+      "buddhistHindrance": null,
+      "egyptianMaat": {
+        "principle": "Justice",
+        "description": "Justice alleviates distress through fairness and integrity."
+      },
+      "islamic": {
+        "pillar": "Shahada (Faith)",
+        "pillarDescription": "The declaration of faith, stating that there is no god but Allah, and Muhammad is the messenger of Allah. This is the fundamental creed of Islam and must be recited with conviction by anyone who wishes to convert to Islam.",
+        "articleOfFaith": "Belief in Allah",
+        "articleDescription": "The belief in the oneness of Allah, with no partners, associates, or equals."
+      },
+      "greekCardinal": {
+        "vice": "Tyranny/Anarchy",
+        "virtue": "Justice (Dikaiosyne)"
+      }
+    },
+    "combinedFigure": "Radiant and majestic, I am the embodiment of vitality and justice, illuminating the world with my brilliance. My name is Sol, and I am revered across cultures as the giver of life, bringing prosperity and enlightenment to all who bask in my light. Known as Surya in Hindu tradition, I symbolize power, vitality, and enlightenment, energizing the cosmos with my radiant presence. In Norse mythology, I am Sol, guiding the course of the day and seasons with my chariot, symbolizing light and life for gods and mortals alike. From Genesis to cultural practices, I mark the beginning of the week as Yom Rishon, the first day, bringing forth the dawn of creation and the promise of a new beginning.",
+    "metalDescription": "Traditionally symbolizing purity and divinity, gold resonates with the sun's energy, a beacon of light and life."
+  },
+  {
+    "number": 6,
+    "metal": "Silver",
+    "planet": "Moon",
+    "day": "Monday",
+    "sin": "Envy",
+    "virtue": "Gratitude",
+    "astrology": "The Moon governs emotions, intuition, and the unconscious.",
+    "body": {
+      "organ": "Nervous System",
+      "organDescription": "The nervous system coordinates sensory and motor functions.",
+      "chakra": "Third Eye Chakra",
+      "chakraDescription": "Third Eye Chakra enhances intuition and inner wisdom."
+    },
+    "deities": {
+      "greek": {
+        "name": "Artemis",
+        "description": "Symbolizes wilderness, childbirth, and chastity."
+      },
+      "roman": {
+        "name": "Luna/Diana",
+        "description": "The goddess of the Moon, represented cycles and change, influencing emotions and intuition."
+      },
+      "hindu": {
+        "name": "Chandra",
+        "description": "The lunar deity, embodied tranquility, intuition, and emotion, guiding the night sky and influencing the ebb and flow of life."
+      },
+      "norse": {
+        "name": "Mani",
+        "description": "The moon god, guided the night sky, marking the passage of time and the changing phases of the moon."
+      },
+      "babylonian": {
+        "name": "Sin",
+        "description": "The moon god, symbolized wisdom and the passage of time, influencing agricultural practices and timekeeping."
+      },
+      "jewish": {
+        "name": "Yom Sheni",
+        "description": "The second day, traditionally signifies the separation of the waters below and above on the second day of creation."
+      }
+    },
+    "philosophies": {
+      "christian": {
+        "sin": "Envy/Covetousness",
+        "virtue": "Charity/Gratitude",
+        "description": "Encourages appreciation of others' fortunes."
+      },
+      "hinduArishadvarga": {
+        "vice": "Matsarya (Jealousy)",
+        "counter": "Dharma",
+        "description": "Matsarya (Jealousy) is negated by Dharma's guidance."
+      },
+      "taoist": {
+        "excess": "Restlessness/Worry",
+        "virtue": "Mental Calmness/Contentment",
+        "description": "Mental calmness is prioritized over restlessness and worry. Contentment is valued over greed for simplicity."
+      },
+      "stoic": {
+        "vice": "Excess (in various forms)",
+        "virtue": "Wisdom (Sophia)",
+        "description": "Wisdom enlightens the mind, reducing ignorance and excess."
+      },
+      "buddhistKlesha": {
+        "affliction": "Ignorance (avidyā)",
+        "description": "Misunderstanding the nature of reality and the self. Dispelled by true knowledge."
+      },
+      "buddhistHindrance": {
+        "hindrance": "Doubt (vicikicchā)",
+        "description": "Skepticism about the teachings, one's abilities, or the value of the practice. Impedes spiritual progress and faith."
+      },
+      "egyptianMaat": null,
+      "islamic": {
+        "pillar": "Zakat (Almsgiving)",
+        "pillarDescription": "The practice of charitable giving based on accumulated wealth, and is obligatory for all Muslims who can afford it. It is meant to purify wealth by setting aside a portion for those in need and to help bridge the gap between the rich and the poor.",
+        "secondPillar": "Salat (Prayer)",
+        "secondPillarDescription": "Performing the five daily prayers, which are obligatory for all Muslims. These prayers are performed at dawn, noon, mid-afternoon, sunset, and night, serving as a direct link between the worshipper and Allah.",
+        "articleOfFaith": "Belief in Angels",
+        "articleDescription": "The belief in the existence of angels, who are created from light and serve various functions, including worshipping Allah, delivering His messages to the prophets, and recording the deeds of every individual."
+      },
+      "greekCardinal": {
+        "vice": "Excess (in various forms)",
+        "virtue": "Wisdom (Sophia)"
+      }
+    },
+    "combinedFigure": "Gentle and mysterious, I am the keeper of secrets and the guide of dreams, influencing the ebb and flow of life's rhythms. I am Luna, known as Mani in Norse lore, guiding the night sky with my luminous presence, marking the passage of time and the changing phases of the moon. As Chandra in Hindu mythology, I embody tranquility and intuition, influencing the tides of emotion and the cycles of nature. Yom Sheni, the second day, acknowledges my subtle influence, reflecting on the separation of waters below and above, marking the genesis of creation's unfolding mysteries.",
+    "metalDescription": "Representing the intuition, the mysteries of the night, and the deep emotions that come with love."
+  },
+  {
+    "number": 5,
+    "metal": "Iron",
+    "planet": "Mars",
+    "day": "Tuesday",
+    "sin": "Wrath",
+    "virtue": "Patience",
+    "astrology": "Mars is linked to action, desire, and assertiveness.",
+    "body": {
+      "organ": "Muscular System",
+      "organDescription": "Muscular system enables movement and structural support.",
+      "chakra": "Throat Chakra",
+      "chakraDescription": "Throat Chakra fosters clear communication and expression."
+    },
+    "deities": {
+      "greek": {
+        "name": "Ares",
+        "description": "Embodies the principles of war and courage."
+      },
+      "roman": {
+        "name": "Mars",
+        "description": "The god of war, represented courage and military prowess, safeguarding the state and its people."
+      },
+      "hindu": {
+        "name": "Mangala",
+        "description": "The god of Mars, symbolized energy, courage, and determination, guiding individuals towards victory and success."
+      },
+      "norse": {
+        "name": "Tyr",
+        "description": "The god of war and justice, exemplified bravery and honor, defending the realms of gods and mortals alike."
+      },
+      "babylonian": {
+        "name": "Nergal",
+        "description": "The god of war, embodied strength and protection, revered for his fierce aspect in battles."
+      },
+      "jewish": {
+        "name": "Yom Shlishi",
+        "description": "The third day, is associated with the gathering of waters into seas and the appearance of dry land in Genesis."
+      }
+    },
+    "philosophies": {
+      "christian": {
+        "sin": "Wrath/Anger",
+        "virtue": "Patience",
+        "description": "Teaches control over anger."
+      },
+      "hinduArishadvarga": {
+        "vice": "Krodha (Anger)",
+        "counter": "Artha (Purpose/Wealth)",
+        "description": "Krodha (Anger) is balanced by Artha's objectives."
+      },
+      "taoist": {
+        "excess": "Anger",
+        "virtue": "Compassion",
+        "description": "Compassion moderates anger, promoting peace."
+      },
+      "stoic": {
+        "vice": "Cowardice/Recklessness",
+        "virtue": "Courage (Andreia)",
+        "description": "Courage allows one to face difficulties and uncertainties without fear, understanding that external events like pain or loss do not harm one's moral character, thus acting as a remedy for fear."
+      },
+      "buddhistKlesha": {
+        "affliction": "Aversion (dveṣa)",
+        "description": "Hatred or repulsion towards unpleasant experiences and objects. Countered by understanding and acceptance."
+      },
+      "buddhistHindrance": {
+        "hindrance": "Ill Will (vyāpāda)",
+        "description": "Feelings of malice, anger, and hostility towards others. Overcome by mindfulness and kindness."
+      },
+      "egyptianMaat": null,
+      "islamic": {
+        "pillar": "Hajj (Pilgrimage)",
+        "pillarDescription": "Making the pilgrimage to Mecca at least once in a lifetime if one is physically and financially able to do so. The Hajj is performed during the Islamic month of Dhu al-Hijjah and involves several rituals intended to bring Muslims closer to Allah and to remind them of the equality and unity of all Muslims.",
+        "articleOfFaith": "Belief in the Day of Judgment",
+        "articleDescription": "The belief in the Day of Judgment when all individuals will be resurrected and judged by Allah based on their deeds in this life. It includes the belief in heaven and hell, where individuals will be rewarded or punished accordingly."
+      },
+      "greekCardinal": {
+        "vice": "Cowardice/Recklessness",
+        "virtue": "Courage (Andreia)"
+      }
+    },
+    "combinedFigure": "Fearless and resolute, I am the warrior god, standing as a beacon of strength and courage in times of conflict. Mars is my name, known as Tyr in Norse tales, embodying honor and valor on the battlefield. In Hindu tradition, I am Mangala, guiding individuals towards victory and success with my fiery energy and determination. Yom Shlishi, the third day, resonates with my relentless pursuit of justice and protection, symbolizing the gathering of waters and the appearance of dry land, setting the stage for the drama of creation's unfolding.",
+    "metalDescription": "Representing strength, passion, and the fiery intensity of love. (Iron-Nickel Meteorite)"
+  },
+  {
+    "number": 4,
+    "metal": "Mercury",
+    "planet": "Mercury",
+    "day": "Wednesday",
+    "sin": "Greed",
+    "virtue": "Charity",
+    "astrology": "Mercury influences intellect, communication, and adaptability.",
+    "body": {
+      "organ": "Respiratory System",
+      "organDescription": "Respiratory system exchanges gases, vital for energy and life.",
+      "secondaryOrgan": "Circulatory System",
+      "chakra": "Heart Chakra",
+      "chakraDescription": "Heart Chakra is the center of love, compassion, and acceptance."
+    },
+    "deities": {
+      "greek": {
+        "name": "Hermes",
+        "description": "The messenger of gods, symbolizing eloquence and agility."
+      },
+      "roman": {
+        "name": "Mercury",
+        "description": "The messenger god, facilitated commerce and communication, bridging the divine and mortal realms."
+      },
+      "hindu": {
+        "name": "Budha",
+        "description": "The god of communication, represented intelligence, communication, and learning, guiding individuals towards enlightenment and wisdom."
+      },
+      "norse": {
+        "name": "Odin",
+        "description": "The chief god of wisdom and knowledge, presided over healing and poetry, imparting wisdom to gods and mortals alike."
+      },
+      "babylonian": {
+        "name": "Nabu",
+        "description": "The god of wisdom and writing, symbolized knowledge and communication, guiding scribes and scholars."
+      },
+      "jewish": {
+        "name": "Yom Revi'i",
+        "description": "The fourth day, is linked to the creation of the luminaries—the sun, moon, and stars—in Genesis."
+      }
+    },
+    "philosophies": {
+      "christian": {
+        "sin": "Greed/Envy",
+        "virtue": "Charity/Gratitude",
+        "description": "Encourages generosity over hoarding."
+      },
+      "hinduArishadvarga": {
+        "vice": "Lobha (Greed)",
+        "counter": "Kama (Desire, in the sense of legitimate aims)",
+        "description": "Lobha (Greed) finds balance with rightful desires (Kama)."
+      },
+      "taoist": {
+        "excess": "Restlessness/Worry",
+        "virtue": "Mental Calmness/Contentment",
+        "description": "Mental calmness is prioritized over restlessness and worry. Contentment is valued over greed for simplicity."
+      },
+      "stoic": null,
+      "buddhistKlesha": null,
+      "buddhistHindrance": {
+        "hindrance": "Restlessness-Worry (uddhacca-kukkucca)",
+        "description": "Inability to calm the mind, accompanied by worry and agitation. Countered by Right Concentration (Mental calmness)."
+      },
+      "egyptianMaat": null,
+      "islamic": {
+        "pillar": "Hajj (Pilgrimage)",
+        "pillarDescription": "Making the pilgrimage to Mecca at least once in a lifetime if one is physically and financially able to do so. The Hajj is performed during the Islamic month of Dhu al-Hijjah and involves several rituals intended to bring Muslims closer to Allah and to remind them of the equality and unity of all Muslims."
+      },
+      "greekCardinal": null
+    },
+    "combinedFigure": "Swift and cunning, I am the messenger of the gods, bridging the realms of the divine and mortal with my wit and agility. Mercury is my name, known as Odin in Norse myth, guiding seekers of wisdom and knowledge with my boundless intellect and insatiable curiosity. As Budha in Hindu lore, I inspire communication and learning, guiding individuals towards enlightenment and understanding. Yom Revi'i, the fourth day, celebrates my influence over the luminaries—the sun, moon, and stars—marking the unfolding of creation's cosmic symphony.",
+    "metalDescription": null
+  },
+  {
+    "number": 3,
+    "metal": "Tin",
+    "planet": "Jupiter",
+    "day": "Thursday",
+    "sin": "Gluttony",
+    "virtue": "Temperance",
+    "astrology": "Jupiter is associated with growth, optimism, and abundance.",
+    "body": {
+      "organ": "Digestive System",
+      "organDescription": "Digestive system processes food into energy and nutrients.",
+      "secondaryOrgan": "Muscular System",
+      "chakra": "Solar Plexus Chakra",
+      "chakraDescription": "Solar Plexus Chakra relates to self-esteem and personal power."
+    },
+    "deities": {
+      "greek": {
+        "name": "Zeus",
+        "description": "Rules the sky and thunder, symbolizing power and authority."
+      },
+      "roman": {
+        "name": "Jupiter",
+        "description": "The king of gods, symbolized justice and governance, ensuring social order and prosperity."
+      },
+      "hindu": {
+        "name": "Brihaspati",
+        "description": "The guru of gods, embodied Jupiter's wisdom and expansion, symbolizing wisdom, knowledge, and virtue, guiding individuals towards righteousness and spiritual growth."
+      },
+      "norse": {
+        "name": "Thor",
+        "description": "The god of thunder, protected the realms of gods and mortals, embodying strength and valor in battle."
+      },
+      "babylonian": {
+        "name": "Marduk",
+        "description": "The chief deity, represented order and creation, embodying leadership and authority."
+      },
+      "jewish": {
+        "name": "Yom Chamishi",
+        "description": "The fifth day, is associated with the creation of fish and birds, marking the fifth day of creation in Genesis."
+      }
+    },
+    "philosophies": {
+      "christian": {
+        "sin": "Gluttony/Drunkenness",
+        "virtue": "Temperance",
+        "description": "Promotes moderation and self-control."
+      },
+      "hinduArishadvarga": {
+        "vice": "Moha (Delusion)",
+        "counter": "Moksha (Liberation)",
+        "description": "Moha (Delusion) contrasts with Moksha's liberation."
+      },
+      "taoist": {
+        "excess": "Ambition",
+        "virtue": "Humility",
+        "description": "Ambition is balanced with humility, fostering wisdom."
+      },
+      "stoic": {
+        "vice": "Licentiousness/Insensibility",
+        "virtue": "Temperance (Sophrosyne)",
+        "description": "Wisdom helps correct irrational desires by providing knowledge of what is truly valuable, steering one away from the pursuit of external goods like wealth or pleasure, which are often mistaken for sources of happiness."
+      },
+      "buddhistKlesha": {
+        "affliction": "Desire (Epithumia)",
+        "description": "Desire is enlightened by wisdom."
+      },
+      "buddhistHindrance": null,
+      "egyptianMaat": null,
+      "islamic": {
+        "pillar": "Sawm (Fasting)",
+        "pillarDescription": "Observing the fast during the month of Ramadan, one of the holiest months in the Islamic calendar. Muslims fast from dawn to sunset, abstaining from food, drink, smoking, and sexual relations, to cultivate self-discipline, self-restraint, and empathy for the less fortunate."
+      },
+      "greekCardinal": {
+        "vice": "Licentiousness/Insensibility",
+        "virtue": "Temperance (Sophrosyne)"
+      }
+    },
+    "combinedFigure": "Majestic and benevolent, I am the king of gods, wielding authority and justice with wisdom and fairness. Jupiter is my name, known as Thor in Norse legend, protecting the realms of gods and mortals with my thunderous might and steadfast courage. In Hindu tradition, I am Brihaspati, symbolizing virtue and righteousness, guiding humanity towards spiritual growth and enlightenment. Yom Chamishi, the fifth day, echoes with the creation of fish and birds, symbolizing the diversity and abundance of life in the cosmos.",
+    "metalDescription": "Symbolizing abundance, expansion, and the growth of love over time."
+  },
+  {
+    "number": 2,
+    "metal": "Copper",
+    "planet": "Venus",
+    "day": "Friday",
+    "sin": "Lust",
+    "virtue": "Chastity",
+    "astrology": "Venus rules over love, beauty, and relational harmony.",
+    "body": {
+      "organ": "Reproductive System",
+      "organDescription": "Reproductive system underpins procreation and sexual health.",
+      "secondaryOrgan": "Lymphatic System",
+      "chakra": "Sacral Chakra",
+      "chakraDescription": "Sacral Chakra influences creativity and emotional well-being."
+    },
+    "deities": {
+      "greek": {
+        "name": "Aphrodite",
+        "description": "Represents romantic love, beauty, and attraction."
+      },
+      "roman": {
+        "name": "Venus",
+        "description": "The goddess of love and beauty, inspired desire and fertility, bringing harmony and prosperity to mortals."
+      },
+      "hindu": {
+        "name": "Shukra",
+        "description": "The guru of demons, governs Venus's influence on pleasure and desire, symbolizing love, beauty, and prosperity, guiding individuals towards happiness and fulfillment."
+      },
+      "norse": {
+        "name": "Freyja/Frigg",
+        "description": "The goddess of love and fertility, presided over love and domestic life, bringing blessings to homes and hearths."
+      },
+      "babylonian": {
+        "name": "Ishtar",
+        "description": "The goddess of love and war, embodied the dualities of creation and destruction, nurturing life and protecting against adversity."
+      },
+      "jewish": {
+        "name": "Yom Shishi",
+        "description": "The sixth day, is linked to the creation of land animals and humans, leading into the Sabbath or Shabbat."
+      }
+    },
+    "philosophies": {
+      "christian": {
+        "sin": "Lust",
+        "virtue": "Chastity",
+        "description": "Highlights the balance of desires."
+      },
+      "hinduArishadvarga": {
+        "vice": "Kama (Desire)",
+        "counter": "Dharma (Righteousness)",
+        "description": "Kama's pursuits are guided by Dharma's righteousness."
+      },
+      "taoist": {
+        "excess": "Desire",
+        "virtue": "Simplicity",
+        "description": "Simplicity and moderation counteract excessive desire."
+      },
+      "stoic": {
+        "vice": "Pleasure (Hēdonē)",
+        "virtue": "Temperance",
+        "description": "Temperance counters excessive or irrational pleasure by promoting moderation and self-regulation, especially in the face of physical pleasures or luxury, ensuring a rational and balanced approach to enjoyment."
+      },
+      "buddhistKlesha": {
+        "affliction": "Attachment (rāga)",
+        "description": "Desire and clinging to pleasurable experiences and objects. Loosened through insight."
+      },
+      "buddhistHindrance": {
+        "hindrance": "Sensual Desire (kāmacchanda)",
+        "description": "Craving for pleasure through the five senses. Managed through mindful awareness."
+      },
+      "egyptianMaat": null,
+      "islamic": null,
+      "greekCardinal": null
+    },
+    "combinedFigure": "Enchanting and alluring, I am the goddess of love and beauty, captivating hearts with my grace and charm. Venus is my name, known as Frigg in Norse mythology, presiding over love and domestic life with my nurturing presence and boundless affection. In Hindu lore, I am Shukra, embodying love, beauty, and prosperity, guiding individuals towards happiness and fulfillment. Yom Shishi, the sixth day, heralds the creation of land animals and humans, celebrating the harmony and abundance of life on earth.",
+    "metalDescription": "A tribute to love, beauty, and artistic expression, capturing the essence of romantic love."
+  },
+  {
+    "number": 1,
+    "metal": "Lead",
+    "planet": "Saturn",
+    "day": "Saturday",
+    "sin": "Sloth",
+    "virtue": "Diligence",
+    "astrology": "Saturn symbolizes discipline, structure, and life lessons.",
+    "body": {
+      "organ": "Skeletal System",
+      "organDescription": "The skeletal system provides the body's framework and protection.",
+      "chakra": "Root Chakra",
+      "chakraDescription": "Root Chakra grounds individuals in the physical world."
+    },
+    "deities": {
+      "greek": {
+        "name": "Kronos",
+        "description": "Tied to time, harvest, and destiny, emphasizing endurance."
+      },
+      "roman": {
+        "name": "Saturn",
+        "description": "The god of agriculture and time, represented renewal and abundance, presiding over the Saturnalia festival of feasting and freedom."
+      },
+      "hindu": {
+        "name": "Shani",
+        "description": "The god of karma, symbolized discipline, perseverance, and karma, guiding individuals towards self-awareness and spiritual growth."
+      },
+      "norse": {
+        "name": "Saturn",
+        "description": "No direct Norse association; the god of time and agriculture embodies Saturnian principles."
+      },
+      "babylonian": {
+        "name": "Enki/Mah",
+        "description": "Gods associated with wisdom and agriculture, symbolized divine order and abundance, guiding humanity towards prosperity."
+      },
+      "jewish": {
+        "name": "Shabbat",
+        "description": "The Sabbath day of rest, commemorates God's rest after creating the world, providing a time for spiritual rejuvenation and reflection."
+      }
+    },
+    "philosophies": {
+      "christian": {
+        "sin": "Sloth",
+        "virtue": "Diligence",
+        "description": "Motivates productive action and effort."
+      },
+      "hinduArishadvarga": null,
+      "taoist": null,
+      "stoic": null,
+      "buddhistKlesha": {
+        "affliction": "Fear of Death (abhiniveśāś)",
+        "description": "Clinging to life and fear of dying, which is sometimes interpreted more broadly as clinging to existence or the fear of change. Confronted with the acceptance of life's cycles."
+      },
+      "buddhistHindrance": {
+        "hindrance": "Sloth-Torpor (thīna-middha)",
+        "description": "Physical and mental lethargy, lack of energy and alertness. Overcome by persistent effort and energy (Right Effort)."
+      },
+      "egyptianMaat": null,
+      "islamic": {
+        "pillar": "Shahada (Faith)",
+        "pillarDescription": "The declaration of faith, stating that there is no god but Allah, and Muhammad is the messenger of Allah.",
+        "articleOfFaith": "Belief in Divine Predestination",
+        "articleDescription": "The belief in Qadar, which is divine predestination or decree. Muslims believe that everything that happens, good or bad, is part of Allah's divine plan, yet humans have free will to choose right from wrong."
+      },
+      "greekCardinal": null
+    },
+    "combinedFigure": "Stern and wise, I am the god of time and discipline, guiding humanity towards self-awareness and spiritual growth. Saturn is my name, known as Shani in Hindu tradition, symbolizing karma and discipline, shaping destinies with my firm hand and unyielding resolve. From the Babylonian pantheon to Roman and Jewish traditions, I am revered as the god of agriculture and renewal, marking the cycle of time with the Saturnalia festival of feasting and freedom. As Yom Shabbat, the seventh day, I offer a sanctuary of rest and reflection, commemorating the divine rest after the creation of the world and inviting souls to contemplate the mysteries of existence.",
+    "metalDescription": "Though heavy, it reminds us of the endurance and challenges that love often demands."
+  }
+]

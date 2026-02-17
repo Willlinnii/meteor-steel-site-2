@@ -1,0 +1,58 @@
+[
+  {
+    "sin": "Pride",
+    "desertFathers": "The Desert Fathers regarded pride as one of the most dangerous sins, often considering it the root of all evil. They believed pride could lead to a false sense of self-sufficiency, causing individuals to rely more on themselves and less on God. They advocated for humility as the antidote to pride, emphasizing the importance of recognizing one's own weaknesses and the need for God's grace.",
+    "cassian": "Vainglory involves seeking praise, recognition, and approval from others for one's spiritual deeds. Cassian warns against seeking worldly glory and instead encourages humility and seeking God's approval. Pride is considered the root of all vices. Cassian discusses the dangers of pride, which can lead to a sense of self-sufficiency and a refusal to seek God's guidance. Humility is emphasized as the antidote to pride.",
+    "popeGregory": "Pope Gregory associates pride with Job's initial state of prosperity and self-righteousness. Before his trials, Job was seen as a prideful man who believed his righteousness made him immune to suffering. However, his afflictions humbled him and served as a lesson against pride.",
+    "aquinas": "Considered the root of all sin, it's an excessive love of one's own excellence.",
+    "aquinasVirtue": "Humility, emphasizing the importance of modesty and a realistic sense of one's own importance."
+  },
+  {
+    "sin": "Envy",
+    "desertFathers": "Envy was recognized by the Desert Fathers as sorrow or bitterness at the good fortune of others. They saw it as a poison that could destroy communities and personal relationships. The Fathers encouraged rejoicing in the successes and blessings of others as a way to combat envy, fostering a spirit of brotherly love and unity.",
+    "cassian": "Envy involves feeling resentment and jealousy toward the spiritual progress and blessings of others. Cassian warns against this destructive emotion and encourages rejoicing in the spiritual growth of others.",
+    "popeGregory": "Gregory connects envy to the envy of Satan, who envied Job's piety and prosperity. Satan's envy led him to challenge Job's faith and integrity, resulting in Job's suffering. Envy is thus portrayed as the source of Job's trials.",
+    "aquinas": "Sadness or discontent at another's good fortune.",
+    "aquinasVirtue": "Kindness, encouraging genuine happiness for others' success."
+  },
+  {
+    "sin": "Wrath",
+    "desertFathers": "Anger was another vice that the Desert Fathers warned against, understanding its potential to lead to hatred and conflict. They advocated for forgiveness and patience as virtues that could counteract anger, emphasizing the importance of peace and reconciliation in Christian life.",
+    "cassian": "Cassian identifies wrath as a destructive passion marked by anger, hatred, and a desire for vengeance. He emphasizes the importance of meekness, patience, and forgiveness as antidotes to wrath.",
+    "popeGregory": "Gregory links wrath to Job's own moments of frustration and anger during his trials. Job curses the day of his birth and expresses anger at his suffering, which is seen as a manifestation of human wrath. Gregory emphasizes the need for patience and control over one's anger.",
+    "aquinas": "Uncontrolled feelings of anger and hate towards another person.",
+    "aquinasVirtue": "Patience, valuing calmness and forgiveness in the face of provocation."
+  },
+  {
+    "sin": "Greed",
+    "desertFathers": "Greed, or avarice, was seen by the Desert Fathers as a powerful attachment to material possessions and wealth. They taught that greed could easily distract one from the pursuit of spiritual wealth. The Fathers practiced and preached simplicity and detachment from worldly goods, encouraging their followers to live a life of poverty and generosity.",
+    "cassian": "Avarice, or greed, is described as an insatiable desire for material wealth and possessions. Cassian warns against the distraction and attachment to worldly goods, which can divert one's focus from spiritual growth.",
+    "popeGregory": "Pope Gregory relates greed to Job's loss of wealth and possessions. While Job initially possessed great riches, his trials resulted in the loss of his material wealth. Gregory uses this to highlight the impermanence of worldly possessions and the danger of attachment to them.",
+    "aquinas": "A desire for material wealth or gain, ignoring the spiritual.",
+    "aquinasVirtue": "Liberality or Generosity, advocating for sharing over hoarding."
+  },
+  {
+    "sin": "Gluttony",
+    "desertFathers": "The Desert Fathers practiced strict asceticism, which included fasting and control over physical appetites. Gluttony was not only about food but any form of overindulgence. They taught that moderation and self-control in eating and other physical needs were crucial for maintaining spiritual focus and discipline.",
+    "cassian": "Cassian discusses gluttony as an excessive attachment to food and drink. He emphasizes the importance of moderation in eating and drinking, as excessive indulgence in physical pleasures can lead to spiritual detriment.",
+    "popeGregory": "Gregory does not explicitly connect gluttony to the story of Job in the same way as the other sins.",
+    "aquinas": "Overindulgence to the point of waste, particularly in food or drink.",
+    "aquinasVirtue": "Temperance, suggesting moderation and restraint."
+  },
+  {
+    "sin": "Lust",
+    "desertFathers": "The Desert Fathers spoke often about the battle against lustful thoughts and desires, considering them significant distractions from one's relationship with God. They practiced chastity and recommended constant vigilance, prayer, and fasting as methods to combat lustful impulses, aiming to cultivate purity of heart and mind.",
+    "cassian": "Lust, according to Cassian, involves indulging in impure and illicit sexual desires. He underscores the need for celibacy and chastity, particularly for those living a monastic or ascetic life.",
+    "popeGregory": "Lust is connected to Job's fidelity to his wife. Despite his suffering and his wife's suggestion to curse God and die, Job remains faithful and chaste. Gregory uses this to illustrate Job's virtue in resisting lustful temptations.",
+    "aquinas": "An intense desire or need for sexual gratification.",
+    "aquinasVirtue": "Chastity, promoting purity and self-control in sexual conduct."
+  },
+  {
+    "sin": "Sloth",
+    "desertFathers": "Sloth, or acedia, was described by the Desert Fathers as a state of despondency or listlessness, particularly in relation to one's spiritual practices. It was considered a dangerous vice that could lead to a weakening of faith and neglect of spiritual duties. The Fathers recommended perseverance in prayer, work, and ascetic practices to combat sloth, encouraging a steadfast commitment to one's spiritual journey.",
+    "cassian": "Dejection, also known as sloth or acedia, is characterized by spiritual despondency and a lack of motivation in one's spiritual journey. Cassian discusses the importance of perseverance and spiritual discipline to overcome this vice.",
+    "popeGregory": "Sloth is associated with Job's friends who, out of spiritual lethargy, offer inadequate comfort and misguided advice to Job in his time of suffering. Their reluctance to provide genuine help is seen as a form of sloth.",
+    "aquinas": "Laziness or failure to act and utilize one's talents.",
+    "aquinasVirtue": "Diligence, stressing the importance of zealous and careful effort in one's duties."
+  }
+]

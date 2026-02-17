@@ -1,16 +1,72 @@
 [
   {
-    "id": "example",
-    "name": "Example Modern Figure",
+    "id": "superman",
+    "name": "Superman",
+    "stages": {
+      "golden-age": "Superman is born out of the collapse of an old world. The manuscript makes the metallurgical metaphor explicit: \"Superman, the Man of Steel, is born from a dying planet, just as iron is expelled from a dying star, signifying both an end and a new beginning.\" Krypton is not simply a homeworld. It is a completed civilization at the end of its cycle \u2014 a technological empire that has exhausted itself. This mirrors the mythic pattern already traced across the book: the Bronze Age collapses, Golden Age worlds fail, and new metals arrive after catastrophe. Superman therefore enters the story at the moment of civilizational death. He is the child of an ending world, the survivor of a fallen order. The meteor hero is born when an empire dies.",
+      "falling-star": "This is the clearest Superman motif in the manuscript. \"Where Iron-Nickel meteorites fall from the sky and crater into earth, Superman came from the heavens like a meteorite and cratered into earth.\" He is explicitly framed as a falling star. The meteor-steel motifs appear in full: arrival from the heavens, a new light in the sky, a being from beyond the known world. The text insists: \"The very image of Superman is closely intertwined with a celestial phenomenon.\" And even more directly: \"That we do not see meteor steel in Superman is as incredible as not seeing him in Clark Kent.\" Superman is the modern falling star hero.",
+      "impact-crater": "Meteor steel must be recovered from the crater. The manuscript mirrors the metallurgical process exactly: \"Where iron is extracted from a meteor stone that has been removed from its crater, so too is Superman extracted from a spaceship that had cratered into earth.\" This is the sword-from-stone motif translated into science fiction. The parallels are perfect: where a meteor lodges in the earth, a Kryptonian ship crashes in Kansas; where steel is extracted from stone, a child is rescued from the wreckage; where the hero emerges from the margins, an alien is raised on a farm. Superman is the meteor hero drawn from the crater. He is Excalibur in a cornfield.",
+      "forge": "Steel heroes are forged through fire. The manuscript explicitly places Superman inside the roasting motif: \"Superman in Man of Steel is literally on fire\u2026 before he's dunked in the ocean.\" The forge symbolism deepens further: \"Superman emerges from a ring of sparks, echoing Brunhild's fiery forge,\" and \"the first adversary he faces is a mad scientist, symbolizing a misused forge.\" Superman becomes the hero of modern technological power \u2014 \"faster than a speeding bullet, more powerful than a locomotive.\" Bullets, trains, industrial steel. He is the mythic hero of the technological age.",
+      "quenching": "Steel must be quenched. The manuscript makes the parallel explicit: \"As red-hot iron is plunged into cool water to make it hard, so too is Superman plunged into water.\" Then comes the defining motif: \"Superman\u2026 craters into the earth\u2026 with a single weakness.\" \"The weak spot of Superman is kryptonite.\" This mirrors the ancient steel hero \u2014 Achilles' heel, Sosruquo's thigh, the tong-grip of quenching. And the manuscript adds the evolutionary leap: \"The original weakness calibrated to the age of iron has been forgotten\u2026 the weakness is now associated with radiation.\" The steel hero becomes the nuclear-age hero. Kryptonite is the modern Achilles heel.",
+      "integration": "Here Superman reaches his deepest mythic layer. He is both ultimate and mortal \u2014 alien and human, godlike and raised as a farm boy, cosmic and intimate. The manuscript ties this directly to stellar metallurgy: \"When the Man of Steel's father warned of his sun's explosion, I saw stars throughout time exploding with iron.\" Superman becomes the embodiment of a paradox: born from the death of a star-civilization, raised among humans, living as both Clark Kent and Kal-El. He is the ancient hero reborn as both divine and human. The meteor child becomes the bridge between heaven and earth.",
+      "drawing": "Here the steel hero stands fully revealed. The manuscript frames Superman as the completed technopoetic hero: \"Superman is a metaphor for the rapid technological advancements of his time.\" He embodies modernity, technological power, moral aspiration, and human potential. He is no longer the fallen star. He is the hero fully drawn into the world.",
+      "new-age": "The manuscript culminates in a profound claim: \"Meteor Steel is still here, still trying to break through.\" Superman represents the arrival of a new heroic era. The steel hero now brings justice, protection of the vulnerable, and resistance to tyranny. He becomes the emblem of a new age \u2014 not the Golden Age, not the Bronze Age, but the Age of Justice. The ancient steel hero has returned, in blue and red, to fight \"a never-ending battle for Truth and Justice.\" Superman is the meteor-steel myth alive in the modern world."
+    }
+  },
+  {
+    "id": "marvel-heroes",
+    "name": "Marvel Heroes: Wolverine, Iron Man, Black Panther & X-Men",
+    "stages": {
+      "golden-age": "Marvel heroes do not begin in a mythical past. They begin in the modern military-industrial world. The manuscript explicitly grounds them in this: \"In this film, the connection of the metal to the military is clear. This is where it comes from.\" This is the crucial shift from Superman. Superman emerges from a dying civilization; Marvel heroes emerge from a dangerous living one \u2014 a world of governments, military contracts, weapons research, and industrial technology. The Golden Age world is no longer mythic monarchy. It is modern empire. And this world is already unstable.",
+      "falling-star": "The manuscript states the Marvel heroes explicitly repeat the meteor motif: \"Wolverine is made of adamantium that has been extracted from a meteorite.\" \"Vibranium used by Black Panther\u2026 arrived in the form of meteorites.\" \"Iron Man's heart is made of palladium\u2026 common in iron-nickel meteorites.\" This is enormous. All three heroes originate from meteor metal: Wolverine from adamantium, Black Panther from vibranium, and Iron Man from palladium and iron. The meteor has returned, but now in multiple forms. The Iron Age myth multiplies.",
+      "impact-crater": "Meteor steel must be extracted. The manuscript explicitly mirrors the crater motif: \"The first Iron Man prototype is made from repurposed missiles he craters into the ground.\" And then one of the most mythically perfect lines in the entire book: \"He slams his iron arm into the stone wall of an underground cave, where it gets lodged, creating an opportunity for him to draw his era-bringing weapon from the stone \u2014 like Excalibur.\" This is sword-from-stone imagery explicitly. Tony Stark literally forges Excalibur in a cave. Meanwhile, vibranium arrives in a crater in Wakanda, and adamantium originates from meteor metal. The meteor-crater motif repeats three times.",
+      "forge": "Steel heroes must be roasted. The manuscript gives us a perfect triad. Iron Man \"appears on fire as he emerges \u2014 as though born \u2014 from a cavern.\" With Wolverine, \"we see him wince in agony as molten adamantium is poured into his bones.\" And Black Panther's power emerges from meteor metal embedded in Wakanda's earth \u2014 the forge becomes the nation itself. All three heroes are forged in fire. The metallurgical birth myth becomes modern body horror.",
+      "quenching": "This is where the manuscript becomes astonishingly explicit. The ancient steel motif is impervious body plus single weakness, and Marvel repeats it perfectly: \"Wolverine is dying from adamantium radiation.\" \"Iron Man is dying from the radiation of the palladium in his heart.\" The manuscript states the mythic shift clearly: \"The original weakness calibrated to the age of iron has been forgotten. The weakness is now associated with uranium.\" This is the nuclear upgrade of the Achilles Heel. The steel hero becomes the radioactive hero, and the weak spot becomes poison from the metal itself.",
+      "integration": "Marvel deepens the paradox. Steel heroes become hybrids. The manuscript repeatedly emphasizes this fusion. Iron Man is human inside metal, his heart replaced by meteor metal \u2014 man becomes machine. Wolverine's human skeleton is replaced by metal, his body becoming weapon. Black Panther is a human king empowered by meteor metal, his nation fused with cosmic material. The steel hero becomes the human-technology hybrid.",
+      "drawing": "The manuscript explicitly declares the shock: \"We did not expect the full cluster to appear three thousand years later \u2014 but there they are in Wolverine, Iron Man, and the Man of Steel.\" The constellation returns intact: meteor origin, fire and quenching, impervious metal body, single weakness, radiation danger, and military connection. The Iron Age hero has fully returned in modern myth.",
+      "new-age": "Marvel adds the final modern twist: the steel hero emerges from the military world. The manuscript emphasizes this repeatedly: \"The connection of the metal to the military is clear.\" \"He turns away from making weapons to become a vigilante with iron armor.\" This is Prometheus reborn. The technologist steals fire from war and gives it to the people. The steel hero becomes protector, vigilante, and defender of humanity against tyranny. The meteor-steel hero has entered the age of modern power. Marvel heroes collectively form the modern technopoetic constellation of steel: meteor, extraction, forge, quench, armor, weakness, hybrid, military age. The Iron Age myth did not disappear. It multiplied."
+    }
+  },
+  {
+    "id": "iron-giant",
+    "name": "The Iron Giant",
     "stages": {
       "golden-age": "",
-      "falling-star": "",
+      "falling-star": "Few modern stories present the meteor-steel myth as literally as The Iron Giant. The figure does not resemble the myth \u2014 he is the myth. A metal being falls from the heavens, descending from the sky like a meteor and crashing into the ocean. Like meteoric iron in the ancient world, he represents a technology that appears before humanity understands how to create it. A civilization encounters a metal far beyond its own capacity to produce, a sky-metal being whose existence alone disrupts the trajectory of the world. And like so many meteor-steel heroes, he arrives with an apocalyptic shadow. His very body is a weapon. His existence evokes fear. He is mistaken for a harbinger of destruction before he becomes a protector.",
+      "impact-crater": "The metallurgical sequence appears in order: falling star, impact with Earth, plunge into water, emergence as hardened metal. The Giant is not forged by humans. He arrives already forged by the cosmos. The Iron Giant is a perfect modern restatement of the meteor-steel child \u2014 a fallen star that becomes a guardian.",
+      "forge": "",
+      "quenching": "The Giant crashes into the ocean, the most poetic possible modern image of quenching. A metal being descends from the sky in fire and plunges into water, emerging as hardened metal. The ancient sequence of heat followed by rapid cooling plays out on a cinematic scale.",
+      "integration": "",
+      "drawing": "",
+      "new-age": ""
+    }
+  },
+  {
+    "id": "terminator",
+    "name": "The Terminator",
+    "stages": {
+      "golden-age": "",
+      "falling-star": "If the Iron Giant is the child of the meteor, the Terminator is the warrior of the meteor. His arrival scene may be one of the clearest meteor-steel images in modern cinema. He does not walk into the world \u2014 he arrives in fire. A sphere of plasma appears in the sky, lightning cracks, the ground melts, and a crater forms. This is meteor mythology translated directly into science fiction imagery: fireball descent, molten crater, and the emergence of a metal being.",
+      "impact-crater": "When the light fades, a metal skeleton stands at the center of the impact site. The Terminator represents the darker possibility of meteor steel \u2014 the weaponized future of the metal hero. The ancient fear of the metal warrior returns in a new form: not the knight in armor, but the machine in human disguise.",
+      "forge": "",
+      "quenching": "",
+      "integration": "The Terminator is not simply a machine. He is a metal man wearing human skin. This is a profound evolution of the steel hero motif. The impervious body is no longer symbolic armor \u2014 it is literal machinery hidden beneath flesh. The ancient fear of the metal warrior returns in a new form: not the knight in armor, but the machine in human disguise.",
+      "drawing": "",
+      "new-age": ""
+    }
+  },
+  {
+    "id": "silver-surfer",
+    "name": "The Silver Surfer",
+    "stages": {
+      "golden-age": "",
+      "falling-star": "Where Superman is the child of a dying world, the Silver Surfer is the herald of its destruction. He is explicitly described as metallic skinned, a bringer of apocalypse, a being who meteors from heaven to Earth, and a survivor of a destroyed planet. The meteor motif here becomes cosmic and prophetic. The Surfer does not merely fall from the sky \u2014 he announces the end of worlds. He is the shining metal figure who arrives before catastrophe, a celestial messenger whose presence signals a transformation of planetary fate. His body itself becomes the meteor: a figure of living metal streaking across the sky, descending from the heavens as a shining star. Where the Iron Giant becomes protector and the Terminator becomes weapon, the Silver Surfer becomes herald \u2014 the messenger of cosmic change.",
       "impact-crater": "",
       "forge": "",
       "quenching": "",
       "integration": "",
       "drawing": "",
-      "new-age": ""
+      "new-age": "Together with the Iron Giant and the Terminator, the Silver Surfer reveals the expansion of the meteor-steel myth beyond superheroes and ancient myth. The Iron Giant is the child, the Terminator is the weapon, and the Silver Surfer is the herald. The falling star no longer produces only heroes. It now produces protectors, destroyers, and messengers. The myth continues to evolve."
     }
   }
 ]

@@ -1,0 +1,212 @@
+[
+  {
+    "sin": "Pride",
+    "metal": "Gold",
+    "planet": "Sun",
+    "day": "Sunday",
+    "modernLife": {
+      "sin": "Manifesting through egoism on social media, in workplaces, and personal relationships; leads to conflicts and isolation.",
+      "virtue": "Emphasizing empathy, open-mindedness, and the willingness to learn from others; fosters stronger, more authentic connections."
+    },
+    "political": {
+      "sin": "Pride in the political context can manifest as nationalism or ethnocentrism, where excessive pride in one's country or ethnicity leads to xenophobia, isolationism, and conflicts with other nations.",
+      "virtue": "Humility encourages leaders and citizens alike to acknowledge their limitations, seek cooperation, and embrace diversity."
+    },
+    "planetPositive": {
+      "attributes": ["Wisdom", "inspiration", "clarity", "leadership", "artistic expression"],
+      "description": "Apollo, the God of Light: Sunday is associated with the Sun, symbolizing light, vitality, and enlightenment."
+    },
+    "planetBlockage": {
+      "attributes": ["Hubris", "self-centeredness", "refusal to accept others' viewpoints"],
+      "description": "Excessive pride and arrogance can obstruct the Sun's radiance, leading to ego-driven behavior and dogmatism."
+    },
+    "planetConnection": "Sunday, ruled by the Sun, represents leadership, vitality, and ego. The Sun's energy can instill confidence and a sense of self-worth. However, an overinflated ego and excessive pride often accompany this sense of self-assuredness.",
+    "films": [
+      "American Psycho (2000)",
+      "The Devil Wears Prada (2006)",
+      "Whiplash (2014)",
+      "The Great Gatsby (2013)",
+      "Boogie Nights (1997)"
+    ]
+  },
+  {
+    "sin": "Envy",
+    "metal": "Silver",
+    "planet": "Moon",
+    "day": "Monday",
+    "modernLife": {
+      "sin": "Fuelled by comparison culture on social media, leading to dissatisfaction and resentment towards others' achievements or possessions.",
+      "virtue": "Celebrating others' successes, offering support during their struggles, and finding contentment in one's journey."
+    },
+    "political": {
+      "sin": "Envy can fuel divisive politics, where resentment towards certain groups leads to policies that marginalize minorities, immigrants, or the economically disadvantaged.",
+      "virtue": "Kindness encourages empathy and policies that aim to uplift all members of society."
+    },
+    "planetPositive": {
+      "attributes": ["Compassion", "intuition", "emotional intelligence", "nurturing"],
+      "description": "Selene, the Goddess of the Moon: Monday represents intuition, emotions, and the feminine aspect."
+    },
+    "planetBlockage": {
+      "attributes": ["Irrationality", "hypersensitivity", "tendency to be overly moody"],
+      "description": "When the lunar flow is blocked, individuals may experience mood swings, emotional instability, and irrational behavior."
+    },
+    "planetConnection": "Monday, associated with the Moon, embodies duality and the ever-changing nature of life. The Moon waxes and wanes, symbolizing the constant interplay between light and darkness. This duality can evoke feelings of envy.",
+    "films": [
+      "The Social Network (2010)",
+      "Black Swan (2010)",
+      "The Talented Mr. Ripley (1999)",
+      "Mean Girls (2004)",
+      "Jealousy (2013)"
+    ]
+  },
+  {
+    "sin": "Wrath",
+    "metal": "Iron",
+    "planet": "Mars",
+    "day": "Tuesday",
+    "modernLife": {
+      "sin": "Quick tempers in traffic, online interactions, and stressful situations, leading to unnecessary conflicts and stress.",
+      "virtue": "Developing coping strategies for stress, empathy in understanding others' perspectives, and practicing calmness in confrontations."
+    },
+    "political": {
+      "sin": "Wrath can be seen in aggressive foreign policies, militarization, and the quick resort to conflict rather than diplomatic solutions.",
+      "virtue": "Patience emphasizes diplomacy, peaceful conflict resolution, and restorative justice approaches."
+    },
+    "planetPositive": {
+      "attributes": ["Courage", "discipline", "assertiveness", "willingness to stand up for one's beliefs"],
+      "description": "Ares, the God of War: Tuesday symbolizes courage, determination, and action."
+    },
+    "planetBlockage": {
+      "attributes": ["Aggression", "recklessness", "tendency to escalate conflicts unnecessarily"],
+      "description": "When Mars's energy is obstructed, it can lead to aggression, impulsiveness, and the destructive side of conflict."
+    },
+    "planetConnection": "Tuesday, governed by Mars, represents action, courage, and conflict. The assertive energy of Mars can easily lead to wrath when misdirected or unchecked.",
+    "films": [
+      "Falling Down (1993)",
+      "Taxi Driver (1976)",
+      "Kill Bill: Vol. 1 (2003)",
+      "A Clockwork Orange (1971)",
+      "Gran Torino (2008)"
+    ]
+  },
+  {
+    "sin": "Greed",
+    "metal": "Mercury",
+    "planet": "Mercury",
+    "day": "Wednesday",
+    "modernLife": {
+      "sin": "Visible in consumerism, materialism, and the relentless pursuit of wealth at the cost of well-being and environmental health.",
+      "virtue": "Sharing resources, time, and energy with those in need; promoting sustainability and a culture of giving over accumulation."
+    },
+    "political": {
+      "sin": "Greed is evident in the unequal distribution of wealth and resources, corporate lobbying for favorable regulations at the expense of public welfare, and corruption.",
+      "virtue": "Generosity promotes policies that address poverty and inequality, such as progressive taxation, social welfare programs, and international aid."
+    },
+    "planetPositive": {
+      "attributes": ["Communication skills", "adaptability", "problem-solving", "intellectual curiosity"],
+      "description": "Hermes, the Messenger of the Gods: Wednesday corresponds to Mercury, representing communication, intellect, and adaptability."
+    },
+    "planetBlockage": {
+      "attributes": ["Deception", "dishonesty", "lack of integrity in communication"],
+      "description": "A blocked Mercury can lead to deceit, manipulation, and dishonesty in communication."
+    },
+    "planetConnection": "Wednesday, ruled by Mercury, is associated with communication, intellect, and adaptability. The flip side of intellectual pursuit can be a form of greed, where individuals constantly crave more information and possessions.",
+    "films": [
+      "The Wolf of Wall Street (2013)",
+      "Wall Street (1987)",
+      "There Will Be Blood (2007)",
+      "Boiler Room (2000)",
+      "Inside Job (2010)"
+    ]
+  },
+  {
+    "sin": "Gluttony",
+    "metal": "Tin",
+    "planet": "Jupiter",
+    "day": "Thursday",
+    "modernLife": {
+      "sin": "Overindulgence in food, entertainment, and consumption, contributing to health issues and environmental degradation.",
+      "virtue": "Practicing moderation in all aspects of life, focusing on balance, health, and sustainability."
+    },
+    "political": {
+      "sin": "Gluttony is reflected in the overconsumption of natural resources, leading to environmental destruction and climate change.",
+      "virtue": "Temperance advocates for environmental stewardship, responsible consumption, and policies that prioritize the planet's health."
+    },
+    "planetPositive": {
+      "attributes": ["Wisdom", "generosity", "leadership", "ability to inspire others"],
+      "description": "Zeus, the King of Gods: Thursday is associated with Jupiter, symbolizing benevolence, expansion, and wisdom."
+    },
+    "planetBlockage": {
+      "attributes": ["Greed", "extravagance", "disregard for the well-being of others"],
+      "description": "An obstructed Jupiter can lead to excess, self-indulgence, and an arrogant misuse of power."
+    },
+    "planetConnection": "Thursday, under the influence of Jupiter, represents expansion, abundance, and growth. The temptation to indulge excessively in wealth, food, or pleasure can easily lead to gluttony.",
+    "films": [
+      "Super Size Me (2004)",
+      "Se7en (1995)",
+      "Julie & Julia (2009)",
+      "Matilda (1996)",
+      "Spirited Away (2001)"
+    ]
+  },
+  {
+    "sin": "Lust",
+    "metal": "Copper",
+    "planet": "Venus",
+    "day": "Friday",
+    "modernLife": {
+      "sin": "Evident in the objectification in media and advertising, unhealthy relationship dynamics, and the pursuit of instant gratification.",
+      "virtue": "Fostering deep, meaningful relationships based on respect and consent; valuing emotional connections over physical desires."
+    },
+    "political": {
+      "sin": "While lust might not directly relate to sexual desire in politics, it can manifest as a lust for power, leading to authoritarianism and abuse of power.",
+      "virtue": "The principle of chastity, or moderation, calls for balanced governance and the protection of democratic institutions."
+    },
+    "planetPositive": {
+      "attributes": ["Love", "compassion", "beauty", "creativity", "ability to appreciate aesthetics"],
+      "description": "Aphrodite, the Goddess of Love: Friday corresponds to Venus, representing love, beauty, and relationships."
+    },
+    "planetBlockage": {
+      "attributes": ["Superficiality", "shallowness", "focus on physical appearances"],
+      "description": "When Venus's attributes are blocked, it can lead to vanity, superficiality, and the shallow pursuit of appearances in relationships."
+    },
+    "planetConnection": "Friday, governed by Venus, embodies love, sensuality, and beauty. This intense focus on sensual experiences can lead to lust when taken to extremes.",
+    "films": [
+      "Eyes Wide Shut (1999)",
+      "Basic Instinct (1992)",
+      "Wild Things (1998)",
+      "Unfaithful (2002)",
+      "Don Jon (2013)"
+    ]
+  },
+  {
+    "sin": "Sloth",
+    "metal": "Lead",
+    "planet": "Saturn",
+    "day": "Saturday",
+    "modernLife": {
+      "sin": "Procrastination, lack of engagement with community or personal growth, and indifference towards pressing societal issues.",
+      "virtue": "Active engagement in personal and professional responsibilities, continuous learning, and participation in community betterment."
+    },
+    "political": {
+      "sin": "Sloth in politics manifests as apathy towards pressing issues like climate change, poverty, and social injustices.",
+      "virtue": "Diligence requires proactive efforts to address societal challenges and commitment to continuous improvement in governance."
+    },
+    "planetPositive": {
+      "attributes": ["Discipline", "patience", "wisdom", "ability to plan for the future"],
+      "description": "Cronus, the God of Time: Saturday is associated with Saturn, symbolizing discipline, responsibility, and the passage of time."
+    },
+    "planetBlockage": {
+      "attributes": ["Fearfulness", "inflexibility", "refusal to embrace change"],
+      "description": "When Saturn's energy is blocked, individuals may become rigid, resistant to change, and fearful of the unknown."
+    },
+    "planetConnection": "Saturday, associated with Saturn, symbolizes discipline, responsibility, and structure. The fear of failure or the burden of excessive responsibilities can lead to sloth when individuals withdraw from their obligations.",
+    "films": [
+      "Office Space (1999)",
+      "The Big Lebowski (1998)",
+      "Ferris Bueller's Day Off (1986)",
+      "Clerks (1994)",
+      "Idiocracy (2006)"
+    ]
+  }
+]

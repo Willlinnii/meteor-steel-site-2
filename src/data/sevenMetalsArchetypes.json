@@ -1,0 +1,51 @@
+[
+  {
+    "sin": "Pride",
+    "metal": "Gold",
+    "archetype": "The Sovereign",
+    "shadow": "The Sovereign in shadow wields power with arrogance and hubris, seeing themselves as superior and infallible. They are consumed by their desire for recognition and dominance, often at the expense of others' well-being.",
+    "light": "The enlightened Sovereign leads with wisdom and grace, recognizing their own limitations and valuing the contributions of others. They use their power to uplift and serve, grounding their leadership in humility and compassion."
+  },
+  {
+    "sin": "Envy",
+    "metal": "Silver",
+    "archetype": "The Rival",
+    "shadow": "The Rival, consumed by envy, begrudges the success and happiness of others. They are trapped in a cycle of comparison and resentment, unable to find joy in their own achievements or the well-being of others.",
+    "light": "Transcended, the Rival becomes a champion for others, celebrating their successes as if they were their own. They offer support and encouragement, fostering an environment where everyone can thrive."
+  },
+  {
+    "sin": "Wrath",
+    "metal": "Iron",
+    "archetype": "The Warrior",
+    "shadow": "The Warrior in shadow is quick to anger and aggression, often reacting impulsively to perceived threats or injustices. Their wrath can lead to unnecessary conflict and suffering.",
+    "light": "The transformed Warrior wields their strength with patience and discernment. They stand firm in the face of adversity, responding to challenges with calm resolve and thoughtful action."
+  },
+  {
+    "sin": "Greed",
+    "metal": "Mercury",
+    "archetype": "The Collector",
+    "shadow": "The Collector in shadow hoards wealth and resources, driven by an insatiable hunger for more. They view the world through a lens of scarcity, prioritizing their own gain over communal well-being.",
+    "light": "Transformed, the Collector becomes a generous benefactor, sharing their abundance with open hands. They understand the interconnectedness of all life, fostering a sense of community and mutual support."
+  },
+  {
+    "sin": "Gluttony",
+    "metal": "Tin",
+    "archetype": "The Glutton",
+    "shadow": "The Glutton indulges excessively in food, drink, and pleasures, seeking comfort in material consumption. This overindulgence often masks a deeper emptiness or dissatisfaction.",
+    "light": "The enlightened Glutton practices moderation and self-restraint, finding fulfillment in balance and simplicity. They savor life's pleasures without becoming enslaved by them, maintaining harmony in body and spirit."
+  },
+  {
+    "sin": "Lust",
+    "metal": "Copper",
+    "archetype": "The Seductor",
+    "shadow": "The Seductor in shadow manipulates and entices, using their charm for selfish gain and superficial pleasures. They are driven by a compulsive search for sensory satisfaction, often leading to destructive consequences.",
+    "light": "In their higher form, the Seductor channels their passion into deep, meaningful connections and creative endeavors. They honor the sacredness of intimacy and the integrity of their relationships."
+  },
+  {
+    "sin": "Sloth",
+    "metal": "Lead",
+    "archetype": "The Dreamer",
+    "shadow": "The Dreamer, in their lower form, is paralyzed by apathy and inaction, retreating into fantasy or idle daydreams to escape the demands of reality.",
+    "light": "Awakened, the Dreamer harnesses their visionary nature with purpose and perseverance. They actively pursue their dreams, bringing their creative visions to life through sustained effort and dedication."
+  }
+]

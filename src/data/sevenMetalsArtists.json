@@ -1,0 +1,58 @@
+[
+  {
+    "sin": "Pride",
+    "bosch": "Shown through an individual admiring themselves in a mirror, symbolizing vanity and the excessive love of one's own appearance or achievements.",
+    "dali": "Uses a striking image of a man with a bloated, oversized head, symbolizing excessive pride and arrogance.",
+    "bruegel": "Woman admiring herself in a mirror, reflecting vanity.",
+    "cadmus": "Man admiring his image in a mirror, with an atomic explosion in the background symbolizing destructive human pride.",
+    "blake": "In 'The Marriage of Heaven and Hell,' Blake challenges conventional morality and religious dogma, critiquing the pride and hypocrisy of institutionalized religion."
+  },
+  {
+    "sin": "Envy",
+    "bosch": "Envy is symbolized by a woman who looks longingly at another's jewelry.",
+    "dali": "Depicted with distorted, elongated figures reaching out toward a beautiful, unreachable woman.",
+    "bruegel": "Woman casting an envious gaze towards others' belongings, with a demon whispering in her ear.",
+    "cadmus": "Woman gazing enviously at a couple in an intimate embrace.",
+    "blake": "Blake's 'The Book of Urizen' explores themes of division linked to envy. Urizen's desire to impose reason and order can be seen as envy-driven desire to control."
+  },
+  {
+    "sin": "Wrath",
+    "bosch": "Illustrated by a scene of violence, where individuals are engaged in physical conflict.",
+    "dali": "Depicted with a chaotic scene of fiery explosions and anguished figures.",
+    "bruegel": "Brawl in a tavern, depicting violent confrontations and chaos.",
+    "cadmus": "Chaotic scene of violence with individuals engaged in physical altercations.",
+    "blake": "'A Poison Tree' from Songs of Experience embodies wrath. The poem narrates how suppressed anger can grow and manifest destructively."
+  },
+  {
+    "sin": "Greed",
+    "bosch": "Illustrated by a scene of avarice, where an individual is hoarding wealth or goods.",
+    "dali": "Features a monstrous, multi-headed beast devouring wealth and possessions.",
+    "bruegel": "Woman clutching a moneybag while others attempt to steal it.",
+    "cadmus": "Man clutching a bag of money while ignoring a homeless man.",
+    "blake": "'London' from Songs of Experience paints a grim picture highlighting the corrosive effects of industrialization and capitalism."
+  },
+  {
+    "sin": "Gluttony",
+    "bosch": "Shown through a scene of overindulgence, where people are feasting excessively.",
+    "dali": "Presents a grotesque, distorted figure gorging on food.",
+    "bruegel": "People indulging in excessive food and drink at a tavern.",
+    "cadmus": "Woman consuming excessive food and drink while neglecting her child.",
+    "blake": "While not central, gluttony relates to Blake's critiques of materialism and excess."
+  },
+  {
+    "sin": "Lust",
+    "bosch": "Represented by an intimate encounter between individuals, illustrating the sin of excessive sexual desire.",
+    "dali": "Showcases erotic imagery, with distorted bodies entwined in a sensual embrace.",
+    "bruegel": "Couples engaged in sensual activities in a brothel.",
+    "cadmus": "Couples engaged in various acts of sexual promiscuity.",
+    "blake": "'The Sick Rose' from Songs of Experience, where the 'invisible worm' could symbolize a corrupting lust that destroys innocence."
+  },
+  {
+    "sin": "Sloth",
+    "bosch": "Depicted by a person resting idly, neglecting their duties.",
+    "dali": "Represented by a desolate, barren landscape with a decaying donkey.",
+    "bruegel": "Man lounging idly, neglecting responsibilities, with disheveled surroundings.",
+    "cadmus": "Man lying idly on a couch, surrounded by signs of idleness and indifference.",
+    "blake": "Indirectly addressed through Blake's exaltation of creative and imaginative energy, standing in opposition to passivity."
+  }
+]

@@ -1,0 +1,114 @@
+[
+  {
+    "metal": "Gold",
+    "planet": "Sun",
+    "day": "Sunday",
+    "hebrewDay": "Yom Rishon",
+    "creation": {
+      "dayNumber": 1,
+      "description": "The act of divine creation began on this day, with God producing light and distinguishing it from darkness. This separation set in motion the cycle of day and night, defining our understanding of time."
+    },
+    "kabbalistic": {
+      "sephira": "Chesed",
+      "meaning": "Love, Mercy, Grace",
+      "description": "Yom Rishon resonates with Chesed on the Kabbalistic Tree of Life, embodying love, mercy, and grace, emphasizing spiritual growth and inclusiveness."
+    },
+    "otherAssociations": "Sunday commences the working week in contemporary Israeli society, paralleling Monday in many Western cultures. In astrology, the day is influenced by the Sun, denoting beginnings and rejuvenation."
+  },
+  {
+    "metal": "Silver",
+    "planet": "Moon",
+    "day": "Monday",
+    "hebrewDay": "Yom Sheni",
+    "creation": {
+      "dayNumber": 2,
+      "description": "On this day, God fashioned the firmament, partitioning the waters into celestial and terrestrial. This demarcation introduced structure to the cosmos, creating a boundary between heaven and earth."
+    },
+    "kabbalistic": {
+      "sephira": "Gevurah",
+      "meaning": "Judgment, Power, Self-control",
+      "description": "Monday correlates with Gevurah, embodying judgment, power, and self-control, offering a necessary balance to Chesed's boundless love."
+    },
+    "otherAssociations": "Monday, as the second day of the working week, symbolizes continuation and progress. Astrologically, it corresponds to the Moon, representing emotions and intuition."
+  },
+  {
+    "metal": "Iron",
+    "planet": "Mars",
+    "day": "Tuesday",
+    "hebrewDay": "Yom Shlishi",
+    "creation": {
+      "dayNumber": 3,
+      "description": "God collected the waters to reveal dry land and cultivated all types of vegetation on the third day. This addition of dry land and plant life enriched the Earth with sustainability and beauty."
+    },
+    "kabbalistic": {
+      "sephira": "Tiferet",
+      "meaning": "Beauty, Equilibrium, Harmony",
+      "description": "Yom Shlishi is associated with Tiferet on the Tree of Life, which signifies beauty, equilibrium, and harmony, acting as a synthesis of Chesed's love and Gevurah's discipline."
+    },
+    "otherAssociations": "Representing the midpoint of the work week, Tuesday connotes advancement and achievement. In astrological terms, it is linked with Mars, associated with energy and determination."
+  },
+  {
+    "metal": "Mercury",
+    "planet": "Mercury",
+    "day": "Wednesday",
+    "hebrewDay": "Yom Revi'i",
+    "creation": {
+      "dayNumber": 4,
+      "description": "God fashioned the celestial bodies — the Sun, the Moon, and the stars, bringing light to the earth and marking the progression of time."
+    },
+    "kabbalistic": {
+      "sephira": "Netzach",
+      "meaning": "Eternity, Triumph, Resilience",
+      "description": "Wednesday aligns with Netzach, symbolizing eternity, triumph, and the resilience required to fulfill one's divine objectives. Netzach underscores the value of determination and proactivity."
+    },
+    "otherAssociations": "As the fourth day, it signals the impending end of the work week. Astrologically, the day is tied to Mercury, associated with intellect and communication."
+  },
+  {
+    "metal": "Tin",
+    "planet": "Jupiter",
+    "day": "Thursday",
+    "hebrewDay": "Yom Chamishi",
+    "creation": {
+      "dayNumber": 5,
+      "description": "God filled the seas with life and the skies with birds, diversifying the world with different species."
+    },
+    "kabbalistic": {
+      "sephira": "Hod",
+      "meaning": "Glory, Humility, Acknowledgment",
+      "description": "Thursday is linked with Hod, which signifies glory, humility, and acknowledgment of divine victories. Hod urges recognition and surrender to divine influence in all accomplishments."
+    },
+    "otherAssociations": "This day often carries anticipation for the approaching Sabbath, a time for reflection and preparation. Astrologically, Thursday is linked with Jupiter, often associated with expansion and abundance."
+  },
+  {
+    "metal": "Copper",
+    "planet": "Venus",
+    "day": "Friday",
+    "hebrewDay": "Yom Shishi",
+    "creation": {
+      "dayNumber": 6,
+      "description": "On the sixth day, God populated the earth with land animals and created the first humans. The creation of humans in His image marked the apex of God's work, entrusting them with stewardship over all creatures."
+    },
+    "kabbalistic": {
+      "sephira": "Yesod",
+      "meaning": "Foundation, Communication, Connection",
+      "description": "Friday resonates with Yesod, which represents the foundation, communication, and connection among divine emanations. Yesod underlines the concept of interconnectedness in the universe."
+    },
+    "otherAssociations": "Traditionally, it's a day of preparation for the Sabbath, marked by cooking and cleaning activities. Astrologically, it's connected with Venus, symbolic of love, harmony, and beauty."
+  },
+  {
+    "metal": "Lead",
+    "planet": "Saturn",
+    "day": "Saturday",
+    "hebrewDay": "Shabbat",
+    "creation": {
+      "dayNumber": 7,
+      "description": "God concluded His creative work and rested, sanctifying the seventh day as a day of rest for all creation. The Shabbat serves as a constant reminder of God's creative power and the importance of rest and reflection."
+    },
+    "kabbalistic": {
+      "sephira": "Malkuth",
+      "meaning": "Physical World, Manifestation",
+      "description": "Shabbat is connected with Malkuth, symbolizing the physical world, the ultimate destination of all divine energy. Malkuth is where the spiritual converges with the physical, manifesting divine energy in tangible form."
+    },
+    "otherAssociations": "Shabbat is dedicated to rest, prayer, and family gatherings, a pause from routine work in Jewish culture. Astrologically, Saturday corresponds to Saturn, often linked with structure, responsibility, and the cycle of time."
+  }
+]
