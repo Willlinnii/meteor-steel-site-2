@@ -1,0 +1,310 @@
+{
+  "Moon": {
+    "roman": {
+      "name": "Luna",
+      "description": "The Moon (Luna) is personified as the goddess Luna (Greek Selene). She governs the night sky, tides, and cycles of time. Luna is often shown driving a two-horse chariot and wearing a crescent moon.",
+      "symbols": "Crescent moon, chariot, two-horned crown",
+      "myth": "Luna took the shepherd Endymion as lover, granting him eternal sleep to preserve his youth."
+    },
+    "greek": {
+      "name": "Selene",
+      "description": "Selene drives her silver chariot across the night sky and is famous for loving the shepherd Endymion, whom she visits each night in his enchanted sleep. The Moon evokes night, intuition, and the nurturing, cyclical rhythms of nature.",
+      "symbols": "Silver chariot, crescent",
+      "myth": "Selene's eternal love for Endymion, visiting him each night in enchanted sleep."
+    },
+    "norse": {
+      "name": "Máni",
+      "description": "Máni is the personification of the Moon, brother of sun-goddess Sól. The gods set Máni on a chariot in the sky so he 'guides the path of the moon and controls its waxing and waning.' He carries Hjúki and Bil (children in the moon).",
+      "symbols": "Lunar chariot, Hjúki and Bil",
+      "myth": "Máni will be devoured by a wolf at Ragnarök. He embodies the mystery of night and lunar time."
+    },
+    "babylonian": {
+      "name": "Sin (Nanna)",
+      "description": "Sin (Sumerian Nanna) is the Mesopotamian moon god, explicitly called 'lord of wisdom' in early hymns. He ruled the lunar cycles that governed calendars, fertility and tides. He was believed to bestow prosperity.",
+      "symbols": "Crescent moon, lunar disk",
+      "myth": "Sin governs the rise of the waters and the quantity of dairy in his role as lunar life-giver."
+    },
+    "vedic": {
+      "name": "Chandra (Soma)",
+      "description": "Chandra is the lunar deity, personifying the Moon, linked with the night, vegetation and nourishment of the earth. Counted among the Navagraha (nine planetary deities), propitiated for fertility, calmness and emotional well-being.",
+      "symbols": "Celestial chariot, soma plant",
+      "myth": "Chandra drives a celestial chariot each night, influencing the mind and body through the lunar cycle."
+    },
+    "islamic": {
+      "name": "al-Qamar",
+      "description": "Al-Qamar signifies emotion, intuition, and the subconscious, governing rhythms, cycles, and motherly instincts. The crescent moon is an enduring symbol in Islam and Arabic culture, and the Islamic calendar is lunar.",
+      "symbols": "Crescent moon",
+      "myth": "The Moon epitomizes changeability and reflection, as it reflects the sun's light. It stands for inner knowledge and intuitive wisdom."
+    },
+    "medieval": {
+      "name": "Gabriel",
+      "description": "Gabriel is the archangel associated with the Moon, the divine messenger who announced the birth of Christ. The Moon's qualities of changeability and reflection resonate with Gabriel's function in delivering prophetic messages and nurturing new beginnings.",
+      "symbols": "Lily, trumpet, crescent",
+      "myth": "Gabriel is closely tied to the Virgin Mary and childbirth. In Kabbalistic tradition, linked to the sephira Yesod (the foundation)."
+    }
+  },
+  "Mercury": {
+    "roman": {
+      "name": "Mercurius",
+      "description": "Mercury is the Roman messenger god of trade, travel, and thieves, modeled on Greek Hermes. Clever and swift, Mercury as an infant invented the lyre from a tortoise shell. He guided souls to the underworld and protected commerce.",
+      "symbols": "Caduceus (staff), winged hat and sandals, tortoise",
+      "myth": "Mercury invented the lyre from a tortoise shell as an infant and stole Apollo's cattle."
+    },
+    "greek": {
+      "name": "Hermes",
+      "description": "Hermes is the fleet-footed messenger of the Olympian gods. Son of Zeus and Maia, he invented the lyre, stole Apollo's cattle as an infant, and became god of travel, commerce, and thieves.",
+      "symbols": "Caduceus, winged sandals, tortoise",
+      "myth": "Hermes guides souls to the underworld (psychopomp) and delivers messages between gods and mortals."
+    },
+    "norse": {
+      "name": "Odin (Wōden)",
+      "description": "Odin is the chief god of the Norse pantheon, associated with war, poetry, runic magic and deep wisdom. He sacrificed one eye for wisdom. The patron of rún (rune magic), divination and eloquence. Equated with Mercury by the Romans.",
+      "symbols": "Ravens (Huginn and Muninn), spear Gungnir, one eye",
+      "myth": "Odin hung on Yggdrasil for nine nights to gain the runes. He teaches poetry and speech (Mead of Poetry) and practices seiðr (sorcery)."
+    },
+    "babylonian": {
+      "name": "Nabu",
+      "description": "Nabu (Akkadian Nabû) was the patron god of scribes, wisdom and intellectual arts. Worshipped as a divine scribe or 'god of wisdom,' protector of literacy and the rational arts. In Babylonian astronomy, identified with the planet Mercury.",
+      "symbols": "Clay tablet, stylus",
+      "myth": "Nabu was the keeper of the Tablets of Destiny, recording the fates of all living things."
+    },
+    "vedic": {
+      "name": "Budha",
+      "description": "Budha is the deified planet Mercury, representing intelligence, communication and learning. Hindu astrology personifies Mercury as a benevolent deity associated with the mind and eloquence.",
+      "symbols": "Green color, emerald",
+      "myth": "Budha is the son of Chandra (the Moon) and Tara, often invoked for wisdom and clarity of thought."
+    },
+    "islamic": {
+      "name": "ʿUtārid",
+      "description": "ʿUtārid (Mercury) governs communication, intellect, and travel. Arabic scholars noted its rapid motion and visibility only near sunrise or sunset. Mercury's influence was linked to learning, writing, and eloquence.",
+      "symbols": "Swift motion, dawn/dusk visibility",
+      "myth": "ʿUtārid represents intelligence, messages, and the power of words — the planet of scribes and knowledge."
+    },
+    "medieval": {
+      "name": "Raphael",
+      "description": "Raphael is the archangel of healing, knowledge, and journeys. In the Book of Tobit, Raphael guides Tobias on a long journey and heals his family, mirroring Mercury's domain over travel and medicine.",
+      "symbols": "Staff, fish, healing",
+      "myth": "Raphael's name means 'God heals.' Medieval scholars explicitly linked Raphael to Mercury for his swift, clever nature."
+    }
+  },
+  "Venus": {
+    "roman": {
+      "name": "Venus",
+      "description": "Venus is the goddess of love, beauty, desire, fertility and prosperity. She emerged from sea foam (Venus Anadyomene). Revered as the ancestor of Rome through her son Aeneas and linked love to victory.",
+      "symbols": "Rose, dove, seashell, myrtle, Cupid",
+      "myth": "Born of the sea; mother of Aeneas (ancestor of Romans)."
+    },
+    "greek": {
+      "name": "Aphrodite",
+      "description": "Aphrodite is the Olympian goddess of love and beauty, born from the sea-foam. She emerged at Cyprus and became famous for affairs with Ares and loves of Paris, Anchises and others. She embodies attraction, charm, and the creative spark of love.",
+      "symbols": "Sea-foam, rose, mirror, dove",
+      "myth": "Born from sea-foam at Cyprus. Her love affairs with Ares and mortal heroes drove many myths."
+    },
+    "norse": {
+      "name": "Freyja",
+      "description": "Freyja is the Vanir goddess of love, beauty, fertility and sexuality. She presides over childbirth, passion and growth. A powerful practitioner of seiðr (shamanic magic) and also a battle deity — she receives half of slain warriors in Fólkvangr.",
+      "symbols": "Brisingamen necklace, cats, falcon cloak",
+      "myth": "Freyja taught seiðr to the Aesir. She is a chooser of the slain, receiving warriors in her field Fólkvangr."
+    },
+    "babylonian": {
+      "name": "Ishtar (Inanna)",
+      "description": "Ishtar was the great goddess of love, beauty, war and fertility. In early texts she is beautiful and desirous, yet also the patron of warriors. Strongly identified with the planet Venus.",
+      "symbols": "Eight-pointed star, lion, gate",
+      "myth": "Ishtar's descent to the underworld and return — the cycle of death and rebirth of the goddess of love."
+    },
+    "vedic": {
+      "name": "Shukra",
+      "description": "Shukra is the planet Venus personified as a sage (Śukracharya). The name means 'bright' or 'clear.' Shukra became the guru of the asuras (demons), famed for wisdom and magical knowledge. As Venus he symbolizes beauty, luxury and the arts.",
+      "symbols": "White color, diamond, brightness",
+      "myth": "Shukra possesses the Sanjeevani mantra that can revive the dead — guru of the asuras."
+    },
+    "islamic": {
+      "name": "al-Zuhara",
+      "description": "Al-Zuhara (the bright one) governs love, attraction, art, and harmony. Arabic astronomers recognized it as the brilliant morning and evening star. Venus embodies feminine energy and aesthetic sensibility.",
+      "symbols": "Morning/evening star, brightness",
+      "myth": "Al-Zuhara represents affection, beauty, and desire — the gentle forces that draw people and pleasures together."
+    },
+    "medieval": {
+      "name": "Haniel",
+      "description": "Haniel (Joy of God) is the archangel of Venus, embodying grace, beauty, and love. Depicted in emerald green robes with roses and a lit lantern. Haniel nurtures compassion and creativity.",
+      "symbols": "Emerald green, roses, lantern",
+      "myth": "Haniel helps transmute worry or negativity back into light, inspiring love and friendship in keeping with Venus's gentle influence."
+    }
+  },
+  "Sun": {
+    "roman": {
+      "name": "Sol",
+      "description": "Sol is the shining god who drives a chariot of fire across the sky each day. His key myth is Phaethon: his mortal son begged to drive the sun-chariot and disastrously lost control, scorching earth and dying.",
+      "symbols": "Golden chariot, horses of the sun",
+      "myth": "Phaethon — Sol's son's fatal ride of the sun-chariot."
+    },
+    "greek": {
+      "name": "Helios (Apollo)",
+      "description": "Helios is the Titan who personifies daylight — he drives a golden chariot with fiery steeds across the sky every day. He watches over oaths and can see all things by day. The Sun stands for clarity, life and victory.",
+      "symbols": "Golden chariot, fiery crown, four horses",
+      "myth": "Phaethon begged to drive Helios's chariot and lost control, nearly destroying the earth before Zeus struck him down."
+    },
+    "norse": {
+      "name": "Sól (Sunna)",
+      "description": "Sól is the personified sun-goddess who drives the sun-chariot across the sky. She is Máni's sister and the life-giving center of the cosmos. All growth and vision depend on her.",
+      "symbols": "Sun-chariot, golden light",
+      "myth": "Sól is pursued by the wolf Sköll. At Ragnarök she will be swallowed, but her daughter will take her place to light the renewed world."
+    },
+    "babylonian": {
+      "name": "Shamash (Utu)",
+      "description": "Shamash is the great sun god who traversed the sky to bring light and life. He was the divine judge of gods and men, exercising the power of light over darkness and evil, becoming known as the god of justice and equity.",
+      "symbols": "Solar disk, rays of light, scales of justice",
+      "myth": "The Code of Hammurabi was said to be received from Shamash. He sees all things under the sun and judges accordingly."
+    },
+    "vedic": {
+      "name": "Surya",
+      "description": "Surya is the personification of the Sun, one of the principal Vedic deities, revered as the source of light, life and wisdom. The Rigveda contains hymns to Sūrya as the 'rising sun' who dispels darkness and empowers knowledge.",
+      "symbols": "Chariot drawn by seven horses, golden disk",
+      "myth": "Surya rides a chariot drawn by seven horses (the days of the week). He creates the material world (prakṛti), making him a cosmic father of creation."
+    },
+    "islamic": {
+      "name": "al-Shams",
+      "description": "Al-Shams represents the core self, vitality, and ego. The Sun's Arabic name is feminine and features prominently in Islamic culture (Sūrat ash-Shams in the Qur'an). The Sun governs Leo and signifies leadership, creativity, and life force.",
+      "symbols": "Golden light, illumination",
+      "myth": "Al-Shams brings illumination and clarity — the solar power of enlightenment, representing the divine spark within each being."
+    },
+    "medieval": {
+      "name": "Michael",
+      "description": "Michael is the archangel of the Sun, chief of the heavenly hosts and warrior of light. Just as the Sun governs the day, Michael leads God's armies and stands as guardian of illumination and justice. Shown with a fiery sword battling darkness.",
+      "symbols": "Fiery sword, armor, dragon (defeated)",
+      "myth": "Michael battles the dragon in Revelation with heavenly radiance. Sunday was regarded as Michael's day, sought for strength, victory, and enlightenment."
+    }
+  },
+  "Mars": {
+    "roman": {
+      "name": "Mars",
+      "description": "Mars is the Roman god of war and blood, second only to Jupiter. He wields a spear and shield, often accompanied by a wolf or woodpecker. Mars was the father of Romulus and Remus, the founders of Rome.",
+      "symbols": "Spear and shield, helmet, wolf",
+      "myth": "Father of Romulus and Remus — Mars is both god of war and guardian of agriculture's spring."
+    },
+    "greek": {
+      "name": "Ares",
+      "description": "Ares is the fiery Greek god of war and valor. Son of Zeus and Hera, he is the raw courage and chaos of fighting — less the strategist (that's Athena) than the brutal force of battle. He fathered gods of Fear and Panic.",
+      "symbols": "Spear, helmet, shield",
+      "myth": "Ares is both feared and somewhat disdained — a reminder of the price of war and the warrior's spirit."
+    },
+    "norse": {
+      "name": "Týr",
+      "description": "Týr is the Norse god of war and heroic glory, best known for sacrificing his hand to bind the wolf Fenrir. He embodies honor, duty and the establishment of cosmic law.",
+      "symbols": "Sword (one-handed), Fenrir's binding",
+      "myth": "Týr boldly placed his hand in Fenrir's mouth as surety while the gods bound the wolf with Gleipnir. When Fenrir realized the trick, he bit off Týr's hand — the price of keeping chaos chained."
+    },
+    "babylonian": {
+      "name": "Nergal",
+      "description": "Nergal is the god of war, disease and the underworld. He became king of the underworld and was feared as a pestilential bringer of death. In astronomy Nergal corresponds to Mars, the red planet of war.",
+      "symbols": "Mace, lion-headed staff",
+      "myth": "Nergal descended to the underworld and took Ereshkigal as his queen, ruling death and disease together."
+    },
+    "vedic": {
+      "name": "Mangala",
+      "description": "Mangala is the Vedic name for Mars, worshipped as the god of war, strength and raw energy. His names (Lohita 'the red one') and iconography (riding a ram, carrying weapons) emphasize courage and martial prowess.",
+      "symbols": "Red color, ram, weapons",
+      "myth": "Mangala is the son of Bhūmi (Earth) or born from a drop of Rudra's sweat, reflecting his earthy, fiery nature. He embodies righteous anger."
+    },
+    "islamic": {
+      "name": "al-Mirrīkh",
+      "description": "Al-Mirrīkh (Mars) represents energy, aggression, and action. Known for its reddish color, sometimes poetically called 'Merrikh the Blazing.' Mars signifies willpower, conflict, and the force that pushes forward.",
+      "symbols": "Red color, blazing light",
+      "myth": "Al-Mirrīkh stands for strength, initiative, and the purifying fire of challenge — the warrior spirit and desire to conquer obstacles."
+    },
+    "medieval": {
+      "name": "Camael",
+      "description": "Camael is the archangel of Mars, a fierce warrior of God embodying divine severity and courage. Called the 'Archangel of Divine Justice,' entrusted with carrying out God's judgments and protecting the faithful.",
+      "symbols": "Flaming sword, armor",
+      "myth": "Camael led the angelic forces that expelled Adam and Eve from Eden with a flaming sword, and comforted Jesus at Gethsemane. He channels righteous anger and bravery."
+    }
+  },
+  "Jupiter": {
+    "roman": {
+      "name": "Jupiter (Juppiter)",
+      "description": "Jupiter is the chief Roman god of sky and thunder. He wields the lightning bolt, watches from atop the oak, and upholds law and order. He overthrew his father Saturn and ruled the Olympian gods.",
+      "symbols": "Eagle, oak tree, lightning bolt",
+      "myth": "Father of gods and heroes; overthrew Saturn and established divine order on the Capitoline."
+    },
+    "greek": {
+      "name": "Zeus",
+      "description": "Zeus is the chief Olympian, the sky and thunder god. Son of Cronus and Rhea, he overthrew the Titans and became king of the gods on Mount Olympus. He wields the thunderbolt and is symbolized by the eagle.",
+      "symbols": "Thunderbolt, eagle, oak",
+      "myth": "Zeus overthrew his father Cronus, divided the cosmos among his brothers (Poseidon got the sea, Hades the underworld), and fathered many gods and heroes."
+    },
+    "norse": {
+      "name": "Thor (Þórr)",
+      "description": "Thor is the hammer-wielding god of thunder, storms and immense physical strength. Protector of humanity and the gods, he ensures the cycles of nature (storms bring fertility) and battles chaotic forces like Jörmungandr.",
+      "symbols": "Mjölnir (hammer), goats, belt of strength",
+      "myth": "Thor battles the world serpent Jörmungandr. Storm clouds roll away after thunder, planting and growth follow rain. He guards cosmic boundaries."
+    },
+    "babylonian": {
+      "name": "Ninurta",
+      "description": "Ninurta (also Ningirsu) was a warrior god of storms and agriculture. He slays the demon Asag and uses his body to build the Tigris and Euphrates canals — linking him to fertility and plowing.",
+      "symbols": "Double-headed eagle, plow",
+      "myth": "Ninurta defeated the demon Asag and fashioned irrigation from its body. He is patron of farmers and slayer of demons."
+    },
+    "vedic": {
+      "name": "Brihaspati (Guru)",
+      "description": "Brihaspati is the Vedic guru (teacher) of the devas, associated with fire and piety. In the Rigveda he appears as the counselor of the gods, lord of sacred speech and cosmic order. Later identified with the planet Jupiter.",
+      "symbols": "Golden color, sacred texts, fire",
+      "myth": "Brihaspati is the divine teacher whose blessings bring knowledge and spiritual growth — Guru of the gods."
+    },
+    "islamic": {
+      "name": "al-Mushtarī",
+      "description": "Al-Mushtarī (Jupiter) is the Greater Benefic, signifying expansion, luck, philosophy, and benevolence. Associated with wisdom, justice, and abundance — bringing growth and optimism wherever it influences.",
+      "symbols": "Greatness, richness, patronage",
+      "myth": "Al-Mushtarī represents growth, fortune, and higher learning — Zeus's thunderbolt of enlightenment and authority."
+    },
+    "medieval": {
+      "name": "Zadkiel",
+      "description": "Zadkiel is the archangel of Jupiter, revered as the angel of mercy, benevolence, and memory. The name derives from zedek (Hebrew for 'righteousness'), historically used as a name for the planet Jupiter.",
+      "symbols": "Dagger (Abraham's knife), mercy",
+      "myth": "Zadkiel stayed Abraham's hand from sacrificing Isaac, embodying divine compassion and justice tempered with mercy."
+    }
+  },
+  "Saturn": {
+    "roman": {
+      "name": "Saturnus",
+      "description": "Saturn was the ancient Roman god of time, agriculture and abundance. His mythical reign was a Golden Age of plenty, where peace and bounty prevailed. His temple held the state treasury. The feast of Saturnalia honored him.",
+      "symbols": "Sickle/scythe (harvest), hourglass",
+      "myth": "Saturn's Golden Age — a reign of peace, plenty and equality before Jupiter overthrew him."
+    },
+    "greek": {
+      "name": "Kronos (Cronus)",
+      "description": "Kronos is the elder Titan, lord of the Golden Age and father of Zeus. He overthrew his father Uranus and reigned until told a child would dethrone him. He swallowed each newborn god until Zeus escaped.",
+      "symbols": "Sickle, hourglass",
+      "myth": "Kronos swallowed his children to prevent prophecy. Zeus escaped, forced Kronos to disgorge his siblings, and banished the Titans. Yet Kronos's reign was kindly to humankind."
+    },
+    "norse": {
+      "name": "Saturn (Time/Boundary)",
+      "description": "Saturn in Norse context embodies time, cycles and renewal. He governs transitions (the passing of years) and imposes limits. He represents structure, discipline and the dissolution-rebirth cycle: every ending (winter) contains the seed of a new beginning (spring).",
+      "symbols": "Boundaries, winter, structure",
+      "myth": "Saturn was venerated for governing the cyclic order of seasons and ages — every ending contains the seed of renewal."
+    },
+    "babylonian": {
+      "name": "Ninurta/Ninazu",
+      "description": "The final card combines Ninurta with Ninazu. Ninazu is a warrior-type god associated with snakes and vegetation. Together they embody stern, Saturnine qualities of fate, agriculture and judgment.",
+      "symbols": "Snake, plow, underworld gate",
+      "myth": "Ninurta is patron of farmers and slayer of demons. Ninazu rules the subterranean realm. Combined: endings and legacies for humanity's labors."
+    },
+    "vedic": {
+      "name": "Shani",
+      "description": "Shani is the divine personification of Saturn, the stern lord of karma and justice, governing time and the consequences of one's actions. He dispenses rewards or hardships according to each person's thoughts, speech and deeds.",
+      "symbols": "Crow, buffalo, dark blue/black color",
+      "myth": "Shani is the son of Surya (Sun) and Chhaya (Shadow). His gaze can bring misfortune — representing the heavy but purifying burden of karmic law."
+    },
+    "islamic": {
+      "name": "Zuhal",
+      "description": "Zuhal (Saturn) embodies structure, limitation, discipline, and wisdom through hardship. Often called the Greater Malefic because it brings challenges, lessons, and karmic consequences — much like time and gravity impose limits.",
+      "symbols": "Slow movement, fate, forethought",
+      "myth": "Zuhal stands for completion, worldly wisdom, and the tests that forge strength — time, effort, and the structure of the cosmos."
+    },
+    "medieval": {
+      "name": "Cassiel",
+      "description": "Cassiel is the archangel of Saturn, depicted as a watcher who remains on the fringes. Detached, solitary, and patient, like Saturn's slow and distant course. Sometimes called the 'Angel of Time' or 'Father Time.'",
+      "symbols": "Hourglass, solitude, tears",
+      "myth": "Cassiel teaches prudence, self-discipline, and isolation for spiritual growth. The 'angel of tears' — Saturnine lessons can be heavy, yet lead to profound insight and endurance."
+    }
+  }
+}

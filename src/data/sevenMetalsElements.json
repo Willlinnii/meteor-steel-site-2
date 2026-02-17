@@ -1,0 +1,166 @@
+{
+  "Fire": {
+    "signs": ["Aries", "Leo", "Sagittarius"],
+    "qualities": "Passion, energy, will, transformation",
+    "cultures": {
+      "roman": {
+        "name": "Ignis",
+        "description": "Fire (Ignis) was sacred to Vesta, goddess of the hearth, whose eternal flame was tended by the Vestal Virgins. Vulcan, god of the forge, wielded fire to craft divine weapons. Fire represented both domestic piety and destructive martial power.",
+        "symbols": "Hearth flame, forge, lightning bolt"
+      },
+      "greek": {
+        "name": "Pyr",
+        "description": "Heraclitus held fire as the primordial element from which all things arise and to which they return. Prometheus stole fire from the gods to give humanity consciousness and craft. Fire is the element of transformation, will, and creative intelligence.",
+        "symbols": "Torch of Prometheus, hearth of Hestia"
+      },
+      "norse": {
+        "name": "Eldr",
+        "description": "Muspelheim, the realm of fire, existed before creation. The fire giant Surtr guards its borders and will set the world ablaze at Ragnarök. Fire is both the spark of creation (mingling with Niflheim's ice to form life) and the agent of cosmic destruction and renewal.",
+        "symbols": "Surtr's flaming sword, Muspelheim"
+      },
+      "babylonian": {
+        "name": "Girru / Nusku",
+        "description": "Girru (also Nusku) was the Mesopotamian god of fire, light, and purification. Fire rituals were central to temple practice — the sacred flame illuminated the gods' dwellings. Fire was an agent of divine justice, burning away impurity and falsehood.",
+        "symbols": "Sacred flame, lamp, torch"
+      },
+      "vedic": {
+        "name": "Agni",
+        "description": "Agni is the Vedic god of fire, the intermediary between humans and gods. He carries sacrificial offerings to the heavens and dwells in every hearth. Agni has three forms: the sacrificial fire, lightning, and the sun. He is invoked more than any other deity in the Rig Veda.",
+        "symbols": "Sacrificial fire, ram, seven flames"
+      },
+      "islamic": {
+        "name": "Nār",
+        "description": "Fire (Nār) in Islamic cosmology is the substance from which the jinn were created, as stated in the Quran. Fire represents both illumination and trial. The concept of divine light (Nūr) is distinguished from worldly fire, with Nūr representing God's guidance and Nār representing purification through tribulation.",
+        "symbols": "Lamp of guidance, purifying flame"
+      },
+      "medieval": {
+        "name": "Ignis",
+        "description": "Medieval Christian thought associated fire with the Holy Spirit, divine inspiration, and purification. The tongues of fire at Pentecost symbolized God's transformative presence. Fire was also linked to the choleric temperament — hot and dry — producing courage, ambition, and leadership.",
+        "symbols": "Pentecostal flame, burning bush, seraph"
+      }
+    }
+  },
+  "Earth": {
+    "signs": ["Taurus", "Virgo", "Capricorn"],
+    "qualities": "Stability, material form, patience, endurance",
+    "cultures": {
+      "roman": {
+        "name": "Terra",
+        "description": "Terra Mater (Mother Earth) was the primordial goddess of the earth, mother of Saturn and source of all fertility. Ceres, her granddaughter, governed agriculture and grain. The Romans revered the earth as the foundation of civilization, law, and the city itself.",
+        "symbols": "Cornucopia, grain sheaf, plow"
+      },
+      "greek": {
+        "name": "Gaia / Ge",
+        "description": "Gaia is the primordial earth goddess who emerged from Chaos and gave birth to the sky (Ouranos), the sea, and the mountains. She is the ancestor of all the Titans and Olympian gods. Empedocles counted earth among the four eternal roots of all matter.",
+        "symbols": "Globe, fruits, key of the earth"
+      },
+      "norse": {
+        "name": "Jörð",
+        "description": "Jörð is the personification of Earth in Norse cosmology, mother of Thor by Odin. Midgard, the realm of humans, was fashioned from the body of the giant Ymir. The earth is the middle ground between fire and ice, the place where mortal life unfolds.",
+        "symbols": "Midgard, Ymir's body, fertile soil"
+      },
+      "babylonian": {
+        "name": "Ki",
+        "description": "Ki is the Sumerian earth goddess, consort of An (sky). Together An and Ki produced the great gods, including Enlil. The earth was considered sacred ground upon which temples (ziggurats) connected mortals to the divine. Agriculture and irrigation were seen as collaboration with Ki's fertile body.",
+        "symbols": "Ziggurat, irrigated field, clay tablet"
+      },
+      "vedic": {
+        "name": "Prithvi / Bhūmi",
+        "description": "Prithvi is the earth goddess in Vedic tradition, often paired with Dyaus Pita (sky father). She is patient, nurturing, and bears the weight of all living beings. In the Vishnu Purana, Bhūmi is rescued by Varaha (Vishnu's boar avatar) from the cosmic ocean.",
+        "symbols": "Lotus, cow, boar (Varaha)"
+      },
+      "islamic": {
+        "name": "Arḍ",
+        "description": "The Earth (Arḍ) in Islamic tradition was created by God as a place of trust (amānah) for humanity. Humans were formed from clay (ṭīn) and are stewards (khalīfah) of the earth. The Quran speaks of the earth as spread out and stable, with mountains as pegs to anchor it.",
+        "symbols": "Clay, mountain pegs, garden"
+      },
+      "medieval": {
+        "name": "Terra",
+        "description": "Medieval cosmology placed Earth at the center of the universe, the densest and lowest of the four elements. Earth corresponded to the melancholic temperament — cold and dry — producing contemplation, endurance, and gravity. The earth was God's footstool, the stage of salvation history.",
+        "symbols": "Globe, cross, plowed field"
+      }
+    }
+  },
+  "Air": {
+    "signs": ["Gemini", "Libra", "Aquarius"],
+    "qualities": "Intellect, communication, connection, freedom",
+    "cultures": {
+      "roman": {
+        "name": "Aer",
+        "description": "The Romans associated air with Mercury (Mercurius), the swift messenger god who moved between worlds. Jupiter wielded the winds and storms as expressions of divine will. Aeolus kept the winds imprisoned in a cave, releasing them at the gods' command.",
+        "symbols": "Caduceus, wings, wind rose"
+      },
+      "greek": {
+        "name": "Aer / Pneuma",
+        "description": "Anaximenes proposed air as the primordial substance from which all matter derives through rarefaction and condensation. The Stoics elevated pneuma (breath/spirit) as the active principle pervading the cosmos. Hermes ruled the airy realm of intellect and communication.",
+        "symbols": "Wind, feather, lyre"
+      },
+      "norse": {
+        "name": "Vindr",
+        "description": "Wind and air are associated with Odin, the Allfather, whose very name relates to the Old Norse word for 'wind' or 'fury.' Odin gave humanity the breath of life (önd). The vast void of Ginnungagap — the primordial space between fire and ice — is the Norse conception of primal air.",
+        "symbols": "Ginnungagap, raven, breath of Odin"
+      },
+      "babylonian": {
+        "name": "Enlil / Ilu",
+        "description": "Enlil, 'Lord Wind,' was the Sumerian god of air, wind, and storms — second in rank only to An (sky). He separated heaven and earth and decreed the fates. Enlil's breath was the wind itself; his will shaped civilization and could bring both abundance and the Great Flood.",
+        "symbols": "Crown of horns, wind, storm"
+      },
+      "vedic": {
+        "name": "Vayu",
+        "description": "Vayu is the Vedic god of wind and breath, the vital force (prāṇa) that animates all living things. Father of Bhima and Hanuman, Vayu moves between the visible and invisible worlds. In yogic philosophy, prāṇāyāma (breath control) is the mastery of Vayu's element.",
+        "symbols": "Wind, deer, flag, prāṇa"
+      },
+      "islamic": {
+        "name": "Hawāʾ / Rīḥ",
+        "description": "Wind (Rīḥ) in the Quran is a sign of God's power — it carries rain, drives ships, and can destroy transgressors. The angels were created from light (Nūr) which is associated with the airy, luminous realm. Air represents the unseen world (al-ghayb) and the spirit (rūḥ).",
+        "symbols": "Wind, breath, cloud"
+      },
+      "medieval": {
+        "name": "Aer",
+        "description": "In medieval cosmology, Air was the element above water and below fire, corresponding to the sanguine temperament — hot and moist — producing optimism, sociability, and intellectual agility. Air was the medium of sound, speech, and divine revelation; angels moved through it.",
+        "symbols": "Bird, censer smoke, breath"
+      }
+    }
+  },
+  "Water": {
+    "signs": ["Cancer", "Scorpio", "Pisces"],
+    "qualities": "Emotion, intuition, depth, adaptability",
+    "cultures": {
+      "roman": {
+        "name": "Aqua",
+        "description": "Neptune (Neptunus) ruled the seas, and Rome's engineering genius expressed itself through aqueducts that channeled water across the empire. Water was essential to ritual purification and the baths that formed the social heart of Roman civic life.",
+        "symbols": "Trident, aqueduct, fountain"
+      },
+      "greek": {
+        "name": "Hydor",
+        "description": "Thales proposed water as the archē — the fundamental substance of all reality. Oceanus, the great river encircling the world, was the oldest Titan. Poseidon ruled the seas with his trident; the river Styx bound even the gods to their oaths.",
+        "symbols": "Trident, river, ocean wave"
+      },
+      "norse": {
+        "name": "Vatn",
+        "description": "Water pervades Norse cosmology: from the primordial ice of Niflheim whose melting created life, to the Well of Urðr where the Norns water Yggdrasil daily, to the Well of Mímir whose waters grant wisdom. Njörðr governs the seas and Ægir brews ale in his submarine hall.",
+        "symbols": "Well of Urðr, Niflheim ice, Ægir's cauldron"
+      },
+      "babylonian": {
+        "name": "Enki / Ea",
+        "description": "Enki (Akkadian Ea) was the god of freshwater, wisdom, and magic, dwelling in the subterranean sweet-water ocean (Apsû). Tiamat, the salt-water chaos dragon, represents the primordial ocean from which creation emerged. Water was the source of all life and civilization in arid Mesopotamia.",
+        "symbols": "Flowing streams, goatfish, Apsû"
+      },
+      "vedic": {
+        "name": "Āpas / Varuna",
+        "description": "Varuna is the Vedic lord of cosmic waters and moral law (ṛta). The sacred rivers — Ganga, Yamuna, Sarasvati — are goddesses whose waters purify body and soul. Water is the element of emotion, memory, and the dissolving of boundaries between self and cosmos.",
+        "symbols": "Sacred river, lotus, makara (sea creature)"
+      },
+      "islamic": {
+        "name": "Māʾ",
+        "description": "Water (Māʾ) is the origin of all life in the Quran: 'We made from water every living thing.' Rain is a sign of God's mercy and provision. Ritual ablution (wuḍūʾ) purifies the body before prayer; the rivers of Paradise flow with water, milk, honey, and wine.",
+        "symbols": "Rain, river, ablution vessel"
+      },
+      "medieval": {
+        "name": "Aqua",
+        "description": "Water corresponded to the phlegmatic temperament — cold and moist — producing calm, patience, and contemplation. Baptismal water was the medium of spiritual rebirth. The great flood and Moses parting the Red Sea made water central to salvation history as both destroyer and deliverer.",
+        "symbols": "Baptismal font, fish, chalice"
+      }
+    }
+  }
+}

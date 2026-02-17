@@ -5,10 +5,11 @@ const TABS = [
   { id: 'deities',   label: 'Deities' },
   { id: 'sins',      label: 'Sins' },
   { id: 'day',       label: 'Day' },
-  { id: 'theology',  label: 'Theology' },
   { id: 'stories',   label: 'Stories' },
   { id: 'body',      label: 'Body' },
   { id: 'hebrew',    label: 'Hebrew' },
+  { id: 'synthesis', label: 'Synthesis' },
+  { id: 'development', label: 'Development' },
 ];
 
 export default function MetalContentTabs({ activeTab, onSelectTab }) {

@@ -15,15 +15,19 @@ export default function PlanetNode({ planet, metal, cx, cy, selected, onClick })
   const r = selected ? 14 : 11;
 
   return (
-    <g className="planet-node" onClick={onClick} style={{ cursor: 'pointer' }}>
+    <g
+      className="planet-node"
+      onClick={onClick}
+      style={{ cursor: 'pointer', transform: `translate(${cx}px, ${cy}px)`, transition: 'transform 0.8s ease-in-out' }}
+    >
       {selected && (
-        <circle cx={cx} cy={cy} r={r + 6} fill="none" stroke={color} strokeWidth="1" opacity="0.4">
+        <circle cx={0} cy={0} r={r + 6} fill="none" stroke={color} strokeWidth="1" opacity="0.4">
           <animate attributeName="r" values={`${r + 4};${r + 8};${r + 4}`} dur="2s" repeatCount="indefinite" />
           <animate attributeName="opacity" values="0.4;0.15;0.4" dur="2s" repeatCount="indefinite" />
         </circle>
       )}
       <circle
-        cx={cx} cy={cy} r={r}
+        cx={0} cy={0} r={r}
         fill={color}
         fillOpacity={selected ? 0.9 : 0.7}
         stroke={color}
@@ -31,7 +35,7 @@ export default function PlanetNode({ planet, metal, cx, cy, selected, onClick })
         filter={selected ? `url(#glow-${planet})` : undefined}
       />
       <text
-        x={cx} y={cy + r + 14}
+        x={0} y={r + 14}
         textAnchor="middle"
         fill={selected ? color : '#a8a8b8'}
         fontSize={selected ? '11' : '10'}
@@ -41,7 +45,7 @@ export default function PlanetNode({ planet, metal, cx, cy, selected, onClick })
         {planet}
       </text>
       <text
-        x={cx} y={cy + r + 26}
+        x={0} y={r + 26}
         textAnchor="middle"
         fill={selected ? color : '#888'}
         fontSize="8"

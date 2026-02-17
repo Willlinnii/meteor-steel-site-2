@@ -1,0 +1,590 @@
+[
+  {
+    "sign": "Aries",
+    "symbol": "♈",
+    "element": "Fire",
+    "modality": "Cardinal",
+    "rulingPlanet": "Mars",
+    "house": 1,
+    "dates": "March 21 – April 19",
+    "archetype": "The Pioneer",
+    "stageOfExperience": "Initiation and Beginnings",
+    "description": "Aries represents the energy of initiation, where the journey begins with a burst of vitality and courage. This stage is about taking the first steps, embracing new challenges, and asserting oneself. It's the archetype of the warrior or pioneer, who forges ahead with determination and passion, setting the stage for the journey that follows.",
+    "cultures": {
+      "roman": {
+        "name": "Aries",
+        "myth": "Golden Ram of Phrixus",
+        "description": "Aries, the Ram, is the fire sign of leadership and courage. In myth the celestial ram carried Phrixus to safety; his golden fleece would later be sought by Jason. Aries is ruled by Mars (the war god) and represents new beginnings and bold action."
+      },
+      "greek": {
+        "name": "Aries (Chrysomallus)",
+        "myth": "Golden Ram and the Fleece",
+        "description": "The flying ram Chrysomallus rescued Phrixus and Helle and carried them to safety, later becoming the Golden Fleece. Zeus honored this ram by placing it among the stars as the constellation Aries. As the first sign, it symbolizes beginnings, leadership and the bold energy of spring."
+      },
+      "norse": {
+        "name": "Harpa",
+        "myth": "First Month of Summer",
+        "description": "Harpa is the Old Norse name for the first month of the summer half (roughly mid-April to mid-May). It marks the turning point of spring into early summer, celebrating the returning sun and warmer days. Traditional Blót festivals to Ostara took place at Harpa's start, symbolizing renewal and rebirth."
+      },
+      "babylonian": {
+        "name": "Marduk",
+        "myth": "Slayer of Tiamat, King of the Gods",
+        "description": "Marduk was the patron god of Babylon. In the Enūma Eliš, Marduk defeats the chaos dragon Tiamat and fashions the cosmos from her body, establishing order. He is proclaimed king of the gods and source of their authority. Associated with the Aries ram figure, symbolizing new beginnings and authority."
+      },
+      "vedic": {
+        "name": "Mesha",
+        "myth": "The Ram, ruled by Mangala",
+        "description": "Mesha literally means 'ram' or 'sheep,' signifying new beginnings and creative energy. It is the first cardinal fire sign of the Hindu zodiac, governed by Mars (Mangala), endowing it with courage and initiative."
+      },
+      "islamic": {
+        "name": "al-Ḥamal",
+        "myth": "The Ram",
+        "description": "Al-Ḥamal (the Ram) is the first sign of the zodiac, a Fire sign noted for its energy and initiative. Ruled by Mars, it imparts courage and assertiveness. As the Spring equinox sign, Aries heralds the start of the astrological year with a burst of activity."
+      },
+      "medieval": {
+        "name": "Aries",
+        "myth": "The Ram of Spring",
+        "description": "Aries is the first sign of the zodiac, a cardinal fire sign ruled by Mars, known for boldness, courage, and initiating energy. The ram's horns carry sacrificial imagery, and in Christian context Aries's season (spring) heralds new beginnings — a fitting parallel to the resurrection theme of Easter."
+      }
+    }
+  },
+  {
+    "sign": "Taurus",
+    "symbol": "♉",
+    "element": "Earth",
+    "modality": "Fixed",
+    "rulingPlanet": "Venus",
+    "house": 2,
+    "dates": "April 20 – May 20",
+    "archetype": "The Sustainer",
+    "stageOfExperience": "Establishment and Stability",
+    "description": "Taurus embodies the phase of grounding and establishing stability. This stage is about building a solid foundation, cultivating resources, and enjoying the pleasures of the material world. It's a time for growth, preservation, and the enjoyment of sensory experiences, where the focus is on maintaining and nurturing what has been initiated.",
+    "cultures": {
+      "roman": {
+        "name": "Taurus",
+        "myth": "Europa and the Bull",
+        "description": "Taurus, the Bull, is a steadfast earth sign of fertility and strength. It recalls the myth where Zeus transformed into a white bull to abduct the princess Europa. Taurus is ruled by Venus, giving it an affinity with sensuality and beauty."
+      },
+      "greek": {
+        "name": "Taurus (Europa's Bull)",
+        "myth": "Zeus as the White Bull",
+        "description": "Zeus took the form of a beautiful white bull to woo and carry Europa safely to Crete. For this, the bull was set among the heavens. In Greek tradition Taurus represents strength and stability, ruled by Venus/Aphrodite, highlighting its sensuous, fertile nature."
+      },
+      "norse": {
+        "name": "Skerpla",
+        "myth": "Second Summer Month – Spring Unfolding",
+        "description": "Skerpla is the second month of summer (around May). Its name may mean 'brightness' or 'clearness,' reflecting longer, brighter days of late spring. Norse farmers prepared fields for planting and celebrated growth. Rites honored fertility deities like Freyja."
+      },
+      "babylonian": {
+        "name": "Gugalanna",
+        "myth": "The Bull of Heaven",
+        "description": "Gugalanna is the 'Bull of Heaven' in Sumerian myth. He appears as the husband of the underworld goddess Ereshkigal and is the Bull of Heaven that Gilgamesh and Enkidu slay in the Epic of Gilgamesh. He embodies the bull figure of Taurus."
+      },
+      "vedic": {
+        "name": "Vrishabha",
+        "myth": "The Bull, ruled by Shukra",
+        "description": "Vrishabha represents stability, fertility and material abundance. The bull's traits of strength and resilience reflect Taurus' earthy nature. Ruled by Venus (Shukra), with the Moon exalted here, associated with comfort, wealth and the enjoyment of life's pleasures."
+      },
+      "islamic": {
+        "name": "al-Thawr",
+        "myth": "The Bull",
+        "description": "Al-Thawr (the Bull) is an Earth sign associated with practicality and groundedness. Ruled by Venus, it carries an affinity for comfort, art, and sensual pleasures. Taurus represents stability, endurance, and the fruitful abundance of the earth."
+      },
+      "medieval": {
+        "name": "Taurus (Luke – Ox)",
+        "myth": "The Ox of Sacrifice and Service",
+        "description": "The Ox is the symbol of St. Luke the Evangelist, associated with sacrifice and service. Luke's Gospel begins with a priest offering sacrifice in the Temple, and the ox signifies Christ's priestly role and sacrifice for redemption. Taurus's stability reflects Luke's emphasis on the steadfast, earthly life."
+      }
+    }
+  },
+  {
+    "sign": "Gemini",
+    "symbol": "♊",
+    "element": "Air",
+    "modality": "Mutable",
+    "rulingPlanet": "Mercury",
+    "house": 3,
+    "dates": "May 21 – June 20",
+    "archetype": "The Messenger",
+    "stageOfExperience": "Communication and Duality",
+    "description": "Gemini represents the phase of communication, learning, and the exploration of dualities. This stage is about gathering information, exploring different perspectives, and sharing knowledge. It's a phase of curiosity, adaptability, and the realization that life is filled with contrasts and contradictions that must be understood and integrated.",
+    "cultures": {
+      "roman": {
+        "name": "Gemini (Castor & Pollux)",
+        "myth": "The Dioscuri",
+        "description": "Gemini is linked to the Dioscuri – Castor and Pollux – twin brothers of Roman myth. Though one was mortal and one divine, Zeus honored their bond by placing them both in the sky. Ruled by Mercury, adding intellect and versatility."
+      },
+      "greek": {
+        "name": "Gemini (Dioscuri)",
+        "myth": "Castor and Pollux share immortality",
+        "description": "One brother (Pollux) was divine (son of Zeus) and the other (Castor) mortal. They shared a deep bond, adventuring together as Argonauts. When Castor died, Pollux begged Zeus to share his immortality; Zeus placed them both in the sky as Gemini."
+      },
+      "norse": {
+        "name": "Sólmánuðr",
+        "myth": "Sun Month – Twin Forces, Choice",
+        "description": "Sólmánuðr means 'sun month,' the third summer month coinciding with the summer solstice. The 'twin forces' reflect the interplay of light and dark, or the need to choose one's path in full daylight. It symbolizes peak vitality and clarity."
+      },
+      "babylonian": {
+        "name": "Mash-mashu",
+        "myth": "The Great Twins",
+        "description": "Babylonian astronomy split the Twins into two: Castor was called Mash-mashu-Mahru ('the western one of the Twins') and together with Pollux they formed Mas-tab-ba-gal-gal ('the Great Twins'). These twin star-deities align with Gemini."
+      },
+      "vedic": {
+        "name": "Mithuna",
+        "myth": "The Pair, ruled by Budha",
+        "description": "Mithuna literally means 'pair' or 'twins,' representing the dual nature of Gemini. It stands for intellectual exchange and communication. An air sign governed by Budha (Mercury), emphasizing mental agility, speech and learning."
+      },
+      "islamic": {
+        "name": "al-Jawzāʾ",
+        "myth": "The Twins",
+        "description": "Al-Jawzāʾ (the Twins) is an Air sign noted for versatility and intellect. Ruled by Mercury, Gemini embodies adaptability and curiosity. Also called Al-Tawʾamān ('the Two Twins'), aligning with the Greek concept of Castor and Pollux."
+      },
+      "medieval": {
+        "name": "Gemini",
+        "myth": "The Twins of Duality",
+        "description": "A mutable air sign symbolized by the Twins. Geminis thrive on intellectual stimulation, renowned for quick wit, eloquent communication, and dual nature. Ruled by Mercury, embodying adaptability and curiosity — they can see both sides of any situation."
+      }
+    }
+  },
+  {
+    "sign": "Cancer",
+    "symbol": "♋",
+    "element": "Water",
+    "modality": "Cardinal",
+    "rulingPlanet": "Moon",
+    "house": 4,
+    "dates": "June 21 – July 22",
+    "archetype": "The Nurturer",
+    "stageOfExperience": "Birth and Emotional Foundation",
+    "description": "Cancer represents the beginning of emotional consciousness, where the focus is on establishing roots, forming bonds, and creating a sense of home and security. This stage is about nurturing and being nurtured, as well as developing the emotional core from which all other experiences will grow.",
+    "cultures": {
+      "roman": {
+        "name": "Cancer",
+        "myth": "Hera's Crab against Hercules",
+        "description": "Hera sent a giant crab to distract Hercules during his battle with the Hydra; when Hercules crushed it, Hera placed the crab in the stars as Cancer. Ruled by the Moon (silver), associated with nurturing, care, and strong loyalty."
+      },
+      "greek": {
+        "name": "Cancer (Carcinos)",
+        "myth": "The Crab of Heracles' Labors",
+        "description": "Hera sent the crab Carcinos to distract Heracles during his battle with the Hydra. Heracles crushed the crab underfoot, and Hera placed it among the stars. Cancer recalls self-sacrifice and loyalty, as well as themes of home, protection and tenacity."
+      },
+      "norse": {
+        "name": "Heyannir",
+        "myth": "Haymaking Season – Mid-Summer Motion",
+        "description": "Heyannir is the hay-harvest month (roughly mid-August to mid-September), also called Tvímánuðr ('double month'). It represents the active movement of midsummer — fields cut, animals fed, stores gathered. It embodies abundance and the motion of community life."
+      },
+      "babylonian": {
+        "name": "Alul/Nangar",
+        "myth": "The Crab",
+        "description": "In Babylonian astrological lists the sign Cancer is literally called 'the Crab.' The names Alul or Nangar likely refer to local words for the crab figure. This evokes the protective, home-keeping qualities of the crab constellation."
+      },
+      "vedic": {
+        "name": "Karka",
+        "myth": "The Crab, ruled by Chandra",
+        "description": "Karka (Karkata) is a watery, movable sign associated with emotion, nurture and the home. Ruled by Chandra (the Moon), highlighting Cancer's sensitivity and cyclical nature as the Moon waxes and wanes."
+      },
+      "islamic": {
+        "name": "al-Saraṭān",
+        "myth": "The Crab",
+        "description": "Al-Saraṭān (the Crab) is a Water sign ruled by the Moon, imbued with sensitive and nurturing qualities. Cancer governs home, family, and deep emotions. Cancer marked the summer solstice in ancient times, associated with the gateway of life."
+      },
+      "medieval": {
+        "name": "Cancer",
+        "myth": "The Crab of Protection",
+        "description": "A water sign symbolized by the Crab. Cancer is nurturing, empathetic, and home-loving, with a powerful capacity for empathy and healing. Ruled by the Moon, giving intuition and a gentle, changeable temperament. The Crab's hard shell guards soft inner feelings."
+      }
+    }
+  },
+  {
+    "sign": "Leo",
+    "symbol": "♌",
+    "element": "Fire",
+    "modality": "Fixed",
+    "rulingPlanet": "Sun",
+    "house": 5,
+    "dates": "July 23 – August 22",
+    "archetype": "The Sovereign",
+    "stageOfExperience": "Self-Expression and Identity",
+    "description": "Leo embodies the emergence of the self as a unique, creative force. This stage is characterized by the assertion of identity, personal power, and the desire to shine and be recognized. It represents the phase where one discovers and expresses their true self, seeking validation and applause from the world.",
+    "cultures": {
+      "roman": {
+        "name": "Leo",
+        "myth": "The Nemean Lion",
+        "description": "Leo recalls the Nemean Lion: Hercules' first labor was to slay this invulnerable beast, which Zeus then honored in the sky. Leo is ruled by the Sun, giving it a golden, proud spirit of courage and nobility."
+      },
+      "greek": {
+        "name": "Leo (Nemean Lion)",
+        "myth": "Heracles slays the invulnerable lion",
+        "description": "Heracles slew the invulnerable Nemean Lion as his first task, after which the lion was placed in the heavens as Leo. The constellation signifies courage, royalty and strength. Regulus, the lion's 'heart,' is one of its brightest stars."
+      },
+      "norse": {
+        "name": "Tvímánuðr",
+        "myth": "Double Month – Radiance and Ecstatic Vitality",
+        "description": "Tvímánuðr means 'double month,' an alternate name for late summer. It emphasizes abundance as if two months' worth of growth are packed together. It celebrates heightened radiance and vitality — the exuberance of summer's bounty."
+      },
+      "babylonian": {
+        "name": "Ur-gula/Latarak",
+        "myth": "The Lion Guardian",
+        "description": "Latarak (Sumerian Urgulû) is a protective deity associated with the lion. Lexical lists translate Latarak's name as urgulû, meaning 'lion.' Often depicted wearing a lion-skin, he serves as a guardian figure embodying the lion's strength."
+      },
+      "vedic": {
+        "name": "Simha",
+        "myth": "The Lion, ruled by Surya",
+        "description": "Simha is Sanskrit for 'lion,' a fiery fixed sign associated with leadership, courage and creativity. Ruled by Surya (the Sun), giving Simha its radiant confidence and authority. No planet is debilitated here, emphasizing unrestrained energy."
+      },
+      "islamic": {
+        "name": "al-Asad",
+        "myth": "The Lion",
+        "description": "Al-Asad (the Lion) is a Fire sign ruled by the Sun, imbued with radiance and confidence. Leo is characterized by creativity, leadership, and generosity. Pre-Islamic Arabian stargazers also saw a lion in these stars."
+      },
+      "medieval": {
+        "name": "Leo",
+        "myth": "The Lion of St. Mark",
+        "description": "A fire sign symbolized by the Lion, the 'king of the zodiac.' Leos are bold, confident, and warm. Ruled by the Sun, carrying solar energy — expressive, creative, and life-giving. In Christian symbolism, the lion is associated with St. Mark and Christ's royal authority."
+      }
+    }
+  },
+  {
+    "sign": "Virgo",
+    "symbol": "♍",
+    "element": "Earth",
+    "modality": "Mutable",
+    "rulingPlanet": "Mercury",
+    "house": 6,
+    "dates": "August 23 – September 22",
+    "archetype": "The Healer",
+    "stageOfExperience": "Refinement and Service",
+    "description": "Virgo symbolizes the process of refinement, both of the self and the environment. This stage involves self-improvement, learning, and the application of knowledge in practical ways. It's about mastering skills, serving others, and bringing order and efficiency to life. This phase is where the individual becomes aware of their role in contributing to the greater whole.",
+    "cultures": {
+      "roman": {
+        "name": "Virgo",
+        "myth": "Ceres and Astraea/Iustitia",
+        "description": "The Romans saw Virgo as connected to Ceres (goddess of grain) — the virgin of the wheat fields — or as Astraea/Iustitia (justice) holding scales. Virgo brings carefulness and attention to detail, ruled by Mercury."
+      },
+      "greek": {
+        "name": "Virgo (Astraea/Persephone)",
+        "myth": "The Maiden of the Golden Age",
+        "description": "Astraea lived among people in the mythic Golden Age, but as humanity grew unjust she ascended to become the constellation Virgo. Virgo represents purity, service and the seasonal renewal of spring, often linked to agriculture and the harvest."
+      },
+      "norse": {
+        "name": "Haustmánuðr",
+        "myth": "Harvest Month – Harvest Wisdom",
+        "description": "Haustmánuðr ('harvest month') is late autumn (mid-September to mid-October), the season for gathering crops. Rich in harvest wisdom — lessons and sustenance gleaned from the year's labor. Communities held feasts and gave thanks for the bounty."
+      },
+      "babylonian": {
+        "name": "Shala/Shulpae",
+        "myth": "The Furrow – Goddess of Grain",
+        "description": "In the MUL.APIN star compendium, part of the Virgo constellation was termed 'the Furrow,' representing the grain-goddess Shala with her ear of barley. This aligns Shala, goddess of grain and fertility, with the Virgo archetype."
+      },
+      "vedic": {
+        "name": "Kanya",
+        "myth": "The Maiden, ruled by Budha",
+        "description": "Kanya means 'maiden,' an earth sign associated with purity, service and refinement. In Jyotisha, Virgo is seen as 'consciousness in bondage' that aspires to higher ideals. Ruled by Budha (Mercury), bringing focus on intellect and discrimination."
+      },
+      "islamic": {
+        "name": "al-ʿAdhrāʾ",
+        "myth": "The Virgin",
+        "description": "Al-ʿAdhrāʾ (the Virgin) is an Earth sign ruled by Mercury. Associated with analysis, meticulousness, and service to others. In Islamic astronomical manuscripts, Virgo was illustrated as a maiden on a throne or holding plants."
+      },
+      "medieval": {
+        "name": "Virgo",
+        "myth": "The Virgin of Purity and Service",
+        "description": "An earth sign represented by the Virgin or maiden, often associated with wheat and agriculture. Virgos are logical, practical, and meticulous. In Christian context, linked to the Virgin Mary or to an ideal of spiritual purity and humility."
+      }
+    }
+  },
+  {
+    "sign": "Libra",
+    "symbol": "♎",
+    "element": "Air",
+    "modality": "Cardinal",
+    "rulingPlanet": "Venus",
+    "house": 7,
+    "dates": "September 23 – October 22",
+    "archetype": "The Diplomat",
+    "stageOfExperience": "Relationship and Harmony",
+    "description": "Libra represents the exploration of relationships, balance, and harmony. This stage is about understanding others, forming partnerships, and seeking equilibrium in interactions. It's a phase of learning how to balance the self with the needs of others, cultivating fairness, and striving for peace and beauty in the world.",
+    "cultures": {
+      "roman": {
+        "name": "Libra",
+        "myth": "Scales of Astraea/Iustitia",
+        "description": "Its symbol — a balanced pair of scales — is often associated with the goddess of justice (Iustitia). Libra is ruled by Venus, blending fairness with grace. It represents balance, justice and harmony."
+      },
+      "greek": {
+        "name": "Libra (Astraea's Scales)",
+        "myth": "Scales of Justice",
+        "description": "Astraea — a virgin personification of justice — is depicted holding the scales of impartiality. In some stories she lived among humans in the Golden Age then ascended to the heavens. Her scales represent fairness, order, and the act of weighing choices."
+      },
+      "norse": {
+        "name": "Gormánuðr",
+        "myth": "First Winter Month – Divine Balance",
+        "description": "Gormánuðr is the first month of winter (mid-October to mid-November), meaning 'Slaughter Month' — the time when livestock were slaughtered for winter. It symbolizes the balance of light and dark when night begins to overtake day."
+      },
+      "babylonian": {
+        "name": "Zibanitu",
+        "myth": "The Weighing Scales",
+        "description": "Babylonian astronomy names Libra as 'the Balance.' The Sumerian word Zibānu/Zibānitum literally means 'weighing scales.' Ancient texts gloss the constellation as the scales, reflecting its symbol of justice and equilibrium."
+      },
+      "vedic": {
+        "name": "Tula",
+        "myth": "The Scales, ruled by Shukra",
+        "description": "Tula represents balance, harmony and justice. Ancient descriptions note that Libra is depicted as scales that balance material and spiritual life. An airy, movable sign ruled by Shukra (Venus), underscoring associations with beauty, partnership and social grace."
+      },
+      "islamic": {
+        "name": "al-Mīzān",
+        "myth": "The Balance/Scales",
+        "description": "Al-Mīzān (the Scales) denotes balance and justice. An Air sign governed by Venus, with refined aesthetic sense and love of fairness. In Arabic, al-Mīzān refers to weighing scales, a concept tied to justice appearing in the Qur'an."
+      },
+      "medieval": {
+        "name": "Libra",
+        "myth": "Archangel Michael's Scales",
+        "description": "An air sign represented by the Scales — the only inanimate zodiac symbol — signifying balance and justice. Librans are diplomatic and charm-filled, striving for harmony. In medieval Christian allegory, the scales are associated with Archangel Michael weighing souls."
+      }
+    }
+  },
+  {
+    "sign": "Scorpio",
+    "symbol": "♏",
+    "element": "Water",
+    "modality": "Fixed",
+    "rulingPlanet": "Mars",
+    "house": 8,
+    "dates": "October 23 – November 21",
+    "archetype": "The Alchemist",
+    "stageOfExperience": "Transformation and Deep Connection",
+    "description": "Scorpio embodies the deep, transformative power of change and the exploration of the unknown. This stage involves confronting the shadow, embracing the mysteries of life, and experiencing profound emotional and spiritual transformations. It's about intense connections, regeneration, and the alchemy of turning pain into power.",
+    "cultures": {
+      "roman": {
+        "name": "Scorpio",
+        "myth": "Orion's Scorpion",
+        "description": "A scorpion was sent (by Artemis or Hera) to kill the great hunter Orion; after the battle both were placed in the sky as constellations. Scorpio is ruled by Mars, coloring it with passion and power."
+      },
+      "greek": {
+        "name": "Scorpio",
+        "myth": "The Scorpion sent against Orion",
+        "description": "Orion boasted he would slay all beasts on Earth, so Artemis sent a giant scorpion to humble him. The scorpion stung and killed Orion; Zeus placed both in the sky. Scorpio represents transformation, intensity and challenges that conquer pride."
+      },
+      "norse": {
+        "name": "Ýlir",
+        "myth": "Deep Autumn and Underworld Passage",
+        "description": "Ýlir is the late-autumn month (mid-November to mid-December), linked with frost and cold, cognate of 'Yule.' It represents the threshold of winter — days short, nights long, the earth dying. Mythically it evokes descent into the underworld or Hela's realm."
+      },
+      "babylonian": {
+        "name": "Girtab/Ishara",
+        "myth": "The Scorpion Goddess",
+        "description": "Ishara (Išḫara) was a goddess whose symbol was the scorpion. Artifacts show her only in scorpion form. Astronomical texts call 'the Scorpion' star 'Išḫara, goddess of all inhabited lands.' Girtab means 'scorpion' in Sumerian."
+      },
+      "vedic": {
+        "name": "Vrishchika",
+        "myth": "The Scorpion, ruled by Mangala",
+        "description": "Vrishchika is a fixed water sign noted for intensity, passion and transformation. The scorpion emblem hints at hidden power and regeneration. Governed by Mangala (Mars), giving it courage and willpower."
+      },
+      "islamic": {
+        "name": "al-ʿAqrab",
+        "myth": "The Scorpion",
+        "description": "Al-ʿAqrab (the Scorpion) is a Water sign traditionally ruled by Mars. Associated with depth, secrets, death and rebirth, and power. Scorpios possess keen insight into psychology and unwavering determination."
+      },
+      "medieval": {
+        "name": "Scorpio (John – Eagle)",
+        "myth": "The Eagle of Transformation",
+        "description": "Scorpio is traditionally symbolized by the Scorpion, but esoteric lore gives it the higher symbol of the Eagle, representing transcendence. John the Evangelist's Eagle represents soaring divine insight. The eagle is the transmuted symbol of the scorpion — death transformed into spiritual vision."
+      }
+    }
+  },
+  {
+    "sign": "Sagittarius",
+    "symbol": "♐",
+    "element": "Fire",
+    "modality": "Mutable",
+    "rulingPlanet": "Jupiter",
+    "house": 9,
+    "dates": "November 22 – December 21",
+    "archetype": "The Explorer",
+    "stageOfExperience": "Expansion and Truth-Seeking",
+    "description": "Sagittarius represents the quest for higher knowledge, meaning, and truth. This stage is about broadening horizons, exploring new territories, both physically and intellectually, and seeking out wisdom. It's a phase of adventure, philosophical inquiry, and the pursuit of freedom and broader understanding.",
+    "cultures": {
+      "roman": {
+        "name": "Sagittarius",
+        "myth": "Chiron the Centaur",
+        "description": "The centaur Chiron is its mythic model — a wise teacher of heroes who was later placed among the stars. Sagittarius is ruled by Jupiter (optimism) and depicted as a centaur drawing a bow."
+      },
+      "greek": {
+        "name": "Sagittarius (Chiron/Crotus)",
+        "myth": "The Wise Centaur Archer",
+        "description": "Greek tradition links Sagittarius to Chiron, the wise centaur tutor of heroes, or to Crotus, son of Pan who invented archery. Zeus honored Crotus by placing him with bow and arrow among the stars. The arrow points toward Scorpio, aiming for higher understanding."
+      },
+      "norse": {
+        "name": "Mörsugur",
+        "myth": "Yule's Heart – Alchemy and Inner Integration",
+        "description": "Mörsugr (also Jólmánuðr) is the midwinter month (mid-December to mid-January), meaning 'fat-sucker' or 'ram-month.' The heart of winter and Yule celebrations. It stands for inner alchemy and integration — seeds of inner work maturing in darkest nights."
+      },
+      "babylonian": {
+        "name": "Pabilsag",
+        "myth": "The Warrior Archer",
+        "description": "Pabilsag is a warrior-hero god depicted as a bow-wielding archer. In astronomy, Pabilsag was the divine representation of the constellation Sagittarius. As an archer-hero, he fits the zodiac archer of adventure and wisdom."
+      },
+      "vedic": {
+        "name": "Dhanu",
+        "myth": "The Bow, ruled by Guru",
+        "description": "Dhanu is Sanskrit for 'bow,' symbolized by an archer or centaur. It represents the spiritual quest and transforming the base into the noble. A fire sign ruled by Guru (Jupiter), highlighting themes of wisdom, expansion and faith."
+      },
+      "islamic": {
+        "name": "al-Rāmī",
+        "myth": "The Archer",
+        "description": "Al-Rāmī (the Archer), also known as al-Qaws (the Bow), is a Fire sign ruled by Jupiter. Sagittarians are philosophical, freedom-loving, and bluntly honest, seeking knowledge from the wider world. The arrow represents aiming for lofty goals."
+      },
+      "medieval": {
+        "name": "Sagittarius",
+        "myth": "The Centaur Archer of Advent",
+        "description": "A fire sign symbolized by the Archer, a centaur aiming toward the heavens. Sagittarians are famous for boundless optimism, adventurous spirit, and philosophical insight. In medieval context, Sagittarius's time (late autumn) was linked to advent and preparation for the coming light."
+      }
+    }
+  },
+  {
+    "sign": "Capricorn",
+    "symbol": "♑",
+    "element": "Earth",
+    "modality": "Cardinal",
+    "rulingPlanet": "Saturn",
+    "house": 10,
+    "dates": "December 22 – January 19",
+    "archetype": "The Builder",
+    "stageOfExperience": "Achievement and Responsibility",
+    "description": "Capricorn symbolizes the phase of building, structuring, and achieving long-term goals. This stage involves taking on responsibility, working towards mastery, and establishing a legacy. It's about climbing the mountain of success with discipline, perseverance, and a focus on material and social accomplishment.",
+    "cultures": {
+      "roman": {
+        "name": "Capricorn",
+        "myth": "Amalthea and Pan",
+        "description": "It represents Amalthea the goat (whose horn became the cornucopia) or the god Pan transforming his legs into a fish's tail to escape Typhon. Capricorn is ruled by Saturn, giving it steady endurance and practicality."
+      },
+      "greek": {
+        "name": "Capricorn (Sea-Goat)",
+        "myth": "Amalthea and Pan's Transformation",
+        "description": "Amalthea was the goat who nursed the infant Zeus, and her broken horn became the cornucopia of plenty. Pan — with goat's legs — dove into a river fleeing Typhon and became part goat, part fish. Capricorn unites earth and sea, symbolizing nourishment and resourcefulness."
+      },
+      "norse": {
+        "name": "Þorri",
+        "myth": "Frost Month – Testing and Inward Bondage",
+        "description": "Þorri is a late-winter month (mid-January to mid-February), named after a legendary king of winter. The coldest, most challenging part of winter, testing endurance. It represents the soul's 'inward bondage' — facing inner fears during hardship, like the land bound in ice."
+      },
+      "babylonian": {
+        "name": "Suhurmashu",
+        "myth": "The Goat-Fish",
+        "description": "Capricornus was known as Suhur-mash-Ha, literally 'goat-fish.' This amphibious creature symbolizes winter storms or fertility of rain (goat on land, fish at sea). The hybrid form represents the union of practicality and depth."
+      },
+      "vedic": {
+        "name": "Makara",
+        "myth": "The Sea-Creature, ruled by Shani",
+        "description": "Makara means 'sea-creature' (often a crocodile-goat hybrid), an earth sign associated with discipline, karma and spiritual aspiration. Ruled by Shani (Saturn), making it a sign of structure, responsibility and endurance."
+      },
+      "islamic": {
+        "name": "al-Jadī",
+        "myth": "The Kid/Goat",
+        "description": "Al-Jadī (the Goat) is an Earth sign ruled by Saturn, lending a serious, disciplined nature. Capricorn embodies ambition, responsibility, and endurance. Like a mountain goat climbing to a lofty summit, it represents climbing steadily toward mastery."
+      },
+      "medieval": {
+        "name": "Capricorn",
+        "myth": "The Goat of Endurance under Cassiel",
+        "description": "An earth sign symbolized by the Goat, renowned for discipline and ambition. Ruled by Saturn, embodying endurance, order, and maturity. Saturn's archangel Cassiel imparts lessons of temperance, wisdom, and perseverance. Capricorns are the 'architect' archetype — building to last."
+      }
+    }
+  },
+  {
+    "sign": "Aquarius",
+    "symbol": "♒",
+    "element": "Air",
+    "modality": "Fixed",
+    "rulingPlanet": "Saturn",
+    "house": 11,
+    "dates": "January 20 – February 18",
+    "archetype": "The Visionary",
+    "stageOfExperience": "Innovation and Collective Consciousness",
+    "description": "Aquarius represents the stage where the individual connects with the collective and focuses on innovation, progress, and humanitarian efforts. This phase is about breaking free from tradition, embracing new ideas, and contributing to the betterment of society. It's a time for visionary thinking, rebellion against the status quo, and fostering a sense of global interconnectedness.",
+    "cultures": {
+      "roman": {
+        "name": "Aquarius (Ganymede)",
+        "myth": "Jupiter's Cupbearer",
+        "description": "It connects to Ganymede, the beautiful Trojan youth Zeus placed in heaven as cupbearer. Symbolized by a man pouring water, Aquarius represents life's nourishment and humanitarian ideals."
+      },
+      "greek": {
+        "name": "Aquarius (Ganymede)",
+        "myth": "Zeus's Eagle and the Cupbearer",
+        "description": "Zeus (as an eagle) abducted Ganymede to serve as cupbearer to the gods. In the sky Ganymede is Aquarius pouring a pitcher of water. The flowing water recalls ritual libations offered to deities, linking Aquarius to hospitality and life-giving knowledge."
+      },
+      "norse": {
+        "name": "Góa",
+        "myth": "Late Winter – Vision and Starry Clarity",
+        "description": "Góa is a pre-spring month (mid-February to mid-March), the daughter of Þorri in myth, heralding spring's approach. It stands for vision and clear insight. Late winter skies are crisp and starry, suggesting clarity and prophetic dreaming."
+      },
+      "babylonian": {
+        "name": "Gula/Rammanu",
+        "myth": "Goddess of Healing and the Water-Bearer",
+        "description": "Gula (Nintinugga) is the goddess of healing and restoration, symbolized by dogs. The constellation Aquarius was called Gula in Babylonian star catalogues, sometimes associated with Ea (the god of water). Rammanu echoes the storm god's watery, life-giving aspects."
+      },
+      "vedic": {
+        "name": "Kumbha",
+        "myth": "The Pitcher, ruled by Shani",
+        "description": "Kumbha means 'pitcher,' symbolized by a water-bearer. The water stands for the universal life-force and purification of the soul. An air sign ruled by Shani (Saturn), linking enlightenment and liberation with discipline and upheaval."
+      },
+      "islamic": {
+        "name": "Sākib al-māʾ",
+        "myth": "Pourer of Water",
+        "description": "Sākib al-māʾ (Pourer of Water), also called al-Dalw (the Bucket). An Air sign ruled by Saturn. Known for progressive, independent, and humanitarian qualities. Sometimes identified with the biblical figure Idris (Enoch) in Islamic tradition."
+      },
+      "medieval": {
+        "name": "Aquarius (Matthew – Man/Angel)",
+        "myth": "The Water-Bearer of the Holy Spirit",
+        "description": "Matthew the Evangelist is symbolized by a winged man or angel, linked to Aquarius (the 'man' of the four fixed signs). Aquarius's symbol of pouring water connects to the outpouring of wisdom and the Holy Spirit. The 'man with a pitcher of water' in Luke 22:10 heralds a new age."
+      }
+    }
+  },
+  {
+    "sign": "Pisces",
+    "symbol": "♓",
+    "element": "Water",
+    "modality": "Mutable",
+    "rulingPlanet": "Jupiter",
+    "house": 12,
+    "dates": "February 19 – March 20",
+    "archetype": "The Mystic",
+    "stageOfExperience": "Transcendence and Spirituality",
+    "description": "Pisces embodies the final stage of the zodiac, where the focus is on spiritual enlightenment, compassion, and the dissolution of the ego. This phase is about merging with the universal, understanding the interconnectedness of all life, and letting go of individual identity to experience the oneness of existence. It's a time of introspection, dreams, and transcending material concerns.",
+    "cultures": {
+      "roman": {
+        "name": "Pisces",
+        "myth": "Aphrodite and Eros as Fish",
+        "description": "Aphrodite and her son Eros fled Typhon by transforming into fish and tying themselves together. The two fish of Pisces (tied by a cord) symbolize unity through faith."
+      },
+      "greek": {
+        "name": "Pisces",
+        "myth": "Aphrodite and Eros flee Typhoeus",
+        "description": "Aphrodite and Eros fled the monster Typhoeus and were either carried by or turned into two fish for safety. These divine fish were placed in the stars as Pisces. It represents unity and duality, sacrifice and compassion."
+      },
+      "norse": {
+        "name": "Einmánuðr",
+        "myth": "One Month – Dreaming and Liminal Closure",
+        "description": "Einmánuðr ('one-month') is the final winter month (mid-March to mid-April). It closes the old year and ends winter's cycle. A liminal time of dreams and closure — the world prepares to rebirth. It invites wrapping up old lessons before the new cycle begins."
+      },
+      "babylonian": {
+        "name": "Simmah/Anunitum",
+        "myth": "The Twin Fishes – Rivers Made Divine",
+        "description": "Pisces was associated with the goddess Anunitum (an Ishtar-like deity). Astrological texts say Annunitum's name was given to the 'eastern fish.' These goddesses were envisioned as the Euphrates and Tigris rivers — the two fish as two great rivers."
+      },
+      "vedic": {
+        "name": "Meena",
+        "myth": "The Fish, ruled by Guru",
+        "description": "Meena means 'fish,' depicted as two fish swimming in opposite directions. It symbolizes the end of worldly striving and the merging of individual soul with universal. Vedic sages called Pisces Antyaya (the end) or Yasha (glory). Ruled by Guru (Jupiter)."
+      },
+      "islamic": {
+        "name": "al-Ḥūt",
+        "myth": "The Fish",
+        "description": "Al-Ḥūt (the Fish) is a Water sign ruled by Jupiter. Pisces represents transcendence, unity, and the dissolution of boundaries. In Islamic folklore, the pair of fishes connects to the story of Jonah and the great fish that carries the earth."
+      },
+      "medieval": {
+        "name": "Pisces",
+        "myth": "The Fish of Christ (Ichthys)",
+        "description": "Two Fish swimming in opposite directions, signifying the fluid and dual nature of this final sign. In Christian symbolism, the Fish has special significance — the ichthys as symbol of Christ and baptism. Pisces represents profound compassion, self-sacrifice, and spiritual unity."
+      }
+    }
+  }
+]

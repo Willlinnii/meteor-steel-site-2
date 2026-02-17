@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Routes, Route, Link, useLocation } from 'react-router-dom';
 import './App.css';
 import ChatPanel from './components/ChatPanel';
+import DevelopmentPanel from './components/DevelopmentPanel';
 import SevenMetalsPage from './pages/SevenMetals/SevenMetalsPage';
 import figures from './data/figures.json';
 import modernFigures from './data/modernFigures.json';
@@ -47,7 +48,7 @@ function getStageAngles(clockwise) {
   });
 }
 
-function CircleNav({ currentStage, onSelectStage, clockwise, onToggleDirection }) {
+function CircleNav({ currentStage, onSelectStage, clockwise, onToggleDirection, centerLine1, centerLine2, centerLine3, showAuthor = true }) {
   const radius = 42;
   const stages = getStageAngles(clockwise);
 
@@ -63,15 +64,17 @@ function CircleNav({ currentStage, onSelectStage, clockwise, onToggleDirection }
           className={`circle-center ${currentStage === 'overview' ? 'active' : ''}`}
           onClick={() => onSelectStage('overview')}
         >
-          <span className="center-title-journey">Journey</span>
-          <span className="center-title-of">of</span>
-          <span className="center-title-fallen">Fallen Starlight</span>
-          <span
-            className={`center-author ${currentStage === 'bio' ? 'active' : ''}`}
-            onClick={(e) => { e.stopPropagation(); onSelectStage('bio'); }}
-          >
-            Will Linn
-          </span>
+          <span className="center-title-journey">{centerLine1 || 'Journey'}</span>
+          <span className="center-title-of">{centerLine2 || 'of'}</span>
+          <span className="center-title-fallen">{centerLine3 || 'Fallen Starlight'}</span>
+          {showAuthor && (
+            <span
+              className={`center-author ${currentStage === 'bio' ? 'active' : ''}`}
+              onClick={(e) => { e.stopPropagation(); onSelectStage('bio'); }}
+            >
+              Will Linn
+            </span>
+          )}
         </div>
 
         {stages.map(s => {
@@ -206,138 +209,6 @@ function OverviewView() {
   );
 }
 
-const DEV_MODES = [
-  { id: 'noting', label: 'Noting' },
-  { id: 'reflecting', label: 'Reflecting' },
-  { id: 'creating', label: 'Creating' },
-];
-
-function DevelopmentPanel({ stage, entries, setEntries }) {
-  const [mode, setMode] = useState('noting');
-  const [draft, setDraft] = useState('');
-  const [relating, setRelating] = useState(false);
-  const [relation, setRelation] = useState(null);
-
-  const stageLabel = STAGES.find(s => s.id === stage)?.label || stage;
-  const key = `${stage}-${mode}`;
-  const saved = entries[key] || [];
-
-  const handleSave = () => {
-    if (!draft.trim()) return;
-    setEntries(prev => ({
-      ...prev,
-      [key]: [...(prev[key] || []), { text: draft.trim(), relation: null }],
-    }));
-    setDraft('');
-    setRelation(null);
-  };
-
-  const handleRelate = async () => {
-    if (!draft.trim()) return;
-    setRelating(true);
-    setRelation(null);
-    try {
-      const modeInstruction = mode === 'noting'
-        ? 'The user is noting observations.'
-        : mode === 'reflecting'
-        ? 'The user is reflecting on personal meaning.'
-        : 'The user is creating new ideas or connections.';
-
-      const res = await fetch('/api/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          messages: [{
-            role: 'user',
-            content: `I am in the "${stageLabel}" stage of the meteor steel journey. ${modeInstruction}\n\nHere is what I wrote:\n\n"${draft.trim()}"\n\nRelate what I wrote to the material in the "${stageLabel}" stage across the archive. Draw specific connections to the mythology, figures, technology, and themes in this stage. Be concise but insightful.`
-          }]
-        }),
-      });
-      const data = await res.json();
-      if (data.reply) {
-        setRelation(data.reply);
-      } else {
-        setRelation(data.error || 'Could not generate a response.');
-      }
-    } catch {
-      setRelation('Network error. Please try again.');
-    }
-    setRelating(false);
-  };
-
-  const handleKeyDown = (e) => {
-    if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) {
-      handleSave();
-    }
-  };
-
-  return (
-    <div className="dev-panel">
-      <div className="dev-modes">
-        {DEV_MODES.map(m => (
-          <button
-            key={m.id}
-            className={`dev-mode-btn ${mode === m.id ? 'active' : ''}`}
-            onClick={() => setMode(m.id)}
-          >
-            {m.label}
-          </button>
-        ))}
-      </div>
-
-      {saved.length > 0 && (
-        <div className="dev-entries">
-          {saved.map((entry, i) => (
-            <div key={i} className="dev-entry">
-              <p>{entry.text}</p>
-              {entry.relation && (
-                <div className="dev-relation">
-                  {entry.relation.split('\n\n').map((p, j) => (
-                    <p key={j}>{p}</p>
-                  ))}
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
-      )}
-
-      <textarea
-        className="dev-input"
-        value={draft}
-        onChange={e => setDraft(e.target.value)}
-        onKeyDown={handleKeyDown}
-        placeholder={`${mode === 'noting' ? 'Jot down observations...' : mode === 'reflecting' ? 'Record your reflections...' : 'Develop your ideas...'}`}
-        rows={6}
-      />
-
-      {relation && (
-        <div className="dev-relation-preview">
-          {relation.split('\n\n').map((p, i) => (
-            <p key={i}>{p}</p>
-          ))}
-        </div>
-      )}
-
-      <div className="dev-actions">
-        <button
-          className="dev-save-btn"
-          onClick={handleSave}
-          disabled={!draft.trim()}
-        >
-          Save
-        </button>
-        <button
-          className="dev-relate-btn"
-          onClick={handleRelate}
-          disabled={!draft.trim() || relating}
-        >
-          {relating ? 'Relating...' : 'Relate'}
-        </button>
-      </div>
-    </div>
-  );
-}
 
 function SectionContent({ sectionId, stage, entries, setEntries }) {
   switch (sectionId) {
@@ -356,7 +227,7 @@ function SectionContent({ sectionId, stage, entries, setEntries }) {
     case 'synthesis':
       return <TextContent text={synthesis[stage]} />;
     case 'development':
-      return <DevelopmentPanel stage={stage} entries={entries} setEntries={setEntries} />;
+      return <DevelopmentPanel stageLabel={STAGES.find(s => s.id === stage)?.label || stage} stageKey={stage} entries={entries} setEntries={setEntries} />;
     default:
       return null;
   }
@@ -493,6 +364,7 @@ function FallenStarlightHome() {
   const [currentStage, setCurrentStage] = useState('overview');
   const [clockwise, setClockwise] = useState(false);
   const [showMeteors, setShowMeteors] = useState(false);
+  const [devEntries, setDevEntries] = useState({});
 
   const handleSelectStage = useCallback((stage) => {
     setCurrentStage(stage);
@@ -563,6 +435,17 @@ function FallenStarlightHome() {
                   ))}
                 </div>
               </div>
+              <h3 className="chapter-title" style={{ marginTop: '30px' }}>Development</h3>
+              <div className="section-content">
+                <div className="content-area">
+                  <DevelopmentPanel
+                    stageLabel={chapterTitle || currentStage}
+                    stageKey={`starlight-${currentStage}`}
+                    entries={devEntries}
+                    setEntries={setDevEntries}
+                  />
+                </div>
+              </div>
             </>
           )}
         </div>
@@ -571,15 +454,358 @@ function FallenStarlightHome() {
   );
 }
 
+const TEMPLATE_OPTIONS = [
+  { id: 'personal', label: 'Personal Myth', desc: 'Your own life as monomyth' },
+  { id: 'fiction', label: 'Fiction', desc: 'A character and world you invent' },
+  { id: 'screenplay', label: 'Screenplay', desc: 'Visual, cinematic storytelling' },
+  { id: 'reflection', label: 'Reflection', desc: 'Philosophical exploration' },
+];
+
+const FORGE_PROMPTS = {
+  personal: {
+    'golden-age': 'Describe a time in your life when things felt whole and ordered. What was the world like before disruption arrived?',
+    'falling-star': 'What unexpected event, person, or realization disrupted your world? What fell from the sky and demanded your attention?',
+    'impact-crater': 'Where did heaven meet earth? Describe the moment of collision — when the disruption hit and the ground shook beneath you.',
+    'forge': 'What trials by fire did you face? What burned away, and what was being shaped in the heat?',
+    'quenching': 'Describe the cooling — the moment the intensity broke. What hardened in you? What clarity emerged?',
+    'integration': 'How did you bring the changed self back into your life? What did you include rather than purify away?',
+    'drawing': 'Who emerged from this process? Describe the person you became — the blade drawn from the forge.',
+    'new-age': 'What does your world look like now, transformed? How has the journey changed not just you, but your relationship to everything?',
+  },
+  fiction: {
+    'golden-age': 'Establish your story\'s world before disruption. Who lives here? What is ordinary, precious, or taken for granted?',
+    'falling-star': 'Something arrives from beyond — a stranger, a prophecy, a catastrophe. What is the calling that shatters normalcy?',
+    'impact-crater': 'The threshold is crossed. Your protagonist enters unknown territory. What is the landscape of this new world?',
+    'forge': 'Your character faces ordeals, allies, and enemies. What trials test them to their core?',
+    'quenching': 'After the climactic fire, there is a transformation. What does your character become through sacrifice or surrender?',
+    'integration': 'The character must reconcile who they were with who they have become. What inner conflict resolves?',
+    'drawing': 'The hero is fully realized. What power, truth, or gift do they now wield?',
+    'new-age': 'The world is remade. How does your character\'s transformation ripple outward? What is the new ordinary?',
+  },
+  screenplay: {
+    'golden-age': 'INT/EXT — Establish the opening world. What does the audience see and hear? What tone is set?',
+    'falling-star': 'The inciting incident. Write the scene or describe the moment everything changes. What is the visual hook?',
+    'impact-crater': 'Act One break. The protagonist commits to the journey. Where do they go? What do they leave behind?',
+    'forge': 'Act Two trials. Describe 2-3 key sequences — confrontations, setbacks, revelations. Rising tension.',
+    'quenching': 'The midpoint shift or dark night of the soul. What breaks? What is the lowest moment before transformation?',
+    'integration': 'The protagonist reconciles internal conflict. What scene shows them accepting the full truth?',
+    'drawing': 'The climax. Describe the defining action, confrontation, or choice that resolves the central conflict.',
+    'new-age': 'The denouement. What image closes the film? How has the world visually changed from the opening?',
+  },
+  reflection: {
+    'golden-age': 'What does "paradise before the fall" mean to you? When have you experienced a golden age — personally, culturally, or imaginally?',
+    'falling-star': 'Reflect on disruption as a sacred messenger. What uninvited guests have become your greatest teachers?',
+    'impact-crater': 'Consider the places where spirit and matter collide. Where in your life has the transcendent crashed into the mundane?',
+    'forge': 'What is the relationship between suffering and becoming? When has fire been a gift rather than a punishment?',
+    'quenching': 'Reflect on the nature of cooling, patience, and the kind of strength that comes from stillness rather than action.',
+    'integration': 'What does it mean to include rather than purify? How do you hold opposites together without resolving them?',
+    'drawing': 'When have you felt fully drawn forth — revealed as who you truly are? What conditions allowed that emergence?',
+    'new-age': 'How do personal transformations change the collective? Reflect on the relationship between inner work and outer worlds.',
+  },
+};
+
+function StoryForgeHome() {
+  const [currentStage, setCurrentStage] = useState('overview');
+  const [clockwise, setClockwise] = useState(false);
+  const [showMeteors, setShowMeteors] = useState(false);
+  const [template, setTemplate] = useState(null);
+  const [forgeEntries, setForgeEntries] = useState({});
+  const [generatedStory, setGeneratedStory] = useState({});
+  const [generating, setGenerating] = useState(false);
+  const [viewMode, setViewMode] = useState('write');
+
+  const handleSelectStage = useCallback((stage) => {
+    setCurrentStage(stage);
+    if (stage === 'falling-star') {
+      setShowMeteors(false);
+      requestAnimationFrame(() => setShowMeteors(true));
+    } else {
+      setShowMeteors(false);
+    }
+  }, []);
+
+  const stagesWithContent = STAGES.filter(s => {
+    const modes = ['noting', 'reflecting', 'creating'];
+    return modes.some(m => (forgeEntries[`forge-${s.id}-${m}`] || []).length > 0);
+  });
+
+  const currentLabel = currentStage !== 'overview' && currentStage !== 'bio'
+    ? STAGES.find(s => s.id === currentStage)?.label
+    : null;
+
+  const currentIdx = STAGES.findIndex(s => s.id === currentStage);
+
+  const goNext = () => {
+    if (currentIdx < STAGES.length - 1) handleSelectStage(STAGES[currentIdx + 1].id);
+  };
+  const goPrev = () => {
+    if (currentIdx > 0) handleSelectStage(STAGES[currentIdx - 1].id);
+  };
+
+  const handleGenerate = async (targetStage) => {
+    setGenerating(true);
+    try {
+      const templateLabel = TEMPLATE_OPTIONS.find(t => t.id === template)?.label || template;
+      const stageContent = STAGES.map(s => {
+        const modes = ['noting', 'reflecting', 'creating'];
+        const entries = modes.flatMap(m =>
+          (forgeEntries[`forge-${s.id}-${m}`] || []).map(e => `[${m}] ${e.text}`)
+        );
+        return { stageId: s.id, label: s.label, entries };
+      }).filter(s => s.entries.length > 0);
+
+      const res = await fetch('/api/forge', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ template: templateLabel, stageContent, targetStage: targetStage || null }),
+      });
+      const data = await res.json();
+      if (data.story) {
+        const parts = data.story.split(/===\s*([\w-]+)\s*===/);
+        const chapters = { ...generatedStory };
+        for (let i = 1; i < parts.length; i += 2) {
+          chapters[parts[i].trim()] = parts[i + 1].trim();
+        }
+        setGeneratedStory(chapters);
+        setViewMode('read');
+      }
+    } catch {
+      // silent fail
+    }
+    setGenerating(false);
+  };
+
+  // Template picker
+  if (!template) {
+    return (
+      <>
+        <MeteorShower active={showMeteors} />
+        <CircleNav
+          currentStage={currentStage}
+          onSelectStage={handleSelectStage}
+          clockwise={clockwise}
+          onToggleDirection={() => setClockwise(!clockwise)}
+          centerLine1="Story"
+          centerLine2=""
+          centerLine3="Forge"
+          showAuthor={false}
+        />
+        <div className="container">
+          <div className="static-overview">
+            <div className="overview-text" style={{ textAlign: 'center' }}>
+              <p>Choose a lens through which to forge your story. You will be guided through the eight stages of the monomyth, writing at each stage. When ready, the forge will weave your material into a cohesive narrative.</p>
+            </div>
+          </div>
+          <div className="forge-template-grid">
+            {TEMPLATE_OPTIONS.map(t => (
+              <button key={t.id} className="forge-template-btn" onClick={() => setTemplate(t.id)}>
+                <span className="forge-template-label">{t.label}</span>
+                <span className="forge-template-desc">{t.desc}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      </>
+    );
+  }
+
+  const isStageView = currentStage !== 'overview' && currentStage !== 'bio';
+
+  return (
+    <>
+      <MeteorShower active={showMeteors} />
+      <CircleNav
+        currentStage={currentStage}
+        onSelectStage={handleSelectStage}
+        clockwise={clockwise}
+        onToggleDirection={() => setClockwise(!clockwise)}
+        centerLine1="Story"
+        centerLine2=""
+        centerLine3="Forge"
+        showAuthor={false}
+      />
+
+      {currentLabel && <h2 className="stage-heading">{currentLabel}</h2>}
+
+      <div className="container">
+        <div id="content-container">
+          {!isStageView ? (
+            /* Overview / Hub */
+            <div className="forge-hub">
+              <div className="forge-view-toggle">
+                <button className={`dev-mode-btn ${viewMode === 'write' ? 'active' : ''}`} onClick={() => setViewMode('write')}>Write</button>
+                <button className={`dev-mode-btn ${viewMode === 'read' ? 'active' : ''}`} onClick={() => setViewMode('read')}>Read</button>
+              </div>
+
+              <div className="forge-progress">
+                <h4 className="forge-progress-title">Progress — {TEMPLATE_OPTIONS.find(t => t.id === template)?.label}</h4>
+                <div className="forge-progress-stages">
+                  {STAGES.map(s => {
+                    const has = stagesWithContent.find(sc => sc.id === s.id);
+                    return (
+                      <button
+                        key={s.id}
+                        className={`forge-progress-dot ${has ? 'filled' : ''}`}
+                        onClick={() => handleSelectStage(s.id)}
+                        title={s.label}
+                      >
+                        {s.label}
+                      </button>
+                    );
+                  })}
+                </div>
+                <p className="forge-progress-count">{stagesWithContent.length} of 8 stages</p>
+              </div>
+
+              <div className="forge-actions">
+                <button
+                  className="forge-generate-btn"
+                  onClick={() => handleGenerate()}
+                  disabled={stagesWithContent.length === 0 || generating}
+                >
+                  {generating ? 'Forging...' : 'Generate Story'}
+                </button>
+                <button className="forge-change-btn" onClick={() => { setTemplate(null); setCurrentStage('overview'); }}>
+                  Change Template
+                </button>
+              </div>
+
+              {Object.keys(generatedStory).length > 0 && viewMode === 'read' && (
+                <div className="forge-story-overview">
+                  {STAGES.map(s => generatedStory[s.id] ? (
+                    <div key={s.id} className="forge-chapter-preview" onClick={() => { handleSelectStage(s.id); }}>
+                      <h4>{s.label}</h4>
+                      <p>{generatedStory[s.id].substring(0, 150)}...</p>
+                    </div>
+                  ) : null)}
+                </div>
+              )}
+            </div>
+          ) : viewMode === 'write' ? (
+            /* Stage — Write Mode */
+            <>
+              <div className="forge-prompt">
+                <p>{FORGE_PROMPTS[template]?.[currentStage]}</p>
+              </div>
+              <div className="section-content">
+                <div className="content-area">
+                  <DevelopmentPanel
+                    stageLabel={currentLabel}
+                    stageKey={`forge-${currentStage}`}
+                    entries={forgeEntries}
+                    setEntries={setForgeEntries}
+                  />
+                </div>
+              </div>
+              <div className="forge-stage-nav">
+                {currentIdx > 0 && (
+                  <button className="forge-nav-btn" onClick={goPrev}>
+                    ← {STAGES[currentIdx - 1].label}
+                  </button>
+                )}
+                <button className="forge-nav-btn forge-nav-overview" onClick={() => setCurrentStage('overview')}>
+                  Hub
+                </button>
+                {currentIdx < STAGES.length - 1 && (
+                  <button className="forge-nav-btn" onClick={goNext}>
+                    {STAGES[currentIdx + 1].label} →
+                  </button>
+                )}
+              </div>
+            </>
+          ) : (
+            /* Stage — Read Mode */
+            <>
+              {generatedStory[currentStage] ? (
+                <>
+                  <div className="chapter-scroll">
+                    <div className="chapter-content">
+                      {generatedStory[currentStage].split('\n\n').map((p, i) => (
+                        <p key={i}>{p}</p>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="forge-actions" style={{ marginTop: '20px' }}>
+                    <button
+                      className="forge-generate-btn"
+                      onClick={() => handleGenerate(currentStage)}
+                      disabled={generating}
+                    >
+                      {generating ? 'Reforging...' : 'Regenerate Chapter'}
+                    </button>
+                  </div>
+                </>
+              ) : (
+                <div className="empty-content">
+                  Complete your writing and hit Generate Story from the hub to see this chapter.
+                </div>
+              )}
+              <div className="forge-stage-nav">
+                {currentIdx > 0 && (
+                  <button className="forge-nav-btn" onClick={goPrev}>
+                    ← {STAGES[currentIdx - 1].label}
+                  </button>
+                )}
+                <button className="forge-nav-btn forge-nav-overview" onClick={() => setCurrentStage('overview')}>
+                  Hub
+                </button>
+                {currentIdx < STAGES.length - 1 && (
+                  <button className="forge-nav-btn" onClick={goNext}>
+                    {STAGES[currentIdx + 1].label} →
+                  </button>
+                )}
+              </div>
+            </>
+          )}
+        </div>
+      </div>
+    </>
+  );
+}
+
+const NAV_ITEMS = [
+  { path: '/', label: 'Meteor Steel' },
+  { path: '/metals', label: 'Celestial Wheels' },
+  { path: '/fallen-starlight', label: 'Fallen Starlight' },
+  { path: '/story-forge', label: 'Story Forge' },
+  { path: 'https://www.thestoryatlas.com/my-courses/psychles/surface', label: 'Story Atlas', external: true },
+];
+
 function SiteNav() {
   const location = useLocation();
-  const path = location.pathname;
+  const [open, setOpen] = useState(false);
+  const current = NAV_ITEMS.find(n => !n.external && n.path === location.pathname) || NAV_ITEMS[0];
+
   return (
     <nav className="site-nav">
-      <Link className={`site-nav-btn${path === '/' ? ' active' : ''}`} to="/">Meteor Steel</Link>
-      <Link className={`site-nav-btn${path === '/metals' ? ' active' : ''}`} to="/metals">Celestial Wheels</Link>
-      <Link className={`site-nav-btn${path === '/celestial-time' ? ' active' : ''}`} to="/celestial-time">Monomythic Clocks</Link>
-      <Link className={`site-nav-btn${path === '/fallen-starlight' ? ' active' : ''}`} to="/fallen-starlight">Fallen Starlight</Link>
+      <button className="site-nav-toggle" onClick={() => setOpen(!open)}>
+        {current.label} <span className="site-nav-arrow">{open ? '\u25B2' : '\u25BC'}</span>
+      </button>
+      {open && (
+        <div className="site-nav-dropdown">
+          {NAV_ITEMS.map(item => item.external ? (
+            <a
+              key={item.path}
+              className="site-nav-option"
+              href={item.path}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => setOpen(false)}
+            >
+              {item.label} ↗
+            </a>
+          ) : (
+            <Link
+              key={item.path}
+              className={`site-nav-option${item.path === location.pathname ? ' active' : ''}`}
+              to={item.path}
+              onClick={() => setOpen(false)}
+            >
+              {item.label}
+            </Link>
+          ))}
+        </div>
+      )}
     </nav>
   );
 }
@@ -592,6 +818,7 @@ function App() {
         <Route path="/" element={<MeteorSteelHome />} />
         <Route path="/metals" element={<SevenMetalsPage />} />
         <Route path="/fallen-starlight" element={<FallenStarlightHome />} />
+        <Route path="/story-forge" element={<StoryForgeHome />} />
       </Routes>
     </div>
   );

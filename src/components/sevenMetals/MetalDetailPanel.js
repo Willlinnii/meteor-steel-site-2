@@ -3,6 +3,7 @@ import MetalContentTabs from './MetalContentTabs';
 import CultureSelector from './CultureSelector';
 import DeityCard from './DeityCard';
 import TextBlock from './TextBlock';
+import DevelopmentPanel from '../DevelopmentPanel';
 
 function OverviewTab({ data }) {
   if (!data) return <p className="metals-empty">Select a planet to begin.</p>;
@@ -57,26 +58,23 @@ function OverviewTab({ data }) {
   );
 }
 
+const DEITY_CULTURE_ALIASES = {
+  Vedic: ['hindu', 'indian', 'vedic'],
+  Islamic: ['islamic', 'arabic', 'persian'],
+  Medieval: ['medieval', 'christian'],
+  Babylonian: ['babylonian', 'sumerian', 'mesopotamian'],
+};
+
 function DeitiesTab({ data, activeCulture }) {
   if (!data?.deities) return <p className="metals-empty">No deity data available.</p>;
-  const essays = data.deities.thematicEssays;
   const deityList = data.deities.deities || [];
+  const aliases = DEITY_CULTURE_ALIASES[activeCulture] || [activeCulture.toLowerCase()];
   const filtered = activeCulture
-    ? deityList.filter(d => d.culture && d.culture.toLowerCase().includes(activeCulture.toLowerCase()))
+    ? deityList.filter(d => d.culture && aliases.some(a => d.culture.toLowerCase().includes(a)))
     : deityList;
 
   return (
     <div className="tab-content">
-      {essays && (
-        <div className="thematic-essays">
-          {Object.entries(essays).map(([key, text]) => (
-            <div key={key} className="essay-block">
-              <h5 className="essay-title">{key.replace(/([A-Z])/g, ' $1').trim()}</h5>
-              <p>{text}</p>
-            </div>
-          ))}
-        </div>
-      )}
       {filtered.length === 0 && <p className="metals-empty">No deities found for this culture.</p>}
       {filtered.map((d, i) => (
         <DeityCard key={`${d.name}-${i}`} deity={d} />
@@ -89,7 +87,8 @@ function SinsTab({ data }) {
   const a = data?.archetype;
   const m = data?.modern;
   const artists = data?.artists;
-  if (!a && !m && !artists) return <p className="metals-empty">No sin/virtue data available.</p>;
+  const t = data?.theology;
+  if (!a && !m && !artists && !t) return <p className="metals-empty">No sin/virtue data available.</p>;
 
   const artistFields = [
     ['bosch', 'Hieronymus Bosch'],
@@ -158,6 +157,15 @@ function SinsTab({ data }) {
           </ul>
         </div>
       )}
+      {t && (
+        <>
+          {t.desertFathers && <div className="theology-section"><h5>Desert Fathers</h5><p>{t.desertFathers}</p></div>}
+          {t.cassian && <div className="theology-section"><h5>John Cassian</h5><p>{t.cassian}</p></div>}
+          {t.popeGregory && <div className="theology-section"><h5>Pope Gregory</h5><p>{t.popeGregory}</p></div>}
+          {t.aquinas && <div className="theology-section"><h5>Thomas Aquinas</h5><p>{t.aquinas}</p></div>}
+          {t.aquinasVirtue && <div className="theology-section"><h5>Aquinas — Virtue</h5><p>{t.aquinasVirtue}</p></div>}
+        </>
+      )}
     </div>
   );
 }
@@ -187,20 +195,6 @@ function DayTab({ data }) {
           <p>{m.planetConnection}</p>
         </div>
       )}
-    </div>
-  );
-}
-
-function TheologyTab({ data }) {
-  if (!data?.theology) return <p className="metals-empty">No theology data available.</p>;
-  const t = data.theology;
-  return (
-    <div className="tab-content">
-      {t.desertFathers && <div className="theology-section"><h5>Desert Fathers</h5><p>{t.desertFathers}</p></div>}
-      {t.cassian && <div className="theology-section"><h5>John Cassian</h5><p>{t.cassian}</p></div>}
-      {t.popeGregory && <div className="theology-section"><h5>Pope Gregory</h5><p>{t.popeGregory}</p></div>}
-      {t.aquinas && <div className="theology-section"><h5>Thomas Aquinas</h5><p>{t.aquinas}</p></div>}
-      {t.aquinasVirtue && <div className="theology-section"><h5>Aquinas — Virtue</h5><p>{t.aquinasVirtue}</p></div>}
     </div>
   );
 }
@@ -282,7 +276,22 @@ function HebrewTab({ data }) {
   );
 }
 
-export default function MetalDetailPanel({ data, activeTab, onSelectTab, activeCulture, onSelectCulture }) {
+function SynthesisTab({ data }) {
+  const essays = data?.deities?.thematicEssays;
+  if (!essays) return <p className="metals-empty">No synthesis data available.</p>;
+  return (
+    <div className="tab-content">
+      {Object.entries(essays).map(([key, text]) => (
+        <div key={key} className="essay-block">
+          <h5 className="essay-title">{key.replace(/([A-Z])/g, ' $1').trim()}</h5>
+          <p>{text}</p>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+export default function MetalDetailPanel({ data, activeTab, onSelectTab, activeCulture, onSelectCulture, devEntries, setDevEntries }) {
   const showCultureSelector = activeTab === 'deities';
 
   return (
@@ -296,10 +305,18 @@ export default function MetalDetailPanel({ data, activeTab, onSelectTab, activeC
         {activeTab === 'deities' && <DeitiesTab data={data} activeCulture={activeCulture} />}
         {activeTab === 'sins' && <SinsTab data={data} />}
         {activeTab === 'day' && <DayTab data={data} />}
-        {activeTab === 'theology' && <TheologyTab data={data} />}
         {activeTab === 'stories' && <StoriesTab data={data} />}
         {activeTab === 'body' && <BodyTab data={data} />}
         {activeTab === 'hebrew' && <HebrewTab data={data} />}
+        {activeTab === 'synthesis' && <SynthesisTab data={data} />}
+        {activeTab === 'development' && (
+          <DevelopmentPanel
+            stageLabel={`${data.core.planet} — ${data.core.metal}`}
+            stageKey={`metals-${data.core.planet}`}
+            entries={devEntries}
+            setEntries={setDevEntries}
+          />
+        )}
       </div>
     </div>
   );

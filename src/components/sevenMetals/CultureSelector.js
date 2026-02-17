@@ -1,6 +1,6 @@
 import React from 'react';
 
-const CULTURES = ['Greek', 'Roman', 'Hindu', 'Norse', 'Babylonian', 'Jewish'];
+const CULTURES = ['Roman', 'Greek', 'Norse', 'Babylonian', 'Vedic', 'Islamic', 'Medieval'];
 
 export default function CultureSelector({ activeCulture, onSelectCulture }) {
   return (
@@ -9,7 +9,7 @@ export default function CultureSelector({ activeCulture, onSelectCulture }) {
         <button
           key={c}
           className={`culture-btn${activeCulture === c ? ' active' : ''}`}
-          onClick={() => onSelectCulture(activeCulture === c ? null : c)}
+          onClick={() => { if (activeCulture !== c) onSelectCulture(c); }}
         >
           {c}
         </button>

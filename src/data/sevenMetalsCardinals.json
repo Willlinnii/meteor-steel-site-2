@@ -1,0 +1,162 @@
+{
+  "vernal-equinox": {
+    "label": "Vernal Equinox",
+    "date": "March 20–21",
+    "season": "Spring",
+    "direction": "East",
+    "zodiacCusp": "Aries begins",
+    "description": "The vernal equinox marks the moment when day and night stand in perfect balance, with light about to overtake darkness. It is the astronomical beginning of spring in the Northern Hemisphere — the great turning point when the Sun crosses the celestial equator moving northward.",
+    "mythology": "Nearly every culture celebrates this threshold. In ancient Mesopotamia, the Akitu festival honored Marduk's victory over chaos. The Greeks told of Persephone's return from the underworld. Norse tradition celebrated Ostara, the goddess of dawn and renewal. In Vedic tradition, Vasant Panchami marks the arrival of spring's creative energy.",
+    "themes": "Rebirth, renewal, balance of light and dark, initiation, the seed breaking ground, new beginnings, the return of life.",
+    "cultures": {
+      "roman": {
+        "name": "Hilaria / New Year",
+        "description": "The Romans celebrated the spring equinox with the festival of Hilaria (March 25), honoring the resurrection of Attis and the Great Mother Cybele. March 1 was also the original Roman New Year, marking the return of the campaigning season and agricultural activity."
+      },
+      "greek": {
+        "name": "Return of Persephone",
+        "description": "The vernal equinox marks Persephone's annual return from Hades to her mother Demeter, ending winter's barrenness. The Eleusinian Mysteries celebrated this cycle of descent and return as a metaphor for the soul's journey through death and rebirth."
+      },
+      "norse": {
+        "name": "Ostara / Sigrblót",
+        "description": "Ostara (from the goddess Ēostre) celebrates the returning light and fertility of spring. Eggs and hares are her symbols. Sigrblót ('victory sacrifice') was held at this time to ensure success in the summer's ventures. The name Easter derives from this Norse-Germanic festival."
+      },
+      "babylonian": {
+        "name": "Akitu (New Year)",
+        "description": "The Babylonian Akitu festival, lasting twelve days around the spring equinox, re-enacted Marduk's victory over Tiamat and the creation of the world. The king's authority was ritually renewed, and the Enūma Eliš was recited. It was the most important festival in the Mesopotamian calendar."
+      },
+      "vedic": {
+        "name": "Vasant / Ugadi",
+        "description": "The spring equinox period coincides with Ugadi and Gudi Padwa, Hindu New Year celebrations. Vasant Panchami honors Sarasvati, goddess of knowledge and creative arts. Spring (Vasant Ritu) is considered the king of seasons, when nature blooms and festivals of color (Holi) are celebrated."
+      },
+      "islamic": {
+        "name": "Nowruz",
+        "description": "Nowruz (New Day) marks the spring equinox and the Persian New Year, celebrated across the Islamic world from Iran to Central Asia. Though pre-Islamic in origin, it is embraced as a celebration of renewal, hospitality, and gratitude. The Haft-sin table arranges seven symbolic items beginning with the letter S."
+      },
+      "medieval": {
+        "name": "Lady Day / Annunciation",
+        "description": "March 25, the Feast of the Annunciation (Lady Day), fell near the vernal equinox and was the start of the legal and financial year in medieval England. The angel Gabriel's announcement to Mary mirrored the cosmic renewal of spring — the moment when the Word entered the world as seed enters soil."
+      }
+    }
+  },
+  "summer-solstice": {
+    "label": "Summer Solstice",
+    "date": "June 20–21",
+    "season": "Summer",
+    "direction": "North",
+    "zodiacCusp": "Cancer begins",
+    "description": "The summer solstice is the longest day and shortest night of the year, when the Sun reaches its highest point in the sky. It marks the zenith of solar power — the fullness of light — and the paradoxical moment when the days begin to shorten again.",
+    "mythology": "Midsummer celebrations are among the oldest human festivals. Bonfires were lit across Europe to mirror the Sun's power. The Norse held Midsommar feasts; the druids gathered at Stonehenge; the Greeks honored Helios at his peak. In many traditions, this is when the veil between worlds grows thin.",
+    "themes": "Peak of power, fullness, abundance, the turning point, fire festivals, celebration, the beginning of the descent toward darkness.",
+    "cultures": {
+      "roman": {
+        "name": "Vestalia",
+        "description": "The Vestalia (June 7–15) honored Vesta, goddess of the hearth, near the solstice. The inner sanctum of her temple was opened to women. Bakers decorated their donkeys with garlands. The solstice represented the peak of Sol Invictus's power before the long decline."
+      },
+      "greek": {
+        "name": "Kronia / Skira",
+        "description": "The Athenians celebrated the Skira around the solstice, a festival of reversal where social norms were inverted. The Kronia honored Kronos with feasting and temporary equality between masters and slaves. The solstice marked Apollo's supremacy and the fullness of solar masculine energy."
+      },
+      "norse": {
+        "name": "Midsommar / Sólmánuðr",
+        "description": "Midsommar is one of the most important Norse festivals. Bonfires were lit on hilltops to honor the sun at its peak. The maypole was raised, dances performed, and the night was considered magical — a time for divination, love spells, and communion with the hidden folk (huldufólk)."
+      },
+      "babylonian": {
+        "name": "Tammuz / Dumuzi",
+        "description": "The month of Tammuz (June–July) was named for the dying-and-rising shepherd god Dumuzi, consort of Inanna. His descent to the underworld at midsummer mirrored the beginning of the sun's decline. Ritual weeping for Tammuz marked the paradox of abundance turning toward loss."
+      },
+      "vedic": {
+        "name": "Uttarayana Zenith",
+        "description": "The summer solstice marks the peak of Uttarayana (the sun's northward journey). Surya, the sun god, reaches maximum power. In yogic tradition, this is a time of expanded consciousness and outward energy. The guru principle is honored, as the solstice falls near Guru Purnima."
+      },
+      "islamic": {
+        "name": "Longest Day",
+        "description": "While not a formal Islamic holiday, the summer solstice was recognized by Islamic astronomers and scholars. Al-Biruni and other scientists precisely calculated solstice dates. The long days of Ramadan when it falls in summer are considered especially meritorious for fasting."
+      },
+      "medieval": {
+        "name": "Feast of St. John",
+        "description": "The Nativity of John the Baptist (June 24) was placed near the summer solstice deliberately — as John said of Christ, 'He must increase, I must decrease.' St. John's fires (bonfires) were lit across Europe, blending pagan solstice customs with Christian symbolism of the forerunner's burning witness."
+      }
+    }
+  },
+  "autumnal-equinox": {
+    "label": "Autumnal Equinox",
+    "date": "September 22–23",
+    "season": "Autumn",
+    "direction": "West",
+    "zodiacCusp": "Libra begins",
+    "description": "The autumnal equinox is the second moment of perfect balance, when day and night are again equal — but now darkness is gaining. It marks the beginning of autumn, the harvest season, and the great gathering-in before winter's descent.",
+    "mythology": "Harvest festivals are universal at this threshold. Persephone descends again to Hades. The Norse held Haustblót, a sacrifice of thanksgiving. The Chinese celebrate the Mid-Autumn Moon Festival. In many traditions, this is the time of weighing and judgment — Libra's scales.",
+    "themes": "Harvest, gratitude, balance, descent into darkness, letting go, judgment, the weighing of deeds, preparation for winter.",
+    "cultures": {
+      "roman": {
+        "name": "Cerialia / Harvest",
+        "description": "The autumn was a season of harvest festivals honoring Ceres (grain) and Pomona (fruit). The Meditrinalia (October 11) celebrated the new wine. Romans understood autumn as the season of gathering the fruits of summer's labor and preparing stores against winter."
+      },
+      "greek": {
+        "name": "Descent of Persephone",
+        "description": "The autumnal equinox marks Persephone's return to Hades as queen of the underworld. Demeter's grief brings the dying of vegetation. The Greater Mysteries at Eleusis were celebrated in September, initiating participants into the secrets of death and rebirth."
+      },
+      "norse": {
+        "name": "Haustblót (Autumn Sacrifice)",
+        "description": "Haustblót was the great autumn sacrifice, a feast of thanksgiving to the gods for the harvest. Offerings were made to Freyr for fertility and to Odin for wisdom in the dark months ahead. Mead was shared and the community gathered to prepare for winter's trials."
+      },
+      "babylonian": {
+        "name": "Second Akitu",
+        "description": "A second, smaller Akitu festival was held at the autumnal equinox, marking the planting of winter barley. This was a time of counting stores and preparing for the cooler season. The scales of judgment — later reflected in the sign Libra — weighed the harvest against the coming need."
+      },
+      "vedic": {
+        "name": "Sharad Ritu / Navaratri",
+        "description": "The autumn equinox falls during Sharad Ritu and coincides with Navaratri, nine nights honoring the Goddess Durga's victory over the buffalo demon Mahishasura. It is a time of purification, fasting, and the triumph of dharma over adharma. Dussehra celebrates Rama's victory over Ravana."
+      },
+      "islamic": {
+        "name": "Harvest Balance",
+        "description": "The equinox was important to Islamic agricultural calendars. Scholars like Ibn al-Baytar documented the harvest cycle. The concept of mīzān (balance/scales) in the Quran resonates with the equinox's perfect equilibrium and the autumnal sign of Libra."
+      },
+      "medieval": {
+        "name": "Michaelmas",
+        "description": "The Feast of St. Michael and All Angels (September 29) fell near the autumnal equinox. Michael, the warrior archangel, defends against darkness as the nights lengthen. Michaelmas was a quarter day for rents and contracts, a time of earthly and spiritual accounting."
+      }
+    }
+  },
+  "winter-solstice": {
+    "label": "Winter Solstice",
+    "date": "December 21–22",
+    "season": "Winter",
+    "direction": "South",
+    "zodiacCusp": "Capricorn begins",
+    "description": "The winter solstice is the longest night and shortest day — the nadir of the solar year. Yet within this deepest darkness lies the seed of returning light, for from this day forward the Sun begins its slow climb back. It is the great paradox: death containing the promise of rebirth.",
+    "mythology": "The winter solstice may be humanity's oldest celebrated astronomical event. The Romans held Saturnalia and later Dies Natalis Solis Invicti. The Norse celebrated Yule. Newgrange in Ireland was built to catch the solstice sunrise. Nearly every culture marks this as the birth of light from darkness.",
+    "themes": "Death and rebirth of light, endurance through darkness, hope, the unconquered sun, birth of the divine child, inward reflection, the seed in frozen ground.",
+    "cultures": {
+      "roman": {
+        "name": "Saturnalia / Sol Invictus",
+        "description": "Saturnalia (December 17–23) was Rome's greatest festival — a carnival of gift-giving, feasting, and social inversion where slaves dined with masters. December 25 was later fixed as Dies Natalis Solis Invicti (Birthday of the Unconquered Sun), celebrating the sun's rebirth after the longest night."
+      },
+      "greek": {
+        "name": "Lenaia / Poseidea",
+        "description": "The Lenaia honored Dionysus in midwinter with dramatic performances and wine rituals. The Poseidea honored Poseidon. Winter was a time of inward turning, storytelling, and the mysteries of death — Dionysus himself was a dying-and-rising god whose rebirth mirrored the sun's return."
+      },
+      "norse": {
+        "name": "Yule (Jól)",
+        "description": "Yule was the great midwinter festival lasting twelve nights. A massive Yule log was burned, its flames sustaining light through the darkest time. Odin rode as the Yule Father during the Wild Hunt. Feasting, oath-taking, and honoring the ancestors marked this sacred turning point. Many Christmas traditions descend from Yule."
+      },
+      "babylonian": {
+        "name": "Zagmuk",
+        "description": "Zagmuk was the Babylonian festival of the winter solstice, celebrating Marduk's battle against the forces of chaos. As days shortened, the people feared the monsters of darkness would prevail. The festival's rituals ensured Marduk's victory and the return of light and order."
+      },
+      "vedic": {
+        "name": "Makar Sankranti / Uttarayana",
+        "description": "Makar Sankranti celebrates the sun's entry into Capricorn (Makara) and the beginning of Uttarayana — the sun's northward journey. It is one of the few Hindu festivals tied to the solar calendar. Bonfires are lit, sesame sweets shared, and kites flown to honor the returning sun. Dying during Uttarayana is considered auspicious."
+      },
+      "islamic": {
+        "name": "Shab-e Yalda / Longest Night",
+        "description": "Shab-e Yalda (Night of Birth) is celebrated in Persian and Central Asian Muslim cultures on the winter solstice. Families gather to eat pomegranates and watermelon (red fruits symbolizing dawn), read Hafiz's poetry, and stay awake through the longest night to welcome the triumph of light over darkness."
+      },
+      "medieval": {
+        "name": "Christmas / Nativity",
+        "description": "The birth of Christ was fixed at December 25, near the winter solstice, as the 'Sun of Righteousness' rising in the darkest time. The O Antiphons, Advent candles, and the Christmas star all emphasize light emerging from darkness. The Twelve Days of Christmas echo the ancient solstice vigil period."
+      }
+    }
+  }
+}
