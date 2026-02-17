@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/meteor-steel-site-2/static/css/main.34d57a56.css",
+    "main.js": "/meteor-steel-site-2/static/js/main.c82d27a4.js",
+    "index.html": "/meteor-steel-site-2/index.html",
+    "main.34d57a56.css.map": "/meteor-steel-site-2/static/css/main.34d57a56.css.map",
+    "main.c82d27a4.js.map": "/meteor-steel-site-2/static/js/main.c82d27a4.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.34d57a56.css",
+    "static/js/main.c82d27a4.js"
+  ]
+}
