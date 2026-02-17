@@ -654,25 +654,29 @@
     grid-template-columns: 1fr;
   }
 
-  .align-toggle {
+  .live-toggle,
+  .align-toggle,
+  .calendar-toggle {
+    transform: none;
+    width: 32px;
+    height: 32px;
+    font-size: 1.1rem;
+    top: auto;
+    left: auto;
     right: auto;
-    left: calc(50% + 25px);
-    transform: translateX(-50%);
-    bottom: -40px;
+    bottom: 20px;
   }
 
   .live-toggle {
-    right: auto;
-    left: calc(50% - 25px);
-    transform: translateX(-50%);
-    bottom: -40px;
+    right: 0px;
+  }
+
+  .align-toggle {
+    right: 40px;
   }
 
   .calendar-toggle {
-    right: auto;
-    left: calc(50% + 75px);
-    transform: translateX(-50%);
-    bottom: -40px;
+    right: 80px;
   }
 }
 

@@ -141,8 +141,8 @@ function MonthContent({ month, activeTab, onSelectTab }) {
 
   // Build tab list: stone, flower, then each holiday
   const tabs = [];
-  if (m.stone) tabs.push({ id: 'stone', label: m.stone.name });
-  if (m.flower) tabs.push({ id: 'flower', label: m.flower.name });
+  if (m.stone) tabs.push({ id: 'stone', label: 'Stone' });
+  if (m.flower) tabs.push({ id: 'flower', label: 'Flower' });
   if (m.holidays) {
     m.holidays.forEach((h, i) => {
       tabs.push({ id: `holiday-${i}`, label: h.name });

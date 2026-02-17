@@ -6,7 +6,7 @@ const TABS = [
   { id: 'sins',      label: 'Sins' },
   { id: 'day',       label: 'Day' },
   { id: 'body',      label: 'Body' },
-  { id: 'hebrew',    label: 'Hebrew' },
+  { id: 'hebrew',    label: 'Creation' },
   { id: 'synthesis', label: 'Synthesis' },
   { id: 'development', label: 'Development' },
 ];
