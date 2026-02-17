@@ -574,6 +574,13 @@
   .deity-gallery {
     grid-template-columns: 1fr;
   }
+
+  .align-toggle {
+    right: auto;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: -40px;
+  }
 }
 
 /* ===== CULTURE BLOCKS ===== */

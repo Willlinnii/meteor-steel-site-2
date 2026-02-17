@@ -355,7 +355,6 @@ function MeteorSteelHome() {
           )}
         </div>
       </div>
-      <ChatPanel />
     </>
   );
 }
@@ -820,6 +819,7 @@ function App() {
         <Route path="/fallen-starlight" element={<FallenStarlightHome />} />
         <Route path="/story-forge" element={<StoryForgeHome />} />
       </Routes>
+      <ChatPanel />
     </div>
   );
 }

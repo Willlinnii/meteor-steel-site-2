@@ -181,7 +181,7 @@ export default function SevenMetalsPage() {
       <div className="metals-diagram-center">
         <OrbitalDiagram
           selectedPlanet={selectedPlanet}
-          onSelectPlanet={setSelectedPlanet}
+          onSelectPlanet={(p) => { setSelectedPlanet(p); setSelectedSign(null); setSelectedCardinal(null); }}
           selectedSign={selectedSign}
           onSelectSign={(sign) => { setSelectedSign(sign); setSelectedCardinal(null); }}
           selectedCardinal={selectedCardinal}
