@@ -1,0 +1,691 @@
+/* ===== GAMES PAGE ===== */
+.games-page {
+  min-height: 100vh;
+  padding: 70px 20px 40px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.games-page-title {
+  font-family: 'Cinzel', serif;
+  color: var(--accent-gold);
+  font-size: 1.8rem;
+  text-align: center;
+  margin-bottom: 6px;
+  letter-spacing: 0.06em;
+}
+
+.games-page-subtitle {
+  color: var(--text-secondary);
+  text-align: center;
+  font-size: 0.95rem;
+  margin-bottom: 28px;
+}
+
+/* ===== GAMES GRID ===== */
+.games-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 14px;
+  margin-bottom: 30px;
+}
+
+.game-card {
+  background: rgba(26, 26, 36, 0.7);
+  border: 1px solid var(--border-subtle);
+  border-radius: 10px;
+  padding: 18px 16px;
+  cursor: pointer;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  transition: all 0.2s ease;
+}
+
+.game-card:hover {
+  border-color: var(--accent-ember);
+  background: rgba(196, 113, 58, 0.08);
+}
+
+.game-card.active {
+  border-color: var(--accent-ember);
+  background: rgba(196, 113, 58, 0.12);
+  box-shadow: 0 0 12px rgba(196, 113, 58, 0.15);
+}
+
+.game-card.featured {
+  border-color: var(--accent-gold);
+}
+
+.game-card.featured:hover {
+  border-color: var(--accent-gold);
+  background: rgba(201, 169, 97, 0.1);
+}
+
+.game-card-title {
+  font-family: 'Cinzel', serif;
+  color: var(--text-primary);
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+}
+
+.game-card-origin {
+  color: var(--accent-ember);
+  font-size: 0.78rem;
+  font-style: italic;
+}
+
+.game-card-desc {
+  color: var(--text-secondary);
+  font-size: 0.82rem;
+  line-height: 1.4;
+}
+
+/* ===== MODE SELECTOR ===== */
+.game-mode-selector {
+  text-align: center;
+  padding-top: 40px;
+}
+
+.game-mode-back {
+  background: none;
+  border: none;
+  color: var(--accent-ember);
+  font-family: 'Cinzel', serif;
+  font-size: 0.85rem;
+  cursor: pointer;
+  margin-bottom: 20px;
+  padding: 4px 8px;
+}
+
+.game-mode-back:hover {
+  text-decoration: underline;
+}
+
+.game-mode-heading {
+  font-family: 'Cinzel', serif;
+  color: var(--accent-gold);
+  font-size: 1.6rem;
+  margin-bottom: 4px;
+}
+
+.game-mode-origin {
+  color: var(--accent-ember);
+  font-style: italic;
+  font-size: 0.9rem;
+  margin-bottom: 8px;
+}
+
+.game-mode-desc {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  margin-bottom: 28px;
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.game-mode-buttons {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.game-mode-btn {
+  background: rgba(26, 26, 36, 0.8);
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
+  padding: 24px 36px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+  min-width: 180px;
+}
+
+.game-mode-btn:hover {
+  border-color: var(--accent-ember);
+  background: rgba(196, 113, 58, 0.1);
+  box-shadow: 0 0 12px rgba(196, 113, 58, 0.15);
+}
+
+.game-mode-label {
+  font-family: 'Cinzel', serif;
+  color: var(--text-primary);
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.game-mode-sublabel {
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+}
+
+/* ===== GAME SHELL ===== */
+.game-shell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.game-shell-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  max-width: 620px;
+}
+
+.game-shell-back {
+  background: none;
+  border: none;
+  color: var(--accent-ember);
+  font-family: 'Cinzel', serif;
+  font-size: 0.8rem;
+  cursor: pointer;
+  padding: 4px 8px;
+  white-space: nowrap;
+}
+
+.game-shell-back:hover {
+  text-decoration: underline;
+}
+
+.game-shell-title {
+  font-family: 'Cinzel', serif;
+  color: var(--accent-gold);
+  font-size: 1.3rem;
+  flex: 1;
+  text-align: center;
+  margin: 0;
+}
+
+.game-shell-turn {
+  color: var(--text-secondary);
+  font-size: 0.78rem;
+  white-space: nowrap;
+}
+
+.game-shell-players {
+  display: flex;
+  gap: 24px;
+  justify-content: center;
+}
+
+.game-shell-player {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  transition: all 0.2s ease;
+}
+
+.game-shell-player.active {
+  color: var(--text-primary);
+  background: rgba(196, 113, 58, 0.1);
+  border: 1px solid rgba(196, 113, 58, 0.3);
+}
+
+.game-shell-player.winner {
+  color: var(--accent-gold);
+}
+
+.player-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.player-name {
+  font-family: 'Cinzel', serif;
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
+}
+
+.game-shell-board {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.game-shell-controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  max-width: 620px;
+}
+
+.game-shell-dice-area {
+  min-height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.game-shell-extra {
+  color: var(--text-secondary);
+  font-size: 0.82rem;
+  text-align: center;
+}
+
+.game-shell-buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.game-btn {
+  font-family: 'Cinzel', serif;
+  font-size: 0.82rem;
+  padding: 8px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  letter-spacing: 0.04em;
+}
+
+.game-btn-roll {
+  background: rgba(196, 113, 58, 0.15);
+  border: 1px solid var(--accent-ember);
+  color: var(--accent-ember);
+}
+
+.game-btn-roll:hover:not(:disabled) {
+  background: rgba(196, 113, 58, 0.25);
+  box-shadow: 0 0 8px rgba(196, 113, 58, 0.2);
+}
+
+.game-btn-roll:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.game-btn-restart {
+  background: rgba(139, 157, 195, 0.1);
+  border: 1px solid rgba(139, 157, 195, 0.3);
+  color: var(--accent-steel);
+}
+
+.game-btn-restart:hover {
+  background: rgba(139, 157, 195, 0.2);
+}
+
+/* ===== DICE DISPLAY ===== */
+.dice-svg {
+  display: inline-block;
+}
+
+.dice-sticks,
+.dice-tetra,
+.dice-cowrie {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+@keyframes diceRoll {
+  0% { transform: rotate(0deg) scale(1); }
+  25% { transform: rotate(90deg) scale(1.1); }
+  50% { transform: rotate(180deg) scale(1); }
+  75% { transform: rotate(270deg) scale(1.1); }
+  100% { transform: rotate(360deg) scale(1); }
+}
+
+.dice-rolling .dice-svg,
+.dice-svg.dice-rolling {
+  animation: diceRoll 0.4s ease-out;
+}
+
+/* ===== MOVE LOG ===== */
+.game-move-log {
+  width: 100%;
+  max-width: 620px;
+  max-height: 120px;
+  overflow-y: auto;
+  background: rgba(10, 10, 15, 0.6);
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-family: 'Crimson Pro', serif;
+  font-size: 0.78rem;
+  line-height: 1.5;
+  color: var(--text-secondary);
+}
+
+.game-move-log-entry {
+  padding: 1px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.game-move-log-entry:last-child {
+  border-bottom: none;
+  color: var(--text-primary);
+}
+
+/* ===== GAME OVER OVERLAY ===== */
+.game-over-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+}
+
+.game-over-panel {
+  background: var(--bg-medium);
+  border: 1px solid var(--accent-gold);
+  border-radius: 16px;
+  padding: 36px 48px;
+  text-align: center;
+  box-shadow: 0 0 40px rgba(201, 169, 97, 0.2);
+}
+
+.game-over-title {
+  font-family: 'Cinzel', serif;
+  color: var(--accent-gold);
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+}
+
+.game-over-buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+/* ===== BOARD COMMON ===== */
+.game-board-svg {
+  width: 100%;
+  max-width: 560px;
+  height: auto;
+}
+
+.board-cell {
+  stroke: var(--border-subtle);
+  stroke-width: 0.5;
+}
+
+.board-cell-light {
+  fill: rgba(26, 26, 36, 0.9);
+}
+
+.board-cell-dark {
+  fill: rgba(20, 20, 28, 0.9);
+}
+
+.board-cell-special {
+  fill: rgba(201, 169, 97, 0.12);
+  stroke: rgba(201, 169, 97, 0.3);
+}
+
+.board-piece {
+  transition: all 0.35s ease;
+  cursor: pointer;
+}
+
+.board-piece-highlight {
+  filter: drop-shadow(0 0 4px var(--accent-ember));
+}
+
+.board-move-target {
+  fill: rgba(196, 113, 58, 0.25);
+  stroke: var(--accent-ember);
+  stroke-width: 1;
+  cursor: pointer;
+}
+
+.board-move-target:hover {
+  fill: rgba(196, 113, 58, 0.4);
+}
+
+.board-number {
+  font-size: 3.5px;
+  fill: var(--text-secondary);
+  text-anchor: middle;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* ===== SNAKES AND LADDERS ===== */
+.snl-ladder {
+  stroke: var(--accent-gold);
+  stroke-width: 1.2;
+  stroke-linecap: round;
+}
+
+.snl-ladder-rung {
+  stroke: var(--accent-gold);
+  stroke-width: 0.6;
+  opacity: 0.6;
+}
+
+.snl-snake {
+  fill: none;
+  stroke: #c44040;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+}
+
+.snl-snake-head {
+  fill: #c44040;
+}
+
+/* ===== SENET ===== */
+.senet-special-mark {
+  fill: var(--accent-gold);
+  opacity: 0.5;
+}
+
+.senet-path-arrow {
+  fill: var(--text-secondary);
+  opacity: 0.2;
+}
+
+/* ===== ROYAL GAME OF UR ===== */
+.ur-rosette {
+  fill: rgba(201, 169, 97, 0.15);
+  stroke: var(--accent-gold);
+  stroke-width: 0.8;
+}
+
+.ur-rosette-star {
+  fill: var(--accent-gold);
+  opacity: 0.4;
+}
+
+/* ===== MEHEN ===== */
+.mehen-serpent {
+  fill: none;
+  stroke: rgba(139, 157, 195, 0.3);
+  stroke-width: 14;
+  stroke-linecap: round;
+}
+
+.mehen-space {
+  fill: rgba(26, 26, 36, 0.8);
+  stroke: var(--border-subtle);
+  stroke-width: 0.5;
+}
+
+/* ===== JACKALS AND HOUNDS ===== */
+.jh-track {
+  fill: none;
+  stroke: var(--border-subtle);
+  stroke-width: 0.8;
+}
+
+.jh-hole {
+  fill: rgba(26, 26, 36, 0.8);
+  stroke: var(--border-subtle);
+  stroke-width: 0.5;
+}
+
+.jh-shortcut {
+  stroke: var(--accent-gold);
+  stroke-width: 0.6;
+  stroke-dasharray: 2 2;
+  opacity: 0.5;
+}
+
+/* ===== PACHISI ===== */
+.pachisi-castle {
+  fill: rgba(201, 169, 97, 0.12);
+  stroke: var(--accent-gold);
+  stroke-width: 0.8;
+}
+
+.pachisi-home {
+  fill: rgba(196, 113, 58, 0.1);
+  stroke: var(--accent-ember);
+  stroke-width: 1;
+}
+
+/* ===== MYTHOUSE GAME ===== */
+.mythouse-ring {
+  fill: none;
+  stroke: var(--border-subtle);
+  stroke-width: 0.5;
+}
+
+.mythouse-chute {
+  stroke: #c44040;
+  stroke-width: 0.8;
+  stroke-dasharray: 3 2;
+  opacity: 0.6;
+}
+
+.mythouse-ladder-line {
+  stroke: var(--accent-gold);
+  stroke-width: 0.8;
+  stroke-dasharray: 3 2;
+  opacity: 0.6;
+}
+
+.mythouse-gem {
+  fill: var(--accent-gold);
+  opacity: 0.7;
+}
+
+.mythouse-star {
+  fill: var(--accent-gold);
+  filter: drop-shadow(0 0 6px rgba(201, 169, 97, 0.5));
+}
+
+.mythouse-ordeal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 190;
+}
+
+.mythouse-ordeal-panel {
+  background: var(--bg-medium);
+  border: 1px solid var(--accent-ember);
+  border-radius: 12px;
+  padding: 24px 32px;
+  text-align: center;
+}
+
+.mythouse-ordeal-title {
+  font-family: 'Cinzel', serif;
+  color: var(--accent-ember);
+  font-size: 1.1rem;
+  margin-bottom: 16px;
+}
+
+.mythouse-ordeal-cards {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.mythouse-ordeal-card {
+  width: 70px;
+  height: 100px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Cinzel', serif;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.mythouse-ordeal-card.face-down {
+  background: rgba(139, 157, 195, 0.15);
+  border: 1px solid var(--accent-steel);
+  color: var(--accent-steel);
+}
+
+.mythouse-ordeal-card.face-up {
+  background: rgba(201, 169, 97, 0.15);
+  border: 1px solid var(--accent-gold);
+  color: var(--accent-gold);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 600px) {
+  .games-page {
+    padding: 60px 12px 30px;
+  }
+
+  .games-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .game-card {
+    padding: 12px 10px;
+  }
+
+  .game-card-title {
+    font-size: 0.88rem;
+  }
+
+  .game-card-desc {
+    font-size: 0.75rem;
+  }
+
+  .game-mode-btn {
+    padding: 18px 24px;
+    min-width: 140px;
+  }
+
+  .game-shell-title {
+    font-size: 1rem;
+  }
+
+  .game-board-svg {
+    max-width: 100%;
+  }
+
+  .game-over-panel {
+    padding: 24px 20px;
+    margin: 0 16px;
+  }
+}

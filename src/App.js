@@ -7,6 +7,7 @@ import DevelopmentPanel from './components/DevelopmentPanel';
 import SevenMetalsPage from './pages/SevenMetals/SevenMetalsPage';
 import MonomythPage from './pages/Monomyth/MonomythPage';
 import MythologyChannelPage from './pages/MythologyChannel/MythologyChannelPage';
+import GamesPage from './pages/Games/GamesPage';
 import figures from './data/figures.json';
 import modernFigures from './data/modernFigures.json';
 import stageOverviews from './data/stageOverviews.json';
@@ -801,6 +802,7 @@ const NAV_ITEMS = [
   { path: '/story-forge', label: 'Story Forge' },
   { path: 'https://www.thestoryatlas.com/my-courses/psychles/surface', label: 'Story Atlas', external: true },
   { path: '/mythosophia', label: 'Mythosophia' },
+  { path: '/games', label: 'Mythouse Games' },
   { path: '/mythology-channel', label: 'Mythology Channel' },
 ];
 
@@ -900,6 +902,7 @@ function App() {
         <Route path="/story-forge" element={<StoryForgeHome />} />
         <Route path="/monomyth" element={<MonomythPage />} />
         <Route path="/mythology-channel" element={<MythologyChannelPage />} />
+        <Route path="/games" element={<GamesPage />} />
         <Route path="/mythology-channel/:showId" element={<MythologyChannelPage />} />
         <Route path="/mythosophia" element={<MythosophiaPage />} />
       </Routes>
