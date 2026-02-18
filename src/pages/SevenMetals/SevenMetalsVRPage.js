@@ -383,9 +383,9 @@ export default function SevenMetalsVRPage() {
   }
 
   return (
-    <div className="celestial-vr-layout">
+    <div className="celestial-vr-layout" style={cameraAR ? { background: 'transparent' } : undefined}>
       {/* 3D Scene */}
-      <div className={`celestial-scene-wrapper ${panelOpen && hasSelection ? 'panel-open' : ''}`}>
+      <div className={`celestial-scene-wrapper ${panelOpen && hasSelection ? 'panel-open' : ''}`} style={cameraAR ? { background: 'transparent' } : undefined}>
         {/* Camera feed for phone AR mode */}
         {cameraAR && (
           <video

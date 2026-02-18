@@ -1,5 +1,5 @@
-import React, { Suspense, useRef } from 'react';
-import { Canvas } from '@react-three/fiber';
+import React, { Suspense, useRef, useEffect } from 'react';
+import { Canvas, useThree } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import { XR, useXR } from '@react-three/xr';
 import OrbitalScene from './OrbitalScene';
@@ -7,6 +7,19 @@ import GyroscopeCamera from './GyroscopeCamera';
 import './CelestialScene.css';
 
 function SceneFallback() {
+  return null;
+}
+
+// Dynamically update renderer clear color when AR mode changes
+function ClearColorManager({ cameraAR }) {
+  const { gl } = useThree();
+  useEffect(() => {
+    if (cameraAR) {
+      gl.setClearColor(0x000000, 0); // fully transparent
+    } else {
+      gl.setClearColor('#0a0a14', 1); // opaque dark
+    }
+  }, [cameraAR, gl]);
   return null;
 }
 
@@ -64,20 +77,14 @@ export default function CelestialScene({
   const internalCamPosRef = useRef({ x: 0, y: 0, z: 0 });
 
   return (
-    <div className="celestial-scene-container">
+    <div className="celestial-scene-container" style={cameraAR ? { background: 'transparent' } : undefined}>
       <Canvas
         camera={{ position: [0, 8, 20], fov: 60, near: 0.1, far: 200 }}
         gl={{ antialias: true, alpha: true }}
         dpr={[1, 2]}
         style={cameraAR ? { background: 'transparent' } : undefined}
-        onCreated={({ gl }) => {
-          if (cameraAR) {
-            gl.setClearColor(0x000000, 0);
-          } else {
-            gl.setClearColor('#0a0a14', 1);
-          }
-        }}
       >
+        <ClearColorManager cameraAR={cameraAR} />
         <XR store={xrStore}>
           <Suspense fallback={<SceneFallback />}>
             <ARScaleWrapper cameraAR={cameraAR} arZoom={arZoom}>
