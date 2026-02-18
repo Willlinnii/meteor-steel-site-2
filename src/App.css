@@ -31,6 +31,43 @@ body {
   min-height: 100vh;
 }
 
+/* ===== MYTHOSOPHIA PAGE ===== */
+
+.mythosophia-page {
+  width: 100%;
+  height: calc(100vh - 50px);
+  padding-top: 50px;
+  overflow: hidden;
+}
+
+.mythosophia-iframe {
+  width: 100%;
+  height: calc(100% + 155px);
+  border: none;
+  margin-top: -155px;
+}
+
+/* ===== SITE FOOTER ===== */
+.site-footer {
+  padding: 40px 20px 24px;
+  text-align: center;
+}
+
+.site-footer-icons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.site-footer-icon {
+  color: var(--text-secondary);
+  transition: color 0.3s ease;
+}
+
+.site-footer-icon:hover {
+  color: var(--accent-ember);
+}
+
 /* ===== SITE HEADER ===== */
 .site-header {
   position: fixed;
@@ -466,7 +503,6 @@ body {
   letter-spacing: 0.03em;
   text-shadow: 0 0 8px rgba(0,0,0,0.9), 0 0 3px rgba(0,0,0,1);
   transition: all 0.3s ease;
-  pointer-events: none;
 }
 
 .model-stage-marker:hover .model-stage-label {

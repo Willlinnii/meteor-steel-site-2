@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import CircleNav from '../../components/CircleNav';
 import mythsData from '../../data/mythsEpisodes.json';
 import './MythologyChannelPage.css';
 
@@ -7,14 +6,14 @@ const SHOWS = [
   {
     id: 'myths-tv',
     label: 'Myths: Greatest Mysteries',
-    playlist: null, // Playlist URL to be added
+    playlist: 'https://www.youtube.com/embed/videoseries?list=PLqal35qVo2sWWRcS9pRrR68YOgT4p4Ftm',
     description: 'The international TV series exploring humanity\'s greatest myths — featuring Will Linn as meta-expert.',
     isMythsTV: true,
   },
   {
     id: 'myth-salon',
     label: 'Myth Salon',
-    playlist: 'https://www.youtube.com/embed/videoseries?list=UULFqVaWkjn_SaMEkvxDnSajOQ',
+    playlist: 'https://www.youtube.com/embed/videoseries?list=PLX31T_KS3jtpmankurn1mE7-r3fHY4nAV',
     description: 'Live conversations exploring myth, depth psychology, and the soul of culture.',
   },
   {
@@ -61,9 +60,6 @@ const SHOWS = [
   },
 ];
 
-// Empty stages — show buttons handle selection, no labels on the ring
-const CIRCLE_STAGES = [];
-
 function MythsEpisodeContent({ episode }) {
   return (
     <div className="myths-episode-content">
@@ -92,30 +88,27 @@ function MythsEpisodeContent({ episode }) {
 export default function MythologyChannelPage() {
   const [activeShow, setActiveShow] = useState(null);
   const [videoUrl, setVideoUrl] = useState(null);
-  const [clockwise, setClockwise] = useState(true);
   const [activeEpisode, setActiveEpisode] = useState(null);
 
-  const handleSelectStage = (id) => {
-    if (id === 'overview') {
+  const handleShowClick = (show) => {
+    if (activeShow?.id === show.id) {
+      // Toggle off
       setActiveShow(null);
       setVideoUrl(null);
       setActiveEpisode(null);
-      return;
-    }
-    const show = SHOWS.find(s => s.id === id);
-    if (show) {
+    } else {
       setActiveShow(show);
       setActiveEpisode(null);
-      if (show.playlist) {
-        setVideoUrl(show.playlist);
-      } else {
-        setVideoUrl(null);
-      }
+      setVideoUrl(show.playlist || null);
     }
   };
 
-  const handleCloseVideo = () => {
-    setVideoUrl(null);
+  const handleTvClick = () => {
+    if (videoUrl) {
+      setActiveShow(null);
+      setVideoUrl(null);
+      setActiveEpisode(null);
+    }
   };
 
   const handleEpisodeClick = (episode) => {
@@ -123,24 +116,40 @@ export default function MythologyChannelPage() {
   };
 
   const isMythsActive = activeShow?.isMythsTV;
+  const isOn = !!videoUrl;
 
   return (
     <div className="mythology-channel-page">
-      <div className="mythology-channel-circle-area">
-        <CircleNav
-          stages={CIRCLE_STAGES}
-          currentStage={activeShow?.id || 'overview'}
-          onSelectStage={handleSelectStage}
-          clockwise={clockwise}
-          onToggleDirection={() => setClockwise(c => !c)}
-          centerLine1="The Mythology"
-          centerLine2=""
-          centerLine3="Channel"
-          showAuthor={false}
-          videoUrl={videoUrl}
-          onCloseVideo={handleCloseVideo}
+      <div className={`tv-wrapper${isOn ? ' tv-on' : ''}`}>
+        <img
+          src={process.env.PUBLIC_URL + '/tv-frame.png'}
+          alt="Mythology Channel TV"
+          className="tv-frame-img"
         />
+        {!isOn && <div className="tv-screen-fill" />}
+        {isOn && (
+          <div className="tv-screen-area" onClick={handleTvClick}>
+            <iframe
+              title={activeShow?.label || 'Video'}
+              src={videoUrl}
+              className="tv-video-player"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            />
+          </div>
+        )}
+        {isOn && (
+          <button className="tv-power-btn" onClick={handleTvClick} title="Turn off">
+            {'\u25A0'}
+          </button>
+        )}
       </div>
+
+      {activeShow && (
+        <div className="tv-now-playing">
+          Now Playing: <strong>{activeShow.label}</strong>
+        </div>
+      )}
 
       <div className="mythology-channel-shows">
         <h2 className="shows-heading">Shows</h2>
@@ -149,7 +158,7 @@ export default function MythologyChannelPage() {
             <button
               key={show.id}
               className={`show-card${activeShow?.id === show.id ? ' active' : ''}${show.isMythsTV ? ' myths-tv-card' : ''}`}
-              onClick={() => handleSelectStage(show.id)}
+              onClick={() => handleShowClick(show)}
             >
               <span className="show-card-title">{show.label}</span>
               <span className="show-card-desc">{show.description}</span>

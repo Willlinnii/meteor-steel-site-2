@@ -231,10 +231,11 @@ function buildWorldTabs(worldKey) {
   return tabs;
 }
 
-function WorldContent({ worldKey, onSelectModel, selectedModelId }) {
+function WorldContent({ worldKey, onSelectModel, selectedModelId, videoUrl, onPlayVideo, onCloseVideo }) {
   const [activeTab, setActiveTab] = useState('overview');
   const data = worldKey === 'normal' ? worldData.normalWorld : worldKey === 'other' ? worldData.otherWorld : worldData.threshold;
   const tabs = buildWorldTabs(worldKey);
+  const thresholdPlaylist = 'PLX31T_KS3jtpSJ1X0ivWv1cuxJk7_FEgh';
 
   return (
     <div className="metal-detail-panel">
@@ -251,6 +252,21 @@ function WorldContent({ worldKey, onSelectModel, selectedModelId }) {
             {t.label}
           </button>
         ))}
+        {worldKey === 'threshold' && (
+          <button
+            className={`metal-tab playlist-tab${videoUrl ? ' active' : ''}`}
+            title="Watch Threshold playlist"
+            onClick={() => {
+              if (videoUrl) {
+                onCloseVideo();
+              } else {
+                onPlayVideo(`https://www.youtube.com/embed/videoseries?list=${thresholdPlaylist}&autoplay=1`);
+              }
+            }}
+          >
+            {videoUrl ? '\u25A0' : '\u25B6'}
+          </button>
+        )}
       </div>
 
       <div className="metal-content-scroll">
@@ -457,7 +473,7 @@ export default function MonomythPage() {
       <div className="container">
         <div id="content-container">
           {activeWorld ? (
-            <WorldContent worldKey={activeWorld} onSelectModel={handleSelectModel} selectedModelId={selectedModel?.id} />
+            <WorldContent worldKey={activeWorld} onSelectModel={handleSelectModel} selectedModelId={selectedModel?.id} videoUrl={videoUrl} onPlayVideo={(url) => setVideoUrl(url)} onCloseVideo={() => setVideoUrl(null)} />
           ) : isStage ? (
             <div className="metal-detail-panel">
               <div className="metal-tabs">

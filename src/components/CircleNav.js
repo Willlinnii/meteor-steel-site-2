@@ -209,8 +209,10 @@ export default function CircleNav({ stages, currentStage, onSelectStage, clockwi
                 style={{
                   left: `${x}%`,
                   top: `${y}%`,
+                  cursor: 'pointer',
                 }}
                 title={label}
+                onClick={() => onSelectStage(stages[i]?.id)}
               >
                 <span
                   className="model-stage-label"
