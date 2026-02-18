@@ -86,11 +86,13 @@ export default function OrbitalScene({
   selectedEarth,
   onSelectEarth,
   infoPanelContent,
+  cameraAR,
 }) {
   const { anglesRef, moonPhaseRef } = useOrbitalAnimation(mode);
 
   const isHelio = mode === ORBITAL_MODES.HELIOCENTRIC;
   const orbitData = isHelio ? HELIO_ORBITS_3D : ORBITS_3D;
+  const sizeScale = cameraAR ? 2.5 : 1; // bigger planets in phone AR
 
   // Sun orbit radius for the light tracker
   const sunOrbitR = ORBITS_3D.find(o => o.planet === 'Sun')?.radius || 8;
@@ -102,7 +104,7 @@ export default function OrbitalScene({
       <SunLight anglesRef={anglesRef} isHelio={isHelio} orbitRadius={sunOrbitR} />
 
       {/* Stars */}
-      <StarfieldBackground />
+      <StarfieldBackground cameraAR={cameraAR} />
 
       {/* Zodiac ring */}
       <ZodiacSphere selectedSign={selectedSign} onSelectSign={onSelectSign} />
@@ -138,7 +140,7 @@ export default function OrbitalScene({
         <Planet3D
           planet="Sun"
           position={[0, 0, 0]}
-          size={0.7}
+          size={0.7 * sizeScale}
           selected={selectedPlanet === 'Sun'}
           onClick={() => onSelectPlanet('Sun')}
         />
@@ -156,7 +158,7 @@ export default function OrbitalScene({
           key={o.planet}
           planet={o.planet}
           orbitRadius={o.radius}
-          size={o.size}
+          size={o.size * sizeScale}
           anglesRef={anglesRef}
           moonPhaseRef={moonPhaseRef}
           selected={selectedPlanet === o.planet}

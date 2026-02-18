@@ -31,7 +31,7 @@ function ARScaleWrapper({ children, cameraAR }) {
   const isPresenting = useXR((state) => state.session != null);
   const inAR = isPresenting || cameraAR;
   const scale = inAR ? 0.08 : 1;
-  const y = inAR ? -0.5 : 0;
+  const y = isPresenting ? -0.5 : 0; // only offset for headset AR, phone AR camera is at y=0
   return (
     <group scale={[scale, scale, scale]} position={[0, y, 0]}>
       {children}
@@ -82,6 +82,7 @@ export default function CelestialScene({
                 selectedEarth={selectedEarth}
                 onSelectEarth={onSelectEarth}
                 infoPanelContent={infoPanelContent}
+                cameraAR={cameraAR}
               />
             </ARScaleWrapper>
             <ConditionalOrbitControls cameraAR={cameraAR} />

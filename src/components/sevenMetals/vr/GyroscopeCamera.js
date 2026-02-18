@@ -74,8 +74,8 @@ export default function GyroscopeCamera() {
 
     camera.quaternion.copy(quat.current);
 
-    // Position camera at center looking outward
-    camera.position.set(0, 2, 0);
+    // Position camera at Earth (center of geocentric system), eye level with orbital plane
+    camera.position.set(0, 0, 0);
   });
 
   return null;
