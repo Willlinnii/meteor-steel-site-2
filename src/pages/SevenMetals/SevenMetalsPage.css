@@ -63,6 +63,13 @@
   fill-opacity: 1 !important;
 }
 
+/* ===== ORBITAL DIAGRAM WRAPPER ===== */
+
+.orbital-diagram-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
 /* ===== ORBITAL MODE TOGGLE (cycle: orbiting → live → aligned) ===== */
 
 .orbital-mode-toggle {
@@ -718,40 +725,32 @@
     grid-template-columns: 1fr;
   }
 
+  .orbital-diagram-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .orbital-diagram-wrapper .orbital-svg {
+    width: 100%;
+    flex-basis: 100%;
+  }
+
   .orbital-mode-toggle,
   .calendar-toggle,
-  .medicine-wheel-toggle {
+  .medicine-wheel-toggle,
+  .vr-view-toggle {
+    position: static;
     transform: none;
-    width: 28px;
-    height: 28px;
+    width: 32px;
+    height: 32px;
     font-size: 0.95rem;
-    top: auto;
-    left: auto;
-    right: auto;
-    bottom: 20px;
-  }
-
-  .orbital-mode-toggle {
-    right: 0px;
-  }
-
-  .calendar-toggle {
-    right: 30px;
-  }
-
-  .medicine-wheel-toggle {
-    right: 60px;
+    margin: 0;
   }
 
   .vr-view-toggle {
-    transform: none;
-    width: 28px;
-    height: 28px;
     font-size: 0.7rem;
-    top: auto;
-    left: auto;
-    right: 90px;
-    bottom: 20px;
   }
 }
 

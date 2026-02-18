@@ -304,7 +304,7 @@ export default function OrbitalDiagram({ selectedPlanet, onSelectPlanet, selecte
   };
 
   return (
-    <div style={{ position: 'relative', display: 'inline-block' }}>
+    <div className="orbital-diagram-wrapper">
       <svg viewBox="0 0 700 700" className="orbital-svg" role="img" aria-label={showMedicineWheel ? "Medicine wheel diagram" : heliocentric ? "Heliocentric orbital diagram" : "Geocentric orbital diagram with zodiac"}>
         {showMedicineWheel ? (
           <g className="medicine-wheel" onMouseMove={handleWheelMove} onMouseLeave={() => { hoveredRingRef.current = null; setHoveredRing(null); }}>
