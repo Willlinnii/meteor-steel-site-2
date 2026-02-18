@@ -3,6 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import { Body, GeoVector, Ecliptic, MoonPhase } from 'astronomy-engine';
 import PlanetNode from './PlanetNode';
 import wheelData from '../../data/medicineWheels.json';
+import starsNorth from '../../data/starsNorth.json';
+import starsSouth from '../../data/starsSouth.json';
+import constellationsData from '../../data/constellations.json';
 
 const BODY_MAP = {
   Moon: Body.Moon,
@@ -46,6 +49,28 @@ const HELIO_ORBITS = [
   { planet: 'Saturn',  r: 278, angle: 100,  speed: 0.034 },
 ];
 const HELIO_MOON = { r: 18, speed: 13.37 };
+
+const CHAKRA_POSITIONS = [
+  { label: 'Crown',        x: 350, y: 120, color: '#9b59b6' },
+  { label: 'Third Eye',    x: 350, y: 155, color: '#6a5acd' },
+  { label: 'Throat',       x: 350, y: 190, color: '#4a9bd9' },
+  { label: 'Heart',        x: 350, y: 245, color: '#4caf50' },
+  { label: 'Solar Plexus', x: 350, y: 300, color: '#f0c040' },
+  { label: 'Sacral',       x: 350, y: 355, color: '#e67e22' },
+  { label: 'Root',         x: 350, y: 400, color: '#c04040' },
+];
+
+const CHAKRA_ORDERINGS = {
+  chaldean:     ['Saturn','Jupiter','Mars','Sun','Venus','Mercury','Moon'],
+  heliocentric: ['Sun','Mercury','Venus','Moon','Mars','Jupiter','Saturn'],
+  weekdays:     ['Sun','Moon','Mars','Mercury','Jupiter','Venus','Saturn'],
+};
+
+const CHAKRA_MODE_LABELS = {
+  chaldean: 'Chaldean Order',
+  heliocentric: 'Heliocentric Order',
+  weekdays: 'Weekday Order',
+};
 
 // SVG path glyphs for zodiac signs (drawn in a ~16x16 viewBox, centered at 0,0)
 const ZODIAC_GLYPHS = {
@@ -92,6 +117,7 @@ const ZODIAC_INNER_R = 300;
 const ZODIAC_OUTER_R = 340;
 const ZODIAC_TEXT_R = 320;
 const CARDINAL_R = (ZODIAC_INNER_R + ZODIAC_OUTER_R) / 2; // midpoint of band
+const MAX_STAR_R = 295; // just inside zodiac inner ring
 
 // Build an SVG arc path for text to follow
 function arcPath(cx, cy, r, startDeg, endDeg, sweep) {
@@ -150,6 +176,14 @@ function tangentRotation(angleDeg) {
   return rot;
 }
 
+function starToSvg(ra, dec) {
+  const angleRad = (-ra * Math.PI) / 180;
+  const r = MAX_STAR_R * (1 - Math.abs(dec) / 90);
+  return { x: CX + r * Math.cos(angleRad), y: CY + r * Math.sin(angleRad) };
+}
+function starRadius(mag) { return 0.4 + (6 - mag) * 0.35; }
+function starOpacity(mag) { return 0.3 + (6 - mag) * 0.1; }
+
 const MW_QUADRANTS = [
   { dir: 'N', startDeg: -135, endDeg: -45 },
   { dir: 'E', startDeg: -45, endDeg: 45 },
@@ -186,8 +220,116 @@ function ensureYTApi() {
   });
 }
 
-export default function OrbitalDiagram({ selectedPlanet, onSelectPlanet, selectedSign, onSelectSign, selectedCardinal, onSelectCardinal, selectedEarth, onSelectEarth, showCalendar, onToggleCalendar, selectedMonth, onSelectMonth, showMedicineWheel, onToggleMedicineWheel, selectedWheelItem, onSelectWheelItem, videoUrl, onCloseVideo }) {
+export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPlanet, selectedSign, onSelectSign, selectedCardinal, onSelectCardinal, selectedEarth, onSelectEarth, showCalendar, onToggleCalendar, selectedMonth, onSelectMonth, showMedicineWheel, onToggleMedicineWheel, selectedWheelItem, onSelectWheelItem, chakraViewMode, onToggleChakraView, videoUrl, onCloseVideo, ybrActive, ybrCurrentStopIndex, ybrStopProgress, ybrJourneySequence, onToggleYBR }) {
   const navigate = useNavigate();
+  const wrapperRef = useRef(null);
+  const [tooltip, setTooltip] = useState(null);
+
+  const handleTooltipEnter = useCallback((type, key, e) => {
+    if (showMedicineWheel || chakraViewMode) return;
+    setTooltip({ type, key, x: e.clientX, y: e.clientY });
+  }, [showMedicineWheel, chakraViewMode]);
+
+  const handleTooltipMove = useCallback((e) => {
+    setTooltip(prev => prev ? { ...prev, x: e.clientX, y: e.clientY } : null);
+  }, []);
+
+  const handleTooltipLeave = useCallback(() => {
+    setTooltip(null);
+  }, []);
+
+  // Pre-compute constellation projected lines and star-to-constellation lookups
+  // (must be above renderTooltipContent which references constellationMap)
+  const { constellationMap, northStarToCid, southStarToCid } = useMemo(() => {
+    const cMap = {};
+    const n2c = {}; // northStarIndex → constellation id
+    const s2c = {}; // southStarIndex → constellation id
+    for (const c of constellationsData) {
+      cMap[c.id] = {
+        name: c.name,
+        lines: c.lines.map(([[ra1, dec1], [ra2, dec2]]) => {
+          const p1 = starToSvg(ra1, dec1);
+          const p2 = starToSvg(ra2, dec2);
+          return { x1: p1.x, y1: p1.y, x2: p2.x, y2: p2.y, dec1, dec2 };
+        }),
+        northStars: c.ns,
+        southStars: c.ss,
+      };
+      for (const idx of c.ns) n2c[idx] = c.id;
+      for (const idx of c.ss) s2c[idx] = c.id;
+    }
+    return { constellationMap: cMap, northStarToCid: n2c, southStarToCid: s2c };
+  }, []);
+
+  const renderTooltipContent = useCallback(() => {
+    if (!tooltip || !tooltipData) return null;
+    const { type, key } = tooltip;
+    if (type === 'planet') {
+      const d = tooltipData.planets[key];
+      if (!d) return null;
+      return (
+        <>
+          <div className="orbital-tooltip-title">{key} — {d.metal}</div>
+          <div className="orbital-tooltip-row">{d.day} · {d.chakra}</div>
+          <div className="orbital-tooltip-row">{d.sin} / {d.virtue}</div>
+          <div className="orbital-tooltip-desc">{d.astrology}</div>
+        </>
+      );
+    }
+    if (type === 'zodiac') {
+      const d = tooltipData.zodiac[key];
+      if (!d) return null;
+      return (
+        <>
+          <div className="orbital-tooltip-title">{d.symbol} {key} — {d.archetype}</div>
+          <div className="orbital-tooltip-row">{d.element} · {d.modality} · {d.ruler}</div>
+          <div className="orbital-tooltip-row">{d.dates}</div>
+        </>
+      );
+    }
+    if (type === 'cardinal') {
+      const d = tooltipData.cardinals[key];
+      if (!d) return null;
+      return (
+        <>
+          <div className="orbital-tooltip-title">{d.label}</div>
+          <div className="orbital-tooltip-row">{d.date} · {d.season} · {d.direction}</div>
+          <div className="orbital-tooltip-row">{d.zodiacCusp}</div>
+        </>
+      );
+    }
+    if (type === 'month') {
+      const d = tooltipData.months[key];
+      if (!d) return null;
+      return (
+        <>
+          <div className="orbital-tooltip-title">{key}</div>
+          <div className="orbital-tooltip-row">{d.stone} · {d.flower}</div>
+          {d.mood && <div className="orbital-tooltip-desc">{d.mood}</div>}
+        </>
+      );
+    }
+    if (type === 'daynight') {
+      const d = tooltipData.dayNight[key];
+      if (!d) return null;
+      return (
+        <>
+          <div className="orbital-tooltip-title">{d.label}</div>
+          <div className="orbital-tooltip-row">{d.element} · {d.polarity}</div>
+          <div className="orbital-tooltip-desc">{d.qualities}</div>
+        </>
+      );
+    }
+    if (type === 'constellation') {
+      const c = constellationMap[key];
+      if (!c) return null;
+      return (
+        <div className="orbital-tooltip-title">{c.name}</div>
+      );
+    }
+    return null;
+  }, [tooltip, tooltipData, constellationMap]);
+
   const [aligned, setAligned] = useState(false);
   const [livePositions, setLivePositions] = useState(false);
   const [heliocentric, setHeliocentric] = useState(false);
@@ -200,8 +342,99 @@ export default function OrbitalDiagram({ selectedPlanet, onSelectPlanet, selecte
   });
   const rafRef = useRef(null);
   const lastTimeRef = useRef(null);
+  const [starMapMode, setStarMapMode] = useState('north'); // 'none' | 'north' | 'south'
+  const [hoveredConstellation, setHoveredConstellation] = useState(null);
   const [hoveredRing, setHoveredRing] = useState(null);
   const hoveredRingRef = useRef(null);
+  const [stormFlash, setStormFlash] = useState(false);
+  const wheelOpenedRef = useRef(false);
+
+  const playThunder = useCallback(() => {
+    try {
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      const duration = 5.0;
+      const sampleRate = ctx.sampleRate;
+      const len = sampleRate * duration;
+      const buffer = ctx.createBuffer(1, len, sampleRate);
+      const d = buffer.getChannelData(0);
+      // Layer 1: initial crack
+      for (let i = 0; i < len; i++) {
+        const t = i / sampleRate;
+        const crack = Math.exp(-t * 8) * (t < 0.03 ? t / 0.03 : 1);
+        d[i] = (Math.random() * 2 - 1) * crack * 0.7;
+      }
+      // Layer 2: deep rolling rumble with multiple echo peaks
+      for (let i = 0; i < len; i++) {
+        const t = i / sampleRate;
+        const rumble = Math.exp(-t * 0.6)
+          * (0.4 + 0.25 * Math.sin(t * 8) + 0.2 * Math.sin(t * 3.5) + 0.15 * Math.sin(t * 14))
+          * (1 + 0.6 * Math.exp(-Math.pow(t - 0.8, 2) * 8))  // echo at 0.8s
+          * (1 + 0.4 * Math.exp(-Math.pow(t - 1.6, 2) * 6))  // echo at 1.6s
+          * (1 + 0.25 * Math.exp(-Math.pow(t - 2.5, 2) * 5)); // echo at 2.5s
+        d[i] += (Math.random() * 2 - 1) * rumble * 0.5;
+      }
+      // Heavy low-pass for deep bass rumble (multiple passes)
+      for (let pass = 0; pass < 3; pass++) {
+        for (let i = 1; i < len; i++) {
+          d[i] = d[i] * 0.08 + d[i - 1] * 0.92;
+        }
+      }
+      const source = ctx.createBufferSource();
+      source.buffer = buffer;
+      const gain = ctx.createGain();
+      gain.gain.value = 1.0;
+      source.connect(gain);
+      gain.connect(ctx.destination);
+      source.start();
+      source.onended = () => ctx.close();
+    } catch (e) { /* audio not available */ }
+  }, []);
+
+  const triggerStormFlash = useCallback(() => {
+    if (stormFlash) return;
+    setStormFlash(true);
+    playThunder();
+    setTimeout(() => setStormFlash(false), 3500);
+  }, [stormFlash, playThunder]);
+
+  // Yellow Brick Road intro animation
+  const [ybrIntroStep, setYbrIntroStep] = useState(-1);
+
+  const YBR_INTRO_SEQ = useMemo(() => {
+    const seq = [];
+    // Planets in Chaldean order (inner to outer)
+    ['Moon', 'Mercury', 'Venus', 'Sun', 'Mars', 'Jupiter', 'Saturn'].forEach(planet => {
+      const orbit = ORBITS.find(o => o.planet === planet);
+      if (orbit) {
+        const rad = (ALIGN_ANGLE * Math.PI) / 180;
+        seq.push({ x: CX + orbit.r * Math.cos(rad), y: CY + orbit.r * Math.sin(rad), type: 'planet', r: orbit.r < 100 ? 14 : 16 });
+      }
+    });
+    // Zodiac CCW from Cancer: Cancer, Leo, Virgo, Libra, Scorpio, Sag, Cap, Aquarius, Pisces, Aries, Taurus, Gemini
+    [3, 4, 5, 6, 7, 8, 9, 10, 11, 0, 1, 2].forEach(i => {
+      const angle = -(i * 30 + 15);
+      const rad = (angle * Math.PI) / 180;
+      seq.push({ x: CX + ZODIAC_TEXT_R * Math.cos(rad), y: CY + ZODIAC_TEXT_R * Math.sin(rad), type: 'zodiac', r: 18 });
+    });
+    return seq;
+  }, []);
+
+  useEffect(() => {
+    if (ybrIntroStep < 0) return;
+    if (ybrIntroStep >= YBR_INTRO_SEQ.length) {
+      const t = setTimeout(() => setYbrIntroStep(-1), 1200);
+      return () => clearTimeout(t);
+    }
+    // Planets light up faster, zodiac slightly slower
+    const delay = ybrIntroStep < 7 ? 220 : 180;
+    const t = setTimeout(() => setYbrIntroStep(s => s + 1), delay);
+    return () => clearTimeout(t);
+  }, [ybrIntroStep, YBR_INTRO_SEQ.length]);
+
+  const startYbrIntro = useCallback(() => {
+    setYbrIntroStep(0);
+  }, []);
+
   const handleWheelMove = (e) => {
     const svg = e.currentTarget.closest('svg');
     const rect = svg.getBoundingClientRect();
@@ -219,7 +452,7 @@ export default function OrbitalDiagram({ selectedPlanet, onSelectPlanet, selecte
   };
 
   useEffect(() => {
-    if (aligned || livePositions) {
+    if (aligned || livePositions || chakraViewMode) {
       lastTimeRef.current = null;
       return;
     }
@@ -249,7 +482,16 @@ export default function OrbitalDiagram({ selectedPlanet, onSelectPlanet, selecte
       cancelAnimationFrame(rafRef.current);
       lastTimeRef.current = null;
     };
-  }, [aligned, livePositions, heliocentric]);
+  }, [aligned, livePositions, heliocentric, chakraViewMode]);
+
+  // Auto-align when Yellow Brick Road activates
+  useEffect(() => {
+    if (ybrActive) {
+      setAligned(true);
+      setLivePositions(false);
+      setHeliocentric(false);
+    }
+  }, [ybrActive]);
 
   const liveAngles = useMemo(() => {
     if (!livePositions) return null;
@@ -262,6 +504,40 @@ export default function OrbitalDiagram({ selectedPlanet, onSelectPlanet, selecte
   }, [livePositions]);
 
   const moonPhaseAngle = useMemo(() => MoonPhase(new Date()), []);
+
+  const starPositionsNorth = useMemo(() =>
+    starsNorth.map(([ra, dec, mag]) => ({ ...starToSvg(ra, dec), r: starRadius(mag), o: starOpacity(mag) })), []
+  );
+  const starPositionsSouth = useMemo(() =>
+    starsSouth.map(([ra, dec, mag]) => ({ ...starToSvg(ra, dec), r: starRadius(mag), o: starOpacity(mag) })), []
+  );
+
+  // Pre-select ~30 stars from each hemisphere to twinkle, with staggered delays
+  const twinkleNorth = useMemo(() => {
+    const set = new Set();
+    for (let i = 7; i < starsNorth.length; i += Math.floor(starsNorth.length / 30)) set.add(i);
+    return set;
+  }, []);
+  const twinkleSouth = useMemo(() => {
+    const set = new Set();
+    for (let i = 5; i < starsSouth.length; i += Math.floor(starsSouth.length / 30)) set.add(i);
+    return set;
+  }, []);
+
+  // Hit targets for constellation stars (only for current hemisphere)
+  const constellationHits = useMemo(() => {
+    if (starMapMode === 'none') return [];
+    const isNorth = starMapMode === 'north';
+    const positions = isNorth ? starPositionsNorth : starPositionsSouth;
+    const lookup = isNorth ? northStarToCid : southStarToCid;
+    const hits = [];
+    for (const idx in lookup) {
+      const i = Number(idx);
+      const s = positions[i];
+      if (s) hits.push({ x: s.x, y: s.y, r: s.r, cid: lookup[idx], idx: i });
+    }
+    return hits;
+  }, [starMapMode, starPositionsNorth, starPositionsSouth, northStarToCid, southStarToCid]);
 
   // YouTube video player in center
   const videoPlayerRef = useRef(null);
@@ -303,8 +579,25 @@ export default function OrbitalDiagram({ selectedPlanet, onSelectPlanet, selecte
     }
   };
 
+  const cycleStarMap = () => setStarMapMode(p => p === 'none' ? 'north' : p === 'north' ? 'south' : 'none');
+
+  const handleConstellationOver = useCallback((e) => {
+    const cid = e.target.dataset.cid;
+    if (cid) {
+      setHoveredConstellation(cid);
+      setTooltip({ type: 'constellation', key: cid, x: e.clientX, y: e.clientY });
+    }
+  }, []);
+
+  const handleConstellationOut = useCallback((e) => {
+    if (e.target.dataset.cid) {
+      setHoveredConstellation(null);
+      setTooltip(null);
+    }
+  }, []);
+
   return (
-    <div className="orbital-diagram-wrapper">
+    <div className="orbital-diagram-wrapper" ref={wrapperRef}>
       <svg viewBox="0 0 700 700" className="orbital-svg" role="img" aria-label={showMedicineWheel ? "Medicine wheel diagram" : heliocentric ? "Heliocentric orbital diagram" : "Geocentric orbital diagram with zodiac"}>
         {showMedicineWheel ? (
           <g className="medicine-wheel" onMouseMove={handleWheelMove} onMouseLeave={() => { hoveredRingRef.current = null; setHoveredRing(null); }}>
@@ -499,7 +792,7 @@ export default function OrbitalDiagram({ selectedPlanet, onSelectPlanet, selecte
             })()}
 
             {/* Storm attribution — bottom right, clickable */}
-            <g onClick={() => onSelectWheelItem && onSelectWheelItem(selectedWheelItem === 'meta:author' ? null : 'meta:author')} style={{ cursor: 'pointer' }}>
+            <g onClick={() => { triggerStormFlash(); onSelectWheelItem && onSelectWheelItem(selectedWheelItem === 'meta:author' ? null : 'meta:author'); }} style={{ cursor: 'pointer' }}>
               <text x={CX + MW_OUTER_R + 10} y={CY + MW_OUTER_R + 22} textAnchor="end"
                 fill={selectedWheelItem === 'meta:author' ? '#f0c040' : 'rgba(220, 190, 120, 0.45)'} fontSize="11" fontFamily="Crimson Pro, serif" fontWeight="400" fontStyle="italic"
                 style={{ transition: 'fill 0.3s' }}>
@@ -643,6 +936,9 @@ export default function OrbitalDiagram({ selectedPlanet, onSelectPlanet, selecte
                   key={m}
                   className={`month-segment${isSelected ? ' active' : ''}`}
                   onClick={() => onSelectMonth && onSelectMonth(isSelected ? null : m)}
+                  onMouseEnter={(e) => handleTooltipEnter('month', m, e)}
+                  onMouseMove={handleTooltipMove}
+                  onMouseLeave={handleTooltipLeave}
                   style={{ cursor: 'pointer' }}
                 >
                   <circle cx={hx} cy={hy} r="18" fill="transparent" />
@@ -729,6 +1025,9 @@ export default function OrbitalDiagram({ selectedPlanet, onSelectPlanet, selecte
               key={z.sign}
               className={`zodiac-sign${isSelected ? ' active' : ''}`}
               onClick={() => onSelectSign && onSelectSign(isSelected ? null : z.sign)}
+              onMouseEnter={(e) => handleTooltipEnter('zodiac', z.sign, e)}
+              onMouseMove={handleTooltipMove}
+              onMouseLeave={handleTooltipLeave}
               style={{ cursor: 'pointer' }}
             >
               <circle cx={hx} cy={hy} r="24" fill="transparent" />
@@ -773,6 +1072,9 @@ export default function OrbitalDiagram({ selectedPlanet, onSelectPlanet, selecte
               key={c.id}
               className={`cardinal-point${isSelected ? ' active' : ''}`}
               onClick={() => onSelectCardinal && onSelectCardinal(isSelected ? null : c.id)}
+              onMouseEnter={(e) => handleTooltipEnter('cardinal', c.id, e)}
+              onMouseMove={handleTooltipMove}
+              onMouseLeave={handleTooltipLeave}
               style={{ cursor: 'pointer' }}
             >
               {/* Hit target */}
@@ -811,6 +1113,215 @@ export default function OrbitalDiagram({ selectedPlanet, onSelectPlanet, selecte
           );
         })}
 
+        {/* Chakra body viewer — Vitruvian figure + planets at chakra positions */}
+        {chakraViewMode ? (
+          <g className="chakra-body-viewer">
+            {/* Vitruvian figure — Da Vinci-style with two overlapping poses */}
+            <g className="vitruvian-figure">
+              {/* Inscribed circle — centered on navel */}
+              <circle cx={350} cy={295} r={240} fill="none" stroke="rgba(201,169,97,0.15)" strokeWidth="0.8" />
+              {/* Inscribed square — centered on groin */}
+              <rect x={120} y={100} width={460} height={460} fill="none" stroke="rgba(201,169,97,0.10)" strokeWidth="0.8" />
+
+              {/* ══ HEAD ══ */}
+              <ellipse cx={350} cy={128} rx={22} ry={28} fill="none" stroke="rgba(201,169,97,0.4)" strokeWidth="1.2" />
+              {/* Hair — curly suggestion */}
+              <path d="M328,120 C324,108 330,96 342,94 C348,93 352,93 358,94 C370,96 376,108 372,120" fill="none" stroke="rgba(201,169,97,0.22)" strokeWidth="0.8" strokeLinecap="round" />
+              <path d="M330,115 C328,105 335,98 345,97" fill="none" stroke="rgba(201,169,97,0.15)" strokeWidth="0.6" />
+              <path d="M370,115 C372,105 365,98 355,97" fill="none" stroke="rgba(201,169,97,0.15)" strokeWidth="0.6" />
+              {/* Eyes — minimal */}
+              <line x1={340} y1={124} x2={346} y2={124} stroke="rgba(201,169,97,0.25)" strokeWidth="0.7" />
+              <line x1={354} y1={124} x2={360} y2={124} stroke="rgba(201,169,97,0.25)" strokeWidth="0.7" />
+              {/* Nose */}
+              <line x1={350} y1={127} x2={350} y2={135} stroke="rgba(201,169,97,0.18)" strokeWidth="0.5" />
+              {/* Mouth */}
+              <path d="M345,140 C348,142 352,142 355,140" fill="none" stroke="rgba(201,169,97,0.15)" strokeWidth="0.5" />
+
+              {/* ══ NECK ══ */}
+              <line x1={343} y1={156} x2={343} y2={172} stroke="rgba(201,169,97,0.3)" strokeWidth="0.9" />
+              <line x1={357} y1={156} x2={357} y2={172} stroke="rgba(201,169,97,0.3)" strokeWidth="0.9" />
+
+              {/* ══ TORSO ══ */}
+              {/* Shoulder / clavicle lines */}
+              <path d="M343,172 C335,174 310,180 298,186" fill="none" stroke="rgba(201,169,97,0.38)" strokeWidth="1.1" strokeLinecap="round" />
+              <path d="M357,172 C365,174 390,180 402,186" fill="none" stroke="rgba(201,169,97,0.38)" strokeWidth="1.1" strokeLinecap="round" />
+              {/* Pectoral contours */}
+              <path d="M305,195 C315,208 338,212 350,210" fill="none" stroke="rgba(201,169,97,0.2)" strokeWidth="0.7" />
+              <path d="M395,195 C385,208 362,212 350,210" fill="none" stroke="rgba(201,169,97,0.2)" strokeWidth="0.7" />
+              {/* Nipple dots */}
+              <circle cx={325} cy={205} r="1.5" fill="rgba(201,169,97,0.2)" />
+              <circle cx={375} cy={205} r="1.5" fill="rgba(201,169,97,0.2)" />
+              {/* Ribcage hints */}
+              <path d="M318,222 C332,227 368,227 382,222" fill="none" stroke="rgba(201,169,97,0.12)" strokeWidth="0.6" />
+              <path d="M322,236 C336,240 364,240 378,236" fill="none" stroke="rgba(201,169,97,0.12)" strokeWidth="0.6" />
+              {/* Abdominal center line */}
+              <line x1={350} y1={212} x2={350} y2={340} stroke="rgba(201,169,97,0.15)" strokeWidth="0.6" />
+              {/* Navel */}
+              <circle cx={350} cy={295} r={3} fill="none" stroke="rgba(201,169,97,0.22)" strokeWidth="0.6" />
+              {/* Torso outline — left */}
+              <path d="M298,186 C290,210 288,250 296,290 C302,320 310,340 318,355" fill="none" stroke="rgba(201,169,97,0.35)" strokeWidth="1" strokeLinecap="round" />
+              {/* Torso outline — right */}
+              <path d="M402,186 C410,210 412,250 404,290 C398,320 390,340 382,355" fill="none" stroke="rgba(201,169,97,0.35)" strokeWidth="1" strokeLinecap="round" />
+              {/* Waist indentation */}
+              <path d="M302,280 C318,276 340,275 350,275" fill="none" stroke="rgba(201,169,97,0.12)" strokeWidth="0.5" />
+              <path d="M398,280 C382,276 360,275 350,275" fill="none" stroke="rgba(201,169,97,0.12)" strokeWidth="0.5" />
+              {/* Hip bones */}
+              <path d="M312,340 C325,348 340,352 350,353" fill="none" stroke="rgba(201,169,97,0.15)" strokeWidth="0.6" />
+              <path d="M388,340 C375,348 360,352 350,353" fill="none" stroke="rgba(201,169,97,0.15)" strokeWidth="0.6" />
+
+              {/* ══ PRIMARY POSE — LEFT ARM (square pose) ══ */}
+              {/* Deltoid cap */}
+              <path d="M298,179 C291,175 285,179 284,185 C283,191 287,196 296,198" fill="none" stroke="rgba(201,169,97,0.35)" strokeWidth="0.9" strokeLinecap="round" />
+              {/* Anterior contour (top of arm) — shoulder to wrist */}
+              <path d="M298,179 C275,182 255,185 237,188 C218,190 195,192 170,194 C152,195 142,196 132,196" fill="none" stroke="rgba(201,169,97,0.38)" strokeWidth="1" strokeLinecap="round" />
+              {/* Posterior contour (bottom of arm) — armpit to wrist */}
+              <path d="M296,198 C275,201 255,204 237,205 C218,206 195,207 170,206 C152,206 142,205 132,204" fill="none" stroke="rgba(201,169,97,0.38)" strokeWidth="1" strokeLinecap="round" />
+              {/* Elbow crease */}
+              <path d="M237,188 C236,193 236,200 237,205" fill="none" stroke="rgba(201,169,97,0.12)" strokeWidth="0.5" />
+              {/* Bicep contour */}
+              <path d="M290,184 C275,188 262,191 250,193" fill="none" stroke="rgba(201,169,97,0.1)" strokeWidth="0.5" />
+              {/* Left hand — palm outline */}
+              <path d="M132,196 C126,195 120,196 118,200 C120,204 126,205 132,204" fill="none" stroke="rgba(201,169,97,0.3)" strokeWidth="0.8" strokeLinecap="round" />
+              {/* Fingers */}
+              <path d="M118,196 L106,191" fill="none" stroke="rgba(201,169,97,0.28)" strokeWidth="0.7" strokeLinecap="round" />
+              <path d="M118,198 L104,196" fill="none" stroke="rgba(201,169,97,0.28)" strokeWidth="0.7" strokeLinecap="round" />
+              <path d="M118,200 L103,200" fill="none" stroke="rgba(201,169,97,0.28)" strokeWidth="0.7" strokeLinecap="round" />
+              <path d="M118,202 L105,206" fill="none" stroke="rgba(201,169,97,0.28)" strokeWidth="0.7" strokeLinecap="round" />
+              <path d="M119,204 L112,210" fill="none" stroke="rgba(201,169,97,0.22)" strokeWidth="0.6" strokeLinecap="round" />
+
+              {/* ══ PRIMARY POSE — RIGHT ARM (square pose) ══ */}
+              {/* Deltoid cap */}
+              <path d="M402,179 C409,175 415,179 416,185 C417,191 413,196 404,198" fill="none" stroke="rgba(201,169,97,0.35)" strokeWidth="0.9" strokeLinecap="round" />
+              {/* Anterior contour */}
+              <path d="M402,179 C425,182 445,185 463,188 C482,190 505,192 530,194 C548,195 558,196 568,196" fill="none" stroke="rgba(201,169,97,0.38)" strokeWidth="1" strokeLinecap="round" />
+              {/* Posterior contour */}
+              <path d="M404,198 C425,201 445,204 463,205 C482,206 505,207 530,206 C548,206 558,205 568,204" fill="none" stroke="rgba(201,169,97,0.38)" strokeWidth="1" strokeLinecap="round" />
+              {/* Elbow crease */}
+              <path d="M463,188 C464,193 464,200 463,205" fill="none" stroke="rgba(201,169,97,0.12)" strokeWidth="0.5" />
+              {/* Bicep contour */}
+              <path d="M410,184 C425,188 438,191 450,193" fill="none" stroke="rgba(201,169,97,0.1)" strokeWidth="0.5" />
+              {/* Right hand — palm outline */}
+              <path d="M568,196 C574,195 580,196 582,200 C580,204 574,205 568,204" fill="none" stroke="rgba(201,169,97,0.3)" strokeWidth="0.8" strokeLinecap="round" />
+              {/* Fingers */}
+              <path d="M582,196 L594,191" fill="none" stroke="rgba(201,169,97,0.28)" strokeWidth="0.7" strokeLinecap="round" />
+              <path d="M582,198 L596,196" fill="none" stroke="rgba(201,169,97,0.28)" strokeWidth="0.7" strokeLinecap="round" />
+              <path d="M582,200 L597,200" fill="none" stroke="rgba(201,169,97,0.28)" strokeWidth="0.7" strokeLinecap="round" />
+              <path d="M582,202 L595,206" fill="none" stroke="rgba(201,169,97,0.28)" strokeWidth="0.7" strokeLinecap="round" />
+              <path d="M581,204 L588,210" fill="none" stroke="rgba(201,169,97,0.22)" strokeWidth="0.6" strokeLinecap="round" />
+
+              {/* ══ SECONDARY POSE — LEFT ARM RAISED ══ */}
+              {/* Upper contour (above arm) */}
+              <path d="M297,176 C272,164 250,154 232,147 C212,140 192,134 172,130 C158,127 148,126 140,125" fill="none" stroke="rgba(201,169,97,0.22)" strokeWidth="0.9" strokeLinecap="round" />
+              {/* Lower contour (below arm) */}
+              <path d="M293,190 C270,178 250,168 232,161 C212,154 192,148 172,144 C158,141 148,140 140,139" fill="none" stroke="rgba(201,169,97,0.22)" strokeWidth="0.9" strokeLinecap="round" />
+              {/* Raised palm */}
+              <path d="M140,125 C136,124 132,126 131,131 C132,136 136,138 140,139" fill="none" stroke="rgba(201,169,97,0.18)" strokeWidth="0.7" strokeLinecap="round" />
+              {/* Raised fingers */}
+              <path d="M131,126 L121,120" fill="none" stroke="rgba(201,169,97,0.15)" strokeWidth="0.6" strokeLinecap="round" />
+              <path d="M131,128 L119,124" fill="none" stroke="rgba(201,169,97,0.15)" strokeWidth="0.6" strokeLinecap="round" />
+              <path d="M131,131 L118,130" fill="none" stroke="rgba(201,169,97,0.15)" strokeWidth="0.6" strokeLinecap="round" />
+              <path d="M131,134 L121,137" fill="none" stroke="rgba(201,169,97,0.15)" strokeWidth="0.6" strokeLinecap="round" />
+
+              {/* ══ SECONDARY POSE — RIGHT ARM RAISED ══ */}
+              {/* Upper contour */}
+              <path d="M403,176 C428,164 450,154 468,147 C488,140 508,134 528,130 C542,127 552,126 560,125" fill="none" stroke="rgba(201,169,97,0.22)" strokeWidth="0.9" strokeLinecap="round" />
+              {/* Lower contour */}
+              <path d="M407,190 C430,178 450,168 468,161 C488,154 508,148 528,144 C542,141 552,140 560,139" fill="none" stroke="rgba(201,169,97,0.22)" strokeWidth="0.9" strokeLinecap="round" />
+              {/* Raised palm */}
+              <path d="M560,125 C564,124 568,126 569,131 C568,136 564,138 560,139" fill="none" stroke="rgba(201,169,97,0.18)" strokeWidth="0.7" strokeLinecap="round" />
+              {/* Raised fingers */}
+              <path d="M569,126 L579,120" fill="none" stroke="rgba(201,169,97,0.15)" strokeWidth="0.6" strokeLinecap="round" />
+              <path d="M569,128 L581,124" fill="none" stroke="rgba(201,169,97,0.15)" strokeWidth="0.6" strokeLinecap="round" />
+              <path d="M569,131 L582,130" fill="none" stroke="rgba(201,169,97,0.15)" strokeWidth="0.6" strokeLinecap="round" />
+              <path d="M569,134 L579,137" fill="none" stroke="rgba(201,169,97,0.15)" strokeWidth="0.6" strokeLinecap="round" />
+
+              {/* ══ PRIMARY POSE — LEFT LEG (square pose, together) ══ */}
+              {/* Lateral (outer) contour — hip to ankle with calf shape */}
+              <path d="M318,358 C314,378 312,405 314,435 C316,452 317,464 316,478 C317,492 321,512 326,532 C330,546 332,553 334,558" fill="none" stroke="rgba(201,169,97,0.38)" strokeWidth="1" strokeLinecap="round" />
+              {/* Medial (inner) contour */}
+              <path d="M340,358 C342,378 344,405 344,435 C344,452 343,464 343,478 C343,492 343,512 343,532 C343,546 343,553 343,558" fill="none" stroke="rgba(201,169,97,0.35)" strokeWidth="0.9" strokeLinecap="round" />
+              {/* Kneecap */}
+              <path d="M316,470 C318,466 322,464 328,464 C334,464 340,466 343,470" fill="none" stroke="rgba(201,169,97,0.12)" strokeWidth="0.5" />
+              {/* Calf muscle bulge */}
+              <path d="M318,488 C319,498 322,508 326,516" fill="none" stroke="rgba(201,169,97,0.1)" strokeWidth="0.5" />
+              {/* Left foot */}
+              <path d="M334,558 C330,560 323,562 318,564 C322,566 332,567 341,566 C343,565 344,562 343,558" fill="none" stroke="rgba(201,169,97,0.3)" strokeWidth="0.8" strokeLinecap="round" />
+
+              {/* ══ PRIMARY POSE — RIGHT LEG (square pose, together) ══ */}
+              {/* Lateral (outer) contour */}
+              <path d="M382,358 C386,378 388,405 386,435 C384,452 383,464 384,478 C383,492 379,512 374,532 C370,546 368,553 366,558" fill="none" stroke="rgba(201,169,97,0.38)" strokeWidth="1" strokeLinecap="round" />
+              {/* Medial (inner) contour */}
+              <path d="M360,358 C358,378 356,405 356,435 C356,452 357,464 357,478 C357,492 357,512 357,532 C357,546 357,553 357,558" fill="none" stroke="rgba(201,169,97,0.35)" strokeWidth="0.9" strokeLinecap="round" />
+              {/* Kneecap */}
+              <path d="M384,470 C382,466 378,464 372,464 C366,464 360,466 357,470" fill="none" stroke="rgba(201,169,97,0.12)" strokeWidth="0.5" />
+              {/* Calf muscle bulge */}
+              <path d="M382,488 C381,498 378,508 374,516" fill="none" stroke="rgba(201,169,97,0.1)" strokeWidth="0.5" />
+              {/* Right foot */}
+              <path d="M366,558 C370,560 377,562 382,564 C378,566 368,567 359,566 C357,565 356,562 357,558" fill="none" stroke="rgba(201,169,97,0.3)" strokeWidth="0.8" strokeLinecap="round" />
+
+              {/* ══ SECONDARY POSE — LEFT LEG SPREAD ══ */}
+              {/* Lateral (outer) contour */}
+              <path d="M315,358 C298,392 278,430 260,468 C248,494 240,514 232,534 C228,542 225,548 223,552" fill="none" stroke="rgba(201,169,97,0.22)" strokeWidth="0.9" strokeLinecap="round" />
+              {/* Medial (inner) contour */}
+              <path d="M338,362 C322,394 304,430 287,466 C276,490 268,510 261,530 C258,538 255,544 253,548" fill="none" stroke="rgba(201,169,97,0.22)" strokeWidth="0.9" strokeLinecap="round" />
+              {/* Left spread foot */}
+              <path d="M223,552 C218,554 212,558 210,561 C215,564 224,564 234,562 C242,559 250,554 253,548" fill="none" stroke="rgba(201,169,97,0.16)" strokeWidth="0.7" strokeLinecap="round" />
+
+              {/* ══ SECONDARY POSE — RIGHT LEG SPREAD ══ */}
+              {/* Lateral (outer) contour */}
+              <path d="M385,358 C402,392 422,430 440,468 C452,494 460,514 468,534 C472,542 475,548 477,552" fill="none" stroke="rgba(201,169,97,0.22)" strokeWidth="0.9" strokeLinecap="round" />
+              {/* Medial (inner) contour */}
+              <path d="M362,362 C378,394 396,430 413,466 C424,490 432,510 439,530 C442,538 445,544 447,548" fill="none" stroke="rgba(201,169,97,0.22)" strokeWidth="0.9" strokeLinecap="round" />
+              {/* Right spread foot */}
+              <path d="M477,552 C482,554 488,558 490,561 C485,564 476,564 466,562 C458,559 450,554 447,548" fill="none" stroke="rgba(201,169,97,0.16)" strokeWidth="0.7" strokeLinecap="round" />
+
+              {/* Hip / groin area */}
+              <path d="M318,358 C330,362 345,363 350,363 C355,363 370,362 382,358" fill="none" stroke="rgba(201,169,97,0.15)" strokeWidth="0.6" />
+            </g>
+
+            {/* Chakra color dots */}
+            {CHAKRA_POSITIONS.map((pos, i) => (
+              <circle key={`dot-${pos.label}`} className="chakra-dot" cx={pos.x} cy={pos.y} r="18" fill={pos.color} opacity="0.12" />
+            ))}
+
+            {/* Chakra labels */}
+            {CHAKRA_POSITIONS.map((pos) => (
+              <text key={`label-${pos.label}`} className="chakra-label"
+                x={pos.x + 28} y={pos.y + 1}
+                textAnchor="start" dominantBaseline="central"
+                fill="rgba(201,169,97,0.35)" fontSize="8" fontFamily="Cinzel, serif" fontWeight="400"
+              >
+                {pos.label}
+              </text>
+            ))}
+
+            {/* Planet nodes at chakra positions */}
+            {CHAKRA_ORDERINGS[chakraViewMode].map((planet, i) => {
+              const pos = CHAKRA_POSITIONS[i];
+              const orbit = ORBITS.find(o => o.planet === planet);
+              return (
+                <PlanetNode
+                  key={planet}
+                  planet={planet}
+                  metal={orbit?.metal || ''}
+                  cx={pos.x}
+                  cy={pos.y}
+                  selected={selectedPlanet === planet}
+                  onClick={() => onSelectPlanet(planet)}
+                  onMouseEnter={(e) => handleTooltipEnter('planet', planet, e)}
+                  onMouseLeave={handleTooltipLeave}
+                  smooth={true}
+                />
+              );
+            })}
+
+            {/* Mode label */}
+            <text x={CX} y={620} textAnchor="middle" fill="rgba(155,89,182,0.6)" fontSize="11" fontFamily="Cinzel, serif" fontWeight="500" letterSpacing="1">
+              {CHAKRA_MODE_LABELS[chakraViewMode]}
+            </text>
+          </g>
+        ) : (
+          <>
         {/* Orbital rings */}
         {(heliocentric ? HELIO_ORBITS : ORBITS).map(o => (
           <circle
@@ -840,6 +1351,16 @@ export default function OrbitalDiagram({ selectedPlanet, onSelectPlanet, selecte
             strokeWidth="1"
             strokeDasharray="6 4"
           />
+        )}
+
+        {starMapMode === 'south' && (
+          <g className="star-layer star-layer-south" opacity={hoveredConstellation ? 0.15 : 1}>
+            {starPositionsSouth.map((s, i) => (
+              twinkleSouth.has(i)
+                ? <circle key={i} cx={s.x} cy={s.y} r={s.r} fill="#e8e0d0" className="star-twinkle" style={{ '--star-base-o': s.o, animationDelay: `${(i * 2.3) % 14}s`, animationDuration: `${12 + (i * 1.1) % 5}s` }} />
+                : <circle key={i} cx={s.x} cy={s.y} r={s.r} fill="#e8e0d0" opacity={s.o} />
+            ))}
+          </g>
         )}
 
         {/* Center body: Sun (heliocentric) or Earth (geocentric) */}
@@ -897,7 +1418,10 @@ export default function OrbitalDiagram({ selectedPlanet, onSelectPlanet, selecte
           return (
             <g>
               <circle cx={CX} cy={CY} r="28" fill="url(#earth-glow)" />
-              <g style={{ cursor: 'pointer' }} onClick={() => onSelectEarth && onSelectEarth(daySelected ? null : 'day')}>
+              <g style={{ cursor: 'pointer' }} onClick={() => onSelectEarth && onSelectEarth(daySelected ? null : 'day')}
+                onMouseEnter={(e) => handleTooltipEnter('daynight', 'day', e)}
+                onMouseMove={handleTooltipMove}
+                onMouseLeave={handleTooltipLeave}>
                 <path d={`M 0,${-er} A ${er},${er} 0 0,1 0,${er} L 0,0 Z`}
                   fill={daySelected ? '#6aded0' : '#4a9a8a'} fillOpacity="0.9"
                   stroke={daySelected ? '#7aeac0' : 'none'} strokeWidth="1.5"
@@ -913,7 +1437,10 @@ export default function OrbitalDiagram({ selectedPlanet, onSelectPlanet, selecte
                   Day
                 </text>
               </g>
-              <g style={{ cursor: 'pointer' }} onClick={() => onSelectEarth && onSelectEarth(nightSelected ? null : 'night')}>
+              <g style={{ cursor: 'pointer' }} onClick={() => onSelectEarth && onSelectEarth(nightSelected ? null : 'night')}
+                onMouseEnter={(e) => handleTooltipEnter('daynight', 'night', e)}
+                onMouseMove={handleTooltipMove}
+                onMouseLeave={handleTooltipLeave}>
                 <path d={`M 0,${-er} A ${er},${er} 0 0,0 0,${er} L 0,0 Z`}
                   fill={nightSelected ? '#2a4a4a' : '#152525'} fillOpacity="0.9"
                   stroke={nightSelected ? '#5a8a8a' : 'none'} strokeWidth="1.5"
@@ -954,6 +1481,8 @@ export default function OrbitalDiagram({ selectedPlanet, onSelectPlanet, selecte
                     cy={py}
                     selected={selectedPlanet === o.planet}
                     onClick={() => onSelectPlanet(o.planet)}
+                    onMouseEnter={(e) => handleTooltipEnter('planet', o.planet, e)}
+                    onMouseLeave={handleTooltipLeave}
                     smooth={false}
                   />
                   {/* Moon orbiting Earth */}
@@ -991,6 +1520,8 @@ export default function OrbitalDiagram({ selectedPlanet, onSelectPlanet, selecte
                 cy={py}
                 selected={selectedPlanet === o.planet}
                 onClick={() => onSelectPlanet(o.planet)}
+                onMouseEnter={(e) => handleTooltipEnter('planet', o.planet, e)}
+                onMouseLeave={handleTooltipLeave}
                 moonPhase={o.planet === 'Moon' ? (
                   !aligned && !livePositions
                     ? ((90 - orbitAngles['Moon']) % 360 + 360) % 360
@@ -1015,18 +1546,163 @@ export default function OrbitalDiagram({ selectedPlanet, onSelectPlanet, selecte
             </g>
           );
         })}
+
+        {starMapMode === 'north' && (
+          <g className="star-layer star-layer-north" opacity={hoveredConstellation ? 0.15 : 1}>
+            {starPositionsNorth.map((s, i) => (
+              twinkleNorth.has(i)
+                ? <circle key={i} cx={s.x} cy={s.y} r={s.r} fill="#e8e0d0" className="star-twinkle" style={{ '--star-base-o': s.o, animationDelay: `${(i * 2.3) % 14}s`, animationDuration: `${12 + (i * 1.1) % 5}s` }} />
+                : <circle key={i} cx={s.x} cy={s.y} r={s.r} fill="#e8e0d0" opacity={s.o} />
+            ))}
+          </g>
+        )}
+
+        {/* Constellation highlight: lines + bright stars */}
+        {hoveredConstellation && starMapMode !== 'none' && constellationMap[hoveredConstellation] && (
+          <g className="constellation-highlight">
+            {constellationMap[hoveredConstellation].lines
+              .filter(l => starMapMode === 'north' ? (l.dec1 >= 0 && l.dec2 >= 0) : (l.dec1 < 0 && l.dec2 < 0))
+              .map((l, i) => (
+              <line key={i} x1={l.x1} y1={l.y1} x2={l.x2} y2={l.y2}
+                stroke="rgba(232, 224, 208, 0.4)" strokeWidth="0.8" />
+            ))}
+            {(starMapMode === 'north'
+              ? constellationMap[hoveredConstellation].northStars.map(i => ({ ...starPositionsNorth[i], i }))
+              : constellationMap[hoveredConstellation].southStars.map(i => ({ ...starPositionsSouth[i], i }))
+            ).map(s => (
+              <circle key={s.i} cx={s.x} cy={s.y} r={s.r * 1.8}
+                fill="#e8e0d0" opacity={1} />
+            ))}
+          </g>
+        )}
+
+        {/* Invisible hit targets for constellation star hover */}
+        {starMapMode !== 'none' && (
+          <g className="constellation-hit-layer"
+            onMouseOver={handleConstellationOver}
+            onMouseMove={handleTooltipMove}
+            onMouseOut={handleConstellationOut}>
+            {constellationHits.map(s => (
+              <circle key={`${s.cid}-${s.idx}`} cx={s.x} cy={s.y}
+                r={Math.max(s.r + 2, 5)} fill="transparent" data-cid={s.cid}
+                style={{ cursor: 'pointer' }} />
+            ))}
+          </g>
+        )}
+          </>
+        )}
+
+        {/* Yellow Brick Road overlay */}
+        {ybrActive && !chakraViewMode && (() => {
+          const seq = ybrJourneySequence || [];
+          const positions = seq.map(stop => {
+            if (stop.type === 'planet') {
+              const orbit = ORBITS.find(o => o.planet === stop.entity);
+              if (!orbit) return { x: CX, y: CY };
+              const rad = (ALIGN_ANGLE * Math.PI) / 180;
+              return { x: CX + orbit.r * Math.cos(rad), y: CY + orbit.r * Math.sin(rad) };
+            }
+            const signIdx = ZODIAC.findIndex(z => z.sign === stop.entity);
+            if (signIdx < 0) return { x: CX, y: CY };
+            const angle = -(signIdx * 30 + 15);
+            const rad = (angle * Math.PI) / 180;
+            return { x: CX + ZODIAC_TEXT_R * Math.cos(rad), y: CY + ZODIAC_TEXT_R * Math.sin(rad) };
+          });
+
+          // Full path: Earth center → all stops → Earth center
+          const allPts = [{ x: CX, y: CY }, ...positions, { x: CX, y: CY }];
+          const fullD = allPts.map((p, i) => `${i === 0 ? 'M' : 'L'}${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ');
+
+          // Visited path up to current stop
+          const vi = ybrCurrentStopIndex >= 0 ? Math.min(ybrCurrentStopIndex, positions.length - 1) : -1;
+          const visitedPts = vi >= 0 ? [{ x: CX, y: CY }, ...positions.slice(0, vi + 1)] : [];
+          const visitedD = visitedPts.length > 1
+            ? visitedPts.map((p, i) => `${i === 0 ? 'M' : 'L'}${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ')
+            : '';
+
+          return (
+            <g className="ybr-overlay" style={{ pointerEvents: 'none' }}>
+              <path d={fullD} fill="none" stroke="rgba(218,165,32,0.15)" strokeWidth="1.5" strokeDasharray="6 4" />
+              {visitedD && <path d={visitedD} fill="none" stroke="rgba(218,165,32,0.6)" strokeWidth="2" />}
+              {positions.map((pos, i) => {
+                const isCurrent = i === ybrCurrentStopIndex;
+                const isPast = i < ybrCurrentStopIndex;
+                const stopId = seq[i]?.id;
+                const isComplete = stopId && ybrStopProgress?.[stopId]?.passed?.every(p => p);
+                return (
+                  <g key={i}>
+                    <circle cx={pos.x} cy={pos.y}
+                      r={isCurrent ? 5 : 3}
+                      fill={isPast && isComplete ? 'rgba(218,165,32,0.5)' : isPast ? 'rgba(218,165,32,0.3)' : isCurrent ? '#daa520' : 'none'}
+                      stroke={isCurrent ? '#daa520' : isPast ? 'rgba(218,165,32,0.3)' : 'rgba(218,165,32,0.15)'}
+                      strokeWidth={isCurrent ? 1.5 : 0.8}
+                    />
+                    {isCurrent && (
+                      <circle cx={pos.x} cy={pos.y} r="8" fill="none" stroke="#daa520" strokeWidth="1" opacity="0.6">
+                        <animate attributeName="r" values="6;10;6" dur="2s" repeatCount="indefinite" />
+                        <animate attributeName="opacity" values="0.6;0.2;0.6" dur="2s" repeatCount="indefinite" />
+                      </circle>
+                    )}
+                  </g>
+                );
+              })}
+            </g>
+          );
+        })()}
+
+        {/* YBR intro lighting sequence */}
+        {ybrIntroStep >= 0 && (() => {
+          const maxIdx = Math.min(ybrIntroStep, YBR_INTRO_SEQ.length - 1);
+          const fading = ybrIntroStep >= YBR_INTRO_SEQ.length;
+          return (
+            <g className="ybr-intro-overlay" style={{ pointerEvents: 'none', opacity: fading ? 0 : 1, transition: 'opacity 1s ease-out' }}>
+              {YBR_INTRO_SEQ.slice(0, maxIdx + 1).map((pos, i) => {
+                const isCurrent = i === maxIdx && !fading;
+                const age = maxIdx - i;
+                const dimOpacity = Math.max(0.2, 0.6 - age * 0.03);
+                return (
+                  <g key={i}>
+                    {/* Soft glow fill */}
+                    <circle cx={pos.x} cy={pos.y}
+                      r={isCurrent ? pos.r * 1.2 : pos.r * 0.9}
+                      fill={isCurrent ? 'rgba(218,165,32,0.15)' : 'rgba(218,165,32,0.06)'}
+                      stroke="none"
+                    />
+                    {/* Ring */}
+                    <circle cx={pos.x} cy={pos.y}
+                      r={isCurrent ? pos.r : pos.r * 0.8}
+                      fill="none"
+                      stroke={isCurrent ? '#f0c040' : 'rgba(218,165,32,0.6)'}
+                      strokeWidth={isCurrent ? 2.5 : 1.2}
+                      opacity={isCurrent ? 1 : dimOpacity}
+                    />
+                    {/* Pulse on current */}
+                    {isCurrent && (
+                      <circle cx={pos.x} cy={pos.y} r={pos.r} fill="none" stroke="#f0c040" strokeWidth="2" opacity="0.7">
+                        <animate attributeName="r" values={`${pos.r * 0.7};${pos.r * 1.5};${pos.r * 0.7}`} dur="0.6s" repeatCount="indefinite" />
+                        <animate attributeName="opacity" values="0.7;0.15;0.7" dur="0.6s" repeatCount="indefinite" />
+                      </circle>
+                    )}
+                  </g>
+                );
+              })}
+            </g>
+          );
+        })()}
         </>)}
       </svg>
       <div className="orbital-btn-row">
         {!showMedicineWheel && (
           <>
-            <button
-              className="orbital-mode-toggle"
-              onClick={cycleOrbitalMode}
-              title={aligned ? 'Aligned — click to orbit' : livePositions ? 'Live Positions — click to align' : heliocentric ? 'Heliocentric — click for live positions' : 'Earth Centered — click for heliocentric'}
-            >
-              {aligned ? '☍' : livePositions ? '◉' : heliocentric ? '☉' : '◎'}
-            </button>
+            {!chakraViewMode && (
+              <button
+                className="orbital-mode-toggle"
+                onClick={cycleOrbitalMode}
+                title={aligned ? 'Aligned — click to orbit' : livePositions ? 'Live Positions — click to align' : heliocentric ? 'Heliocentric — click for live positions' : 'Earth Centered — click for heliocentric'}
+              >
+                {aligned ? '☍' : livePositions ? '◉' : heliocentric ? '☉' : '◎'}
+              </button>
+            )}
             <button
               className="calendar-toggle"
               onClick={() => onToggleCalendar && onToggleCalendar()}
@@ -1034,14 +1710,60 @@ export default function OrbitalDiagram({ selectedPlanet, onSelectPlanet, selecte
             >
               {showCalendar ? '📅' : '📆'}
             </button>
+            <button
+              className="chakra-view-toggle"
+              onClick={() => onToggleChakraView && onToggleChakraView()}
+              title={
+                !chakraViewMode ? 'Show chakra body viewer (Chaldean)' :
+                chakraViewMode === 'chaldean' ? 'Chaldean Order — click for Heliocentric' :
+                chakraViewMode === 'heliocentric' ? 'Heliocentric Order — click for Weekday' :
+                'Weekday Order — click to exit'
+              }
+            >
+              ☸
+            </button>
+            <button className="star-map-toggle" onClick={cycleStarMap}
+              title={starMapMode === 'none' ? 'Show northern star map' :
+                     starMapMode === 'north' ? 'Northern — click for southern' :
+                     'Southern — click to hide'}>
+              {starMapMode === 'none' ? '☆' : starMapMode === 'north' ? '★N' : '★S'}
+            </button>
           </>
         )}
         <button
           className="medicine-wheel-toggle"
-          onClick={() => onToggleMedicineWheel && onToggleMedicineWheel()}
+          onClick={() => {
+            if (!showMedicineWheel && !wheelOpenedRef.current) {
+              wheelOpenedRef.current = true;
+              triggerStormFlash();
+            }
+            onToggleMedicineWheel && onToggleMedicineWheel();
+          }}
           title={showMedicineWheel ? 'Show celestial wheels' : 'Show medicine wheel'}
         >
           {showMedicineWheel ? '\u2726' : '\u2727'}
+        </button>
+        <button
+          className={`ybr-toggle${ybrActive ? ' active' : ''}`}
+          onClick={() => {
+            if (ybrActive) {
+              startYbrIntro();
+            } else {
+              startYbrIntro();
+              onToggleYBR && onToggleYBR();
+            }
+          }}
+          title={ybrActive ? 'Exit Yellow Brick Road' : 'Walk the Yellow Brick Road'}
+        >
+          <svg viewBox="0 0 20 14" width="18" height="13" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinejoin="round">
+            <path d="M1,4 L7,1 L19,1 L13,4 Z" />
+            <path d="M1,4 L1,13 L13,13 L13,4" />
+            <path d="M13,4 L19,1 L19,10 L13,13" />
+            <line x1="7" y1="4" x2="7" y2="13" />
+            <line x1="1" y1="8.5" x2="13" y2="8.5" />
+            <line x1="4" y1="8.5" x2="4" y2="13" />
+            <line x1="10" y1="4" x2="10" y2="8.5" />
+          </svg>
         </button>
         <button
           className="vr-view-toggle"
@@ -1060,6 +1782,32 @@ export default function OrbitalDiagram({ selectedPlanet, onSelectPlanet, selecte
             <button className="orbital-video-btn" onClick={handleVideoNext} title="Next">{'\u25B6'}</button>
           </div>
         </div>
+      )}
+      {tooltip && wrapperRef.current && (() => {
+        const rect = wrapperRef.current.getBoundingClientRect();
+        const relX = tooltip.x - rect.left;
+        const relY = tooltip.y - rect.top;
+        const nearTop = relY < 80;
+        return (
+          <div
+            className="orbital-tooltip"
+            style={{
+              left: relX,
+              top: nearTop ? relY + 16 : relY - 12,
+              transform: nearTop ? 'translateX(-50%)' : 'translateX(-50%) translateY(-100%)',
+            }}
+          >
+            {renderTooltipContent()}
+          </div>
+        );
+      })()}
+      {stormFlash && (
+        <>
+          <div className="storm-flash-bg" />
+          <div className="storm-flash-img-wrap">
+            <img src="/storm-shield.png" alt="Storm Shield" className="storm-flash-img" />
+          </div>
+        </>
       )}
     </div>
   );

@@ -105,3 +105,14 @@ export function getLadderAt(ring, pos) {
 export function getChuteAt(ring, pos) {
   return CHUTES.find(c => c.fromRing === ring && c.fromPos === pos);
 }
+
+// Ring-to-planet mapping (for Major Arcana alignment bonus)
+export const RING_PLANET = {
+  1: 'Moon',
+  2: 'Mercury',
+  3: 'Venus',
+  4: 'Sun',
+  5: 'Mars',
+  6: 'Jupiter',
+  7: 'Saturn',
+};

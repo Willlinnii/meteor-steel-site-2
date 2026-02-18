@@ -179,7 +179,7 @@ function renderPlanetDetails(planet, r, moonPhase) {
   }
 }
 
-export default function PlanetNode({ planet, metal, cx, cy, selected, onClick, moonPhase, smooth }) {
+export default function PlanetNode({ planet, metal, cx, cy, selected, onClick, moonPhase, smooth, onMouseEnter, onMouseLeave }) {
   const color = PLANET_COLORS[planet] || '#aaa';
   const r = selected ? 14 : 11;
 
@@ -187,6 +187,8 @@ export default function PlanetNode({ planet, metal, cx, cy, selected, onClick, m
     <g
       className="planet-node"
       onClick={onClick}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
       style={{ cursor: 'pointer', transform: `translate(${cx}px, ${cy}px)`, transition: smooth ? 'transform 0.8s ease-in-out' : 'none' }}
     >
       {selected && (

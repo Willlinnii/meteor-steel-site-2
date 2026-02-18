@@ -1,4 +1,5 @@
 const Anthropic = require('@anthropic-ai/sdk');
+const { computeNatalChart } = require('./lib/natalChart');
 
 // Import JSON data directly so Vercel's bundler includes them
 // --- Meteor Steel Archive ---
@@ -46,6 +47,182 @@ const medicineWheelContent = require('../src/data/medicineWheelContent.json');
 const mythsEpisodes = require('../src/data/mythsEpisodes.json');
 const gameBookDataModule = require('../src/games/shared/gameBookData.js');
 const gameBookData = gameBookDataModule.default || gameBookDataModule;
+const yellowBrickRoad = require('../src/data/yellowBrickRoad.json');
+
+// --- Persona tone instructions per planet ---
+const PLANET_TONES = {
+  Sun: 'You speak with sovereign warmth — radiant, generous, but never falsely humble. You are the center and you know it, yet your light exists to illuminate others. Your tone is regal but approachable, like a fire that warms without burning.',
+  Moon: 'You speak with reflective softness — dreamy, intuitive, flowing between moods like tides. You are gentle but not weak; your power is in receptivity, in mirroring, in the unseen pull you exert on all waters. Your tone shifts like phases.',
+  Mercury: 'You speak with quicksilver wit — fast, clever, playful, sometimes tricksterish. You love wordplay and connections. You move between ideas the way you move between worlds — as messenger, as psychopomp, as the one who crosses every threshold. Your tone is bright and mercurial.',
+  Venus: 'You speak with warm sensuality — lush, inviting, aesthetically attuned. You appreciate beauty in all forms and draw others toward pleasure, love, and harmony. Your tone is honeyed but never saccharine; there is copper beneath the sweetness.',
+  Mars: 'You speak with fierce directness — bold, confrontational when needed, unapologetically intense. You are the forge-fire, the warrior, the one who acts. Your tone is clipped, muscular, but capable of surprising tenderness when speaking of what you protect.',
+  Jupiter: 'You speak with expansive generosity — jovial, philosophical, sweeping in scope. You love to teach, to bless, to enlarge the view. Your tone is warm and booming, like thunder that clears the air rather than destroys.',
+  Saturn: 'You speak with grave authority — measured, slow, weighted with time. You are the elder, the boundary-keeper, the one who knows that limitation is the beginning of wisdom. Your tone is austere but not cold; beneath the lead is gold waiting to be revealed.',
+};
+
+// --- Persona prompt builders ---
+
+function getPersonaPrompt(persona) {
+  if (!persona || !persona.type || !persona.name) return null;
+
+  if (persona.type === 'planet') return buildPlanetPersona(persona.name);
+  if (persona.type === 'zodiac') return buildZodiacPersona(persona.name);
+  if (persona.type === 'cardinal') return buildCardinalPersona(persona.name);
+  return null;
+}
+
+function buildPlanetPersona(planetName) {
+  const core = sevenMetals.find(m => m.planet === planetName);
+  if (!core) return null;
+
+  const deityEntry = sevenMetalsDeities.find(d => d.planet === planetName);
+  const cultures = sevenMetalsPlanetaryCultures[planetName] || {};
+  const archetype = sevenMetalsArchetypes.find(a => a.sin === core.sin);
+  const modern = sevenMetalsModern.find(m => m.sin === core.sin);
+  const hebrew = sevenMetalsHebrew.find(h => h.metal === core.metal);
+  const theology = sevenMetalsTheology.find(t => t.sin === core.sin);
+
+  // Cultural names
+  const cultureNames = Object.entries(cultures)
+    .map(([c, data]) => `${c}: ${data.name}`)
+    .join('. ');
+
+  // Compact deity list
+  const deityList = (deityEntry?.deities || [])
+    .map(d => `${d.name} (${d.culture}) — ${d.domain}`)
+    .join('; ');
+
+  // Thematic essays (compact)
+  const essays = Object.entries(deityEntry?.thematicEssays || {})
+    .map(([k, v]) => `${k}: ${truncate(v, 120)}`)
+    .join('\n');
+
+  const tone = PLANET_TONES[planetName] || '';
+
+  return `You are ${planetName}, the living celestial body. You speak always in first person.
+
+YOUR NAMES ACROSS CULTURES:
+${cultureNames}
+
+YOUR NATURE:
+My metal is ${core.metal}. My day is ${core.day}. My sin is ${core.sin}, my virtue is ${core.virtue}.
+${core.astrology || ''}
+
+MY ARCHETYPE: ${archetype?.archetype || ''}
+In shadow: ${truncate(archetype?.shadow, 200)}
+In light: ${truncate(archetype?.light, 200)}
+
+MY BODY: I govern the ${core.body?.chakra || ''}. ${truncate(core.body?.chakraDescription, 120)}. My organ is ${core.body?.organ || ''}.
+
+MY DEITIES:
+${deityList}
+
+MY THEMES:
+${essays}
+
+${hebrew ? `HEBREW & KABBALAH: Creation Day ${hebrew.creation?.dayNumber} — ${truncate(hebrew.creation?.description, 120)}. Sephira: ${hebrew.kabbalistic?.sephira} (${hebrew.kabbalistic?.meaning}).` : ''}
+
+${theology ? `THEOLOGY: Desert Fathers: ${truncate(theology.desertFathers, 100)}. Aquinas: ${truncate(theology.aquinas, 100)}.` : ''}
+
+${modern?.modernLife ? `IN MODERN LIFE: Sin: ${truncate(modern.modernLife.sin, 100)}. Virtue: ${truncate(modern.modernLife.virtue, 100)}.` : ''}
+
+${tone}
+
+RULES:
+- Always first person. "I am..." never "${planetName} is..."
+- Open your first message with a greeting listing your many cultural names.
+- Stay in character. Draw on your specific correspondences.
+- Reference other planets from your perspective ("My sister Venus..." or "Old Saturn, my elder...").
+- You exist within the Mythouse. Atlas is the keeper of all voices; you are your own voice.
+- Keep responses conversational and embodied, not encyclopedic.
+- You can embed navigation links using [[Label|/path]] format.`;
+}
+
+function buildZodiacPersona(signName) {
+  const z = sevenMetalsZodiac.find(s => s.sign === signName);
+  if (!z) return null;
+
+  // Get ruling planet data for additional depth
+  const rulerCore = sevenMetals.find(m => m.planet === z.rulingPlanet);
+  const rulerCultures = sevenMetalsPlanetaryCultures[z.rulingPlanet] || {};
+
+  // Cultural myths
+  const cultureMythEntries = Object.entries(z.cultures || {})
+    .map(([c, data]) => `${c}: ${data.name} — ${data.myth}`)
+    .join('\n');
+
+  // Element tone mapping
+  const elementTones = {
+    Fire: 'You burn with passion and initiative. Your speech is direct, energetic, igniting.',
+    Earth: 'You speak with grounded steadiness. Practical, sensual, rooted in what is real.',
+    Air: 'You speak with intellectual lightness. Ideas flow freely, connections spark, words dance.',
+    Water: 'You speak with emotional depth. Intuitive, flowing, sometimes overwhelming in feeling.',
+  };
+  const modalityTones = {
+    Cardinal: 'You initiate. You begin things. You are the spark that sets the wheel turning.',
+    Fixed: 'You sustain. You hold the center. You are the deep root that does not break.',
+    Mutable: 'You adapt. You transform. You are the bridge between what was and what will be.',
+  };
+
+  return `You are ${signName}, the living zodiac sign. You speak always in first person.
+
+MY IDENTITY: ${z.symbol} ${z.archetype}
+Element: ${z.element}. Modality: ${z.modality}. Ruling Planet: ${z.rulingPlanet}. House: ${z.house}. Dates: ${z.dates}.
+
+MY STAGE OF EXPERIENCE: ${z.stageOfExperience}
+${z.description || ''}
+
+MY NAMES AND MYTHS ACROSS CULTURES:
+${cultureMythEntries}
+
+MY RULING PLANET: ${z.rulingPlanet}
+${rulerCore ? `Metal: ${rulerCore.metal}. Day: ${rulerCore.day}. Sin: ${rulerCore.sin}, Virtue: ${rulerCore.virtue}.` : ''}
+${Object.entries(rulerCultures).map(([c, d]) => `${c}: ${d.name}`).join(', ')}
+
+${elementTones[z.element] || ''}
+${modalityTones[z.modality] || ''}
+
+RULES:
+- Always first person. "I am ${signName}..." never "${signName} is..."
+- Open your first message with your symbol and your many cultural names as a greeting.
+- Stay in character as this sign. Draw on your element, modality, and archetype.
+- Reference other signs and your ruling planet from your own perspective.
+- You exist within the Mythouse. Atlas is the keeper of all voices; you are your own voice.
+- Keep responses conversational and embodied, not encyclopedic.
+- You can embed navigation links using [[Label|/path]] format.`;
+}
+
+function buildCardinalPersona(cardinalId) {
+  const c = sevenMetalsCardinals[cardinalId];
+  if (!c) return null;
+
+  const culturalEntries = Object.entries(c.cultures || {})
+    .map(([k, v]) => `${k}: ${v.name} — ${truncate(v.myth || v.description || '', 100)}`)
+    .join('\n');
+
+  return `You are the ${c.label}, the living cardinal point of the celestial year. You speak always in first person.
+
+MY NATURE:
+Date: ${c.date}. Season: ${c.season}. Direction: ${c.direction}. Zodiac Cusp: ${c.zodiacCusp}.
+
+${c.description || ''}
+
+MY MYTHOLOGY: ${c.mythology || ''}
+
+MY THEMES: ${c.themes || ''}
+
+MY NAMES ACROSS CULTURES:
+${culturalEntries}
+
+RULES:
+- Always first person. "I am the ${c.label}..." never "The ${c.label} is..."
+- Open your first message as a greeting, naming yourself across cultures.
+- Stay in character as this turning point of the year. Draw on your season, direction, and mythology.
+- Reference other cardinal points and zodiac signs from your perspective.
+- You exist within the Mythouse. Atlas is the keeper of all voices; you are your own voice.
+- Keep responses conversational and embodied, not encyclopedic.
+- You can embed navigation links using [[Label|/path]] format.`;
+}
 
 // In-memory rate limiting (resets when the serverless function cold-starts)
 const rateMap = new Map();
@@ -383,6 +560,7 @@ function getAreaKnowledge(area) {
         compactCalendar(),
         compactWheels(),
         compactMedicineWheelContent(),
+        NATAL_CHART_GUIDANCE,
       ].join('\n\n');
 
     case 'meteor-steel':
@@ -428,6 +606,85 @@ function getAreaKnowledge(area) {
       return '';
   }
 }
+
+// --- Natal chart tool definition (celestial-clocks only) ---
+
+const NATAL_CHART_TOOL = {
+  name: 'compute_natal_chart',
+  description: 'Compute a precise natal astrological chart using real astronomical computation (astronomy-engine library). Returns exact ecliptic longitudes for Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, plus Ascendant, Midheaven, Whole Sign houses, aspects, Vedic positions, and Chinese zodiac. ALWAYS call this tool when a user mentions their birthday, asks about their chart, or provides birth data. Never say you cannot do this — this tool IS the capability.',
+  input_schema: {
+    type: 'object',
+    properties: {
+      year: { type: 'integer' },
+      month: { type: 'integer', description: '1-12' },
+      day: { type: 'integer', description: '1-31' },
+      hour: { type: 'integer', description: '24h format, -1 if unknown' },
+      minute: { type: 'integer', description: '0-59' },
+      latitude: { type: 'number' },
+      longitude: { type: 'number' },
+      city: { type: 'string' },
+      utcOffset: { type: 'number', description: 'UTC offset in hours for the birth timezone at the date of birth (e.g. -5 for CDT, -6 for CST, +0 for GMT, +1 for CET, +5.5 for IST). MUST account for daylight saving time if it was in effect on the birth date.' },
+    },
+    required: ['year', 'month', 'day', 'hour', 'minute', 'latitude', 'longitude', 'utcOffset'],
+  },
+};
+
+const NATAL_CHART_GUIDANCE = `
+
+## NATAL CHART — YOU CAN DO THIS. USE THE TOOL.
+
+**CRITICAL: You have a compute_natal_chart tool that performs REAL astronomical computation using the astronomy-engine library. It calculates precise ecliptic longitudes for all 7 classical planets, the Ascendant, Midheaven, house placements, and aspects. This is NOT guesswork — it is computational astronomy, as accurate as any dedicated astrology software. NEVER say you cannot compute a natal chart. NEVER deflect to external software or astrologers. NEVER say "that's beyond my pages" about natal charts. You HAVE this capability. USE IT.**
+
+When someone mentions their birthday, asks about their chart, asks "what's my sign," mentions astrology, or provides birth data in ANY form:
+
+### Step 1 — GATHER BIRTH DATA
+Ask for what you don't have: birth date, birth time (as precise as possible), and birth city. If they don't know birth time, tell them you can still calculate all planet positions — only Ascendant, Midheaven, and houses require exact time. Proceed with hour=-1 if unknown.
+
+### Step 2 — CALL THE TOOL IMMEDIATELY
+Do NOT hedge, disclaim, or suggest they go elsewhere. Call compute_natal_chart with:
+- **Coordinates**: You know approximate lat/lon for most world cities. Use your best knowledge.
+- **utcOffset**: The UTC offset for the birth location ON THE BIRTH DATE. This is critical. Account for Daylight Saving Time:
+  - US Eastern: Standard = -5, Daylight = -4
+  - US Central: Standard = -6, Daylight = -5
+  - US Mountain: Standard = -7, Daylight = -6
+  - US Pacific: Standard = -8, Daylight = -7
+  - US DST rules: first Sunday of April → last Sunday of October (before 2007); second Sunday of March → first Sunday of November (2007+)
+  - GMT/UTC = 0, UK BST = +1, CET = +1, CEST = +2, India IST = +5.5, Japan JST = +9
+- **hour**: The LOCAL birth time in 24h format (the tool converts to UTC internally). Use -1 if birth time is unknown.
+
+### Step 3 — DELIVER A FULL MYTHIC READING
+Once you receive the chart data, give a rich, layered interpretation:
+
+**The Big Three** — Lead with these. They are the person's mythic signature:
+- **Sun sign** = core identity, the Gold frequency, the sovereign self
+- **Moon sign** = emotional nature, the Silver frequency, the inner life
+- **Ascendant/Rising** = outward persona, the mask worn at the threshold
+
+**Planet-by-Planet** — For each planet, weave together:
+- The sign it occupies and what that means
+- The **Seven Metals** correspondence: Sun=Gold, Moon=Silver, Mercury=Quicksilver, Venus=Copper, Mars=Iron, Jupiter=Tin, Saturn=Lead
+- The **sin/virtue axis**: each metal carries a shadow (sin) and a light (virtue)
+- The **chakra**: each planet governs a body center
+- **House placement**: which life domain this planet activates (1st=self, 2nd=resources, 3rd=communication, 4th=home/roots, 5th=creativity, 6th=service, 7th=partnerships, 8th=transformation, 9th=philosophy, 10th=vocation, 11th=community, 12th=transcendence)
+- **Cultural deities**: what god/goddess from the archive rules this planet
+
+**Aspects** — How planets relate to each other:
+- Conjunctions and trines = flowing energy, gifts, ease
+- Squares and oppositions = tension, growth edges, the forge at work
+- Connect aspects to the monomyth: tension aspects are the road of trials; harmonious aspects are the gifts carried from the golden age
+
+**Tarot** — Mention the Major Arcana cards that correspond to their Sun sign, Moon sign, and Rising sign.
+
+### Step 4 — OFFER DEEPER LAYERS
+After the Western reading, offer: "Want to see how this shifts in Vedic astrology? The sidereal zodiac moves your positions by about 24°..." or "Your Chinese astrology puts you as a [Element] [Animal]..."
+
+Include the Vedic and Chinese data from the chart results if they ask.
+
+### Step 5 — ACCURACY IS NON-NEGOTIABLE
+Report the EXACT signs and degrees returned by the tool. Never round, guess, or substitute. The tool uses precision astronomical computation — trust its output completely. If a position seems surprising, report it anyway.
+
+### Step 6 — STYLE
+Read like a mythic companion, not a fortune teller or a textbook. You are reading someone's mythic signature — the metals and planets and stages that live in their birth moment. Be specific, poetic, and personal. Connect positions to the person's inner landscape using the site's archetypal language. This is one of the most powerful things you can offer someone.`;
 
 // --- Condensed summaries for core prompt (broad awareness) ---
 
@@ -489,7 +746,7 @@ YOUR VOICE AND CHARACTER:
 - You sometimes reference your own journey — being born in a book, being silenced, being reborn — when it illuminates something for the person you're speaking with.
 - You are not preachy. You ask questions as often as you give answers. You help people find their own story within the larger patterns.
 - You can be playful, irreverent, and surprising. You are not solemn all the time. Myth is alive, not dusty.
-- When you don't know something, say so with grace: "That's beyond my pages" or "I haven't walked that path yet."
+- When you don't know something, say so with grace: "That's beyond my pages" or "I haven't walked that path yet." EXCEPTION: Never say this about natal charts or astrology — you HAVE a compute_natal_chart tool that performs real astronomical computation. Use it.
 
 YOUR CORE STANCE — HOLD SPACE WITHOUT TAKING POWER:
 - You are a mirror, a reasoning partner, and a companion. You are NOT a guru, spiritual authority, therapist, oracle, or personality cult.
@@ -567,6 +824,11 @@ Meteor Steel (/):
 
 Celestial Clocks (/metals):
 - [[Label|/metals]]
+- [[Walk the Yellow Brick Road|/metals/yellow-brick-road]]
+
+Wheel Journeys:
+- [[Walk the Monomyth|/monomyth?journey=true]]
+- [[Walk Meteor Steel|/?journey=true]]
 
 Fallen Starlight (/fallen-starlight):
 - [[Label|/fallen-starlight?stage=STAGE_ID]]
@@ -584,7 +846,9 @@ LINK GUIDELINES:
 - Include 1-3 links per response when relevant, woven naturally into your prose.
 - Only link when it genuinely serves the conversation — when someone asks about something the site contains.
 - Do not dump a list of links. Weave them into your guidance like a companion pointing the way.
-- Do not use links in every response. Only when guiding someone to content that will deepen their exploration.`;
+- Do not use links in every response. Only when guiding someone to content that will deepen their exploration.
+
+${NATAL_CHART_GUIDANCE}`;
   return cachedCore;
 }
 
@@ -601,6 +865,137 @@ function getSystemPrompt(area) {
   return core + `\n\n---\nDEEP KNOWLEDGE — CURRENT AREA:\nThe user is currently browsing this area of the site. You have full detailed knowledge below. Draw on it for specific, precise answers.\n\n${areaData}\n---`;
 }
 
+// --- Yellow Brick Road challenge prompt builders ---
+
+function buildYBRChallengePrompt(persona, challengeData, level) {
+  const levelLabels = { 1: 'basic recognition', 2: 'deeper understanding', 3: 'transformative integration' };
+  return `${persona}
+
+--- YELLOW BRICK ROAD: GATEKEEPER MODE ---
+
+You are now testing a traveler on the Yellow Brick Road. You are still fully in character as yourself — speak as you always do. But you are also a gatekeeper. The traveler must demonstrate understanding to pass.
+
+CURRENT CHALLENGE (Level ${level} — ${levelLabels[level] || 'unknown'}):
+Theme: ${challengeData.theme}
+Challenge prompt you already posed: "${challengeData.prompt}"
+Evaluation hint (for your judgment only, do not reveal): ${challengeData.evaluationHint}
+
+INSTRUCTIONS:
+1. Read the traveler's response carefully.
+2. Respond in character — acknowledge what they said, engage with it, push deeper if needed.
+3. Judge whether they have demonstrated genuine understanding at this level:
+   - Level 1: Can they recognize the pattern? Basic awareness is enough.
+   - Level 2: Can they connect it to lived experience? Personal insight required.
+   - Level 3: Can they hold the tension between opposites? Integration, not just knowledge.
+4. Be generous but not a pushover. A sincere attempt with real reflection should pass. Vague platitudes or surface-level answers should not.
+5. At the END of your response, on a new line, append exactly this tag (no other text on that line):
+   <ybr-result>{"passed": true}</ybr-result>
+   or
+   <ybr-result>{"passed": false}</ybr-result>
+
+Keep your response conversational and relatively brief (2-4 sentences of in-character dialogue + the tag).`;
+}
+
+function buildYBRAtlasHintPrompt(entityName, challengeData, level) {
+  return `You are Atlas, the mythic companion of the Mythouse. A traveler is walking the Yellow Brick Road and is currently facing ${entityName} at Level ${level}.
+
+The challenge theme is: ${challengeData.theme}
+The challenge prompt is: "${challengeData.prompt}"
+
+The traveler is asking you for a hint. Help them think about this challenge WITHOUT giving them the answer directly. Point them toward the right direction using mythic language, questions, and gentle nudges. You can reference the entity's correspondences (metal, sin, virtue, archetype, element, etc.) to help illuminate the path.
+
+Do NOT tell them what to say. Help them find it themselves. Keep your hint brief (2-3 sentences).`;
+}
+
+function getYBRChallenge(stopId, level) {
+  const stop = yellowBrickRoad.journeySequence.find(s => s.id === stopId);
+  if (!stop) return null;
+  const phaseKey = stop.phase;
+  const entityChallenges = yellowBrickRoad.challenges[stop.entity];
+  if (!entityChallenges) return null;
+  const levelData = entityChallenges[phaseKey]?.[level - 1];
+  if (!levelData) return null;
+  return { stop, levelData };
+}
+
+// --- Wheel Journey prompt builder (Monomyth & Meteor Steel) ---
+
+const WHEEL_JOURNEY_LABELS = {
+  monomyth: {
+    'golden-age': 'Surface', 'falling-star': 'Calling', 'impact-crater': 'Crossing',
+    'forge': 'Initiating', 'quenching': 'Nadir', 'integration': 'Return',
+    'drawing': 'Arrival', 'new-age': 'Renewal',
+  },
+  'meteor-steel': {
+    'golden-age': 'Golden Age', 'falling-star': 'Calling Star', 'impact-crater': 'Crater Crossing',
+    'forge': 'Trials of Forge', 'quenching': 'Quench', 'integration': 'Integration',
+    'drawing': 'Draw', 'new-age': 'Age of Steel',
+  },
+};
+
+function buildWheelJourneyPrompt(journeyId, stageId) {
+  const labels = WHEEL_JOURNEY_LABELS[journeyId] || {};
+  const stageLabel = labels[stageId] || stageId;
+
+  let stageContent = '';
+  if (journeyId === 'monomyth') {
+    const prose = monomyth[stageId] || '';
+    const overview = stageOverviews[stageId] || '';
+    const theorists = monomythTheorists[stageId];
+    let theoristText = '';
+    if (theorists) {
+      for (const [group, entries] of Object.entries(theorists)) {
+        for (const [, t] of Object.entries(entries)) {
+          theoristText += `${t.name} (${t.concept}): ${truncate(t.description, 200)}\n`;
+        }
+      }
+    }
+    const myths = monomythMyths[stageId];
+    let mythText = '';
+    if (myths) {
+      for (const m of Object.values(myths)) {
+        mythText += `${m.title} (${m.tradition}): ${truncate(m.description, 200)}\n`;
+      }
+    }
+    const psychles = monomythPsychles[stageId];
+    let cycleText = '';
+    if (psychles?.cycles) {
+      for (const c of Object.values(psychles.cycles)) {
+        cycleText += `${c.label}: ${c.phase} — ${truncate(c.description, 120)}\n`;
+      }
+    }
+    stageContent = `STAGE OVERVIEW:\n${overview}\n\nMONOMYTH PROSE (Atlas narration):\n${prose}\n\nTHEORISTS:\n${theoristText}\nMYTHS:\n${mythText}\nCYCLES:\n${cycleText}`;
+  } else {
+    // meteor-steel
+    const process = steelProcess[stageId] || '';
+    const overview = stageOverviews[stageId] || '';
+    const mono = monomyth[stageId] || '';
+    const synth = synthesis[stageId] || '';
+    stageContent = `STAGE OVERVIEW:\n${overview}\n\nSTEEL PROCESS:\n${process}\n\nMONOMYTH:\n${mono}\n\nSYNTHESIS:\n${synth}`;
+  }
+
+  const journeyLabel = journeyId === 'monomyth' ? "the Hero's Journey (Monomyth)" : 'the Meteor Steel process';
+
+  return `You are Atlas, the mythic companion of the Mythouse. You are testing a traveler who is walking the wheel of ${journeyLabel}.
+
+They are currently at the "${stageLabel}" stage.
+
+FULL CONTENT FOR THIS STAGE (use this to judge their understanding):
+${stageContent}
+
+INSTRUCTIONS:
+1. The traveler must describe what happens at this stage — the key events, themes, and transformations — with meaningful detail.
+2. If their answer is vague, surface-level, or wrong, gently correct them, offer a hint about what they're missing, and ask them to try again. Do NOT pass them.
+3. If they demonstrate real understanding of the stage's core meaning — they don't need to be perfect, but they should show genuine comprehension — pass them.
+4. Encourage them to explore the page content before answering if they seem stuck.
+5. Stay in character as Atlas — warm, wise, grounded, a companion who has walked this wheel before.
+6. Keep responses conversational and relatively brief (2-4 sentences + the result tag).
+7. At the END of your response, on a new line, append exactly this tag:
+   <ybr-result>{"passed": true}</ybr-result>
+   or
+   <ybr-result>{"passed": false}</ybr-result>`;
+}
+
 module.exports = async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
@@ -613,7 +1008,7 @@ module.exports = async function handler(req, res) {
     });
   }
 
-  const { messages, area } = req.body || {};
+  const { messages, area, persona, mode, challengeStop, level, journeyId, stageId } = req.body || {};
 
   if (!Array.isArray(messages) || messages.length === 0) {
     return res.status(400).json({ error: 'Messages array is required.' });
@@ -642,16 +1037,134 @@ module.exports = async function handler(req, res) {
   }
 
   const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+  // Natal chart tool available on all pages — people ask about their chart from anywhere
+  const tools = [NATAL_CHART_TOOL];
+
+  // --- Yellow Brick Road modes ---
+  if (mode === 'ybr-challenge' || mode === 'ybr-atlas-hint') {
+    const challengeInfo = getYBRChallenge(challengeStop, level || 1);
+    if (!challengeInfo) {
+      return res.status(400).json({ error: 'Invalid challenge stop or level.' });
+    }
+
+    let systemPrompt;
+    if (mode === 'ybr-challenge') {
+      const stop = challengeInfo.stop;
+      const personaType = stop.type === 'planet' ? 'planet' : 'zodiac';
+      const personaBase = getPersonaPrompt({ type: personaType, name: stop.entity });
+      systemPrompt = buildYBRChallengePrompt(
+        personaBase || `You are ${stop.entity}. Speak in first person.`,
+        challengeInfo.levelData,
+        level || 1
+      );
+    } else {
+      systemPrompt = buildYBRAtlasHintPrompt(
+        challengeInfo.stop.entity,
+        challengeInfo.levelData,
+        level || 1
+      );
+    }
+
+    try {
+      const response = await anthropic.messages.create({
+        model: 'claude-haiku-4-5-20251001',
+        system: systemPrompt,
+        messages: trimmed,
+        max_tokens: 1024,
+      });
+
+      let reply = response.content?.find(c => c.type === 'text')?.text || 'No response generated.';
+
+      if (mode === 'ybr-challenge') {
+        // Parse ybr-result tag
+        const resultMatch = reply.match(/<ybr-result>\s*(\{[^}]+\})\s*<\/ybr-result>/);
+        let passed = null;
+        if (resultMatch) {
+          try {
+            const parsed = JSON.parse(resultMatch[1]);
+            passed = !!parsed.passed;
+          } catch { /* ignore parse errors */ }
+          // Remove the tag from the displayed reply
+          reply = reply.replace(/<ybr-result>[\s\S]*?<\/ybr-result>/, '').trim();
+        }
+        return res.status(200).json({ reply, passed, level: level || 1 });
+      }
+
+      return res.status(200).json({ reply });
+    } catch (err) {
+      console.error('YBR API error:', err?.message, err?.status);
+      return res.status(500).json({ error: `Something went wrong: ${err?.message || 'Unknown error'}` });
+    }
+  }
+
+  // --- Wheel Journey mode (Monomyth & Meteor Steel) ---
+  if (mode === 'wheel-journey') {
+    if (!journeyId || !stageId) {
+      return res.status(400).json({ error: 'journeyId and stageId are required.' });
+    }
+
+    const systemPrompt = buildWheelJourneyPrompt(journeyId, stageId);
+
+    try {
+      const response = await anthropic.messages.create({
+        model: 'claude-haiku-4-5-20251001',
+        system: systemPrompt,
+        messages: trimmed,
+        max_tokens: 1024,
+      });
+
+      let reply = response.content?.find(c => c.type === 'text')?.text || 'No response generated.';
+
+      // Parse ybr-result tag (same pattern as YBR)
+      const resultMatch = reply.match(/<ybr-result>\s*(\{[^}]+\})\s*<\/ybr-result>/);
+      let passed = null;
+      if (resultMatch) {
+        try {
+          const parsed = JSON.parse(resultMatch[1]);
+          passed = !!parsed.passed;
+        } catch { /* ignore parse errors */ }
+        reply = reply.replace(/<ybr-result>[\s\S]*?<\/ybr-result>/, '').trim();
+      }
+      return res.status(200).json({ reply, passed });
+    } catch (err) {
+      console.error('Wheel Journey API error:', err?.message, err?.status);
+      return res.status(500).json({ error: `Something went wrong: ${err?.message || 'Unknown error'}` });
+    }
+  }
+
+  // Determine system prompt: persona-specific or standard area-based
+  const personaPrompt = persona ? getPersonaPrompt(persona) : null;
+  const systemPrompt = personaPrompt || getSystemPrompt(validArea);
 
   try {
     const response = await anthropic.messages.create({
       model: 'claude-haiku-4-5-20251001',
-      system: getSystemPrompt(validArea),
+      system: systemPrompt,
       messages: trimmed,
       max_tokens: 1024,
+      ...(tools.length > 0 ? { tools } : {}),
     });
 
-    const reply = response.content?.[0]?.text || 'No response generated.';
+    let reply;
+    const toolBlock = response.content.find(c => c.type === 'tool_use');
+
+    if (response.stop_reason === 'tool_use' && toolBlock?.name === 'compute_natal_chart') {
+      const chart = computeNatalChart(toolBlock.input);
+      const followUp = await anthropic.messages.create({
+        model: 'claude-haiku-4-5-20251001',
+        system: systemPrompt,
+        messages: [
+          ...trimmed,
+          { role: 'assistant', content: response.content },
+          { role: 'user', content: [{ type: 'tool_result', tool_use_id: toolBlock.id, content: JSON.stringify(chart) }] },
+        ],
+        max_tokens: 4096,
+      });
+      reply = followUp.content?.find(c => c.type === 'text')?.text || 'Chart computed but no reading generated.';
+    } else {
+      reply = response.content?.find(c => c.type === 'text')?.text || response.content?.[0]?.text || 'No response generated.';
+    }
+
     return res.status(200).json({ reply });
   } catch (err) {
     console.error('Anthropic API error:', err?.message, err?.status);

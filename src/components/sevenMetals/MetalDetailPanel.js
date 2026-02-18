@@ -4,6 +4,8 @@ import CultureSelector from './CultureSelector';
 import DeityCard from './DeityCard';
 import TextBlock from './TextBlock';
 import DevelopmentPanel from '../DevelopmentPanel';
+import TarotCardContent from './TarotCardContent';
+import PersonaChatPanel from '../PersonaChatPanel';
 
 function OverviewTab({ data }) {
   if (!data) return <p className="metals-empty">Select a planet to begin.</p>;
@@ -228,16 +230,16 @@ function BodyTab({ data }) {
   const b = data.core.body;
   return (
     <div className="tab-content">
-      {b.organ && (
-        <div className="body-section">
-          <h5>{b.organ}</h5>
-          {b.organDescription && <p>{b.organDescription}</p>}
-        </div>
-      )}
       {b.chakra && (
         <div className="body-section">
           <h5>{b.chakra}</h5>
           {b.chakraDescription && <p>{b.chakraDescription}</p>}
+        </div>
+      )}
+      {b.organ && (
+        <div className="body-section">
+          <h5>{b.organ}</h5>
+          {b.organDescription && <p>{b.organDescription}</p>}
         </div>
       )}
     </div>
@@ -287,12 +289,12 @@ function SynthesisTab({ data }) {
   );
 }
 
-export default function MetalDetailPanel({ data, activeTab, onSelectTab, activeCulture, onSelectCulture, devEntries, setDevEntries, playlistUrl, videoActive, onToggleVideo }) {
+export default function MetalDetailPanel({ data, activeTab, onSelectTab, activeCulture, onSelectCulture, devEntries, setDevEntries, playlistUrl, videoActive, onToggleVideo, onTogglePersonaChat, personaChatActive, personaChatMessages, setPersonaChatMessages, onClosePersonaChat }) {
   const showCultureSelector = activeTab === 'deities';
 
   return (
     <div className="metal-detail-panel">
-      <MetalContentTabs activeTab={activeTab} onSelectTab={onSelectTab} playlistUrl={playlistUrl} videoActive={videoActive} onToggleVideo={onToggleVideo} />
+      <MetalContentTabs activeTab={activeTab} onSelectTab={onSelectTab} playlistUrl={playlistUrl} videoActive={videoActive} onToggleVideo={onToggleVideo} onTogglePersonaChat={onTogglePersonaChat} personaChatActive={personaChatActive} />
       {showCultureSelector && (
         <CultureSelector activeCulture={activeCulture} onSelectCulture={onSelectCulture} />
       )}
@@ -303,6 +305,7 @@ export default function MetalDetailPanel({ data, activeTab, onSelectTab, activeC
         {activeTab === 'day' && <DayTab data={data} />}
         {activeTab === 'body' && <BodyTab data={data} />}
         {activeTab === 'hebrew' && <HebrewTab data={data} />}
+        {activeTab === 'tarot' && <TarotCardContent correspondenceType="planet" correspondenceValue={data.core.planet} showMinorArcana={false} />}
         {activeTab === 'synthesis' && <SynthesisTab data={data} />}
         {activeTab === 'development' && (
           <DevelopmentPanel
@@ -313,6 +316,16 @@ export default function MetalDetailPanel({ data, activeTab, onSelectTab, activeC
           />
         )}
       </div>
+      {personaChatActive && (
+        <PersonaChatPanel
+          entityType="planet"
+          entityName={data.core.planet}
+          entityLabel={data.core.planet}
+          messages={personaChatMessages || []}
+          setMessages={setPersonaChatMessages}
+          onClose={onClosePersonaChat}
+        />
+      )}
     </div>
   );
 }

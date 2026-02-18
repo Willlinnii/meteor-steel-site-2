@@ -58,8 +58,32 @@ const GAMES = [
     id: 'mythic-cards',
     label: 'Mythic Cards',
     origin: 'Mythouse Original',
-    description: 'Browse 52 playing cards and 154 Major Arcana across 7 cultural decks.',
+    description: 'Browse 52 playing cards and 8 full tarot decks (78 cards each) across 7 cultures.',
     direct: true,
+  },
+  {
+    id: 'yellow-brick-road',
+    label: 'Yellow Brick Road',
+    origin: 'Mythouse Original',
+    description: 'Ascend through the planetary spheres, traverse the zodiac, and descend carrying what you\'ve gathered. 26 encounters. 3 levels each.',
+    featured: true,
+    externalPath: '/metals/yellow-brick-road',
+  },
+  {
+    id: 'monomyth-journey',
+    label: 'Walk the Monomyth',
+    origin: 'Mythouse Original',
+    description: 'Walk the eight stages of the Hero\'s Journey with Atlas as your guide.',
+    featured: true,
+    externalPath: '/monomyth?journey=true',
+  },
+  {
+    id: 'meteor-steel-journey',
+    label: 'Walk Meteor Steel',
+    origin: 'Mythouse Original',
+    description: 'Walk the eight stages of the Meteor Steel process with Atlas as your guide.',
+    featured: true,
+    externalPath: '/?journey=true',
   },
 ];
 
@@ -147,7 +171,7 @@ export default function GamesPage() {
           <Link
             key={game.id}
             className={`game-card${game.featured ? ' featured' : ''}`}
-            to={`/games/${game.id}`}
+            to={game.externalPath || `/games/${game.id}`}
           >
             <span className="game-card-title">{game.label}</span>
             <span className="game-card-origin">{game.origin}</span>

@@ -27,14 +27,14 @@ function ZodiacSegment({ sign, symbol, index, selected, onClick }) {
         onPointerOver={(e) => { e.stopPropagation(); setHovered(true); document.body.style.cursor = 'pointer'; }}
         onPointerOut={() => { setHovered(false); document.body.style.cursor = 'auto'; }}
       >
-        <planeGeometry args={[2.5, 1.5]} />
+        <planeGeometry args={[3.2, 2.4]} />
         <meshBasicMaterial transparent opacity={0} side={THREE.DoubleSide} depthWrite={false} />
       </mesh>
 
       {/* Symbol */}
       <Text
         position={[0, 0.35, 0.01]}
-        fontSize={0.6}
+        fontSize={0.75}
         color={color}
         anchorX="center"
         anchorY="middle"
@@ -45,8 +45,8 @@ function ZodiacSegment({ sign, symbol, index, selected, onClick }) {
 
       {/* Sign name */}
       <Text
-        position={[0, -0.25, 0.01]}
-        fontSize={0.28}
+        position={[0, -0.3, 0.01]}
+        fontSize={0.32}
         color={color}
         anchorX="center"
         anchorY="middle"
@@ -54,6 +54,14 @@ function ZodiacSegment({ sign, symbol, index, selected, onClick }) {
       >
         {sign}
       </Text>
+
+      {/* Hover highlight background */}
+      {hovered && !selected && (
+        <mesh>
+          <planeGeometry args={[2.2, 1.6]} />
+          <meshBasicMaterial color="#c9a961" transparent opacity={0.06} side={THREE.DoubleSide} depthWrite={false} />
+        </mesh>
+      )}
 
       {/* Selection pulse */}
       {selected && (

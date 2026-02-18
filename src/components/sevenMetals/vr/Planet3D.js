@@ -111,12 +111,19 @@ export default function Planet3D({ planet, position, size, selected, onClick, mo
       {/* Sun corona renders behind sphere */}
       {isSun && <SunCorona3D radius={size} />}
 
-      {/* Main sphere */}
+      {/* Invisible expanded hit area for easier clicking */}
       <mesh
-        ref={meshRef}
         onClick={(e) => { e.stopPropagation(); onClick && onClick(); }}
         onPointerOver={(e) => { e.stopPropagation(); setHovered(true); document.body.style.cursor = 'pointer'; }}
         onPointerOut={() => { setHovered(false); document.body.style.cursor = 'auto'; }}
+      >
+        <sphereGeometry args={[size * 2.2, 16, 16]} />
+        <meshBasicMaterial transparent opacity={0} depthWrite={false} />
+      </mesh>
+
+      {/* Main sphere */}
+      <mesh
+        ref={meshRef}
       >
         <sphereGeometry args={[size, 32, 32]} />
         {isSun ? (

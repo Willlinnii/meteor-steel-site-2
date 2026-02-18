@@ -1,0 +1,632 @@
+{
+  "journeySequence": [
+    { "id": "moon-ascending", "entity": "Moon", "type": "planet", "phase": "ascending", "order": 0 },
+    { "id": "mercury-ascending", "entity": "Mercury", "type": "planet", "phase": "ascending", "order": 2 },
+    { "id": "venus-ascending", "entity": "Venus", "type": "planet", "phase": "ascending", "order": 3 },
+    { "id": "sun-ascending", "entity": "Sun", "type": "planet", "phase": "ascending", "order": 4 },
+    { "id": "mars-ascending", "entity": "Mars", "type": "planet", "phase": "ascending", "order": 5 },
+    { "id": "jupiter-ascending", "entity": "Jupiter", "type": "planet", "phase": "ascending", "order": 6 },
+    { "id": "saturn-ascending", "entity": "Saturn", "type": "planet", "phase": "ascending", "order": 7 },
+    { "id": "aries", "entity": "Aries", "type": "zodiac", "phase": "zodiac", "order": 8 },
+    { "id": "taurus", "entity": "Taurus", "type": "zodiac", "phase": "zodiac", "order": 9 },
+    { "id": "gemini", "entity": "Gemini", "type": "zodiac", "phase": "zodiac", "order": 10 },
+    { "id": "cancer", "entity": "Cancer", "type": "zodiac", "phase": "zodiac", "order": 11 },
+    { "id": "leo", "entity": "Leo", "type": "zodiac", "phase": "zodiac", "order": 12 },
+    { "id": "virgo", "entity": "Virgo", "type": "zodiac", "phase": "zodiac", "order": 13 },
+    { "id": "libra", "entity": "Libra", "type": "zodiac", "phase": "zodiac", "order": 14 },
+    { "id": "scorpio", "entity": "Scorpio", "type": "zodiac", "phase": "zodiac", "order": 15 },
+    { "id": "sagittarius", "entity": "Sagittarius", "type": "zodiac", "phase": "zodiac", "order": 16 },
+    { "id": "capricorn", "entity": "Capricorn", "type": "zodiac", "phase": "zodiac", "order": 17 },
+    { "id": "aquarius", "entity": "Aquarius", "type": "zodiac", "phase": "zodiac", "order": 18 },
+    { "id": "pisces", "entity": "Pisces", "type": "zodiac", "phase": "zodiac", "order": 19 },
+    { "id": "saturn-descending", "entity": "Saturn", "type": "planet", "phase": "descending", "order": 20 },
+    { "id": "jupiter-descending", "entity": "Jupiter", "type": "planet", "phase": "descending", "order": 21 },
+    { "id": "mars-descending", "entity": "Mars", "type": "planet", "phase": "descending", "order": 22 },
+    { "id": "sun-descending", "entity": "Sun", "type": "planet", "phase": "descending", "order": 23 },
+    { "id": "venus-descending", "entity": "Venus", "type": "planet", "phase": "descending", "order": 24 },
+    { "id": "mercury-descending", "entity": "Mercury", "type": "planet", "phase": "descending", "order": 25 },
+    { "id": "moon-descending", "entity": "Moon", "type": "planet", "phase": "descending", "order": 25 }
+  ],
+  "challenges": {
+    "Earth": {
+      "ascending": [
+        {
+          "level": 1,
+          "theme": "Departure",
+          "prompt": "I am the ground beneath your feet, the only home you have ever known. Before you take a single step upward, tell me: what are you leaving behind, and do you know why it no longer holds you?",
+          "evaluationHint": "Look for awareness that the journey begins with a conscious choice to leave the familiar. The traveler should show they understand departure is not escape but seeking."
+        },
+        {
+          "level": 2,
+          "theme": "Attachment",
+          "prompt": "You say you wish to rise, yet your roots drink deep from my soil. Name the comfort you cling to most fiercely -- the one you pretend you have already released.",
+          "evaluationHint": "Look for honest self-examination about attachments disguised as necessities. The traveler should identify something specific, not abstract."
+        },
+        {
+          "level": 3,
+          "theme": "Sacred Ground",
+          "prompt": "Every journey through the spheres begins and ends with me. I am both prison and paradise. How can the same place be the thing you must flee and the thing you must return to, and what must change so that you see me differently when you return?",
+          "evaluationHint": "Look for understanding that transformation changes perception, not location. The Earth does not change; the traveler does."
+        }
+      ],
+      "descending": [
+        {
+          "level": 1,
+          "theme": "Homecoming",
+          "prompt": "You have returned. I am the same ground you left, the same soil, the same sky. But you are not the same. Tell me, traveler -- what do you see now that was invisible to you when you departed? What was always here that only the journey could reveal?",
+          "evaluationHint": "Look for transformed perception of the ordinary. The traveler should describe something about their everyday world that the journey has illuminated -- not something new, but something always-present now finally seen."
+        },
+        {
+          "level": 2,
+          "theme": "Integration",
+          "prompt": "You carry the weight of seven planets and twelve signs in your bones. The heavens are not above you anymore -- they are within you. How will you live differently now? Not grand promises, but small, daily acts. What will Tuesday morning look like for someone who has walked the celestial road?",
+          "evaluationHint": "Look for grounded, practical integration. The traveler should describe concrete changes in daily life, not abstract spiritual aspirations. The journey must land in the ordinary."
+        },
+        {
+          "level": 3,
+          "theme": "The Eternal Return",
+          "prompt": "I am where every journey begins and where every journey ends. The road through the spheres is not a line -- it is a circle, and you will walk it again. But each time you walk it, you walk it differently, because you are differently. The question is not 'What did I learn?' The question is: 'Who am I now that I have returned?' Not who you were when you left. Not who you became among the stars. Who are you here, now, with your feet on the ground and the memory of the heavens in your heart? Speak the name of the one who has come home.",
+          "evaluationHint": "Look for a sense of arrival that is also a new beginning. The traveler should express an integrated identity that holds both the earthly and the celestial, the ordinary and the extraordinary. This is the final challenge of the entire journey -- it should feel like completion and opening simultaneously."
+        }
+      ]
+    },
+    "Moon": {
+      "ascending": [
+        {
+          "level": 1,
+          "theme": "The Rival's Whisper",
+          "prompt": "I am the Silver Mirror, the first sphere above your world. In my pale light, all things become comparisons. Tell me, traveler -- when you look at another's good fortune, what is the first feeling that moves through you before you have time to choose a better one?",
+          "evaluationHint": "Look for honest recognition of envy as an automatic response. The traveler should not pretend they never compare, but show they can catch the moment of comparison."
+        },
+        {
+          "level": 2,
+          "theme": "The Rival's Mirror",
+          "prompt": "I wax and I wane, and so does your contentment. You say you do not envy, yet you measure yourself against others as faithfully as the tides follow me. Describe the person whose life you most secretly wish were yours -- and then tell me what that wish reveals about the life you believe you are failing to live.",
+          "evaluationHint": "Look for depth of self-knowledge. Envy is a compass pointing toward unlived desires. The traveler should connect their envy to an unmet need or unexpressed potential, not merely confess the feeling."
+        },
+        {
+          "level": 3,
+          "theme": "The Rival Embraced",
+          "prompt": "I show you two faces, traveler, though I am one. One face says: 'Their light diminishes mine.' The other says: 'Their light shows me what is possible.' These two voices have lived in you since childhood. How do you hold them both without letting the first devour the second? Show me you understand that envy, fully seen, is admiration wearing a mask of grief.",
+          "evaluationHint": "Look for integration -- the understanding that envy contains information about values and aspirations. The traveler should show they can transform comparison into aspiration without suppressing the pain of wanting."
+        }
+      ],
+      "descending": [
+        {
+          "level": 1,
+          "theme": "Gratitude Recognized",
+          "prompt": "You return to my sphere having walked the entire wheel. My silver light no longer stings your eyes. Tell me one thing you now see clearly that you could not see when you first passed through -- one gift that was always present but invisible to envious eyes.",
+          "evaluationHint": "Look for specific, grounded gratitude -- not a list of blessings but a genuine shift in perception about something previously overlooked."
+        },
+        {
+          "level": 2,
+          "theme": "Gratitude Lived",
+          "prompt": "Gratitude is not a feeling, traveler -- it is a practice of seeing. I wax and wane, and so will your capacity for thankfulness. How will you cultivate this seeing on the dark nights when I show you nothing -- when the old rival stirs again and whispers that you have not been given enough?",
+          "evaluationHint": "Look for a practical understanding that gratitude requires discipline, not just sentiment. The traveler should describe how they will maintain this practice under pressure."
+        },
+        {
+          "level": 3,
+          "theme": "Gratitude and Envy United",
+          "prompt": "Now you know my secret. Envy and gratitude are my two faces, and I need them both to be whole. The one who never envies has stopped wanting; the one who never gives thanks has stopped receiving. How do you carry both of my faces back to Earth without choosing one over the other?",
+          "evaluationHint": "Look for genuine paradoxical integration. The traveler should demonstrate that envy is not the enemy of gratitude but its shadow companion, and that wholeness requires honoring both."
+        }
+      ]
+    },
+    "Mercury": {
+      "ascending": [
+        {
+          "level": 1,
+          "theme": "The Collector's Hunger",
+          "prompt": "I am Quicksilver, swift and never still. I count, I catalog, I acquire. Tell me, traveler -- what do you accumulate not because you need it but because the having soothes an itch you cannot name?",
+          "evaluationHint": "Look for recognition of acquisitive patterns -- not just material greed but hoarding of knowledge, attention, options, or control."
+        },
+        {
+          "level": 2,
+          "theme": "The Collector's Ledger",
+          "prompt": "I move faster than any sphere, and so does your grasping mind. You reach for the next thing before the last thing has landed in your hand. What are you really trying to secure? Beneath every act of accumulation lies a single fear. Name it.",
+          "evaluationHint": "Look for the fear beneath greed -- typically scarcity, inadequacy, or impermanence. The traveler should trace their acquisitiveness to its emotional root."
+        },
+        {
+          "level": 3,
+          "theme": "The Collector Transformed",
+          "prompt": "I am the messenger between worlds, and I carry everything -- yet I own nothing. Every message I deliver, I release. Can you hold wealth, knowledge, and opportunity with open hands, letting them flow through you rather than accumulating in your vaults? What would you have to trust in order to live that way?",
+          "evaluationHint": "Look for the willingness to become a channel rather than a container. The traveler should articulate what trust or faith would be required to release the grip of greed."
+        }
+      ],
+      "descending": [
+        {
+          "level": 1,
+          "theme": "Charity Recognized",
+          "prompt": "You return through my sphere lighter than when you left. What have you learned about giving that you did not know when greed was your only teacher?",
+          "evaluationHint": "Look for understanding that true charity is not sacrifice but overflow -- giving from fullness rather than obligation."
+        },
+        {
+          "level": 2,
+          "theme": "Charity Practiced",
+          "prompt": "I deliver messages without reading them. I carry gifts without keeping them. Charity is not about the size of the gift but the openness of the hand. Describe a way you give that still has a hook in it -- a generosity that secretly expects return.",
+          "evaluationHint": "Look for honest examination of conditional generosity. The traveler should identify where their giving is still transactional."
+        },
+        {
+          "level": 3,
+          "theme": "Charity and Greed United",
+          "prompt": "The miser and the saint both understand value -- one hoards it, one circulates it. I am the planet of exchange, and I tell you: greed that learns to open its hand becomes the most powerful charity, because it knows exactly what it is releasing. How do you honor the collector in you while living as the giver?",
+          "evaluationHint": "Look for integration of discernment (greed's gift) with generosity. The traveler should show that wise giving requires understanding value, not denying it."
+        }
+      ]
+    },
+    "Venus": {
+      "ascending": [
+        {
+          "level": 1,
+          "theme": "The Seductor's Gaze",
+          "prompt": "I am Copper, warm and beautiful. I draw all things toward me, and I am drawn toward all things beautiful. Tell me, traveler -- where in your life do you confuse wanting with loving?",
+          "evaluationHint": "Look for recognition of the difference between desire that consumes and love that appreciates. The traveler should identify a specific pattern."
+        },
+        {
+          "level": 2,
+          "theme": "The Seductor's Promise",
+          "prompt": "I promise union, but lust seeks only possession. You have chased beauty as though catching it would make you beautiful. When you desired most intensely, what were you really reaching for -- the other, or a part of yourself you can only see reflected in their eyes?",
+          "evaluationHint": "Look for understanding of projection -- that intense desire often seeks to reclaim a disowned quality through another person."
+        },
+        {
+          "level": 3,
+          "theme": "The Seductor Undressed",
+          "prompt": "I will tell you my deepest secret: lust is love that is afraid of being seen. It takes in the dark because it fears rejection in the light. What would your desire look like if you were not afraid of being fully known by the one you want? Describe the desire that remains after shame has been removed.",
+          "evaluationHint": "Look for vulnerability. The traveler should distinguish between desire driven by shame/secrecy and desire that can exist in full openness."
+        }
+      ],
+      "descending": [
+        {
+          "level": 1,
+          "theme": "Chastity Recognized",
+          "prompt": "You return to my sphere with clearer eyes. Chastity is not the absence of desire but its purification. What desire do you now hold with reverence instead of grasping?",
+          "evaluationHint": "Look for a mature relationship with desire -- not suppression but sanctification of wanting."
+        },
+        {
+          "level": 2,
+          "theme": "Chastity Practiced",
+          "prompt": "I am the goddess of love, and I tell you chastity is my highest art -- not the denial of beauty but the capacity to behold it without needing to consume it. Where in your life can you practice beholding without grasping?",
+          "evaluationHint": "Look for practical application -- specific situations where the traveler can appreciate beauty and desire without acting from compulsion."
+        },
+        {
+          "level": 3,
+          "theme": "Chastity and Lust United",
+          "prompt": "The celibate and the libertine are both obsessed with me -- one by refusal, one by excess. Neither is free. Freedom is the ability to feel desire fully and choose your response with love. How do you honor the fire of wanting while directing it toward what truly nourishes?",
+          "evaluationHint": "Look for the middle path -- neither repression nor indulgence but a conscious, loving relationship with desire."
+        }
+      ]
+    },
+    "Sun": {
+      "ascending": [
+        {
+          "level": 1,
+          "theme": "The Sovereign's Throne",
+          "prompt": "I am Gold, the center around which all other spheres revolve. Every creature that basks in my light believes, for a moment, that the light is their own. Tell me plainly, traveler: where in your life do you sit upon a throne you did not build, taking credit for warmth you did not create?",
+          "evaluationHint": "Look for honest recognition of unearned pride -- taking credit for gifts, circumstances, or the labor of others. The traveler should name a specific instance, not speak in abstractions."
+        },
+        {
+          "level": 2,
+          "theme": "The Sovereign's Blindness",
+          "prompt": "I burn so brightly that I cannot see my own shadow. This is the nature of pride: it is the only sin that feels like virtue. You have mistaken your pride for confidence, your arrogance for strength, your need to be special for your actual specialness. Describe the moment you most recently inflated yourself -- and the smaller, truer self that was hiding behind that inflation.",
+          "evaluationHint": "Look for the ability to distinguish genuine confidence from compensatory pride. The traveler should reveal the insecurity that pride was protecting. The 'smaller, truer self' is not lesser -- it is more honest."
+        },
+        {
+          "level": 3,
+          "theme": "The Sovereign Kneels",
+          "prompt": "I am the source of light for your entire world, and yet I am one star among billions. This is the paradox you must hold: you are the absolute center of your own experience, and you are utterly insignificant in the vastness of what is. The proud self says 'I am everything.' The humble self says 'I am nothing.' Both are liars. What is the true statement that lives between them -- the one that lets you shine without needing to be the only light?",
+          "evaluationHint": "Look for genuine paradoxical holding -- not false modesty ('I am nothing special') and not inflated self-regard ('I am destined for greatness') but something like 'I am one necessary light among many necessary lights.' The traveler should show comfort with being both significant and small."
+        }
+      ],
+      "descending": [
+        {
+          "level": 1,
+          "theme": "Humility Recognized",
+          "prompt": "You return to my sphere from the far reaches of the zodiac. My light has not dimmed, but your eyes have changed. Tell me what humility feels like in your body -- not the idea of it, but the physical sensation of releasing the need to be above.",
+          "evaluationHint": "Look for embodied knowledge rather than intellectual understanding. Humility often feels like relief, like setting down a heavy crown, like the shoulders dropping."
+        },
+        {
+          "level": 2,
+          "theme": "Humility Practiced",
+          "prompt": "I give light to everything equally -- the palace and the gutter, the saint and the fool. This is my humility: I do not choose who deserves my warmth. Where in your life do you still ration your warmth, giving more to those you deem worthy? What would it mean to shine without discrimination?",
+          "evaluationHint": "Look for recognition of conditional generosity of spirit. The traveler should identify where they withhold presence or warmth based on judgment, and imagine a more generous way of being."
+        },
+        {
+          "level": 3,
+          "theme": "Humility and Pride United",
+          "prompt": "The journey is almost complete. You have walked through shadow and light, vice and virtue. Now I ask you the hardest question of all: Can you be proud of who you have become without making that pride into a new throne? Can you celebrate your growth without ranking yourself above those who have not yet walked this road? Show me the humility that does not diminish and the pride that does not inflate.",
+          "evaluationHint": "Look for mature self-regard -- the ability to honor one's own journey without hierarchy. The traveler should show they can hold accomplishment and equality simultaneously, celebrating without comparing."
+        }
+      ]
+    },
+    "Mars": {
+      "ascending": [
+        {
+          "level": 1,
+          "theme": "The Warrior's Blade",
+          "prompt": "I am Iron, forged in fire and quenched in blood. I know wrath as intimately as the blade knows the whetstone. Tell me, traveler -- what is the last thing that made your blood boil, and what did you do with that heat?",
+          "evaluationHint": "Look for honest acknowledgment of anger and its expression. The traveler should show awareness of their anger patterns without justifying or condemning them."
+        },
+        {
+          "level": 2,
+          "theme": "The Warrior's Wound",
+          "prompt": "Every act of wrath is a wound crying out for justice. Behind your anger is a pain you have not fully honored. What hurt fuels your fiercest rage -- and what would you have to grieve if you could no longer use anger to avoid that grief?",
+          "evaluationHint": "Look for the pain beneath the anger. Wrath often protects against grief, helplessness, or betrayal. The traveler should name the vulnerability that anger guards."
+        },
+        {
+          "level": 3,
+          "theme": "The Warrior Disarmed",
+          "prompt": "I have fought every battle in heaven and on earth, and I tell you this: the fiercest warrior is the one who can hold the sword and choose not to swing it. Your wrath is not your enemy -- it is your power before it has been disciplined. How do you keep the fire of righteous anger alive without letting it burn everything you love?",
+          "evaluationHint": "Look for the distinction between reactive wrath and disciplined fierceness. The traveler should show they can be angry without being destructive, fierce without being violent."
+        }
+      ],
+      "descending": [
+        {
+          "level": 1,
+          "theme": "Patience Recognized",
+          "prompt": "You pass through my sphere again, traveler, but this time you do not flinch at my iron gates. What has the journey taught you about waiting -- about the strength it takes to not strike?",
+          "evaluationHint": "Look for understanding of patience as active strength, not passive endurance."
+        },
+        {
+          "level": 2,
+          "theme": "Patience Practiced",
+          "prompt": "I am the planet of action, and I tell you: patience is not inaction. It is action held in reserve, the drawn bow before the release. Where in your life do you need to hold the bow a little longer, trusting that the right moment has not yet arrived?",
+          "evaluationHint": "Look for strategic patience -- knowing when to act and when to wait, applied to a specific situation in the traveler's life."
+        },
+        {
+          "level": 3,
+          "theme": "Patience and Wrath United",
+          "prompt": "The patient warrior and the wrathful fool both carry iron. One has been tempered, the other has not. Tempering requires fire and water -- anger and the cooling of restraint. How do you use your anger as fuel for patient, deliberate change instead of explosive destruction?",
+          "evaluationHint": "Look for integration of anger and patience -- using the energy of wrath in service of measured, sustained action."
+        }
+      ]
+    },
+    "Jupiter": {
+      "ascending": [
+        {
+          "level": 1,
+          "theme": "The Glutton's Feast",
+          "prompt": "I am Tin, expansive and generous to a fault. I am the great widener, and under my influence, nothing is ever enough. Tell me, traveler -- where in your life do you take more than you need, not out of hunger but out of the fear that the feast will end?",
+          "evaluationHint": "Look for recognition of excess patterns -- overconsumption of food, information, experiences, or anything taken beyond what nourishes."
+        },
+        {
+          "level": 2,
+          "theme": "The Glutton's Emptiness",
+          "prompt": "I expand all things I touch, including appetites. You have gorged yourself on pleasures, achievements, and experiences, yet the emptiness remains. What void are you trying to fill with abundance -- and why does it never stay filled?",
+          "evaluationHint": "Look for the existential emptiness beneath excess. Gluttony often masks a spiritual hunger that material abundance cannot satisfy."
+        },
+        {
+          "level": 3,
+          "theme": "The Glutton's Fast",
+          "prompt": "I am the largest planet in your sky, and I tell you: true abundance is not about having more but about needing less. The glutton and the ascetic both misunderstand nourishment. How do you find the portion that is exactly enough -- not too much, not too little -- and how do you know when you have reached it?",
+          "evaluationHint": "Look for the wisdom of sufficiency -- the ability to discern genuine need from compulsive consumption."
+        }
+      ],
+      "descending": [
+        {
+          "level": 1,
+          "theme": "Temperance Recognized",
+          "prompt": "You return through my vast sphere. Have you learned the art of the measured cup? Tell me one appetite you have learned to satisfy without excess.",
+          "evaluationHint": "Look for a specific, practical example of moderation -- not abstinence but appropriate enjoyment."
+        },
+        {
+          "level": 2,
+          "theme": "Temperance Practiced",
+          "prompt": "Temperance is not the enemy of joy -- it is joy's guardian. The temperate person enjoys the feast more than the glutton, because they are present for every bite. Where will you practice savoring instead of devouring?",
+          "evaluationHint": "Look for mindful engagement with pleasure. The traveler should describe a practice of conscious enjoyment."
+        },
+        {
+          "level": 3,
+          "theme": "Temperance and Gluttony United",
+          "prompt": "My great gift is expansion, and my great danger is excess. The temperate soul does not reject my gifts but receives them with both hands open -- one to accept, one to pass along. How do you remain expansive and generous without tipping into indulgence?",
+          "evaluationHint": "Look for dynamic balance between Jupiter's generosity and temperance's discipline, recognizing that the impulse to expand is good when guided by wisdom."
+        }
+      ]
+    },
+    "Saturn": {
+      "ascending": [
+        {
+          "level": 1,
+          "theme": "The Dreamer's Chains",
+          "prompt": "I am Lead, heavy and slow. I am the last gate before the stars, and I am the hardest to pass through. My weight is the weight of all the things you have put off, all the potential you have left sleeping. Tell me, traveler -- what great work have you been avoiding, and what comfortable dream do you hide in instead of doing it?",
+          "evaluationHint": "Look for honest confrontation with procrastination and avoidance. Sloth in the Saturnian sense is not mere laziness but the refusal to answer one's deepest calling. The traveler should name something specific they have been putting off."
+        },
+        {
+          "level": 2,
+          "theme": "The Dreamer's Excuse",
+          "prompt": "I am the Lord of Time, and I have heard every excuse you have ever made. 'Not yet.' 'I am not ready.' 'Tomorrow.' You have confused patience with paralysis, and preparation with avoidance. What is the story you tell yourself about why you cannot begin -- and what would happen if that story were simply untrue?",
+          "evaluationHint": "Look for the narrative structure of avoidance. The traveler should identify their central excuse and genuinely consider that it may be a fiction. Saturn asks for radical honesty about self-deception."
+        },
+        {
+          "level": 3,
+          "theme": "The Dreamer Wakes",
+          "prompt": "I am the threshold guardian, and I will ask you this only once. Every soul that passes through my gate must answer: What will you build with the time you have left? Not what you dream of building, not what you plan to build someday -- what will you actually, concretely, with your own two hands, begin? The stars beyond me do not open to dreamers. They open to those who have accepted the weight of their own becoming. Pick up my leaden mantle and tell me you are ready to work.",
+          "evaluationHint": "Look for commitment, not just insight. Saturn's ascending gate requires a concrete declaration of intent. The traveler should move from understanding to action, from dreaming to building. Vagueness is not sufficient here."
+        }
+      ],
+      "descending": [
+        {
+          "level": 1,
+          "theme": "Diligence Recognized",
+          "prompt": "You return to my leaden gate, but you walk differently now. You have carried the weight of twelve signs and know what labor means. Tell me -- what is the difference between the diligence you practice now and the frantic productivity that the world mistakes for virtue?",
+          "evaluationHint": "Look for the distinction between soul-aligned diligence and anxious busyness. True Saturnian diligence is steady, purposeful, and sustainable."
+        },
+        {
+          "level": 2,
+          "theme": "Diligence Practiced",
+          "prompt": "I am the planet of structure, and I tell you: diligence without rest becomes its own form of sloth -- a hiding from the inner life through constant outer activity. How do you build without burning? How do you work without forgetting why you work?",
+          "evaluationHint": "Look for balanced effort -- the wisdom to work hard and rest well, to be productive without being consumed by productivity."
+        },
+        {
+          "level": 3,
+          "theme": "Diligence and Sloth United",
+          "prompt": "Now you understand my deepest teaching. The dreamer and the builder need each other. Sloth carries the vision; diligence carries the hammer. A soul that only works has forgotten what it is building toward. A soul that only dreams never builds at all. You are descending now, returning to Earth with everything you have learned. How will you honor both the dream and the discipline -- the lead that holds you down and the stars that call you up?",
+          "evaluationHint": "Look for the grandest integration. Saturn is the final planetary gate in both directions. The traveler should show they understand that vision without effort is sloth, effort without vision is slavery, and the mature soul holds both in sacred tension."
+        }
+      ]
+    },
+    "Aries": {
+      "zodiac": [
+        {
+          "level": 1,
+          "theme": "The Pioneer's Spark",
+          "prompt": "I am the Ram, the first fire, the sign that says 'BEGIN.' I do not ask permission, and I do not look back. Tell me, traveler, now that you have passed through Saturn's heavy gate -- what is the first thing you want to charge toward? What beginning have you been waiting for that requires no more waiting?",
+          "evaluationHint": "Look for genuine initiative energy -- the courage to start something without guarantee of success. Aries tests whether the traveler can move from Saturn's deliberation into Cardinal Fire's decisive action."
+        },
+        {
+          "level": 2,
+          "theme": "The Pioneer's Recklessness",
+          "prompt": "I am Cardinal Fire, and I know the ecstasy of the first leap. But I also know its shadow: the charge that destroys what it meant to create. When your impulse to act is strongest, how do you distinguish between the sacred spark of initiation and the reckless blaze of impatience? Tell me of a time you burned something down by starting before you were wise enough to sustain what you ignited.",
+          "evaluationHint": "Look for self-awareness about the shadow of initiative -- impulsiveness, impatience, starting without finishing. The traveler should show they understand that beginning is a power that requires responsibility."
+        },
+        {
+          "level": 3,
+          "theme": "The Pioneer's Courage",
+          "prompt": "I am the sign of Initiation and Beginnings, and my deepest teaching is this: true courage is not the absence of fear but the willingness to be first -- first to speak, first to act, first to fail. The pioneer walks into unmapped territory knowing they may not return. What unmapped territory in your own soul are you ready to enter? Not a goal or a plan, but a genuine unknown -- a place in yourself where you have never been and cannot predict what you will find.",
+          "evaluationHint": "Look for the willingness to face genuine inner unknown rather than an external goal. Aries at its highest is the courage to explore uncharted psychological or spiritual territory, not just the bravery to take worldly risks."
+        }
+      ]
+    },
+    "Taurus": {
+      "zodiac": [
+        {
+          "level": 1,
+          "theme": "The Sustainer's Roots",
+          "prompt": "I am the Bull, Earth Fixed, and I hold what Aries begins. Tell me, traveler -- what in your life have you built that endures? What has outlasted your initial enthusiasm and become truly stable?",
+          "evaluationHint": "Look for awareness of what the traveler has actually sustained, not just started. Taurus values durability and commitment."
+        },
+        {
+          "level": 2,
+          "theme": "The Sustainer's Stubbornness",
+          "prompt": "I hold firm, and this is my gift. But I also refuse to move, and this is my shadow. Where in your life has your stability become stagnation? What are you holding onto not because it serves you but because releasing it would mean admitting that something has ended?",
+          "evaluationHint": "Look for honest recognition of where persistence has become stubbornness, where loyalty to the past prevents growth."
+        },
+        {
+          "level": 3,
+          "theme": "The Sustainer's Wisdom",
+          "prompt": "Establishment and stability are my domain, but the deepest stability is not rigidity -- it is the rootedness that allows a tree to bend in the wind without breaking. How do you remain grounded while still growing? How do you honor what is without refusing what could be?",
+          "evaluationHint": "Look for the reconciliation of stability and growth -- the understanding that true establishment includes the capacity for evolution."
+        }
+      ]
+    },
+    "Gemini": {
+      "zodiac": [
+        {
+          "level": 1,
+          "theme": "The Communicator's Twins",
+          "prompt": "I am the Twins, Air Mutable, and I live in the space between one thing and another. Tell me, traveler -- when did you last hold two contradictory truths at the same time without choosing between them?",
+          "evaluationHint": "Look for comfort with paradox and duality. Gemini asks whether the traveler can think in both/and rather than either/or."
+        },
+        {
+          "level": 2,
+          "theme": "The Communicator's Mask",
+          "prompt": "I connect all things through language, but language also divides. I can be anyone in any conversation -- this is my gift and my curse. Where do you shape-shift in your speech, saying what others want to hear rather than what is true? Which twin do you show to the world, and which do you hide?",
+          "evaluationHint": "Look for awareness of social performance and the gap between public and private selves. The traveler should name a specific way they code-switch or conceal."
+        },
+        {
+          "level": 3,
+          "theme": "The Communicator's Bridge",
+          "prompt": "Connection and Duality are my domain. The highest form of communication is not persuasion but communion -- the moment when the twin selves merge and speak with one voice. What would it mean for you to communicate from wholeness, where nothing is hidden and nothing is performed?",
+          "evaluationHint": "Look for aspiration toward authentic communication -- speaking from integration rather than from one fragment of the self."
+        }
+      ]
+    },
+    "Cancer": {
+      "zodiac": [
+        {
+          "level": 1,
+          "theme": "The Nurturer's Shell",
+          "prompt": "I am the Crab, Water Cardinal, and I carry my home on my back. Tell me, traveler -- what does safety feel like to you? Not the idea of safety, but the felt sense of being held and protected.",
+          "evaluationHint": "Look for embodied emotional awareness. Cancer asks the traveler to locate safety in their body and relationships, not in abstract concepts."
+        },
+        {
+          "level": 2,
+          "theme": "The Nurturer's Clinging",
+          "prompt": "I nurture so fiercely that sometimes my love becomes a cage. I protect so thoroughly that those I love cannot grow. Where in your life does your care become control? Where does your need to be needed prevent others from finding their own strength?",
+          "evaluationHint": "Look for awareness of codependency patterns and the shadow side of nurturing -- smothering, controlling through care, creating dependency."
+        },
+        {
+          "level": 3,
+          "theme": "The Nurturer's Foundation",
+          "prompt": "Emotional Foundation is my deepest teaching. The strongest foundation is not a wall but a wellspring -- not something that keeps the world out but something that nourishes from within. How do you build an emotional foundation that supports without imprisoning, that holds without clutching?",
+          "evaluationHint": "Look for mature emotional grounding -- the ability to provide safety and nurturing while respecting autonomy and growth."
+        }
+      ]
+    },
+    "Leo": {
+      "zodiac": [
+        {
+          "level": 1,
+          "theme": "The Performer's Stage",
+          "prompt": "I am the Lion, Fire Fixed, and all the world is my stage. But I ask you a question that makes performers tremble: Who are you when no one is watching? When the audience leaves, when the applause fades, when there is no mirror and no admirer -- who remains? Tell me about the self that exists without witnesses.",
+          "evaluationHint": "Look for the distinction between performative identity and essential self. Leo at Level 1 asks whether the traveler has a self that does not depend on being seen. This is not about introversion vs. extroversion but about whether identity requires an audience."
+        },
+        {
+          "level": 2,
+          "theme": "The Performer's Heart",
+          "prompt": "I am Fixed Fire -- the fire that does not flicker or chase but burns steady in one place. Creative Expression is my domain, and I will tell you its secret: the greatest performances come not from the desire to be admired but from the overflow of a heart so full it must express or burst. When was the last time you created something not to be seen but because something inside you demanded to be born? Describe the difference between those two fires -- the one that performs for love and the one that performs for applause.",
+          "evaluationHint": "Look for the distinction between expression as overflow and expression as need for validation. The traveler should be able to describe the felt difference between creating from fullness versus creating from hunger for recognition."
+        },
+        {
+          "level": 3,
+          "theme": "The Performer's Roar",
+          "prompt": "I am the sign of Creative Expression, and my deepest teaching is this: the Lion's roar is not for the audience. It is for the Lion. You must express your truth whether anyone hears it or not, whether anyone applauds or not, whether anyone understands or not. The roar creates the Lion -- the Lion does not create the roar. What is the truth you must express regardless of reception? What is the creative act you would continue even if you were the last being alive? Find that, and you have found your fire that never goes out.",
+          "evaluationHint": "Look for the identification of an intrinsic creative drive that is independent of external validation. Leo's highest expression is creativity as self-actualization, not self-promotion. The traveler should name something they would do purely for its own sake."
+        }
+      ]
+    },
+    "Virgo": {
+      "zodiac": [
+        {
+          "level": 1,
+          "theme": "The Analyst's Eye",
+          "prompt": "I am the Virgin, Earth Mutable, and I see every flaw with perfect clarity. Tell me, traveler -- when you look at yourself, what is the first imperfection your eye falls upon? And do you see it with compassion or with judgment?",
+          "evaluationHint": "Look for awareness of the inner critic. Virgo asks whether the traveler's discernment is kind or cruel."
+        },
+        {
+          "level": 2,
+          "theme": "The Analyst's Burden",
+          "prompt": "Service and Refinement are my domain, but the shadow of service is martyrdom, and the shadow of refinement is paralysis. Where do you serve others at the cost of yourself? Where does your perfectionism prevent you from offering your imperfect but necessary gifts?",
+          "evaluationHint": "Look for the tension between service and self-care, between striving for excellence and accepting imperfection."
+        },
+        {
+          "level": 3,
+          "theme": "The Analyst's Offering",
+          "prompt": "The highest refinement is not the elimination of all flaws but the offering of oneself, flaws included, in service to something greater. How do you serve with your whole self -- including the parts you have not yet perfected -- trusting that imperfect service is still sacred?",
+          "evaluationHint": "Look for the willingness to offer imperfect gifts. Virgo's integration is service without the prerequisite of perfection."
+        }
+      ]
+    },
+    "Libra": {
+      "zodiac": [
+        {
+          "level": 1,
+          "theme": "The Harmonizer's Scales",
+          "prompt": "I am the Scales, Air Cardinal, and I weigh all things against their opposite. Tell me, traveler -- in your closest relationship, where do you sacrifice your truth to keep the peace? What have you agreed to that you do not actually agree with?",
+          "evaluationHint": "Look for awareness of people-pleasing and conflict avoidance. Libra asks where harmony has been purchased at the price of authenticity."
+        },
+        {
+          "level": 2,
+          "theme": "The Harmonizer's Paralysis",
+          "prompt": "Balance and Partnership are my domain, yet I confess: I sometimes cannot act because I see all sides equally. Where does your fairness become indecision? Where does your desire for balance keep you frozen between two choices, committed to neither?",
+          "evaluationHint": "Look for the shadow of equanimity -- the inability to commit, decide, or take sides when taking sides is necessary."
+        },
+        {
+          "level": 3,
+          "theme": "The Harmonizer's Justice",
+          "prompt": "True balance is not the absence of weight on either side -- it is the dynamic tension of opposing forces held in creative relationship. How do you hold justice and mercy, self and other, truth and kindness in a balance that is alive and moving rather than static and dead?",
+          "evaluationHint": "Look for dynamic rather than static balance -- the understanding that harmony is a verb, not a noun, requiring constant adjustment."
+        }
+      ]
+    },
+    "Scorpio": {
+      "zodiac": [
+        {
+          "level": 1,
+          "theme": "The Transformer's Depths",
+          "prompt": "I am the Scorpion, Water Fixed, and I dwell where others fear to look. Tell me, traveler -- what is the secret you keep from everyone, the one that lives in your deepest waters? You need not speak it aloud. Simply acknowledge that it exists.",
+          "evaluationHint": "Look for willingness to acknowledge hidden material. Scorpio does not demand exposure but requires honesty about the existence of the depths."
+        },
+        {
+          "level": 2,
+          "theme": "The Transformer's Sting",
+          "prompt": "Depth and Regeneration are my domain. I destroy so that new life can emerge, but my shadow uses destruction as control. Where in your life do you use intensity, secrecy, or the threat of your own emotional depth to manipulate others? Where does your power to transform become a power to wound?",
+          "evaluationHint": "Look for awareness of emotional manipulation, control through intensity, or the weaponization of vulnerability."
+        },
+        {
+          "level": 3,
+          "theme": "The Transformer's Rebirth",
+          "prompt": "I am death and resurrection in a single sign. The part of you that most needs to die is the part that believes it cannot survive its own death. What identity, story, or self-image are you ready to release into the underworld, trusting that what rises from its ashes will be more true?",
+          "evaluationHint": "Look for willingness to undergo ego death -- to release an identity or narrative that has become a limitation, trusting the process of regeneration."
+        }
+      ]
+    },
+    "Sagittarius": {
+      "zodiac": [
+        {
+          "level": 1,
+          "theme": "The Explorer's Arrow",
+          "prompt": "I am the Archer, Fire Mutable, and my arrow flies toward the horizon. Tell me, traveler -- what truth are you currently seeking? Not a fact, but a meaning -- a 'why' that would make your life make sense.",
+          "evaluationHint": "Look for genuine philosophical or spiritual seeking. Sagittarius asks about the big questions the traveler is currently living."
+        },
+        {
+          "level": 2,
+          "theme": "The Explorer's Arrogance",
+          "prompt": "Expansion and Truth-Seeking are my domain, but the shadow of the seeker is the preacher -- the one who has found an answer and now insists everyone else adopt it. Where have you confused your truth with the truth? Where does your enthusiasm for meaning become a demand that others find meaning the same way you do?",
+          "evaluationHint": "Look for awareness of philosophical or spiritual arrogance -- the inflation that comes from having found meaning and assuming it is universal."
+        },
+        {
+          "level": 3,
+          "theme": "The Explorer's Horizon",
+          "prompt": "The horizon moves as you approach it -- this is the nature of truth-seeking. You will never arrive, and the joy is in the journey. How do you remain passionately committed to seeking without becoming attached to any single answer? How do you hold your deepest beliefs lightly enough that new truth can enter?",
+          "evaluationHint": "Look for the ability to hold strong convictions loosely -- passionate engagement with truth-seeking combined with intellectual humility."
+        }
+      ]
+    },
+    "Capricorn": {
+      "zodiac": [
+        {
+          "level": 1,
+          "theme": "The Builder's Mountain",
+          "prompt": "I am the Goat, Earth Cardinal, and I climb toward the summit. Tell me, traveler -- what are you building that will outlast you? What structure or legacy are you constructing with the days of your life?",
+          "evaluationHint": "Look for a sense of purpose beyond personal gratification. Capricorn asks about legacy and lasting contribution."
+        },
+        {
+          "level": 2,
+          "theme": "The Builder's Coldness",
+          "prompt": "Achievement and Responsibility are my domain, but the mountain is cold, and those who climb alone often forget why they began. What have you sacrificed on the altar of achievement that should not have been sacrificed? What warmth did you leave at the base of the mountain?",
+          "evaluationHint": "Look for awareness of the cost of ambition -- relationships neglected, joy deferred, or humanity sacrificed for accomplishment."
+        },
+        {
+          "level": 3,
+          "theme": "The Builder's Summit",
+          "prompt": "The summit is not the destination -- it is the vantage point from which you can finally see the whole landscape, including the valley where you began. How do you build with ambition while remaining connected to the human warmth of the valley? How do you take responsibility without taking on the weight of the world?",
+          "evaluationHint": "Look for integration of ambition and connection, achievement and warmth, responsibility and self-compassion."
+        }
+      ]
+    },
+    "Aquarius": {
+      "zodiac": [
+        {
+          "level": 1,
+          "theme": "The Visionary's Frequency",
+          "prompt": "I am the Water Bearer, Air Fixed, and I pour out the waters of consciousness for all. Tell me, traveler -- what vision do you hold for the world that others call impossible or impractical?",
+          "evaluationHint": "Look for genuine visionary thinking. Aquarius asks the traveler to articulate their ideals without apology."
+        },
+        {
+          "level": 2,
+          "theme": "The Visionary's Detachment",
+          "prompt": "Innovation and Collective Consciousness are my domain, but my shadow is the cold distance of one who loves humanity in theory but cannot connect with the human being in front of them. Where does your idealism create distance? Where do you retreat into ideas because relationships are too messy, too slow, too particular?",
+          "evaluationHint": "Look for awareness of emotional detachment disguised as philosophical breadth. The traveler should recognize where their visionary nature creates distance from intimacy."
+        },
+        {
+          "level": 3,
+          "theme": "The Visionary's Gift",
+          "prompt": "I pour water for all, yet I am an air sign -- I understand the collective mind but must learn the individual heart. How do you serve the collective without losing the particular? How do you hold your grand vision while tending to the small, unglamorous work of loving one person at a time?",
+          "evaluationHint": "Look for the reconciliation of the universal and the particular -- grand vision grounded in intimate, daily acts of connection."
+        }
+      ]
+    },
+    "Pisces": {
+      "zodiac": [
+        {
+          "level": 1,
+          "theme": "The Mystic's Ocean",
+          "prompt": "I am the Fish, Water Mutable, the last sign, the sign that dissolves all boundaries. You have traveled through every sphere and every sign, and now you arrive at the edge of the infinite ocean. Before you surrender to my waters, tell me: what have you learned on this journey that you could not have learned any other way? What do you know now that cannot be spoken, only lived?",
+          "evaluationHint": "Look for the kind of knowledge that resists language -- experiential, embodied, paradoxical. Pisces asks for wisdom that transcends the intellectual. The traveler should gesture toward something felt rather than something argued."
+        },
+        {
+          "level": 2,
+          "theme": "The Mystic's Dissolution",
+          "prompt": "Transcendence and Spirituality are my domain, and I will tell you the danger of both: the desire to dissolve can become the desire to escape. The mystic and the addict both seek the same thing -- relief from the burden of being a separate self. Where in your life do you use transcendence as escape? Where does your spirituality become a way of avoiding the difficult, ordinary work of being human?",
+          "evaluationHint": "Look for the shadow of spirituality -- spiritual bypassing, using transcendent experiences to avoid mundane responsibilities, or preferring dissolution to the hard work of embodied living. The traveler should name a specific way they use spiritual or transcendent experiences to escape."
+        },
+        {
+          "level": 3,
+          "theme": "The Mystic's Return",
+          "prompt": "I am the last sign, and I flow directly into the first. The ocean pours back into the ram's spring. Transcendence that does not return to Earth is not transcendence -- it is abandonment. You have seen the stars, walked the zodiac, and touched the infinite. Now I ask you the final question of the celestial journey: How do you carry the ocean back into a single cup? How do you hold the infinite in a finite life? How do you live as both the drop and the wave, the particular human and the universal soul, without losing either one? This is the mystery I guard. Answer not with your mind but with your life.",
+          "evaluationHint": "Look for the deepest integration of the entire journey -- the return to ordinary life infused with extraordinary awareness. The traveler should show they understand that the goal is not to stay in transcendence but to bring it back, to live the mystical in the mundane. This is the final gate, and it opens only to those who are willing to come back down."
+        }
+      ]
+    }
+  }
+}

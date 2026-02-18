@@ -5,15 +5,30 @@ import { D6Display } from '../shared/DiceDisplay';
 import { chooseBestMove, evaluateWithNoise } from '../shared/aiCore';
 import {
   RINGS, SPACES_PER_RING, RING_DICE, GEMSTONE_VALUES, FALLEN_STARLIGHT_VALUE,
-  PIECE_TYPES, LADDERS, CHUTES, ORDEAL_POSITIONS,
+  PIECE_TYPES, LADDERS, CHUTES, ORDEAL_POSITIONS, RING_PLANET,
   ringPosToSVG, buildSpiralPath, rollForRing, getLadderAt, getChuteAt,
 } from './mythouseData';
-import { buildOrdealDeck, drawCard } from './mythouseCardData';
+import {
+  drawCard, CULTURES,
+  buildMinorOrdealDeck, buildMixedMinorDeck,
+  buildMajorArcanaDeck, buildMixedMajorDeck,
+} from './mythouseCardData';
 
 // Board expanded to fit celestial frame rings
 const BOARD_SIZE = 660;
 const CENTER = BOARD_SIZE / 2; // 330
 const PLAYER_COLORS = ['#c9a961', '#8b9dc3'];
+
+// All available cultures for deck selection (Tarot + 7 mythological)
+const ALL_CULTURES = [
+  { key: 'tarot', label: 'Tarot' },
+  ...CULTURES,
+];
+
+// Element accent colors for Minor Arcana ordeal display
+const ELEMENT_COLORS = {
+  Air: '#7ec8e3', Water: '#5b9bd5', Fire: '#e8835a', Earth: '#8fba74',
+};
 
 const DICE_TIERS = [
   { name: 'd6', sides: 6, unlockRing: 1 },
@@ -144,17 +159,25 @@ function initPieces() {
 }
 
 export default function MythouseGame({ mode, onExit }) {
+  // === SETUP STATE ===
+  const [deckMode, setDeckMode] = useState(null); // 'single'|'each'|'mixed'
+  const [cultures, setCultures] = useState([null, null]); // [P0 culture, P1 culture]
+  const [setupStep, setSetupStep] = useState('mode'); // 'mode'|'culture'|'p1culture'|'p2culture'
+
+  // === GAME STATE ===
   const [pieces, setPieces] = useState(initPieces);
   const [scores, setScores] = useState([0, 0]);
+  const [cardScores, setCardScores] = useState([0, 0]); // card-only points for display
   const [gems, setGems] = useState(() => {
     const g = {};
     for (let r = 1; r <= RINGS; r++) g[r] = true;
     return g;
   });
   const [starlightClaimed, setStarlightClaimed] = useState(false);
+  const [starlightPlayer, setStarlightPlayer] = useState(null);
   const [currentPlayer, setCurrentPlayer] = useState(0);
   const [diceValue, setDiceValue] = useState(null);
-  const [gamePhase, setGamePhase] = useState('rolling');
+  const [gamePhase, setGamePhase] = useState('setup');
   const [winner, setWinner] = useState(null);
   const [turnCount, setTurnCount] = useState(0);
   const [message, setMessage] = useState('Roll the dice to begin your ascent!');
@@ -162,23 +185,124 @@ export default function MythouseGame({ mode, onExit }) {
   const [ordeal, setOrdeal] = useState(null);
   const [moveLog, setMoveLog] = useState([]);
   const [direction, setDirection] = useState(1);
-  const [selectedCelestial, setSelectedCelestial] = useState(null); // { type: 'zodiac'|'month', index }
-  const [gameDeck, setGameDeck] = useState(() => buildOrdealDeck());
+  const [selectedCelestial, setSelectedCelestial] = useState(null);
+
+  // === CARD DECKS ===
+  const [gameDeck, setGameDeck] = useState([]); // Minor Arcana deck (shared or P0)
+  const [gameDeckP2, setGameDeckP2] = useState([]); // Minor Arcana P1 deck ('each' mode)
+  const [majorDeck, setMajorDeck] = useState([]); // Major Arcana deck (shared or P0)
+  const [majorDeckP2, setMajorDeckP2] = useState([]); // Major Arcana P1 deck ('each' mode)
+
+  // === COLLECTED CARDS ===
+  const [collectedMinor, setCollectedMinor] = useState([[], []]); // Minor cards per player
+  const [collectedMajor, setCollectedMajor] = useState([[], []]); // Major cards per player
+  const [majorReveal, setMajorReveal] = useState(null); // { card, player, pts, aligned }
+  const [showCollected, setShowCollected] = useState(false);
+
   const aiTimer = useRef(null);
   const isAI = mode === 'ai';
+
+  // Build decks based on mode and culture selections
+  const buildDecks = useCallback((dMode, c0, c1) => {
+    let minor, minorP2, major, majorP2;
+    if (dMode === 'mixed') {
+      minor = buildMixedMinorDeck();
+      major = buildMixedMajorDeck();
+      minorP2 = []; majorP2 = [];
+    } else if (dMode === 'single') {
+      minor = buildMinorOrdealDeck(c0);
+      major = buildMajorArcanaDeck(c0);
+      minorP2 = []; majorP2 = [];
+    } else { // 'each'
+      minor = buildMinorOrdealDeck(c0);
+      minorP2 = buildMinorOrdealDeck(c1);
+      major = buildMajorArcanaDeck(c0);
+      majorP2 = buildMajorArcanaDeck(c1);
+    }
+    setGameDeck(minor); setGameDeckP2(minorP2);
+    setMajorDeck(major); setMajorDeckP2(majorP2);
+  }, []);
+
+  // Start game after setup
+  const startGame = useCallback((dMode, c0, c1) => {
+    setDeckMode(dMode);
+    setCultures([c0, c1]);
+    buildDecks(dMode, c0, c1);
+    setGamePhase('rolling');
+    setMessage('Roll the dice to begin your ascent!');
+  }, [buildDecks]);
+
+  // Setup: select deck mode
+  const handleDeckMode = useCallback((dMode) => {
+    setDeckMode(dMode);
+    if (dMode === 'mixed') {
+      startGame('mixed', null, null);
+    } else if (dMode === 'single') {
+      setSetupStep('culture');
+    } else { // 'each'
+      setSetupStep('p1culture');
+    }
+  }, [startGame]);
+
+  // Setup: select culture
+  const handleCulturePick = useCallback((cultureKey) => {
+    if (setupStep === 'culture') {
+      // Single culture for both
+      startGame('single', cultureKey, cultureKey);
+    } else if (setupStep === 'p1culture') {
+      setCultures(prev => [cultureKey, prev[1]]);
+      if (isAI) {
+        // AI picks randomly
+        const aiCulture = ALL_CULTURES[Math.floor(Math.random() * ALL_CULTURES.length)].key;
+        startGame('each', cultureKey, aiCulture);
+      } else {
+        setSetupStep('p2culture');
+      }
+    } else if (setupStep === 'p2culture') {
+      startGame('each', cultures[0], cultureKey);
+    }
+  }, [setupStep, isAI, cultures, startGame]);
+
+  // Get the right Minor deck for a player
+  const getMinorDeckFor = useCallback((player) => {
+    if (deckMode === 'each' && player === 1) return gameDeckP2;
+    return gameDeck;
+  }, [deckMode, gameDeck, gameDeckP2]);
+
+  // Rebuild a Minor deck if exhausted
+  const rebuildMinorDeck = useCallback((player) => {
+    if (deckMode === 'mixed') return buildMixedMinorDeck();
+    const culture = deckMode === 'each' ? cultures[player] : cultures[0];
+    return buildMinorOrdealDeck(culture || 'tarot');
+  }, [deckMode, cultures]);
+
+  // Get the right Major deck for a player
+  const getMajorDeckFor = useCallback((player) => {
+    if (deckMode === 'each' && player === 1) return majorDeckP2;
+    return majorDeck;
+  }, [deckMode, majorDeck, majorDeckP2]);
+
+  // Rebuild a Major deck if exhausted
+  const rebuildMajorDeck = useCallback((player) => {
+    if (deckMode === 'mixed') return buildMixedMajorDeck();
+    const culture = deckMode === 'each' ? cultures[player] : cultures[0];
+    return buildMajorArcanaDeck(culture || 'tarot');
+  }, [deckMode, cultures]);
 
   const resetGame = useCallback(() => {
     setPieces(initPieces());
     setScores([0, 0]);
+    setCardScores([0, 0]);
     setGems(() => {
       const g = {};
       for (let r = 1; r <= RINGS; r++) g[r] = true;
       return g;
     });
     setStarlightClaimed(false);
+    setStarlightPlayer(null);
     setCurrentPlayer(0);
     setDiceValue(null);
-    setGamePhase('rolling');
+    setGamePhase('setup');
     setWinner(null);
     setTurnCount(0);
     setMessage('Roll the dice to begin your ascent!');
@@ -186,7 +310,17 @@ export default function MythouseGame({ mode, onExit }) {
     setOrdeal(null);
     setMoveLog([]);
     setSelectedCelestial(null);
-    setGameDeck(buildOrdealDeck());
+    setDeckMode(null);
+    setCultures([null, null]);
+    setSetupStep('mode');
+    setGameDeck([]);
+    setGameDeckP2([]);
+    setMajorDeck([]);
+    setMajorDeckP2([]);
+    setCollectedMinor([[], []]);
+    setCollectedMajor([[], []]);
+    setMajorReveal(null);
+    setShowCollected(false);
     if (aiTimer.current) clearTimeout(aiTimer.current);
   }, []);
 
@@ -270,6 +404,7 @@ export default function MythouseGame({ mode, onExit }) {
         if (allFinished || !starlightClaimed) {
           if (!starlightClaimed) {
             setStarlightClaimed(true);
+            setStarlightPlayer(currentPlayer);
             setScores(s => {
               const ns = [...s];
               ns[currentPlayer] += FALLEN_STARLIGHT_VALUE;
@@ -385,37 +520,70 @@ export default function MythouseGame({ mode, onExit }) {
 
   const handleOrdealReveal = useCallback(() => {
     if (!ordeal || ordeal.revealed) return;
-    let deck = gameDeck;
-    if (deck.length < 2) deck = buildOrdealDeck();
-    const draw1 = drawCard(deck);
-    const draw2 = drawCard(draw1.remaining);
-    setGameDeck(draw2.remaining);
-    const card0 = draw1.card || { label: '?', value: 1, suitSymbol: '', suitColor: '#ddd' };
-    const card1 = draw2.card || { label: '?', value: 1, suitSymbol: '', suitColor: '#ddd' };
+    const challenger = ordeal.challenger;
+    const defender = ordeal.defender;
+
+    // Get challenger's deck
+    let cDeck = getMinorDeckFor(challenger);
+    if (cDeck.length < 1) cDeck = rebuildMinorDeck(challenger);
+    const draw1 = drawCard(cDeck);
+
+    // Get defender's deck (might be same deck for non-'each' modes)
+    let dDeck;
+    if (deckMode === 'each') {
+      dDeck = getMinorDeckFor(defender);
+      if (dDeck.length < 1) dDeck = rebuildMinorDeck(defender);
+    } else {
+      dDeck = draw1.remaining;
+      if (dDeck.length < 1) dDeck = rebuildMinorDeck(0);
+    }
+    const draw2 = drawCard(dDeck);
+
+    // Update decks
+    if (deckMode === 'each') {
+      if (challenger === 0) { setGameDeck(draw1.remaining); setGameDeckP2(draw2.remaining); }
+      else { setGameDeckP2(draw1.remaining); setGameDeck(draw2.remaining); }
+    } else {
+      setGameDeck(draw2.remaining);
+    }
+
+    const fallback = { label: '?', value: 1, suitSymbol: '', suitColor: '#ddd', element: 'Air' };
+    const card0 = draw1.card || fallback;
+    const card1 = draw2.card || fallback;
     setOrdeal(prev => ({ ...prev, cards: [card0, card1], revealed: true }));
-  }, [ordeal, gameDeck]);
+  }, [ordeal, deckMode, getMinorDeckFor, rebuildMinorDeck]);
 
   const handleOrdealClose = useCallback(() => {
     if (!ordeal || !ordeal.revealed) return;
-    const c0 = ordeal.cards[0];
-    const c1 = ordeal.cards[1];
+    const c0 = ordeal.cards[0]; // challenger's card
+    const c1 = ordeal.cards[1]; // defender's card
     const v0 = c0.value;
     const v1 = c1.value;
     const ordealWinner = v0 >= v1 ? ordeal.challenger : ordeal.defender;
+    const winnerCard = ordealWinner === ordeal.challenger ? c0 : c1;
 
     if (ordealWinner === ordeal.challenger) {
-      const msg = `Won with ${c0.label} (${v0}) vs ${c1.label} (${v1})!`;
+      const msg = `Won with ${c0.label} (${v0}) vs ${c1.label} (${v1}) — +${v0} pts!`;
       setMessage(msg);
       setMoveLog(log => [...log, msg]);
-      setScores(s => {
-        const ns = [...s];
-        ns[ordeal.challenger] += 10;
-        return ns;
+      setScores(s => { const ns = [...s]; ns[ordeal.challenger] += v0; return ns; });
+      setCardScores(s => { const ns = [...s]; ns[ordeal.challenger] += v0; return ns; });
+      setCollectedMinor(prev => {
+        const next = [prev[0].slice(), prev[1].slice()];
+        next[ordeal.challenger].push(winnerCard);
+        return next;
       });
     } else {
       const msg = `Lost! ${c0.label} (${v0}) vs ${c1.label} (${v1}). Pushed back.`;
       setMessage(msg);
       setMoveLog(log => [...log, msg]);
+      setScores(s => { const ns = [...s]; ns[ordeal.defender] += v1; return ns; });
+      setCardScores(s => { const ns = [...s]; ns[ordeal.defender] += v1; return ns; });
+      setCollectedMinor(prev => {
+        const next = [prev[0].slice(), prev[1].slice()];
+        next[ordeal.defender].push(winnerCard);
+        return next;
+      });
       setPieces(prev => {
         const next = [prev[0].map(p => ({ ...p })), prev[1].map(p => ({ ...p }))];
         const piece = next[ordeal.challenger][ordeal.pieceIdx];
@@ -424,11 +592,53 @@ export default function MythouseGame({ mode, onExit }) {
       });
     }
 
-    setOrdeal(null);
+    // Now draw a Major Arcana card for the ordeal-triggering player (challenger)
+    const triggerPlayer = ordeal.challenger;
+    let mDeck = getMajorDeckFor(triggerPlayer);
+    if (mDeck.length < 1) mDeck = rebuildMajorDeck(triggerPlayer);
+    const majorDraw = drawCard(mDeck);
+
+    // Update major deck
+    if (deckMode === 'each' && triggerPlayer === 1) {
+      setMajorDeckP2(majorDraw.remaining);
+    } else {
+      setMajorDeck(majorDraw.remaining);
+    }
+
+    if (majorDraw.card) {
+      const mCard = majorDraw.card;
+      const ringPlanet = RING_PLANET[ordeal.ring];
+      const aligned = mCard.correspondence === ringPlanet;
+      const pts = aligned ? mCard.number * 2 : mCard.number;
+
+      setScores(s => { const ns = [...s]; ns[triggerPlayer] += pts; return ns; });
+      setCardScores(s => { const ns = [...s]; ns[triggerPlayer] += pts; return ns; });
+      setCollectedMajor(prev => {
+        const next = [prev[0].slice(), prev[1].slice()];
+        next[triggerPlayer].push(mCard);
+        return next;
+      });
+
+      setMajorReveal({ card: mCard, player: triggerPlayer, pts, aligned, ring: ordeal.ring });
+      setOrdeal(null);
+      setGamePhase('majorReveal');
+    } else {
+      setOrdeal(null);
+      setCurrentPlayer(p => 1 - p);
+      setGamePhase('rolling');
+      setTurnCount(t => t + 1);
+    }
+  }, [ordeal, deckMode, getMajorDeckFor, rebuildMajorDeck]);
+
+  const handleMajorRevealClose = useCallback(() => {
+    if (!majorReveal) return;
+    const msg = `${isAI && majorReveal.player === 1 ? 'Atlas' : isAI ? 'You' : 'Player ' + (majorReveal.player + 1)} drew ${majorReveal.card.name}${majorReveal.aligned ? ' (aligned!)' : ''} — +${majorReveal.pts} pts`;
+    setMoveLog(log => [...log, msg]);
+    setMajorReveal(null);
     setCurrentPlayer(p => 1 - p);
     setGamePhase('rolling');
     setTurnCount(t => t + 1);
-  }, [ordeal]);
+  }, [majorReveal, isAI]);
 
   // AI auto-play
   useEffect(() => {
@@ -459,17 +669,70 @@ export default function MythouseGame({ mode, onExit }) {
             setTimeout(handleOrdealClose, 800);
           }
         }, 600);
+      } else if (gamePhase === 'majorReveal') {
+        aiTimer.current = setTimeout(handleMajorRevealClose, 1200);
       }
     }
     return () => { if (aiTimer.current) clearTimeout(aiTimer.current); };
   }, [isAI, currentPlayer, gamePhase, winner, legalMoves, ordeal,
-      handleRoll, applyMove, handleOrdealReveal, handleOrdealClose]);
+      handleRoll, applyMove, handleOrdealReveal, handleOrdealClose, handleMajorRevealClose]);
 
   // === RENDER ===
 
   const players = isAI
     ? [{ name: 'You', color: PLAYER_COLORS[0] }, { name: 'Atlas', color: PLAYER_COLORS[1] }]
     : [{ name: 'Player 1', color: PLAYER_COLORS[0] }, { name: 'Player 2', color: PLAYER_COLORS[1] }];
+
+  // === SETUP PHASE ===
+  if (gamePhase === 'setup') {
+    return (
+      <div className="mythouse-setup">
+        <button className="game-mode-back" onClick={onExit}>&larr; Back</button>
+        <h2 className="mythouse-setup-title">Choose Your Deck</h2>
+        <p className="mythouse-setup-desc">
+          Select how the card decks will be configured for this game.
+        </p>
+
+        {setupStep === 'mode' && (
+          <div className="mythouse-setup-modes">
+            <button className="game-mode-btn" onClick={() => handleDeckMode('single')}>
+              <span className="game-mode-label">Single Culture</span>
+              <span className="game-mode-sublabel">One culture for both players</span>
+            </button>
+            <button className="game-mode-btn" onClick={() => handleDeckMode('each')}>
+              <span className="game-mode-label">Each Picks Own</span>
+              <span className="game-mode-sublabel">{isAI ? 'You pick, Atlas picks randomly' : 'Each player picks a culture'}</span>
+            </button>
+            <button className="game-mode-btn" onClick={() => handleDeckMode('mixed')}>
+              <span className="game-mode-label">Mixed Deck</span>
+              <span className="game-mode-sublabel">Cards from all cultures, shuffled</span>
+            </button>
+          </div>
+        )}
+
+        {(setupStep === 'culture' || setupStep === 'p1culture' || setupStep === 'p2culture') && (
+          <>
+            <p className="mythouse-setup-pick">
+              {setupStep === 'culture' && 'Choose a culture for both players:'}
+              {setupStep === 'p1culture' && (isAI ? 'Choose your culture:' : 'Player 1, choose your culture:')}
+              {setupStep === 'p2culture' && 'Player 2, choose your culture:'}
+            </p>
+            <div className="mythouse-setup-cultures">
+              {ALL_CULTURES.map(c => (
+                <button
+                  key={c.key}
+                  className="mythouse-culture-btn"
+                  onClick={() => handleCulturePick(c.key)}
+                >
+                  {c.label}
+                </button>
+              ))}
+            </div>
+          </>
+        )}
+      </div>
+    );
+  }
 
   const legalPieceIndices = new Set(legalMoves.map(m => m.pieceIdx));
 
@@ -479,6 +742,12 @@ export default function MythouseGame({ mode, onExit }) {
   // Active zodiac signs based on current ring's ruling planet
   const activeZodiac = new Set(RING_ZODIAC[highestRing] || []);
   const currentMonth = new Date().getMonth();
+
+  // Score breakdown for display
+  const gemScoreFor = (i) => {
+    const starlight = starlightPlayer === i ? FALLEN_STARLIGHT_VALUE : 0;
+    return scores[i] - cardScores[i] - starlight;
+  };
 
   return (
     <GameShell
@@ -813,10 +1082,57 @@ export default function MythouseGame({ mode, onExit }) {
           <span key={i} className="mythouse-score-item">
             <span className="mythouse-score-dot" style={{ background: p.color }} />
             <span>{p.name}</span>
+            <span className="mythouse-score-breakdown">
+              <span style={{ color: 'var(--accent-gold)' }}>{gemScoreFor(i)}</span>
+              {' + '}
+              <span style={{ color: 'var(--accent-ember)' }}>{cardScores[i]}</span>
+              {' = '}
+            </span>
             <span className="mythouse-score-value" style={{ color: PLAYER_COLORS[i] }}>{scores[i]} pts</span>
           </span>
         ))}
       </div>
+
+      {/* Collected cards toggle */}
+      <div className="mythouse-collected-toggle-row">
+        <button
+          className={`mythouse-collected-toggle${showCollected ? ' active' : ''}`}
+          onClick={() => setShowCollected(v => !v)}
+        >
+          Cards: {collectedMinor[0].length + collectedMajor[0].length} / {collectedMinor[1].length + collectedMajor[1].length}
+        </button>
+      </div>
+
+      {showCollected && (
+        <div className="mythouse-collected-panel">
+          {[0, 1].map(i => (
+            <div key={i} className="mythouse-collected-player">
+              <div className="mythouse-collected-header" style={{ color: PLAYER_COLORS[i] }}>
+                {players[i].name}
+              </div>
+              {collectedMajor[i].length > 0 && (
+                <div className="mythouse-collected-section">
+                  <span className="mythouse-collected-label">Major Arcana ({collectedMajor[i].length})</span>
+                  {collectedMajor[i].map((c, j) => (
+                    <span key={j} className="mythouse-collected-card major">{c.name} ({c.number})</span>
+                  ))}
+                </div>
+              )}
+              {collectedMinor[i].length > 0 && (
+                <div className="mythouse-collected-section">
+                  <span className="mythouse-collected-label">Minor Arcana ({collectedMinor[i].length})</span>
+                  {collectedMinor[i].map((c, j) => (
+                    <span key={j} className="mythouse-collected-card minor">{c.label} ({c.value})</span>
+                  ))}
+                </div>
+              )}
+              {collectedMinor[i].length === 0 && collectedMajor[i].length === 0 && (
+                <span className="mythouse-collected-empty">No cards yet</span>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
 
       {/* Celestial info panel */}
       {selectedCelestial && (
@@ -852,43 +1168,47 @@ export default function MythouseGame({ mode, onExit }) {
         </div>
       )}
 
-      {/* Ordeal overlay */}
+      {/* Ordeal overlay — Minor Arcana */}
       {ordeal && (
         <div className="mythouse-ordeal-overlay" onClick={ordeal.revealed ? handleOrdealClose : undefined}>
           <div className="mythouse-ordeal-panel">
             <h3 className="mythouse-ordeal-title">The Ordeal!</h3>
             <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', marginBottom: 12 }}>
-              A duel at the gate. Each player draws a card.
+              A duel at the gate of Ring {ordeal.ring}. Each player draws a card.
             </p>
             <div className="mythouse-ordeal-cards">
-              <div
-                className={`mythouse-ordeal-card ${ordeal.revealed ? 'face-up' : 'face-down'}`}
-                onClick={!ordeal.revealed ? handleOrdealReveal : undefined}
-                style={{ cursor: !ordeal.revealed ? 'pointer' : 'default' }}
-              >
-                {ordeal.revealed ? (
-                  <>
-                    <span className="mythouse-ordeal-card-name">{ordeal.cards[0].rank}</span>
-                    <span className="mythouse-ordeal-card-power" style={{ color: ordeal.cards[0].suitColor }}>{ordeal.cards[0].suitSymbol}</span>
-                    <span className="mythouse-ordeal-card-deck">{ordeal.cards[0].value} pts</span>
-                  </>
-                ) : '?'}
-              </div>
-              <div className={`mythouse-ordeal-card ${ordeal.revealed ? 'face-up' : 'face-down'}`}>
-                {ordeal.revealed ? (
-                  <>
-                    <span className="mythouse-ordeal-card-name">{ordeal.cards[1].rank}</span>
-                    <span className="mythouse-ordeal-card-power" style={{ color: ordeal.cards[1].suitColor }}>{ordeal.cards[1].suitSymbol}</span>
-                    <span className="mythouse-ordeal-card-deck">{ordeal.cards[1].value} pts</span>
-                  </>
-                ) : '?'}
-              </div>
+              {[0, 1].map(ci => {
+                const card = ordeal.cards[ci];
+                const isRevealed = ordeal.revealed && card;
+                const elColor = isRevealed ? (ELEMENT_COLORS[card.element] || '#ddd') : undefined;
+                return (
+                  <div
+                    key={ci}
+                    className={`mythouse-ordeal-card ${isRevealed ? 'face-up' : 'face-down'}`}
+                    onClick={ci === 0 && !ordeal.revealed ? handleOrdealReveal : undefined}
+                    style={{
+                      cursor: ci === 0 && !ordeal.revealed ? 'pointer' : 'default',
+                      borderColor: isRevealed ? elColor : undefined,
+                    }}
+                  >
+                    {isRevealed ? (
+                      <>
+                        <span className="mythouse-ordeal-card-suit" style={{ color: elColor }}>{card.suitSymbol}</span>
+                        <span className="mythouse-ordeal-card-name">{card.rankLabel || card.rank}</span>
+                        <span className="mythouse-ordeal-card-suitname" style={{ color: elColor }}>{card.suitName || ''}</span>
+                        <span className="mythouse-ordeal-card-element">{card.element}</span>
+                        <span className="mythouse-ordeal-card-deck">{card.value} pts</span>
+                      </>
+                    ) : '?'}
+                  </div>
+                );
+              })}
             </div>
             {ordeal.revealed && (
               <p style={{ color: 'var(--accent-gold)', fontSize: '0.9rem' }}>
                 {ordeal.cards[0].value >= ordeal.cards[1].value
-                  ? 'You win the ordeal!'
-                  : 'You lose the ordeal...'}
+                  ? `${players[ordeal.challenger].name} wins the ordeal!`
+                  : `${players[ordeal.defender].name} wins the ordeal...`}
                 <br />
                 <small style={{ color: 'var(--text-secondary)' }}>Click to continue</small>
               </p>
@@ -896,6 +1216,34 @@ export default function MythouseGame({ mode, onExit }) {
             {!ordeal.revealed && (
               <p style={{ color: 'var(--text-secondary)', fontSize: '0.8rem' }}>Click a card to reveal</p>
             )}
+          </div>
+        </div>
+      )}
+
+      {/* Major Arcana reveal overlay */}
+      {majorReveal && (
+        <div className="mythouse-ordeal-overlay" onClick={handleMajorRevealClose}>
+          <div className="mythouse-major-reveal-panel">
+            <h3 className="mythouse-major-reveal-title">Major Arcana!</h3>
+            <p className="mythouse-major-reveal-player">
+              {players[majorReveal.player].name} draws a card from the Major Arcana
+            </p>
+            <div className="mythouse-major-reveal-card">
+              <span className="mythouse-major-reveal-number">{majorReveal.card.number}</span>
+              <span className="mythouse-major-reveal-name">{majorReveal.card.name}</span>
+              {majorReveal.card.correspondence && (
+                <span className={`mythouse-major-reveal-badge mc-corr-${majorReveal.card.type || 'planet'}`}>
+                  {majorReveal.card.correspondence}
+                </span>
+              )}
+              <span className="mythouse-major-reveal-pts">
+                +{majorReveal.pts} pts
+                {majorReveal.aligned && (
+                  <span className="mythouse-major-reveal-aligned"> (Aligned with {RING_PLANET[majorReveal.ring]}!)</span>
+                )}
+              </span>
+            </div>
+            <small style={{ color: 'var(--text-secondary)' }}>Click to continue</small>
           </div>
         </div>
       )}

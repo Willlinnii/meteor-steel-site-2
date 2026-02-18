@@ -312,7 +312,7 @@ export default function MythologyChannelPage() {
       {activeShow?.id === 'climate-journey' && (
         <div className="climate-bootcamp-cta">
           <a
-            href="https://www.thestoryatlas.com/my-courses/climate-bootcamp"
+            href="https://www.thestoryatlas.com/my-courses/climate-bootcamp/introducing-the-situation"
             target="_blank"
             rel="noopener noreferrer"
             className="climate-bootcamp-btn"

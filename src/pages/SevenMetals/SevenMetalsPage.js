@@ -5,6 +5,8 @@ import CultureSelector from '../../components/sevenMetals/CultureSelector';
 import './SevenMetalsPage.css';
 import { useLocation, useNavigate } from 'react-router-dom';
 
+import TarotCardContent from '../../components/sevenMetals/TarotCardContent';
+import PersonaChatPanel from '../../components/PersonaChatPanel';
 import coreData from '../../data/sevenMetals.json';
 import deitiesData from '../../data/sevenMetalsDeities.json';
 import archetypesData from '../../data/sevenMetalsArchetypes.json';
@@ -22,6 +24,8 @@ import calendarData from '../../data/mythicCalendar.json';
 import wheelData from '../../data/medicineWheels.json';
 import wheelContent from '../../data/medicineWheelContent.json';
 import dayNightData from '../../data/dayNight.json';
+import useYellowBrickRoad from '../../components/sevenMetals/useYellowBrickRoad';
+import YellowBrickRoadPanel from '../../components/sevenMetals/YellowBrickRoadPanel';
 
 const PLANET_PLAYLISTS = {
   Moon: 'https://www.youtube.com/playlist?list=PLX31T_KS3jtq-GwZQZtrFaqTbvs6QPiBR',
@@ -68,6 +72,7 @@ const CULTURE_KEY_MAP = {
   Vedic: 'vedic',
   Islamic: 'islamic',
   Medieval: 'medieval',
+  Tarot: 'tarot',
 };
 
 function CultureBlock({ cultureData }) {
@@ -87,6 +92,23 @@ function CultureBlock({ cultureData }) {
 function ZodiacContent({ sign, activeCulture }) {
   const z = zodiacData.find(d => d.sign === sign);
   if (!z) return <p className="metals-empty">No data for {sign}.</p>;
+
+  if (activeCulture === 'Tarot') {
+    return (
+      <div className="tab-content">
+        <h4>{z.symbol} {z.archetype}</h4>
+        <div className="overview-grid">
+          <div className="overview-item"><span className="ov-label">Element</span><span className="ov-value">{z.element}</span></div>
+          <div className="overview-item"><span className="ov-label">Modality</span><span className="ov-value">{z.modality}</span></div>
+          <div className="overview-item"><span className="ov-label">Ruler</span><span className="ov-value">{z.rulingPlanet}</span></div>
+          <div className="overview-item"><span className="ov-label">House</span><span className="ov-value">{z.house}</span></div>
+          <div className="overview-item"><span className="ov-label">Dates</span><span className="ov-value">{z.dates}</span></div>
+        </div>
+        <TarotCardContent correspondenceType="zodiac" correspondenceValue={sign} element={z.element} showMinorArcana />
+      </div>
+    );
+  }
+
   const cultureKey = CULTURE_KEY_MAP[activeCulture];
   const cultureEntry = z.cultures?.[cultureKey];
   const elementEntry = elementsData[z.element];
@@ -125,6 +147,21 @@ function ZodiacContent({ sign, activeCulture }) {
 function CardinalContent({ cardinalId, activeCulture }) {
   const c = cardinalsData[cardinalId];
   if (!c) return <p className="metals-empty">No data for this cardinal point.</p>;
+
+  if (activeCulture === 'Tarot') {
+    return (
+      <div className="tab-content">
+        <div className="overview-grid">
+          <div className="overview-item"><span className="ov-label">Date</span><span className="ov-value">{c.date}</span></div>
+          <div className="overview-item"><span className="ov-label">Season</span><span className="ov-value">{c.season}</span></div>
+          <div className="overview-item"><span className="ov-label">Direction</span><span className="ov-value">{c.direction}</span></div>
+          <div className="overview-item"><span className="ov-label">Zodiac Cusp</span><span className="ov-value">{c.zodiacCusp}</span></div>
+        </div>
+        <TarotCardContent correspondenceType="cardinal" correspondenceValue={cardinalId} showMinorArcana />
+      </div>
+    );
+  }
+
   const cultureKey = CULTURE_KEY_MAP[activeCulture];
   const cultureEntry = c.cultures?.[cultureKey];
 
@@ -355,13 +392,83 @@ export default function SevenMetalsPage() {
   const [selectedWheelItem, setSelectedWheelItem] = useState(null);
   const [activeWheelTab, setActiveWheelTab] = useState(null);
   const [videoUrl, setVideoUrl] = useState(null);
+  const [chakraViewMode, setChakraViewMode] = useState(null);
+  const [personaChatOpen, setPersonaChatOpen] = useState(null);
+  const [personaChatHistory, setPersonaChatHistory] = useState({});
+  const ybr = useYellowBrickRoad();
 
   // Sync view state with URL on back/forward navigation
   useEffect(() => {
     const path = location.pathname;
     setShowMedicineWheel(path.endsWith('/medicine-wheel'));
     setShowCalendar(path.endsWith('/calendar'));
-  }, [location.pathname]);
+    if (path.endsWith('/yellow-brick-road') && !ybr.active) {
+      ybr.startGame();
+    }
+  }, [location.pathname]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const handleYBRToggle = () => {
+    if (ybr.active) {
+      ybr.exitGame();
+      navigate('/metals');
+    } else {
+      ybr.startGame();
+      navigate('/metals/yellow-brick-road');
+    }
+  };
+
+  const tooltipData = useMemo(() => {
+    const planets = {};
+    coreData.forEach(item => {
+      planets[item.planet] = {
+        metal: item.metal,
+        day: item.day,
+        chakra: item.body?.chakra,
+        sin: item.sin,
+        virtue: item.virtue,
+        astrology: item.astrology,
+      };
+    });
+    const zodiac = {};
+    zodiacData.forEach(z => {
+      zodiac[z.sign] = {
+        symbol: z.symbol,
+        archetype: z.archetype,
+        element: z.element,
+        modality: z.modality,
+        ruler: z.rulingPlanet,
+        dates: z.dates,
+      };
+    });
+    const cardinals = {};
+    Object.entries(cardinalsData).forEach(([id, c]) => {
+      cardinals[id] = {
+        label: c.label,
+        date: c.date,
+        season: c.season,
+        direction: c.direction,
+        zodiacCusp: c.zodiacCusp,
+      };
+    });
+    const months = {};
+    calendarData.forEach(m => {
+      months[m.month] = {
+        stone: m.stone?.name,
+        flower: m.flower?.name,
+        mood: m.mood ? (m.mood.length > 100 ? m.mood.slice(0, 100) + '\u2026' : m.mood) : null,
+      };
+    });
+    const dayNight = {};
+    Object.entries(dayNightData).forEach(([side, d]) => {
+      dayNight[side] = {
+        label: d.label,
+        element: d.element,
+        polarity: d.polarity,
+        qualities: d.qualities,
+      };
+    });
+    return { planets, zodiac, cardinals, months, dayNight };
+  }, []);
 
   const mergedData = useMemo(() => {
     const map = {};
@@ -382,6 +489,23 @@ export default function SevenMetalsPage() {
   }, []);
 
   const currentData = mergedData[selectedPlanet] || null;
+
+  function togglePersonaChat(type, name) {
+    const key = `${type}:${name}`;
+    if (personaChatOpen === key) {
+      setPersonaChatOpen(null);
+    } else {
+      setPersonaChatOpen(key);
+      if (!personaChatHistory[key]) {
+        setPersonaChatHistory(prev => ({ ...prev, [key]: [] }));
+      }
+    }
+  }
+
+  function setCurrentPersonaMessages(msgs) {
+    if (!personaChatOpen) return;
+    setPersonaChatHistory(prev => ({ ...prev, [personaChatOpen]: msgs }));
+  }
 
   let wheelAlignmentData = null;
   if (selectedWheelItem?.startsWith('num:') || selectedWheelItem?.startsWith('dir:')) {
@@ -405,14 +529,15 @@ export default function SevenMetalsPage() {
     <div className="seven-metals-page">
       <div className="metals-diagram-center">
         <OrbitalDiagram
+          tooltipData={tooltipData}
           selectedPlanet={selectedPlanet}
-          onSelectPlanet={(p) => { setSelectedPlanet(p); setSelectedSign(null); setSelectedCardinal(null); setSelectedEarth(null); setSelectedMonth(null); setVideoUrl(null); }}
+          onSelectPlanet={(p) => { setSelectedPlanet(p); setSelectedSign(null); setSelectedCardinal(null); setSelectedEarth(null); setSelectedMonth(null); setVideoUrl(null); setPersonaChatOpen(null); if (chakraViewMode) setActiveTab('body'); }}
           selectedSign={selectedSign}
-          onSelectSign={(sign) => { setSelectedSign(sign); setSelectedCardinal(null); setSelectedEarth(null); setSelectedMonth(null); setVideoUrl(null); }}
+          onSelectSign={(sign) => { setSelectedSign(sign); setSelectedCardinal(null); setSelectedEarth(null); setSelectedMonth(null); setVideoUrl(null); setPersonaChatOpen(null); }}
           selectedCardinal={selectedCardinal}
-          onSelectCardinal={(c) => { setSelectedCardinal(c); setSelectedSign(null); setSelectedEarth(null); setSelectedMonth(null); setVideoUrl(null); }}
+          onSelectCardinal={(c) => { setSelectedCardinal(c); setSelectedSign(null); setSelectedEarth(null); setSelectedMonth(null); setVideoUrl(null); setPersonaChatOpen(null); }}
           selectedEarth={selectedEarth}
-          onSelectEarth={(e) => { setSelectedEarth(e); setSelectedSign(null); setSelectedCardinal(null); setSelectedMonth(null); setVideoUrl(null); }}
+          onSelectEarth={(e) => { setSelectedEarth(e); setSelectedSign(null); setSelectedCardinal(null); setSelectedMonth(null); setVideoUrl(null); setPersonaChatOpen(null); }}
           showCalendar={showCalendar}
           onToggleCalendar={() => { const next = !showCalendar; setShowCalendar(next); navigate(next ? '/metals/calendar' : '/metals'); }}
           selectedMonth={selectedMonth}
@@ -422,17 +547,46 @@ export default function SevenMetalsPage() {
             const next = !showMedicineWheel;
             setShowMedicineWheel(next);
             setSelectedWheelItem(null);
-            if (next) { setSelectedSign(null); setSelectedCardinal(null); setSelectedEarth(null); setSelectedMonth(null); setShowCalendar(false); navigate('/metals/medicine-wheel'); }
+            if (next) { setChakraViewMode(null); setSelectedSign(null); setSelectedCardinal(null); setSelectedEarth(null); setSelectedMonth(null); setShowCalendar(false); navigate('/metals/medicine-wheel'); }
             else { setSelectedPlanet('Sun'); navigate('/metals'); }
           }}
           selectedWheelItem={selectedWheelItem}
           onSelectWheelItem={(item) => { setSelectedWheelItem(item); setActiveWheelTab(null); if (item) { setSelectedSign(null); setSelectedCardinal(null); setSelectedEarth(null); setSelectedMonth(null); } }}
+          chakraViewMode={chakraViewMode}
+          onToggleChakraView={() => {
+            setChakraViewMode(prev => {
+              if (!prev) return 'chaldean';
+              if (prev === 'chaldean') return 'heliocentric';
+              if (prev === 'heliocentric') return 'weekdays';
+              return null;
+            });
+            if (showMedicineWheel) { setShowMedicineWheel(false); setSelectedWheelItem(null); navigate('/metals'); }
+          }}
           videoUrl={videoUrl}
           onCloseVideo={() => setVideoUrl(null)}
+          ybrActive={ybr.active}
+          ybrCurrentStopIndex={ybr.currentStopIndex}
+          ybrStopProgress={ybr.stopProgress}
+          ybrJourneySequence={ybr.journeySequence}
+          onToggleYBR={handleYBRToggle}
         />
       </div>
 
-      {showMedicineWheel ? (
+      {ybr.active ? (
+        <YellowBrickRoadPanel
+          currentStopIndex={ybr.currentStopIndex}
+          stopProgress={ybr.stopProgress}
+          journeyComplete={ybr.journeyComplete}
+          journeySequence={ybr.journeySequence}
+          completedStops={ybr.completedStops}
+          totalStops={ybr.totalStops}
+          onAdvanceFromEarth={ybr.advanceFromEarth}
+          onRecordResult={ybr.recordChallengeResult}
+          onAdvanceToNext={ybr.advanceToNextStop}
+          onExit={() => { ybr.exitGame(); navigate('/metals'); }}
+          isStopComplete={ybr.isStopComplete}
+        />
+      ) : showMedicineWheel ? (
         wheelAlignmentData ? (
           <>
             <h2 className="metals-heading">
@@ -596,8 +750,25 @@ export default function SevenMetalsPage() {
                       {videoUrl ? '\u25A0' : '\u25B6'}
                     </button>
                   )}
+                  <button
+                    className={`metal-tab persona-tab${personaChatOpen === `cardinal:${selectedCardinal}` ? ' active' : ''}`}
+                    title={personaChatOpen === `cardinal:${selectedCardinal}` ? 'Close persona chat' : `Speak to ${cardinalsData[selectedCardinal]?.label || selectedCardinal}`}
+                    onClick={() => togglePersonaChat('cardinal', selectedCardinal)}
+                  >
+                    {personaChatOpen === `cardinal:${selectedCardinal}` ? '\u25A0' : '\uD83C\uDF99'}
+                  </button>
                 </div>
                 <CardinalContent cardinalId={selectedCardinal} activeCulture={activeCulture} />
+                {personaChatOpen === `cardinal:${selectedCardinal}` && (
+                  <PersonaChatPanel
+                    entityType="cardinal"
+                    entityName={selectedCardinal}
+                    entityLabel={cardinalsData[selectedCardinal]?.label || selectedCardinal}
+                    messages={personaChatHistory[`cardinal:${selectedCardinal}`] || []}
+                    setMessages={setCurrentPersonaMessages}
+                    onClose={() => setPersonaChatOpen(null)}
+                  />
+                )}
               </div>
             </div>
           </div>
@@ -625,8 +796,25 @@ export default function SevenMetalsPage() {
                       {videoUrl ? '\u25A0' : '\u25B6'}
                     </button>
                   )}
+                  <button
+                    className={`metal-tab persona-tab${personaChatOpen === `zodiac:${selectedSign}` ? ' active' : ''}`}
+                    title={personaChatOpen === `zodiac:${selectedSign}` ? 'Close persona chat' : `Speak to ${selectedSign}`}
+                    onClick={() => togglePersonaChat('zodiac', selectedSign)}
+                  >
+                    {personaChatOpen === `zodiac:${selectedSign}` ? '\u25A0' : '\uD83C\uDF99'}
+                  </button>
                 </div>
                 <ZodiacContent sign={selectedSign} activeCulture={activeCulture} />
+                {personaChatOpen === `zodiac:${selectedSign}` && (
+                  <PersonaChatPanel
+                    entityType="zodiac"
+                    entityName={selectedSign}
+                    entityLabel={selectedSign}
+                    messages={personaChatHistory[`zodiac:${selectedSign}`] || []}
+                    setMessages={setCurrentPersonaMessages}
+                    onClose={() => setPersonaChatOpen(null)}
+                  />
+                )}
               </div>
             </div>
           </div>
@@ -657,6 +845,11 @@ export default function SevenMetalsPage() {
                       if (videoUrl) { setVideoUrl(null); }
                       else { setVideoUrl(PLANET_PLAYLISTS[selectedPlanet]); }
                     }}
+                    onTogglePersonaChat={() => togglePersonaChat('planet', selectedPlanet)}
+                    personaChatActive={personaChatOpen === `planet:${selectedPlanet}`}
+                    personaChatMessages={personaChatHistory[`planet:${selectedPlanet}`] || []}
+                    setPersonaChatMessages={setCurrentPersonaMessages}
+                    onClosePersonaChat={() => setPersonaChatOpen(null)}
                   />
                   {activeTab === 'overview' && (
                     <div className="planet-culture-wrapper">

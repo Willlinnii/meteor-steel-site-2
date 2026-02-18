@@ -230,6 +230,69 @@ const GAME_BOOK = {
       },
     ],
   },
+  'monomyth-journey': {
+    rules: [
+      'The journey follows the eight stages of the Hero\'s Journey around the wheel: Surface, Calling, Crossing, Initiating, Nadir, Return, Arrival, Renewal.',
+      'At each stage, Atlas asks you to describe what happens — the key events, themes, and transformations.',
+      'If your answer is vague or wrong, Atlas will gently correct you and ask you to try again.',
+      'If you demonstrate real understanding, Atlas will pass you and advance you to the next stage.',
+      'You are encouraged to explore each stage\'s content on the page before answering.',
+      'The journey is complete when you have walked all eight stages around the wheel.',
+    ],
+    secrets: [
+      {
+        heading: 'The Monomyth Wheel',
+        text: 'The eight stages map to the universal pattern that Joseph Campbell called the monomyth — the hero\'s journey found in every culture. Surface is the ordinary world. Calling is the disruption. Crossing is the threshold into the unknown. Initiating is the road of trials. Nadir is the deepest point of transformation. Return is the journey back. Arrival is the homecoming. Renewal is the world transformed by the journey.',
+      },
+      {
+        heading: 'Atlas as Guide',
+        text: 'Unlike the Yellow Brick Road where each entity tests you in their own voice, here Atlas speaks as Atlas — the mythic companion who has walked this wheel before. Atlas draws on the full depth of the Mythouse archive: theorists, myths, cycles, depth psychology, and symbols. The test is not memorization but understanding.',
+      },
+    ],
+  },
+  'meteor-steel-journey': {
+    rules: [
+      'The journey follows the eight stages of the Meteor Steel process around the wheel: Golden Age, Calling Star, Crater Crossing, Trials of Forge, Quench, Integration, Draw, Age of Steel.',
+      'At each stage, Atlas asks you to describe what happens — the technology, mythology, and transformation.',
+      'If your answer is vague or wrong, Atlas will gently correct you and ask you to try again.',
+      'If you demonstrate real understanding, Atlas will pass you and advance you to the next stage.',
+      'You are encouraged to explore each stage\'s content on the page before answering.',
+      'The journey is complete when you have walked all eight stages around the wheel.',
+    ],
+    secrets: [
+      {
+        heading: 'Meteor Steel as Metaphor',
+        text: 'The eight stages trace the literal process of forging meteor steel — from the golden age before the fall, through the meteor\'s arrival, impact, smelting, quenching, integration, drawing, and the new age of steel. But each stage is simultaneously a metaphor for personal transformation: disruption, ordeal, cooling, integration of shadow, emergence, and renewal.',
+      },
+      {
+        heading: 'Carbon Is the Secret',
+        text: 'The revelation at the heart of Meteor Steel is that carbon — the "impurity" that ancient metallurgists tried to remove — is precisely what gives steel its strength. This is the central metaphor of the Mythouse: transformation comes not from purification but from integration. The shadow, the feminine, the earthly, the dark — these are not enemies to be burned away but partners to be embraced.',
+      },
+    ],
+  },
+  'yellow-brick-road': {
+    rules: [
+      'The journey begins on Earth and passes through 26 celestial encounters: 7 ascending planets (Moon through Saturn), 12 zodiac signs (Aries through Pisces), then 7 descending planets (Saturn through Moon).',
+      'Each entity tests you three times at deepening levels: first recognition of the pattern, then how it lives in you, then whether you can hold both shadow and light.',
+      'Ascending planets test your awareness of shadow and vice. Zodiac signs test your understanding of archetypal experience. Descending planets test your integration of virtue and light.',
+      'You may ask Atlas for a hint at any time, but Atlas will guide without giving answers directly.',
+      'There are no wrong answers, only deeper ones. The journey is complete when you return to Earth having visited all 26 encounters.',
+    ],
+    secrets: [
+      {
+        heading: 'The Chaldean Path',
+        text: 'The order of the planets follows the ancient Chaldean sequence — Moon, Mercury, Venus, Sun, Mars, Jupiter, Saturn — arranged by their apparent speed across the sky. This is the same order used in the days of the week and the planetary hours. To ascend through these spheres is to climb the celestial ladder that mystics from Babylon to Renaissance Florence described as the soul\'s journey between incarnation and the divine.',
+      },
+      {
+        heading: 'Ascent and Descent',
+        text: 'The ascending path confronts you with each planet\'s shadow — the vice, the wound, the unexamined pattern. The descending path asks you to integrate each planet\'s virtue — the gift, the medicine, the conscious expression. This mirrors the Hermetic principle: "As above, so below." You cannot truly possess the light until you have named the darkness. The zodiac ring between ascent and descent represents the twelve archetypal experiences of embodied life.',
+      },
+      {
+        heading: 'Three Levels of Testing',
+        text: 'Each entity tests at three levels that mirror the stages of alchemical transformation. Level 1 (Nigredo) asks: can you see the pattern? Level 2 (Albedo) asks: how does this pattern live in your own experience? Level 3 (Rubedo) asks: can you hold the tension between shadow and light without collapsing into either? These are the same three stages the alchemists described in the transformation of lead into gold — which was always, secretly, the transformation of the self.',
+      },
+    ],
+  },
 };
 
 export default GAME_BOOK;

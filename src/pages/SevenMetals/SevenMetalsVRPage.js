@@ -11,6 +11,7 @@ import './SevenMetalsPage.css';
 // Reuse all existing data + content components from 2D page
 import MetalDetailPanel from '../../components/sevenMetals/MetalDetailPanel';
 import CultureSelector from '../../components/sevenMetals/CultureSelector';
+import TarotCardContent from '../../components/sevenMetals/TarotCardContent';
 
 import coreData from '../../data/sevenMetals.json';
 import deitiesData from '../../data/sevenMetalsDeities.json';
@@ -37,6 +38,7 @@ function findBySin(arr, sin) {
 const CULTURE_KEY_MAP = {
   Roman: 'roman', Greek: 'greek', Norse: 'norse',
   Babylonian: 'babylonian', Vedic: 'vedic', Islamic: 'islamic', Medieval: 'medieval',
+  Tarot: 'tarot',
 };
 
 const MODE_ORDER = [
@@ -63,6 +65,23 @@ function CultureBlock({ cultureData }) {
 function ZodiacContent({ sign, activeCulture }) {
   const z = zodiacData.find(d => d.sign === sign);
   if (!z) return null;
+
+  if (activeCulture === 'Tarot') {
+    return (
+      <div className="tab-content">
+        <h4>{z.symbol} {z.archetype}</h4>
+        <div className="overview-grid">
+          <div className="overview-item"><span className="ov-label">Element</span><span className="ov-value">{z.element}</span></div>
+          <div className="overview-item"><span className="ov-label">Modality</span><span className="ov-value">{z.modality}</span></div>
+          <div className="overview-item"><span className="ov-label">Ruler</span><span className="ov-value">{z.rulingPlanet}</span></div>
+          <div className="overview-item"><span className="ov-label">House</span><span className="ov-value">{z.house}</span></div>
+          <div className="overview-item"><span className="ov-label">Dates</span><span className="ov-value">{z.dates}</span></div>
+        </div>
+        <TarotCardContent correspondenceType="zodiac" correspondenceValue={sign} element={z.element} showMinorArcana />
+      </div>
+    );
+  }
+
   const cultureKey = CULTURE_KEY_MAP[activeCulture];
   const cultureEntry = z.cultures?.[cultureKey];
   const elementEntry = elementsData[z.element];
@@ -101,6 +120,21 @@ function ZodiacContent({ sign, activeCulture }) {
 function CardinalContent({ cardinalId, activeCulture }) {
   const c = cardinalsData[cardinalId];
   if (!c) return null;
+
+  if (activeCulture === 'Tarot') {
+    return (
+      <div className="tab-content">
+        <div className="overview-grid">
+          <div className="overview-item"><span className="ov-label">Date</span><span className="ov-value">{c.date}</span></div>
+          <div className="overview-item"><span className="ov-label">Season</span><span className="ov-value">{c.season}</span></div>
+          <div className="overview-item"><span className="ov-label">Direction</span><span className="ov-value">{c.direction}</span></div>
+          <div className="overview-item"><span className="ov-label">Zodiac Cusp</span><span className="ov-value">{c.zodiacCusp}</span></div>
+        </div>
+        <TarotCardContent correspondenceType="cardinal" correspondenceValue={cardinalId} showMinorArcana />
+      </div>
+    );
+  }
+
   const cultureKey = CULTURE_KEY_MAP[activeCulture];
   const cultureEntry = c.cultures?.[cultureKey];
 
@@ -262,6 +296,8 @@ export default function SevenMetalsVRPage() {
       streamRef.current = null;
     }
     setCameraAR(false);
+    setArPanelLocked(false);
+    panelLockedExtRef.current = false;
   }, []);
 
   // AR navigation state
@@ -271,6 +307,20 @@ export default function SevenMetalsVRPage() {
   const [arZoom, setArZoom] = useState(1);
   const [flyToTarget, setFlyToTarget] = useState(null);
   const onFlyComplete = useCallback(() => setFlyToTarget(null), []);
+
+  // Full-screen info panel lock state (AR mode)
+  const [arPanelLocked, setArPanelLocked] = useState(false);
+  const panelLockedExtRef = useRef(false);
+
+  const handlePanelLock = useCallback(() => {
+    setArPanelLocked(true);
+    panelLockedExtRef.current = true;
+  }, []);
+
+  const handlePanelUnlock = useCallback(() => {
+    setArPanelLocked(false);
+    panelLockedExtRef.current = false;
+  }, []);
 
   // Fly to a planet when tapped (in AR mode)
   const handleFlyTo = useCallback((pos) => {
@@ -417,10 +467,12 @@ export default function SevenMetalsVRPage() {
           onScaleChange={setArZoom}
           cameraPosRef={cameraPosRef}
           anglesRef={anglesRef}
+          onPanelLock={handlePanelLock}
+          panelLockedRef={panelLockedExtRef}
         />
 
-        {/* AR navigation overlays */}
-        {cameraAR && (
+        {/* AR navigation overlays — hidden when full-screen panel is open */}
+        {cameraAR && !arPanelLocked && (
           <>
             <ARJoystick joystickRef={joystickRef} />
             <ARMiniMap
@@ -429,6 +481,27 @@ export default function SevenMetalsVRPage() {
               onFlyTo={handleFlyTo}
             />
           </>
+        )}
+
+        {/* Full-screen info panel overlay (AR lock mode) */}
+        {cameraAR && arPanelLocked && hasSelection && (
+          <div className="ar-fullscreen-panel">
+            <div className="ar-fullscreen-panel-header">
+              <div>
+                <h2 className="ar-fullscreen-panel-heading">{panelHeading}</h2>
+                {panelSub && <span className="ar-fullscreen-panel-sub">{panelSub}</span>}
+              </div>
+              <button className="ar-fullscreen-panel-close" onClick={handlePanelUnlock} title="Return to cosmos">
+                &times;
+              </button>
+            </div>
+            <div className="ar-fullscreen-panel-body">
+              {panelContent}
+            </div>
+            <div className="ar-fullscreen-panel-footer" onClick={handlePanelUnlock}>
+              Return to Cosmos
+            </div>
+          </div>
         )}
 
         {/* Overlay controls on the 3D canvas */}

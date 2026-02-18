@@ -2,6 +2,7 @@ import React, { useState, useCallback, useMemo } from 'react';
 import {
   buildPlayingDeck, SUITS, CULTURES, ARCANA_POSITIONS,
   getArcanaForCulture, getArcanaPosition, getCrossReference,
+  buildMinorArcana, getSuitsForCulture,
 } from './mythouseCardData';
 
 const TYPE_LABELS = { element: 'Element', planet: 'Planet', zodiac: 'Zodiac' };
@@ -14,8 +15,10 @@ const TYPE_SYMBOLS = {
 export default function MythouseCards({ onExit }) {
   const [section, setSection] = useState('playing');
   const [suitFilter, setSuitFilter] = useState(null);
-  const [activeCulture, setActiveCulture] = useState('tarot'); // 'tarot' | culture key
+  const [activeCulture, setActiveCulture] = useState('tarot');
   const [expandedCard, setExpandedCard] = useState(null);
+  const [arcanaView, setArcanaView] = useState('major'); // 'major' | 'minor'
+  const [minorSuitFilter, setMinorSuitFilter] = useState(null);
 
   // Playing cards (built once)
   const playingDeck = useMemo(() => buildPlayingDeck(), []);
@@ -25,11 +28,27 @@ export default function MythouseCards({ onExit }) {
     return playingDeck.filter(c => c.suit === suitFilter);
   }, [playingDeck, suitFilter]);
 
-  // Arcana cards for selected culture (empty for tarot overview)
+  // Major Arcana cards for selected culture
   const arcanaCards = useMemo(() => {
     if (activeCulture === 'tarot') return [];
     return getArcanaForCulture(activeCulture);
   }, [activeCulture]);
+
+  // Minor Arcana cards for selected culture (including tarot base)
+  const minorCards = useMemo(() => {
+    return buildMinorArcana(activeCulture);
+  }, [activeCulture]);
+
+  // Suits for the active culture
+  const cultureSuits = useMemo(() => {
+    return getSuitsForCulture(activeCulture);
+  }, [activeCulture]);
+
+  // Filtered minor arcana
+  const filteredMinor = useMemo(() => {
+    if (!minorSuitFilter) return minorCards;
+    return minorCards.filter(c => c.suit === minorSuitFilter);
+  }, [minorCards, minorSuitFilter]);
 
   const handleArcanaClick = useCallback((card) => {
     setExpandedCard(card);
@@ -67,15 +86,14 @@ export default function MythouseCards({ onExit }) {
           className={`mc-tab${section === 'arcana' ? ' active' : ''}`}
           onClick={() => setSection('arcana')}
         >
-          Major Arcana
-          <span className="mc-tab-count">154</span>
+          Tarot Decks
+          <span className="mc-tab-count">78 each</span>
         </button>
       </div>
 
       {/* === PLAYING CARDS SECTION === */}
       {section === 'playing' && (
         <>
-          {/* Suit filter tabs */}
           <div className="mc-deck-tabs">
             <button
               className={`mc-tab${suitFilter === null ? ' active' : ''}`}
@@ -95,7 +113,6 @@ export default function MythouseCards({ onExit }) {
             ))}
           </div>
 
-          {/* Playing card grid */}
           <div className="mc-card-grid mc-playing-grid">
             {filteredPlaying.map(card => (
               <div key={card.id} className="mc-playing-card">
@@ -111,82 +128,161 @@ export default function MythouseCards({ onExit }) {
         </>
       )}
 
-      {/* === MAJOR ARCANA SECTION === */}
+      {/* === TAROT DECKS SECTION === */}
       {section === 'arcana' && (
         <>
-          {/* Tarot + Culture tabs */}
+          {/* Culture tabs */}
           <div className="mc-deck-tabs">
             <button
               className={`mc-tab${activeCulture === 'tarot' ? ' active' : ''}`}
               style={{ '--tab-color': 'var(--accent-gold)' }}
-              onClick={() => { setActiveCulture('tarot'); setExpandedCard(null); }}
+              onClick={() => { setActiveCulture('tarot'); setExpandedCard(null); setMinorSuitFilter(null); }}
             >
               Tarot
-              <span className="mc-tab-count">22</span>
+              <span className="mc-tab-count">78</span>
             </button>
             {CULTURES.map(c => (
               <button
                 key={c.key}
                 className={`mc-tab${activeCulture === c.key ? ' active' : ''}`}
-                onClick={() => { setActiveCulture(c.key); setExpandedCard(null); }}
+                onClick={() => { setActiveCulture(c.key); setExpandedCard(null); setMinorSuitFilter(null); }}
               >
                 {c.label}
-                <span className="mc-tab-count">22</span>
+                <span className="mc-tab-count">78</span>
               </button>
             ))}
           </div>
 
-          {/* Tarot overview grid (22 base positions) */}
-          {isTarotView && (
-            <div className="mc-card-grid">
-              {ARCANA_POSITIONS.map(pos => {
-                const sym = (TYPE_SYMBOLS[pos.type] || {})[pos.correspondence] || '';
-                return (
-                  <button
-                    key={pos.number}
-                    className="mc-card mc-arcana-card mc-tarot-card"
-                    onClick={() => setExpandedCard({ number: pos.number, name: pos.tarot, culture: 'tarot' })}
-                  >
-                    <span className="mc-card-number">#{pos.number}</span>
-                    <span className="mc-tarot-symbol">{sym}</span>
-                    <span className="mc-card-name">{pos.tarot}</span>
-                    <span className={`mc-card-correspondence mc-corr-${pos.type}`}>
-                      {pos.correspondence}
-                    </span>
-                  </button>
-                );
-              })}
-            </div>
+          {/* Major / Minor sub-toggle */}
+          <div className="mc-sub-toggle">
+            <button
+              className={`mc-sub-tab${arcanaView === 'major' ? ' active' : ''}`}
+              onClick={() => setArcanaView('major')}
+            >
+              Major Arcana
+              <span className="mc-tab-count">22</span>
+            </button>
+            <button
+              className={`mc-sub-tab${arcanaView === 'minor' ? ' active' : ''}`}
+              onClick={() => setArcanaView('minor')}
+            >
+              Minor Arcana
+              <span className="mc-tab-count">56</span>
+            </button>
+          </div>
+
+          {/* ---- MAJOR ARCANA VIEW ---- */}
+          {arcanaView === 'major' && (
+            <>
+              {/* Tarot overview grid (22 base positions) */}
+              {isTarotView && (
+                <div className="mc-card-grid">
+                  {ARCANA_POSITIONS.map(pos => {
+                    const sym = (TYPE_SYMBOLS[pos.type] || {})[pos.correspondence] || '';
+                    return (
+                      <button
+                        key={pos.number}
+                        className="mc-card mc-arcana-card mc-tarot-card"
+                        onClick={() => setExpandedCard({ number: pos.number, name: pos.tarot, culture: 'tarot' })}
+                      >
+                        <span className="mc-card-number">#{pos.number}</span>
+                        <span className="mc-tarot-symbol">{sym}</span>
+                        <span className="mc-card-name">{pos.tarot}</span>
+                        <span className={`mc-card-correspondence mc-corr-${pos.type}`}>
+                          {pos.correspondence}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+
+              {/* Culture-specific major arcana grid */}
+              {!isTarotView && (
+                <div className="mc-card-grid">
+                  {arcanaCards.map(card => {
+                    const pos = getArcanaPosition(card.number);
+                    return (
+                      <button
+                        key={`${card.culture}-${card.number}`}
+                        className="mc-card mc-arcana-card"
+                        onClick={() => handleArcanaClick(card)}
+                      >
+                        <span className="mc-card-number">#{card.number}</span>
+                        <span className="mc-card-name">{card.name}</span>
+                        <span className="mc-card-brief">
+                          {card.description.substring(0, 100)}{card.description.length > 100 ? '...' : ''}
+                        </span>
+                        {pos && (
+                          <span className={`mc-card-correspondence mc-corr-${pos.type}`}>
+                            {pos.correspondence}
+                          </span>
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+            </>
           )}
 
-          {/* Culture-specific card grid */}
-          {!isTarotView && (
-            <div className="mc-card-grid">
-              {arcanaCards.map(card => {
-                const pos = getArcanaPosition(card.number);
-                return (
+          {/* ---- MINOR ARCANA VIEW ---- */}
+          {arcanaView === 'minor' && (
+            <>
+              {/* Suit filter tabs */}
+              <div className="mc-deck-tabs mc-suit-tabs">
+                <button
+                  className={`mc-tab${minorSuitFilter === null ? ' active' : ''}`}
+                  onClick={() => setMinorSuitFilter(null)}
+                >
+                  All Suits
+                </button>
+                {cultureSuits.map(s => (
                   <button
-                    key={`${card.culture}-${card.number}`}
-                    className="mc-card mc-arcana-card"
-                    onClick={() => handleArcanaClick(card)}
+                    key={s.key}
+                    className={`mc-tab${minorSuitFilter === s.key ? ' active' : ''}`}
+                    style={{ '--tab-color': s.color }}
+                    onClick={() => setMinorSuitFilter(s.key)}
                   >
-                    <span className="mc-card-number">#{card.number}</span>
-                    <span className="mc-card-name">{card.name}</span>
-                    <span className="mc-card-brief">
-                      {card.description.substring(0, 100)}{card.description.length > 100 ? '...' : ''}
-                    </span>
-                    {pos && (
-                      <span className={`mc-card-correspondence mc-corr-${pos.type}`}>
-                        {pos.correspondence}
-                      </span>
-                    )}
+                    <span style={{ color: s.color }}>{s.symbol}</span> {s.name}
                   </button>
-                );
-              })}
-            </div>
+                ))}
+              </div>
+
+              {/* Suit description (when filtering by a single suit) */}
+              {minorSuitFilter && (() => {
+                const suit = cultureSuits.find(s => s.key === minorSuitFilter);
+                return suit?.desc ? (
+                  <p className="mc-suit-desc">
+                    <span className="mc-suit-element" style={{ color: suit.color }}>{suit.element}</span>
+                    {' \u2014 '}{suit.desc}
+                  </p>
+                ) : null;
+              })()}
+
+              {/* Minor arcana card grid */}
+              <div className="mc-card-grid mc-minor-grid">
+                {filteredMinor.map(card => (
+                  <div
+                    key={card.id}
+                    className={`mc-minor-card${card.isCourt ? ' mc-court' : ''}`}
+                  >
+                    <span className="mc-minor-rank-top">{card.isCourt ? card.rankLabel.charAt(0) : card.rankLabel}</span>
+                    <span className="mc-minor-suit" style={{ color: card.suitColor }}>
+                      {card.suitSymbol}
+                    </span>
+                    <span className="mc-minor-name">{card.rankLabel}</span>
+                    <span className="mc-minor-suit-label" style={{ color: card.suitColor }}>
+                      {card.suitName}
+                    </span>
+                    <span className="mc-minor-value">{card.value} pt{card.value !== 1 ? 's' : ''}</span>
+                  </div>
+                ))}
+              </div>
+            </>
           )}
 
-          {/* Detail overlay */}
+          {/* Detail overlay (major arcana only) */}
           {expandedCard && (
             <div className="mc-detail-overlay" onClick={() => setExpandedCard(null)}>
               <div className="mc-detail-panel" onClick={e => e.stopPropagation()}>

@@ -3,6 +3,8 @@ import { useSearchParams } from 'react-router-dom';
 import CircleNav from '../../components/CircleNav';
 import DevelopmentPanel from '../../components/DevelopmentPanel';
 import TextBlock from '../../components/sevenMetals/TextBlock';
+import useWheelJourney from '../../hooks/useWheelJourney';
+import WheelJourneyPanel from '../../components/WheelJourneyPanel';
 import './MonomythPage.css';
 
 import monomythProse from '../../data/monomyth.json';
@@ -461,6 +463,24 @@ export default function MonomythPage() {
   const [activeWorld, setActiveWorld] = useState(null);
   const [selectedModel, setSelectedModel] = useState(null);
 
+  const journey = useWheelJourney('monomyth', MONOMYTH_STAGES);
+
+  const handleYBRToggle = useCallback(() => {
+    if (journey.active) {
+      journey.exitGame();
+    } else {
+      journey.startGame();
+    }
+  }, [journey]);
+
+  // When journey advances to a new stage, auto-select it on the wheel
+  useEffect(() => {
+    if (journey.active && journey.currentStopIndex >= 0 && journey.currentStopIndex < MONOMYTH_STAGES.length) {
+      setCurrentStage(MONOMYTH_STAGES[journey.currentStopIndex].id);
+      setActiveWorld(null);
+    }
+  }, [journey.active, journey.currentStopIndex]);
+
   const handleSelectModel = useCallback((theoristKey) => {
     const modelId = THEORIST_TO_MODEL[theoristKey];
     if (!modelId) return;
@@ -483,8 +503,11 @@ export default function MonomythPage() {
     const theoristParam = searchParams.get('theorist');
     const cycleParam = searchParams.get('cycle');
     const worldParam = searchParams.get('world');
+    const journeyParam = searchParams.get('journey');
 
-    if (worldParam && ['normal', 'other', 'threshold'].includes(worldParam)) {
+    if (journeyParam === 'true') {
+      journey.startGame();
+    } else if (worldParam && ['normal', 'other', 'threshold'].includes(worldParam)) {
       setActiveWorld(worldParam);
       setCurrentStage('overview');
     } else if (stageParam && MONOMYTH_STAGES.find(s => s.id === stageParam)) {
@@ -555,10 +578,43 @@ export default function MonomythPage() {
         onSelectWorld={handleSelectWorld}
         modelOverlay={selectedModel}
         onCloseModel={() => setSelectedModel(null)}
+        ybrActive={journey.active}
+        ybrCurrentStopIndex={journey.currentStopIndex}
+        ybrStages={MONOMYTH_STAGES}
+        onToggleYBR={handleYBRToggle}
       />
 
       {isStage && stageLabel && (
         <h2 className="stage-heading">{stageLabel}</h2>
+      )}
+
+      {journey.active && (
+        <div className="container">
+          <WheelJourneyPanel
+            journeyId="monomyth"
+            stages={MONOMYTH_STAGES}
+            currentStopIndex={journey.currentStopIndex}
+            stopProgress={journey.stopProgress}
+            journeyComplete={journey.journeyComplete}
+            completedStops={journey.completedStops}
+            totalStops={journey.totalStops}
+            onAdvanceFromIntro={journey.advanceFromIntro}
+            onRecordResult={journey.recordResult}
+            onAdvanceToNext={journey.advanceToNext}
+            onExit={journey.exitGame}
+            introText={[
+              "Atlas invites you to walk the wheel of the Hero's Journey.",
+              "Eight stages. Eight stops around the wheel. At each one, Atlas will ask you to describe what happens at that stage — the events, themes, and transformations that define it.",
+              "You are encouraged to explore each stage's content on the page before answering. The tabs above hold the knowledge you need — overview, cycles, theorists, myths, films.",
+              "There are no wrong answers, only deeper ones.",
+            ]}
+            completionText={[
+              "You have walked the full wheel of the Monomyth — from Surface through Calling, Crossing, Initiating, Nadir, Return, Arrival, and Renewal.",
+              "The hero's journey is not a path that ends. It is a wheel that turns. You began at the surface. You return to the surface. But you are different now, because you have seen the pattern.",
+            ]}
+            returnLabel="Return to Monomyth"
+          />
+        </div>
       )}
 
       <div className="container">

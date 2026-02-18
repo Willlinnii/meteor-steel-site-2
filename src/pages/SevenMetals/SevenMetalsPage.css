@@ -43,7 +43,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 40px 20px 20px;
+  padding: 40px 20px 56px;
 }
 
 /* ===== ORBITAL SVG ===== */
@@ -695,6 +695,24 @@
   background: rgba(224, 112, 32, 0.12);
 }
 
+/* Persona chat mic button */
+.persona-tab {
+  color: #9070c0;
+}
+
+.persona-tab:hover {
+  color: #a880d0;
+  background: rgba(144, 112, 192, 0.12);
+  box-shadow: 0 0 8px rgba(144, 112, 192, 0.2);
+}
+
+.persona-tab.active {
+  color: #b090e0;
+  border-color: #9070c0;
+  background: rgba(144, 112, 192, 0.15);
+  box-shadow: 0 0 10px rgba(144, 112, 192, 0.25);
+}
+
 /* ===== RESPONSIVE ===== */
 
 @media (max-width: 900px) {
@@ -741,9 +759,16 @@
     gap: 6px;
   }
 
+  .persona-tab {
+    font-size: 0.6rem;
+    padding: 6px 10px;
+  }
+
   .orbital-mode-toggle,
   .calendar-toggle,
   .medicine-wheel-toggle,
+  .chakra-view-toggle,
+  .star-map-toggle,
   .vr-view-toggle {
     width: 34px;
     height: 34px;
@@ -781,6 +806,62 @@
   margin-bottom: 12px;
 }
 
+/* ===== CHAKRA VIEW TOGGLE ===== */
+
+.chakra-view-toggle {
+  position: static;
+  background: none;
+  border: 1px solid rgba(155, 89, 182, 0.5);
+  color: rgba(155, 89, 182, 0.8);
+  font-size: 1.3rem;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  opacity: 0.7;
+}
+
+.chakra-view-toggle:hover {
+  opacity: 1;
+  background: rgba(155, 89, 182, 0.1);
+  box-shadow: 0 0 10px rgba(155, 89, 182, 0.3);
+}
+
+/* ===== VITRUVIAN FIGURE ===== */
+
+.vitruvian-figure {
+  opacity: 0;
+  animation: vitruvian-fade-in 0.6s ease-out forwards;
+}
+
+@keyframes vitruvian-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* ===== CHAKRA BODY VIEWER ===== */
+
+.chakra-body-viewer {
+  animation: chakra-fade-in 0.4s ease-out;
+}
+
+@keyframes chakra-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.chakra-dot {
+  transition: opacity 0.3s ease;
+}
+
+.chakra-label {
+  transition: fill 0.3s ease;
+  pointer-events: none;
+}
+
 /* ===== MEDICINE WHEEL TOGGLE ===== */
 
 .medicine-wheel-toggle {
@@ -804,6 +885,33 @@
   background: rgba(180, 140, 80, 0.1);
   box-shadow: 0 0 10px rgba(180, 140, 80, 0.3);
 }
+
+.star-map-toggle {
+  position: static;
+  background: none;
+  border: 1px solid rgba(232, 224, 208, 0.4);
+  color: rgba(232, 224, 208, 0.7);
+  font-size: 1.1rem;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  opacity: 0.7;
+}
+.star-map-toggle:hover {
+  opacity: 1;
+  background: rgba(232, 224, 208, 0.08);
+  box-shadow: 0 0 10px rgba(232, 224, 208, 0.2);
+}
+.star-layer {
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+.constellation-highlight { pointer-events: none; }
+.constellation-hit-layer { pointer-events: auto; }
 
 .vr-view-toggle {
   position: static;
@@ -847,4 +955,713 @@
 
 .mw-position:hover circle:first-child {
   fill: rgba(180, 140, 80, 0.05);
+}
+
+/* ===== ORBITAL TOOLTIP ===== */
+
+.orbital-tooltip {
+  position: absolute;
+  pointer-events: none;
+  z-index: 20;
+  background: rgba(10, 10, 24, 0.92);
+  border: 1px solid rgba(201, 169, 97, 0.3);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  padding: 10px 14px;
+  max-width: 260px;
+  animation: tooltip-fade-in 0.15s ease-out;
+}
+
+@keyframes tooltip-fade-in {
+  from { opacity: 0; transform: translateX(-50%) translateY(-100%) scale(0.96); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(-100%) scale(1); }
+}
+
+.orbital-tooltip-title {
+  font-family: 'Cinzel', serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--accent-gold, #c9a84c);
+  margin-bottom: 4px;
+  letter-spacing: 0.03em;
+}
+
+.orbital-tooltip-row {
+  font-family: 'Crimson Pro', serif;
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.75);
+  line-height: 1.5;
+}
+
+.orbital-tooltip-desc {
+  font-family: 'Crimson Pro', serif;
+  font-size: 0.72rem;
+  color: rgba(255, 255, 255, 0.55);
+  font-style: italic;
+  line-height: 1.45;
+  margin-top: 4px;
+}
+
+@media (max-width: 600px) {
+  .orbital-tooltip {
+    max-width: 200px;
+    padding: 8px 10px;
+  }
+  .orbital-tooltip-title {
+    font-size: 0.72rem;
+  }
+  .orbital-tooltip-row,
+  .orbital-tooltip-desc {
+    font-size: 0.66rem;
+  }
+}
+
+/* ===== STORM FLASH (Hyemeyohsts Storm easter egg) ===== */
+
+.storm-flash-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 9999;
+  animation: storm-lightning 3.5s ease-out forwards;
+}
+
+.storm-flash-img-wrap {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 120%;
+  height: 120%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 10000;
+}
+
+.storm-flash-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  opacity: 0;
+  animation: storm-img-flash 3.5s ease-out forwards;
+}
+
+@keyframes storm-lightning {
+  0% { background: rgba(200, 220, 255, 0.95); }
+  2% { background: rgba(180, 200, 255, 0.1); }
+  4% { background: rgba(190, 210, 255, 0.75); }
+  6% { background: rgba(160, 190, 255, 0.15); }
+  8% { background: rgba(180, 205, 255, 0.4); }
+  12% { background: rgba(0, 0, 0, 0); }
+  100% { background: rgba(0, 0, 0, 0); }
+}
+
+@keyframes storm-img-flash {
+  0% { opacity: 0; transform: scale(0.85); }
+  4% { opacity: 0.8; transform: scale(1.03); }
+  8% { opacity: 0.8; transform: scale(1); }
+  75% { opacity: 0.8; transform: scale(1); }
+  100% { opacity: 0; transform: scale(1.01); }
+}
+
+/* ===== STAR TWINKLE ===== */
+
+.star-twinkle {
+  animation: star-glint 14s ease-in-out infinite;
+}
+
+@keyframes star-glint {
+  0%, 97.2%, 100% { opacity: var(--star-base-o, 0.4); }
+  98%, 99.2% { opacity: 1; filter: brightness(5) drop-shadow(0 0 3px #fff); }
+}
+
+/* ===== TAROT CARD CONTENT ===== */
+
+.tarot-content {
+  padding: 8px 0;
+}
+
+.tarot-arcana-block {
+  margin-bottom: 1.5rem;
+}
+
+.tarot-position-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  margin-bottom: 14px;
+  background: rgba(201, 169, 97, 0.08);
+  border: 1px solid rgba(201, 169, 97, 0.25);
+}
+
+.tarot-numeral {
+  font-family: 'Cinzel', serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--accent-gold);
+  min-width: 2.5rem;
+  text-align: center;
+}
+
+.tarot-name {
+  font-family: 'Cinzel', serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  flex: 1;
+}
+
+.tarot-correspondence {
+  font-family: 'Cinzel', serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--accent-fire);
+  padding: 3px 10px;
+  border: 1px solid rgba(232, 131, 90, 0.3);
+  background: rgba(232, 131, 90, 0.06);
+}
+
+.tarot-culture-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.tarot-culture-card {
+  padding: 12px 16px;
+  background: rgba(139, 157, 195, 0.03);
+  border: 1px solid var(--border-subtle);
+  border-left: 3px solid var(--border-subtle);
+}
+
+.tarot-culture-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-secondary);
+  margin-bottom: 4px;
+}
+
+.tarot-card-name {
+  font-family: 'Cinzel', serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--accent-gold);
+  margin-bottom: 6px;
+}
+
+.tarot-card-desc {
+  font-family: 'Crimson Pro', serif;
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.tarot-minor-section {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.tarot-minor-section h5 {
+  font-family: 'Cinzel', serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--accent-fire);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 12px;
+}
+
+.tarot-suit-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.tarot-suit-item {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 10px 14px;
+  background: rgba(139, 157, 195, 0.03);
+  border: 1px solid var(--border-subtle);
+}
+
+.tarot-suit-symbol {
+  font-size: 1.6rem;
+  line-height: 1;
+  flex-shrink: 0;
+  width: 2rem;
+  text-align: center;
+}
+
+.tarot-suit-desc {
+  font-family: 'Crimson Pro', serif;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  margin: 4px 0 0;
+}
+
+/* ===== YELLOW BRICK ROAD ===== */
+
+/* --- YBR Toggle Button --- */
+
+.ybr-toggle {
+  position: static;
+  background: none;
+  border: 1px solid rgba(218, 165, 32, 0.5);
+  color: rgba(218, 165, 32, 0.8);
+  font-size: 1.2rem;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  opacity: 0.7;
+}
+
+.ybr-toggle:hover {
+  opacity: 1;
+  background: rgba(218, 165, 32, 0.1);
+  box-shadow: 0 0 10px rgba(218, 165, 32, 0.3);
+}
+
+.ybr-toggle.active {
+  opacity: 1;
+  border-color: rgba(218, 165, 32, 0.8);
+  background: rgba(218, 165, 32, 0.15);
+  box-shadow: 0 0 12px rgba(218, 165, 32, 0.4);
+}
+
+/* --- SVG Path Overlay --- */
+
+.ybr-path-full {
+  stroke: rgba(218, 165, 32, 0.15);
+  stroke-width: 2;
+  stroke-dasharray: 6 4;
+  fill: none;
+}
+
+.ybr-path-visited {
+  stroke: rgba(218, 165, 32, 0.6);
+  stroke-width: 2.5;
+  fill: none;
+}
+
+.ybr-stop-past {
+  fill: rgba(218, 165, 32, 0.4);
+}
+
+.ybr-stop-future {
+  fill: none;
+  stroke: rgba(218, 165, 32, 0.2);
+  stroke-width: 1;
+}
+
+.ybr-stop-current {
+  fill: rgba(218, 165, 32, 0.9);
+}
+
+/* --- YBR Panel --- */
+
+.ybr-panel {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 24px 20px;
+}
+
+.ybr-title {
+  font-family: 'Cinzel', serif;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: rgba(218, 165, 32, 0.9);
+  text-align: center;
+  letter-spacing: 0.06em;
+  margin-bottom: 20px;
+}
+
+.ybr-intro-text {
+  max-width: 560px;
+  margin: 0 auto 24px;
+}
+
+.ybr-intro-text p {
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: var(--text-primary);
+  margin-bottom: 12px;
+}
+
+.ybr-summary {
+  text-align: center;
+  font-family: 'Cinzel', serif;
+  color: rgba(218, 165, 32, 0.7);
+  font-size: 0.9rem;
+  letter-spacing: 0.04em;
+  margin-top: 16px;
+}
+
+.ybr-begin-btn {
+  display: block;
+  margin: 24px auto 0;
+  font-family: 'Cinzel', serif;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: rgba(218, 165, 32, 0.9);
+  background: rgba(218, 165, 32, 0.1);
+  border: 1px solid rgba(218, 165, 32, 0.5);
+  padding: 14px 36px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.ybr-begin-btn:hover {
+  background: rgba(218, 165, 32, 0.2);
+  box-shadow: 0 0 16px rgba(218, 165, 32, 0.3);
+  border-color: rgba(218, 165, 32, 0.8);
+}
+
+/* --- Challenge Header --- */
+
+.ybr-challenge-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.ybr-phase-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-secondary);
+  margin-bottom: 4px;
+}
+
+.ybr-entity-name {
+  font-family: 'Cinzel', serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: rgba(218, 165, 32, 0.9);
+  margin-bottom: 2px;
+}
+
+.ybr-entity-type {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin-bottom: 10px;
+}
+
+/* --- Level Indicator --- */
+
+.ybr-level-indicator {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+.ybr-level-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.ybr-level-dot.passed {
+  background: rgba(218, 165, 32, 0.8);
+  box-shadow: 0 0 6px rgba(218, 165, 32, 0.5);
+}
+
+.ybr-level-dot.current {
+  background: rgba(218, 165, 32, 0.5);
+  animation: ybr-dot-pulse 2s ease-in-out infinite;
+}
+
+.ybr-level-dot.future {
+  background: rgba(218, 165, 32, 0.15);
+  border: 1px solid rgba(218, 165, 32, 0.3);
+}
+
+@keyframes ybr-dot-pulse {
+  0%, 100% { box-shadow: 0 0 4px rgba(218, 165, 32, 0.3); }
+  50% { box-shadow: 0 0 12px rgba(218, 165, 32, 0.7); }
+}
+
+/* --- Challenge Prompt --- */
+
+.ybr-challenge-prompt {
+  background: rgba(218, 165, 32, 0.05);
+  border-left: 3px solid rgba(218, 165, 32, 0.5);
+  padding: 16px 20px;
+  margin-bottom: 16px;
+}
+
+.ybr-prompt-level {
+  font-family: 'Cinzel', serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: rgba(218, 165, 32, 0.6);
+  margin-bottom: 6px;
+}
+
+.ybr-prompt-text {
+  font-size: 1.1rem;
+  line-height: 1.7;
+  color: var(--text-primary);
+  font-style: italic;
+}
+
+/* --- YBR Chat Panel --- */
+
+.ybr-chat-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 12px;
+  max-height: 300px;
+  overflow-y: auto;
+  padding: 4px 0;
+}
+
+.ybr-chat-panel .chat-msg.user {
+  align-self: flex-end;
+  max-width: 85%;
+  border-color: rgba(218, 165, 32, 0.3);
+  background: rgba(218, 165, 32, 0.08);
+}
+
+.ybr-chat-panel .chat-msg.assistant {
+  align-self: flex-start;
+  max-width: 85%;
+}
+
+.ybr-typing {
+  animation: ybr-blink 1s step-end infinite;
+}
+
+@keyframes ybr-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+/* --- Input Row --- */
+
+.ybr-input-row {
+  display: flex;
+  gap: 8px;
+  align-items: flex-end;
+  margin-bottom: 12px;
+}
+
+.ybr-input {
+  flex: 1;
+  font-family: 'Crimson Pro', serif;
+  font-size: 1rem;
+  color: var(--text-primary);
+  background: var(--bg-medium);
+  border: 1px solid rgba(218, 165, 32, 0.3);
+  padding: 10px 14px;
+  resize: none;
+  transition: border-color 0.3s;
+}
+
+.ybr-input:focus {
+  outline: none;
+  border-color: rgba(218, 165, 32, 0.6);
+}
+
+.ybr-send-btn {
+  font-family: 'Cinzel', serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: rgba(218, 165, 32, 0.9);
+  background: rgba(218, 165, 32, 0.1);
+  border: 1px solid rgba(218, 165, 32, 0.5);
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.ybr-send-btn:hover:not(:disabled) {
+  background: rgba(218, 165, 32, 0.2);
+  box-shadow: 0 0 10px rgba(218, 165, 32, 0.3);
+}
+
+.ybr-send-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* --- Atlas Hint Section --- */
+
+.ybr-atlas-section {
+  margin-top: 8px;
+}
+
+.ybr-atlas-hint-btn {
+  font-family: 'Cinzel', serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: rgba(155, 89, 182, 0.8);
+  background: none;
+  border: 1px solid rgba(155, 89, 182, 0.3);
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.ybr-atlas-hint-btn:hover {
+  background: rgba(155, 89, 182, 0.1);
+  border-color: rgba(155, 89, 182, 0.5);
+}
+
+.ybr-atlas-hint-btn.active {
+  background: rgba(155, 89, 182, 0.1);
+  border-color: rgba(155, 89, 182, 0.5);
+}
+
+.ybr-atlas-panel {
+  margin-top: 10px;
+  padding: 12px;
+  border: 1px solid rgba(155, 89, 182, 0.2);
+  background: rgba(155, 89, 182, 0.03);
+}
+
+.ybr-atlas-chat {
+  max-height: 150px;
+}
+
+.ybr-atlas-input {
+  border-color: rgba(155, 89, 182, 0.3) !important;
+}
+
+.ybr-atlas-input:focus {
+  border-color: rgba(155, 89, 182, 0.6) !important;
+}
+
+.ybr-atlas-send {
+  color: rgba(155, 89, 182, 0.8) !important;
+  border-color: rgba(155, 89, 182, 0.4) !important;
+}
+
+/* --- Stop Complete & Advance --- */
+
+.ybr-stop-complete {
+  text-align: center;
+  padding: 20px 0;
+}
+
+.ybr-farewell {
+  font-size: 1.1rem;
+  line-height: 1.7;
+  color: var(--text-primary);
+  font-style: italic;
+  margin-bottom: 20px;
+}
+
+.ybr-advance-btn {
+  font-family: 'Cinzel', serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: rgba(218, 165, 32, 0.9);
+  background: rgba(218, 165, 32, 0.1);
+  border: 1px solid rgba(218, 165, 32, 0.5);
+  padding: 12px 28px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  animation: ybr-advance-pulse 2s ease-in-out infinite;
+}
+
+.ybr-advance-btn:hover {
+  background: rgba(218, 165, 32, 0.2);
+  box-shadow: 0 0 16px rgba(218, 165, 32, 0.4);
+}
+
+@keyframes ybr-advance-pulse {
+  0%, 100% { box-shadow: 0 0 6px rgba(218, 165, 32, 0.2); }
+  50% { box-shadow: 0 0 16px rgba(218, 165, 32, 0.5); }
+}
+
+/* --- Previous Exchanges --- */
+
+.ybr-previous-exchanges {
+  margin-bottom: 16px;
+}
+
+.ybr-exchange-detail {
+  margin-bottom: 6px;
+}
+
+.ybr-exchange-summary {
+  font-family: 'Cinzel', serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: rgba(218, 165, 32, 0.6);
+  cursor: pointer;
+  padding: 6px 0;
+}
+
+.ybr-exchange-messages {
+  padding: 8px 0 8px 12px;
+  border-left: 2px solid rgba(218, 165, 32, 0.15);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.ybr-exchange-messages .chat-msg {
+  font-size: 0.9rem;
+  opacity: 0.7;
+}
+
+/* --- YBR Responsive --- */
+
+@media (max-width: 600px) {
+  .ybr-panel {
+    padding: 16px 12px;
+  }
+
+  .ybr-title {
+    font-size: 1.4rem;
+  }
+
+  .ybr-entity-name {
+    font-size: 1.3rem;
+  }
+
+  .ybr-input-row {
+    flex-direction: column;
+  }
+
+  .ybr-send-btn {
+    width: 100%;
+  }
+
+  .ybr-begin-btn {
+    width: 100%;
+  }
 }

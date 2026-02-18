@@ -1,9 +1,13 @@
 import React, { useState, useEffect, useCallback, Suspense, lazy } from 'react';
 import { Routes, Route, Link, useLocation, useSearchParams } from 'react-router-dom';
+import { useAuth } from './auth/AuthContext';
+import LoginPage from './auth/LoginPage';
 import './App.css';
 import ChatPanel from './components/ChatPanel';
 import CircleNav from './components/CircleNav';
 import DevelopmentPanel from './components/DevelopmentPanel';
+import useWheelJourney from './hooks/useWheelJourney';
+import WheelJourneyPanel from './components/WheelJourneyPanel';
 import SevenMetalsPage from './pages/SevenMetals/SevenMetalsPage';
 import MonomythPage from './pages/Monomyth/MonomythPage';
 import MythologyChannelPage from './pages/MythologyChannel/MythologyChannelPage';
@@ -19,6 +23,7 @@ import synthesis from './data/synthesis.json';
 import fallenStarlightData from './data/fallenStarlight.json';
 
 const SevenMetalsVRPage = lazy(() => import('./pages/SevenMetals/SevenMetalsVRPage'));
+const AdminPage = lazy(() => import('./pages/Admin/AdminPage'));
 
 const STAGES = [
   { id: 'golden-age', label: 'Golden Age' },
@@ -284,6 +289,16 @@ function MeteorSteelHome() {
   const [devEntries, setDevEntries] = useState({});
   const [videoUrl, setVideoUrl] = useState(null);
 
+  const journey = useWheelJourney('meteor-steel', STAGES);
+
+  const handleYBRToggle = useCallback(() => {
+    if (journey.active) {
+      journey.exitGame();
+    } else {
+      journey.startGame();
+    }
+  }, [journey]);
+
   const handleSelectStage = useCallback((stage) => {
     setCurrentStage(stage);
     setVideoUrl(null);
@@ -295,10 +310,20 @@ function MeteorSteelHome() {
     }
   }, []);
 
+  // When journey advances to a new stage, auto-select it on the wheel
+  useEffect(() => {
+    if (journey.active && journey.currentStopIndex >= 0 && journey.currentStopIndex < STAGES.length) {
+      handleSelectStage(STAGES[journey.currentStopIndex].id);
+    }
+  }, [journey.active, journey.currentStopIndex, handleSelectStage]);
+
   // Deep link from Atlas navigation
   useEffect(() => {
     const stageParam = searchParams.get('stage');
-    if (stageParam && STAGES.find(s => s.id === stageParam)) {
+    const journeyParam = searchParams.get('journey');
+    if (journeyParam === 'true') {
+      journey.startGame();
+    } else if (stageParam && STAGES.find(s => s.id === stageParam)) {
       handleSelectStage(stageParam);
     }
     if (searchParams.toString()) {
@@ -326,10 +351,43 @@ function MeteorSteelHome() {
         videoUrl={videoUrl}
         onCloseVideo={() => setVideoUrl(null)}
         onAuthorPlay={() => setVideoUrl(WILL_LINN_PLAYLIST)}
+        ybrActive={journey.active}
+        ybrCurrentStopIndex={journey.currentStopIndex}
+        ybrStages={STAGES}
+        onToggleYBR={handleYBRToggle}
       />
 
       {currentStage !== 'overview' && currentStage !== 'bio' && (
         <h2 className="stage-heading">{currentLabel}</h2>
+      )}
+
+      {journey.active && (
+        <div className="container">
+          <WheelJourneyPanel
+            journeyId="meteor-steel"
+            stages={STAGES}
+            currentStopIndex={journey.currentStopIndex}
+            stopProgress={journey.stopProgress}
+            journeyComplete={journey.journeyComplete}
+            completedStops={journey.completedStops}
+            totalStops={journey.totalStops}
+            onAdvanceFromIntro={journey.advanceFromIntro}
+            onRecordResult={journey.recordResult}
+            onAdvanceToNext={journey.advanceToNext}
+            onExit={journey.exitGame}
+            introText={[
+              "Atlas invites you to walk the wheel of Meteor Steel.",
+              "Eight stages. Eight stops around the wheel. At each one, Atlas will ask you to describe what happens at that stage — the technology, the mythology, and the transformation.",
+              "You are encouraged to explore each stage's content on the page before answering. The tabs above hold the knowledge you need — technology, figures, saviors, monomyth, synthesis.",
+              "Steel cuts. Life flows.",
+            ]}
+            completionText={[
+              "You have walked the full wheel of Meteor Steel — from Golden Age through Calling Star, Crater Crossing, Trials of Forge, Quench, Integration, Draw, and Age of Steel.",
+              "The meteorite fell. The crater opened. The forge burned. The blade was drawn. You have traced the full arc of transformation — from fallen starlight to living steel.",
+            ]}
+            returnLabel="Return to Meteor Steel"
+          />
+        </div>
       )}
 
       <div className="container">
@@ -847,9 +905,15 @@ function SiteNav() {
 }
 
 function SiteHeader() {
+  const { user, signOut } = useAuth();
   return (
     <header className="site-header">
       <Link to="/metals" className="site-header-logo">Mythouse</Link>
+      {user && (
+        <div className="site-header-user">
+          <button className="site-header-signout" onClick={signOut}>Sign Out</button>
+        </div>
+      )}
     </header>
   );
 }
@@ -891,7 +955,35 @@ function MythosophiaPage() {
   );
 }
 
+function RequireAdmin({ children }) {
+  const { user } = useAuth();
+  const adminEmail = process.env.REACT_APP_ADMIN_EMAIL;
+  if (!user || user.email !== adminEmail) {
+    return (
+      <div style={{ padding: '80px 20px', textAlign: 'center', color: 'var(--text-secondary)' }}>
+        <h2 style={{ color: 'var(--accent-ember)', marginBottom: 12 }}>Access Denied</h2>
+        <p>You do not have permission to view this page.</p>
+      </div>
+    );
+  }
+  return children;
+}
+
 function App() {
+  const { user, loading } = useAuth();
+
+  if (loading) {
+    return (
+      <div className="celestial-loading" style={{ position: 'fixed', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg-dark)' }}>
+        <span className="celestial-loading-spinner" />
+      </div>
+    );
+  }
+
+  if (!user) {
+    return <LoginPage />;
+  }
+
   return (
     <div className="app">
       <SiteHeader />
@@ -907,6 +999,7 @@ function App() {
         <Route path="/games/*" element={<GamesPage />} />
         <Route path="/mythology-channel/:showId" element={<MythologyChannelPage />} />
         <Route path="/mythosophia" element={<MythosophiaPage />} />
+        <Route path="/dragon/*" element={<RequireAdmin><Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" />Loading Admin...</div>}><AdminPage /></Suspense></RequireAdmin>} />
       </Routes>
       <SiteFooter />
       <ChatPanel />

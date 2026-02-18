@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useCallback } from 'react';
+import React, { useRef, useEffect, useCallback, useState } from 'react';
 
 function getStageAngles(stages, clockwise) {
   const step = clockwise ? 45 : -45;
@@ -38,11 +38,43 @@ function ensureYTApi() {
   });
 }
 
-export default function CircleNav({ stages, currentStage, onSelectStage, clockwise, onToggleDirection, centerLine1, centerLine2, centerLine3, showAuthor = true, videoUrl, onCloseVideo, onAuthorPlay, worldZones, activeWorld, onSelectWorld, modelOverlay, onCloseModel }) {
+export default function CircleNav({ stages, currentStage, onSelectStage, clockwise, onToggleDirection, centerLine1, centerLine2, centerLine3, showAuthor = true, videoUrl, onCloseVideo, onAuthorPlay, worldZones, activeWorld, onSelectWorld, modelOverlay, onCloseModel, ybrActive, ybrCurrentStopIndex, ybrStages, onToggleYBR }) {
   const radius = 42;
   const computed = getStageAngles(stages, clockwise);
   const playerRef = useRef(null);
   const playerDivRef = useRef(null);
+  const [ybrAnimStage, setYbrAnimStage] = useState(-1);
+  const ybrAnimRef = useRef(null);
+
+  // Sequential light-up animation when toggling YBR on
+  const handleYBRClick = useCallback(() => {
+    if (ybrActive) {
+      // Already active — just toggle off
+      onToggleYBR();
+      return;
+    }
+    // Run the light-up sequence, then activate
+    if (ybrAnimRef.current) clearTimeout(ybrAnimRef.current);
+    let i = 0;
+    const total = stages.length;
+    const step = () => {
+      setYbrAnimStage(i);
+      i++;
+      if (i <= total) {
+        ybrAnimRef.current = setTimeout(step, 120);
+      } else {
+        ybrAnimRef.current = setTimeout(() => {
+          setYbrAnimStage(-1);
+          onToggleYBR();
+        }, 200);
+      }
+    };
+    step();
+  }, [ybrActive, onToggleYBR, stages.length]);
+
+  useEffect(() => {
+    return () => { if (ybrAnimRef.current) clearTimeout(ybrAnimRef.current); };
+  }, []);
 
   // Extract list ID from embed URL
   const listId = videoUrl ? new URL(videoUrl).searchParams.get('list') : null;
@@ -174,6 +206,38 @@ export default function CircleNav({ stages, currentStage, onSelectStage, clockwi
               </g>
             );
           })()}
+          {(ybrActive || ybrAnimStage >= 0) && (() => {
+            const step = clockwise ? 45 : -45;
+            const r = 42;
+            const isAnim = ybrAnimStage >= 0;
+            const points = (ybrStages || stages).map((s, i) => {
+              const angle = -90 + step * i;
+              const rad = (angle * Math.PI) / 180;
+              return { x: 50 + r * Math.cos(rad), y: 50 + r * Math.sin(rad) };
+            });
+            return (
+              <g className="ybr-overlay" style={{ pointerEvents: 'none' }}>
+                <circle cx="50" cy="50" r={r} className="ybr-path-full" fill="none" />
+                {points.map((p, i) => {
+                  let cls, radius;
+                  if (isAnim) {
+                    const lit = i < ybrAnimStage;
+                    const current = i === ybrAnimStage;
+                    cls = current ? 'ybr-stop-anim-current' : lit ? 'ybr-stop-anim-lit' : 'ybr-stop-future';
+                    radius = current ? 2.5 : lit ? 1.8 : 1.2;
+                  } else {
+                    const isPast = i < ybrCurrentStopIndex;
+                    const isCurrent = i === ybrCurrentStopIndex;
+                    cls = isPast ? 'ybr-stop-past' : isCurrent ? 'ybr-stop-current' : 'ybr-stop-future';
+                    radius = isPast ? 1.8 : isCurrent ? 2.5 : 1.2;
+                  }
+                  return (
+                    <circle key={i} cx={p.x} cy={p.y} r={radius} className={`ybr-stop-marker ${cls}`} />
+                  );
+                })}
+              </g>
+            );
+          })()}
         </svg>
 
         {listId ? (
@@ -296,6 +360,24 @@ export default function CircleNav({ stages, currentStage, onSelectStage, clockwi
             </div>
           );
         })}
+
+        {onToggleYBR && (
+          <button
+            className={`circle-ybr-toggle${ybrActive ? ' active' : ''}${ybrAnimStage >= 0 ? ' animating' : ''}`}
+            onClick={handleYBRClick}
+            title={ybrActive ? 'Exit Wheel Journey' : 'Walk the Wheel'}
+          >
+            <svg viewBox="0 0 20 14" width="16" height="11" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinejoin="round">
+              <path d="M1,4 L7,1 L19,1 L13,4 Z" />
+              <path d="M1,4 L1,13 L13,13 L13,4" />
+              <path d="M13,4 L19,1 L19,10 L13,13" />
+              <line x1="7" y1="4" x2="7" y2="13" />
+              <line x1="1" y1="8.5" x2="13" y2="8.5" />
+              <line x1="4" y1="8.5" x2="4" y2="13" />
+              <line x1="10" y1="4" x2="10" y2="8.5" />
+            </svg>
+          </button>
+        )}
       </div>
       <button className="direction-toggle" onClick={onToggleDirection}>
         {clockwise ? '\u21BB' : '\u21BA'}

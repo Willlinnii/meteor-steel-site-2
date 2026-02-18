@@ -73,9 +73,12 @@ export default function CelestialScene({
   onScaleChange,
   cameraPosRef,
   anglesRef,
+  onPanelLock,
+  panelLockedRef: externalPanelLockedRef,
 }) {
   const internalCamPosRef = useRef({ x: 0, y: 0, z: 0 });
-  const panelLockedRef = useRef(false);
+  const internalPanelLockedRef = useRef(false);
+  const panelLockedRef = externalPanelLockedRef || internalPanelLockedRef;
 
   return (
     <div className="celestial-scene-container" style={cameraAR ? { background: 'transparent' } : undefined}>
@@ -103,6 +106,7 @@ export default function CelestialScene({
                 cameraAR={cameraAR}
                 anglesRef={anglesRef}
                 panelLockedRef={panelLockedRef}
+                onPanelLock={onPanelLock}
               />
             </ARScaleWrapper>
             <ConditionalOrbitControls cameraAR={cameraAR} />

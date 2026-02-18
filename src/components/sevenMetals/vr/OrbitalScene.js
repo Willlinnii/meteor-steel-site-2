@@ -89,6 +89,7 @@ export default function OrbitalScene({
   cameraAR,
   anglesRef: externalAnglesRef,
   panelLockedRef,
+  onPanelLock,
 }) {
   const { anglesRef, moonPhaseRef } = useOrbitalAnimation(mode);
 
@@ -196,7 +197,7 @@ export default function OrbitalScene({
 
       {/* Info panel — lies flat below orbital plane in AR, look down to read */}
       {cameraAR && (
-        <InfoPanel3D visible={!!infoPanelContent} panelLockedRef={panelLockedRef}>
+        <InfoPanel3D visible={!!infoPanelContent} onLock={onPanelLock}>
           {infoPanelContent}
         </InfoPanel3D>
       )}

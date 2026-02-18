@@ -1,5 +1,9 @@
-// Mythouse Card System — Standard playing deck + Major Arcana utilities
+// Mythouse Card System — Standard playing deck + Major Arcana + Minor Arcana utilities
 import { CULTURES, ARCANA_POSITIONS, MAJOR_ARCANA } from './majorArcanaData';
+import {
+  CULTURE_SUITS, MINOR_RANKS,
+  buildMinorArcana, getSuitsForCulture, getCourtForCulture,
+} from './minorArcanaData';
 
 // === STANDARD 52-CARD PLAYING DECK ===
 
@@ -68,5 +72,60 @@ export function getCrossReference(number) {
   return MAJOR_ARCANA.filter(c => c.number === number);
 }
 
+// === MINOR ARCANA UTILITIES ===
+
+export function getMinorArcanaForCulture(cultureKey) {
+  return buildMinorArcana(cultureKey);
+}
+
+// === MINOR ARCANA ORDEAL DECKS ===
+
+/** Build a shuffled Minor Arcana deck for a single culture (56 cards). */
+export function buildMinorOrdealDeck(culture) {
+  return shuffleDeck(buildMinorArcana(culture));
+}
+
+/** Build a shuffled Mixed Minor deck from all 8 cultures (448 cards). */
+export function buildMixedMinorDeck() {
+  const allCultures = ['tarot', ...CULTURES.map(c => c.key)];
+  const cards = [];
+  for (const culture of allCultures) {
+    cards.push(...buildMinorArcana(culture));
+  }
+  return shuffleDeck(cards);
+}
+
+// === MAJOR ARCANA GAME DECKS ===
+
+/** Build a shuffled Major Arcana deck for a single culture (22 cards). */
+export function buildMajorArcanaDeck(culture) {
+  if (culture === 'tarot') {
+    // Tarot uses the standard position names (The Fool, The Magician, etc.)
+    const cards = ARCANA_POSITIONS.map(pos => ({
+      culture: 'tarot', number: pos.number, name: pos.tarot,
+      description: '', correspondence: pos.correspondence, type: pos.type,
+    }));
+    return shuffleDeck(cards);
+  }
+  const cards = MAJOR_ARCANA.filter(c => c.culture === culture).map(card => {
+    const pos = ARCANA_POSITIONS.find(p => p.number === card.number);
+    return { ...card, correspondence: pos?.correspondence || null, type: pos?.type || null };
+  });
+  return shuffleDeck(cards);
+}
+
+/** Build a shuffled Mixed Major deck from all 7 cultures (154 cards). */
+export function buildMixedMajorDeck() {
+  const cards = MAJOR_ARCANA.map(card => {
+    const pos = ARCANA_POSITIONS.find(p => p.number === card.number);
+    return { ...card, correspondence: pos?.correspondence || null, type: pos?.type || null };
+  });
+  return shuffleDeck(cards);
+}
+
 // Re-export data
-export { CULTURES, ARCANA_POSITIONS, MAJOR_ARCANA, SUITS };
+export {
+  CULTURES, ARCANA_POSITIONS, MAJOR_ARCANA, SUITS,
+  CULTURE_SUITS, MINOR_RANKS,
+  buildMinorArcana, getSuitsForCulture, getCourtForCulture,
+};
