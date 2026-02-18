@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import React from 'react';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import SnakesAndLaddersGame from '../../games/snakesAndLadders/SnakesAndLaddersGame';
 import RoyalGameOfUrGame from '../../games/royalGameOfUr/RoyalGameOfUrGame';
 import SenetGame from '../../games/senet/SenetGame';
@@ -66,90 +66,78 @@ const GAME_COMPONENTS = {
 };
 
 export default function GamesPage() {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const [activeGame, setActiveGame] = useState(null);
-  const [gameMode, setGameMode] = useState(null);
+  const { '*': splat } = useParams();
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    const gameParam = searchParams.get('game');
-    const modeParam = searchParams.get('mode');
-    if (gameParam) {
-      const game = GAMES.find(g => g.id === gameParam);
-      if (game) {
-        setActiveGame(game);
-        if (modeParam === 'ai' || modeParam === 'local') setGameMode(modeParam);
-      }
-      setSearchParams({}, { replace: true });
-    }
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  // Parse URL: /games/:gameId/:mode
+  const parts = splat ? splat.split('/').filter(Boolean) : [];
+  const gameId = parts[0] || null;
+  const mode = parts[1] || null;
 
-  const handleGameClick = (game) => {
-    if (activeGame?.id === game.id && !gameMode) {
-      setActiveGame(null);
-    } else {
-      setActiveGame(game);
-      setGameMode(null);
-    }
-  };
+  const activeGame = gameId ? GAMES.find(g => g.id === gameId) : null;
 
   const handleExit = () => {
-    setActiveGame(null);
-    setGameMode(null);
+    navigate('/games');
   };
 
-  if (activeGame && gameMode) {
+  // Playing a game
+  if (activeGame && mode) {
     const GameComponent = GAME_COMPONENTS[activeGame.id];
-    if (GameComponent) {
+    if (GameComponent && (mode === 'ai' || mode === 'local')) {
       return (
         <div className="games-page">
-          <GameComponent mode={gameMode} onExit={handleExit} />
+          <GameComponent mode={mode} onExit={handleExit} />
         </div>
       );
     }
   }
 
-  return (
-    <div className="games-page">
-      {activeGame && !gameMode ? (
+  // Mode selector for a specific game
+  if (activeGame && !mode) {
+    return (
+      <div className="games-page">
         <div className="game-mode-selector">
-          <button className="game-mode-back" onClick={() => setActiveGame(null)}>
+          <Link className="game-mode-back" to="/games">
             &#8592; All Games
-          </button>
+          </Link>
           <h2 className="game-mode-heading">{activeGame.label}</h2>
           <p className="game-mode-origin">{activeGame.origin}</p>
           <p className="game-mode-desc">{activeGame.description}</p>
           <div className="game-mode-buttons">
-            <button className="game-mode-btn" onClick={() => setGameMode('ai')}>
+            <Link className="game-mode-btn" to={`/games/${activeGame.id}/ai`}>
               <span className="game-mode-label">vs Atlas</span>
               <span className="game-mode-sublabel">Play against Atlas</span>
-            </button>
-            <button className="game-mode-btn" onClick={() => setGameMode('local')}>
+            </Link>
+            <Link className="game-mode-btn" to={`/games/${activeGame.id}/local`}>
               <span className="game-mode-label">Two Players</span>
               <span className="game-mode-sublabel">Hot-seat on this device</span>
-            </button>
+            </Link>
           </div>
         </div>
-      ) : (
-        <>
-          <h1 className="games-page-title">Mythouse Games</h1>
-          <p className="games-page-subtitle">
-            Ancient board games brought to life. Choose a game to begin.
-          </p>
-          <div className="games-grid">
-            {GAMES.map(game => (
-              <button
-                key={game.id}
-                className={`game-card${activeGame?.id === game.id ? ' active' : ''}${game.featured ? ' featured' : ''}`}
-                onClick={() => handleGameClick(game)}
-              >
-                <span className="game-card-title">{game.label}</span>
-                <span className="game-card-origin">{game.origin}</span>
-                <span className="game-card-desc">{game.description}</span>
-              </button>
-            ))}
-          </div>
-        </>
-      )}
+      </div>
+    );
+  }
+
+  // All games grid
+  return (
+    <div className="games-page">
+      <h1 className="games-page-title">Mythouse Games</h1>
+      <p className="games-page-subtitle">
+        Ancient board games brought to life. Choose a game to begin.
+      </p>
+      <div className="games-grid">
+        {GAMES.map(game => (
+          <Link
+            key={game.id}
+            className={`game-card${game.featured ? ' featured' : ''}`}
+            to={`/games/${game.id}`}
+          >
+            <span className="game-card-title">{game.label}</span>
+            <span className="game-card-origin">{game.origin}</span>
+            <span className="game-card-desc">{game.description}</span>
+          </Link>
+        ))}
+      </div>
     </div>
   );
 }

@@ -904,7 +904,7 @@ function App() {
         <Route path="/story-forge" element={<StoryForgeHome />} />
         <Route path="/monomyth" element={<MonomythPage />} />
         <Route path="/mythology-channel" element={<MythologyChannelPage />} />
-        <Route path="/games" element={<GamesPage />} />
+        <Route path="/games/*" element={<GamesPage />} />
         <Route path="/mythology-channel/:showId" element={<MythologyChannelPage />} />
         <Route path="/mythosophia" element={<MythosophiaPage />} />
       </Routes>

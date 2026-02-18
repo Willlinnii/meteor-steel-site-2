@@ -37,6 +37,7 @@
   padding: 18px 16px;
   cursor: pointer;
   text-align: left;
+  text-decoration: none;
   display: flex;
   flex-direction: column;
   gap: 5px;
@@ -98,6 +99,8 @@
   cursor: pointer;
   margin-bottom: 20px;
   padding: 4px 8px;
+  text-decoration: none;
+  display: inline-block;
 }
 
 .game-mode-back:hover {
@@ -146,6 +149,7 @@
   gap: 6px;
   transition: all 0.2s ease;
   min-width: 180px;
+  text-decoration: none;
 }
 
 .game-mode-btn:hover {
@@ -753,28 +757,49 @@
 }
 
 .mythouse-ordeal-card {
-  width: 70px;
-  height: 100px;
+  width: 120px;
+  height: 170px;
   border-radius: 8px;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   font-family: 'Cinzel', serif;
-  font-size: 1.5rem;
   cursor: pointer;
   transition: all 0.2s ease;
+  padding: 8px;
+  gap: 4px;
 }
 
 .mythouse-ordeal-card.face-down {
   background: rgba(139, 157, 195, 0.15);
   border: 1px solid var(--accent-steel);
   color: var(--accent-steel);
+  font-size: 1.5rem;
 }
 
 .mythouse-ordeal-card.face-up {
   background: rgba(201, 169, 97, 0.15);
   border: 1px solid var(--accent-gold);
   color: var(--accent-gold);
+}
+
+.mythouse-ordeal-card-name {
+  font-size: 0.7rem;
+  text-align: center;
+  line-height: 1.2;
+  font-weight: 600;
+}
+
+.mythouse-ordeal-card-deck {
+  font-size: 0.6rem;
+  opacity: 0.7;
+}
+
+.mythouse-ordeal-card-power {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-top: auto;
 }
 
 /* ===== MYTHOUSE LAYOUT ===== */
@@ -903,6 +928,426 @@
   transition: opacity 0.3s ease;
 }
 
+/* ===== CARD BROWSER ===== */
+.mc-browser {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.mc-title {
+  font-family: 'Cinzel', serif;
+  color: var(--accent-gold);
+  font-size: 1.5rem;
+  text-align: center;
+  margin-bottom: 16px;
+  letter-spacing: 0.05em;
+}
+
+.mc-deck-tabs {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.mc-tab {
+  background: rgba(26, 26, 36, 0.8);
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  padding: 8px 16px;
+  cursor: pointer;
+  font-family: 'Cinzel', serif;
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.mc-tab:hover {
+  border-color: var(--tab-color, var(--accent-ember));
+  color: var(--text-primary);
+}
+
+.mc-tab.active {
+  border-color: var(--tab-color, var(--accent-ember));
+  color: var(--tab-color, var(--accent-ember));
+  background: rgba(201, 169, 97, 0.08);
+}
+
+.mc-tab-count {
+  font-size: 0.7rem;
+  opacity: 0.6;
+}
+
+.mc-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 14px;
+}
+
+.mc-action-btn {
+  background: rgba(26, 26, 36, 0.8);
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  padding: 6px 18px;
+  cursor: pointer;
+  font-family: 'Cinzel', serif;
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  transition: all 0.2s ease;
+  letter-spacing: 0.03em;
+}
+
+.mc-action-btn:hover:not(:disabled) {
+  border-color: var(--accent-ember);
+  color: var(--text-primary);
+}
+
+.mc-action-btn:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.mc-drawn-row {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 8px 0;
+  margin-bottom: 12px;
+}
+
+.mc-drawn-thumb {
+  flex-shrink: 0;
+  width: 80px;
+  background: rgba(26, 26, 36, 0.9);
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  padding: 6px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  transition: all 0.2s ease;
+}
+
+.mc-drawn-thumb:hover {
+  background: rgba(201, 169, 97, 0.08);
+}
+
+.mc-drawn-name {
+  font-family: 'Cinzel', serif;
+  font-size: 0.65rem;
+  color: var(--text-primary);
+  text-align: center;
+  line-height: 1.2;
+}
+
+.mc-drawn-power {
+  font-family: 'Cinzel', serif;
+  font-size: 0.9rem;
+  color: var(--accent-gold);
+  font-weight: 700;
+}
+
+.mc-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 10px;
+  margin-bottom: 30px;
+}
+
+.mc-card {
+  background: rgba(26, 26, 36, 0.85);
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  padding: 12px 10px;
+  min-height: 190px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  text-align: left;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.mc-card:hover {
+  border-color: var(--accent-gold);
+  background: rgba(201, 169, 97, 0.06);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(201, 169, 97, 0.1);
+}
+
+.mc-card-deck {
+  font-size: 0.6rem;
+  font-family: 'Cinzel', serif;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.mc-card-name {
+  font-family: 'Cinzel', serif;
+  color: var(--text-primary);
+  font-size: 0.82rem;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.mc-card-brief {
+  color: var(--text-secondary);
+  font-size: 0.72rem;
+  line-height: 1.4;
+  flex: 1;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.mc-card-power {
+  font-family: 'Cinzel', serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--accent-gold);
+  position: absolute;
+  bottom: 8px;
+  right: 10px;
+  opacity: 0.7;
+}
+
+.mc-empty {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  text-align: center;
+  grid-column: 1 / -1;
+  padding: 40px 0;
+}
+
+/* Card detail overlay */
+.mc-detail-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+  padding: 20px;
+}
+
+.mc-detail-panel {
+  background: var(--bg-medium, #1a1a24);
+  border: 1px solid var(--accent-gold);
+  border-radius: 12px;
+  max-width: 600px;
+  width: 100%;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 0 40px rgba(201, 169, 97, 0.15);
+}
+
+.mc-detail-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border-subtle);
+  position: sticky;
+  top: 0;
+  background: var(--bg-medium, #1a1a24);
+  z-index: 1;
+}
+
+.mc-detail-deck {
+  font-family: 'Cinzel', serif;
+  font-size: 0.7rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.mc-detail-name {
+  font-family: 'Cinzel', serif;
+  color: var(--text-primary);
+  font-size: 1.1rem;
+  margin: 0;
+  flex: 1;
+}
+
+.mc-detail-power {
+  font-family: 'Cinzel', serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--accent-gold);
+}
+
+.mc-detail-close {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 1.4rem;
+  cursor: pointer;
+  padding: 0 4px;
+  line-height: 1;
+  opacity: 0.6;
+}
+
+.mc-detail-close:hover {
+  opacity: 1;
+  color: var(--text-primary);
+}
+
+.mc-detail-body {
+  padding: 16px 20px;
+}
+
+.mc-detail-section {
+  margin-bottom: 12px;
+}
+
+.mc-section-toggle {
+  width: 100%;
+  background: rgba(201, 169, 97, 0.06);
+  border: 1px solid rgba(201, 169, 97, 0.15);
+  border-radius: 6px;
+  padding: 8px 12px;
+  cursor: pointer;
+  font-family: 'Cinzel', serif;
+  font-size: 0.82rem;
+  color: var(--accent-gold);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.2s ease;
+  text-align: left;
+}
+
+.mc-section-toggle:hover {
+  background: rgba(201, 169, 97, 0.1);
+}
+
+.mc-section-toggle.open {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.mc-section-arrow {
+  font-size: 0.7rem;
+  opacity: 0.6;
+}
+
+.mc-section-heading {
+  font-family: 'Cinzel', serif;
+  color: var(--accent-gold);
+  font-size: 0.85rem;
+  margin: 0 0 6px 0;
+  font-weight: 600;
+}
+
+.mc-section-text {
+  color: var(--text-secondary);
+  font-size: 0.82rem;
+  line-height: 1.6;
+  margin: 0 0 8px 0;
+}
+
+.mc-meta-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.mc-meta-tag {
+  font-size: 0.72rem;
+  color: var(--accent-ember);
+  background: rgba(196, 113, 58, 0.1);
+  border: 1px solid rgba(196, 113, 58, 0.25);
+  border-radius: 4px;
+  padding: 2px 8px;
+  font-family: 'Cinzel', serif;
+}
+
+.mc-deity-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.mc-deity-card {
+  background: rgba(26, 26, 36, 0.7);
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.mc-deity-name {
+  font-family: 'Cinzel', serif;
+  color: var(--text-primary);
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.mc-deity-culture {
+  color: var(--accent-ember);
+  font-size: 0.68rem;
+  font-style: italic;
+}
+
+.mc-deity-domain {
+  color: var(--text-secondary);
+  font-size: 0.7rem;
+  line-height: 1.3;
+}
+
+.mc-culture-row {
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.mc-culture-row:last-child {
+  border-bottom: none;
+}
+
+.mc-culture-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.72rem;
+  color: var(--accent-ember);
+  text-transform: capitalize;
+  display: inline-block;
+  margin-right: 8px;
+}
+
+.mc-culture-name {
+  font-family: 'Cinzel', serif;
+  font-size: 0.78rem;
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.mc-culture-desc {
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  line-height: 1.5;
+  margin: 4px 0 0 0;
+}
+
+.mc-essay-scroll {
+  max-height: 50vh;
+  overflow-y: auto;
+}
+
 /* ===== RESPONSIVE ===== */
 @media (max-width: 600px) {
   .games-page {
@@ -942,5 +1387,33 @@
   .game-over-panel {
     padding: 24px 20px;
     margin: 0 16px;
+  }
+
+  .mc-card-grid {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 8px;
+  }
+
+  .mc-card {
+    min-height: 160px;
+    padding: 10px 8px;
+  }
+
+  .mc-deck-tabs {
+    gap: 6px;
+  }
+
+  .mc-tab {
+    padding: 6px 10px;
+    font-size: 0.72rem;
+  }
+
+  .mc-detail-panel {
+    max-height: 85vh;
+  }
+
+  .mythouse-ordeal-card {
+    width: 100px;
+    height: 140px;
   }
 }
