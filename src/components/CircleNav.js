@@ -189,7 +189,7 @@ export default function CircleNav({ stages, currentStage, onSelectStage, clockwi
 
         {modelOverlay && !listId && (() => {
           const m = modelOverlay;
-          const r = 28;
+          const r = 33;
           const step = clockwise ? 45 : -45;
           return m.stages.map((label, i) => {
             if (!label) return null;

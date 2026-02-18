@@ -65,6 +65,29 @@
   box-shadow: 0 0 12px rgba(196, 113, 58, 0.15);
 }
 
+.show-card.myths-tv-card {
+  border-color: var(--accent-gold);
+}
+
+.show-card.myths-tv-card .show-card-title {
+  color: var(--accent-gold);
+}
+
+.show-card.myths-tv-card:hover {
+  border-color: var(--accent-gold);
+  background: rgba(201, 169, 97, 0.1);
+}
+
+.show-card.myths-tv-card.active {
+  border-color: var(--accent-gold);
+  background: rgba(201, 169, 97, 0.15);
+  box-shadow: 0 0 12px rgba(201, 169, 97, 0.2);
+}
+
+.show-card.myths-tv-card.active .show-card-title {
+  color: var(--accent-gold);
+}
+
 .show-card-title {
   font-family: 'Cinzel', serif;
   font-size: 0.75rem;
@@ -82,6 +105,175 @@
   font-size: 0.75rem;
   color: var(--text-secondary);
   line-height: 1.4;
+}
+
+/* ===== MYTHS TV SECTION ===== */
+
+.myths-section {
+  width: 100%;
+  max-width: 900px;
+  margin-top: 30px;
+}
+
+.myths-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.myths-show-title {
+  font-family: 'Cinzel', serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent-gold);
+  margin-bottom: 10px;
+}
+
+.myths-show-desc {
+  font-family: 'Crimson Pro', serif;
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  max-width: 600px;
+  margin: 0 auto 16px;
+}
+
+.myths-roku-btn {
+  display: inline-block;
+  font-family: 'Cinzel', serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--accent-gold);
+  border: 1px solid var(--accent-gold);
+  padding: 10px 24px;
+  transition: all 0.3s ease;
+}
+
+.myths-roku-btn:hover {
+  background: rgba(201, 169, 97, 0.12);
+  box-shadow: 0 0 12px rgba(201, 169, 97, 0.3);
+}
+
+.myths-episodes-heading {
+  font-family: 'Cinzel', serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent-ember);
+  text-align: center;
+  margin-bottom: 14px;
+}
+
+.myths-episodes-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.myths-episode-btn {
+  font-family: 'Cinzel', serif;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  background: none;
+  border: 1px solid var(--border-subtle);
+  padding: 8px 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.myths-episode-btn:hover {
+  border-color: var(--accent-gold);
+  color: var(--accent-gold);
+  background: rgba(201, 169, 97, 0.06);
+}
+
+.myths-episode-btn.active {
+  color: var(--accent-gold);
+  border-color: var(--accent-gold);
+  background: rgba(201, 169, 97, 0.12);
+  box-shadow: 0 0 8px rgba(201, 169, 97, 0.2);
+}
+
+/* Episode content panel */
+.myths-episode-panel {
+  border: 1px solid var(--border-subtle);
+  background: var(--bg-medium);
+  max-height: 70vh;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent-steel) var(--bg-dark);
+}
+
+.myths-episode-content {
+  padding: 30px;
+}
+
+.myths-episode-title {
+  font-family: 'Cinzel', serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--accent-gold);
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.myths-episode-summary {
+  font-family: 'Crimson Pro', serif;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  font-style: italic;
+  text-align: center;
+  margin-bottom: 24px;
+  padding: 0 20px;
+}
+
+.myths-entries {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.myths-entry {
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.myths-entry:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.myths-entry-question {
+  font-family: 'Cinzel', serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--accent-fire);
+  margin-bottom: 10px;
+}
+
+.myths-entry-text p {
+  font-family: 'Crimson Pro', serif;
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: var(--text-primary);
+  margin-bottom: 10px;
+}
+
+.myths-entry-text p:last-child {
+  margin-bottom: 0;
 }
 
 @media (max-width: 600px) {
@@ -104,5 +296,26 @@
 
   .show-card-desc {
     font-size: 0.65rem;
+  }
+
+  .myths-section {
+    margin-top: 20px;
+  }
+
+  .myths-show-title {
+    font-size: 1rem;
+  }
+
+  .myths-episode-btn {
+    font-size: 0.58rem;
+    padding: 6px 10px;
+  }
+
+  .myths-episode-content {
+    padding: 20px 16px;
+  }
+
+  .myths-episode-title {
+    font-size: 1.1rem;
   }
 }
