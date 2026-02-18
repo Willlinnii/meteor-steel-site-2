@@ -34,20 +34,31 @@
       ]
     },
     {
+      "id": "sacredElements",
+      "title": "The Four Sacred Elements of Life",
+      "center": "Self\nThe Fifth Element",
+      "positions": [
+        { "dir": "N", "label": "Air", "angle": -90 },
+        { "dir": "E", "label": "Fire", "angle": 0 },
+        { "dir": "S", "label": "Water", "angle": 90 },
+        { "dir": "W", "label": "Earth", "angle": 180 }
+      ]
+    },
+    {
       "id": "earthCount",
       "title": "The Children's Earth Count",
       "center": "WahKahn\nSsKwan",
       "positions": [
-        { "dir": "E", "num": 1, "label": "The Sun", "sublabel": "Light · Fire · Stars (11)", "angle": 0 },
-        { "dir": "W", "num": 2, "label": "The Earth", "sublabel": "Substance · Planets (12)", "angle": 180 },
-        { "dir": "S", "num": 3, "label": "All Plants", "sublabel": "The Transformers · White Buffalo Woman (13)", "angle": 90 },
-        { "dir": "N", "num": 4, "label": "All Animals", "sublabel": "Heart and Breath · Sweet Medicine (14)", "angle": -90 },
-        { "dir": "C5", "num": 5, "label": "All Humans", "sublabel": "The Self · Collective Consciousness (15)", "isCenter": true, "centerY": 0 },
-        { "dir": "SE", "num": 6, "label": "Spirit-Spirit", "sublabel": "The Present · Great Teachers (16)", "angle": 45 },
-        { "dir": "SW", "num": 7, "label": "Dream of Life", "sublabel": "The Past · Kachinas (17)", "angle": 135 },
-        { "dir": "NW", "num": 8, "label": "Circle of Law", "sublabel": "The Future · Balancers (18)", "angle": -135 },
-        { "dir": "NE", "num": 9, "label": "The Moon", "sublabel": "Movement · Pure Science (19)", "angle": -45 },
-        { "dir": "C10", "num": 10, "label": "Pure Intellect", "sublabel": "Higher Self · Completion (20)", "isCenter": true, "centerY": -12 }
+        { "dir": "E", "num": 1, "label": "The Sun", "shortLabel": "Sun", "sublabel": "Light · Fire · Stars (11)", "angle": 0 },
+        { "dir": "W", "num": 2, "label": "The Earth", "shortLabel": "Earth", "sublabel": "Substance · Planets (12)", "angle": 180 },
+        { "dir": "S", "num": 3, "label": "All Plants", "shortLabel": "Plants", "sublabel": "The Transformers · White Buffalo Woman (13)", "angle": 90 },
+        { "dir": "N", "num": 4, "label": "All Animals", "shortLabel": "Animals", "sublabel": "Heart and Breath · Sweet Medicine (14)", "angle": -90 },
+        { "dir": "C5", "num": 5, "label": "All Humans", "shortLabel": "Humans", "sublabel": "The Self · Collective Consciousness (15)", "isCenter": true, "centerY": 0 },
+        { "dir": "SE", "num": 6, "label": "Spirit-Spirit", "shortLabel": "Spirit²", "sublabel": "The Present · Great Teachers (16)", "angle": 45 },
+        { "dir": "SW", "num": 7, "label": "Dream of Life", "shortLabel": "Dream", "sublabel": "The Past · Kachinas (17)", "angle": 135 },
+        { "dir": "NW", "num": 8, "label": "Circle of Law", "shortLabel": "Law", "sublabel": "The Future · Balancers (18)", "angle": -135 },
+        { "dir": "NE", "num": 9, "label": "The Moon", "shortLabel": "Moon", "sublabel": "Movement · Pure Science (19)", "angle": -45 },
+        { "dir": "C10", "num": 10, "label": "Pure Intellect", "shortLabel": "Intellect", "sublabel": "Higher Self · Completion (20)", "isCenter": true, "centerY": -12 }
       ]
     },
     {
@@ -55,16 +66,16 @@
       "title": "The Medicine Wheel of the Spheres of the Body",
       "subtitle": "The Physical Centers",
       "positions": [
-        { "dir": "E", "num": 1, "label": "The Human", "sublabel": "Sexual Energy, Magnetism and Creativity", "angle": 0 },
-        { "dir": "W", "num": 2, "label": "The Womb of Women / The Testes of Men", "sublabel": "The Will", "angle": 180 },
-        { "dir": "S", "num": 3, "label": "The Stomach", "sublabel": "The Emotions", "angle": 90 },
-        { "dir": "N", "num": 4, "label": "The Heart and Lungs", "sublabel": "Courage and Fear", "angle": -90 },
-        { "dir": "C5", "num": 5, "label": "The Mouth and Throat", "sublabel": "The Voice", "isCenter": true, "centerY": 8 },
-        { "dir": "SE", "num": 6, "label": "The Center of Forehead Including Eyes/Ears", "sublabel": "The Power of Sight, Hearing and Smelling", "angle": 45 },
-        { "dir": "SW", "num": 7, "label": "The Physical Brain", "sublabel": "The Brain-Mind", "angle": 135 },
-        { "dir": "NW", "num": 8, "label": "The Body-Mind", "sublabel": "The Physical Body", "angle": -135 },
-        { "dir": "NE", "num": 9, "label": "The Energy Field", "sublabel": "The Energy That Radiates from and Surrounds the Body", "angle": -45 },
-        { "dir": "C10", "num": 10, "label": "The Higher Self", "sublabel": "Pure Intellect and Measure", "isCenter": true, "centerY": -8 }
+        { "dir": "E", "num": 1, "label": "The Human", "shortLabel": "Genitals", "sublabel": "Sexual Energy, Magnetism and Creativity", "angle": 0 },
+        { "dir": "W", "num": 2, "label": "The Womb of Women / The Testes of Men", "shortLabel": "Womb", "sublabel": "The Will", "angle": 180 },
+        { "dir": "S", "num": 3, "label": "The Stomach", "shortLabel": "Stomach", "sublabel": "The Emotions", "angle": 90 },
+        { "dir": "N", "num": 4, "label": "The Heart and Lungs", "shortLabel": "Heart", "sublabel": "Courage and Fear", "angle": -90 },
+        { "dir": "C5", "num": 5, "label": "The Mouth and Throat", "shortLabel": "Voice", "sublabel": "The Voice", "isCenter": true, "centerY": 8 },
+        { "dir": "SE", "num": 6, "label": "The Center of Forehead Including Eyes/Ears", "shortLabel": "Forehead", "sublabel": "The Power of Sight, Hearing and Smelling", "angle": 45 },
+        { "dir": "SW", "num": 7, "label": "The Physical Brain", "shortLabel": "Brain", "sublabel": "The Brain-Mind", "angle": 135 },
+        { "dir": "NW", "num": 8, "label": "The Body-Mind", "shortLabel": "Body", "sublabel": "The Physical Body", "angle": -135 },
+        { "dir": "NE", "num": 9, "label": "The Energy Field", "shortLabel": "Energy", "sublabel": "The Energy That Radiates from and Surrounds the Body", "angle": -45 },
+        { "dir": "C10", "num": 10, "label": "The Higher Self", "shortLabel": "Higher Self", "sublabel": "Pure Intellect and Measure", "isCenter": true, "centerY": -8 }
       ]
     },
     {

@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useRef, useEffect, useCallback } from 'react';
 import { Body, GeoVector, Ecliptic, MoonPhase } from 'astronomy-engine';
 import PlanetNode from './PlanetNode';
 import wheelData from '../../data/medicineWheels.json';
@@ -27,14 +27,30 @@ function lonToSignLabel(lon) {
 }
 
 const ORBITS = [
-  { planet: 'Moon',    metal: 'Silver',  r: 55,  angle: -90 },
-  { planet: 'Mercury', metal: 'Mercury', r: 90,  angle: -40 },
-  { planet: 'Venus',   metal: 'Copper',  r: 125, angle: -130 },
-  { planet: 'Sun',     metal: 'Gold',    r: 160, angle: 20 },
-  { planet: 'Mars',    metal: 'Iron',    r: 198, angle: -70 },
-  { planet: 'Jupiter', metal: 'Tin',     r: 238, angle: 160 },
-  { planet: 'Saturn',  metal: 'Lead',    r: 278, angle: 100 },
+  { planet: 'Moon',    metal: 'Silver',  r: 55,  angle: -90,  speed: 6 },
+  { planet: 'Mercury', metal: 'Mercury', r: 90,  angle: -40,  speed: 2 },
+  { planet: 'Venus',   metal: 'Copper',  r: 125, angle: -130, speed: 1 },
+  { planet: 'Sun',     metal: 'Gold',    r: 160, angle: 20,   speed: 0.6 },
+  { planet: 'Mars',    metal: 'Iron',    r: 198, angle: -70,  speed: 0.35 },
+  { planet: 'Jupiter', metal: 'Tin',     r: 238, angle: 160,  speed: 0.12 },
+  { planet: 'Saturn',  metal: 'Lead',    r: 278, angle: 100,  speed: 0.06 },
 ];
+
+// SVG path glyphs for zodiac signs (drawn in a ~16x16 viewBox, centered at 0,0)
+const ZODIAC_GLYPHS = {
+  Aries: 'M-5,6 C-5,-2 -1,-7 0,-7 C1,-7 5,-2 5,6 M0,-7 L0,7',
+  Taurus: 'M-6,-4 C-6,-8 6,-8 6,-4 M0,-4 C-4,-4 -6,0 -6,3 C-6,6 -3,7 0,7 C3,7 6,6 6,3 C6,0 4,-4 0,-4',
+  Gemini: 'M-6,-7 C-2,-5 2,-5 6,-7 M-6,7 C-2,5 2,5 6,7 M-3,-6 L-3,6 M3,-6 L3,6',
+  Cancer: 'M-6,-1 C-6,-5 0,-5 3,-3 M6,1 C6,5 0,5 -3,3 M-4,-1 A2,2 0 1,1 -4,-1.01 M4,1 A2,2 0 1,1 4,1.01',
+  Leo: 'M-5,5 C-5,1 -2,-2 0,-2 C2,-2 4,0 4,3 C4,5 3,6 2,6 M0,-2 C-2,-2 -4,-5 -2,-7 C0,-8 3,-7 4,-5',
+  Virgo: 'M-6,6 L-6,-4 C-6,-6 -4,-6 -3,-4 L-3,4 C-3,6 -1,6 0,4 L0,-4 C0,-6 2,-6 3,-4 L3,4 C3,6 5,4 6,2 M3,4 C4,6 6,7 7,5',
+  Libra: 'M-7,3 L7,3 M-5,0 C-5,-4 5,-4 5,0 M-7,6 L7,6',
+  Scorpio: 'M-6,6 L-6,-4 C-6,-6 -4,-6 -3,-4 L-3,4 C-3,6 -1,6 0,4 L0,-4 C0,-6 2,-6 3,-4 L3,6 L5,4 M3,6 L5,8',
+  Sagittarius: 'M-5,7 L6,-6 M6,-6 L1,-6 M6,-6 L6,-1 M-3,2 L3,-4',
+  Capricorn: 'M-7,2 C-7,-4 -3,-7 0,-4 L0,4 C0,7 3,8 5,6 C7,4 6,1 4,1 C2,1 1,3 2,5',
+  Aquarius: 'M-7,-2 L-4,-5 L-1,-2 L2,-5 L5,-2 M-7,2 L-4,-1 L-1,2 L2,-1 L5,2',
+  Pisces: 'M-6,0 L6,0 M-3,-7 C-6,-4 -6,4 -3,7 M3,-7 C6,-4 6,4 3,7',
+};
 
 const ZODIAC = [
   { sign: 'Aries',       symbol: '♈' },
@@ -89,14 +105,27 @@ const MONTH_TEXT_R = 278;
 const MONTH_OFFSET = 80;
 
 const WHEEL_RINGS = [
-  { idx: 0, innerR: 0, outerR: 42, textR: 28 },
-  { idx: 1, innerR: 42, outerR: 82, textR: 62 },
-  { idx: 2, innerR: 82, outerR: 124, textR: 103 },
-  { idx: 3, innerR: 124, outerR: 172, textR: 148 },
-  { idx: 4, innerR: 172, outerR: 226, textR: 199 },
-  { idx: 5, innerR: 226, outerR: 282, textR: 254 },
+  { idx: 0, innerR: 0, outerR: 40, textR: 26 },
+  { idx: 1, innerR: 40, outerR: 78, textR: 59 },
+  { idx: 2, innerR: 78, outerR: 114, textR: 96 },
+  { idx: 3, innerR: 114, outerR: 150, textR: 132 },
+  { idx: 4, innerR: 150, outerR: 192, textR: 171 },
+  { idx: 5, innerR: 192, outerR: 236, textR: 214 },
+  { idx: 6, innerR: 236, outerR: 280, textR: 258 },
 ];
-const MW_OUTER_R = 292;
+const MW_OUTER_R = 300;
+const NUM_RING_R = 290;
+const NUM_TO_DIR = { 1: 'E', 2: 'W', 3: 'S', 4: 'N', 5: 'C5', 6: 'SE', 7: 'SW', 8: 'NW', 9: 'NE', 10: 'C10' };
+const NUM_ANGLES = [
+  { num: 1, angle: 0 },
+  { num: 2, angle: 180 },
+  { num: 3, angle: 90 },
+  { num: 4, angle: -90 },
+  { num: 6, angle: 45 },
+  { num: 7, angle: 135 },
+  { num: 8, angle: -135 },
+  { num: 9, angle: -45 },
+];
 
 /* Rotate text so it follows the circle tangent, always right-side up */
 function tangentRotation(angleDeg) {
@@ -123,9 +152,82 @@ function quadrantArc(cx, cy, r, startDeg, endDeg) {
   return `M ${cx},${cy} L ${cx + r * Math.cos(s)},${cy + r * Math.sin(s)} A ${r},${r} 0 0,1 ${cx + r * Math.cos(e)},${cy + r * Math.sin(e)} Z`;
 }
 
-export default function OrbitalDiagram({ selectedPlanet, onSelectPlanet, selectedSign, onSelectSign, selectedCardinal, onSelectCardinal, selectedEarth, onSelectEarth, showCalendar, onToggleCalendar, selectedMonth, onSelectMonth, showMedicineWheel, onToggleMedicineWheel, selectedWheelItem, onSelectWheelItem }) {
+// Load YouTube IFrame API once (shared with CircleNav)
+let ytApiReady = false;
+let ytApiCallbacks = [];
+function ensureYTApi() {
+  if (ytApiReady || window.YT?.Player) { ytApiReady = true; return Promise.resolve(); }
+  return new Promise(resolve => {
+    ytApiCallbacks.push(resolve);
+    if (!document.getElementById('yt-iframe-api')) {
+      const tag = document.createElement('script');
+      tag.id = 'yt-iframe-api';
+      tag.src = 'https://www.youtube.com/iframe_api';
+      document.head.appendChild(tag);
+      const prev = window.onYouTubeIframeAPIReady;
+      window.onYouTubeIframeAPIReady = () => {
+        ytApiReady = true;
+        if (prev) prev();
+        ytApiCallbacks.forEach(cb => cb());
+        ytApiCallbacks = [];
+      };
+    }
+  });
+}
+
+export default function OrbitalDiagram({ selectedPlanet, onSelectPlanet, selectedSign, onSelectSign, selectedCardinal, onSelectCardinal, selectedEarth, onSelectEarth, showCalendar, onToggleCalendar, selectedMonth, onSelectMonth, showMedicineWheel, onToggleMedicineWheel, selectedWheelItem, onSelectWheelItem, videoUrl, onCloseVideo }) {
   const [aligned, setAligned] = useState(false);
   const [livePositions, setLivePositions] = useState(false);
+  const [orbitAngles, setOrbitAngles] = useState(() => {
+    const init = {};
+    ORBITS.forEach(o => { init[o.planet] = o.angle; });
+    return init;
+  });
+  const rafRef = useRef(null);
+  const lastTimeRef = useRef(null);
+  const [hoveredRing, setHoveredRing] = useState(null);
+  const hoveredRingRef = useRef(null);
+  const handleWheelMove = (e) => {
+    const svg = e.currentTarget.closest('svg');
+    const rect = svg.getBoundingClientRect();
+    const svgX = ((e.clientX - rect.left) / rect.width) * 700;
+    const svgY = ((e.clientY - rect.top) / rect.height) * 700;
+    const dist = Math.sqrt((svgX - CX) ** 2 + (svgY - CY) ** 2);
+    let idx = null;
+    for (let i = 0; i < WHEEL_RINGS.length; i++) {
+      if (dist >= WHEEL_RINGS[i].innerR && dist < WHEEL_RINGS[i].outerR) { idx = i; break; }
+    }
+    if (idx !== hoveredRingRef.current) {
+      hoveredRingRef.current = idx;
+      setHoveredRing(idx);
+    }
+  };
+
+  useEffect(() => {
+    if (aligned || livePositions) {
+      lastTimeRef.current = null;
+      return;
+    }
+    const tick = (timestamp) => {
+      if (lastTimeRef.current != null) {
+        const dt = (timestamp - lastTimeRef.current) / 1000;
+        setOrbitAngles(prev => {
+          const next = {};
+          ORBITS.forEach(o => {
+            next[o.planet] = prev[o.planet] - o.speed * dt;
+          });
+          return next;
+        });
+      }
+      lastTimeRef.current = timestamp;
+      rafRef.current = requestAnimationFrame(tick);
+    };
+    rafRef.current = requestAnimationFrame(tick);
+    return () => {
+      cancelAnimationFrame(rafRef.current);
+      lastTimeRef.current = null;
+    };
+  }, [aligned, livePositions]);
 
   const liveAngles = useMemo(() => {
     if (!livePositions) return null;
@@ -138,6 +240,31 @@ export default function OrbitalDiagram({ selectedPlanet, onSelectPlanet, selecte
   }, [livePositions]);
 
   const moonPhaseAngle = useMemo(() => MoonPhase(new Date()), []);
+
+  // YouTube video player in center
+  const videoPlayerRef = useRef(null);
+  const videoPlayerDivRef = useRef(null);
+  const videoListId = videoUrl ? (() => { try { return new URL(videoUrl).searchParams.get('list'); } catch { return null; } })() : null;
+
+  useEffect(() => {
+    if (!videoListId) {
+      if (videoPlayerRef.current) { videoPlayerRef.current.destroy(); videoPlayerRef.current = null; }
+      return;
+    }
+    let cancelled = false;
+    ensureYTApi().then(() => {
+      if (cancelled || !videoPlayerDivRef.current) return;
+      if (videoPlayerRef.current) { videoPlayerRef.current.destroy(); videoPlayerRef.current = null; }
+      videoPlayerRef.current = new window.YT.Player(videoPlayerDivRef.current, {
+        playerVars: { listType: 'playlist', list: videoListId, autoplay: 1, controls: 0, modestbranding: 1, rel: 0, fs: 0, playsinline: 1 },
+        events: { onReady: (e) => e.target.playVideo() },
+      });
+    });
+    return () => { cancelled = true; if (videoPlayerRef.current) { videoPlayerRef.current.destroy(); videoPlayerRef.current = null; } };
+  }, [videoListId]);
+
+  const handleVideoPrev = useCallback(() => { if (videoPlayerRef.current?.previousVideo) videoPlayerRef.current.previousVideo(); }, []);
+  const handleVideoNext = useCallback(() => { if (videoPlayerRef.current?.nextVideo) videoPlayerRef.current.nextVideo(); }, []);
 
   const toggleLive = () => {
     if (!livePositions) setAligned(false);
@@ -153,7 +280,7 @@ export default function OrbitalDiagram({ selectedPlanet, onSelectPlanet, selecte
     <div style={{ position: 'relative', display: 'inline-block' }}>
       <svg viewBox="0 0 700 700" className="orbital-svg" role="img" aria-label={showMedicineWheel ? "Medicine wheel diagram" : "Geocentric orbital diagram with zodiac"}>
         {showMedicineWheel ? (
-          <g className="medicine-wheel">
+          <g className="medicine-wheel" onMouseMove={handleWheelMove} onMouseLeave={() => { hoveredRingRef.current = null; setHoveredRing(null); }}>
             {/* Quadrant background sectors */}
             {MW_QUADRANTS.map(q => (
               <path key={q.dir} d={quadrantArc(CX, CY, MW_OUTER_R, q.startDeg, q.endDeg)} fill={wheelData.quadrantColors[q.dir]} />
@@ -177,7 +304,10 @@ export default function OrbitalDiagram({ selectedPlanet, onSelectPlanet, selecte
 
             {/* Concentric ring circles */}
             {WHEEL_RINGS.map(ring => ring.outerR > 0 && (
-              <circle key={ring.idx} cx={CX} cy={CY} r={ring.outerR} fill="none" stroke="rgba(180, 140, 80, 0.25)" strokeWidth="0.8" />
+              <circle key={ring.idx} cx={CX} cy={CY} r={ring.outerR} fill="none"
+                stroke={hoveredRing === ring.idx ? "rgba(218, 165, 32, 0.45)" : "rgba(180, 140, 80, 0.25)"}
+                strokeWidth={hoveredRing === ring.idx ? "1.5" : "0.8"}
+                style={{ transition: 'stroke 0.3s, stroke-width 0.3s' }} />
             ))}
             <circle cx={CX} cy={CY} r={MW_OUTER_R} fill="none" stroke="rgba(180, 140, 80, 0.35)" strokeWidth="1.2" />
 
@@ -201,49 +331,41 @@ export default function OrbitalDiagram({ selectedPlanet, onSelectPlanet, selecte
             {/* Position labels and hit targets */}
             {wheelData.wheels.map((wheel, wi) => {
               const ring = WHEEL_RINGS[wi];
-              const fontSize = wi <= 2 ? 8.5 : 7.5;
+              const fontSize = [11, 9, 9.5, 10, 9, 9, 8.5][wi] || 8.5;
               return (
                 <g key={wheel.id}>
-                  {wheel.positions.map(pos => {
-                    let px, py;
-                    if (pos.isCenter) {
-                      px = CX;
-                      py = CY + (pos.centerY || 0);
-                    } else {
-                      const rad = (pos.angle * Math.PI) / 180;
-                      px = CX + ring.textR * Math.cos(rad);
-                      py = CY + ring.textR * Math.sin(rad);
-                    }
+                  {wheel.positions.filter(p => !p.isCenter).map(pos => {
+                    const rad = (pos.angle * Math.PI) / 180;
+                    const px = CX + ring.textR * Math.cos(rad);
+                    const py = CY + ring.textR * Math.sin(rad);
                     const itemKey = `${wheel.id}:${pos.dir}`;
                     const isSelected = selectedWheelItem === itemKey;
-                    const displayLabel = pos.num != null ? String(pos.num) : pos.label;
+                    const isHighlighted = !isSelected && selectedWheelItem && (
+                      (selectedWheelItem.startsWith('num:') && NUM_TO_DIR[parseInt(selectedWheelItem.split(':')[1])] === pos.dir) ||
+                      (selectedWheelItem.startsWith('dir:') && selectedWheelItem.split(':')[1] === pos.dir)
+                    );
+                    const isActive = isSelected || isHighlighted;
+                    const displayLabel = pos.shortLabel || pos.label;
                     const rot = pos.isCenter ? 0 : tangentRotation(pos.angle);
 
                     return (
                       <g key={itemKey}
-                        className={`mw-position${isSelected ? ' active' : ''}`}
+                        className={`mw-position${isActive ? ' active' : ''}`}
                         onClick={() => onSelectWheelItem && onSelectWheelItem(isSelected ? null : itemKey)}
                         style={{ cursor: 'pointer' }}
                       >
-                        <circle cx={px} cy={py} r={pos.num != null ? 11 : 16} fill="transparent" />
-                        {isSelected && (
+                        <circle cx={px} cy={py} r={16} fill="transparent" />
+                        {isActive && (
                           <circle cx={px} cy={py} r="13" fill="none" stroke="rgba(218, 165, 32, 0.6)" strokeWidth="0.8">
                             <animate attributeName="r" values="11;15;11" dur="2s" repeatCount="indefinite" />
                             <animate attributeName="opacity" values="0.6;0.2;0.6" dur="2s" repeatCount="indefinite" />
                           </circle>
                         )}
-                        {pos.num != null && (
-                          <circle cx={px} cy={py} r="8"
-                            fill={isSelected ? 'rgba(218, 165, 32, 0.15)' : 'rgba(180, 140, 80, 0.08)'}
-                            stroke={isSelected ? 'rgba(218, 165, 32, 0.5)' : 'rgba(180, 140, 80, 0.25)'}
-                            strokeWidth="0.6"
-                          />
-                        )}
                         <text x={px} y={py}
                           textAnchor="middle" dominantBaseline="central"
-                          fill={isSelected ? '#f0c040' : 'rgba(220, 190, 120, 0.8)'}
+                          fill={isActive ? '#f0c040' : 'rgba(220, 190, 120, 0.8)'}
                           fontSize={fontSize} fontFamily="Cinzel, serif"
-                          fontWeight={isSelected ? '700' : '500'}
+                          fontWeight={isActive ? '700' : '500'}
                           transform={rot ? `rotate(${rot}, ${px}, ${py})` : undefined}
                           style={{ transition: 'fill 0.3s' }}
                         >
@@ -256,27 +378,129 @@ export default function OrbitalDiagram({ selectedPlanet, onSelectPlanet, selecte
               );
             })}
 
-            {/* Center label */}
-            <text x={CX} y={CY - 4} textAnchor="middle" dominantBaseline="central"
-              fill="rgba(220, 190, 120, 0.9)" fontSize="12" fontFamily="Cinzel, serif" fontWeight="700">
-              Self
-            </text>
+            {/* Outer number ring */}
+            <circle cx={CX} cy={CY} r={NUM_RING_R} fill="none" stroke="rgba(180, 140, 80, 0.2)" strokeWidth="0.6" strokeDasharray="3 2" />
+            {NUM_ANGLES.map(({ num, angle }) => {
+              const rad = (angle * Math.PI) / 180;
+              const nx = CX + NUM_RING_R * Math.cos(rad);
+              const ny = CY + NUM_RING_R * Math.sin(rad);
+              const numKey = `num:${num}`;
+              const isNumSelected = selectedWheelItem === numKey;
+              const isNumActive = isNumSelected || (selectedWheelItem?.startsWith('dir:') && selectedWheelItem.split(':')[1] === NUM_TO_DIR[num]);
+              return (
+                <g key={numKey}
+                  className={`mw-position${isNumActive ? ' active' : ''}`}
+                  onClick={() => onSelectWheelItem && onSelectWheelItem(isNumSelected ? null : numKey)}
+                  style={{ cursor: 'pointer' }}
+                >
+                  <circle cx={nx} cy={ny} r="10"
+                    fill={isNumActive ? 'rgba(218, 165, 32, 0.15)' : 'rgba(180, 140, 80, 0.06)'}
+                    stroke={isNumActive ? 'rgba(218, 165, 32, 0.5)' : 'rgba(180, 140, 80, 0.2)'}
+                    strokeWidth="0.6" />
+                  {isNumActive && (
+                    <circle cx={nx} cy={ny} r="12" fill="none" stroke="rgba(218, 165, 32, 0.5)" strokeWidth="0.6">
+                      <animate attributeName="r" values="10;14;10" dur="2s" repeatCount="indefinite" />
+                      <animate attributeName="opacity" values="0.5;0.2;0.5" dur="2s" repeatCount="indefinite" />
+                    </circle>
+                  )}
+                  <text x={nx} y={ny} textAnchor="middle" dominantBaseline="central"
+                    fill={isNumActive ? '#f0c040' : 'rgba(220, 190, 120, 0.7)'}
+                    fontSize="11" fontFamily="Cinzel, serif" fontWeight={isNumActive ? '700' : '500'}
+                    style={{ transition: 'fill 0.3s' }}>
+                    {num}
+                  </text>
+                </g>
+              );
+            })}
 
-            {/* Storm attribution — bottom right */}
-            <text x={CX + MW_OUTER_R + 10} y={CY + MW_OUTER_R + 22} textAnchor="end"
-              fill="rgba(220, 190, 120, 0.45)" fontSize="8" fontFamily="Crimson Pro, serif" fontWeight="400" fontStyle="italic">
-              Hyemeyohsts Storm
-            </text>
+            {/* Dynamic center content — changes on ring hover */}
+            {(() => {
+              let items;
+              if (hoveredRing == null) {
+                items = [{ text: 'Self', size: 15, bold: true }];
+              } else if (hoveredRing === 0) {
+                items = [
+                  { text: 'Self', size: 10, bold: true, key: 'humanSelf:center' },
+                  { text: 'Perspective', size: 7.5, key: 'perspective:center' },
+                  { text: 'Beauty', size: 7.5, key: 'elements:center' },
+                  { text: 'Fifth Element', size: 7, key: 'sacredElements:center' },
+                  { text: 'WahKahn · SsKwan', size: 7, key: 'mathematics:center' },
+                  { text: 'Humans · Voice', size: 7, key: 'num:5' },
+                  { text: 'Intellect · Higher Self', size: 7, key: 'num:10' },
+                ];
+              } else {
+                const wheel = wheelData.wheels[hoveredRing];
+                items = [];
+                if (wheel?.center) {
+                  wheel.center.split('\n').filter(l => l.trim()).forEach((line, i) => {
+                    items.push({ text: line, size: i === 0 ? 11 : 9, bold: i === 0, key: `${wheel.id}:center` });
+                  });
+                }
+                if (wheel) {
+                  wheel.positions.filter(p => p.isCenter).forEach(p => {
+                    items.push({ text: p.shortLabel || p.label, size: 9, key: `${wheel.id}:${p.dir}` });
+                  });
+                }
+                if (items.length === 0) items = [{ text: 'Self', size: 11, bold: true }];
+              }
+              const lh = hoveredRing === 0 ? 10 : 13;
+              const totalH = items.length * lh;
+              const startY = CY - totalH / 2 + lh / 2;
+              const backR = hoveredRing != null ? Math.max(78, totalH / 2 + 8) : 78;
+              return (
+                <g>
+                  <circle cx={CX} cy={CY} r={backR} fill="rgba(18, 16, 14, 0.92)"
+                    stroke={hoveredRing != null ? 'rgba(180, 140, 80, 0.2)' : 'none'} strokeWidth="0.6"
+                    opacity={hoveredRing != null ? 1 : 0}
+                    style={{ transition: 'r 0.3s, opacity 0.3s' }} />
+                  {items.map((item, i) => {
+                    const isSel = item.key && selectedWheelItem === item.key;
+                    return (
+                      <text key={i} x={CX} y={startY + i * lh}
+                        textAnchor="middle" dominantBaseline="central"
+                        fill={isSel ? '#f0c040' : 'rgba(220, 190, 120, 0.9)'}
+                        fontSize={item.size} fontFamily="Cinzel, serif"
+                        fontWeight={item.bold ? '700' : '500'}
+                        style={{ cursor: item.key ? 'pointer' : 'default' }}
+                        onClick={item.key ? (e) => { e.stopPropagation(); onSelectWheelItem && onSelectWheelItem(isSel ? null : item.key); } : undefined}>
+                        {item.text}
+                      </text>
+                    );
+                  })}
+                </g>
+              );
+            })()}
 
-            {/* Compass direction labels */}
-            <text x={CX} y={CY - MW_OUTER_R - 18} textAnchor="middle"
-              fill="rgba(255, 255, 255, 0.8)" fontSize="16" fontFamily="Cinzel, serif" fontWeight="700" letterSpacing="2">N</text>
-            <text x={CX + MW_OUTER_R + 18} y={CY + 1} textAnchor="start" dominantBaseline="central"
-              fill="rgba(218, 165, 32, 0.8)" fontSize="16" fontFamily="Cinzel, serif" fontWeight="700" letterSpacing="2">E</text>
-            <text x={CX} y={CY + MW_OUTER_R + 24} textAnchor="middle"
-              fill="rgba(178, 34, 34, 0.8)" fontSize="16" fontFamily="Cinzel, serif" fontWeight="700" letterSpacing="2">S</text>
-            <text x={CX - MW_OUTER_R - 18} y={CY + 1} textAnchor="end" dominantBaseline="central"
-              fill="rgba(150, 150, 150, 0.8)" fontSize="16" fontFamily="Cinzel, serif" fontWeight="700" letterSpacing="2">W</text>
+            {/* Storm attribution — bottom right, clickable */}
+            <g onClick={() => onSelectWheelItem && onSelectWheelItem(selectedWheelItem === 'meta:author' ? null : 'meta:author')} style={{ cursor: 'pointer' }}>
+              <text x={CX + MW_OUTER_R + 10} y={CY + MW_OUTER_R + 22} textAnchor="end"
+                fill={selectedWheelItem === 'meta:author' ? '#f0c040' : 'rgba(220, 190, 120, 0.45)'} fontSize="11" fontFamily="Crimson Pro, serif" fontWeight="400" fontStyle="italic"
+                style={{ transition: 'fill 0.3s' }}>
+                Hyemeyohsts Storm
+              </text>
+            </g>
+
+            {/* Clickable compass direction labels */}
+            {[
+              { dir: 'N', x: CX, y: CY - MW_OUTER_R - 18, anchor: 'middle', baseDom: undefined, baseFill: 'rgba(255, 255, 255, 0.8)' },
+              { dir: 'E', x: CX + MW_OUTER_R + 18, y: CY + 1, anchor: 'start', baseDom: 'central', baseFill: 'rgba(218, 165, 32, 0.8)' },
+              { dir: 'S', x: CX, y: CY + MW_OUTER_R + 24, anchor: 'middle', baseDom: undefined, baseFill: 'rgba(178, 34, 34, 0.8)' },
+              { dir: 'W', x: CX - MW_OUTER_R - 18, y: CY + 1, anchor: 'end', baseDom: 'central', baseFill: 'rgba(150, 150, 150, 0.8)' },
+            ].map(c => {
+              const dirKey = `dir:${c.dir}`;
+              const isDirActive = selectedWheelItem === dirKey || (selectedWheelItem?.startsWith('num:') && NUM_TO_DIR[parseInt(selectedWheelItem.split(':')[1])] === c.dir);
+              return (
+                <g key={c.dir} onClick={() => onSelectWheelItem && onSelectWheelItem(selectedWheelItem === dirKey ? null : dirKey)} style={{ cursor: 'pointer' }}>
+                  <circle cx={c.x} cy={c.y} r="14" fill="transparent" />
+                  <text x={c.x} y={c.y} textAnchor={c.anchor} dominantBaseline={c.baseDom}
+                    fill={isDirActive ? '#f0c040' : c.baseFill}
+                    fontSize="16" fontFamily="Cinzel, serif" fontWeight="700" letterSpacing="2"
+                    style={{ transition: 'fill 0.3s' }}>
+                    {c.dir}
+                  </text>
+                </g>
+              );
+            })}
           </g>
         ) : (<>
         <defs>
@@ -456,14 +680,21 @@ export default function OrbitalDiagram({ selectedPlanet, onSelectPlanet, selecte
           strokeWidth="0.6"
         />
 
-        {/* Zodiac sign labels on curved paths */}
+        {/* Zodiac sign labels on curved paths + glyph icons */}
         {ZODIAC.map((z, i) => {
           const isSelected = selectedSign === z.sign;
-          // Invisible hit area for click
           const centerAngle = -(i * 30 + 15);
           const rad = (centerAngle * Math.PI) / 180;
           const hx = CX + ZODIAC_TEXT_R * Math.cos(rad);
           const hy = CY + ZODIAC_TEXT_R * Math.sin(rad);
+          const color = isSelected ? '#f0c040' : 'rgba(201, 169, 97, 0.6)';
+          // Glyph position: slightly inward from text
+          const glyphR = ZODIAC_INNER_R + 10;
+          const gx = CX + glyphR * Math.cos(rad);
+          const gy = CY + glyphR * Math.sin(rad);
+          // Rotate glyph to stay upright
+          let glyphRot = centerAngle + 90;
+          if (glyphRot > 90 || glyphRot < -90) glyphRot += 180;
 
           return (
             <g
@@ -472,21 +703,33 @@ export default function OrbitalDiagram({ selectedPlanet, onSelectPlanet, selecte
               onClick={() => onSelectSign && onSelectSign(isSelected ? null : z.sign)}
               style={{ cursor: 'pointer' }}
             >
-              {/* Invisible wider hit target */}
-              <circle cx={hx} cy={hy} r="22" fill="transparent" />
+              <circle cx={hx} cy={hy} r="24" fill="transparent" />
+              {/* Glyph icon */}
+              <g transform={`translate(${gx},${gy}) rotate(${glyphRot}) scale(0.8)`}>
+                <path
+                  d={ZODIAC_GLYPHS[z.sign]}
+                  fill="none"
+                  stroke={color}
+                  strokeWidth="1.2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  style={{ transition: 'stroke 0.3s' }}
+                />
+              </g>
+              {/* Sign name on curved path */}
               <text
-                fill={isSelected ? '#f0c040' : 'rgba(201, 169, 97, 0.6)'}
-                fontSize="13"
+                fill={color}
+                fontSize="14"
                 fontFamily="Cinzel, serif"
                 fontWeight={isSelected ? '700' : '500'}
-                letterSpacing="0.5"
+                letterSpacing="1"
               >
                 <textPath
                   href={`#zpath-${z.sign}`}
                   startOffset="50%"
                   textAnchor="middle"
                 >
-                  {z.symbol} {z.sign}
+                  {z.sign}
                 </textPath>
               </text>
             </g>
@@ -571,27 +814,84 @@ export default function OrbitalDiagram({ selectedPlanet, onSelectPlanet, selecte
           />
         )}
 
-        {/* Earth at center */}
-        <g
-          style={{ cursor: 'pointer' }}
-          onClick={() => onSelectEarth && onSelectEarth(!selectedEarth)}
-        >
-          <circle cx={CX} cy={CY} r="28" fill="url(#earth-glow)" />
-          <circle cx={CX} cy={CY} r="12" fill={selectedEarth ? '#5acea0' : '#3a7a6a'} fillOpacity="0.8" stroke={selectedEarth ? '#7aeac0' : '#5aaa9a'} strokeWidth="1.5" />
-          {selectedEarth && (
-            <circle cx={CX} cy={CY} r="18" fill="none" stroke="#5acea0" strokeWidth="0.8" opacity="0.5">
-              <animate attributeName="r" values="16;22;16" dur="2s" repeatCount="indefinite" />
-              <animate attributeName="opacity" values="0.5;0.2;0.5" dur="2s" repeatCount="indefinite" />
-            </circle>
-          )}
-          <text x={CX} y={CY + 24} textAnchor="middle" fill={selectedEarth ? '#7aeac0' : '#5aaa9a'} fontSize="10" fontFamily="Cinzel, serif" fontWeight="600">
-            Earth
-          </text>
-        </g>
+        {/* Earth at center — day/night halves */}
+        {(() => {
+          const sunAngle = aligned ? ALIGN_ANGLE : liveAngles ? liveAngles['Sun'].svgAngle : orbitAngles['Sun'];
+          const er = 14;
+          const daySelected = selectedEarth === 'day';
+          const nightSelected = selectedEarth === 'night';
+          const sunRad = (sunAngle * Math.PI) / 180;
+          // Label positions: offset along sun axis for day, opposite for night
+          const dayLabelX = CX + (er + 14) * Math.cos(sunRad);
+          const dayLabelY = CY + (er + 14) * Math.sin(sunRad);
+          const nightLabelX = CX - (er + 14) * Math.cos(sunRad);
+          const nightLabelY = CY - (er + 14) * Math.sin(sunRad);
+          return (
+            <g>
+              <circle cx={CX} cy={CY} r="28" fill="url(#earth-glow)" />
+              {/* Day side — semicircle facing the Sun */}
+              <g
+                style={{ cursor: 'pointer' }}
+                onClick={() => onSelectEarth && onSelectEarth(daySelected ? null : 'day')}
+              >
+                <path
+                  d={`M 0,${-er} A ${er},${er} 0 0,1 0,${er} L 0,0 Z`}
+                  fill={daySelected ? '#6aded0' : '#4a9a8a'}
+                  fillOpacity="0.9"
+                  stroke={daySelected ? '#7aeac0' : 'none'}
+                  strokeWidth="1.5"
+                  transform={`translate(${CX},${CY}) rotate(${sunAngle})`}
+                />
+                {daySelected && (
+                  <circle cx={CX} cy={CY} r={er + 5} fill="none" stroke="#7aeac0" strokeWidth="0.8" opacity="0.5">
+                    <animate attributeName="r" values={`${er + 3};${er + 7};${er + 3}`} dur="2s" repeatCount="indefinite" />
+                    <animate attributeName="opacity" values="0.5;0.2;0.5" dur="2s" repeatCount="indefinite" />
+                  </circle>
+                )}
+                <text x={dayLabelX} y={dayLabelY} textAnchor="middle" dominantBaseline="central"
+                  fill={daySelected ? '#7aeac0' : 'rgba(90, 170, 154, 0.6)'} fontSize="7" fontFamily="Cinzel, serif" fontWeight={daySelected ? '700' : '400'}>
+                  Day
+                </text>
+              </g>
+              {/* Night side — semicircle facing away from the Sun */}
+              <g
+                style={{ cursor: 'pointer' }}
+                onClick={() => onSelectEarth && onSelectEarth(nightSelected ? null : 'night')}
+              >
+                <path
+                  d={`M 0,${-er} A ${er},${er} 0 0,0 0,${er} L 0,0 Z`}
+                  fill={nightSelected ? '#2a4a4a' : '#152525'}
+                  fillOpacity="0.9"
+                  stroke={nightSelected ? '#5a8a8a' : 'none'}
+                  strokeWidth="1.5"
+                  transform={`translate(${CX},${CY}) rotate(${sunAngle})`}
+                />
+                {nightSelected && (
+                  <circle cx={CX} cy={CY} r={er + 5} fill="none" stroke="#5a8a8a" strokeWidth="0.8" opacity="0.5">
+                    <animate attributeName="r" values={`${er + 3};${er + 7};${er + 3}`} dur="2s" repeatCount="indefinite" />
+                    <animate attributeName="opacity" values="0.5;0.2;0.5" dur="2s" repeatCount="indefinite" />
+                  </circle>
+                )}
+                <text x={nightLabelX} y={nightLabelY} textAnchor="middle" dominantBaseline="central"
+                  fill={nightSelected ? '#8ababa' : 'rgba(90, 130, 130, 0.5)'} fontSize="7" fontFamily="Cinzel, serif" fontWeight={nightSelected ? '700' : '400'}>
+                  Night
+                </text>
+              </g>
+              {/* Terminator line */}
+              <line
+                x1={CX} y1={CY - er} x2={CX} y2={CY + er}
+                stroke="rgba(180, 220, 210, 0.3)" strokeWidth="0.8"
+                transform={`rotate(${sunAngle}, ${CX}, ${CY})`}
+              />
+              {/* Outline */}
+              <circle cx={CX} cy={CY} r={er} fill="none" stroke="rgba(90, 170, 154, 0.5)" strokeWidth="1" />
+            </g>
+          );
+        })()}
 
         {/* Planet nodes */}
         {ORBITS.map(o => {
-          const angle = aligned ? ALIGN_ANGLE : liveAngles ? liveAngles[o.planet].svgAngle : o.angle;
+          const angle = aligned ? ALIGN_ANGLE : liveAngles ? liveAngles[o.planet].svgAngle : orbitAngles[o.planet];
           const rad = (angle * Math.PI) / 180;
           const px = CX + o.r * Math.cos(rad);
           const py = CY + o.r * Math.sin(rad);
@@ -604,7 +904,12 @@ export default function OrbitalDiagram({ selectedPlanet, onSelectPlanet, selecte
                 cy={py}
                 selected={selectedPlanet === o.planet}
                 onClick={() => onSelectPlanet(o.planet)}
-                moonPhase={o.planet === 'Moon' ? moonPhaseAngle : undefined}
+                moonPhase={o.planet === 'Moon' ? (
+                  !aligned && !livePositions
+                    ? ((90 - orbitAngles['Moon']) % 360 + 360) % 360
+                    : moonPhaseAngle
+                ) : undefined}
+                smooth={aligned || livePositions}
               />
               {liveAngles && (
                 <g style={{ transform: `translate(${px}px, ${py}px)`, transition: 'transform 0.8s ease-in-out' }}>
@@ -630,7 +935,7 @@ export default function OrbitalDiagram({ selectedPlanet, onSelectPlanet, selecte
           <button
             className="live-toggle"
             onClick={toggleLive}
-            title={livePositions ? 'Decorative positions' : 'Live planetary positions'}
+            title={livePositions ? 'Orbiting' : 'Live planetary positions'}
           >
             {livePositions ? '◉' : '◎'}
           </button>
@@ -657,6 +962,16 @@ export default function OrbitalDiagram({ selectedPlanet, onSelectPlanet, selecte
       >
         {showMedicineWheel ? '✦' : '✧'}
       </button>
+      {videoListId && (
+        <div className="orbital-video-container">
+          <div ref={videoPlayerDivRef} className="orbital-video-player" />
+          <button className="orbital-video-close" onClick={onCloseVideo} title="Close video">{'\u2715'}</button>
+          <div className="orbital-video-controls">
+            <button className="orbital-video-btn" onClick={handleVideoPrev} title="Previous">{'\u25C0'}</button>
+            <button className="orbital-video-btn" onClick={handleVideoNext} title="Next">{'\u25B6'}</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

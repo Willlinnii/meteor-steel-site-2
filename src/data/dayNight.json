@@ -1,0 +1,96 @@
+{
+  "day": {
+    "label": "Day",
+    "subtitle": "Daylight",
+    "element": "Fire / Air",
+    "qualities": "Consciousness, action, visibility, reason, growth",
+    "polarity": "Yang · Solar · Masculine",
+    "description": "In the geocentric cosmos, day is the face of the Earth turned toward the Sun — the hemisphere bathed in the radiance of Gold. Day is not merely the absence of darkness but an active principle: the outpouring of solar energy that awakens life, drives growth, and makes all things visible. It is the domain of consciousness, labor, commerce, and the rational mind.",
+    "cosmology": "The day side of Earth is the realm where solar influence is direct and unmediated. The Sun's rays penetrate the atmosphere, warming the land and sea, drawing moisture upward, stirring the winds. In the classical model, the Sun's sphere governs Gold — and Gold's qualities (splendor, permanence, generosity) are day's qualities. To stand in daylight is to stand in the Sun's alchemical influence.",
+    "themes": "Waking consciousness, clarity, reason, labor, visibility, growth, warmth, the outward journey, manifestation in form.",
+    "cultures": {
+      "roman": {
+        "name": "Dies",
+        "description": "The Roman day (dies) was sacred and structured. The hours were unequal — stretching or compressing with the seasons — because daylight itself was the measure, not the clock. Dies was personified as a goddess riding across the sky, scattering darkness. The Forum, the courts, the Senate — all Roman public life belonged to the day.",
+        "symbols": "Aurora's chariot, the sundial, the rooster"
+      },
+      "greek": {
+        "name": "Hemera",
+        "description": "Hemera, primordial goddess of Day, was the daughter of Erebus (Darkness) and Nyx (Night) — light born from darkness. Each morning she drew back the dark veil of her mother to reveal the shining upper atmosphere (Aether). For the Greeks, day was the natural condition of the cosmos; night was a curtain drawn over it. Apollo drove the sun chariot, but Hemera was the daylight itself.",
+        "symbols": "Aether, the lyre, the laurel"
+      },
+      "norse": {
+        "name": "Dagr",
+        "description": "Dagr (Day) was the son of Nótt (Night) and Dellingr (Dawn). He rode across the sky on his horse Skinfaxi, whose shining mane lit up the heavens and the earth. In Norse cosmology, day and night are not abstract conditions but living beings on an eternal ride, each chasing the other around the world.",
+        "symbols": "Skinfaxi, the shining mane, the dawn-gate"
+      },
+      "babylonian": {
+        "name": "Ūmu",
+        "description": "The Babylonian day began at sunset — so the first hours of 'day' were actually dark. But the daylight hours belonged to Shamash, the Sun god and lord of justice. Shamash saw all things in his passage across the sky; nothing done in daylight could be hidden from him. Daylight was the time of truth, contracts, and divine judgment.",
+        "symbols": "Shamash's rays, the saw of judgment, the solar disk"
+      },
+      "vedic": {
+        "name": "Ahar / Diva",
+        "description": "In Vedic cosmology, Ushas (Dawn) is among the most celebrated deities of the Rig Veda — a radiant goddess who opens the gates of day. Surya (the Sun) follows her chariot, filling the world with light. Day is the time of yajna (sacrifice), when the sacred fire carries offerings upward to the gods. The active, waking world is the realm of dharma — righteous action performed in the light.",
+        "symbols": "Ushas's chariot, the sacred fire, the golden egg"
+      },
+      "islamic": {
+        "name": "Nahār",
+        "description": "The Quran speaks of the alternation of night and day as among the greatest signs (āyāt) of God's power. Day (Nahār) is the time of seeking God's bounty through work, trade, and righteous effort. The five daily prayers mark the architecture of the day — Fajr at dawn, Dhuhr at noon, Asr in the afternoon — structuring daylight as a rhythm of devotion and labor.",
+        "symbols": "The minaret's shadow, the open market, the prayer mat"
+      },
+      "medieval": {
+        "name": "Dies",
+        "description": "Medieval Christianity structured the day through the Liturgy of the Hours — Lauds at dawn, Terce, Sext, None through the afternoon — transforming daylight into a scaffolding of prayer. Day represented the active life (vita activa): work, pilgrimage, crusade, and charitable labor. Christ called himself the Light of the World; to walk in day was to walk in grace.",
+        "symbols": "The cathedral rose window, the monastery bell, the pilgrim's road"
+      }
+    }
+  },
+  "night": {
+    "label": "Night",
+    "subtitle": "Night Shadow",
+    "element": "Water / Earth",
+    "qualities": "Mystery, rest, intuition, dreams, dissolution",
+    "polarity": "Yin · Lunar · Feminine",
+    "description": "Night is the face of the Earth turned away from the Sun — the hemisphere given over to the Moon, the stars, and the vast silence of the celestial spheres. In the geocentric model, night is not emptiness but fullness: with the Sun's brilliance removed, the entire cosmos becomes visible. Night reveals what day conceals — the planets, the fixed stars, the Milky Way, the architecture of heaven itself.",
+    "cosmology": "On the night side, the Sun's direct influence withdraws and the Moon takes precedence — Silver replaces Gold. The other five planetary metals (Mercury, Copper, Iron, Tin, Lead) become visible as wandering stars against the fixed zodiac. Night is when the celestial spheres can be read, when astrology becomes possible, when the cosmic order declares itself to the naked eye.",
+    "themes": "Sleep, dreams, intuition, the unconscious, receptivity, mystery, the inward journey, dissolution of boundaries, revelation of the cosmic order.",
+    "cultures": {
+      "roman": {
+        "name": "Nox",
+        "description": "Nox was the Roman goddess of Night, feared and respected even by Jupiter. The hours of darkness were divided into four vigiliae (watches) kept by soldiers and priests. Night was the time of augury — birds were observed at dawn, dreams were interpreted, and the gods sent portents through the dark. The Lemuria, held in May, was a midnight rite to appease restless spirits.",
+        "symbols": "The owl, the torch, the dark veil"
+      },
+      "greek": {
+        "name": "Nyx",
+        "description": "Nyx, primordial goddess of Night, was so powerful that Zeus himself feared to displease her. She was the mother of Sleep (Hypnos), Death (Thanatos), Dreams (Oneiroi), and Fate (Moirai). Her dark veil covered the earth each evening, and even the gods respected her dominion. In Orphic tradition, Nyx was the first being — Night preceded all creation.",
+        "symbols": "The dark veil, the crescent, the poppy"
+      },
+      "norse": {
+        "name": "Nótt",
+        "description": "Nótt (Night) was the daughter of the giant Nörvi, a woman dark and beautiful. She rode across the sky on her horse Hrímfaxi, whose foaming bit scattered dew across the earth each morning. Nótt was the mother of Dagr (Day) — darkness giving birth to light. The Norse did not fear the night; they reckoned time by nights, not days ('fortnight' = fourteen nights).",
+        "symbols": "Hrímfaxi, the dew, the stars"
+      },
+      "babylonian": {
+        "name": "Mūšu",
+        "description": "The Babylonian night was the domain of Sin (Nanna), the Moon god, who illuminated the darkness and measured the months. Night was when the stars — the 'writing of heaven' — could be read by the astronomers of the ziggurat. Babylonian astrology was born from the night: the careful observation of planetary movements against the fixed stars, recorded on clay tablets over centuries.",
+        "symbols": "The crescent of Sin, the astrolabe, the clay tablet"
+      },
+      "vedic": {
+        "name": "Rātri",
+        "description": "Rātri, the Vedic goddess of Night, has her own hymn in the Rig Veda (X.127) — a rare and beautiful invocation asking her for protection. She is Ushas's sister, not her enemy; together they weave the fabric of time. Night is the time of rest, of Soma's influence, of dreams sent by the gods. The yogi meditates in the pre-dawn darkness, when the veil between worlds is thinnest.",
+        "symbols": "The stars, Soma, the lotus that closes at night"
+      },
+      "islamic": {
+        "name": "Layl",
+        "description": "The Quran devotes an entire surah to the Night (Al-Layl, 92). Laylat al-Qadr — the Night of Power — is the holiest night of the year, 'better than a thousand months,' when the Quran was first revealed. Night is the time of tahajjud (voluntary prayer), when the believer rises in darkness to seek closeness to God. The Islamic day begins at sunset, honoring the primacy of night.",
+        "symbols": "The crescent moon, the night prayer, the lamp"
+      },
+      "medieval": {
+        "name": "Nox",
+        "description": "Medieval monastic life honored the night through Matins and Vigils — prayers offered in the deep hours between midnight and dawn. Contemplatives saw the night as the time of the soul's deepest communion with God, following the mystic tradition of John of the Cross's 'Dark Night of the Soul.' Night was also when the celestial spheres were studied — monks were among Europe's first systematic astronomers.",
+        "symbols": "The vigil candle, the cloister, the star chart"
+      }
+    }
+  }
+}

@@ -1,0 +1,171 @@
+{
+  "normalWorld": {
+    "title": "The Normal World",
+    "subtitle": "The Ordinary World of Waking Day",
+    "description": "The surface reality, status quo — the world of common sense. As Vogler describes, 'Most stories take the hero out of the ordinary, mundane world and into a Special World, new and alien. Before the adventure can begin, the audience needs to know the hero's Ordinary World — the baseline against which all change will be measured.' This is the sphere of the known, the dome of the sky at noon, the ouroboros of self-referential normality where the end meets the beginning in a closed loop of status quo.",
+    "overview": {
+      "consciousness": "The world of consciousness, the ego, the persona — what Jung calls the mask self. The surface world is that of our common sensory experience, what Kant calls Nature: the world of phenomena, the world as it appears to us.",
+      "normality": "Initial normality: the relationship between starting place and starting state revolves around normality. There are reality-wide norms at the start of the story and there is the starting normal experience of a protagonist. Within a system's norms are those who enforce, suffer, skirt, benefit from and/or unwittingly participate.",
+      "geometry": "The full circle — complete, bounded, self-contained. The sphere of the known world. The dome of the sky at noon. The ouroboros of self-referential normality, where the end meets the beginning in a closed loop of status quo.",
+      "orientation": "As Syd Field explains, audiences do not do well with extended disorientation at the start of a story. We tend to start in a world that matches the audience's own orientation — normality. From Harry Potter to The Matrix, we start in a relatively normal and mundane reality before adventuring into the unknown."
+    },
+    "theorists": {
+      "campbell": {
+        "name": "Joseph Campbell",
+        "description": "The ordinary world of waking day — the hero's starting reality before the call disrupts it. The world of phenomena, of common sensory experience."
+      },
+      "vogler": {
+        "name": "Christopher Vogler",
+        "description": "The Normal World of Common Sense — the ordinary. 'Most stories take the hero out of the ordinary, mundane world and into a Special World.' Often heroes are unaware there is anything wrong with their Ordinary World and don't see any need for change."
+      },
+      "harmon": {
+        "name": "Dan Harmon",
+        "description": "You — where you are at the start of the story, in your comfort zone."
+      },
+      "snyder": {
+        "name": "Blake Snyder",
+        "description": "The current state or world before the story — the thesis world of Act 1."
+      },
+      "mckee": {
+        "name": "Robert McKee",
+        "description": "A world in balance — an imperfect balance, perhaps, but the protagonist's life is in relative control. The world as it is before the inciting incident disrupts it."
+      },
+      "jung": {
+        "name": "C.G. Jung",
+        "description": "The world of consciousness. The persona, the mask self — the surface of identity presented to the world. The known territory of the ego."
+      },
+      "kant": {
+        "name": "Immanuel Kant",
+        "description": "Nature — the world of phenomena, of the world as it appears to us through the categories of understanding. The surface world of common sensory experience."
+      }
+    },
+    "films": {
+      "wizardOfOz": {
+        "title": "The Wizard of Oz",
+        "year": 1939,
+        "description": "Perhaps the most famous cinematic example of establishing initial normality. The film spends considerable time showing Dorothy's drab life in Kansas (shot in black and white) before she arrives in Oz (shot in Technicolor), creating a sharp contrast between the Ordinary World and the Special World."
+      },
+      "starWars": {
+        "title": "Star Wars",
+        "year": 1977,
+        "description": "The cinematic introduction communicates the situation and status quo of the ordinary world — Luke's mundane life on Tatooine, longing to leave but bound by duty."
+      },
+      "matrix": {
+        "title": "The Matrix",
+        "year": 1999,
+        "description": "The ordinary world is revealed to be an elaborate illusion — normality itself is the prison. Neo's cubicle life represents the ultimate surface reality."
+      }
+    },
+    "stages": {
+      "golden-age": "The Normal World at its fullest expression — the complete sphere of the known. The status quo before disruption, where the hero exists within established norms.",
+      "falling-star": "The Normal World begins to crack. The call arrives from beyond, and the hero becomes aware that something is missing from ordinary life.",
+      "new-age": "The Normal World transformed — the hero returns with the Elixir, and the ordinary is renewed. The journey is meaningless unless she brings back something from the Special World."
+    }
+  },
+  "otherWorld": {
+    "title": "The Other World",
+    "subtitle": "The Special World of Curiously Fluid Forms",
+    "description": "Neverland, Oz, Fantasia, The Matrix, A Galaxy Far Far Away, Middle Earth, the land of the dead, Amduat, Hell, warzones, forest, land beneath the waves, below the earth, night, dream, trance, unconscious — these are the other worlds, inner and outer, through which journeys proceed. Campbell writes, from the ordinary world of waking day, 'the hero moves in a dream landscape of curiously fluid, ambiguous forms, where he must survive a succession of trials.'",
+    "overview": {
+      "arrival": "Arrival in another world is first and most powerfully experienced as departure from the last. When you plunge through the rabbit hole, it's like a wind tunnel that tightens all the air into an intense blast. That's the other world coming at you, blasting away all orientation. Then when you arrive, all you can see is different. It can be thrilling. It can be scary. Likely it's both.",
+      "relativity": "One of the crucial disorientations that comes when one transitions into the world of otherness is a transition from a sense of objectivity to an experience of the relative. Otherness is definitively relative — what is the Special World depends entirely on whose perspective you occupy.",
+      "timeSpace": "TIME SPACE is about the where-when. When it's night, where are you? In the night world. When it's death, where are you? The death world. When it's winter, the winter world. When we are awake, we are in the world of waking day. When we are asleep, we are in a dream world. This is a study of the When-Wheres — a study of time-space.",
+      "axisMundi": "The axis mundi represents a nearness to the holy, the worlds of the gods, spirits, heaven, death, numinosity, the divine other, and perhaps the immaterial. The axis mundi is the epicenter of what is sacred, and at this epicenter is the connection of below with above."
+    },
+    "theorists": {
+      "campbell": {
+        "name": "Joseph Campbell",
+        "description": "The hero moves in a dream landscape of curiously fluid, ambiguous forms. The belly of the whale, the road of trials, the meeting with the goddess — these all occur in the realm beyond the threshold. The hero who achieves mastery becomes the Master of Two Worlds, free to pass back and forth across the world division."
+      },
+      "vogler": {
+        "name": "Christopher Vogler",
+        "description": "The Special World — new and alien territory. 'The most important function of this period of adjustment to the Special World is testing. Storytellers use this phase to test the hero, putting her through a series of trials and challenges meant to prepare her for greater ordeals ahead.'"
+      },
+      "harmon": {
+        "name": "Dan Harmon",
+        "description": "The characters cross a threshold and begin an exploration into an unfamiliar situation. They leave the known and enter the unknown."
+      },
+      "snyder": {
+        "name": "Blake Snyder",
+        "description": "The protagonist leaves the thesis world of Act 1 and enters the upside-down antithesis world of Act 2. The world is turned on its head."
+      },
+      "steiner": {
+        "name": "Rudolf Steiner",
+        "description": "The Way of Initiation describes a crossing of an initiatory threshold — sometimes with a disorienting blindfold. The departure from ordinary consciousness into higher knowledge."
+      },
+      "jung": {
+        "name": "C.G. Jung",
+        "description": "The unconscious — the shadow realm beneath the ego's awareness. The world of archetypes, dreams, and the collective unconscious that the hero must navigate to achieve individuation."
+      },
+      "breton": {
+        "name": "André Breton",
+        "description": "Beyond the imprisoning reality of reason — the surreal, the marvelous, the world that exists when normality's grip loosens and the imagination takes command."
+      }
+    },
+    "myths": {
+      "inanna": {
+        "title": "Inanna's Descent",
+        "tradition": "Sumerian",
+        "description": "From the great above she set her mind toward the great below. My lady abandoned heaven, abandoned earth, to the nether world she descended. Abandoned lordship, abandoned ladyship, to the nether world she descended."
+      },
+      "osiris": {
+        "title": "The Duat",
+        "tradition": "Egyptian",
+        "description": "Osiris journeys through the Duat — the Egyptian underworld — passing through Aker, the bottommost point, between two great cats. The crossing of the sun from sky to earth, the crossing of corpse from above to below."
+      },
+      "persephone": {
+        "title": "Persephone's Descent",
+        "tradition": "Greek",
+        "description": "Persephone descends to Hades, dwelling in the underworld as its queen. Her annual return marks the spring equinox — the boundary between the world of the dead and the world of the living."
+      },
+      "orpheus": {
+        "title": "Orpheus in the Underworld",
+        "tradition": "Greek",
+        "description": "Orpheus follows his beloved into the land of the dead, charming the rulers of the underworld with his music. The journey below is guided by love and art — and tested by the temptation to look back."
+      },
+      "christ": {
+        "title": "The Harrowing of Hell",
+        "tradition": "Christian",
+        "description": "When Christ dies on the cross, the veil isolating the holy of holies is ripped. The crossing from life to death, from above to below. Christ descends to the dead before resurrection."
+      },
+      "dante": {
+        "title": "The Divine Comedy",
+        "tradition": "Italian",
+        "description": "Dante's descent through the circles of Hell, guided by Virgil — the poet navigating the geography of the other world, each circle a deeper layer of the unconscious made manifest."
+      }
+    },
+    "films": {
+      "matrix": {
+        "title": "The Matrix",
+        "year": 1999,
+        "description": "After Morpheus welcomes Neo, he pukes — illustrating the shock of crossing into the deep end of the other world. The real world is the other world; the matrix was the false normal."
+      },
+      "starWars": {
+        "title": "Star Wars",
+        "year": 1977,
+        "description": "The Millennium Falcon carries Luke from his home world, serving as a ferry that crosses the threshold. 'A Galaxy Far Far Away' is the classic other world."
+      },
+      "nightmareBeforeChristmas": {
+        "title": "The Nightmare Before Christmas",
+        "year": 1993,
+        "description": "Halloween Town is other to Christmas Town and vice versa — otherness is definitively relative. What is the Special World depends entirely on whose perspective you occupy."
+      },
+      "darkKnight": {
+        "title": "The Dark Knight Rises",
+        "year": 2012,
+        "description": "Bane says 'I was born in the shadows.' Where Batman had entered into and integrated the other (darkness/shadow), that other was Bane's normal — illustrating the relativity of the other world."
+      },
+      "hook": {
+        "title": "Hook",
+        "year": 1991,
+        "description": "Jack says to his father, 'I am home,' illustrating how Peter Pan became deeply acclimated to the other world (Neverland) and didn't want to leave — the hero's refusal to return."
+      }
+    },
+    "stages": {
+      "impact-crater": "The threshold — the horizontal line of the horizon, the boundary between above and below, known and unknown, day and night. The gate, the door, the mouth of the whale, the surface of the sea.",
+      "forge": "Deep in the Other World — the road of trials. After having been swallowed into an unknown world, the characters begin to adapt. The Beast of Burden journeys deep into the desert.",
+      "quenching": "The deepest point of the Other World — the nadir, the belly of the whale, the innermost chamber. Aker, the bottommost point of the Duat. Here we are not tested — we are undone.",
+      "integration": "The return begins. Does the character really want to head back towards the world from which they departed? The character's deep acclimation to the other world has brought meaning to which little in the mundane can compare."
+    }
+  }
+}

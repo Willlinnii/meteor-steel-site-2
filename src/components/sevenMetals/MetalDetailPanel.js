@@ -287,12 +287,12 @@ function SynthesisTab({ data }) {
   );
 }
 
-export default function MetalDetailPanel({ data, activeTab, onSelectTab, activeCulture, onSelectCulture, devEntries, setDevEntries }) {
+export default function MetalDetailPanel({ data, activeTab, onSelectTab, activeCulture, onSelectCulture, devEntries, setDevEntries, playlistUrl, videoActive, onToggleVideo }) {
   const showCultureSelector = activeTab === 'deities';
 
   return (
     <div className="metal-detail-panel">
-      <MetalContentTabs activeTab={activeTab} onSelectTab={onSelectTab} />
+      <MetalContentTabs activeTab={activeTab} onSelectTab={onSelectTab} playlistUrl={playlistUrl} videoActive={videoActive} onToggleVideo={onToggleVideo} />
       {showCultureSelector && (
         <CultureSelector activeCulture={activeCulture} onSelectCulture={onSelectCulture} />
       )}

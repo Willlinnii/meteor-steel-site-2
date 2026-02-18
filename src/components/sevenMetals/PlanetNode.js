@@ -36,8 +36,6 @@ function moonShadowPath(r, phase) {
   const termSweep = isWaxing ? (terminatorX > 0 ? 1 : 0) : (terminatorX < 0 ? 0 : 1);
 
   // Path: top of moon → semicircle on shadow side to bottom → terminator arc back to top
-  const shadowEdgeX = isWaxing ? -r : r;
-
   return `M 0,${-r} A ${r},${r} 0 0,${shadowSweep} 0,${r} A ${Math.abs(terminatorX)},${r} 0 0,${termSweep} 0,${-r}`;
 }
 
@@ -165,7 +163,7 @@ function renderPlanetDetails(planet, r, moonPhase) {
   }
 }
 
-export default function PlanetNode({ planet, metal, cx, cy, selected, onClick, moonPhase }) {
+export default function PlanetNode({ planet, metal, cx, cy, selected, onClick, moonPhase, smooth }) {
   const color = PLANET_COLORS[planet] || '#aaa';
   const r = selected ? 14 : 11;
 
@@ -173,7 +171,7 @@ export default function PlanetNode({ planet, metal, cx, cy, selected, onClick, m
     <g
       className="planet-node"
       onClick={onClick}
-      style={{ cursor: 'pointer', transform: `translate(${cx}px, ${cy}px)`, transition: 'transform 0.8s ease-in-out' }}
+      style={{ cursor: 'pointer', transform: `translate(${cx}px, ${cy}px)`, transition: smooth ? 'transform 0.8s ease-in-out' : 'none' }}
     >
       {selected && (
         <circle cx={0} cy={0} r={r + 6} fill="none" stroke={color} strokeWidth="1" opacity="0.4">

@@ -11,7 +11,7 @@ const TABS = [
   { id: 'development', label: 'Development' },
 ];
 
-export default function MetalContentTabs({ activeTab, onSelectTab }) {
+export default function MetalContentTabs({ activeTab, onSelectTab, playlistUrl, videoActive, onToggleVideo }) {
   return (
     <div className="metal-tabs">
       {TABS.map(t => (
@@ -23,6 +23,15 @@ export default function MetalContentTabs({ activeTab, onSelectTab }) {
           {t.label}
         </button>
       ))}
+      {playlistUrl && (
+        <button
+          className={`metal-tab playlist-tab${videoActive ? ' active' : ''}`}
+          title="Watch playlist"
+          onClick={onToggleVideo}
+        >
+          {videoActive ? '\u25A0' : '\u25B6'}
+        </button>
+      )}
     </div>
   );
 }

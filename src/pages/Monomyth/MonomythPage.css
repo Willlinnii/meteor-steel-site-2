@@ -162,6 +162,41 @@
   line-height: 1.6;
 }
 
+/* ===== PLAYLIST TAB ===== */
+
+.playlist-tab {
+  text-decoration: none;
+  color: #e07020;
+}
+
+.playlist-tab:hover {
+  color: #f08030;
+  background: rgba(224, 112, 32, 0.12);
+}
+
+/* ===== WORLD CONTENT ===== */
+
+.world-title {
+  font-family: 'Cinzel', serif;
+  font-size: 1.3rem;
+  color: var(--accent-ember);
+  text-align: center;
+  margin: 0 0 4px;
+}
+
+.world-subtitle {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1rem;
+  font-style: italic;
+  color: var(--text-muted);
+  text-align: center;
+  margin: 0 0 16px;
+}
+
+.world-stage-item {
+  margin-bottom: 12px;
+}
+
 /* ===== RESPONSIVE ===== */
 
 @media (max-width: 600px) {

@@ -1,8 +1,9 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import OrbitalDiagram from '../../components/sevenMetals/OrbitalDiagram';
 import MetalDetailPanel from '../../components/sevenMetals/MetalDetailPanel';
 import CultureSelector from '../../components/sevenMetals/CultureSelector';
 import './SevenMetalsPage.css';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import coreData from '../../data/sevenMetals.json';
 import deitiesData from '../../data/sevenMetalsDeities.json';
@@ -20,6 +21,30 @@ import elementsData from '../../data/sevenMetalsElements.json';
 import calendarData from '../../data/mythicCalendar.json';
 import wheelData from '../../data/medicineWheels.json';
 import wheelContent from '../../data/medicineWheelContent.json';
+import dayNightData from '../../data/dayNight.json';
+
+const PLANET_PLAYLISTS = {
+  Moon: 'https://www.youtube.com/playlist?list=PLX31T_KS3jtq-GwZQZtrFaqTbvs6QPiBR',
+  Mercury: 'https://www.youtube.com/playlist?list=PLX31T_KS3jtqvqEVpF80i8C3BarI-r4v8',
+  Venus: 'https://www.youtube.com/playlist?list=PLX31T_KS3jtqPR9w4JeJ165w-kBZuJVRL',
+  Sun: 'https://www.youtube.com/playlist?list=PLX31T_KS3jtpLL5eRKVfNOR2yZMGOZXX0',
+  Mars: 'https://www.youtube.com/playlist?list=PLX31T_KS3jtoX7Hl2YYUkaobk5xhBifss',
+  Jupiter: 'https://www.youtube.com/playlist?list=PLX31T_KS3jtpPirpHQffXpnyD_Qr7CY98',
+  Saturn: 'https://www.youtube.com/playlist?list=PLX31T_KS3jto0mKzJrNvM_8jQvbgMc3Ys',
+};
+
+const ZODIAC_PLAYLISTS = {
+  Taurus: 'https://www.youtube.com/playlist?list=PLX31T_KS3jtozOJ8XgvRnJHbXiqG-oDG4',
+  Gemini: 'https://www.youtube.com/playlist?list=PLX31T_KS3jtoOo40tz0rtHH8wqz-OevmS',
+  Cancer: 'https://www.youtube.com/playlist?list=PLX31T_KS3jtrevNnKq-qFfC2rAMTrmqmC',
+  Leo: 'https://www.youtube.com/playlist?list=PLX31T_KS3jtroHmH9HNF-xp_Gz5ruBXe6',
+  Virgo: 'https://www.youtube.com/playlist?list=PLX31T_KS3jtptlYXUvXfd4t_xUqx3KpwO',
+  Libra: 'https://www.youtube.com/playlist?list=PLX31T_KS3jtpCLdwfCy-W7IJB1djh_Gai',
+  Scorpio: 'https://www.youtube.com/playlist?list=PLX31T_KS3jtpmhF3fbc5Rnt6kRO-75zQS',
+  Sagittarius: 'https://www.youtube.com/playlist?list=PLX31T_KS3jtqw8XIsqacvmgt4-6bVFMXF',
+  Capricorn: 'https://www.youtube.com/playlist?list=PLX31T_KS3jtqc0pTP_OgydWtdT_EntIo8',
+  Aquarius: 'https://www.youtube.com/playlist?list=PLX31T_KS3jtpqswOrq5U08V7qhPeVoMKu',
+};
 
 function findBySin(arr, sin) {
   return arr.find(item => item.sin === sin) || null;
@@ -218,46 +243,120 @@ function PlanetCultureContent({ planet, activeCulture }) {
   );
 }
 
-function EarthContent({ activeCulture }) {
+function DayNightContent({ side, activeCulture }) {
+  const data = dayNightData[side];
+  if (!data) return <p className="metals-empty">No data for {side}.</p>;
   const cultureKey = CULTURE_KEY_MAP[activeCulture];
-  const earthElement = elementsData['Earth'];
-  const earthCulture = earthElement?.cultures?.[cultureKey];
+  const cultureEntry = data.cultures?.[cultureKey];
 
   return (
     <div className="tab-content">
       <div className="overview-grid">
-        <div className="overview-item"><span className="ov-label">Role</span><span className="ov-value">Geocentric Center</span></div>
-        <div className="overview-item"><span className="ov-label">Element</span><span className="ov-value">Earth</span></div>
-        <div className="overview-item"><span className="ov-label">Signs</span><span className="ov-value">Taurus · Virgo · Capricorn</span></div>
-        <div className="overview-item"><span className="ov-label">Qualities</span><span className="ov-value">{earthElement?.qualities || 'Stability, material form, patience, endurance'}</span></div>
+        <div className="overview-item"><span className="ov-label">Element</span><span className="ov-value">{data.element}</span></div>
+        <div className="overview-item"><span className="ov-label">Polarity</span><span className="ov-value">{data.polarity}</span></div>
+        <div className="overview-item"><span className="ov-label">Qualities</span><span className="ov-value">{data.qualities}</span></div>
       </div>
       <div className="modern-section">
-        <h5>The Still Point</h5>
-        <p>In the classical geocentric model, Earth stands at the center of the celestial spheres — not as a planet among planets, but as the fixed ground upon which all cosmic motion is measured. The seven metals orbit around it, each tracing a sphere of influence. Earth is the stage, the body, the material vessel through which all heavenly forces are received and expressed.</p>
+        <h5>{data.subtitle}</h5>
+        <p>{data.description}</p>
       </div>
-      {earthCulture && (
+      <div className="modern-section">
+        <h5>Cosmology</h5>
+        <p>{data.cosmology}</p>
+      </div>
+      <div className="modern-section">
+        <h5>Themes</h5>
+        <p>{data.themes}</p>
+      </div>
+      {cultureEntry && (
         <div className="modern-section">
           <h5>{activeCulture} Tradition</h5>
-          <CultureBlock cultureData={earthCulture} />
+          <CultureBlock cultureData={cultureEntry} />
         </div>
       )}
     </div>
   );
 }
 
+const MW_NUM_TO_DIR = { 1: 'E', 2: 'W', 3: 'S', 4: 'N', 5: 'C5', 6: 'SE', 7: 'SW', 8: 'NW', 9: 'NE', 10: 'C10' };
+const MW_DIR_NAMES = { N: 'North', E: 'East', S: 'South', W: 'West', NE: 'Northeast', SE: 'Southeast', SW: 'Southwest', NW: 'Northwest', C5: 'Center', C10: 'Center' };
+const WHEEL_SHORT_NAMES = { humanSelf: 'Self', perspective: 'Perspective', elements: 'Elements', sacredElements: 'Four Elements', earthCount: 'Earth Count', bodySpheres: 'Body', mathematics: 'Mathematics' };
+
+function WheelAlignmentContent({ targetDir, activeWheelTab, onSelectWheelTab }) {
+  const alignments = [];
+  wheelData.wheels.forEach(wheel => {
+    const pos = wheel.positions.find(p => p.dir === targetDir);
+    if (pos) {
+      alignments.push({ wheel, pos, content: wheelContent[`${wheel.id}:${pos.dir}`] });
+    }
+  });
+  if (targetDir === 'C5') {
+    wheelData.wheels.forEach(wheel => {
+      if (!wheel.positions.find(p => p.dir === 'C5') && wheelContent[`${wheel.id}:center`]) {
+        alignments.push({
+          wheel,
+          pos: { dir: 'center', label: (wheel.center || 'Center').replace(/\n/g, ' · ') },
+          content: wheelContent[`${wheel.id}:center`]
+        });
+      }
+    });
+  }
+  if (alignments.length === 0) return <p className="metals-empty">No alignments found.</p>;
+  const currentTabId = activeWheelTab && alignments.find(a => a.wheel.id === activeWheelTab) ? activeWheelTab : alignments[0].wheel.id;
+  const current = alignments.find(a => a.wheel.id === currentTabId);
+  return (
+    <div className="tab-content">
+      <div className="metal-tabs">
+        {alignments.map(a => (
+          <button key={a.wheel.id} className={`metal-tab${currentTabId === a.wheel.id ? ' active' : ''}`} onClick={() => onSelectWheelTab(a.wheel.id)}>
+            {WHEEL_SHORT_NAMES[a.wheel.id] || a.wheel.id}
+          </button>
+        ))}
+      </div>
+      {current && (
+        <>
+          <h5>{current.pos.shortLabel || current.pos.label}{current.pos.sublabel ? ` — ${current.pos.sublabel}` : ''}</h5>
+          {current.content ? (
+            <div className="modern-section">
+              <p><em>{current.content.summary}</em></p>
+              <p>{current.content.teaching}</p>
+              {current.content.pages && (
+                <p className="attr-list">Lightningbolt pp. {current.content.pages.join(', ')}</p>
+              )}
+            </div>
+          ) : (
+            <p className="metals-empty">Content coming soon.</p>
+          )}
+        </>
+      )}
+    </div>
+  );
+}
+
 export default function SevenMetalsPage() {
+  const location = useLocation();
+  const navigate = useNavigate();
   const [selectedPlanet, setSelectedPlanet] = useState('Sun');
   const [activeTab, setActiveTab] = useState('overview');
   const [activeCulture, setActiveCulture] = useState('Greek');
   const [selectedSign, setSelectedSign] = useState(null);
   const [selectedCardinal, setSelectedCardinal] = useState(null);
-  const [selectedEarth, setSelectedEarth] = useState(false);
+  const [selectedEarth, setSelectedEarth] = useState('day');
   const [devEntries, setDevEntries] = useState({});
-  const [showCalendar, setShowCalendar] = useState(false);
+  const [showCalendar, setShowCalendar] = useState(() => location.pathname.endsWith('/calendar'));
   const [selectedMonth, setSelectedMonth] = useState(null);
   const [activeMonthTab, setActiveMonthTab] = useState('stone');
-  const [showMedicineWheel, setShowMedicineWheel] = useState(false);
+  const [showMedicineWheel, setShowMedicineWheel] = useState(() => location.pathname.endsWith('/medicine-wheel'));
   const [selectedWheelItem, setSelectedWheelItem] = useState(null);
+  const [activeWheelTab, setActiveWheelTab] = useState(null);
+  const [videoUrl, setVideoUrl] = useState(null);
+
+  // Sync view state with URL on back/forward navigation
+  useEffect(() => {
+    const path = location.pathname;
+    setShowMedicineWheel(path.endsWith('/medicine-wheel'));
+    setShowCalendar(path.endsWith('/calendar'));
+  }, [location.pathname]);
 
   const mergedData = useMemo(() => {
     const map = {};
@@ -279,8 +378,17 @@ export default function SevenMetalsPage() {
 
   const currentData = mergedData[selectedPlanet] || null;
 
+  let wheelAlignmentData = null;
+  if (selectedWheelItem?.startsWith('num:') || selectedWheelItem?.startsWith('dir:')) {
+    const isNum = selectedWheelItem.startsWith('num:');
+    const value = selectedWheelItem.split(':')[1];
+    const targetDir = isNum ? MW_NUM_TO_DIR[parseInt(value)] : value;
+    const dirName = MW_DIR_NAMES[targetDir] || targetDir;
+    wheelAlignmentData = { targetDir, heading: isNum ? value : value, sub: `${dirName} · Alignments Across All Wheels` };
+  }
+
   let wheelContentData = null;
-  if (selectedWheelItem) {
+  if (selectedWheelItem && !wheelAlignmentData) {
     const [wId, wDir] = selectedWheelItem.split(':');
     const wheel = wheelData.wheels.find(w => w.id === wId);
     const pos = wheel?.positions.find(p => p.dir === wDir);
@@ -293,32 +401,48 @@ export default function SevenMetalsPage() {
       <div className="metals-diagram-center">
         <OrbitalDiagram
           selectedPlanet={selectedPlanet}
-          onSelectPlanet={(p) => { setSelectedPlanet(p); setSelectedSign(null); setSelectedCardinal(null); setSelectedEarth(false); setSelectedMonth(null); }}
+          onSelectPlanet={(p) => { setSelectedPlanet(p); setSelectedSign(null); setSelectedCardinal(null); setSelectedEarth(null); setSelectedMonth(null); setVideoUrl(null); }}
           selectedSign={selectedSign}
-          onSelectSign={(sign) => { setSelectedSign(sign); setSelectedCardinal(null); setSelectedEarth(false); setSelectedMonth(null); }}
+          onSelectSign={(sign) => { setSelectedSign(sign); setSelectedCardinal(null); setSelectedEarth(null); setSelectedMonth(null); setVideoUrl(null); }}
           selectedCardinal={selectedCardinal}
-          onSelectCardinal={(c) => { setSelectedCardinal(c); setSelectedSign(null); setSelectedEarth(false); setSelectedMonth(null); }}
+          onSelectCardinal={(c) => { setSelectedCardinal(c); setSelectedSign(null); setSelectedEarth(null); setSelectedMonth(null); setVideoUrl(null); }}
           selectedEarth={selectedEarth}
-          onSelectEarth={(e) => { setSelectedEarth(e); setSelectedSign(null); setSelectedCardinal(null); setSelectedMonth(null); }}
+          onSelectEarth={(e) => { setSelectedEarth(e); setSelectedSign(null); setSelectedCardinal(null); setSelectedMonth(null); setVideoUrl(null); }}
           showCalendar={showCalendar}
-          onToggleCalendar={() => setShowCalendar(!showCalendar)}
+          onToggleCalendar={() => { const next = !showCalendar; setShowCalendar(next); navigate(next ? '/metals/calendar' : '/metals'); }}
           selectedMonth={selectedMonth}
-          onSelectMonth={(m) => { setSelectedMonth(m); setActiveMonthTab('stone'); if (m) { setSelectedSign(null); setSelectedCardinal(null); setSelectedEarth(false); } }}
+          onSelectMonth={(m) => { setSelectedMonth(m); setActiveMonthTab('stone'); if (m) { setSelectedSign(null); setSelectedCardinal(null); setSelectedEarth(null); } }}
           showMedicineWheel={showMedicineWheel}
           onToggleMedicineWheel={() => {
             const next = !showMedicineWheel;
             setShowMedicineWheel(next);
             setSelectedWheelItem(null);
-            if (next) { setSelectedSign(null); setSelectedCardinal(null); setSelectedEarth(false); setSelectedMonth(null); setShowCalendar(false); }
-            else { setSelectedPlanet('Sun'); }
+            if (next) { setSelectedSign(null); setSelectedCardinal(null); setSelectedEarth(null); setSelectedMonth(null); setShowCalendar(false); navigate('/metals/medicine-wheel'); }
+            else { setSelectedPlanet('Sun'); navigate('/metals'); }
           }}
           selectedWheelItem={selectedWheelItem}
-          onSelectWheelItem={(item) => { setSelectedWheelItem(item); if (item) { setSelectedSign(null); setSelectedCardinal(null); setSelectedEarth(false); setSelectedMonth(null); } }}
+          onSelectWheelItem={(item) => { setSelectedWheelItem(item); setActiveWheelTab(null); if (item) { setSelectedSign(null); setSelectedCardinal(null); setSelectedEarth(null); setSelectedMonth(null); } }}
+          videoUrl={videoUrl}
+          onCloseVideo={() => setVideoUrl(null)}
         />
       </div>
 
       {showMedicineWheel ? (
-        wheelContentData ? (
+        wheelAlignmentData ? (
+          <>
+            <h2 className="metals-heading">
+              {wheelAlignmentData.heading}
+              <span className="metals-sub">{wheelAlignmentData.sub}</span>
+            </h2>
+            <div className="container">
+              <div id="content-container">
+                <div className="metal-detail-panel">
+                  <WheelAlignmentContent targetDir={wheelAlignmentData.targetDir} activeWheelTab={activeWheelTab} onSelectWheelTab={setActiveWheelTab} />
+                </div>
+              </div>
+            </div>
+          </>
+        ) : wheelContentData ? (
           <>
             <h2 className="metals-heading">
               {wheelContentData.pos.label}
@@ -348,18 +472,52 @@ export default function SevenMetalsPage() {
               </div>
             </div>
           </>
-        ) : (
+        ) : selectedWheelItem === 'meta:author' ? (
           <>
             <h2 className="metals-heading">
-              Medicine Wheel
-              <span className="metals-sub">Hyemeyohsts Storm</span>
+              Hyemeyohsts Storm
+              <span className="metals-sub">Seven Arrows (1972) · Lightningbolt (1994)</span>
             </h2>
             <div className="container">
               <div id="content-container">
                 <div className="metal-detail-panel">
                   <div className="tab-content">
-                    <p>Select a position on the medicine wheel to explore its teachings.</p>
-                    <p className="attr-list">Human Self · Perspective · Elements · Spheres of the Body · Mathematics</p>
+                    {wheelContent['meta:author'] && (
+                      <div className="modern-section">
+                        <p><em>{wheelContent['meta:author'].summary}</em></p>
+                        {wheelContent['meta:author'].teaching.split('\n\n').map((para, i) => (
+                          <p key={i}>{para}</p>
+                        ))}
+                        <p className="attr-list">Lightningbolt, Introduction and pp. {wheelContent['meta:author'].pages.join(', ')}</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </>
+        ) : (
+          <>
+            <h2 className="metals-heading">
+              The Medicine Wheel
+              <span className="metals-sub">Teachings of the Zero Chiefs</span>
+            </h2>
+            <div className="container">
+              <div id="content-container">
+                <div className="metal-detail-panel">
+                  <div className="tab-content">
+                    {wheelContent['meta:overview'] ? (
+                      <div className="modern-section">
+                        <p><em>{wheelContent['meta:overview'].summary}</em></p>
+                        {wheelContent['meta:overview'].teaching.split('\n\n').map((para, i) => (
+                          <p key={i}>{para}</p>
+                        ))}
+                        <p className="attr-list">Lightningbolt pp. {wheelContent['meta:overview'].pages.join(', ')}</p>
+                      </div>
+                    ) : (
+                      <p>Select a position on the medicine wheel to explore its teachings.</p>
+                    )}
+                    <p className="attr-list" style={{ marginTop: '1rem' }}>Human Self · Perspective · Elements · Four Sacred Elements · Earth Count · Spheres of the Body · Mathematics</p>
                   </div>
                 </div>
               </div>
@@ -380,17 +538,32 @@ export default function SevenMetalsPage() {
             </div>
           </div>
         </>
-      ) : selectedEarth ? (
+      ) : selectedEarth === 'day' ? (
         <>
           <h2 className="metals-heading">
-            Earth
-            <span className="metals-sub">The Still Point · Geocentric Center</span>
+            Earth · Day
+            <span className="metals-sub">Daylight</span>
           </h2>
           <div className="container">
             <div id="content-container">
               <div className="metal-detail-panel">
                 <CultureSelector activeCulture={activeCulture} onSelectCulture={setActiveCulture} />
-                <EarthContent activeCulture={activeCulture} />
+                <DayNightContent side="day" activeCulture={activeCulture} />
+              </div>
+            </div>
+          </div>
+        </>
+      ) : selectedEarth === 'night' ? (
+        <>
+          <h2 className="metals-heading">
+            Earth · Night
+            <span className="metals-sub">Night Shadow</span>
+          </h2>
+          <div className="container">
+            <div id="content-container">
+              <div className="metal-detail-panel">
+                <CultureSelector activeCulture={activeCulture} onSelectCulture={setActiveCulture} />
+                <DayNightContent side="night" activeCulture={activeCulture} />
               </div>
             </div>
           </div>
@@ -419,7 +592,21 @@ export default function SevenMetalsPage() {
           <div className="container">
             <div id="content-container">
               <div className="metal-detail-panel">
-                <CultureSelector activeCulture={activeCulture} onSelectCulture={setActiveCulture} />
+                <div className="metal-tabs">
+                  <CultureSelector activeCulture={activeCulture} onSelectCulture={setActiveCulture} />
+                  {ZODIAC_PLAYLISTS[selectedSign] && (
+                    <button
+                      className={`metal-tab playlist-tab${videoUrl ? ' active' : ''}`}
+                      title={`Watch ${selectedSign} playlist`}
+                      onClick={() => {
+                        if (videoUrl) { setVideoUrl(null); }
+                        else { setVideoUrl(ZODIAC_PLAYLISTS[selectedSign]); }
+                      }}
+                    >
+                      {videoUrl ? '\u25A0' : '\u25B6'}
+                    </button>
+                  )}
+                </div>
                 <ZodiacContent sign={selectedSign} activeCulture={activeCulture} />
               </div>
             </div>
@@ -445,6 +632,12 @@ export default function SevenMetalsPage() {
                     onSelectCulture={setActiveCulture}
                     devEntries={devEntries}
                     setDevEntries={setDevEntries}
+                    playlistUrl={PLANET_PLAYLISTS[selectedPlanet]}
+                    videoActive={!!videoUrl}
+                    onToggleVideo={() => {
+                      if (videoUrl) { setVideoUrl(null); }
+                      else { setVideoUrl(PLANET_PLAYLISTS[selectedPlanet]); }
+                    }}
                   />
                   {activeTab === 'overview' && (
                     <div className="planet-culture-wrapper">

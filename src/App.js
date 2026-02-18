@@ -19,14 +19,23 @@ import fallenStarlightData from './data/fallenStarlight.json';
 
 const STAGES = [
   { id: 'golden-age', label: 'Golden Age' },
-  { id: 'falling-star', label: 'Calling Star' },
-  { id: 'impact-crater', label: 'Crater Crossing', flipLabel: true },
-  { id: 'forge', label: 'Trials of Forge' },
-  { id: 'quenching', label: 'Quench' },
+  { id: 'falling-star', label: 'Calling Star', playlist: 'https://www.youtube.com/embed/videoseries?list=PLX31T_KS3jtrMxHMpTDRlDhlLoaRq6dF4' },
+  { id: 'impact-crater', label: 'Crater Crossing', flipLabel: true, playlist: 'https://www.youtube.com/embed/videoseries?list=PLX31T_KS3jtoYglowzB41dBItO8rMabPn' },
+  { id: 'forge', label: 'Trials of Forge', playlist: 'https://www.youtube.com/embed/videoseries?list=PLX31T_KS3jtpg0pxs6NXg74AcwRseQsyB' },
+  { id: 'quenching', label: 'Quench', playlist: 'https://www.youtube.com/embed/videoseries?list=PLX31T_KS3jtp9wK2jaSsGVtMPijVE12NQ' },
   { id: 'integration', label: 'Integration' },
   { id: 'drawing', label: 'Draw', flipLabel: true },
   { id: 'new-age', label: 'Age of Steel' },
 ];
+
+const OVERVIEW_PLAYLIST = 'https://www.youtube.com/embed/videoseries?list=PLX31T_KS3jtprvPecCWeurfN2QUufNTX_';
+
+const FIGURE_PLAYLISTS = {
+  'achilles-hephaestus-prometheus': 'https://www.youtube.com/embed/videoseries?list=PLX31T_KS3jtoo4HfBh_Seteq850FpXj0J',
+  'jason-hercules-argonauts': 'https://www.youtube.com/embed/videoseries?list=PLX31T_KS3jtpcAkL6FcT6oh0kjxPCwIdC',
+};
+
+const WILL_LINN_PLAYLIST = 'https://www.youtube.com/embed/videoseries?list=PLX31T_KS3jtqnc5ueQyjc0ZZQCtYZ6Pci';
 
 /* CircleNav extracted to ./components/CircleNav.js */
 
@@ -41,7 +50,7 @@ const SECTION_TABS = [
   { id: 'development', label: 'Development' },
 ];
 
-function FigureCards({ figuresList, stage }) {
+function FigureCards({ figuresList, stage, onPlayFigure }) {
   const available = figuresList.filter(f => f.stages[stage] && f.stages[stage].trim());
   const [activeFigure, setActiveFigure] = useState(available[0]?.id || null);
 
@@ -55,11 +64,23 @@ function FigureCards({ figuresList, stage }) {
     return <div className="empty-content">No content available for this stage.</div>;
   }
 
+  const renderFigureName = (f) => {
+    const playlistUrl = FIGURE_PLAYLISTS[f.id];
+    if (playlistUrl && onPlayFigure) {
+      return (
+        <>
+          {f.name} <span className="figure-play-icon" onClick={(e) => { e.stopPropagation(); onPlayFigure(playlistUrl); }}>{'\u25B6'}</span>
+        </>
+      );
+    }
+    return f.name;
+  };
+
   if (available.length === 1) {
     const f = available[0];
     return (
       <div className="figure-card">
-        <h4 className="figure-name">{f.name}</h4>
+        <h4 className="figure-name">{renderFigureName(f)}</h4>
         <div className="figure-content">
           {f.stages[stage].split('\n\n').map((p, i) => (
             <p key={i}>{p}</p>
@@ -80,7 +101,7 @@ function FigureCards({ figuresList, stage }) {
             className={`figure-btn ${f.id === selected.id ? 'active' : ''}`}
             onClick={() => setActiveFigure(f.id)}
           >
-            {f.name}
+            {renderFigureName(f)}
           </button>
         ))}
       </div>
@@ -119,7 +140,7 @@ function TextContent({ text }) {
   );
 }
 
-function OverviewView() {
+function OverviewView({ onPlayVideo, videoActive }) {
   return (
     <div className="static-overview">
       <div className="overview-text">
@@ -127,21 +148,30 @@ function OverviewView() {
           <p key={i}>{p}</p>
         ))}
       </div>
+      <div className="overview-play-row">
+        <button
+          className={`section-tab playlist-tab${videoActive ? ' active' : ''}`}
+          onClick={() => onPlayVideo(videoActive ? null : OVERVIEW_PLAYLIST)}
+          title="Heroes of Steel playlist"
+        >
+          {videoActive ? '\u25A0' : '\u25B6'} Heroes of Steel
+        </button>
+      </div>
     </div>
   );
 }
 
 
-function SectionContent({ sectionId, stage, entries, setEntries }) {
+function SectionContent({ sectionId, stage, entries, setEntries, onPlayFigure }) {
   switch (sectionId) {
     case 'technology':
       return <TextContent text={steelProcess[stage]} />;
     case 'figures':
-      return <FigureCards figuresList={figures} stage={stage} />;
+      return <FigureCards figuresList={figures} stage={stage} onPlayFigure={onPlayFigure} />;
     case 'saviors':
-      return <FigureCards figuresList={saviors} stage={stage} />;
+      return <FigureCards figuresList={saviors} stage={stage} onPlayFigure={onPlayFigure} />;
     case 'modern':
-      return <FigureCards figuresList={modernFigures} stage={stage} />;
+      return <FigureCards figuresList={modernFigures} stage={stage} onPlayFigure={onPlayFigure} />;
     case 'ufo':
       return <TextContent text={ufo[stage]} />;
     case 'monomyth':
@@ -155,8 +185,10 @@ function SectionContent({ sectionId, stage, entries, setEntries }) {
   }
 }
 
-function StageView({ stage, devEntries, setDevEntries }) {
+function StageView({ stage, devEntries, setDevEntries, onPlayVideo, videoActive, onPlayFigure }) {
   const [activeSection, setActiveSection] = useState('technology');
+  const stageData = STAGES.find(s => s.id === stage);
+  const playlistUrl = stageData?.playlist;
 
   return (
     <>
@@ -174,11 +206,20 @@ function StageView({ stage, devEntries, setDevEntries }) {
             {tab.label}
           </button>
         ))}
+        {playlistUrl && (
+          <button
+            className={`section-tab playlist-tab${videoActive ? ' active' : ''}`}
+            title="Watch playlist"
+            onClick={() => onPlayVideo(videoActive ? null : playlistUrl)}
+          >
+            {videoActive ? '\u25A0' : '\u25B6'}
+          </button>
+        )}
       </div>
 
       <div className="section-content">
         <div className="content-area">
-          <SectionContent sectionId={activeSection} stage={stage} entries={devEntries} setEntries={setDevEntries} />
+          <SectionContent sectionId={activeSection} stage={stage} entries={devEntries} setEntries={setDevEntries} onPlayFigure={onPlayFigure} />
         </div>
       </div>
     </>
@@ -237,15 +278,21 @@ function MeteorSteelHome() {
   const [clockwise, setClockwise] = useState(false);
   const [showMeteors, setShowMeteors] = useState(false);
   const [devEntries, setDevEntries] = useState({});
+  const [videoUrl, setVideoUrl] = useState(null);
 
   const handleSelectStage = useCallback((stage) => {
     setCurrentStage(stage);
+    setVideoUrl(null);
     if (stage === 'falling-star') {
       setShowMeteors(false);
       requestAnimationFrame(() => setShowMeteors(true));
     } else {
       setShowMeteors(false);
     }
+  }, []);
+
+  const handlePlayVideo = useCallback((url) => {
+    setVideoUrl(url);
   }, []);
 
   const currentLabel = currentStage === 'overview'
@@ -261,6 +308,9 @@ function MeteorSteelHome() {
         onSelectStage={handleSelectStage}
         clockwise={clockwise}
         onToggleDirection={() => setClockwise(!clockwise)}
+        videoUrl={videoUrl}
+        onCloseVideo={() => setVideoUrl(null)}
+        onAuthorPlay={() => setVideoUrl(WILL_LINN_PLAYLIST)}
       />
 
       {currentStage !== 'overview' && currentStage !== 'bio' && (
@@ -270,11 +320,18 @@ function MeteorSteelHome() {
       <div className="container">
         <div id="content-container">
           {currentStage === 'overview' ? (
-            <OverviewView />
+            <OverviewView onPlayVideo={handlePlayVideo} videoActive={!!videoUrl} />
           ) : currentStage === 'bio' ? (
             <BioView />
           ) : (
-            <StageView stage={currentStage} devEntries={devEntries} setDevEntries={setDevEntries} />
+            <StageView
+              stage={currentStage}
+              devEntries={devEntries}
+              setDevEntries={setDevEntries}
+              onPlayVideo={handlePlayVideo}
+              videoActive={!!videoUrl}
+              onPlayFigure={handlePlayVideo}
+            />
           )}
         </div>
       </div>
@@ -741,7 +798,7 @@ function App() {
       <SiteNav />
       <Routes>
         <Route path="/" element={<MeteorSteelHome />} />
-        <Route path="/metals" element={<SevenMetalsPage />} />
+        <Route path="/metals/*" element={<SevenMetalsPage />} />
         <Route path="/fallen-starlight" element={<FallenStarlightHome />} />
         <Route path="/story-forge" element={<StoryForgeHome />} />
         <Route path="/monomyth" element={<MonomythPage />} />
