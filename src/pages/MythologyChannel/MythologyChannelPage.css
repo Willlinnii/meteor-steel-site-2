@@ -126,6 +126,43 @@
   background: rgba(196, 113, 58, 0.3);
 }
 
+/* ===== ANTENNA ZAP EFFECT ===== */
+
+.tv-zap-overlay {
+  position: absolute;
+  top: 0;
+  left: 20%;
+  width: 60%;
+  height: 12%;
+  z-index: 4;
+  pointer-events: none;
+}
+
+.zap {
+  fill: none;
+  stroke: #7af0ff;
+  stroke-width: 0.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 0 3px #7af0ff) drop-shadow(0 0 6px rgba(122, 240, 255, 0.6));
+  opacity: 0;
+}
+
+.zap-l1 { animation: zapFlash 0.5s ease-out 0s 1 forwards; }
+.zap-r1 { animation: zapFlash 0.5s ease-out 0.05s 1 forwards; }
+.zap-l2 { animation: zapFlash 0.4s ease-out 0.15s 1 forwards; }
+.zap-r2 { animation: zapFlash 0.4s ease-out 0.2s 1 forwards; }
+.zap-l3 { animation: zapFlash 0.35s ease-out 0.3s 1 forwards; }
+.zap-r3 { animation: zapFlash 0.35s ease-out 0.35s 1 forwards; }
+
+@keyframes zapFlash {
+  0%   { opacity: 0; stroke-dasharray: 0 200; stroke: #fff; }
+  15%  { opacity: 1; stroke-dasharray: 40 200; stroke: #7af0ff; }
+  40%  { opacity: 0.9; stroke-dasharray: 120 200; stroke: #7af0ff; }
+  70%  { opacity: 0.5; stroke-dasharray: 200 200; stroke: #aaf4ff; }
+  100% { opacity: 0; stroke-dasharray: 200 200; stroke: #fff; }
+}
+
 /* Now playing label */
 .tv-now-playing {
   font-family: 'Cinzel', serif;

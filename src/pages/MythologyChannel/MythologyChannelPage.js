@@ -41,6 +41,18 @@ const SHOWS = [
     description: 'The power of story to transform consciousness and culture.',
   },
   {
+    id: 'dennis-slattery',
+    label: 'Myth, Poetics & Culture',
+    playlist: 'https://www.youtube.com/embed/videoseries?list=PLX31T_KS3jtqUrR_L1_fsxw0S4ugOMo50',
+    description: 'Talks by Dennis Patrick Slattery on mythopoetics and literature.',
+  },
+  {
+    id: 'lionel-corbett',
+    label: 'Depth & Meaning',
+    playlist: 'https://www.youtube.com/embed/videoseries?list=PL6ygcKvnP7CNyqy5clgYGMmZ7RE2Kj7F-',
+    description: 'Talks by Lionel Corbett on Jungian psychology and the numinous.',
+  },
+  {
     id: 'myth-is-all-around-us',
     label: 'Myth is All Around Us',
     playlist: 'https://www.youtube.com/embed/videoseries?list=PLX31T_KS3jtplVff23-tgQ5KIt8Z89_Fe',
@@ -71,22 +83,10 @@ const SHOWS = [
     description: 'Explorations of Taoist philosophy and its mythic dimensions.',
   },
   {
-    id: 'lionel-corbett',
-    label: 'Lionel Corbett',
-    playlist: 'https://www.youtube.com/embed/videoseries?list=PL6ygcKvnP7CNyqy5clgYGMmZ7RE2Kj7F-',
-    description: 'Talks by Lionel Corbett on Jungian psychology and the numinous.',
-  },
-  {
-    id: 'dennis-slattery',
-    label: 'Dennis Slattery',
-    playlist: 'https://www.youtube.com/embed/videoseries?list=PLX31T_KS3jtqUrR_L1_fsxw0S4ugOMo50',
-    description: 'Talks by Dennis Patrick Slattery on mythopoetics and literature.',
-  },
-  {
     id: 'pulling-focus',
     label: 'Pulling Focus',
     playlist: 'https://www.youtube.com/embed/videoseries?list=PLX31T_KS3jtpAyw0zUzQqRM5LCh_A-Qx_',
-    description: 'Exploring archetypal depths.',
+    description: 'Documentary depths and archetypal realities.',
   },
   {
     id: 'climate-journey',
@@ -125,8 +125,11 @@ export default function MythologyChannelPage() {
   const [activeShow, setActiveShow] = useState(null);
   const [videoUrl, setVideoUrl] = useState(null);
   const [activeEpisode, setActiveEpisode] = useState(null);
+  const [zapKey, setZapKey] = useState(0);
   const playerRef = useRef(null);
   const playerContainerRef = useRef(null);
+
+  const triggerZap = useCallback(() => setZapKey(k => k + 1), []);
 
   const destroyPlayer = useCallback(() => {
     if (playerRef.current) {
@@ -194,6 +197,7 @@ export default function MythologyChannelPage() {
       setActiveShow(show);
       setActiveEpisode(null);
       setVideoUrl(show.playlist || null);
+      triggerZap();
     }
   };
 
@@ -208,11 +212,13 @@ export default function MythologyChannelPage() {
   const handlePrev = (e) => {
     e.stopPropagation();
     if (playerRef.current?.previousVideo) playerRef.current.previousVideo();
+    triggerZap();
   };
 
   const handleNext = (e) => {
     e.stopPropagation();
     if (playerRef.current?.nextVideo) playerRef.current.nextVideo();
+    triggerZap();
   };
 
   const handleEpisodeClick = (episode) => {
@@ -250,6 +256,18 @@ export default function MythologyChannelPage() {
             {'\u25A0'}
           </button>
         )}
+        {zapKey > 0 && (
+          <svg key={zapKey} className="tv-zap-overlay" viewBox="0 0 100 12" preserveAspectRatio="none">
+            {/* Left antenna zaps — travel from center-dome up-left */}
+            <polyline className="zap zap-l1" points="50,10 46,7 48,6 43,3 45,2 38,0" />
+            <polyline className="zap zap-l2" points="50,10 47,8 49,7 44,4 46,3 36,0.5" />
+            <polyline className="zap zap-l3" points="50,10 45,6 47,5 42,2 34,0" />
+            {/* Right antenna zaps — travel from center-dome up-right */}
+            <polyline className="zap zap-r1" points="50,10 54,7 52,6 57,3 55,2 62,0" />
+            <polyline className="zap zap-r2" points="50,10 53,8 51,7 56,4 54,3 64,0.5" />
+            <polyline className="zap zap-r3" points="50,10 55,6 53,5 58,2 66,0" />
+          </svg>
+        )}
       </div>
 
       {activeShow && (
@@ -259,7 +277,7 @@ export default function MythologyChannelPage() {
       )}
 
       <div className="mythology-channel-shows">
-        <h2 className="shows-heading">Shows</h2>
+        <h2 className="shows-heading">Series</h2>
         <div className="shows-grid">
           {SHOWS.map(show => (
             <button
