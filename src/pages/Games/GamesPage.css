@@ -1134,6 +1134,30 @@
   border: 1px solid rgba(139, 157, 195, 0.25);
 }
 
+/* === Tarot overview cards === */
+.mc-tarot-card {
+  align-items: center;
+  text-align: center;
+  min-height: 180px;
+  justify-content: center;
+}
+
+.mc-tarot-symbol {
+  font-size: 2.2rem;
+  line-height: 1;
+  margin: 4px 0;
+  opacity: 0.8;
+  color: var(--accent-gold);
+}
+
+.mc-tarot-card .mc-card-name {
+  font-size: 0.95rem;
+}
+
+.mc-tarot-card .mc-card-number {
+  align-self: center;
+}
+
 /* === Detail overlay === */
 .mc-detail-overlay {
   position: fixed;

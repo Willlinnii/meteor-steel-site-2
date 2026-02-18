@@ -1,13 +1,20 @@
 import React, { useState, useCallback, useMemo } from 'react';
 import {
-  buildPlayingDeck, SUITS, CULTURES,
+  buildPlayingDeck, SUITS, CULTURES, ARCANA_POSITIONS,
   getArcanaForCulture, getArcanaPosition, getCrossReference,
 } from './mythouseCardData';
+
+const TYPE_LABELS = { element: 'Element', planet: 'Planet', zodiac: 'Zodiac' };
+const TYPE_SYMBOLS = {
+  element: { Air: '\u2601', Water: '\u2248', Fire: '\u2632' },
+  planet: { Mercury: '\u263F', Moon: '\u263D', Venus: '\u2640', Jupiter: '\u2643', Mars: '\u2642', Sun: '\u2609', Saturn: '\u2644' },
+  zodiac: { Aries: '\u2648', Taurus: '\u2649', Gemini: '\u264A', Cancer: '\u264B', Leo: '\u264C', Virgo: '\u264D', Libra: '\u264E', Scorpio: '\u264F', Sagittarius: '\u2650', Capricorn: '\u2651', Aquarius: '\u2652', Pisces: '\u2653' },
+};
 
 export default function MythouseCards({ onExit }) {
   const [section, setSection] = useState('playing');
   const [suitFilter, setSuitFilter] = useState(null);
-  const [activeCulture, setActiveCulture] = useState('roman');
+  const [activeCulture, setActiveCulture] = useState('tarot'); // 'tarot' | culture key
   const [expandedCard, setExpandedCard] = useState(null);
 
   // Playing cards (built once)
@@ -18,8 +25,11 @@ export default function MythouseCards({ onExit }) {
     return playingDeck.filter(c => c.suit === suitFilter);
   }, [playingDeck, suitFilter]);
 
-  // Arcana cards for selected culture
-  const arcanaCards = useMemo(() => getArcanaForCulture(activeCulture), [activeCulture]);
+  // Arcana cards for selected culture (empty for tarot overview)
+  const arcanaCards = useMemo(() => {
+    if (activeCulture === 'tarot') return [];
+    return getArcanaForCulture(activeCulture);
+  }, [activeCulture]);
 
   const handleArcanaClick = useCallback((card) => {
     setExpandedCard(card);
@@ -34,6 +44,8 @@ export default function MythouseCards({ onExit }) {
     if (!expandedCard) return null;
     return getArcanaPosition(expandedCard.number);
   }, [expandedCard]);
+
+  const isTarotView = activeCulture === 'tarot';
 
   return (
     <div className="mc-browser">
@@ -102,8 +114,16 @@ export default function MythouseCards({ onExit }) {
       {/* === MAJOR ARCANA SECTION === */}
       {section === 'arcana' && (
         <>
-          {/* Culture tabs */}
+          {/* Tarot + Culture tabs */}
           <div className="mc-deck-tabs">
+            <button
+              className={`mc-tab${activeCulture === 'tarot' ? ' active' : ''}`}
+              style={{ '--tab-color': 'var(--accent-gold)' }}
+              onClick={() => { setActiveCulture('tarot'); setExpandedCard(null); }}
+            >
+              Tarot
+              <span className="mc-tab-count">22</span>
+            </button>
             {CULTURES.map(c => (
               <button
                 key={c.key}
@@ -116,30 +136,55 @@ export default function MythouseCards({ onExit }) {
             ))}
           </div>
 
-          {/* Arcana card grid */}
-          <div className="mc-card-grid">
-            {arcanaCards.map(card => {
-              const pos = getArcanaPosition(card.number);
-              return (
-                <button
-                  key={`${card.culture}-${card.number}`}
-                  className="mc-card mc-arcana-card"
-                  onClick={() => handleArcanaClick(card)}
-                >
-                  <span className="mc-card-number">#{card.number}</span>
-                  <span className="mc-card-name">{card.name}</span>
-                  <span className="mc-card-brief">
-                    {card.description.substring(0, 100)}{card.description.length > 100 ? '...' : ''}
-                  </span>
-                  {pos && (
+          {/* Tarot overview grid (22 base positions) */}
+          {isTarotView && (
+            <div className="mc-card-grid">
+              {ARCANA_POSITIONS.map(pos => {
+                const sym = (TYPE_SYMBOLS[pos.type] || {})[pos.correspondence] || '';
+                return (
+                  <button
+                    key={pos.number}
+                    className="mc-card mc-arcana-card mc-tarot-card"
+                    onClick={() => setExpandedCard({ number: pos.number, name: pos.correspondence, culture: 'tarot' })}
+                  >
+                    <span className="mc-card-number">#{pos.number}</span>
+                    <span className="mc-tarot-symbol">{sym}</span>
+                    <span className="mc-card-name">{pos.correspondence}</span>
                     <span className={`mc-card-correspondence mc-corr-${pos.type}`}>
-                      {pos.correspondence}
+                      {TYPE_LABELS[pos.type]}
                     </span>
-                  )}
-                </button>
-              );
-            })}
-          </div>
+                  </button>
+                );
+              })}
+            </div>
+          )}
+
+          {/* Culture-specific card grid */}
+          {!isTarotView && (
+            <div className="mc-card-grid">
+              {arcanaCards.map(card => {
+                const pos = getArcanaPosition(card.number);
+                return (
+                  <button
+                    key={`${card.culture}-${card.number}`}
+                    className="mc-card mc-arcana-card"
+                    onClick={() => handleArcanaClick(card)}
+                  >
+                    <span className="mc-card-number">#{card.number}</span>
+                    <span className="mc-card-name">{card.name}</span>
+                    <span className="mc-card-brief">
+                      {card.description.substring(0, 100)}{card.description.length > 100 ? '...' : ''}
+                    </span>
+                    {pos && (
+                      <span className={`mc-card-correspondence mc-corr-${pos.type}`}>
+                        {pos.correspondence}
+                      </span>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+          )}
 
           {/* Detail overlay */}
           {expandedCard && (
@@ -150,9 +195,11 @@ export default function MythouseCards({ onExit }) {
                     #{expandedCard.number}
                   </span>
                   <h3 className="mc-detail-name">{expandedCard.name}</h3>
-                  <span className="mc-detail-culture">
-                    {CULTURES.find(c => c.key === expandedCard.culture)?.label}
-                  </span>
+                  {expandedCard.culture !== 'tarot' && (
+                    <span className="mc-detail-culture">
+                      {CULTURES.find(c => c.key === expandedCard.culture)?.label}
+                    </span>
+                  )}
                   <button className="mc-detail-close" onClick={() => setExpandedCard(null)}>
                     &times;
                   </button>
@@ -163,32 +210,31 @@ export default function MythouseCards({ onExit }) {
                   {position && (
                     <div style={{ marginBottom: 12 }}>
                       <span className={`mc-card-correspondence mc-corr-${position.type}`}>
-                        {position.type === 'element' ? 'Element' : position.type === 'planet' ? 'Planet' : 'Zodiac'}:
-                        {' '}{position.correspondence}
+                        {TYPE_LABELS[position.type]}: {position.correspondence}
                       </span>
                     </div>
                   )}
 
-                  {/* Full description */}
-                  <p className="mc-section-text">{expandedCard.description}</p>
+                  {/* Full description (culture-specific cards only) */}
+                  {expandedCard.description && (
+                    <p className="mc-section-text">{expandedCard.description}</p>
+                  )}
 
-                  {/* Cross-reference section */}
+                  {/* Cross-reference / cultural variants */}
                   <div className="mc-crossref">
                     <h4 className="mc-section-heading">
-                      Same Position Across Cultures
+                      {expandedCard.culture === 'tarot' ? 'Across 7 Cultures' : 'Same Position Across Cultures'}
                     </h4>
                     {crossRef.map(ref => {
                       const cultureLabel = CULTURES.find(c => c.key === ref.culture)?.label;
-                      const isCurrent = ref.culture === expandedCard.culture;
+                      const isCurrent = expandedCard.culture !== 'tarot' && ref.culture === expandedCard.culture;
                       return (
                         <button
                           key={ref.culture}
                           className={`mc-crossref-item${isCurrent ? ' active' : ''}`}
                           onClick={() => {
-                            if (!isCurrent) {
-                              setActiveCulture(ref.culture);
-                              setExpandedCard(ref);
-                            }
+                            setActiveCulture(ref.culture);
+                            setExpandedCard(ref);
                           }}
                         >
                           <span className="mc-crossref-culture">{cultureLabel}</span>
