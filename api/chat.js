@@ -29,6 +29,7 @@ const mythicCalendar = require('../src/data/mythicCalendar.json');
 const medicineWheels = require('../src/data/medicineWheels.json');
 // --- The Revelation of Fallen Starlight ---
 const fallenStarlight = require('../src/data/fallenStarlight.json');
+const fallenStarlightAtlas = require('../src/data/fallenStarlightAtlas.js');
 
 // In-memory rate limiting (resets when the serverless function cold-starts)
 const rateMap = new Map();
@@ -186,11 +187,11 @@ function compactWheels() {
 }
 
 function compactFallenStarlight() {
-  const chapters = Object.entries(fallenStarlight.chapters || {}).map(([stage, text]) => {
+  const chapters = Object.entries(fallenStarlightAtlas).map(([stage, text]) => {
     const title = (fallenStarlight.titles || {})[stage] || stage;
     return `### ${title}\n${text}`;
   });
-  return '## The Revelation of Fallen Starlight — Full Text\nThis is the original story that gave Atlas life. Jaq carries Atlas (a book called Story Atlas & the Golden Wheels) into the Mythouse and walks the monomyth.\n\n' + chapters.join('\n\n');
+  return '## The Revelation of Fallen Starlight\nThe original story that gave Atlas life. Jaq carries Atlas (Story Atlas & the Golden Wheels) into the Mythouse and walks the monomyth. All key dialogue, plot events, and thematic content preserved.\n\n' + chapters.join('\n\n');
 }
 
 function loadData() {
