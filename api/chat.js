@@ -47,60 +47,170 @@ function checkRateLimit(ip) {
   return true;
 }
 
-function formatArray(label, arr) {
-  const sections = [];
-  for (const figure of arr) {
-    const stageTexts = Object.entries(figure.stages)
-      .filter(([, v]) => v && v.trim())
-      .map(([stage, text]) => `  [${stage}]: ${text}`)
+// --- Compact formatters: ~80% token reduction vs raw JSON ---
+
+function truncate(str, max) {
+  if (!str) return '';
+  const s = String(str).trim();
+  return s.length <= max ? s : s.slice(0, max).replace(/\s+\S*$/, '') + '…';
+}
+
+function compactFigures(label, arr) {
+  return `## ${label}\n` + arr.map(f => {
+    const stages = Object.entries(f.stages || {})
+      .filter(([, v]) => v?.trim())
+      .map(([stage, text]) => `  ${stage}: ${truncate(text, 120)}`)
       .join('\n');
-    if (stageTexts) {
-      sections.push(`## ${label} — ${figure.name}\n${stageTexts}`);
-    }
-  }
-  return sections.join('\n\n');
+    return `${f.name}:\n${stages}`;
+  }).join('\n');
 }
 
-function formatObject(label, obj) {
-  const entries = Object.entries(obj)
-    .filter(([, v]) => v && String(v).trim())
-    .map(([key, text]) => `  [${key}]: ${text}`)
+function compactStages(label, obj) {
+  return `## ${label}\n` + Object.entries(obj)
+    .filter(([, v]) => v?.trim())
+    .map(([key, text]) => `${key}: ${truncate(text, 200)}`)
     .join('\n');
-  return entries ? `## ${label}\n${entries}` : '';
 }
 
-function formatJSON(label, data) {
-  return `## ${label}\n${JSON.stringify(data, null, 1)}`;
+function compactZodiac() {
+  return '## Zodiac Signs\n' + sevenMetalsZodiac.map(z => {
+    const cultures = Object.entries(z.cultures || {})
+      .map(([c, v]) => `${c}: ${v.name} — ${v.myth}`)
+      .join(' | ');
+    return `${z.sign} ${z.symbol} | ${z.element}/${z.modality} | ${z.rulingPlanet} | House ${z.house} | ${z.dates} | ${z.archetype} — ${z.stageOfExperience}\n  ${cultures}`;
+  }).join('\n');
+}
+
+function compactMetals() {
+  return '## Seven Metals\n' + sevenMetals.map(m => {
+    const deities = Object.entries(m.deities || {})
+      .map(([trad, name]) => `${trad}: ${name}`)
+      .join(', ');
+    return `${m.metal} | ${m.planet} | ${m.day} | Sin: ${m.sin} | Virtue: ${m.virtue} | ${m.astrology} | Chakra: ${m.body?.chakra} (${m.body?.organ}) | Deities: ${deities}`;
+  }).join('\n');
+}
+
+function compactCalendar() {
+  return '## Mythic Calendar\n' + mythicCalendar.map(m => {
+    const holidays = (m.holidays || []).map(h => h.name).join(', ');
+    return `${m.month}: Stone=${m.stone?.name}, Flower=${m.flower?.name}, Holidays=[${holidays}], Mood=${truncate(m.mood, 100)}`;
+  }).join('\n');
+}
+
+function compactFilms() {
+  return '## Films by Monomyth Stage\n' + Object.entries(monomythFilms)
+    .map(([stage, filmsObj]) => {
+      const list = Object.values(filmsObj).map(f => `${f.title} (${f.year}): ${truncate(f.description, 80)}`).join('; ');
+      return `${stage}: ${list}`;
+    }).join('\n');
+}
+
+function compactCardinals() {
+  return '## Cardinal Points (Equinoxes & Solstices)\n' + Object.entries(sevenMetalsCardinals)
+    .map(([id, c]) => {
+      const cultures = Object.entries(c.cultures || {})
+        .map(([k, v]) => `${k}: ${v.name}`)
+        .join(', ');
+      return `${c.label} (${c.date}) | ${c.season} | ${c.direction} | ${c.zodiacCusp} | Themes: ${(c.themes || []).join(', ')} | Cultures: ${cultures}`;
+    }).join('\n');
+}
+
+function compactElements() {
+  return '## Elements\n' + Object.entries(sevenMetalsElements)
+    .map(([el, data]) => {
+      const cultures = Object.entries(data.cultures || {})
+        .map(([c, v]) => `${c}: ${v.name}`)
+        .join(', ');
+      return `${el} | Signs: ${(data.signs || []).join(', ')} | ${data.qualities} | Cultures: ${cultures}`;
+    }).join('\n');
+}
+
+function compactHebrew() {
+  return '## Hebrew Creation & Kabbalah\n' + sevenMetalsHebrew.map(d =>
+    `${d.day} (${d.metal}/${d.planet}): Creation Day ${d.creation?.dayNumber} — ${truncate(d.creation?.description, 80)} | Sephira: ${d.kabbalistic?.sephira} (${d.kabbalistic?.meaning})`
+  ).join('\n');
+}
+
+function compactTheology() {
+  return '## Theology of the Sins\n' + sevenMetalsTheology.map(s =>
+    `${s.sin}: Desert Fathers=${truncate(s.desertFathers, 60)} | Cassian=${truncate(s.cassian, 60)} | Gregory=${truncate(s.popeGregory, 60)} | Aquinas=${truncate(s.aquinas, 60)}, Virtue=${s.aquinasVirtue}`
+  ).join('\n');
+}
+
+function compactModernLife() {
+  return '## Sins in Modern Life\n' + sevenMetalsModern.map(s => {
+    const films = (s.films || []).map(f => f.title || f).join(', ');
+    return `${s.sin} (${s.metal}/${s.planet}/${s.day}): Modern=${truncate(s.modernLife?.sin, 60)} | Virtue=${truncate(s.modernLife?.virtue, 60)} | Films: ${films}`;
+  }).join('\n');
+}
+
+function compactStories() {
+  return '## Sins in Literature\n' + sevenMetalsStories.map(s => {
+    const works = ['castleOfPerseverance', 'faerieQueene', 'danteInferno', 'canterburyTales', 'drFaustus', 'decameron', 'arthurian']
+      .filter(w => s[w])
+      .map(w => `${w}: ${truncate(s[w], 50)}`)
+      .join(' | ');
+    return `${s.sin}: ${works}`;
+  }).join('\n');
+}
+
+function compactArtists() {
+  return '## Sins in Art\n' + sevenMetalsArtists.map(s => {
+    const artists = ['bosch', 'dali', 'bruegel', 'cadmus', 'blake']
+      .filter(a => s[a])
+      .map(a => `${a}: ${truncate(s[a], 50)}`)
+      .join(' | ');
+    return `${s.sin}: ${artists}`;
+  }).join('\n');
+}
+
+function compactArchetypes() {
+  return '## Sin Archetypes\n' + sevenMetalsArchetypes.map(a =>
+    `${a.sin}: Archetype=${a.archetype}, Shadow=${truncate(a.shadow, 60)}, Light=${truncate(a.light, 60)}`
+  ).join('\n');
+}
+
+function compactShared() {
+  const intro = truncate(sevenMetalsShared.introduction, 200);
+  const thoughts = (sevenMetalsShared.thoughts || []).map(t => truncate(t, 80)).join('\n  ');
+  return `## Shared Correspondences\n${intro}\nKey thoughts:\n  ${thoughts}`;
+}
+
+function compactWheels() {
+  return '## Medicine Wheels\n' + (medicineWheels.wheels || []).map(w => {
+    const positions = (w.positions || []).map(p => `${p.dir}: ${p.label}`).join(', ');
+    return `${w.title}: ${positions}`;
+  }).join('\n');
 }
 
 function loadData() {
   const parts = [
-    // Meteor Steel Archive
-    formatArray('figures', figures),
-    formatArray('ironAgeSaviors', saviors),
-    formatArray('modernFigures', modernFigures),
-    formatObject('stageOverviews', stageOverviews),
-    formatObject('steelProcess', steelProcess),
-    formatObject('ufo', ufo),
-    formatObject('monomyth', monomyth),
-    formatObject('synthesis', synthesis),
-    // Seven Metals & Celestial Wheels
-    formatJSON('sevenMetals', sevenMetals),
-    formatJSON('zodiac', sevenMetalsZodiac),
-    formatJSON('hebrewCreation', sevenMetalsHebrew),
-    formatJSON('cardinalDirections', sevenMetalsCardinals),
-    formatJSON('elements', sevenMetalsElements),
-    formatJSON('sharedCorrespondences', sevenMetalsShared),
-    formatJSON('theology', sevenMetalsTheology),
-    formatJSON('archetypes', sevenMetalsArchetypes),
-    formatJSON('modernLife', sevenMetalsModern),
-    formatJSON('storiesInLiterature', sevenMetalsStories),
-    formatJSON('artisticDepictions', sevenMetalsArtists),
+    // Meteor Steel Archive — keep full text for core narrative content
+    compactFigures('Mythic Figures', figures),
+    compactFigures('Iron Age Saviors', saviors),
+    compactFigures('Modern Figures', modernFigures),
+    compactStages('Stage Overviews', stageOverviews),
+    compactStages('Steel Process', steelProcess),
+    compactStages('UFO Mythology', ufo),
+    compactStages('Monomyth', monomyth),
+    compactStages('Synthesis', synthesis),
+    // Seven Metals & Celestial Wheels — compact reference format
+    compactMetals(),
+    compactZodiac(),
+    compactHebrew(),
+    compactCardinals(),
+    compactElements(),
+    compactShared(),
+    compactTheology(),
+    compactArchetypes(),
+    compactModernLife(),
+    compactStories(),
+    compactArtists(),
     // Monomyth Extended
-    formatJSON('filmsByStage', monomythFilms),
+    compactFilms(),
     // Calendar & Medicine Wheels
-    formatJSON('mythicCalendar', mythicCalendar),
-    formatJSON('medicineWheels', medicineWheels),
+    compactCalendar(),
+    compactWheels(),
   ].filter(Boolean);
 
   return parts.join('\n\n');
