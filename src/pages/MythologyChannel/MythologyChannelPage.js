@@ -23,6 +23,12 @@ const SHOWS = [
     description: 'Mythic wisdom and the philosophical dimensions of storytelling.',
   },
   {
+    id: 'deep-sight',
+    label: 'Deep Sight',
+    playlist: 'https://www.youtube.com/embed/videoseries?list=PLX31T_KS3jtowPCw_QkXozvJzzTqvZozz',
+    description: 'Visionary explorations of myth and the imaginal.',
+  },
+  {
     id: 'lionel-corbett',
     label: 'Lionel Corbett',
     playlist: 'https://www.youtube.com/embed/videoseries?list=PL6ygcKvnP7CNyqy5clgYGMmZ7RE2Kj7F-',
@@ -51,12 +57,6 @@ const SHOWS = [
     label: 'Dennis Slattery',
     playlist: 'https://www.youtube.com/embed/videoseries?list=PLX31T_KS3jtqUrR_L1_fsxw0S4ugOMo50',
     description: 'Talks by Dennis Patrick Slattery on mythopoetics and literature.',
-  },
-  {
-    id: 'deep-sight',
-    label: 'Deep Sight',
-    playlist: 'https://www.youtube.com/embed/videoseries?list=PLX31T_KS3jtowPCw_QkXozvJzzTqvZozz',
-    description: 'Visionary explorations of myth and the imaginal.',
   },
 ];
 
@@ -92,14 +92,6 @@ export default function MythologyChannelPage() {
   const playerRef = useRef(null);
   const playerContainerRef = useRef(null);
 
-  // Load YouTube IFrame API
-  useEffect(() => {
-    if (window.YT) return;
-    const tag = document.createElement('script');
-    tag.src = 'https://www.youtube.com/iframe_api';
-    document.head.appendChild(tag);
-  }, []);
-
   const destroyPlayer = useCallback(() => {
     if (playerRef.current) {
       playerRef.current.destroy();
@@ -117,7 +109,10 @@ export default function MythologyChannelPage() {
     const listId = activeShow.playlist.match(/list=([^&]+)/)?.[1];
     if (!listId) return;
 
+    let cancelled = false;
+
     const createPlayer = () => {
+      if (cancelled || !playerContainerRef.current) return;
       destroyPlayer();
       playerRef.current = new window.YT.Player(playerContainerRef.current, {
         width: '100%',
@@ -131,13 +126,27 @@ export default function MythologyChannelPage() {
       });
     };
 
+    // Load YT API if not already loaded
     if (window.YT && window.YT.Player) {
       createPlayer();
     } else {
-      window.onYouTubeIframeAPIReady = createPlayer;
+      if (!document.getElementById('yt-iframe-api')) {
+        const tag = document.createElement('script');
+        tag.id = 'yt-iframe-api';
+        tag.src = 'https://www.youtube.com/iframe_api';
+        document.head.appendChild(tag);
+      }
+      const prevCallback = window.onYouTubeIframeAPIReady;
+      window.onYouTubeIframeAPIReady = () => {
+        if (prevCallback) prevCallback();
+        createPlayer();
+      };
     }
 
-    return destroyPlayer;
+    return () => {
+      cancelled = true;
+      destroyPlayer();
+    };
   }, [activeShow, destroyPlayer]);
 
   const handleShowClick = (show) => {

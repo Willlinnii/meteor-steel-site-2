@@ -573,8 +573,8 @@ function StoryForgeHome() {
         setGeneratedStory(chapters);
         setViewMode('read');
       }
-    } catch {
-      // silent fail
+    } catch (err) {
+      console.error('Story Forge generation error:', err);
     }
     setGenerating(false);
   };
@@ -620,6 +620,7 @@ function StoryForgeHome() {
     <>
       <MeteorShower active={showMeteors} />
       <CircleNav
+        stages={STAGES}
         currentStage={currentStage}
         onSelectStage={handleSelectStage}
         clockwise={clockwise}
@@ -772,11 +773,11 @@ const NAV_ITEMS = [
   { path: '/metals', label: 'Celestial Clocks' },
   { path: '/', label: 'Meteor Steel' },
   { path: '/monomyth', label: 'Monomyth' },
-  { path: '/mythology-channel', label: 'Mythology Channel' },
   { path: '/fallen-starlight', label: 'Fallen Starlight' },
   { path: '/story-forge', label: 'Story Forge' },
   { path: 'https://www.thestoryatlas.com/my-courses/psychles/surface', label: 'Story Atlas', external: true },
   { path: '/mythosophia', label: 'Mythosophia' },
+  { path: '/mythology-channel', label: 'Mythology Channel' },
 ];
 
 function SiteNav() {
