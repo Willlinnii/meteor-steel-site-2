@@ -108,7 +108,9 @@ export default function CircleNav({ stages, currentStage, onSelectStage, clockwi
           {modelOverlay && !listId && (() => {
             const m = modelOverlay;
             const r = 28;
+            const mr = 1.8;
             const step = clockwise ? 45 : -45;
+            const isLunar = m.id === 'lunar-month';
             return (
               <g className="model-overlay-ring">
                 <circle cx="50" cy="50" r={r} fill="none" stroke={m.color} strokeWidth="0.4" opacity="0.6" />
@@ -117,10 +119,56 @@ export default function CircleNav({ stages, currentStage, onSelectStage, clockwi
                   if (!label) return null;
                   const angle = -90 + step * i;
                   const rad = (angle * Math.PI) / 180;
-                  const cx = 50 + r * Math.cos(rad);
-                  const cy = 50 + r * Math.sin(rad);
+                  const px = 50 + r * Math.cos(rad);
+                  const py = 50 + r * Math.sin(rad);
+                  if (!isLunar) {
+                    return <circle key={i} cx={px} cy={py} r={mr} fill={m.color} opacity="0.7" />;
+                  }
+                  const uid = `moon-${i}`;
+                  // Moon phases: 0=full, 1=waning gibbous, 2=last quarter, 3=waning crescent,
+                  //              4=new, 5=waxing crescent, 6=first quarter, 7=waxing gibbous
+                  if (i === 0) {
+                    // Full moon — filled circle
+                    return <circle key={i} cx={px} cy={py} r={mr} fill={m.color} opacity="0.9" />;
+                  }
+                  if (i === 4) {
+                    // New moon — empty circle
+                    return <circle key={i} cx={px} cy={py} r={mr} fill="none" stroke={m.color} strokeWidth="0.3" opacity="0.7" />;
+                  }
+                  // Half and crescent phases use clip paths
                   return (
-                    <circle key={i} cx={cx} cy={cy} r="1.8" fill={m.color} opacity="0.7" />
+                    <g key={i}>
+                      <defs>
+                        <clipPath id={uid}>
+                          {i === 2 && (
+                            // Last quarter — left half lit
+                            <rect x={px - mr} y={py - mr} width={mr} height={mr * 2} />
+                          )}
+                          {i === 6 && (
+                            // First quarter — right half lit
+                            <rect x={px} y={py - mr} width={mr} height={mr * 2} />
+                          )}
+                          {i === 1 && (
+                            // Waning gibbous — mostly lit, shadow on right
+                            <path d={`M ${px} ${py - mr} A ${mr} ${mr} 0 1 0 ${px} ${py + mr} A ${mr * 0.4} ${mr} 0 0 1 ${px} ${py - mr}`} />
+                          )}
+                          {i === 3 && (
+                            // Waning crescent — thin sliver on left
+                            <path d={`M ${px} ${py - mr} A ${mr} ${mr} 0 1 0 ${px} ${py + mr} A ${mr * 0.4} ${mr} 0 0 0 ${px} ${py - mr}`} />
+                          )}
+                          {i === 5 && (
+                            // Waxing crescent — thin sliver on right
+                            <path d={`M ${px} ${py - mr} A ${mr} ${mr} 0 1 1 ${px} ${py + mr} A ${mr * 0.4} ${mr} 0 0 1 ${px} ${py - mr}`} />
+                          )}
+                          {i === 7 && (
+                            // Waxing gibbous — mostly lit, shadow on left
+                            <path d={`M ${px} ${py - mr} A ${mr} ${mr} 0 1 1 ${px} ${py + mr} A ${mr * 0.4} ${mr} 0 0 0 ${px} ${py - mr}`} />
+                          )}
+                        </clipPath>
+                      </defs>
+                      <circle cx={px} cy={py} r={mr} fill="none" stroke={m.color} strokeWidth="0.2" opacity="0.4" />
+                      <circle cx={px} cy={py} r={mr} fill={m.color} opacity="0.85" clipPath={`url(#${uid})`} />
+                    </g>
                   );
                 })}
               </g>
