@@ -722,9 +722,9 @@
   .calendar-toggle,
   .medicine-wheel-toggle {
     transform: none;
-    width: 32px;
-    height: 32px;
-    font-size: 1.1rem;
+    width: 28px;
+    height: 28px;
+    font-size: 0.95rem;
     top: auto;
     left: auto;
     right: auto;
@@ -736,11 +736,11 @@
   }
 
   .calendar-toggle {
-    right: 40px;
+    right: 30px;
   }
 
   .medicine-wheel-toggle {
-    right: 80px;
+    right: 60px;
   }
 }
 
