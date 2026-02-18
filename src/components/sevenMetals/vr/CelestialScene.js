@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react';
+import React, { Suspense, useRef } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import { XR, useXR } from '@react-three/xr';
@@ -26,12 +26,13 @@ function ConditionalOrbitControls({ cameraAR }) {
   );
 }
 
-// Scale down scene in AR so it fits in a room
-function ARScaleWrapper({ children, cameraAR }) {
+// Scale down scene in AR so it fits in a room, with dynamic pinch zoom
+function ARScaleWrapper({ children, cameraAR, arZoom }) {
   const isPresenting = useXR((state) => state.session != null);
   const inAR = isPresenting || cameraAR;
-  const scale = inAR ? 0.08 : 1;
-  const y = isPresenting ? -0.5 : 0; // only offset for headset AR, phone AR camera is at y=0
+  const baseScale = inAR ? 0.08 : 1;
+  const scale = baseScale * (inAR ? (arZoom || 1) : 1);
+  const y = isPresenting ? -0.5 : 0;
   return (
     <group scale={[scale, scale, scale]} position={[0, y, 0]}>
       {children}
@@ -52,7 +53,16 @@ export default function CelestialScene({
   infoPanelContent,
   xrStore,
   cameraAR,
+  arZoom,
+  joystickRef,
+  flyToTarget,
+  onFlyComplete,
+  onScaleChange,
+  cameraPosRef,
+  anglesRef,
 }) {
+  const internalCamPosRef = useRef({ x: 0, y: 0, z: 0 });
+
   return (
     <div className="celestial-scene-container">
       <Canvas
@@ -62,7 +72,7 @@ export default function CelestialScene({
         style={cameraAR ? { background: 'transparent' } : undefined}
         onCreated={({ gl }) => {
           if (cameraAR) {
-            gl.setClearColor(0x000000, 0); // transparent
+            gl.setClearColor(0x000000, 0);
           } else {
             gl.setClearColor('#0a0a14', 1);
           }
@@ -70,7 +80,7 @@ export default function CelestialScene({
       >
         <XR store={xrStore}>
           <Suspense fallback={<SceneFallback />}>
-            <ARScaleWrapper cameraAR={cameraAR}>
+            <ARScaleWrapper cameraAR={cameraAR} arZoom={arZoom}>
               <OrbitalScene
                 mode={mode}
                 selectedPlanet={selectedPlanet}
@@ -83,10 +93,19 @@ export default function CelestialScene({
                 onSelectEarth={onSelectEarth}
                 infoPanelContent={infoPanelContent}
                 cameraAR={cameraAR}
+                anglesRef={anglesRef}
               />
             </ARScaleWrapper>
             <ConditionalOrbitControls cameraAR={cameraAR} />
-            {cameraAR && <GyroscopeCamera />}
+            {cameraAR && (
+              <GyroscopeCamera
+                joystickRef={joystickRef}
+                flyToTarget={flyToTarget}
+                onFlyComplete={onFlyComplete}
+                onScaleChange={onScaleChange}
+                cameraPosRef={cameraPosRef || internalCamPosRef}
+              />
+            )}
           </Suspense>
         </XR>
       </Canvas>

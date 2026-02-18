@@ -2,6 +2,8 @@ import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react'
 import { Link } from 'react-router-dom';
 import { createXRStore } from '@react-three/xr';
 import CelestialScene from '../../components/sevenMetals/vr/CelestialScene';
+import ARJoystick from '../../components/sevenMetals/vr/ARJoystick';
+import ARMiniMap from '../../components/sevenMetals/vr/ARMiniMap';
 import { ORBITAL_MODES, MODE_LABELS, MODE_SYMBOLS } from '../../components/sevenMetals/vr/constants3D';
 import '../../components/sevenMetals/vr/CelestialScene.css';
 import './SevenMetalsPage.css';
@@ -262,6 +264,19 @@ export default function SevenMetalsVRPage() {
     setCameraAR(false);
   }, []);
 
+  // AR navigation state
+  const joystickRef = useRef({ x: 0, y: 0 });
+  const cameraPosRef = useRef({ x: 0, y: 0, z: 0 });
+  const anglesRef = useRef(null);
+  const [arZoom, setArZoom] = useState(1);
+  const [flyToTarget, setFlyToTarget] = useState(null);
+  const onFlyComplete = useCallback(() => setFlyToTarget(null), []);
+
+  // Fly to a planet when tapped (in AR mode)
+  const handleFlyTo = useCallback((pos) => {
+    setFlyToTarget(pos);
+  }, []);
+
   const mergedData = useMemo(() => {
     const map = {};
     coreData.forEach(item => {
@@ -361,7 +376,26 @@ export default function SevenMetalsVRPage() {
           infoPanelContent={null}
           xrStore={xrStore}
           cameraAR={cameraAR}
+          arZoom={arZoom}
+          joystickRef={joystickRef}
+          flyToTarget={flyToTarget}
+          onFlyComplete={onFlyComplete}
+          onScaleChange={setArZoom}
+          cameraPosRef={cameraPosRef}
+          anglesRef={anglesRef}
         />
+
+        {/* AR navigation overlays */}
+        {cameraAR && (
+          <>
+            <ARJoystick joystickRef={joystickRef} />
+            <ARMiniMap
+              anglesRef={anglesRef}
+              cameraPos={cameraPosRef.current}
+              onFlyTo={handleFlyTo}
+            />
+          </>
+        )}
 
         {/* Overlay controls on the 3D canvas */}
         <Link to="/metals" className="celestial-back-link">

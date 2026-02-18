@@ -87,8 +87,16 @@ export default function OrbitalScene({
   onSelectEarth,
   infoPanelContent,
   cameraAR,
+  anglesRef: externalAnglesRef,
 }) {
   const { anglesRef, moonPhaseRef } = useOrbitalAnimation(mode);
+
+  // Expose angles to external ref (for mini-map)
+  useFrame(() => {
+    if (externalAnglesRef && anglesRef.current) {
+      externalAnglesRef.current = anglesRef.current;
+    }
+  });
 
   const isHelio = mode === ORBITAL_MODES.HELIOCENTRIC;
   const orbitData = isHelio ? HELIO_ORBITS_3D : ORBITS_3D;
