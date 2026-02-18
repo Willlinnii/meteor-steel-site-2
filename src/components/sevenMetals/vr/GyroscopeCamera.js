@@ -10,7 +10,7 @@ const FLY_OFFSET = 1.5; // stop this far from target (don't go inside planet)
  * Phone AR camera: gyroscope orientation + joystick movement + fly-to + pinch zoom.
  * Camera sits at Earth (0,0,0) initially and can move freely on the orbital plane.
  */
-export default function GyroscopeCamera({ joystickRef, flyToTarget, onFlyComplete, onScaleChange, cameraPosRef }) {
+export default function GyroscopeCamera({ joystickRef, flyToTarget, onFlyComplete, onScaleChange, cameraPosRef, panelLockedRef }) {
   const { camera, gl } = useThree();
   const euler = useRef(new THREE.Euler(0, 0, 0, 'YXZ'));
   const quat = useRef(new THREE.Quaternion());
@@ -128,6 +128,15 @@ export default function GyroscopeCamera({ joystickRef, flyToTarget, onFlyComplet
   }, [requestPermission, onOrientation]);
 
   useFrame((_, delta) => {
+    // --- Freeze everything when panel is locked ---
+    if (panelLockedRef && panelLockedRef.current) {
+      // Still expose position for mini-map but don't move or rotate
+      if (cameraPosRef) {
+        cameraPosRef.current = { x: posRef.current.x, y: posRef.current.y, z: posRef.current.z };
+      }
+      return;
+    }
+
     // --- Gyroscope orientation ---
     if (hasData.current) {
       const a = THREE.MathUtils.degToRad(alpha.current);
