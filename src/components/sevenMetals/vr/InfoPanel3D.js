@@ -1,46 +1,69 @@
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { Html } from '@react-three/drei';
 
 /**
  * 3D info panel that lies flat below the orbital plane.
  * Tap to lock camera and scroll freely, tap unlock bar to release.
- * Supports pinch-to-zoom on the panel content.
+ * Supports pinch-to-zoom on the panel content via native touch events.
  */
 export default function InfoPanel3D({ visible, children, panelLockedRef }) {
   const [locked, setLocked] = useState(false);
   const [zoom, setZoom] = useState(1);
+  const containerRef = useRef(null);
   const pinchStartDist = useRef(null);
   const zoomAtStart = useRef(1);
 
-  const getTouchDist = (touches) => {
-    const dx = touches[0].clientX - touches[1].clientX;
-    const dy = touches[0].clientY - touches[1].clientY;
-    return Math.sqrt(dx * dx + dy * dy);
-  };
+  // Use native touch listeners (passive: false) so we can preventDefault
+  // and stop iOS from hijacking pinch gestures for page zoom / app switcher
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
 
-  const onTouchStart = useCallback((e) => {
-    if (e.touches.length === 2) {
-      e.stopPropagation();
-      pinchStartDist.current = getTouchDist(e.touches);
-      zoomAtStart.current = zoom;
-    }
+    const getTouchDist = (touches) => {
+      const dx = touches[0].clientX - touches[1].clientX;
+      const dy = touches[0].clientY - touches[1].clientY;
+      return Math.sqrt(dx * dx + dy * dy);
+    };
+
+    const onTouchStart = (e) => {
+      if (e.touches.length === 2) {
+        e.preventDefault();
+        e.stopPropagation();
+        pinchStartDist.current = getTouchDist(e.touches);
+        zoomAtStart.current = zoom;
+      }
+    };
+
+    const onTouchMove = (e) => {
+      if (e.touches.length === 2 && pinchStartDist.current != null) {
+        e.preventDefault();
+        e.stopPropagation();
+        const dist = getTouchDist(e.touches);
+        const ratio = dist / pinchStartDist.current;
+        const newZoom = Math.max(0.5, Math.min(3, zoomAtStart.current * ratio));
+        setZoom(newZoom);
+      }
+    };
+
+    const onTouchEnd = () => {
+      pinchStartDist.current = null;
+    };
+
+    el.addEventListener('touchstart', onTouchStart, { passive: false });
+    el.addEventListener('touchmove', onTouchMove, { passive: false });
+    el.addEventListener('touchend', onTouchEnd);
+    el.addEventListener('touchcancel', onTouchEnd);
+
+    return () => {
+      el.removeEventListener('touchstart', onTouchStart);
+      el.removeEventListener('touchmove', onTouchMove);
+      el.removeEventListener('touchend', onTouchEnd);
+      el.removeEventListener('touchcancel', onTouchEnd);
+    };
   }, [zoom]);
 
-  const onTouchMove = useCallback((e) => {
-    if (e.touches.length === 2 && pinchStartDist.current != null) {
-      e.stopPropagation();
-      const dist = getTouchDist(e.touches);
-      const ratio = dist / pinchStartDist.current;
-      setZoom(Math.max(0.5, Math.min(3, zoomAtStart.current * ratio)));
-    }
-  }, []);
-
-  const onTouchEnd = useCallback(() => {
-    pinchStartDist.current = null;
-  }, []);
-
   const handleLock = useCallback(() => {
-    if (locked) return; // use the unlock bar instead
+    if (locked) return;
     setLocked(true);
     if (panelLockedRef) panelLockedRef.current = true;
   }, [locked, panelLockedRef]);
@@ -72,9 +95,7 @@ export default function InfoPanel3D({ visible, children, panelLockedRef }) {
           fontSize: `${13 * zoom}px`,
           lineHeight: '1.5',
           pointerEvents: 'auto',
-          touchAction: locked ? 'pan-y pinch-zoom' : 'none',
-          backdropFilter: 'blur(10px)',
-          WebkitBackdropFilter: 'blur(10px)',
+          touchAction: 'none',
           boxShadow: locked
             ? '0 0 20px rgba(100, 180, 255, 0.15)'
             : '0 0 30px rgba(201, 169, 97, 0.08)',
@@ -126,12 +147,9 @@ export default function InfoPanel3D({ visible, children, panelLockedRef }) {
         )}
 
         <div
+          ref={containerRef}
           onClick={!locked ? handleLock : undefined}
-          onTouchStart={onTouchStart}
-          onTouchMove={onTouchMove}
-          onTouchEnd={onTouchEnd}
-          onTouchCancel={onTouchEnd}
-          style={{ padding: '12px 18px' }}
+          style={{ padding: '12px 18px', touchAction: 'none' }}
         >
           {children}
         </div>

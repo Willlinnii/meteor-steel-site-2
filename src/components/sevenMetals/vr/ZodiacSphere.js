@@ -28,7 +28,7 @@ function ZodiacSegment({ sign, symbol, index, selected, onClick }) {
         onPointerOut={() => { setHovered(false); document.body.style.cursor = 'auto'; }}
       >
         <planeGeometry args={[2.5, 1.5]} />
-        <meshBasicMaterial transparent opacity={0} side={THREE.DoubleSide} />
+        <meshBasicMaterial transparent opacity={0} side={THREE.DoubleSide} depthWrite={false} />
       </mesh>
 
       {/* Symbol */}

@@ -81,7 +81,7 @@ export default function CelestialScene({
     <div className="celestial-scene-container" style={cameraAR ? { background: 'transparent' } : undefined}>
       <Canvas
         camera={{ position: [0, 8, 20], fov: 60, near: 0.1, far: 200 }}
-        gl={{ antialias: true, alpha: true, premultipliedAlpha: false }}
+        gl={{ antialias: true, alpha: true }}
         dpr={[1, 2]}
         style={cameraAR ? { background: 'transparent' } : undefined}
       >
