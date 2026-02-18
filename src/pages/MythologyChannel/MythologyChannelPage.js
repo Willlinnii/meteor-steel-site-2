@@ -122,11 +122,10 @@ export default function MythologyChannelPage() {
     <div className="mythology-channel-page">
       <div className={`tv-wrapper${isOn ? ' tv-on' : ''}`}>
         <img
-          src={process.env.PUBLIC_URL + '/tv-frame.png'}
+          src={process.env.PUBLIC_URL + (isOn ? '/tv-frame.png' : '/tv-solid.png')}
           alt="Mythology Channel TV"
           className="tv-frame-img"
         />
-        {!isOn && <div className="tv-screen-fill" />}
         {isOn && (
           <div className="tv-screen-area" onClick={handleTvClick}>
             <iframe

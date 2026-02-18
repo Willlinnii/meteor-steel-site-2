@@ -32,6 +32,7 @@
       "last 1 safari version"
     ]
   },
+  "proxy": "https://meteor-steel-site-2.vercel.app",
   "devDependencies": {
     "mammoth": "^1.11.0"
   }
