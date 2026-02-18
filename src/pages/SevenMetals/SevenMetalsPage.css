@@ -70,12 +70,23 @@
   display: inline-block;
 }
 
+/* ===== BUTTON ROW (below diagram) ===== */
+
+.orbital-btn-row {
+  position: absolute;
+  bottom: -36px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+}
+
 /* ===== ORBITAL MODE TOGGLE (cycle: orbiting → live → aligned) ===== */
 
 .orbital-mode-toggle {
-  position: absolute;
-  bottom: -30px;
-  right: 20px;
+  position: static;
   background: none;
   border: 1px solid var(--accent-ember);
   color: var(--accent-ember);
@@ -99,9 +110,7 @@
 /* ===== CALENDAR TOGGLE ===== */
 
 .calendar-toggle {
-  position: absolute;
-  bottom: -30px;
-  right: -30px;
+  position: static;
   background: none;
   border: 1px solid rgba(139, 195, 170, 0.5);
   color: rgba(139, 195, 170, 0.8);
@@ -725,28 +734,20 @@
     grid-template-columns: 1fr;
   }
 
-  .orbital-diagram-wrapper {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 8px;
-  }
-
-  .orbital-diagram-wrapper .orbital-svg {
-    width: 100%;
-    flex-basis: 100%;
+  .orbital-btn-row {
+    position: static;
+    transform: none;
+    margin: 8px auto 0;
+    gap: 6px;
   }
 
   .orbital-mode-toggle,
   .calendar-toggle,
   .medicine-wheel-toggle,
   .vr-view-toggle {
-    position: static;
-    transform: none;
-    width: 32px;
-    height: 32px;
+    width: 34px;
+    height: 34px;
     font-size: 0.95rem;
-    margin: 0;
   }
 
   .vr-view-toggle {
@@ -783,9 +784,7 @@
 /* ===== MEDICINE WHEEL TOGGLE ===== */
 
 .medicine-wheel-toggle {
-  position: absolute;
-  bottom: -30px;
-  right: -80px;
+  position: static;
   background: none;
   border: 1px solid rgba(180, 140, 80, 0.5);
   color: rgba(180, 140, 80, 0.8);
@@ -807,9 +806,7 @@
 }
 
 .vr-view-toggle {
-  position: absolute;
-  bottom: -30px;
-  right: -130px;
+  position: static;
   background: none;
   border: 1px solid rgba(139, 157, 195, 0.5);
   color: rgba(139, 157, 195, 0.8);

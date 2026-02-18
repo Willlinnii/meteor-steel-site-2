@@ -1017,38 +1017,40 @@ export default function OrbitalDiagram({ selectedPlanet, onSelectPlanet, selecte
         })}
         </>)}
       </svg>
-      {!showMedicineWheel && (
-        <>
-          <button
-            className="orbital-mode-toggle"
-            onClick={cycleOrbitalMode}
-            title={aligned ? 'Aligned — click to orbit' : livePositions ? 'Live Positions — click to align' : heliocentric ? 'Heliocentric — click for live positions' : 'Earth Centered — click for heliocentric'}
-          >
-            {aligned ? '☍' : livePositions ? '◉' : heliocentric ? '☉' : '◎'}
-          </button>
-          <button
-            className="calendar-toggle"
-            onClick={() => onToggleCalendar && onToggleCalendar()}
-            title={showCalendar ? 'Hide mythic calendar' : 'Show mythic calendar'}
-          >
-            {showCalendar ? '📅' : '📆'}
-          </button>
-        </>
-      )}
-      <button
-        className="medicine-wheel-toggle"
-        onClick={() => onToggleMedicineWheel && onToggleMedicineWheel()}
-        title={showMedicineWheel ? 'Show celestial wheels' : 'Show medicine wheel'}
-      >
-        {showMedicineWheel ? '\u2726' : '\u2727'}
-      </button>
-      <button
-        className="vr-view-toggle"
-        onClick={() => navigate('/metals/vr')}
-        title="View in 3D"
-      >
-        3D
-      </button>
+      <div className="orbital-btn-row">
+        {!showMedicineWheel && (
+          <>
+            <button
+              className="orbital-mode-toggle"
+              onClick={cycleOrbitalMode}
+              title={aligned ? 'Aligned — click to orbit' : livePositions ? 'Live Positions — click to align' : heliocentric ? 'Heliocentric — click for live positions' : 'Earth Centered — click for heliocentric'}
+            >
+              {aligned ? '☍' : livePositions ? '◉' : heliocentric ? '☉' : '◎'}
+            </button>
+            <button
+              className="calendar-toggle"
+              onClick={() => onToggleCalendar && onToggleCalendar()}
+              title={showCalendar ? 'Hide mythic calendar' : 'Show mythic calendar'}
+            >
+              {showCalendar ? '📅' : '📆'}
+            </button>
+          </>
+        )}
+        <button
+          className="medicine-wheel-toggle"
+          onClick={() => onToggleMedicineWheel && onToggleMedicineWheel()}
+          title={showMedicineWheel ? 'Show celestial wheels' : 'Show medicine wheel'}
+        >
+          {showMedicineWheel ? '\u2726' : '\u2727'}
+        </button>
+        <button
+          className="vr-view-toggle"
+          onClick={() => navigate('/metals/vr')}
+          title="View in 3D"
+        >
+          3D
+        </button>
+      </div>
       {videoListId && (
         <div className="orbital-video-container">
           <div ref={videoPlayerDivRef} className="orbital-video-player" />
