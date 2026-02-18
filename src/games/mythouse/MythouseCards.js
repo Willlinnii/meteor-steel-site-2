@@ -145,13 +145,13 @@ export default function MythouseCards({ onExit }) {
                   <button
                     key={pos.number}
                     className="mc-card mc-arcana-card mc-tarot-card"
-                    onClick={() => setExpandedCard({ number: pos.number, name: pos.correspondence, culture: 'tarot' })}
+                    onClick={() => setExpandedCard({ number: pos.number, name: pos.tarot, culture: 'tarot' })}
                   >
                     <span className="mc-card-number">#{pos.number}</span>
                     <span className="mc-tarot-symbol">{sym}</span>
-                    <span className="mc-card-name">{pos.correspondence}</span>
+                    <span className="mc-card-name">{pos.tarot}</span>
                     <span className={`mc-card-correspondence mc-corr-${pos.type}`}>
-                      {TYPE_LABELS[pos.type]}
+                      {pos.correspondence}
                     </span>
                   </button>
                 );
@@ -213,6 +213,13 @@ export default function MythouseCards({ onExit }) {
                         {TYPE_LABELS[position.type]}: {position.correspondence}
                       </span>
                     </div>
+                  )}
+
+                  {/* Tarot name subtitle (for culture-specific views) */}
+                  {expandedCard.culture !== 'tarot' && position && (
+                    <p style={{ color: 'var(--text-secondary)', fontSize: '0.78rem', fontStyle: 'italic', margin: '0 0 8px' }}>
+                      Tarot: {position.tarot}
+                    </p>
                   )}
 
                   {/* Full description (culture-specific cards only) */}
