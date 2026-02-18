@@ -490,13 +490,27 @@ export default function MonomythPage() {
     } else if (stageParam && MONOMYTH_STAGES.find(s => s.id === stageParam)) {
       setCurrentStage(stageParam);
       setActiveWorld(null);
-      setActiveTab('overview');
-      if (theoristParam) {
-        setTimeout(() => handleSelectModel(theoristParam), 150);
-      }
       if (cycleParam) {
+        setActiveTab('cycles');
         setTimeout(() => handleSelectCycle(cycleParam), 150);
+      } else if (theoristParam) {
+        setActiveTab('theorists');
+        setTimeout(() => handleSelectModel(theoristParam), 150);
+      } else {
+        setActiveTab('overview');
       }
+    } else if (cycleParam) {
+      // Cycle-only link (no stage): pick first stage, show cycles tab, activate cycle
+      setCurrentStage('golden-age');
+      setActiveWorld(null);
+      setActiveTab('cycles');
+      setTimeout(() => handleSelectCycle(cycleParam), 150);
+    } else if (theoristParam) {
+      // Theorist-only link (no stage): pick first stage, show theorists tab, activate model
+      setCurrentStage('golden-age');
+      setActiveWorld(null);
+      setActiveTab('theorists');
+      setTimeout(() => handleSelectModel(theoristParam), 150);
     }
 
     if (searchParams.toString()) {
