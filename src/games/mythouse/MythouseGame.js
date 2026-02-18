@@ -1,11 +1,12 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import GameShell from '../shared/GameShell';
+import GAME_BOOK from '../shared/gameBookData';
 import { D6Display } from '../shared/DiceDisplay';
 import { chooseBestMove, evaluateWithNoise } from '../shared/aiCore';
 import {
   RINGS, SPACES_PER_RING, RING_DICE, GEMSTONE_VALUES, FALLEN_STARLIGHT_VALUE,
   PIECE_TYPES, LADDERS, CHUTES, ORDEAL_POSITIONS,
-  ringPosToSVG, rollForRing, getLadderAt, getChuteAt,
+  ringPosToSVG, buildSpiralPath, rollForRing, getLadderAt, getChuteAt,
 } from './mythouseData';
 
 const BOARD_SIZE = 560;
@@ -134,7 +135,7 @@ export default function MythouseGame({ mode, onExit }) {
     setLegalMoves(moves);
     setGamePhase('moving');
     setMessage(`Rolled ${roll} (${RING_DICE[highRing].name}) — choose a piece`);
-  }, [gamePhase, winner, currentPlayer, pieces, getHighestRing, getLegalMovesForPlayer]);
+  }, [gamePhase, winner, currentPlayer, pieces, getHighestRing, getLegalMovesForPlayer, isAI]);
 
   const applyMove = useCallback((move) => {
     setPieces(prev => {
@@ -369,6 +370,8 @@ export default function MythouseGame({ mode, onExit }) {
       diceDisplay={diceValue ? <D6Display value={Math.min(diceValue, 6)} /> : null}
       extraInfo={<>{message}<br /><small>{scoreInfo}</small></>}
       moveLog={moveLog}
+      rules={GAME_BOOK['mythouse'].rules}
+      secrets={GAME_BOOK['mythouse'].secrets}
     >
       <div style={{ textAlign: 'right', marginBottom: 4 }}>
         <button
@@ -381,22 +384,15 @@ export default function MythouseGame({ mode, onExit }) {
         </button>
       </div>
       <svg className="game-board-svg" viewBox={`0 0 ${BOARD_SIZE} ${BOARD_SIZE}`} style={{ maxWidth: 560 }}>
-        {/* Draw rings */}
-        {Array.from({ length: RINGS }, (_, i) => {
-          const ring = i + 1;
-          const maxR = 250;
-          const minR = 40;
-          const r = maxR - ((ring - 1) / (RINGS - 1)) * (maxR - minR);
-          return (
-            <circle
-              key={`ring-${ring}`}
-              cx={CENTER}
-              cy={CENTER}
-              r={r}
-              className="mythouse-ring"
-            />
-          );
-        })}
+        {/* Draw spiral path */}
+        <path
+          d={buildSpiralPath(CENTER, CENTER, direction)}
+          fill="none"
+          stroke="var(--border-subtle)"
+          strokeWidth="12"
+          strokeLinecap="round"
+          opacity="0.3"
+        />
 
         {/* Draw spaces */}
         {Array.from({ length: RINGS }, (_, ri) => {
@@ -503,7 +499,7 @@ export default function MythouseGame({ mode, onExit }) {
           })
         )}
 
-        {/* Ring labels */}
+        {/* Ring labels — placed at the start of each ring's segment */}
         {Array.from({ length: RINGS }, (_, i) => {
           const ring = i + 1;
           const { x, y } = ringPosToSVG(ring, 14, CENTER, CENTER, direction);
@@ -511,13 +507,13 @@ export default function MythouseGame({ mode, onExit }) {
             <text
               key={`rl-${ring}`}
               x={x}
-              y={y - 8}
+              y={y + 3}
               textAnchor="middle"
               fontSize="7"
               fill="var(--text-secondary)"
-              opacity="0.5"
+              opacity="0.6"
             >
-              Ring {ring}
+              R{ring}
             </text>
           );
         })}

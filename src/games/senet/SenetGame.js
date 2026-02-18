@@ -1,5 +1,6 @@
-import React, { useState, useCallback, useEffect, useRef } from 'react';
+import React, { useState, useCallback, useEffect, useRef, useMemo } from 'react';
 import GameShell from '../shared/GameShell';
+import GAME_BOOK from '../shared/gameBookData';
 import { StickDiceDisplay } from '../shared/DiceDisplay';
 import { rollStickDice } from '../shared/diceEngine';
 import { chooseBestMove, evaluateWithNoise } from '../shared/aiCore';
@@ -474,7 +475,7 @@ export default function SenetGame({ mode, onExit }) {
     };
   }, []);
 
-  const labels = mode === 'ai' ? ['You', 'Atlas'] : PLAYER_LABELS;
+  const labels = useMemo(() => mode === 'ai' ? ['You', 'Atlas'] : PLAYER_LABELS, [mode]);
 
   /* ---- Reset ---- */
   const resetGame = useCallback(() => {
@@ -668,7 +669,7 @@ export default function SenetGame({ mode, onExit }) {
     (mode === 'local' || currentPlayer === 0);
 
   return (
-    <GameShell gameName="Senet" onExit={onExit} onReset={resetGame} moveLog={moveLog}>
+    <GameShell gameName="Senet" onExit={onExit} onReset={resetGame} moveLog={moveLog} rules={GAME_BOOK['senet'].rules} secrets={GAME_BOOK['senet'].secrets}>
       <div style={{ textAlign: 'center', marginBottom: 8 }}>
         <div style={{ fontSize: 14, fontWeight: 600, marginBottom: 4 }}>
           {statusText}

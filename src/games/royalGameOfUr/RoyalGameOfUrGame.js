@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useEffect, useRef, useMemo } from 'react';
 import GameShell from '../shared/GameShell';
+import GAME_BOOK from '../shared/gameBookData';
 import { TetrahedralDiceDisplay } from '../shared/DiceDisplay';
 import { rollTetrahedralDice } from '../shared/diceEngine';
 import { chooseBestMove, evaluateWithNoise } from '../shared/aiCore';
@@ -817,6 +818,8 @@ export default function RoyalGameOfUrGame({ mode, onExit }) {
       }
       turnCount={turnCount}
       moveLog={moveLog}
+      rules={GAME_BOOK['royal-game-of-ur'].rules}
+      secrets={GAME_BOOK['royal-game-of-ur'].secrets}
     >
       {scoreInfo}
       {renderBoard()}

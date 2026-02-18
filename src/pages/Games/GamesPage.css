@@ -374,6 +374,123 @@
   color: var(--text-primary);
 }
 
+/* ===== GAME BOOK (Rules & Secrets) ===== */
+.game-book-section {
+  width: 100%;
+  max-width: 620px;
+  margin: 12px auto 0;
+}
+
+.game-book-toggles {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+.game-book-toggle {
+  background: rgba(26, 26, 46, 0.7);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  font-family: 'Cinzel', serif;
+  font-size: 0.82rem;
+  padding: 6px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  letter-spacing: 0.03em;
+}
+
+.game-book-toggle:hover {
+  border-color: var(--accent-gold);
+  color: var(--text-primary);
+}
+
+.game-book-toggle.active {
+  background: rgba(201, 169, 97, 0.12);
+  border-color: var(--accent-gold);
+  color: var(--accent-gold);
+}
+
+.game-book-toggle-secrets.active {
+  background: rgba(160, 100, 200, 0.12);
+  border-color: #a070c8;
+  color: #c8a0e8;
+}
+
+.game-book-toggle-secrets:hover {
+  border-color: #a070c8;
+  color: #c8a0e8;
+}
+
+.game-book-panel {
+  margin-top: 10px;
+  padding: 16px 20px;
+  background: rgba(10, 10, 18, 0.7);
+  border: 1px solid var(--border-subtle);
+  border-radius: 10px;
+  animation: gameBookFadeIn 0.25s ease;
+}
+
+@keyframes gameBookFadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.game-book-rules {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.game-book-rules li {
+  position: relative;
+  padding: 5px 0 5px 18px;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  line-height: 1.5;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.game-book-rules li:last-child {
+  border-bottom: none;
+}
+
+.game-book-rules li::before {
+  content: '\25C6';
+  position: absolute;
+  left: 0;
+  color: var(--accent-gold);
+  font-size: 0.6rem;
+  top: 8px;
+}
+
+.game-book-panel-secrets {
+  border-color: rgba(160, 100, 200, 0.25);
+}
+
+.game-book-secret {
+  margin-bottom: 16px;
+}
+
+.game-book-secret:last-child {
+  margin-bottom: 0;
+}
+
+.game-book-secret-heading {
+  font-family: 'Cinzel', serif;
+  color: #c8a0e8;
+  font-size: 0.9rem;
+  margin: 0 0 6px 0;
+  font-weight: 600;
+}
+
+.game-book-secret-text {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  line-height: 1.6;
+  margin: 0;
+}
+
 /* ===== GAME OVER OVERLAY ===== */
 .game-over-overlay {
   position: fixed;

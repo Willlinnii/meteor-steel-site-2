@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import GameShell from '../shared/GameShell';
+import GAME_BOOK from '../shared/gameBookData';
 import { CowrieDiceDisplay } from '../shared/DiceDisplay';
 import { rollCowrieShells } from '../shared/diceEngine';
 import { chooseBestMove, evaluateWithNoise } from '../shared/aiCore';
@@ -139,7 +140,7 @@ export default function PachisiGame({ mode, onExit }) {
     setLegalMoves(moves);
     setGamePhase('moving');
     setMessage(`Rolled ${result.total} — choose a piece to move`);
-  }, [gamePhase, winner, currentPlayer, pieces, getLegalMoves]);
+  }, [gamePhase, winner, currentPlayer, pieces, getLegalMoves, isAI]);
 
   const makeMove = useCallback((move) => {
     setPieces(prev => {
@@ -249,6 +250,8 @@ export default function PachisiGame({ mode, onExit }) {
       diceDisplay={diceResult ? <CowrieDiceDisplay shells={diceResult.shells} /> : null}
       extraInfo={message}
       moveLog={moveLog}
+      rules={GAME_BOOK['pachisi'].rules}
+      secrets={GAME_BOOK['pachisi'].secrets}
     >
       <svg className="game-board-svg" viewBox={`0 0 ${BOARD_PX} ${BOARD_PX}`} style={{ maxWidth: 480 }}>
         {/* Draw board cells */}

@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import GameShell from '../shared/GameShell';
+import GAME_BOOK from '../shared/gameBookData';
 import { D6Display } from '../shared/DiceDisplay';
 import { rollD6 } from '../shared/diceEngine';
 import { LADDERS, SNAKES, squareToSVG } from './snakesAndLaddersData';
@@ -203,6 +204,8 @@ export default function SnakesAndLaddersGame({ mode, onExit }) {
       diceDisplay={diceValue ? <D6Display value={diceValue} /> : null}
       extraInfo={message}
       moveLog={moveLog}
+      rules={GAME_BOOK['snakes-and-ladders'].rules}
+      secrets={GAME_BOOK['snakes-and-ladders'].secrets}
     >
       <svg
         className="game-board-svg"

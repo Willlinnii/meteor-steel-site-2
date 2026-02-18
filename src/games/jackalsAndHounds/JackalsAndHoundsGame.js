@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useEffect, useRef, useMemo } from 'react';
 import GameShell from '../shared/GameShell';
+import GAME_BOOK from '../shared/gameBookData';
 import { D6Display } from '../shared/DiceDisplay';
 import { rollD6 } from '../shared/diceEngine';
 import { TRACK_LENGTH, PIECES_PER_PLAYER, SHORTCUT_MAP, holeToSVG } from './jackalsAndHoundsData';
@@ -438,7 +439,7 @@ function JackalsAndHoundsGame({ mode, onExit }) {
   );
 
   return (
-    <GameShell gameName="Jackals &amp; Hounds" onExit={onExit} onReset={handleReset} moveLog={moveLog}>
+    <GameShell gameName="Jackals &amp; Hounds" onExit={onExit} onReset={handleReset} moveLog={moveLog} rules={GAME_BOOK['jackals-and-hounds'].rules} secrets={GAME_BOOK['jackals-and-hounds'].secrets}>
       <div style={{ textAlign: 'center', marginBottom: 8 }}>
         <div style={{ color: '#b0a080', fontSize: 13, marginBottom: 4 }}>
           Turn {turnCount + 1} &mdash;{' '}

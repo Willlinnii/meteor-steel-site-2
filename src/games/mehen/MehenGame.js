@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useEffect, useRef, useMemo } from 'react';
 import GameShell from '../shared/GameShell';
+import GAME_BOOK from '../shared/gameBookData';
 import { D6Display } from '../shared/DiceDisplay';
 import { rollD6 } from '../shared/diceEngine';
 import { TOTAL_SPACES, CENTER, mehenPositionToSVG } from './mehenData';
@@ -383,7 +384,7 @@ function MehenGame({ mode, onExit }) {
   );
 
   return (
-    <GameShell gameName="Mehen" onExit={onExit} onReset={handleReset} moveLog={moveLog}>
+    <GameShell gameName="Mehen" onExit={onExit} onReset={handleReset} moveLog={moveLog} rules={GAME_BOOK['mehen'].rules} secrets={GAME_BOOK['mehen'].secrets}>
       <div style={{ textAlign: 'center', marginBottom: 8 }}>
         <div style={{ color: '#b0a080', fontSize: 13, marginBottom: 4 }}>
           Turn {turnCount + 1} &mdash;{' '}

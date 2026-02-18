@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 export default function GameShell({
   gameName,
@@ -18,8 +18,12 @@ export default function GameShell({
   message,
   playerNames,
   moveLog,
+  rules,
+  secrets,
 }) {
   const logRef = useRef(null);
+  const [openPanel, setOpenPanel] = useState(null); // 'rules' | 'secrets' | null
+
   useEffect(() => {
     if (logRef.current) logRef.current.scrollTop = logRef.current.scrollHeight;
   }, [moveLog]);
@@ -40,6 +44,10 @@ export default function GameShell({
       winnerName = playerNames[winner];
     }
   }
+
+  const togglePanel = (panel) => {
+    setOpenPanel(prev => prev === panel ? null : panel);
+  };
 
   return (
     <div className="game-shell">
@@ -105,6 +113,50 @@ export default function GameShell({
           {moveLog.map((entry, i) => (
             <div key={i} className="game-move-log-entry">{entry}</div>
           ))}
+        </div>
+      )}
+
+      {(rules || secrets) && (
+        <div className="game-book-section">
+          <div className="game-book-toggles">
+            {rules && (
+              <button
+                className={`game-book-toggle${openPanel === 'rules' ? ' active' : ''}`}
+                onClick={() => togglePanel('rules')}
+              >
+                Rules
+              </button>
+            )}
+            {secrets && (
+              <button
+                className={`game-book-toggle game-book-toggle-secrets${openPanel === 'secrets' ? ' active' : ''}`}
+                onClick={() => togglePanel('secrets')}
+              >
+                Secrets
+              </button>
+            )}
+          </div>
+
+          {openPanel === 'rules' && rules && (
+            <div className="game-book-panel">
+              <ul className="game-book-rules">
+                {rules.map((rule, i) => (
+                  <li key={i}>{rule}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {openPanel === 'secrets' && secrets && (
+            <div className="game-book-panel game-book-panel-secrets">
+              {secrets.map((secret, i) => (
+                <div key={i} className="game-book-secret">
+                  <h4 className="game-book-secret-heading">{secret.heading}</h4>
+                  <p className="game-book-secret-text">{secret.text}</p>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       )}
 
