@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, Suspense, lazy } from 'react';
 import { Routes, Route, Link, useLocation, useSearchParams } from 'react-router-dom';
 import './App.css';
 import ChatPanel from './components/ChatPanel';
@@ -12,12 +12,13 @@ import figures from './data/figures.json';
 import modernFigures from './data/modernFigures.json';
 import stageOverviews from './data/stageOverviews.json';
 import steelProcess from './data/steelProcess.json';
-
 import saviors from './data/saviors.json';
 import ufo from './data/ufo.json';
 import monomyth from './data/monomyth.json';
 import synthesis from './data/synthesis.json';
 import fallenStarlightData from './data/fallenStarlight.json';
+
+const SevenMetalsVRPage = lazy(() => import('./pages/SevenMetals/SevenMetalsVRPage'));
 
 const STAGES = [
   { id: 'golden-age', label: 'Golden Age' },
@@ -897,6 +898,7 @@ function App() {
       <SiteNav />
       <Routes>
         <Route path="/" element={<MeteorSteelHome />} />
+        <Route path="/metals/vr" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" />Loading 3D...</div>}><SevenMetalsVRPage /></Suspense>} />
         <Route path="/metals/*" element={<SevenMetalsPage />} />
         <Route path="/fallen-starlight" element={<FallenStarlightHome />} />
         <Route path="/story-forge" element={<StoryForgeHome />} />

@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useRef, useEffect, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Body, GeoVector, Ecliptic, MoonPhase } from 'astronomy-engine';
 import PlanetNode from './PlanetNode';
 import wheelData from '../../data/medicineWheels.json';
@@ -186,6 +187,7 @@ function ensureYTApi() {
 }
 
 export default function OrbitalDiagram({ selectedPlanet, onSelectPlanet, selectedSign, onSelectSign, selectedCardinal, onSelectCardinal, selectedEarth, onSelectEarth, showCalendar, onToggleCalendar, selectedMonth, onSelectMonth, showMedicineWheel, onToggleMedicineWheel, selectedWheelItem, onSelectWheelItem, videoUrl, onCloseVideo }) {
+  const navigate = useNavigate();
   const [aligned, setAligned] = useState(false);
   const [livePositions, setLivePositions] = useState(false);
   const [heliocentric, setHeliocentric] = useState(false);
@@ -1038,7 +1040,14 @@ export default function OrbitalDiagram({ selectedPlanet, onSelectPlanet, selecte
         onClick={() => onToggleMedicineWheel && onToggleMedicineWheel()}
         title={showMedicineWheel ? 'Show celestial wheels' : 'Show medicine wheel'}
       >
-        {showMedicineWheel ? '✦' : '✧'}
+        {showMedicineWheel ? '\u2726' : '\u2727'}
+      </button>
+      <button
+        className="vr-view-toggle"
+        onClick={() => navigate('/metals/vr')}
+        title="View in 3D"
+      >
+        3D
       </button>
       {videoListId && (
         <div className="orbital-video-container">

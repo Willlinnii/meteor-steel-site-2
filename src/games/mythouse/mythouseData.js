@@ -56,17 +56,38 @@ export const PIECE_TYPES = [
 ];
 
 // Convert ring + position to SVG coordinates
-// Board is rendered as concentric circles
+// Board is rendered as a continuous inward spiral
 // direction: 1 = clockwise, -1 = counter-clockwise
 export function ringPosToSVG(ring, pos, centerX = 280, centerY = 280, direction = 1) {
   const maxRadius = 250;
-  const minRadius = 40;
-  const ringRadius = maxRadius - ((ring - 1) / (RINGS - 1)) * (maxRadius - minRadius);
-  const angle = direction * (pos / SPACES_PER_RING) * 2 * Math.PI - Math.PI / 2; // start at top
+  const minRadius = 30;
+  // Linear position along the spiral: 0 (outer) to TOTAL_SPACES (center)
+  const t = (ring - 1) * SPACES_PER_RING + pos;
+  // Radius shrinks linearly as we spiral inward
+  const radius = maxRadius - (t / TOTAL_SPACES) * (maxRadius - minRadius);
+  // One full revolution per ring (28 spaces = 360°)
+  const angle = direction * (t / SPACES_PER_RING) * 2 * Math.PI - Math.PI / 2;
   return {
-    x: centerX + ringRadius * Math.cos(angle),
-    y: centerY + ringRadius * Math.sin(angle),
+    x: centerX + radius * Math.cos(angle),
+    y: centerY + radius * Math.sin(angle),
   };
+}
+
+// Build a smooth SVG spiral path for the board background
+export function buildSpiralPath(centerX = 280, centerY = 280, direction = 1) {
+  const maxRadius = 250;
+  const minRadius = 30;
+  const steps = 500; // smooth curve
+  let d = '';
+  for (let i = 0; i <= steps; i++) {
+    const t = (i / steps) * TOTAL_SPACES;
+    const radius = maxRadius - (t / TOTAL_SPACES) * (maxRadius - minRadius);
+    const angle = direction * (t / SPACES_PER_RING) * 2 * Math.PI - Math.PI / 2;
+    const x = centerX + radius * Math.cos(angle);
+    const y = centerY + radius * Math.sin(angle);
+    d += (i === 0 ? 'M' : 'L') + `${x.toFixed(2)},${y.toFixed(2)} `;
+  }
+  return d;
 }
 
 // Roll the appropriate die for a ring

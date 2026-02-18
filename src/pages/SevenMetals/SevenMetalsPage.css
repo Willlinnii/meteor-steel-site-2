@@ -742,6 +742,17 @@
   .medicine-wheel-toggle {
     right: 60px;
   }
+
+  .vr-view-toggle {
+    transform: none;
+    width: 28px;
+    height: 28px;
+    font-size: 0.7rem;
+    top: auto;
+    left: auto;
+    right: 90px;
+    bottom: 20px;
+  }
 }
 
 /* ===== CULTURE BLOCKS ===== */
@@ -794,6 +805,34 @@
   opacity: 1;
   background: rgba(180, 140, 80, 0.1);
   box-shadow: 0 0 10px rgba(180, 140, 80, 0.3);
+}
+
+.vr-view-toggle {
+  position: absolute;
+  bottom: -30px;
+  right: -130px;
+  background: none;
+  border: 1px solid rgba(139, 157, 195, 0.5);
+  color: rgba(139, 157, 195, 0.8);
+  font-size: 0.85rem;
+  font-family: 'Cinzel', serif;
+  font-weight: 700;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  opacity: 0.7;
+  letter-spacing: 0.5px;
+}
+
+.vr-view-toggle:hover {
+  opacity: 1;
+  background: rgba(139, 157, 195, 0.1);
+  box-shadow: 0 0 10px rgba(139, 157, 195, 0.3);
+  color: #8b9dc3;
 }
 
 /* ===== MEDICINE WHEEL POSITIONS ===== */
