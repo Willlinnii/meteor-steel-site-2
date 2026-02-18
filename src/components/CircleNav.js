@@ -38,7 +38,7 @@ function ensureYTApi() {
   });
 }
 
-export default function CircleNav({ stages, currentStage, onSelectStage, clockwise, onToggleDirection, centerLine1, centerLine2, centerLine3, showAuthor = true, videoUrl, onCloseVideo, onAuthorPlay, worldZones, activeWorld, onSelectWorld }) {
+export default function CircleNav({ stages, currentStage, onSelectStage, clockwise, onToggleDirection, centerLine1, centerLine2, centerLine3, showAuthor = true, videoUrl, onCloseVideo, onAuthorPlay, worldZones, activeWorld, onSelectWorld, modelOverlay, onCloseModel }) {
   const radius = 42;
   const computed = getStageAngles(stages, clockwise);
   const playerRef = useRef(null);
@@ -103,23 +103,29 @@ export default function CircleNav({ stages, currentStage, onSelectStage, clockwi
           <circle cx="50" cy="50" r="47" className="ring ring-outer" />
           <circle cx="50" cy="50" r="38" className="ring ring-inner" />
           {worldZones && !listId && (
-            <>
-              {/* Upper semicircle — Normal World */}
-              <path
-                d="M 12,50 A 38,38 0 0,1 88,50 Z"
-                className={`world-zone world-zone-upper${activeWorld === 'normal' ? ' active' : ''}`}
-                onClick={() => onSelectWorld && onSelectWorld(activeWorld === 'normal' ? null : 'normal')}
-              />
-              {/* Lower semicircle — Other World */}
-              <path
-                d="M 12,50 A 38,38 0 0,0 88,50 Z"
-                className={`world-zone world-zone-lower${activeWorld === 'other' ? ' active' : ''}`}
-                onClick={() => onSelectWorld && onSelectWorld(activeWorld === 'other' ? null : 'other')}
-              />
-              {/* Horizontal dividing line */}
-              <line x1="12" y1="50" x2="88" y2="50" className="world-divider" />
-            </>
+            <line x1="12" y1="50" x2="88" y2="50" className="world-divider" />
           )}
+          {modelOverlay && !listId && (() => {
+            const m = modelOverlay;
+            const r = 28;
+            const step = clockwise ? 45 : -45;
+            return (
+              <g className="model-overlay-ring">
+                <circle cx="50" cy="50" r={r} fill="none" stroke={m.color} strokeWidth="0.4" opacity="0.6" />
+                <line x1="50" y1={50 - r - 1} x2="50" y2={50 + r + 1} stroke={m.color} strokeWidth="0.2" opacity="0.3" />
+                {m.stages.map((label, i) => {
+                  if (!label) return null;
+                  const angle = -90 + step * i;
+                  const rad = (angle * Math.PI) / 180;
+                  const cx = 50 + r * Math.cos(rad);
+                  const cy = 50 + r * Math.sin(rad);
+                  return (
+                    <circle key={i} cx={cx} cy={cy} r="1.8" fill={m.color} opacity="0.7" />
+                  );
+                })}
+              </g>
+            );
+          })()}
         </svg>
 
         {listId ? (
@@ -130,6 +136,17 @@ export default function CircleNav({ stages, currentStage, onSelectStage, clockwi
               <button className="circle-video-btn" onClick={handlePrev} title="Previous">{'\u25C0'}</button>
               <button className="circle-video-btn" onClick={handleNext} title="Next">{'\u25B6'}</button>
             </div>
+          </div>
+        ) : modelOverlay ? (
+          <div className="model-center-info" style={{ '--model-color': modelOverlay.color }}>
+            <span className="model-center-title" style={{ color: modelOverlay.color }}>{modelOverlay.title}</span>
+            <span className="model-center-theorist">{modelOverlay.theorist}</span>
+            <span className="model-center-labels">
+              <span className="model-world-label">{modelOverlay.normalWorldLabel}</span>
+              <span className="model-world-sep">/</span>
+              <span className="model-world-label">{modelOverlay.otherWorldLabel}</span>
+            </span>
+            <button className="model-close-btn" onClick={onCloseModel}>{'\u2715'}</button>
           </div>
         ) : (
           <div
@@ -152,6 +169,59 @@ export default function CircleNav({ stages, currentStage, onSelectStage, clockwi
             )}
           </div>
         )}
+
+        {worldZones && !listId && (
+          <>
+            <div
+              className={`world-zone world-zone-upper${activeWorld === 'normal' ? ' active' : ''}`}
+              onClick={() => onSelectWorld && onSelectWorld(activeWorld === 'normal' ? null : 'normal')}
+            />
+            <div
+              className={`world-zone world-zone-lower${activeWorld === 'other' ? ' active' : ''}`}
+              onClick={() => onSelectWorld && onSelectWorld(activeWorld === 'other' ? null : 'other')}
+            />
+            <div
+              className={`world-zone-threshold${activeWorld === 'threshold' ? ' active' : ''}`}
+              onClick={() => onSelectWorld && onSelectWorld(activeWorld === 'threshold' ? null : 'threshold')}
+            />
+          </>
+        )}
+
+        {modelOverlay && !listId && (() => {
+          const m = modelOverlay;
+          const r = 28;
+          const step = clockwise ? 45 : -45;
+          return m.stages.map((label, i) => {
+            if (!label) return null;
+            const angle = -90 + step * i;
+            const rad = (angle * Math.PI) / 180;
+            const x = 50 + r * Math.cos(rad);
+            const y = 50 + r * Math.sin(rad);
+            const tangent = angle + 90;
+            let norm = ((tangent + 180) % 360 + 360) % 360 - 180;
+            let labelRot = norm;
+            if (norm > 90) labelRot = norm - 180;
+            if (norm < -90) labelRot = norm + 180;
+            return (
+              <div
+                key={`model-${i}`}
+                className="model-stage-marker"
+                style={{
+                  left: `${x}%`,
+                  top: `${y}%`,
+                }}
+                title={label}
+              >
+                <span
+                  className="model-stage-label"
+                  style={{ transform: `rotate(${labelRot}deg)`, color: m.color }}
+                >
+                  {label}
+                </span>
+              </div>
+            );
+          });
+        })()}
 
         {computed.map(s => {
           const rad = (s.angle * Math.PI) / 180;

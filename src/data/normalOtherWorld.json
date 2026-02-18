@@ -2,41 +2,49 @@
   "normalWorld": {
     "title": "The Normal World",
     "subtitle": "The Ordinary World of Waking Day",
-    "description": "The surface reality, status quo — the world of common sense. As Vogler describes, 'Most stories take the hero out of the ordinary, mundane world and into a Special World, new and alien. Before the adventure can begin, the audience needs to know the hero's Ordinary World — the baseline against which all change will be measured.' This is the sphere of the known, the dome of the sky at noon, the ouroboros of self-referential normality where the end meets the beginning in a closed loop of status quo.",
+    "description": "The surface reality, status quo — the world of common sense. This is how we get to what storytellers call the Normal World. The worldview at the foundation of our increasingly secular and materialistic lifestyles — from which comes individualism, egoism, democracy, will to power and the despair of existential isolation. This is the paradigm that killed god, and its tight grip was exactly what the Surrealist Manifesto was meant to deconstruct.",
     "overview": {
-      "consciousness": "The world of consciousness, the ego, the persona — what Jung calls the mask self. The surface world is that of our common sensory experience, what Kant calls Nature: the world of phenomena, the world as it appears to us.",
-      "normality": "Initial normality: the relationship between starting place and starting state revolves around normality. There are reality-wide norms at the start of the story and there is the starting normal experience of a protagonist. Within a system's norms are those who enforce, suffer, skirt, benefit from and/or unwittingly participate.",
-      "geometry": "The full circle — complete, bounded, self-contained. The sphere of the known world. The dome of the sky at noon. The ouroboros of self-referential normality, where the end meets the beginning in a closed loop of status quo.",
-      "orientation": "As Syd Field explains, audiences do not do well with extended disorientation at the start of a story. We tend to start in a world that matches the audience's own orientation — normality. From Harry Potter to The Matrix, we start in a relatively normal and mundane reality before adventuring into the unknown."
+      "Consciousness & Persona": "The world of consciousness, the ego, the persona — what Jung calls the mask self. The surface world is that of our common sensory experience, what Kant calls Nature: the world of phenomena, the world as it appears to us. The self-loving ego prefers to selectively identify with the persona — qualities of the self selectively shared with the world like a mask. Such an ego-persona alignment excludes unknown, undiscovered and repressed dimensions of the self.",
+      "Initial Normality": "The relationship between starting place and starting state revolves around normality. There are reality-wide norms at the start of the story and there is the starting normal experience of a protagonist. Within a system's norms are those who enforce, suffer, skirt, benefit from and/or unwittingly participate. As Syd Field explains, audiences do not do well with extended disorientation at the start of a story. From Harry Potter to The Matrix, we start in a relatively normal and mundane reality before adventuring into the unknown.",
+      "Zenith & Adulthood": "Looking at this stage within the cycle of mortality, this is the zenith, where the Sun rests at noon. This is when humans are in the prime of their adulthood, when animals are sexually mature, and when plants are in full flower. The healthy adult at high noon is a personification of the normal world. This is also, however, a time when the momentum of inclined construction gives way to a deconstructive decline.",
+      "Shelter & Paradise": "Before the Fall, four rivers watered the garden, where the Lord God made grow every tree that is pleasant to the sight, and good for food. The sheltering of the youth in the mother's home is mimetic with the sheltering of the infant in the womb. As the infant is born from the womb, so it is born from the nest or home, so it is born from Eden, Paradise, or the golden age."
+    },
+    "wasteland": {
+      "Vegetal Origins": "The origin of the wasteland motif is death of vegetation that comes with winter followed by new growth with the warming days of Spring. Symbolically, drought and death on earth and field has been poetically used to express the drought and death of soul, creativity and freedom.",
+      "Spiritual Disaster": "Campbell writes, 'spiritual disaster, in the imagery of the grail legend, is symbolized in the Waste Land theme: a landscape of spiritual death, a world waiting, waiting... for the Desired Knight, who would restore its integrity to life and let stream again from infinite depths the lost forgotten, living waters of the inexhaustible source.' James Joyce saw in our world 'a spiritual Waste Land of total disillusionment in the goals and ideals offered by the society and its church.'",
+      "King & Land": "Fraser established a theoretical connection between the king and the land. By comparing myths and rituals around the world, he found a common association of the king's health with the land's. The revivification of the king precipitates the revival of the land. The Grail King's health is sympathetically related to the health of the land — both simultaneously fall ill.",
+      "Organized Lovelessness": "Huxley points to our present economic, social and international arrangements, which are based, in large measure, upon organized lovelessness. When we lack charity towards Nature, instead of trying to co-operate with Tao or the Logos, we try to dominate and exploit — we waste the earth's mineral resources, ruin its soil, ravage its forests, pour filth into its rivers and poisonous fumes into its air.",
+      "Empire of Rationalizations": "Wastelands are empires of rationalization that present the tyranny of ego as heroic righteousness. Our empire of rationalizations relies on major constructs like materiality and monetization. Materialistic science and common sensory experience are the pillars of our materialistic consumer culture. We rationalize our greed with science only to find that science to be wrong, reducing it to rationalizations.",
+      "Thou Shalt": "Nietzsche describes the status quo as a great dragon covered with golden scales, on every scale a glittering 'Thou Shalt!' — the accumulation of past norms that stifles the freedom of a new individual. Campbell picks up: 'The mythological hero is the champion not of things become but of things becoming; the dragon to be slain by him is precisely the monster of the status quo: Holdfast, the keeper of the past.'"
     },
     "theorists": {
       "campbell": {
         "name": "Joseph Campbell",
-        "description": "The ordinary world of waking day — the hero's starting reality before the call disrupts it. The world of phenomena, of common sensory experience."
+        "description": "The ordinary world of waking day — the hero's starting reality before the call disrupts it. 'The modern hero deed must be that of questing to bring to light again the lost Atlantis of the co-ordinated soul.' The lines of communication between the conscious and unconscious zones of the human psyche have all been cut, and we have been split in two."
       },
       "vogler": {
         "name": "Christopher Vogler",
-        "description": "The Normal World of Common Sense — the ordinary. 'Most stories take the hero out of the ordinary, mundane world and into a Special World.' Often heroes are unaware there is anything wrong with their Ordinary World and don't see any need for change."
-      },
-      "harmon": {
-        "name": "Dan Harmon",
-        "description": "You — where you are at the start of the story, in your comfort zone."
-      },
-      "snyder": {
-        "name": "Blake Snyder",
-        "description": "The current state or world before the story — the thesis world of Act 1."
-      },
-      "mckee": {
-        "name": "Robert McKee",
-        "description": "A world in balance — an imperfect balance, perhaps, but the protagonist's life is in relative control. The world as it is before the inciting incident disrupts it."
+        "description": "The Normal World of Common Sense — the ordinary. 'Most stories take the hero out of the ordinary, mundane world and into a Special World. Before the adventure can begin, the audience needs to know the hero's Ordinary World — the baseline against which all change will be measured.' The Ordinary World is the context, home base, and background of the hero."
       },
       "jung": {
         "name": "C.G. Jung",
-        "description": "The world of consciousness. The persona, the mask self — the surface of identity presented to the world. The known territory of the ego."
+        "description": "The world of consciousness — the persona, the mask self. The known territory of the ego. The collective belief as stifling to individuality: 'Unless he stands firmly on his own feet, the so-called objective values profit him nothing, since they then only serve as a substitute for character and so help to suppress his individuality.'"
       },
-      "kant": {
-        "name": "Immanuel Kant",
-        "description": "Nature — the world of phenomena, of the world as it appears to us through the categories of understanding. The surface world of common sensory experience."
+      "nietzsche": {
+        "name": "Friedrich Nietzsche",
+        "description": "The great dragon 'Thou Shalt' — all the values of a thousand years glittering on its scales. The accumulation of norms that stifles freedom. The hero must become 'a wheel rolling of itself' to melt difficulties and open the unpredictable highway."
+      },
+      "fraser": {
+        "name": "James Frazer",
+        "description": "Author of The Golden Bough. Established the connection between the king and the land: when the sovereign is well, the land thrives; when the sovereign sickens, drought and famine follow. The king was sacrificed so that sacred life, transmitted in unabated force to his successor, may renew its youth."
+      },
+      "huxley": {
+        "name": "Aldous Huxley",
+        "description": "Our present arrangements are based on organized lovelessness. 'The principal cause of suffering and wrong-doing is the condition of an expanding and technologically progressive system of mass-production.' Advertising is the organized effort to extend and intensify craving."
+      },
+      "eliot": {
+        "name": "T.S. Eliot",
+        "description": "The Waste Land — 'dry stone' in which there was 'no sound of water.' 'That corpse you planted last year in your garden, has it begun to sprout?' Eliot recast modern life as a neo-wasteland, bridging myth and contemporary conversation."
       }
     },
     "films": {
@@ -54,12 +62,17 @@
         "title": "The Matrix",
         "year": 1999,
         "description": "The ordinary world is revealed to be an elaborate illusion — normality itself is the prison. Neo's cubicle life represents the ultimate surface reality."
+      },
+      "waterworld": {
+        "title": "Waterworld",
+        "year": 1995,
+        "description": "The Mariner begins as pure ego: 'a couple hours ago I was potential dirt to you... you've got nothing I need.' His first show of love comes when he allows the little girl to have his crayon — the miracle of miracles, when individuals go against their material interest on behalf of another."
       }
     },
     "stages": {
-      "golden-age": "The Normal World at its fullest expression — the complete sphere of the known. The status quo before disruption, where the hero exists within established norms.",
-      "falling-star": "The Normal World begins to crack. The call arrives from beyond, and the hero becomes aware that something is missing from ordinary life.",
-      "new-age": "The Normal World transformed — the hero returns with the Elixir, and the ordinary is renewed. The journey is meaningless unless she brings back something from the Special World."
+      "golden-age": "The Normal World at its fullest expression — the complete sphere of the known. Paradise before the fall. Four rivers watered the garden. The status quo before disruption, where the hero exists within established norms. This is also where a story's thematic problem is embedded — the wasteland hiding beneath the surface.",
+      "falling-star": "The Normal World begins to crack. The call arrives from beyond, and the hero becomes aware that something is missing from ordinary life. Shadow disruption of the ego-persona alignment — deeper forces of the psyche call the known self to its unknown depths.",
+      "new-age": "The Normal World transformed — the hero returns with the Elixir, and the ordinary is renewed. The redemption of the wasteland: Sleeping Beauty wakes and so does the kingdom, the Grail King heals and the waters flow again, Christ resurrects and the Messianic Age begins."
     }
   },
   "otherWorld": {
@@ -67,35 +80,49 @@
     "subtitle": "The Special World of Curiously Fluid Forms",
     "description": "Neverland, Oz, Fantasia, The Matrix, A Galaxy Far Far Away, Middle Earth, the land of the dead, Amduat, Hell, warzones, forest, land beneath the waves, below the earth, night, dream, trance, unconscious — these are the other worlds, inner and outer, through which journeys proceed. Campbell writes, from the ordinary world of waking day, 'the hero moves in a dream landscape of curiously fluid, ambiguous forms, where he must survive a succession of trials.'",
     "overview": {
-      "arrival": "Arrival in another world is first and most powerfully experienced as departure from the last. When you plunge through the rabbit hole, it's like a wind tunnel that tightens all the air into an intense blast. That's the other world coming at you, blasting away all orientation. Then when you arrive, all you can see is different. It can be thrilling. It can be scary. Likely it's both.",
-      "relativity": "One of the crucial disorientations that comes when one transitions into the world of otherness is a transition from a sense of objectivity to an experience of the relative. Otherness is definitively relative — what is the Special World depends entirely on whose perspective you occupy.",
-      "timeSpace": "TIME SPACE is about the where-when. When it's night, where are you? In the night world. When it's death, where are you? The death world. When it's winter, the winter world. When we are awake, we are in the world of waking day. When we are asleep, we are in a dream world. This is a study of the When-Wheres — a study of time-space.",
-      "axisMundi": "The axis mundi represents a nearness to the holy, the worlds of the gods, spirits, heaven, death, numinosity, the divine other, and perhaps the immaterial. The axis mundi is the epicenter of what is sacred, and at this epicenter is the connection of below with above."
+      "Arrival & Swallowing": "Arrival in another world is first and most powerfully experienced as departure from the last. When you plunge through the rabbit hole, it's like a wind tunnel that tightens all the air into an intense blast. That's the other world coming at you, blasting away all orientation. The passage of the magical threshold is a transit into a sphere of rebirth symbolized in the worldwide womb image of the belly of the whale.",
+      "Relativity of Otherness": "One of the crucial disorientations that comes when one transitions into the world of otherness is a transition from a sense of objectivity to an experience of the relative. Otherness is definitively relative — what is the Special World depends entirely on whose perspective you occupy. Halloween Town is other to Christmas Town and vice versa. Where Batman entered the darkness, that darkness was Bane's normal.",
+      "Time-Space": "TIME SPACE is about the where-when. When it's night, where are you? In the night world. When it's death, the death world. When it's winter, the winter world. When we are awake, we are in the world of waking day. When we are asleep, we are in a dream world. Day and Night, Full Moon and New Moon, Summer and Winter, Living and Dead — these are the when-wheres, the time-spaces.",
+      "Center & Axis Mundi": "The axis mundi represents a nearness to the holy, the worlds of the gods, spirits, heaven, death, numinosity, the divine other. At the epicenter of what is sacred is the connection of below with above. The road leading to the center is a 'difficult road' — dangerous voyages, wanderings in labyrinths, the seeker's road to the center of his being. Attaining the center is equivalent to a consecration, an initiation."
+    },
+    "dimensions": {
+      "Physical": "Above Earth & Below Earth (Underworld). Above Water & Below Water. On Earth & In Space. Outside Body & Inside Body.",
+      "Temporal": "Day & Night. Full Moon & New Moon. Summer & Winter. Living & Dead. Great Year (Procession of Equinoxes). Universal Return — Alpha and Omega, Big Bang and great collapse.",
+      "Psychological": "Wake & Dream. Conscious & Unconscious. Self with which one identifies vs. everything else in the self. Normal Consciousness vs. Trance, Meditative Depths, Mystical Depths.",
+      "Metaphysical": "Plato: Particulars & Forms. Western Science: Atomism & Quantum. Kant: Laws of Nature vs. Laws of Freedom. Natural vs. Supernatural. Material vs. Immaterial.",
+      "Narrative Genres": "Romance: World of Single Life vs. Reality during Union. Detective: Reality of Covered Truth vs. Uncovered Reality. Adventure: Home vs. World of Adventure. Horror: World without Horror vs. World of Horror. War: Home & Country vs. Warzone.",
+      "Sub-Surface": "Self Beneath Persona. Unconscious Beneath Consciousness. Night Beneath Day. Water beneath Sky. Earth & Caves beneath Surface. Death beneath Life. Sacred beneath Profane. Immaterial beneath Material. Forms beneath Particulars."
+    },
+    "dream": {
+      "Dream & Duat": "The Egyptians were convinced that the sleeper dwells in Nun, the primeval ocean, and that these depths are experienced as a psychic reality in which one may encounter gods and the deceased. Such a conflation of night, death, dream, stars and ocean with other and under worlds is not uncommon throughout world mythology.",
+      "Dream & Unconscious": "Dream roots lie deep in the unfathomably dark recesses of the conscious mind. For want of a more descriptive term we call this unknown background the unconscious. Jung: 'The unconscious has an independent function. The dream not only fails to obey our will but very often stands in flagrant opposition to our conscious intentions.'",
+      "Big Dreams": "Jung: 'The big or meaningful dreams come from a deeper level. They reveal their significance by their plastic form, which often has a poetic force and beauty. Such dreams occur mostly during the critical phases of life — in early youth, puberty, at the onset of middle age, and within sight of death.' They employ mythological motifs: dangerous adventures, dragons, helpful animals, the Wise Old Man, the hidden treasure, the cave, the walled garden.",
+      "World Dreaming Through Us": "Aizenstat: 'Each of our own dream images contains the mundane, the personal, the cultural, and the world levels all at once within itself. It is not just you who are dreaming, the world itself is also dreaming. If we want to go to the very deepest levels of experience, we have to remember that dream images do not belong just to us.'"
     },
     "theorists": {
       "campbell": {
         "name": "Joseph Campbell",
-        "description": "The hero moves in a dream landscape of curiously fluid, ambiguous forms. The belly of the whale, the road of trials, the meeting with the goddess — these all occur in the realm beyond the threshold. The hero who achieves mastery becomes the Master of Two Worlds, free to pass back and forth across the world division."
+        "description": "The hero moves in a dream landscape of curiously fluid, ambiguous forms. The belly of the whale, the road of trials, the meeting with the goddess — these all occur in the realm beyond the threshold. The hero who achieves mastery becomes the Master of Two Worlds, free to pass back and forth across the world division. 'The temple interior, the belly of the whale, and the heavenly land beyond, above, and below the confines of the world, are one and the same.'"
       },
       "vogler": {
         "name": "Christopher Vogler",
-        "description": "The Special World — new and alien territory. 'The most important function of this period of adjustment to the Special World is testing. Storytellers use this phase to test the hero, putting her through a series of trials and challenges meant to prepare her for greater ordeals ahead.'"
-      },
-      "harmon": {
-        "name": "Dan Harmon",
-        "description": "The characters cross a threshold and begin an exploration into an unfamiliar situation. They leave the known and enter the unknown."
-      },
-      "snyder": {
-        "name": "Blake Snyder",
-        "description": "The protagonist leaves the thesis world of Act 1 and enters the upside-down antithesis world of Act 2. The world is turned on its head."
-      },
-      "steiner": {
-        "name": "Rudolf Steiner",
-        "description": "The Way of Initiation describes a crossing of an initiatory threshold — sometimes with a disorienting blindfold. The departure from ordinary consciousness into higher knowledge."
+        "description": "The Special World — new and alien territory. 'The most important function of this period of adjustment to the Special World is testing.' The audience's first impressions should strike a sharp contrast with the Ordinary World. The new rules of the Special World must be learned quickly."
       },
       "jung": {
         "name": "C.G. Jung",
-        "description": "The unconscious — the shadow realm beneath the ego's awareness. The world of archetypes, dreams, and the collective unconscious that the hero must navigate to achieve individuation."
+        "description": "The unconscious — the shadow realm beneath the ego's awareness. 'A dream is a theatre in which the dreamer is himself the scene, the player, the prompter, the producer, the author, the public, and the critic.' The collective unconscious lies at a deeper level, further removed from consciousness, containing the archetypal forms shared by all humanity."
+      },
+      "eliade": {
+        "name": "Mircea Eliade",
+        "description": "Sacred space constitutes a break in the homogeneity of profane space. Communication with heaven is expressed through the axis mundi: pillar, ladder, mountain, tree, vine. Around this cosmic axis lies the world. Every New Year is a resumption of time from the beginning — a repetition of the cosmogony, the mythical passage from chaos to cosmos."
+      },
+      "hillman": {
+        "name": "James Hillman",
+        "description": "The psychological underworld — a storehouse of the imagination filled with seeds of archetypal patterns. The modernist underworld is a cornucopia or granary, where the seed forms of the archetypal imagination are stored."
+      },
+      "smith": {
+        "name": "Evans Lansing Smith",
+        "description": "The descent to the underworld is the single most important myth for modernist authors. The myth gives the works that 'shape and significance' which T.S. Eliot saw to be the consequence of the mythical method. The underworld as ancestral crypt, inferno, temenos, and cornucopia of archetypal forms."
       },
       "breton": {
         "name": "André Breton",
@@ -106,32 +133,32 @@
       "inanna": {
         "title": "Inanna's Descent",
         "tradition": "Sumerian",
-        "description": "From the great above she set her mind toward the great below. My lady abandoned heaven, abandoned earth, to the nether world she descended. Abandoned lordship, abandoned ladyship, to the nether world she descended."
+        "description": "From the great above she set her mind toward the great below. My lady abandoned heaven, abandoned earth, to the nether world she descended. Abandoned lordship, abandoned ladyship, to the nether world she descended. At each of the seven gates she is stripped of another garment of civilization."
       },
       "osiris": {
-        "title": "The Duat",
+        "title": "The Duat & Renewal in the Serpent",
         "tradition": "Egyptian",
-        "description": "Osiris journeys through the Duat — the Egyptian underworld — passing through Aker, the bottommost point, between two great cats. The crossing of the sun from sky to earth, the crossing of corpse from above to below."
+        "description": "Osiris journeys through the Duat — the Egyptian underworld — passing through Aker, the bottommost point, between two great cats. The old ones enter by the tail of the great serpent and travel through the spine, coming out at the mouth as rejuvenated ones, thanks to the inversion of time which occurs in the body of this serpent."
+      },
+      "bellyOfWhale": {
+        "title": "The Belly of the Whale",
+        "tradition": "Universal",
+        "description": "The Zulus tell of two children and their mother swallowed by an elephant. When the woman reached the animal's stomach, she saw large forests and great rivers, and many high lands; on one side there were many rocks; and there were many people who had built their village there — all there inside the elephant. The belly is a world unto itself."
       },
       "persephone": {
         "title": "Persephone's Descent",
         "tradition": "Greek",
-        "description": "Persephone descends to Hades, dwelling in the underworld as its queen. Her annual return marks the spring equinox — the boundary between the world of the dead and the world of the living."
-      },
-      "orpheus": {
-        "title": "Orpheus in the Underworld",
-        "tradition": "Greek",
-        "description": "Orpheus follows his beloved into the land of the dead, charming the rulers of the underworld with his music. The journey below is guided by love and art — and tested by the temptation to look back."
+        "description": "Persephone descends to Hades, dwelling in the underworld as its queen. Her annual return marks the spring equinox — the boundary between the world of the dead and the world of the living. Her personal abduction and return has a microcosmic relationship with the larger cosmos."
       },
       "christ": {
         "title": "The Harrowing of Hell",
         "tradition": "Christian",
-        "description": "When Christ dies on the cross, the veil isolating the holy of holies is ripped. The crossing from life to death, from above to below. Christ descends to the dead before resurrection."
+        "description": "When Christ dies on the cross, the veil isolating the holy of holies is ripped. The crossing from life to death, from above to below. Christ descends to the dead before resurrection. At Golgotha, the blood of Christ baptizes the buried head of Adam, redeeming the progenitor and the spiritual wasteland that followed his fall."
       },
-      "dante": {
-        "title": "The Divine Comedy",
-        "tradition": "Italian",
-        "description": "Dante's descent through the circles of Hell, guided by Virgil — the poet navigating the geography of the other world, each circle a deeper layer of the unconscious made manifest."
+      "grailQuest": {
+        "title": "The Grail Quest",
+        "tradition": "Arthurian",
+        "description": "Because of the actions of Sir Gawain, a knight questing for the grail, 'the waters flowed again through their channel, and all the woods were turned to verdure.' The quest by the Knights of the Round Table to find the Grail is the great adventure to restore health and wholeness to a system that has been almost fatally wounded."
       }
     },
     "films": {
@@ -143,29 +170,70 @@
       "starWars": {
         "title": "Star Wars",
         "year": 1977,
-        "description": "The Millennium Falcon carries Luke from his home world, serving as a ferry that crosses the threshold. 'A Galaxy Far Far Away' is the classic other world."
+        "description": "The Millennium Falcon carries Luke from his home world, serving as a ferry that crosses the threshold. 'A Galaxy Far Far Away' is the classic other world. Luke, as a Jedi, exemplifies the unique metaphysical qualities of the galaxy — the Force."
       },
       "nightmareBeforeChristmas": {
         "title": "The Nightmare Before Christmas",
         "year": 1993,
         "description": "Halloween Town is other to Christmas Town and vice versa — otherness is definitively relative. What is the Special World depends entirely on whose perspective you occupy."
       },
-      "darkKnight": {
-        "title": "The Dark Knight Rises",
-        "year": 2012,
-        "description": "Bane says 'I was born in the shadows.' Where Batman had entered into and integrated the other (darkness/shadow), that other was Bane's normal — illustrating the relativity of the other world."
-      },
       "hook": {
         "title": "Hook",
         "year": 1991,
-        "description": "Jack says to his father, 'I am home,' illustrating how Peter Pan became deeply acclimated to the other world (Neverland) and didn't want to leave — the hero's refusal to return."
+        "description": "Jack says to his father, 'I am home,' illustrating how Peter Pan became deeply acclimated to the other world (Neverland) and didn't want to leave — the hero's refusal to return. This was once the other world to me — California, studios, story, myth, philosophy. I've disenchanted it with discernment and de-othered it with participation."
+      },
+      "fisherKing": {
+        "title": "The Fisher King",
+        "year": 1991,
+        "description": "A thorough study of two men and their psychic wounds. Inspired by the Arthurian legend of the Holy Grail and the Fisher King, whose physical wound symbolized a wound of the spirit. Under his weakened kingship, the land was dying, and only the powerful spiritual magic of the Holy Grail could revive it."
       }
     },
     "stages": {
-      "impact-crater": "The threshold — the horizontal line of the horizon, the boundary between above and below, known and unknown, day and night. The gate, the door, the mouth of the whale, the surface of the sea.",
-      "forge": "Deep in the Other World — the road of trials. After having been swallowed into an unknown world, the characters begin to adapt. The Beast of Burden journeys deep into the desert.",
-      "quenching": "The deepest point of the Other World — the nadir, the belly of the whale, the innermost chamber. Aker, the bottommost point of the Duat. Here we are not tested — we are undone.",
-      "integration": "The return begins. Does the character really want to head back towards the world from which they departed? The character's deep acclimation to the other world has brought meaning to which little in the mundane can compare."
+      "impact-crater": "The threshold — the horizontal line of the horizon, the boundary between above and below, known and unknown, day and night. The gate, the door, the mouth of the whale, the surface of the sea. We leave the known. The bridge collapses behind us. We fall into forests, caves, oceans — through mirrors and under skins.",
+      "forge": "Deep in the Other World — the road of trials. After having been swallowed into an unknown world, the characters begin to adapt. Temples as other worlds: the devotee at the moment of entry undergoes a metamorphosis. His secular character remains without; he sheds it as a snake its slough.",
+      "quenching": "The deepest point of the Other World — the nadir, the belly of the whale, the innermost chamber. Aker, the bottommost point of the Duat. Here we are not tested — we are undone. The axis mundi is the epicenter of what is sacred, and at this epicenter is the connection of below with above.",
+      "integration": "The return begins. Does the character really want to head back towards the world from which they departed? The character's deep acclimation to the other world has brought meaning to which little in the mundane can compare. It will be essential for the hero to transpose the insights gained in the other world into a new understanding of the world at home."
+    }
+  },
+  "threshold": {
+    "title": "The Threshold",
+    "subtitle": "The Boundary Between Above and Below, Known and Unknown",
+    "description": "The boundary of above and below is broken by adze or plow so that the seed can be planted. So does the sperm cross that boundary between outer and inner, to be planted. When we see the soul ferried to the land of death, it, too, is planted. And as the soul crosses into death, the sleeper crosses into dream. So what is it when a protagonist crosses the threshold of adventure, when Osiris rides his ship to the stars, like Luke or Kirk? These are the threshold crossings that inflect the crossing of Alice into wonderland, Lucy into Narnia and Wendy into Neverland.",
+    "overview": {
+      "Liminal Geometry": "The horizontal line of the horizon — the boundary between above and below, known and unknown, day and night. The threshold is a liminal geometry: neither here nor there. The gate, the door, the mouth of the whale, the surface of the sea. Have you ever been both awake and dreaming? Have you ever brought words from the dream into reality, like the dying who speak utterances from beyond? Liminal — between the realms.",
+      "Doors of Perception": "For human experience, the primary thresholds are those between conscious and unconscious activity, wake and dream, life and death — each symbolized by day and night, surface and subterranean, ground and submarine, known and distant. In the last grain of sand, teetering in the point of an hourglass, we see our last breath. Sometimes the horizon we're afraid of is commitment, marriage, parenthood.",
+      "Equinox & Opposites": "The threshold is the equinox, the balance point. In fall, the days are as long as they are short. Something is on the way to its death, something is being born. This is that moment when the side of you that's being born finally has 51% of the control. This is the threshold of Samhain and Halloween, of dia de los muertos and all saints day. It is in the solar clocks of year and day as much as it is between life and death.",
+      "World Between Worlds": "It's difficult to pull away from everything you know but with a deep breath you go, taking the plunge into the abyss of the unknown. We enter a strange no-man's-land, a world between worlds, a zone of crossing that may be desolate and lonely, or in places, crowded with life. There's no turning back now — the adventure has begun for good or ill.",
+      "Meeting Point of Opposites": "A pearl is found in a field that makes it abundant — this eating of the pearl at the meeting place of opposites takes us back to Campbell's profound recognition of the threshold as the meeting point of opposition. Sometimes opposites war, sometimes opposites love. Sometimes we are attracted to the other, sometimes we are repelled by it, but really, often, it's a paradox of simultaneous bothness."
+    },
+    "adze": {
+      "Was Scepter": "The adze, or was sceptre, is the symbol that represents all penetration of the threshold. This is the staff of Seth, associated with the leg of Seth — the constellation the Egyptians recognized as both. Before adze were used to plant seeds, this happened naturally. Grass grows where herd animals gather and where the boar fought. In their fighting — recognized as the fighting of Horus and Seth — their feet tore up the earth. The gouging out of a testicle and eye from one another represent the sun and moonset.",
+      "Tooth, Adze & Plow": "Anything that cuts across boundaries can become assimilated into boundary crossing iconography. From the tusks and feet of the boar, rooting and digging into the earth, to the adze and plow, each is associated with the Egyptian was scepter, used to cut through the world-encircling serpent who separates the world of the living from death, dream and the unknown. As the tooth, adze and plow penetrate earth, so does the crescent moon cut into the horizon, where the sun is planted.",
+      "Opening the Mouths of the Gods": "An adze, which represented the Great Bear — a constellation that belonged to Seth — and with which, in a lost myth, he 'opened the mouths of the gods.' This constellation, Ursa Major — the Big Dipper — was called Meskhetiu by the Egyptians, but was often referred to simply as 'The Foreleg.' Seth, as adze or foreleg, was the instrument used to open the mouth (senses) and spark new life.",
+      "The Constellation & the Polestar": "One of the things that makes the two dippers so unique is how closely they rotate around the axis of the sky. The tip of the little dipper is the pole or North Star around which the sky turns. Just as Seth cuts his way through the seal to the Duat, he here appears as a cutting device at the sky's apex. As though cutting its way through the roof of existence, the adze circles this center. What a threshold to cross. To get there, Osiris will have to climb the Djed pillar, a ladder, not unlike Jacob's, to the heavens.",
+      "Seth as Opener of the Way": "The notion of Seth as a cutter or opener of the way is reinforced by his emblem, the primeval flint knife, the instrument of dismemberment and death. In the Amduat, doors are called 'knife', since they cut the way in several places. Seth, as a knife, as a door, as an opening or opener. When Seth parts the way for the seat of the god with his crooked staff, it can be said that he is parting a world-enclosing sea. Red is the color of the windows and gateways in the Book of the Dead. It's the color of Egyptian knives, adze and plows — from red flint to red copper, gold and bronze.",
+      "The Staff that Parts the Sea": "The crooked staff of Seth might be compared with another. When Seth cuts through Apep — recognized as the starry sky, the Red Sea, the Mediterranean and the cosmic ocean which surrounds the world — he cuts open a door for the solar barque by penetrating the seal between the world we know and the Duat beyond. If there was one Egyptian deity they'd want to take with them, it was Moses, I mean Seth, who parted the world-enclosing sea with his crooked staff so that the seat of God, the Ark of the Covenant, could pass through."
+    },
+    "guardians": {
+      "Threshold Guardians": "Threshold guardians maintain the boundary between known and unknown realities. A struggle with a threshold guardian symbolizes an inner struggle against the boundaries of explored psychic territory and willingness to leave the known and surrender to the implications of adventuring on. As much as the threshold guardian separates known from the unknown, it also resists the invasion of normalcy by repressed and unknown forces.",
+      "Cerberus & Fluffy": "In Greek myth, the three-headed monster dog Cerberus guards the entrance to the underworld. Fluffy, from Harry Potter, is a clear reference to Cerberus. Rowling went further — Fluffy was lulled to sleep by music. This comes from the story of Orpheus, who played Cerberus to sleep in his quest for Eurydice. Not only does Orpheus play Cerberus to sleep, he also lulls Ladon to sleep with his sweet music — another threshold guardian, the serpent confronted at Sunset.",
+      "Charon & the Troll Toll": "The grim ferryman Charon guides souls across the River Styx — a Threshold Guardian who must be appeased with a gift of a penny. In Alice in Wonderland, the threshold guardian is a doorknob, into which she will deposit a key, like a golden coin, apple or bough, which can grant passage. As Frank calls it in It's Always Sunny, this is the 'Troll toll.'",
+      "Crossing Figures": "In ancient Greece and Rome these thresholds were recognized as Janus — the two-faced god of January who looks backwards and forward — and the herms. The herm gets its name from Hermes, the winged messenger between realms. It is not uncommon for boundary-crossing figures to present as hermaphroditic, like Tiresias, who lived as both a woman and man. These figures are also often associated with migratory animals — geese, ducks who fly and swim under water, or rabbits who come and go from their rabbit holes around sunrise and sunset.",
+      "Testing the Hero": "Threshold Guardians take on a fantastic array of forms: border guards, sentinels, night watchmen, lookouts, bodyguards, bouncers, entrance examiners, or anyone whose function is to temporarily block the way of the hero and test her powers. Like the Sphinx who presents Oedipus with a riddle, Threshold Guardians challenge and test heroes on the path. The trick may be to realize that what seems like an obstacle may actually be the means of climbing over the threshold."
+    },
+    "motifs": {
+      "Fire Stick & Flaming Sword": "The Pythagorean symbol for fire is a triangle, because, like a blade, fire divides things. At the boundary of Eden is the flaming sword — the device of penetration and cutting made of the element that divides. This is the wisdom associated with the luminescent staff of Gandalf, who, like Seth, gets his company past the threshold guardian with the help of his crooked staff. This motif goes back, at least, to the myth of Inanna, about whom it was said, 'Who walked in front of her, held a staff in hand.'",
+      "Ferrying the Soul": "When Osiris rides the solar boat, a correlate of the coffin, he crosses into the Duat. At the front of the solar boat is Seth, who cuts the way for the solar company into the underworld. The staff he uses is a stylized adze — the original tool used to penetrate earth for the planting of seeds. The Millennium Falcon carries Luke from his home world, serving as a ferry. Charon's boat crosses the Styx.",
+      "Rabbit Holes & Gates": "For as long as we can remember, we tend to close doors, windows and gates when the night comes. This isn't only a time when the threshold is crossed, it's also a time when it comes down. The rabbit hole can be long. The space between is liminal — not quite here, not quite there.",
+      "Cutting of Hair": "The cutting of the hair at this stage of the journey mimes the shearing of grain and falling of leaves as sun crosses the equinox threshold, leading up to the next, when fall becomes winter and night truly dark.",
+      "Planting the Seed": "The penetrating of earth and horizon to plant sun and seed is associated around the world with the sexual act, which surrealistically synthesizes the male penis as the ultimate penetrating symbol with all other symbols of penetration — from the sword, knife and plow to our electrical plugs. By now, we can add light-saber, torch, flaming sword and glowing wand to our lexicon of penetrating objects."
+    },
+    "cycles": {
+      "Solar Day": "The sun sets across the horizon, descending from above to below. This is the threshold crossing of the daily cycle — the boundary between the known world of day and the unknown world of night.",
+      "Lunar Month": "The half-moon wanes towards empty. Half the face is dark. This is the threshold of the monthly cycle — equally illuminated and shadowed.",
+      "Solar Year": "Shortening days are as short as they are long at the Fall Equinox. This is the threshold of the annual cycle. From here, darkness overtakes light.",
+      "Fertility": "Mother and Earth are penetrated for the planting of seed. This is the moment of conception's threshold — the seed enters the womb, the pollen enters the pistil, the sperm crosses into the egg.",
+      "Mortality": "The familiar life horizon has been outgrown. The old concepts, ideals, and emotional patterns no longer fit; the time for the passing of a threshold is at hand."
     }
   }
 }

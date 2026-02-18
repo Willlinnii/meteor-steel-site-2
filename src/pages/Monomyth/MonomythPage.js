@@ -12,6 +12,22 @@ import psychlesData from '../../data/monomythPsychles.json';
 import depthData from '../../data/monomythDepth.json';
 import filmsData from '../../data/monomythFilms.json';
 import worldData from '../../data/normalOtherWorld.json';
+import monomythModels from '../../data/monomythModels.json';
+
+const THEORIST_TO_MODEL = {
+  campbell: 'campbell', jung: 'jung', nietzsche: 'nietzsche',
+  frobenius: 'frobenius', eliade: 'eliade', plato: 'plato',
+  vogler: 'vogler', snyder: 'snyder', aristotle: 'aristotle',
+  mckee: 'mckee-field', field: 'mckee-field',
+  freud: 'dream', gennep: 'vangennep', murdoch: 'murdock',
+  tolkien: 'tolkien', fraser: 'frazer', marks: 'marks',
+  propp: 'propp', murdock: 'murdock', vangennep: 'vangennep',
+  frazer: 'frazer',
+};
+
+function getModelById(id) {
+  return monomythModels.models.find(m => m.id === id) || null;
+}
 
 const MONOMYTH_STAGES = [
   { id: 'golden-age', label: 'Surface', playlist: 'https://www.youtube.com/playlist?list=PLX31T_KS3jtpduuWlv1HDEoVMtrhOhXF_' },
@@ -73,7 +89,7 @@ function OverviewTab({ stageId }) {
   );
 }
 
-function TheoristsTab({ stageId, activeGroup }) {
+function TheoristsTab({ stageId, activeGroup, onSelectModel, selectedModelId }) {
   const stageData = theoristsData[stageId];
   if (!stageData) return <p className="metals-empty">No theorist data available.</p>;
 
@@ -84,9 +100,16 @@ function TheoristsTab({ stageId, activeGroup }) {
 
   return (
     <div className="tab-content">
-      {Object.entries(group).map(([key, t]) => (
-        <div key={key} className="mono-card">
-          <h4 className="mono-card-name">{t.name}</h4>
+      {Object.entries(group).map(([key, t]) => {
+        const hasModel = !!THEORIST_TO_MODEL[key];
+        const isActive = hasModel && selectedModelId === THEORIST_TO_MODEL[key];
+        return (
+        <div
+          key={key}
+          className={`mono-card${hasModel ? ' mono-card-clickable' : ''}${isActive ? ' mono-card-model-active' : ''}`}
+          onClick={hasModel ? () => onSelectModel(key) : undefined}
+        >
+          <h4 className="mono-card-name">{t.name}{hasModel && <span className="mono-model-icon">{isActive ? ' \u25C9' : ' \u25CE'}</span>}</h4>
           <h5 className="mono-card-concept">{t.concept}</h5>
           <p>{t.description}</p>
           {key === 'jung' && activeGroup === 'mythological' && depthPsych && (
@@ -98,7 +121,7 @@ function TheoristsTab({ stageId, activeGroup }) {
             </>
           )}
         </div>
-      ))}
+      ); })}
     </div>
   );
 }
@@ -189,19 +212,29 @@ function GlobalOverview() {
   );
 }
 
-const WORLD_TABS = [
-  { id: 'overview', label: 'Overview' },
-  { id: 'theorists', label: 'Theorists' },
-  { id: 'myths', label: 'Myths' },
-  { id: 'films', label: 'Films' },
-];
+function buildWorldTabs(worldKey) {
+  const tabs = [{ id: 'overview', label: 'Overview' }];
+  if (worldKey === 'normal') tabs.push({ id: 'wasteland', label: 'Wasteland' });
+  if (worldKey === 'other') {
+    tabs.push({ id: 'dimensions', label: 'Dimensions' });
+    tabs.push({ id: 'dream', label: 'Dream' });
+  }
+  if (worldKey === 'threshold') {
+    tabs.push({ id: 'adze', label: 'The Adze' });
+    tabs.push({ id: 'guardians', label: 'Guardians' });
+    tabs.push({ id: 'motifs', label: 'Motifs' });
+    tabs.push({ id: 'cycles', label: 'Cycles' });
+  }
+  if (worldKey !== 'threshold') tabs.push({ id: 'theorists', label: 'Theorists' });
+  if (worldKey === 'other') tabs.push({ id: 'myths', label: 'Myths' });
+  if (worldKey !== 'threshold') tabs.push({ id: 'films', label: 'Films' });
+  return tabs;
+}
 
-function WorldContent({ worldKey }) {
+function WorldContent({ worldKey, onSelectModel, selectedModelId }) {
   const [activeTab, setActiveTab] = useState('overview');
-  const data = worldKey === 'normal' ? worldData.normalWorld : worldData.otherWorld;
-
-  const showMythsTab = worldKey === 'other';
-  const tabs = showMythsTab ? WORLD_TABS : WORLD_TABS.filter(t => t.id !== 'myths');
+  const data = worldKey === 'normal' ? worldData.normalWorld : worldKey === 'other' ? worldData.otherWorld : worldData.threshold;
+  const tabs = buildWorldTabs(worldKey);
 
   return (
     <div className="metal-detail-panel">
@@ -226,7 +259,7 @@ function WorldContent({ worldKey }) {
             <p className="mono-summary">{data.description}</p>
             {data.overview && Object.entries(data.overview).map(([key, text]) => (
               <div key={key} className="mono-card">
-                <h5 className="mono-card-concept">{key.replace(/([A-Z])/g, ' $1').trim()}</h5>
+                <h5 className="mono-card-concept">{key}</h5>
                 <p>{text}</p>
               </div>
             ))}
@@ -246,14 +279,91 @@ function WorldContent({ worldKey }) {
             )}
           </div>
         )}
-        {activeTab === 'theorists' && (
+        {activeTab === 'wasteland' && data.wasteland && (
           <div className="tab-content">
-            {Object.entries(data.theorists).map(([key, t]) => (
+            {Object.entries(data.wasteland).map(([key, text]) => (
               <div key={key} className="mono-card">
-                <h4 className="mono-card-name">{t.name}</h4>
-                <p>{t.description}</p>
+                <h5 className="mono-card-concept">{key}</h5>
+                <p>{text}</p>
               </div>
             ))}
+          </div>
+        )}
+        {activeTab === 'dimensions' && data.dimensions && (
+          <div className="tab-content">
+            {Object.entries(data.dimensions).map(([key, text]) => (
+              <div key={key} className="mono-card">
+                <h5 className="mono-card-concept">{key}</h5>
+                <p>{text}</p>
+              </div>
+            ))}
+          </div>
+        )}
+        {activeTab === 'dream' && data.dream && (
+          <div className="tab-content">
+            {Object.entries(data.dream).map(([key, text]) => (
+              <div key={key} className="mono-card">
+                <h5 className="mono-card-concept">{key}</h5>
+                <p>{text}</p>
+              </div>
+            ))}
+          </div>
+        )}
+        {activeTab === 'adze' && data.adze && (
+          <div className="tab-content">
+            {Object.entries(data.adze).map(([key, text]) => (
+              <div key={key} className="mono-card">
+                <h5 className="mono-card-concept">{key}</h5>
+                <p>{text}</p>
+              </div>
+            ))}
+          </div>
+        )}
+        {activeTab === 'guardians' && data.guardians && (
+          <div className="tab-content">
+            {Object.entries(data.guardians).map(([key, text]) => (
+              <div key={key} className="mono-card">
+                <h5 className="mono-card-concept">{key}</h5>
+                <p>{text}</p>
+              </div>
+            ))}
+          </div>
+        )}
+        {activeTab === 'motifs' && data.motifs && (
+          <div className="tab-content">
+            {Object.entries(data.motifs).map(([key, text]) => (
+              <div key={key} className="mono-card">
+                <h5 className="mono-card-concept">{key}</h5>
+                <p>{text}</p>
+              </div>
+            ))}
+          </div>
+        )}
+        {activeTab === 'cycles' && data.cycles && (
+          <div className="tab-content">
+            {Object.entries(data.cycles).map(([key, text]) => (
+              <div key={key} className="mono-card">
+                <h5 className="mono-card-concept">{key}</h5>
+                <p>{text}</p>
+              </div>
+            ))}
+          </div>
+        )}
+        {activeTab === 'theorists' && data.theorists && (
+          <div className="tab-content">
+            {Object.entries(data.theorists).map(([key, t]) => {
+              const hasModel = !!THEORIST_TO_MODEL[key];
+              const isActive = hasModel && selectedModelId === THEORIST_TO_MODEL[key];
+              return (
+              <div
+                key={key}
+                className={`mono-card${hasModel ? ' mono-card-clickable' : ''}${isActive ? ' mono-card-model-active' : ''}`}
+                onClick={hasModel ? () => onSelectModel(key) : undefined}
+              >
+                <h4 className="mono-card-name">{t.name}{hasModel && <span className="mono-model-icon">{isActive ? ' \u25C9' : ' \u25CE'}</span>}</h4>
+                <p>{t.description}</p>
+              </div>
+            ); })}
           </div>
         )}
         {activeTab === 'myths' && data.myths && (
@@ -291,6 +401,15 @@ export default function MonomythPage() {
   const [devEntries, setDevEntries] = useState({});
   const [videoUrl, setVideoUrl] = useState(null);
   const [activeWorld, setActiveWorld] = useState(null);
+  const [selectedModel, setSelectedModel] = useState(null);
+
+  const handleSelectModel = (theoristKey) => {
+    const modelId = THEORIST_TO_MODEL[theoristKey];
+    if (!modelId) return;
+    const model = getModelById(modelId);
+    if (!model) return;
+    setSelectedModel(prev => prev?.id === model.id ? null : model);
+  };
 
   const stageLabel = MONOMYTH_STAGES.find(s => s.id === currentStage)?.label;
   const isStage = currentStage !== 'overview';
@@ -327,6 +446,8 @@ export default function MonomythPage() {
         worldZones
         activeWorld={activeWorld}
         onSelectWorld={handleSelectWorld}
+        modelOverlay={selectedModel}
+        onCloseModel={() => setSelectedModel(null)}
       />
 
       {isStage && stageLabel && (
@@ -336,7 +457,7 @@ export default function MonomythPage() {
       <div className="container">
         <div id="content-container">
           {activeWorld ? (
-            <WorldContent worldKey={activeWorld} />
+            <WorldContent worldKey={activeWorld} onSelectModel={handleSelectModel} selectedModelId={selectedModel?.id} />
           ) : isStage ? (
             <div className="metal-detail-panel">
               <div className="metal-tabs">
@@ -388,7 +509,7 @@ export default function MonomythPage() {
               <div className="metal-content-scroll">
                 {activeTab === 'overview' && <OverviewTab stageId={currentStage} />}
                 {activeTab === 'cycles' && <CyclesTab stageId={currentStage} />}
-                {activeTab === 'theorists' && <TheoristsTab stageId={currentStage} activeGroup={activeGroup} />}
+                {activeTab === 'theorists' && <TheoristsTab stageId={currentStage} activeGroup={activeGroup} onSelectModel={handleSelectModel} selectedModelId={selectedModel?.id} />}
                 {activeTab === 'history' && <HistoryTab stageId={currentStage} />}
                 {activeTab === 'myths' && <MythsTab stageId={currentStage} />}
                 {activeTab === 'films' && <FilmsTab stageId={currentStage} />}

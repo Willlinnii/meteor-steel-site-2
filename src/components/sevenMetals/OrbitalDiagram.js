@@ -36,6 +36,16 @@ const ORBITS = [
   { planet: 'Saturn',  metal: 'Lead',    r: 278, angle: 100,  speed: 0.06 },
 ];
 
+const HELIO_ORBITS = [
+  { planet: 'Mercury', r: 55,  angle: -40,  speed: 4.15 },
+  { planet: 'Venus',   r: 95,  angle: -130, speed: 1.62 },
+  { planet: 'Earth',   r: 140, angle: 20,   speed: 1 },
+  { planet: 'Mars',    r: 185, angle: -70,  speed: 0.53 },
+  { planet: 'Jupiter', r: 230, angle: 160,  speed: 0.084 },
+  { planet: 'Saturn',  r: 278, angle: 100,  speed: 0.034 },
+];
+const HELIO_MOON = { r: 18, speed: 13.37 };
+
 // SVG path glyphs for zodiac signs (drawn in a ~16x16 viewBox, centered at 0,0)
 const ZODIAC_GLYPHS = {
   Aries: 'M-5,6 C-5,-2 -1,-7 0,-7 C1,-7 5,-2 5,6 M0,-7 L0,7',
@@ -178,9 +188,12 @@ function ensureYTApi() {
 export default function OrbitalDiagram({ selectedPlanet, onSelectPlanet, selectedSign, onSelectSign, selectedCardinal, onSelectCardinal, selectedEarth, onSelectEarth, showCalendar, onToggleCalendar, selectedMonth, onSelectMonth, showMedicineWheel, onToggleMedicineWheel, selectedWheelItem, onSelectWheelItem, videoUrl, onCloseVideo }) {
   const [aligned, setAligned] = useState(false);
   const [livePositions, setLivePositions] = useState(false);
+  const [heliocentric, setHeliocentric] = useState(false);
   const [orbitAngles, setOrbitAngles] = useState(() => {
     const init = {};
     ORBITS.forEach(o => { init[o.planet] = o.angle; });
+    HELIO_ORBITS.forEach(o => { if (!(o.planet in init)) init[o.planet] = o.angle; });
+    init['Moon-helio'] = -90;
     return init;
   });
   const rafRef = useRef(null);
@@ -212,10 +225,17 @@ export default function OrbitalDiagram({ selectedPlanet, onSelectPlanet, selecte
       if (lastTimeRef.current != null) {
         const dt = (timestamp - lastTimeRef.current) / 1000;
         setOrbitAngles(prev => {
-          const next = {};
-          ORBITS.forEach(o => {
-            next[o.planet] = prev[o.planet] - o.speed * dt;
-          });
+          const next = { ...prev };
+          if (heliocentric) {
+            HELIO_ORBITS.forEach(o => {
+              next[o.planet] = (prev[o.planet] || 0) - o.speed * dt;
+            });
+            next['Moon-helio'] = (prev['Moon-helio'] || 0) - HELIO_MOON.speed * dt;
+          } else {
+            ORBITS.forEach(o => {
+              next[o.planet] = prev[o.planet] - o.speed * dt;
+            });
+          }
           return next;
         });
       }
@@ -227,7 +247,7 @@ export default function OrbitalDiagram({ selectedPlanet, onSelectPlanet, selecte
       cancelAnimationFrame(rafRef.current);
       lastTimeRef.current = null;
     };
-  }, [aligned, livePositions]);
+  }, [aligned, livePositions, heliocentric]);
 
   const liveAngles = useMemo(() => {
     if (!livePositions) return null;
@@ -266,19 +286,24 @@ export default function OrbitalDiagram({ selectedPlanet, onSelectPlanet, selecte
   const handleVideoPrev = useCallback(() => { if (videoPlayerRef.current?.previousVideo) videoPlayerRef.current.previousVideo(); }, []);
   const handleVideoNext = useCallback(() => { if (videoPlayerRef.current?.nextVideo) videoPlayerRef.current.nextVideo(); }, []);
 
-  const toggleLive = () => {
-    if (!livePositions) setAligned(false);
-    setLivePositions(!livePositions);
-  };
-
-  const toggleAlign = () => {
-    if (!aligned) setLivePositions(false);
-    setAligned(!aligned);
+  // Cycle: earth-centered → heliocentric → live positions → aligned → earth-centered
+  const cycleOrbitalMode = () => {
+    if (!aligned && !livePositions && !heliocentric) {
+      setHeliocentric(true);
+    } else if (heliocentric) {
+      setHeliocentric(false);
+      setLivePositions(true);
+    } else if (livePositions) {
+      setLivePositions(false);
+      setAligned(true);
+    } else {
+      setAligned(false);
+    }
   };
 
   return (
     <div style={{ position: 'relative', display: 'inline-block' }}>
-      <svg viewBox="0 0 700 700" className="orbital-svg" role="img" aria-label={showMedicineWheel ? "Medicine wheel diagram" : "Geocentric orbital diagram with zodiac"}>
+      <svg viewBox="0 0 700 700" className="orbital-svg" role="img" aria-label={showMedicineWheel ? "Medicine wheel diagram" : heliocentric ? "Heliocentric orbital diagram" : "Geocentric orbital diagram with zodiac"}>
         {showMedicineWheel ? (
           <g className="medicine-wheel" onMouseMove={handleWheelMove} onMouseLeave={() => { hoveredRingRef.current = null; setHoveredRing(null); }}>
             {/* Quadrant background sectors */}
@@ -504,7 +529,7 @@ export default function OrbitalDiagram({ selectedPlanet, onSelectPlanet, selecte
           </g>
         ) : (<>
         <defs>
-          {ORBITS.map(o => (
+          {[...ORBITS, { planet: 'Earth' }].map(o => (
             <filter key={o.planet} id={`glow-${o.planet}`}>
               <feGaussianBlur stdDeviation="3" result="blur" />
               <feMerge>
@@ -680,7 +705,7 @@ export default function OrbitalDiagram({ selectedPlanet, onSelectPlanet, selecte
           strokeWidth="0.6"
         />
 
-        {/* Zodiac sign labels on curved paths + glyph icons */}
+        {/* Zodiac sign labels on curved paths with inline glyph */}
         {ZODIAC.map((z, i) => {
           const isSelected = selectedSign === z.sign;
           const centerAngle = -(i * 30 + 15);
@@ -688,13 +713,6 @@ export default function OrbitalDiagram({ selectedPlanet, onSelectPlanet, selecte
           const hx = CX + ZODIAC_TEXT_R * Math.cos(rad);
           const hy = CY + ZODIAC_TEXT_R * Math.sin(rad);
           const color = isSelected ? '#f0c040' : 'rgba(201, 169, 97, 0.6)';
-          // Glyph position: slightly inward from text
-          const glyphR = ZODIAC_INNER_R + 10;
-          const gx = CX + glyphR * Math.cos(rad);
-          const gy = CY + glyphR * Math.sin(rad);
-          // Rotate glyph to stay upright
-          let glyphRot = centerAngle + 90;
-          if (glyphRot > 90 || glyphRot < -90) glyphRot += 180;
 
           return (
             <g
@@ -704,22 +722,9 @@ export default function OrbitalDiagram({ selectedPlanet, onSelectPlanet, selecte
               style={{ cursor: 'pointer' }}
             >
               <circle cx={hx} cy={hy} r="24" fill="transparent" />
-              {/* Glyph icon */}
-              <g transform={`translate(${gx},${gy}) rotate(${glyphRot}) scale(0.8)`}>
-                <path
-                  d={ZODIAC_GLYPHS[z.sign]}
-                  fill="none"
-                  stroke={color}
-                  strokeWidth="1.2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  style={{ transition: 'stroke 0.3s' }}
-                />
-              </g>
-              {/* Sign name on curved path */}
               <text
                 fill={color}
-                fontSize="14"
+                fontSize="13"
                 fontFamily="Cinzel, serif"
                 fontWeight={isSelected ? '700' : '500'}
                 letterSpacing="1"
@@ -729,7 +734,7 @@ export default function OrbitalDiagram({ selectedPlanet, onSelectPlanet, selecte
                   startOffset="50%"
                   textAnchor="middle"
                 >
-                  {z.sign}
+                  {z.symbol + '\uFE0E'} {z.sign}
                 </textPath>
               </text>
             </g>
@@ -792,7 +797,7 @@ export default function OrbitalDiagram({ selectedPlanet, onSelectPlanet, selecte
         })}
 
         {/* Orbital rings */}
-        {ORBITS.map(o => (
+        {(heliocentric ? HELIO_ORBITS : ORBITS).map(o => (
           <circle
             key={o.planet}
             cx={CX} cy={CY} r={o.r}
@@ -802,6 +807,14 @@ export default function OrbitalDiagram({ selectedPlanet, onSelectPlanet, selecte
             strokeDasharray="4 3"
           />
         ))}
+        {/* Moon orbit around Earth in heliocentric mode */}
+        {heliocentric && (() => {
+          const earthAngle = orbitAngles['Earth'] || 0;
+          const earthRad = (earthAngle * Math.PI) / 180;
+          const ex = CX + 140 * Math.cos(earthRad);
+          const ey = CY + 140 * Math.sin(earthRad);
+          return <circle cx={ex} cy={ey} r={HELIO_MOON.r} fill="none" stroke="rgba(200, 216, 232, 0.15)" strokeWidth="0.5" strokeDasharray="2 2" />;
+        })()}
 
         {/* Alignment line when active */}
         {aligned && (
@@ -814,14 +827,54 @@ export default function OrbitalDiagram({ selectedPlanet, onSelectPlanet, selecte
           />
         )}
 
-        {/* Earth at center — day/night halves */}
-        {(() => {
+        {/* Center body: Sun (heliocentric) or Earth (geocentric) */}
+        {heliocentric ? (
+          <g
+            style={{ cursor: 'pointer' }}
+            onClick={() => onSelectPlanet('Sun')}
+          >
+            {/* Sun glow */}
+            <radialGradient id="sun-center-glow" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stopColor="#f0c040" stopOpacity="0.4" />
+              <stop offset="60%" stopColor="#f0a020" stopOpacity="0.15" />
+              <stop offset="100%" stopColor="#f08000" stopOpacity="0" />
+            </radialGradient>
+            <circle cx={CX} cy={CY} r="32" fill="url(#sun-center-glow)" />
+            {/* Corona rays */}
+            {Array.from({ length: 8 }, (_, i) => {
+              const angle = (i * 45 * Math.PI) / 180;
+              const inner = 16 * 1.05;
+              const outer = 16 * 1.5;
+              const spread = 0.15;
+              return (
+                <polygon key={i}
+                  points={`${CX + inner * Math.cos(angle - spread)},${CY + inner * Math.sin(angle - spread)} ${CX + outer * Math.cos(angle)},${CY + outer * Math.sin(angle)} ${CX + inner * Math.cos(angle + spread)},${CY + inner * Math.sin(angle + spread)}`}
+                  fill="#f0c040" opacity="0.5"
+                />
+              );
+            })}
+            <circle cx={CX} cy={CY} r="16"
+              fill="#f0c040" fillOpacity={selectedPlanet === 'Sun' ? 0.9 : 0.7}
+              stroke="#f0c040" strokeWidth={selectedPlanet === 'Sun' ? 2 : 1}
+              filter={selectedPlanet === 'Sun' ? 'url(#glow-Sun)' : undefined}
+            />
+            {selectedPlanet === 'Sun' && (
+              <circle cx={CX} cy={CY} r="22" fill="none" stroke="#f0c040" strokeWidth="1" opacity="0.4">
+                <animate attributeName="r" values="20;24;20" dur="2s" repeatCount="indefinite" />
+                <animate attributeName="opacity" values="0.4;0.15;0.4" dur="2s" repeatCount="indefinite" />
+              </circle>
+            )}
+            <text x={CX} y={CY + 30} textAnchor="middle" fill={selectedPlanet === 'Sun' ? '#f0c040' : '#a8a8b8'}
+              fontSize={selectedPlanet === 'Sun' ? '11' : '10'} fontFamily="Cinzel, serif" fontWeight={selectedPlanet === 'Sun' ? '700' : '400'}>
+              Sun
+            </text>
+          </g>
+        ) : (() => {
           const sunAngle = aligned ? ALIGN_ANGLE : liveAngles ? liveAngles['Sun'].svgAngle : orbitAngles['Sun'];
           const er = 14;
           const daySelected = selectedEarth === 'day';
           const nightSelected = selectedEarth === 'night';
           const sunRad = (sunAngle * Math.PI) / 180;
-          // Label positions: offset along sun axis for day, opposite for night
           const dayLabelX = CX + (er + 14) * Math.cos(sunRad);
           const dayLabelY = CY + (er + 14) * Math.sin(sunRad);
           const nightLabelX = CX - (er + 14) * Math.cos(sunRad);
@@ -829,19 +882,11 @@ export default function OrbitalDiagram({ selectedPlanet, onSelectPlanet, selecte
           return (
             <g>
               <circle cx={CX} cy={CY} r="28" fill="url(#earth-glow)" />
-              {/* Day side — semicircle facing the Sun */}
-              <g
-                style={{ cursor: 'pointer' }}
-                onClick={() => onSelectEarth && onSelectEarth(daySelected ? null : 'day')}
-              >
-                <path
-                  d={`M 0,${-er} A ${er},${er} 0 0,1 0,${er} L 0,0 Z`}
-                  fill={daySelected ? '#6aded0' : '#4a9a8a'}
-                  fillOpacity="0.9"
-                  stroke={daySelected ? '#7aeac0' : 'none'}
-                  strokeWidth="1.5"
-                  transform={`translate(${CX},${CY}) rotate(${sunAngle})`}
-                />
+              <g style={{ cursor: 'pointer' }} onClick={() => onSelectEarth && onSelectEarth(daySelected ? null : 'day')}>
+                <path d={`M 0,${-er} A ${er},${er} 0 0,1 0,${er} L 0,0 Z`}
+                  fill={daySelected ? '#6aded0' : '#4a9a8a'} fillOpacity="0.9"
+                  stroke={daySelected ? '#7aeac0' : 'none'} strokeWidth="1.5"
+                  transform={`translate(${CX},${CY}) rotate(${sunAngle})`} />
                 {daySelected && (
                   <circle cx={CX} cy={CY} r={er + 5} fill="none" stroke="#7aeac0" strokeWidth="0.8" opacity="0.5">
                     <animate attributeName="r" values={`${er + 3};${er + 7};${er + 3}`} dur="2s" repeatCount="indefinite" />
@@ -853,19 +898,11 @@ export default function OrbitalDiagram({ selectedPlanet, onSelectPlanet, selecte
                   Day
                 </text>
               </g>
-              {/* Night side — semicircle facing away from the Sun */}
-              <g
-                style={{ cursor: 'pointer' }}
-                onClick={() => onSelectEarth && onSelectEarth(nightSelected ? null : 'night')}
-              >
-                <path
-                  d={`M 0,${-er} A ${er},${er} 0 0,0 0,${er} L 0,0 Z`}
-                  fill={nightSelected ? '#2a4a4a' : '#152525'}
-                  fillOpacity="0.9"
-                  stroke={nightSelected ? '#5a8a8a' : 'none'}
-                  strokeWidth="1.5"
-                  transform={`translate(${CX},${CY}) rotate(${sunAngle})`}
-                />
+              <g style={{ cursor: 'pointer' }} onClick={() => onSelectEarth && onSelectEarth(nightSelected ? null : 'night')}>
+                <path d={`M 0,${-er} A ${er},${er} 0 0,0 0,${er} L 0,0 Z`}
+                  fill={nightSelected ? '#2a4a4a' : '#152525'} fillOpacity="0.9"
+                  stroke={nightSelected ? '#5a8a8a' : 'none'} strokeWidth="1.5"
+                  transform={`translate(${CX},${CY}) rotate(${sunAngle})`} />
                 {nightSelected && (
                   <circle cx={CX} cy={CY} r={er + 5} fill="none" stroke="#5a8a8a" strokeWidth="0.8" opacity="0.5">
                     <animate attributeName="r" values={`${er + 3};${er + 7};${er + 3}`} dur="2s" repeatCount="indefinite" />
@@ -877,20 +914,55 @@ export default function OrbitalDiagram({ selectedPlanet, onSelectPlanet, selecte
                   Night
                 </text>
               </g>
-              {/* Terminator line */}
-              <line
-                x1={CX} y1={CY - er} x2={CX} y2={CY + er}
+              <line x1={CX} y1={CY - er} x2={CX} y2={CY + er}
                 stroke="rgba(180, 220, 210, 0.3)" strokeWidth="0.8"
-                transform={`rotate(${sunAngle}, ${CX}, ${CY})`}
-              />
-              {/* Outline */}
+                transform={`rotate(${sunAngle}, ${CX}, ${CY})`} />
               <circle cx={CX} cy={CY} r={er} fill="none" stroke="rgba(90, 170, 154, 0.5)" strokeWidth="1" />
             </g>
           );
         })()}
 
         {/* Planet nodes */}
-        {ORBITS.map(o => {
+        {heliocentric ? (
+          <>
+            {HELIO_ORBITS.map(o => {
+              const angle = orbitAngles[o.planet] || 0;
+              const rad = (angle * Math.PI) / 180;
+              const px = CX + o.r * Math.cos(rad);
+              const py = CY + o.r * Math.sin(rad);
+              return (
+                <g key={o.planet}>
+                  <PlanetNode
+                    planet={o.planet}
+                    metal={o.planet === 'Earth' ? '' : ORBITS.find(x => x.planet === o.planet)?.metal || ''}
+                    cx={px}
+                    cy={py}
+                    selected={selectedPlanet === o.planet}
+                    onClick={() => onSelectPlanet(o.planet)}
+                    smooth={false}
+                  />
+                  {/* Moon orbiting Earth */}
+                  {o.planet === 'Earth' && (() => {
+                    const moonAngle = orbitAngles['Moon-helio'] || 0;
+                    const mRad = (moonAngle * Math.PI) / 180;
+                    const mx = px + HELIO_MOON.r * Math.cos(mRad);
+                    const my = py + HELIO_MOON.r * Math.sin(mRad);
+                    return (
+                      <g>
+                        <circle cx={mx} cy={my} r="4"
+                          fill="#c8d8e8" fillOpacity="0.7"
+                          stroke="#c8d8e8" strokeWidth="0.5" />
+                        <text x={mx} y={my + 10} textAnchor="middle" fill="rgba(200,216,232,0.5)" fontSize="6" fontFamily="Cinzel, serif">
+                          Moon
+                        </text>
+                      </g>
+                    );
+                  })()}
+                </g>
+              );
+            })}
+          </>
+        ) : ORBITS.map(o => {
           const angle = aligned ? ALIGN_ANGLE : liveAngles ? liveAngles[o.planet].svgAngle : orbitAngles[o.planet];
           const rad = (angle * Math.PI) / 180;
           const px = CX + o.r * Math.cos(rad);
@@ -933,18 +1005,11 @@ export default function OrbitalDiagram({ selectedPlanet, onSelectPlanet, selecte
       {!showMedicineWheel && (
         <>
           <button
-            className="live-toggle"
-            onClick={toggleLive}
-            title={livePositions ? 'Orbiting' : 'Live planetary positions'}
+            className="orbital-mode-toggle"
+            onClick={cycleOrbitalMode}
+            title={aligned ? 'Aligned — click to orbit' : livePositions ? 'Live Positions — click to align' : heliocentric ? 'Heliocentric — click for live positions' : 'Earth Centered — click for heliocentric'}
           >
-            {livePositions ? '◉' : '◎'}
-          </button>
-          <button
-            className="align-toggle"
-            onClick={toggleAlign}
-            title={aligned ? 'Scatter planets' : 'Align planets'}
-          >
-            {aligned ? '⊙' : '☍'}
+            {aligned ? '☍' : livePositions ? '◉' : heliocentric ? '☉' : '◎'}
           </button>
           <button
             className="calendar-toggle"

@@ -63,9 +63,9 @@
   fill-opacity: 1 !important;
 }
 
-/* ===== LIVE TOGGLE ===== */
+/* ===== ORBITAL MODE TOGGLE (cycle: orbiting → live → aligned) ===== */
 
-.live-toggle {
+.orbital-mode-toggle {
   position: absolute;
   bottom: -30px;
   right: 20px;
@@ -83,33 +83,7 @@
   opacity: 0.7;
 }
 
-.live-toggle:hover {
-  opacity: 1;
-  background: rgba(196, 113, 58, 0.1);
-  box-shadow: 0 0 10px rgba(196, 113, 58, 0.3);
-}
-
-/* ===== ALIGN TOGGLE ===== */
-
-.align-toggle {
-  position: absolute;
-  bottom: -30px;
-  right: -30px;
-  background: none;
-  border: 1px solid var(--accent-ember);
-  color: var(--accent-ember);
-  font-size: 1.5rem;
-  width: 40px;
-  height: 40px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s ease;
-  opacity: 0.7;
-}
-
-.align-toggle:hover {
+.orbital-mode-toggle:hover {
   opacity: 1;
   background: rgba(196, 113, 58, 0.1);
   box-shadow: 0 0 10px rgba(196, 113, 58, 0.3);
@@ -120,7 +94,7 @@
 .calendar-toggle {
   position: absolute;
   bottom: -30px;
-  right: -80px;
+  right: -30px;
   background: none;
   border: 1px solid rgba(139, 195, 170, 0.5);
   color: rgba(139, 195, 170, 0.8);
@@ -744,8 +718,7 @@
     grid-template-columns: 1fr;
   }
 
-  .live-toggle,
-  .align-toggle,
+  .orbital-mode-toggle,
   .calendar-toggle,
   .medicine-wheel-toggle {
     transform: none;
@@ -758,20 +731,16 @@
     bottom: 20px;
   }
 
-  .live-toggle {
+  .orbital-mode-toggle {
     right: 0px;
   }
 
-  .align-toggle {
+  .calendar-toggle {
     right: 40px;
   }
 
-  .calendar-toggle {
-    right: 80px;
-  }
-
   .medicine-wheel-toggle {
-    right: 120px;
+    right: 80px;
   }
 }
 
@@ -806,7 +775,7 @@
 .medicine-wheel-toggle {
   position: absolute;
   bottom: -30px;
-  right: -130px;
+  right: -80px;
   background: none;
   border: 1px solid rgba(180, 140, 80, 0.5);
   color: rgba(180, 140, 80, 0.8);

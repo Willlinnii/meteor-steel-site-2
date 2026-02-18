@@ -197,6 +197,29 @@
   margin-bottom: 12px;
 }
 
+/* ===== MODEL OVERLAY (theorist wheel) ===== */
+
+.mono-card-clickable {
+  cursor: pointer;
+  transition: border-color 0.3s ease, background 0.3s ease;
+}
+
+.mono-card-clickable:hover {
+  border-color: var(--accent-gold);
+  background: rgba(201, 169, 97, 0.06);
+}
+
+.mono-card-model-active {
+  border-color: var(--accent-gold);
+  background: rgba(201, 169, 97, 0.1);
+}
+
+.mono-model-icon {
+  font-size: 0.8rem;
+  opacity: 0.6;
+  margin-left: 4px;
+}
+
 /* ===== RESPONSIVE ===== */
 
 @media (max-width: 600px) {

@@ -46,6 +46,11 @@ const ZODIAC_PLAYLISTS = {
   Aquarius: 'https://www.youtube.com/playlist?list=PLX31T_KS3jtpqswOrq5U08V7qhPeVoMKu',
 };
 
+const CARDINAL_PLAYLISTS = {
+  'summer-solstice': 'https://www.youtube.com/playlist?list=PLX31T_KS3jtrt6bHMWVETza07R8lJL2of',
+  'autumnal-equinox': 'https://www.youtube.com/playlist?list=PLX31T_KS3jtqQZM-wycPZdEoc2BD2Q2iu',
+};
+
 function findBySin(arr, sin) {
   return arr.find(item => item.sin === sin) || null;
 }
@@ -577,7 +582,21 @@ export default function SevenMetalsPage() {
           <div className="container">
             <div id="content-container">
               <div className="metal-detail-panel">
-                <CultureSelector activeCulture={activeCulture} onSelectCulture={setActiveCulture} />
+                <div className="metal-tabs">
+                  <CultureSelector activeCulture={activeCulture} onSelectCulture={setActiveCulture} />
+                  {CARDINAL_PLAYLISTS[selectedCardinal] && (
+                    <button
+                      className={`metal-tab playlist-tab${videoUrl ? ' active' : ''}`}
+                      title={`Watch ${cardinalsData[selectedCardinal]?.label || selectedCardinal} playlist`}
+                      onClick={() => {
+                        if (videoUrl) { setVideoUrl(null); }
+                        else { setVideoUrl(CARDINAL_PLAYLISTS[selectedCardinal]); }
+                      }}
+                    >
+                      {videoUrl ? '\u25A0' : '\u25B6'}
+                    </button>
+                  )}
+                </div>
                 <CardinalContent cardinalId={selectedCardinal} activeCulture={activeCulture} />
               </div>
             </div>

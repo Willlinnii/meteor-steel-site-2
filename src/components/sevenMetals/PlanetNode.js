@@ -8,6 +8,7 @@ const PLANET_COLORS = {
   Mars:    '#c04040',
   Jupiter: '#8899cc',
   Saturn:  '#7a7a8a',
+  Earth:   '#4a8ab0',
 };
 
 // Build moon shadow path based on phase angle (0-360°)
@@ -155,6 +156,21 @@ function renderPlanetDetails(planet, r, moonPhase) {
             transform="rotate(-20)"
             strokeDasharray={`${r * 1.7 * Math.PI * 0.52} ${r * 1.7 * Math.PI * 0.48}`}
           />
+        </g>
+      );
+
+    case 'Earth':
+      // Blue ocean with green land masses
+      return (
+        <g>
+          <clipPath id="earth-surface-clip">
+            <circle cx={0} cy={0} r={r * 0.95} />
+          </clipPath>
+          <g clipPath="url(#earth-surface-clip)" opacity="0.5">
+            <ellipse cx={-r * 0.3} cy={-r * 0.25} rx={r * 0.35} ry={r * 0.25} fill="#3a8a4a" />
+            <ellipse cx={r * 0.25} cy={r * 0.1} rx={r * 0.25} ry={r * 0.35} fill="#3a8a4a" />
+            <ellipse cx={-r * 0.1} cy={r * 0.45} rx={r * 0.2} ry={r * 0.12} fill="#3a8a4a" />
+          </g>
         </g>
       );
 

@@ -6,6 +6,7 @@ import CircleNav from './components/CircleNav';
 import DevelopmentPanel from './components/DevelopmentPanel';
 import SevenMetalsPage from './pages/SevenMetals/SevenMetalsPage';
 import MonomythPage from './pages/Monomyth/MonomythPage';
+import MythologyChannelPage from './pages/MythologyChannel/MythologyChannelPage';
 import figures from './data/figures.json';
 import modernFigures from './data/modernFigures.json';
 import stageOverviews from './data/stageOverviews.json';
@@ -344,6 +345,7 @@ function FallenStarlightHome() {
   const [clockwise, setClockwise] = useState(false);
   const [showMeteors, setShowMeteors] = useState(false);
   const [devEntries, setDevEntries] = useState({});
+  const [audioPlaying, setAudioPlaying] = useState(false);
 
   const handleSelectStage = useCallback((stage) => {
     setCurrentStage(stage);
@@ -430,6 +432,28 @@ function FallenStarlightHome() {
           )}
         </div>
       </div>
+
+      <button
+        className={`audio-play-toggle${audioPlaying ? ' active' : ''}`}
+        onClick={() => setAudioPlaying(!audioPlaying)}
+        title={audioPlaying ? 'Pause audio' : 'Play Revelation of Fallen Starlight'}
+      >
+        {audioPlaying ? '\u25A0' : '\u25B6'}
+      </button>
+
+      {audioPlaying && (
+        <div className="audio-player-popup">
+          <iframe
+            title="Revelation of Fallen Starlight"
+            width="100%"
+            height="166"
+            scrolling="no"
+            frameBorder="no"
+            allow="autoplay"
+            src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/mythology-channel/revelation-of-fallen-starlight/s-8Rf09fh53Wr&color=%23c4713a&auto_play=true&hide_related=true&show_comments=false&show_user=false&show_reposts=false&show_teaser=false"
+          />
+        </div>
+      )}
     </>
   );
 }
@@ -745,9 +769,10 @@ function StoryForgeHome() {
 }
 
 const NAV_ITEMS = [
+  { path: '/metals', label: 'Celestial Clocks' },
   { path: '/', label: 'Meteor Steel' },
   { path: '/monomyth', label: 'Monomyth' },
-  { path: '/metals', label: 'Celestial Wheels' },
+  { path: '/mythology-channel', label: 'Mythology Channel' },
   { path: '/fallen-starlight', label: 'Fallen Starlight' },
   { path: '/story-forge', label: 'Story Forge' },
   { path: 'https://www.thestoryatlas.com/my-courses/psychles/surface', label: 'Story Atlas', external: true },
@@ -792,9 +817,18 @@ function SiteNav() {
   );
 }
 
+function SiteHeader() {
+  return (
+    <header className="site-header">
+      <span className="site-header-logo">Mythouse</span>
+    </header>
+  );
+}
+
 function App() {
   return (
     <div className="app">
+      <SiteHeader />
       <SiteNav />
       <Routes>
         <Route path="/" element={<MeteorSteelHome />} />
@@ -802,6 +836,7 @@ function App() {
         <Route path="/fallen-starlight" element={<FallenStarlightHome />} />
         <Route path="/story-forge" element={<StoryForgeHome />} />
         <Route path="/monomyth" element={<MonomythPage />} />
+        <Route path="/mythology-channel" element={<MythologyChannelPage />} />
       </Routes>
       <ChatPanel />
     </div>
