@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 function parseAtlasMessage(text) {
   const segments = [];
@@ -30,6 +30,18 @@ export default function ChatPanel() {
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
   const navigate = useNavigate();
+  const location = useLocation();
+
+  function getArea() {
+    const path = location.pathname;
+    if (path === '/metals') return 'celestial-clocks';
+    if (path === '/' || path === '/monomyth') return 'meteor-steel';
+    if (path === '/fallen-starlight') return 'fallen-starlight';
+    if (path === '/story-forge') return 'story-forge';
+    if (path === '/mythology-channel' || path.startsWith('/mythology-channel/')) return 'mythology-channel';
+    if (path === '/games') return 'games';
+    return null;
+  }
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -78,7 +90,7 @@ export default function ChatPanel() {
       const res = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: updated }),
+        body: JSON.stringify({ messages: updated, area: getArea() }),
       });
 
       const data = await res.json();
