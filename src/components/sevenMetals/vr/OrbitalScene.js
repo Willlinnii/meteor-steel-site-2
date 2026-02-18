@@ -193,13 +193,12 @@ export default function OrbitalScene({
         </mesh>
       )}
 
-      {/* Info panel */}
-      <InfoPanel3D
-        position={[0, 4, 0]}
-        visible={!!infoPanelContent}
-      >
-        {infoPanelContent}
-      </InfoPanel3D>
+      {/* Info panel — lies flat below orbital plane in AR, look down to read */}
+      {cameraAR && (
+        <InfoPanel3D visible={!!infoPanelContent}>
+          {infoPanelContent}
+        </InfoPanel3D>
+      )}
     </>
   );
 }

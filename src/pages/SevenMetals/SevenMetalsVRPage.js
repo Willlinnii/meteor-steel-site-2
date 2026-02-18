@@ -332,6 +332,40 @@ export default function SevenMetalsVRPage() {
   const currentData = mergedData[selectedPlanet] || null;
 
   // Panel heading
+  // Build panel content for both side panel and 3D AR panel
+  const panelContent = selectedSign ? (
+    <div className="metal-detail-panel">
+      <CultureSelector activeCulture={activeCulture} onSelectCulture={setActiveCulture} />
+      <ZodiacContent sign={selectedSign} activeCulture={activeCulture} />
+    </div>
+  ) : selectedCardinal ? (
+    <div className="metal-detail-panel">
+      <CultureSelector activeCulture={activeCulture} onSelectCulture={setActiveCulture} />
+      <CardinalContent cardinalId={selectedCardinal} activeCulture={activeCulture} />
+    </div>
+  ) : selectedEarth ? (
+    <div className="metal-detail-panel">
+      <CultureSelector activeCulture={activeCulture} onSelectCulture={setActiveCulture} />
+      <DayNightContent side={selectedEarth} activeCulture={activeCulture} />
+    </div>
+  ) : currentData ? (
+    <>
+      <MetalDetailPanel
+        data={currentData}
+        activeTab={activeTab}
+        onSelectTab={setActiveTab}
+        activeCulture={activeCulture}
+        onSelectCulture={setActiveCulture}
+      />
+      {activeTab === 'overview' && (
+        <div className="planet-culture-wrapper">
+          <CultureSelector activeCulture={activeCulture} onSelectCulture={setActiveCulture} />
+          <PlanetCultureContent planet={currentData.core.planet} activeCulture={activeCulture} />
+        </div>
+      )}
+    </>
+  ) : null;
+
   let panelHeading = '';
   let panelSub = '';
   if (selectedSign) {
@@ -373,7 +407,7 @@ export default function SevenMetalsVRPage() {
           onSelectCardinal={handleSelectCardinal}
           selectedEarth={selectedEarth}
           onSelectEarth={handleSelectEarth}
-          infoPanelContent={null}
+          infoPanelContent={cameraAR && hasSelection ? panelContent : null}
           xrStore={xrStore}
           cameraAR={cameraAR}
           arZoom={arZoom}
@@ -432,12 +466,12 @@ export default function SevenMetalsVRPage() {
               VR
             </button>
           )}
-          {panelOpen && hasSelection && (
+          {!cameraAR && panelOpen && hasSelection && (
             <button className="celestial-btn" onClick={() => setPanelOpen(false)}>
               Hide Panel
             </button>
           )}
-          {!panelOpen && hasSelection && (
+          {!cameraAR && !panelOpen && hasSelection && (
             <button className="celestial-btn" onClick={() => setPanelOpen(true)}>
               Show Panel
             </button>
@@ -445,8 +479,8 @@ export default function SevenMetalsVRPage() {
         </div>
       </div>
 
-      {/* Side panel with full content */}
-      <div className={`celestial-side-panel ${panelOpen && hasSelection ? 'open' : ''}`}>
+      {/* Side panel with full content — hidden in AR mode (content goes into 3D scene instead) */}
+      <div className={`celestial-side-panel ${!cameraAR && panelOpen && hasSelection ? 'open' : ''}`}>
         <div className="celestial-panel-header">
           <div>
             <h2 className="celestial-panel-heading">{panelHeading}</h2>
@@ -458,40 +492,7 @@ export default function SevenMetalsVRPage() {
         </div>
 
         <div className="celestial-panel-body">
-          {selectedSign ? (
-            <div className="metal-detail-panel">
-              <CultureSelector activeCulture={activeCulture} onSelectCulture={setActiveCulture} />
-              <ZodiacContent sign={selectedSign} activeCulture={activeCulture} />
-            </div>
-          ) : selectedCardinal ? (
-            <div className="metal-detail-panel">
-              <CultureSelector activeCulture={activeCulture} onSelectCulture={setActiveCulture} />
-              <CardinalContent cardinalId={selectedCardinal} activeCulture={activeCulture} />
-            </div>
-          ) : selectedEarth ? (
-            <div className="metal-detail-panel">
-              <CultureSelector activeCulture={activeCulture} onSelectCulture={setActiveCulture} />
-              <DayNightContent side={selectedEarth} activeCulture={activeCulture} />
-            </div>
-          ) : currentData ? (
-            <>
-              <MetalDetailPanel
-                data={currentData}
-                activeTab={activeTab}
-                onSelectTab={setActiveTab}
-                activeCulture={activeCulture}
-                onSelectCulture={setActiveCulture}
-              />
-              {activeTab === 'overview' && (
-                <div className="planet-culture-wrapper">
-                  <CultureSelector activeCulture={activeCulture} onSelectCulture={setActiveCulture} />
-                  <PlanetCultureContent planet={currentData.core.planet} activeCulture={activeCulture} />
-                </div>
-              )}
-            </>
-          ) : (
-            <p className="metals-empty">Select a planet, zodiac sign, or cardinal point to explore.</p>
-          )}
+          {panelContent || <p className="metals-empty">Select a planet, zodiac sign, or cardinal point to explore.</p>}
         </div>
       </div>
     </div>
