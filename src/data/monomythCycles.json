@@ -79,13 +79,13 @@
       "ring": 4,
       "stages": [
         "Awake",
-        "Drowsy",
-        "Falling Asleep",
-        "Light Sleep",
-        "Deep Dream",
-        "Rising Sleep",
-        "Waking Up",
-        "Refreshed"
+        "Tiring",
+        "Fall Asleep",
+        "Deepening Dream",
+        "Quiet",
+        "Dream Returns",
+        "Wake Up",
+        "Rising"
       ]
     },
     {
@@ -101,7 +101,7 @@
       "ring": 5,
       "stages": [
         "Sexual Maturity",
-        "Courtship",
+        "Mating Call",
         "Sowing Seed",
         "Fertilization",
         "Conception",
@@ -124,10 +124,10 @@
       "stages": [
         "Prime of Life",
         "Aging",
-        "Elder",
+        "Passing",
         "Dying",
         "Death",
-        "Seed",
+        "Gestation",
         "Birth",
         "Youth"
       ]
