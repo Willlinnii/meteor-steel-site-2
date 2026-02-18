@@ -59,7 +59,7 @@ export default function ChatPanel() {
   return (
     <>
       <button
-        className="chat-toggle"
+        className={`chat-toggle${open ? ' chat-toggle-open' : ''}`}
         onClick={() => setOpen(!open)}
         aria-label={open ? 'Close chat' : 'Open chat'}
       >
@@ -70,6 +70,7 @@ export default function ChatPanel() {
         <div className="chat-panel">
           <div className="chat-header">
             <span className="chat-title">Atlas</span>
+            <button className="chat-header-close" onClick={() => setOpen(false)} aria-label="Close chat">{'\u2715'}</button>
           </div>
 
           <div className="chat-messages">

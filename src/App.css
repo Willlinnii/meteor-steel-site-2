@@ -1463,6 +1463,23 @@ body {
   padding: 14px 18px;
   background: var(--bg-light);
   border-bottom: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.chat-header-close {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 4px 8px;
+  transition: color 0.2s ease;
+}
+
+.chat-header-close:hover {
+  color: var(--accent-ember);
 }
 
 .chat-title {
@@ -1585,15 +1602,23 @@ body {
   .chat-panel {
     right: 0;
     left: 0;
-    bottom: 80px;
+    bottom: 0;
+    top: 0;
     width: 100%;
-    max-height: 60vh;
-    border-radius: 12px;
+    max-height: none;
+    border-radius: 0;
+  }
+
+  .chat-toggle-open {
+    display: none;
   }
 
   .chat-toggle {
     bottom: 16px;
     right: 16px;
+    width: 48px;
+    height: 48px;
+    font-size: 1.3rem;
   }
 }
 
