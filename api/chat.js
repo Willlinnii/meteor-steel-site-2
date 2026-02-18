@@ -111,7 +111,7 @@ function compactCardinals() {
       const cultures = Object.entries(c.cultures || {})
         .map(([k, v]) => `${k}: ${v.name}`)
         .join(', ');
-      return `${c.label} (${c.date}) | ${c.season} | ${c.direction} | ${c.zodiacCusp} | Themes: ${(c.themes || []).join(', ')} | Cultures: ${cultures}`;
+      return `${c.label} (${c.date}) | ${c.season} | ${c.direction} | ${c.zodiacCusp} | Themes: ${c.themes || ''} | Cultures: ${cultures}`;
     }).join('\n');
 }
 
