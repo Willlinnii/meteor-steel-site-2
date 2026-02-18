@@ -1,4 +1,26 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+function parseAtlasMessage(text) {
+  const segments = [];
+  const regex = /\[\[([^|]+)\|([^\]]+)\]\]/g;
+  let lastIndex = 0;
+  let match;
+
+  while ((match = regex.exec(text)) !== null) {
+    if (match.index > lastIndex) {
+      segments.push({ type: 'text', content: text.slice(lastIndex, match.index) });
+    }
+    segments.push({ type: 'link', label: match[1].trim(), path: match[2].trim() });
+    lastIndex = regex.lastIndex;
+  }
+
+  if (lastIndex < text.length) {
+    segments.push({ type: 'text', content: text.slice(lastIndex) });
+  }
+
+  return segments;
+}
 
 export default function ChatPanel() {
   const [open, setOpen] = useState(false);
@@ -7,6 +29,7 @@ export default function ChatPanel() {
   const [loading, setLoading] = useState(false);
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -17,6 +40,29 @@ export default function ChatPanel() {
       inputRef.current.focus();
     }
   }, [open]);
+
+  function handleNavLink(path) {
+    navigate(path);
+    setOpen(false);
+  }
+
+  function renderParsedMessage(text) {
+    const segments = parseAtlasMessage(text);
+    return segments.map((seg, i) => {
+      if (seg.type === 'link') {
+        return (
+          <button
+            key={i}
+            className="chat-nav-link"
+            onClick={() => handleNavLink(seg.path)}
+          >
+            {seg.label} →
+          </button>
+        );
+      }
+      return <span key={i}>{seg.content}</span>;
+    });
+  }
 
   async function handleSend() {
     const text = input.trim();
@@ -82,7 +128,9 @@ export default function ChatPanel() {
 
             {messages.map((msg, i) => (
               <div key={i} className={`chat-msg chat-msg-${msg.role}`}>
-                <div className="chat-msg-content">{msg.content}</div>
+                <div className="chat-msg-content">
+                  {msg.role === 'assistant' ? renderParsedMessage(msg.content) : msg.content}
+                </div>
               </div>
             ))}
 

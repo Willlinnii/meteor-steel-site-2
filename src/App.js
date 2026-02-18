@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Routes, Route, Link, useLocation } from 'react-router-dom';
+import { Routes, Route, Link, useLocation, useSearchParams } from 'react-router-dom';
 import './App.css';
 import ChatPanel from './components/ChatPanel';
 import CircleNav from './components/CircleNav';
@@ -275,6 +275,7 @@ function MeteorShower({ active }) {
 }
 
 function MeteorSteelHome() {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [currentStage, setCurrentStage] = useState('overview');
   const [clockwise, setClockwise] = useState(false);
   const [showMeteors, setShowMeteors] = useState(false);
@@ -291,6 +292,17 @@ function MeteorSteelHome() {
       setShowMeteors(false);
     }
   }, []);
+
+  // Deep link from Atlas navigation
+  useEffect(() => {
+    const stageParam = searchParams.get('stage');
+    if (stageParam && STAGES.find(s => s.id === stageParam)) {
+      handleSelectStage(stageParam);
+    }
+    if (searchParams.toString()) {
+      setSearchParams({}, { replace: true });
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handlePlayVideo = useCallback((url) => {
     setVideoUrl(url);
@@ -341,6 +353,7 @@ function MeteorSteelHome() {
 }
 
 function FallenStarlightHome() {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [currentStage, setCurrentStage] = useState('overview');
   const [clockwise, setClockwise] = useState(false);
   const [showMeteors, setShowMeteors] = useState(false);
@@ -356,6 +369,17 @@ function FallenStarlightHome() {
       setShowMeteors(false);
     }
   }, []);
+
+  // Deep link from Atlas navigation
+  useEffect(() => {
+    const stageParam = searchParams.get('stage');
+    if (stageParam && STAGES.find(s => s.id === stageParam)) {
+      handleSelectStage(stageParam);
+    }
+    if (searchParams.toString()) {
+      setSearchParams({}, { replace: true });
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const currentLabel = currentStage === 'overview' || currentStage === 'bio'
     ? null

@@ -27,6 +27,8 @@ const monomythFilms = require('../src/data/monomythFilms.json');
 // --- Calendar & Medicine Wheels ---
 const mythicCalendar = require('../src/data/mythicCalendar.json');
 const medicineWheels = require('../src/data/medicineWheels.json');
+// --- The Revelation of Fallen Starlight ---
+const fallenStarlight = require('../src/data/fallenStarlight.json');
 
 // In-memory rate limiting (resets when the serverless function cold-starts)
 const rateMap = new Map();
@@ -337,7 +339,51 @@ CONVERSATION GUIDELINES:
 - Match the energy of the person. If they're curious, be inviting. If they're in pain, be gentle. If they're playful, play.
 - When discussing mythological figures or stages, draw on specific content from the archive — be precise, not vague. Name the figure, name the stage, name the film, name the sin. Specificity is what makes your knowledge feel alive.
 - If asked about something outside the archive, you may draw on your broader mythological knowledge, but note when you're going beyond the archive's specific material.
-- Keep responses focused. Don't dump everything you know. Feel the whole web, then offer the thread that matters most. If someone wants more, they'll pull.`;
+- Keep responses focused. Don't dump everything you know. Feel the whole web, then offer the thread that matters most. If someone wants more, they'll pull.
+
+NAVIGATION LINKS — SITE GUIDE:
+You can embed navigation links in your responses to guide people to specific pages and sections of the site. Use this exact format:
+[[Display Label|/route?param=value]]
+
+This renders as a clickable button the user can tap to navigate directly. Use inviting, descriptive labels — "Explore the Forge — where heat does its work" is better than "Go to Forge."
+
+AVAILABLE DESTINATIONS:
+
+Monomyth (/monomyth):
+- [[Label|/monomyth?stage=STAGE_ID]]
+  Stage IDs: golden-age, falling-star, impact-crater, forge, quenching, integration, drawing, new-age
+- [[Label|/monomyth?theorist=THEORIST_KEY]]
+  Theorist keys: campbell, jung, nietzsche, frobenius, eliade, plato, vogler, snyder, aristotle, freud, murdock, tolkien, frazer, propp, vangennep
+- [[Label|/monomyth?cycle=CYCLE_NAME]]
+  Cycle names: Solar Day, Lunar Month, Solar Year, Wake & Sleep, Procreation, Mortality
+- [[Label|/monomyth?world=WORLD_KEY]]
+  World keys: normal, other, threshold
+
+Mythology Channel (/mythology-channel):
+- [[Label|/mythology-channel?show=SHOW_ID]]
+  Show IDs: myths-tv, myth-salon, mythosophia, deep-sight, journey-of-the-goddess, transformational-narrative, dennis-slattery, lionel-corbett, myth-is-all-around-us, scholar-talks, mastery-circle, mythology-classroom, the-tao, pulling-focus, climate-journey
+
+Meteor Steel (/):
+- [[Label|/?stage=STAGE_ID]]
+  Same stage IDs as monomyth
+
+Celestial Clocks (/metals):
+- [[Label|/metals]]
+
+Fallen Starlight (/fallen-starlight):
+- [[Label|/fallen-starlight?stage=STAGE_ID]]
+
+Story Forge (/story-forge):
+- [[Label|/story-forge]]
+
+Mythosophia (/mythosophia):
+- [[Label|/mythosophia]]
+
+LINK GUIDELINES:
+- Include 1-3 links per response when relevant, woven naturally into your prose.
+- Only link when it genuinely serves the conversation — when someone asks about something the site contains.
+- Do not dump a list of links. Weave them into your guidance like a companion pointing the way.
+- Do not use links in every response. Only when guiding someone to content that will deepen their exploration.`;
 }
 
 module.exports = async function handler(req, res) {

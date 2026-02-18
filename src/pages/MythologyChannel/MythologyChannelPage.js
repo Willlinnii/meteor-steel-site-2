@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import mythsData from '../../data/mythsEpisodes.json';
 import './MythologyChannelPage.css';
 
@@ -122,6 +123,7 @@ function MythsEpisodeContent({ episode }) {
 }
 
 export default function MythologyChannelPage() {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [activeShow, setActiveShow] = useState(null);
   const [videoUrl, setVideoUrl] = useState(null);
   const [activeEpisode, setActiveEpisode] = useState(null);
@@ -130,6 +132,19 @@ export default function MythologyChannelPage() {
   const playerContainerRef = useRef(null);
 
   const triggerZap = useCallback(() => setZapKey(k => k + 1), []);
+
+  // Deep link from Atlas navigation
+  useEffect(() => {
+    const showParam = searchParams.get('show');
+    if (showParam) {
+      const show = SHOWS.find(s => s.id === showParam);
+      if (show) {
+        setActiveShow(show);
+        setVideoUrl(show.playlist || null);
+      }
+      setSearchParams({}, { replace: true });
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const destroyPlayer = useCallback(() => {
     if (playerRef.current) {

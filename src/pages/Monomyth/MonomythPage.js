@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import CircleNav from '../../components/CircleNav';
 import DevelopmentPanel from '../../components/DevelopmentPanel';
 import TextBlock from '../../components/sevenMetals/TextBlock';
@@ -450,6 +451,7 @@ function WorldContent({ worldKey, onSelectModel, onSelectCycle, selectedModelId,
 }
 
 export default function MonomythPage() {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [currentStage, setCurrentStage] = useState('overview');
   const [clockwise, setClockwise] = useState(false);
   const [activeTab, setActiveTab] = useState('overview');
@@ -459,21 +461,48 @@ export default function MonomythPage() {
   const [activeWorld, setActiveWorld] = useState(null);
   const [selectedModel, setSelectedModel] = useState(null);
 
-  const handleSelectModel = (theoristKey) => {
+  const handleSelectModel = useCallback((theoristKey) => {
     const modelId = THEORIST_TO_MODEL[theoristKey];
     if (!modelId) return;
     const model = getModelById(modelId);
     if (!model) return;
     setSelectedModel(prev => prev?.id === model.id ? null : model);
-  };
+  }, []);
 
-  const handleSelectCycle = (cycleKey) => {
+  const handleSelectCycle = useCallback((cycleKey) => {
     const cycleId = CYCLE_TO_MODEL[cycleKey];
     if (!cycleId) return;
     const cycle = getCycleById(cycleId);
     if (!cycle) return;
     setSelectedModel(prev => prev?.id === cycle.id ? null : cycle);
-  };
+  }, []);
+
+  // Deep link from Atlas navigation
+  useEffect(() => {
+    const stageParam = searchParams.get('stage');
+    const theoristParam = searchParams.get('theorist');
+    const cycleParam = searchParams.get('cycle');
+    const worldParam = searchParams.get('world');
+
+    if (worldParam && ['normal', 'other', 'threshold'].includes(worldParam)) {
+      setActiveWorld(worldParam);
+      setCurrentStage('overview');
+    } else if (stageParam && MONOMYTH_STAGES.find(s => s.id === stageParam)) {
+      setCurrentStage(stageParam);
+      setActiveWorld(null);
+      setActiveTab('overview');
+      if (theoristParam) {
+        setTimeout(() => handleSelectModel(theoristParam), 150);
+      }
+      if (cycleParam) {
+        setTimeout(() => handleSelectCycle(cycleParam), 150);
+      }
+    }
+
+    if (searchParams.toString()) {
+      setSearchParams({}, { replace: true });
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const stageLabel = MONOMYTH_STAGES.find(s => s.id === currentStage)?.label;
   const isStage = currentStage !== 'overview';
