@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import mythsData from '../../data/mythsEpisodes.json';
 import './MythologyChannelPage.css';
 
@@ -89,10 +89,59 @@ export default function MythologyChannelPage() {
   const [activeShow, setActiveShow] = useState(null);
   const [videoUrl, setVideoUrl] = useState(null);
   const [activeEpisode, setActiveEpisode] = useState(null);
+  const playerRef = useRef(null);
+  const playerContainerRef = useRef(null);
+
+  // Load YouTube IFrame API
+  useEffect(() => {
+    if (window.YT) return;
+    const tag = document.createElement('script');
+    tag.src = 'https://www.youtube.com/iframe_api';
+    document.head.appendChild(tag);
+  }, []);
+
+  const destroyPlayer = useCallback(() => {
+    if (playerRef.current) {
+      playerRef.current.destroy();
+      playerRef.current = null;
+    }
+  }, []);
+
+  // Create/destroy player when show changes
+  useEffect(() => {
+    if (!activeShow || !activeShow.playlist) {
+      destroyPlayer();
+      return;
+    }
+
+    const listId = activeShow.playlist.match(/list=([^&]+)/)?.[1];
+    if (!listId) return;
+
+    const createPlayer = () => {
+      destroyPlayer();
+      playerRef.current = new window.YT.Player(playerContainerRef.current, {
+        width: '100%',
+        height: '100%',
+        playerVars: {
+          listType: 'playlist',
+          list: listId,
+          autoplay: 1,
+          modestbranding: 1,
+        },
+      });
+    };
+
+    if (window.YT && window.YT.Player) {
+      createPlayer();
+    } else {
+      window.onYouTubeIframeAPIReady = createPlayer;
+    }
+
+    return destroyPlayer;
+  }, [activeShow, destroyPlayer]);
 
   const handleShowClick = (show) => {
     if (activeShow?.id === show.id) {
-      // Toggle off
       setActiveShow(null);
       setVideoUrl(null);
       setActiveEpisode(null);
@@ -111,6 +160,16 @@ export default function MythologyChannelPage() {
     }
   };
 
+  const handlePrev = (e) => {
+    e.stopPropagation();
+    if (playerRef.current?.previousVideo) playerRef.current.previousVideo();
+  };
+
+  const handleNext = (e) => {
+    e.stopPropagation();
+    if (playerRef.current?.nextVideo) playerRef.current.nextVideo();
+  };
+
   const handleEpisodeClick = (episode) => {
     setActiveEpisode(prev => prev?.id === episode.id ? null : episode);
   };
@@ -127,15 +186,19 @@ export default function MythologyChannelPage() {
           className="tv-frame-img"
         />
         {isOn && (
-          <div className="tv-screen-area" onClick={handleTvClick}>
-            <iframe
-              title={activeShow?.label || 'Video'}
-              src={videoUrl}
-              className="tv-video-player"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            />
+          <div className="tv-screen-area">
+            <div ref={playerContainerRef} className="tv-video-player" />
           </div>
+        )}
+        {isOn && (
+          <button className="tv-knob tv-knob-prev" onClick={handlePrev} title="Previous">
+            &#9664;
+          </button>
+        )}
+        {isOn && (
+          <button className="tv-knob tv-knob-next" onClick={handleNext} title="Next">
+            &#9654;
+          </button>
         )}
         {isOn && (
           <button className="tv-power-btn" onClick={handleTvClick} title="Turn off">
