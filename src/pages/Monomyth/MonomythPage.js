@@ -13,6 +13,7 @@ import depthData from '../../data/monomythDepth.json';
 import filmsData from '../../data/monomythFilms.json';
 import worldData from '../../data/normalOtherWorld.json';
 import monomythModels from '../../data/monomythModels.json';
+import monomythCycles from '../../data/monomythCycles.json';
 
 const THEORIST_TO_MODEL = {
   campbell: 'campbell', jung: 'jung', nietzsche: 'nietzsche',
@@ -25,8 +26,21 @@ const THEORIST_TO_MODEL = {
   frazer: 'frazer',
 };
 
+const CYCLE_TO_MODEL = {
+  'Solar Day': 'solar-day',
+  'Lunar Month': 'lunar-month',
+  'Solar Year': 'solar-year',
+  'Wake & Sleep': 'wake-sleep',
+  'Procreation': 'procreation',
+  'Mortality': 'mortality',
+};
+
 function getModelById(id) {
   return monomythModels.models.find(m => m.id === id) || null;
+}
+
+function getCycleById(id) {
+  return monomythCycles.cycles.find(c => c.id === id) || null;
 }
 
 const MONOMYTH_STAGES = [
@@ -181,7 +195,16 @@ function FilmsTab({ stageId }) {
   );
 }
 
-function CyclesTab({ stageId }) {
+const PSYCHLE_KEY_TO_CYCLE = {
+  solarDay: 'Solar Day',
+  lunarMonth: 'Lunar Month',
+  solarYear: 'Solar Year',
+  lifeDeath: 'Mortality',
+  procreation: 'Procreation',
+  wakingDreaming: 'Wake & Sleep',
+};
+
+function CyclesTab({ stageId, onSelectCycle, selectedModelId }) {
   const stageData = psychlesData[stageId];
   if (!stageData) return <p className="metals-empty">No cycle data available.</p>;
 
@@ -191,13 +214,22 @@ function CyclesTab({ stageId }) {
     <div className="tab-content">
       {stageName && <h4>{stageName}</h4>}
       {summary && <p className="mono-summary">{summary}</p>}
-      {cycles && Object.entries(cycles).map(([key, c]) => (
-        <div key={key} className="mono-card">
-          <h5 className="mono-card-concept">{c.label}</h5>
+      {cycles && Object.entries(cycles).map(([key, c]) => {
+        const cycleKey = PSYCHLE_KEY_TO_CYCLE[key];
+        const cycleId = cycleKey ? CYCLE_TO_MODEL[cycleKey] : null;
+        const hasCycle = !!cycleId;
+        const isActive = hasCycle && selectedModelId === cycleId;
+        return (
+        <div
+          key={key}
+          className={`mono-card${hasCycle ? ' mono-card-clickable' : ''}${isActive ? ' mono-card-model-active' : ''}`}
+          onClick={hasCycle && onSelectCycle ? () => onSelectCycle(cycleKey) : undefined}
+        >
+          <h5 className="mono-card-concept">{c.label}{hasCycle && <span className="mono-model-icon">{isActive ? ' \u25C9' : ' \u25CE'}</span>}</h5>
           <span className="mono-card-tradition">{c.phase}</span>
           <p>{c.description}</p>
         </div>
-      ))}
+      ); })}
     </div>
   );
 }
@@ -223,15 +255,15 @@ function buildWorldTabs(worldKey) {
     tabs.push({ id: 'adze', label: 'The Adze' });
     tabs.push({ id: 'guardians', label: 'Guardians' });
     tabs.push({ id: 'motifs', label: 'Motifs' });
-    tabs.push({ id: 'cycles', label: 'Cycles' });
   }
+  tabs.push({ id: 'cycles', label: 'Cycles' });
   if (worldKey !== 'threshold') tabs.push({ id: 'theorists', label: 'Theorists' });
   if (worldKey === 'other') tabs.push({ id: 'myths', label: 'Myths' });
   if (worldKey !== 'threshold') tabs.push({ id: 'films', label: 'Films' });
   return tabs;
 }
 
-function WorldContent({ worldKey, onSelectModel, selectedModelId, videoUrl, onPlayVideo, onCloseVideo }) {
+function WorldContent({ worldKey, onSelectModel, onSelectCycle, selectedModelId, videoUrl, onPlayVideo, onCloseVideo }) {
   const [activeTab, setActiveTab] = useState('overview');
   const data = worldKey === 'normal' ? worldData.normalWorld : worldKey === 'other' ? worldData.otherWorld : worldData.threshold;
   const tabs = buildWorldTabs(worldKey);
@@ -357,12 +389,20 @@ function WorldContent({ worldKey, onSelectModel, selectedModelId, videoUrl, onPl
         )}
         {activeTab === 'cycles' && data.cycles && (
           <div className="tab-content">
-            {Object.entries(data.cycles).map(([key, text]) => (
-              <div key={key} className="mono-card">
-                <h5 className="mono-card-concept">{key}</h5>
+            {Object.entries(data.cycles).map(([key, text]) => {
+              const cycleId = CYCLE_TO_MODEL[key];
+              const hasCycle = !!cycleId;
+              const isActive = hasCycle && selectedModelId === cycleId;
+              return (
+              <div
+                key={key}
+                className={`mono-card${hasCycle ? ' mono-card-clickable' : ''}${isActive ? ' mono-card-model-active' : ''}`}
+                onClick={hasCycle ? () => onSelectCycle(key) : undefined}
+              >
+                <h5 className="mono-card-concept">{key}{hasCycle && <span className="mono-model-icon">{isActive ? ' \u25C9' : ' \u25CE'}</span>}</h5>
                 <p>{text}</p>
               </div>
-            ))}
+            ); })}
           </div>
         )}
         {activeTab === 'theorists' && data.theorists && (
@@ -427,6 +467,14 @@ export default function MonomythPage() {
     setSelectedModel(prev => prev?.id === model.id ? null : model);
   };
 
+  const handleSelectCycle = (cycleKey) => {
+    const cycleId = CYCLE_TO_MODEL[cycleKey];
+    if (!cycleId) return;
+    const cycle = getCycleById(cycleId);
+    if (!cycle) return;
+    setSelectedModel(prev => prev?.id === cycle.id ? null : cycle);
+  };
+
   const stageLabel = MONOMYTH_STAGES.find(s => s.id === currentStage)?.label;
   const isStage = currentStage !== 'overview';
 
@@ -473,7 +521,7 @@ export default function MonomythPage() {
       <div className="container">
         <div id="content-container">
           {activeWorld ? (
-            <WorldContent worldKey={activeWorld} onSelectModel={handleSelectModel} selectedModelId={selectedModel?.id} videoUrl={videoUrl} onPlayVideo={(url) => setVideoUrl(url)} onCloseVideo={() => setVideoUrl(null)} />
+            <WorldContent worldKey={activeWorld} onSelectModel={handleSelectModel} onSelectCycle={handleSelectCycle} selectedModelId={selectedModel?.id} videoUrl={videoUrl} onPlayVideo={(url) => setVideoUrl(url)} onCloseVideo={() => setVideoUrl(null)} />
           ) : isStage ? (
             <div className="metal-detail-panel">
               <div className="metal-tabs">
@@ -524,7 +572,7 @@ export default function MonomythPage() {
 
               <div className="metal-content-scroll">
                 {activeTab === 'overview' && <OverviewTab stageId={currentStage} />}
-                {activeTab === 'cycles' && <CyclesTab stageId={currentStage} />}
+                {activeTab === 'cycles' && <CyclesTab stageId={currentStage} onSelectCycle={handleSelectCycle} selectedModelId={selectedModel?.id} />}
                 {activeTab === 'theorists' && <TheoristsTab stageId={currentStage} activeGroup={activeGroup} onSelectModel={handleSelectModel} selectedModelId={selectedModel?.id} />}
                 {activeTab === 'history' && <HistoryTab stageId={currentStage} />}
                 {activeTab === 'myths' && <MythsTab stageId={currentStage} />}

@@ -1,0 +1,140 @@
+{
+  "cycles": [
+    {
+      "id": "solar-day",
+      "title": "Solar Day",
+      "theorist": "Light Cycle",
+      "source": "Day & Night",
+      "category": "light",
+      "direction": "clockwise",
+      "normalWorldLabel": "Day",
+      "otherWorldLabel": "Night",
+      "color": "#c8a840",
+      "ring": 1,
+      "stages": [
+        "High Noon",
+        "Afternoon",
+        "Sunset",
+        "Dusk",
+        "Midnight",
+        "Pre-Dawn",
+        "Sunrise",
+        "Morning"
+      ]
+    },
+    {
+      "id": "lunar-month",
+      "title": "Lunar Month",
+      "theorist": "Light Cycle",
+      "source": "Bright & Dark",
+      "category": "light",
+      "direction": "clockwise",
+      "normalWorldLabel": "Bright Half",
+      "otherWorldLabel": "Dark Half",
+      "color": "#8aa0c0",
+      "ring": 2,
+      "stages": [
+        "Full Moon",
+        "Waning Gibbous",
+        "Last Quarter",
+        "Waning Crescent",
+        "New Moon",
+        "Waxing Crescent",
+        "First Quarter",
+        "Waxing Gibbous"
+      ]
+    },
+    {
+      "id": "solar-year",
+      "title": "Solar Year",
+      "theorist": "Light Cycle",
+      "source": "Summer & Winter",
+      "category": "light",
+      "direction": "clockwise",
+      "normalWorldLabel": "Summer",
+      "otherWorldLabel": "Winter",
+      "color": "#5a9a4a",
+      "ring": 3,
+      "stages": [
+        "Summer Solstice",
+        "Lughnasadh",
+        "Autumn Equinox",
+        "Samhain",
+        "Winter Solstice",
+        "Imbolc",
+        "Spring Equinox",
+        "Beltane"
+      ]
+    },
+    {
+      "id": "wake-sleep",
+      "title": "Wake & Sleep",
+      "theorist": "Life Cycle",
+      "source": "Consciousness",
+      "category": "life",
+      "direction": "clockwise",
+      "normalWorldLabel": "Waking",
+      "otherWorldLabel": "Dreaming",
+      "color": "#7a6aaa",
+      "ring": 4,
+      "stages": [
+        "Awake",
+        "Drowsy",
+        "Falling Asleep",
+        "Light Sleep",
+        "Deep Dream",
+        "Rising Sleep",
+        "Waking Up",
+        "Refreshed"
+      ]
+    },
+    {
+      "id": "procreation",
+      "title": "Procreation",
+      "theorist": "Life Cycle",
+      "source": "Fertility",
+      "category": "life",
+      "direction": "clockwise",
+      "normalWorldLabel": "Maturity",
+      "otherWorldLabel": "Gestation",
+      "color": "#aa5a7a",
+      "ring": 5,
+      "stages": [
+        "Sexual Maturity",
+        "Courtship",
+        "Sowing Seed",
+        "Fertilization",
+        "Conception",
+        "Gestation",
+        "(Re)Birth",
+        "Youth"
+      ]
+    },
+    {
+      "id": "mortality",
+      "title": "Life & Death",
+      "theorist": "Life Cycle",
+      "source": "Mortality",
+      "category": "life",
+      "direction": "clockwise",
+      "normalWorldLabel": "Living",
+      "otherWorldLabel": "Dead",
+      "color": "#8a7050",
+      "ring": 6,
+      "stages": [
+        "Prime of Life",
+        "Aging",
+        "Elder",
+        "Dying",
+        "Death",
+        "Seed",
+        "Birth",
+        "Youth"
+      ]
+    }
+  ],
+  "categories": {
+    "light": { "label": "Light Cycles", "color": "#c8a840" },
+    "life": { "label": "Life Cycles", "color": "#7a6aaa" }
+  }
+}

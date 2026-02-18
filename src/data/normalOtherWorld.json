@@ -73,6 +73,14 @@
       "golden-age": "The Normal World at its fullest expression — the complete sphere of the known. Paradise before the fall. Four rivers watered the garden. The status quo before disruption, where the hero exists within established norms. This is also where a story's thematic problem is embedded — the wasteland hiding beneath the surface.",
       "falling-star": "The Normal World begins to crack. The call arrives from beyond, and the hero becomes aware that something is missing from ordinary life. Shadow disruption of the ego-persona alignment — deeper forces of the psyche call the known self to its unknown depths.",
       "new-age": "The Normal World transformed — the hero returns with the Elixir, and the ordinary is renewed. The redemption of the wasteland: Sleeping Beauty wakes and so does the kingdom, the Grail King heals and the waters flow again, Christ resurrects and the Messianic Age begins."
+    },
+    "cycles": {
+      "Solar Day": "The sun rests at its zenith — high noon, maximum light, maximum warmth. The known world is fully illuminated. Shadows are shortest; visibility is total. This is the waking day at its peak, when the world is most legible and least mysterious.",
+      "Lunar Month": "The full moon — the circle of reflected light complete. The lunar disc mirrors the sun in full, a silver eye fully open upon the night. Ancient cultures tracked their calendars by this fullness, and it remains the most visible celestial rhythm after the sun itself.",
+      "Solar Year": "The summer solstice — the longest day, the shortest night. The sun at the height of its annual arc. Vegetation is in full bloom, the fields are green, and the world is warm. This is the zenith of the agricultural year, the peak before the harvest begins.",
+      "Wake & Sleep": "Wide awake — fully conscious, alert, oriented. The ego is at the helm, the senses engaged with the external world. This is the state of maximum agency, where we plan, act, and navigate the surface of our experience.",
+      "Procreation": "Sexual maturity — the organism at peak reproductive capacity. Animals court, plants flower, the biological imperative to generate new life is at its strongest. This is the apex of the fertility cycle, the fullest expression of generative energy.",
+      "Mortality": "The prime of life — the zenith of vitality, strength, and presence. The healthy adult at high noon is a personification of the normal world. This is when humans are in the prime of their adulthood, when animals are sexually mature, and when plants are in full flower."
     }
   },
   "otherWorld": {
@@ -193,6 +201,14 @@
       "forge": "Deep in the Other World — the road of trials. After having been swallowed into an unknown world, the characters begin to adapt. Temples as other worlds: the devotee at the moment of entry undergoes a metamorphosis. His secular character remains without; he sheds it as a snake its slough.",
       "quenching": "The deepest point of the Other World — the nadir, the belly of the whale, the innermost chamber. Aker, the bottommost point of the Duat. Here we are not tested — we are undone. The axis mundi is the epicenter of what is sacred, and at this epicenter is the connection of below with above.",
       "integration": "The return begins. Does the character really want to head back towards the world from which they departed? The character's deep acclimation to the other world has brought meaning to which little in the mundane can compare. It will be essential for the hero to transpose the insights gained in the other world into a new understanding of the world at home."
+    },
+    "cycles": {
+      "Solar Day": "Midnight — the sun at its nadir, traveling beneath the earth through the underworld. The Egyptians depicted Ra sailing through the Duat on a solar barque, battling the serpent Apophis in total darkness. This is the hour when the world is most hidden from the light.",
+      "Lunar Month": "The new moon — the dark moon. No reflected sunlight reaches us. The disc is invisible, swallowed by the shadow of the earth. Ancient cultures feared the disappearance of the moon as a death, and celebrated its reappearance as a rebirth.",
+      "Solar Year": "The winter solstice — the longest night, the shortest day. The sun at the lowest point of its annual arc. Vegetation has died back, the fields are barren, and the world is cold. This is the nadir of the agricultural year, the death before regeneration.",
+      "Wake & Sleep": "Deep dream — REM sleep, the unconscious fully active. The dreamer dwells in what the Egyptians called Nun, the primeval ocean. Jung: 'The unconscious has an independent function. The dream not only fails to obey our will but very often stands in flagrant opposition to our conscious intentions.'",
+      "Procreation": "Conception — the meeting of sperm and egg in the dark interior of the womb. The seed has been planted in the earth, the grain buried. New life begins in total darkness, invisible to the outer world, gestating in the body of the mother.",
+      "Mortality": "Death — the body returns to the earth, the soul to the underworld. The Egyptians traversed the Duat; the Greeks descended to Hades; Christ harrowed Hell. The corpse is planted like a seed. This is the nadir from which all return and renewal must begin."
     }
   },
   "threshold": {
@@ -232,8 +248,9 @@
       "Solar Day": "The sun sets across the horizon, descending from above to below. This is the threshold crossing of the daily cycle — the boundary between the known world of day and the unknown world of night.",
       "Lunar Month": "The half-moon wanes towards empty. Half the face is dark. This is the threshold of the monthly cycle — equally illuminated and shadowed.",
       "Solar Year": "Shortening days are as short as they are long at the Fall Equinox. This is the threshold of the annual cycle. From here, darkness overtakes light.",
-      "Fertility": "Mother and Earth are penetrated for the planting of seed. This is the moment of conception's threshold — the seed enters the womb, the pollen enters the pistil, the sperm crosses into the egg.",
-      "Mortality": "The familiar life horizon has been outgrown. The old concepts, ideals, and emotional patterns no longer fit; the time for the passing of a threshold is at hand."
+      "Wake & Sleep": "The eyelids grow heavy, consciousness loosens its grip, and we cross from waking into sleep. This is the threshold between the known world of waking day and the dream landscape of curiously fluid forms — the boundary the Egyptians recognized when the sleeper enters Nun, the primeval ocean.",
+      "Procreation": "Mother and Earth are penetrated for the planting of seed. This is the moment of conception's threshold — the seed enters the womb, the pollen enters the pistil, the sperm crosses into the egg. The boundary of above and below is broken by adze or plow so that the seed can be planted.",
+      "Mortality": "The familiar life horizon has been outgrown. The old concepts, ideals, and emotional patterns no longer fit; the time for the passing of a threshold is at hand. As the sun crosses the equinox, as grain is cut and leaves fall, the elder crosses from the world of the living."
     }
   }
 }
