@@ -374,7 +374,7 @@ Monomyth (/monomyth):
   World keys: normal, other, threshold
 
 Mythology Channel (/mythology-channel):
-- [[Label|/mythology-channel?show=SHOW_ID]]
+- [[Label|/mythology-channel/SHOW_ID]]
   Show IDs: myths-tv, myth-salon, mythosophia, deep-sight, journey-of-the-goddess, transformational-narrative, dennis-slattery, lionel-corbett, myth-is-all-around-us, scholar-talks, mastery-circle, mythology-classroom, the-tao, pulling-focus, climate-journey
 
 Meteor Steel (/):

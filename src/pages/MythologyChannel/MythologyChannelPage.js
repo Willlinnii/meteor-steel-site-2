@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import mythsData from '../../data/mythsEpisodes.json';
 import './MythologyChannelPage.css';
 
@@ -123,7 +123,8 @@ function MythsEpisodeContent({ episode }) {
 }
 
 export default function MythologyChannelPage() {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const { showId } = useParams();
+  const navigate = useNavigate();
   const [activeShow, setActiveShow] = useState(null);
   const [videoUrl, setVideoUrl] = useState(null);
   const [activeEpisode, setActiveEpisode] = useState(null);
@@ -133,16 +134,14 @@ export default function MythologyChannelPage() {
 
   const triggerZap = useCallback(() => setZapKey(k => k + 1), []);
 
-  // Deep link from Atlas navigation
+  // Deep link from URL param
   useEffect(() => {
-    const showParam = searchParams.get('show');
-    if (showParam) {
-      const show = SHOWS.find(s => s.id === showParam);
+    if (showId) {
+      const show = SHOWS.find(s => s.id === showId);
       if (show) {
         setActiveShow(show);
         setVideoUrl(show.playlist || null);
       }
-      setSearchParams({}, { replace: true });
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -208,11 +207,13 @@ export default function MythologyChannelPage() {
       setActiveShow(null);
       setVideoUrl(null);
       setActiveEpisode(null);
+      navigate('/mythology-channel', { replace: true });
     } else {
       setActiveShow(show);
       setActiveEpisode(null);
       setVideoUrl(show.playlist || null);
       triggerZap();
+      navigate(`/mythology-channel/${show.id}`, { replace: true });
     }
   };
 
@@ -221,6 +222,7 @@ export default function MythologyChannelPage() {
       setActiveShow(null);
       setVideoUrl(null);
       setActiveEpisode(null);
+      navigate('/mythology-channel', { replace: true });
     }
   };
 

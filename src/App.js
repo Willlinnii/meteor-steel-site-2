@@ -900,6 +900,7 @@ function App() {
         <Route path="/story-forge" element={<StoryForgeHome />} />
         <Route path="/monomyth" element={<MonomythPage />} />
         <Route path="/mythology-channel" element={<MythologyChannelPage />} />
+        <Route path="/mythology-channel/:showId" element={<MythologyChannelPage />} />
         <Route path="/mythosophia" element={<MythosophiaPage />} />
       </Routes>
       <SiteFooter />
