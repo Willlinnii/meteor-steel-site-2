@@ -3,16 +3,17 @@ import { Canvas } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import { XR, useXR } from '@react-three/xr';
 import OrbitalScene from './OrbitalScene';
+import GyroscopeCamera from './GyroscopeCamera';
 import './CelestialScene.css';
 
 function SceneFallback() {
   return null;
 }
 
-// Hide OrbitControls when in XR session
-function ConditionalOrbitControls() {
+// Hide OrbitControls when in XR session or camera AR mode
+function ConditionalOrbitControls({ cameraAR }) {
   const isPresenting = useXR((state) => state.session != null);
-  if (isPresenting) return null;
+  if (isPresenting || cameraAR) return null;
   return (
     <OrbitControls
       enableDamping
@@ -25,11 +26,12 @@ function ConditionalOrbitControls() {
   );
 }
 
-// Scale down scene in AR so it fits in a room (~1.5m diameter)
-function ARScaleWrapper({ children }) {
+// Scale down scene in AR so it fits in a room
+function ARScaleWrapper({ children, cameraAR }) {
   const isPresenting = useXR((state) => state.session != null);
-  const scale = isPresenting ? 0.08 : 1; // 15 world units * 0.08 = 1.2m radius
-  const y = isPresenting ? -0.5 : 0; // lower it a bit in AR
+  const inAR = isPresenting || cameraAR;
+  const scale = inAR ? 0.08 : 1;
+  const y = inAR ? -0.5 : 0;
   return (
     <group scale={[scale, scale, scale]} position={[0, y, 0]}>
       {children}
@@ -49,6 +51,7 @@ export default function CelestialScene({
   onSelectEarth,
   infoPanelContent,
   xrStore,
+  cameraAR,
 }) {
   return (
     <div className="celestial-scene-container">
@@ -56,13 +59,18 @@ export default function CelestialScene({
         camera={{ position: [0, 8, 20], fov: 60, near: 0.1, far: 200 }}
         gl={{ antialias: true, alpha: true }}
         dpr={[1, 2]}
+        style={cameraAR ? { background: 'transparent' } : undefined}
         onCreated={({ gl }) => {
-          gl.setClearColor('#0a0a14', 1);
+          if (cameraAR) {
+            gl.setClearColor(0x000000, 0); // transparent
+          } else {
+            gl.setClearColor('#0a0a14', 1);
+          }
         }}
       >
         <XR store={xrStore}>
           <Suspense fallback={<SceneFallback />}>
-            <ARScaleWrapper>
+            <ARScaleWrapper cameraAR={cameraAR}>
               <OrbitalScene
                 mode={mode}
                 selectedPlanet={selectedPlanet}
@@ -76,7 +84,8 @@ export default function CelestialScene({
                 infoPanelContent={infoPanelContent}
               />
             </ARScaleWrapper>
-            <ConditionalOrbitControls />
+            <ConditionalOrbitControls cameraAR={cameraAR} />
+            {cameraAR && <GyroscopeCamera />}
           </Suspense>
         </XR>
       </Canvas>

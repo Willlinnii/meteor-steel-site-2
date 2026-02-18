@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { createXRStore } from '@react-three/xr';
 import CelestialScene from '../../components/sevenMetals/vr/CelestialScene';
@@ -179,12 +179,27 @@ export default function SevenMetalsVRPage() {
   const xrStore = useMemo(() => createXRStore(), []);
   const [arSupported, setArSupported] = useState(false);
   const [vrSupported, setVrSupported] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
 
   useEffect(() => {
-    if (navigator.xr) {
-      navigator.xr.isSessionSupported('immersive-ar').then(setArSupported).catch(() => {});
-      navigator.xr.isSessionSupported('immersive-vr').then(setVrSupported).catch(() => {});
+    // Only check native WebXR — skip polyfills by also checking for a real XR device
+    const xr = navigator.xr;
+    if (xr && typeof xr.isSessionSupported === 'function') {
+      // immersive-ar: phones with ARCore/ARKit
+      xr.isSessionSupported('immersive-ar').then(ok => setArSupported(ok)).catch(() => {});
+      // immersive-vr: actual headsets only — check that it's not just a polyfill
+      xr.isSessionSupported('immersive-vr').then(ok => {
+        // Desktop Chrome reports true via polyfill/emulator — filter by checking for mobile or headset UA
+        const isMobileOrHeadset = /Mobile|Quest|Pico|Vive/i.test(navigator.userAgent);
+        setVrSupported(ok && isMobileOrHeadset);
+      }).catch(() => {});
     }
+  }, []);
+
+  useEffect(() => {
+    const onChange = () => setIsFullscreen(!!document.fullscreenElement);
+    document.addEventListener('fullscreenchange', onChange);
+    return () => document.removeEventListener('fullscreenchange', onChange);
   }, []);
 
   const enterAR = () => {
@@ -199,6 +214,53 @@ export default function SevenMetalsVRPage() {
       alert('VR is not supported on this device. Try a VR headset browser (Quest, Vision Pro).');
     });
   };
+  const toggleFullscreen = () => {
+    if (document.fullscreenElement) {
+      document.exitFullscreen();
+    } else {
+      document.documentElement.requestFullscreen().catch(() => {});
+    }
+  };
+
+  // Camera AR mode — phone camera as background, gyroscope controls
+  const [cameraAR, setCameraAR] = useState(false);
+  const videoRef = useRef(null);
+  const streamRef = useRef(null);
+
+  const startCameraAR = useCallback(async () => {
+    try {
+      // iOS requires user gesture for deviceorientation permission
+      if (typeof DeviceOrientationEvent !== 'undefined' &&
+          typeof DeviceOrientationEvent.requestPermission === 'function') {
+        const perm = await DeviceOrientationEvent.requestPermission();
+        if (perm !== 'granted') {
+          alert('Gyroscope permission is needed for AR mode. Please allow motion access.');
+          return;
+        }
+      }
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 720 } },
+        audio: false,
+      });
+      streamRef.current = stream;
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream;
+        videoRef.current.play();
+      }
+      setCameraAR(true);
+    } catch (err) {
+      console.warn('Camera AR failed:', err);
+      alert('Could not access camera. Make sure you allow camera access and are on HTTPS.');
+    }
+  }, []);
+
+  const stopCameraAR = useCallback(() => {
+    if (streamRef.current) {
+      streamRef.current.getTracks().forEach(t => t.stop());
+      streamRef.current = null;
+    }
+    setCameraAR(false);
+  }, []);
 
   const mergedData = useMemo(() => {
     const map = {};
@@ -275,6 +337,17 @@ export default function SevenMetalsVRPage() {
     <div className="celestial-vr-layout">
       {/* 3D Scene */}
       <div className={`celestial-scene-wrapper ${panelOpen && hasSelection ? 'panel-open' : ''}`}>
+        {/* Camera feed for phone AR mode */}
+        {cameraAR && (
+          <video
+            ref={videoRef}
+            className="camera-ar-video"
+            autoPlay
+            playsInline
+            muted
+          />
+        )}
+
         <CelestialScene
           mode={mode}
           selectedPlanet={selectedPlanet}
@@ -287,6 +360,7 @@ export default function SevenMetalsVRPage() {
           onSelectEarth={handleSelectEarth}
           infoPanelContent={null}
           xrStore={xrStore}
+          cameraAR={cameraAR}
         />
 
         {/* Overlay controls on the 3D canvas */}
@@ -302,6 +376,18 @@ export default function SevenMetalsVRPage() {
           <button className="celestial-btn" onClick={cycleMode} title={`Current: ${MODE_LABELS[mode]}`}>
             {MODE_SYMBOLS[mode]} Mode
           </button>
+          <button className="celestial-btn" onClick={toggleFullscreen} title={isFullscreen ? 'Exit fullscreen' : 'Fullscreen immersive view'}>
+            {isFullscreen ? 'Exit FS' : 'Fullscreen'}
+          </button>
+          {!cameraAR ? (
+            <button className="celestial-btn celestial-xr-enter" onClick={startCameraAR} title="Phone AR — use camera as window into the scene">
+              Phone AR
+            </button>
+          ) : (
+            <button className="celestial-btn celestial-xr-enter" onClick={stopCameraAR} title="Exit camera AR mode">
+              Exit AR
+            </button>
+          )}
           {arSupported && (
             <button className="celestial-btn celestial-xr-enter" onClick={enterAR} title="Enter AR — view in your space">
               AR

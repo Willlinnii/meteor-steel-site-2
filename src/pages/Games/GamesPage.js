@@ -7,6 +7,7 @@ import JackalsAndHoundsGame from '../../games/jackalsAndHounds/JackalsAndHoundsG
 import MehenGame from '../../games/mehen/MehenGame';
 import PachisiGame from '../../games/pachisi/PachisiGame';
 import MythouseGame from '../../games/mythouse/MythouseGame';
+import MythouseCards from '../../games/mythouse/MythouseCards';
 import './GamesPage.css';
 
 const GAMES = [
@@ -53,6 +54,13 @@ const GAMES = [
     description: 'Ascend 7 rings of a spiral mountain. Collect gems, face ordeals.',
     featured: true,
   },
+  {
+    id: 'mythic-cards',
+    label: 'Mythic Cards',
+    origin: 'Mythouse Original',
+    description: 'Browse 44 mythic cards across 4 decks. Heroes, Metals, Stars, and the Journey.',
+    direct: true,
+  },
 ];
 
 const GAME_COMPONENTS = {
@@ -79,6 +87,15 @@ export default function GamesPage() {
   const handleExit = () => {
     navigate('/games');
   };
+
+  // Direct-launch entries (no mode selector)
+  if (activeGame && activeGame.id === 'mythic-cards') {
+    return (
+      <div className="games-page">
+        <MythouseCards onExit={handleExit} />
+      </div>
+    );
+  }
 
   // Playing a game
   if (activeGame && mode) {
