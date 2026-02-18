@@ -8,7 +8,7 @@ import {
   PIECE_TYPES, LADDERS, CHUTES, ORDEAL_POSITIONS,
   ringPosToSVG, buildSpiralPath, rollForRing, getLadderAt, getChuteAt,
 } from './mythouseData';
-import { buildAllCards, shuffleDeck, drawContextualCard } from './mythouseCardData';
+import { buildOrdealDeck, drawCard } from './mythouseCardData';
 
 // Board expanded to fit celestial frame rings
 const BOARD_SIZE = 660;
@@ -163,7 +163,7 @@ export default function MythouseGame({ mode, onExit }) {
   const [moveLog, setMoveLog] = useState([]);
   const [direction, setDirection] = useState(1);
   const [selectedCelestial, setSelectedCelestial] = useState(null); // { type: 'zodiac'|'month', index }
-  const [gameDeck, setGameDeck] = useState(() => shuffleDeck(buildAllCards()));
+  const [gameDeck, setGameDeck] = useState(() => buildOrdealDeck());
   const aiTimer = useRef(null);
   const isAI = mode === 'ai';
 
@@ -186,7 +186,7 @@ export default function MythouseGame({ mode, onExit }) {
     setOrdeal(null);
     setMoveLog([]);
     setSelectedCelestial(null);
-    setGameDeck(shuffleDeck(buildAllCards()));
+    setGameDeck(buildOrdealDeck());
     if (aiTimer.current) clearTimeout(aiTimer.current);
   }, []);
 
@@ -386,12 +386,12 @@ export default function MythouseGame({ mode, onExit }) {
   const handleOrdealReveal = useCallback(() => {
     if (!ordeal || ordeal.revealed) return;
     let deck = gameDeck;
-    if (deck.length < 2) deck = shuffleDeck(buildAllCards());
-    const draw1 = drawContextualCard(deck, ordeal.ring);
-    const draw2 = drawContextualCard(draw1.remaining, ordeal.ring);
+    if (deck.length < 2) deck = buildOrdealDeck();
+    const draw1 = drawCard(deck);
+    const draw2 = drawCard(draw1.remaining);
     setGameDeck(draw2.remaining);
-    const card0 = draw1.card || { name: 'Unknown', power: Math.floor(Math.random() * 10) + 1, deckLabel: '' };
-    const card1 = draw2.card || { name: 'Unknown', power: Math.floor(Math.random() * 10) + 1, deckLabel: '' };
+    const card0 = draw1.card || { label: '?', value: 1, suitSymbol: '', suitColor: '#ddd' };
+    const card1 = draw2.card || { label: '?', value: 1, suitSymbol: '', suitColor: '#ddd' };
     setOrdeal(prev => ({ ...prev, cards: [card0, card1], revealed: true }));
   }, [ordeal, gameDeck]);
 
@@ -399,12 +399,12 @@ export default function MythouseGame({ mode, onExit }) {
     if (!ordeal || !ordeal.revealed) return;
     const c0 = ordeal.cards[0];
     const c1 = ordeal.cards[1];
-    const p0 = c0.power;
-    const p1 = c1.power;
-    const ordealWinner = p0 >= p1 ? ordeal.challenger : ordeal.defender;
+    const v0 = c0.value;
+    const v1 = c1.value;
+    const ordealWinner = v0 >= v1 ? ordeal.challenger : ordeal.defender;
 
     if (ordealWinner === ordeal.challenger) {
-      const msg = `Won with ${c0.name} (${p0}) vs ${c1.name} (${p1})!`;
+      const msg = `Won with ${c0.label} (${v0}) vs ${c1.label} (${v1})!`;
       setMessage(msg);
       setMoveLog(log => [...log, msg]);
       setScores(s => {
@@ -413,7 +413,7 @@ export default function MythouseGame({ mode, onExit }) {
         return ns;
       });
     } else {
-      const msg = `Lost! ${c0.name} (${p0}) vs ${c1.name} (${p1}). Pushed back.`;
+      const msg = `Lost! ${c0.label} (${v0}) vs ${c1.label} (${v1}). Pushed back.`;
       setMessage(msg);
       setMoveLog(log => [...log, msg]);
       setPieces(prev => {
@@ -868,25 +868,25 @@ export default function MythouseGame({ mode, onExit }) {
               >
                 {ordeal.revealed ? (
                   <>
-                    <span className="mythouse-ordeal-card-deck">{ordeal.cards[0].deckLabel}</span>
-                    <span className="mythouse-ordeal-card-name">{ordeal.cards[0].name}</span>
-                    <span className="mythouse-ordeal-card-power">{ordeal.cards[0].power}</span>
+                    <span className="mythouse-ordeal-card-name">{ordeal.cards[0].rank}</span>
+                    <span className="mythouse-ordeal-card-power" style={{ color: ordeal.cards[0].suitColor }}>{ordeal.cards[0].suitSymbol}</span>
+                    <span className="mythouse-ordeal-card-deck">{ordeal.cards[0].value} pts</span>
                   </>
                 ) : '?'}
               </div>
               <div className={`mythouse-ordeal-card ${ordeal.revealed ? 'face-up' : 'face-down'}`}>
                 {ordeal.revealed ? (
                   <>
-                    <span className="mythouse-ordeal-card-deck">{ordeal.cards[1].deckLabel}</span>
-                    <span className="mythouse-ordeal-card-name">{ordeal.cards[1].name}</span>
-                    <span className="mythouse-ordeal-card-power">{ordeal.cards[1].power}</span>
+                    <span className="mythouse-ordeal-card-name">{ordeal.cards[1].rank}</span>
+                    <span className="mythouse-ordeal-card-power" style={{ color: ordeal.cards[1].suitColor }}>{ordeal.cards[1].suitSymbol}</span>
+                    <span className="mythouse-ordeal-card-deck">{ordeal.cards[1].value} pts</span>
                   </>
                 ) : '?'}
               </div>
             </div>
             {ordeal.revealed && (
               <p style={{ color: 'var(--accent-gold)', fontSize: '0.9rem' }}>
-                {ordeal.cards[0].power >= ordeal.cards[1].power
+                {ordeal.cards[0].value >= ordeal.cards[1].value
                   ? 'You win the ordeal!'
                   : 'You lose the ordeal...'}
                 <br />

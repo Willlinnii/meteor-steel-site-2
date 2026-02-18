@@ -58,7 +58,7 @@ const GAMES = [
     id: 'mythic-cards',
     label: 'Mythic Cards',
     origin: 'Mythouse Original',
-    description: 'Browse 44 mythic cards across 4 decks. Heroes, Metals, Stars, and the Journey.',
+    description: 'Browse 52 playing cards and 154 Major Arcana across 7 cultural decks.',
     direct: true,
   },
 ];

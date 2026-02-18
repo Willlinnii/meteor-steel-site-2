@@ -1,229 +1,207 @@
-import React, { useState, useCallback } from 'react';
-import { buildDeck, shuffleDeck, drawCard, DECK_INFO } from './mythouseCardData';
-
-const DECK_KEYS = ['figures', 'metals', 'stars', 'journey'];
-const STAGES = [
-  'golden-age', 'falling-star', 'impact-crater', 'forge',
-  'quenching', 'integration', 'drawing', 'new-age',
-];
-const STAGE_LABELS = {
-  'golden-age': 'Golden Age', 'falling-star': 'Falling Star',
-  'impact-crater': 'Impact Crater', 'forge': 'Forge',
-  'quenching': 'Quenching', 'integration': 'Integration',
-  'drawing': 'Drawing', 'new-age': 'New Age',
-};
+import React, { useState, useCallback, useMemo } from 'react';
+import {
+  buildPlayingDeck, SUITS, CULTURES,
+  getArcanaForCulture, getArcanaPosition, getCrossReference,
+} from './mythouseCardData';
 
 export default function MythouseCards({ onExit }) {
-  const [activeDeck, setActiveDeck] = useState('figures');
-  const [cards, setCards] = useState(() => buildDeck('figures'));
-  const [drawnCards, setDrawnCards] = useState([]);
+  const [section, setSection] = useState('playing');
+  const [suitFilter, setSuitFilter] = useState(null);
+  const [activeCulture, setActiveCulture] = useState('roman');
   const [expandedCard, setExpandedCard] = useState(null);
-  const [expandedStages, setExpandedStages] = useState({});
 
-  const switchDeck = useCallback((key) => {
-    setActiveDeck(key);
-    setCards(buildDeck(key));
-    setDrawnCards([]);
-    setExpandedCard(null);
-    setExpandedStages({});
+  // Playing cards (built once)
+  const playingDeck = useMemo(() => buildPlayingDeck(), []);
+
+  const filteredPlaying = useMemo(() => {
+    if (!suitFilter) return playingDeck;
+    return playingDeck.filter(c => c.suit === suitFilter);
+  }, [playingDeck, suitFilter]);
+
+  // Arcana cards for selected culture
+  const arcanaCards = useMemo(() => getArcanaForCulture(activeCulture), [activeCulture]);
+
+  const handleArcanaClick = useCallback((card) => {
+    setExpandedCard(card);
   }, []);
 
-  const handleShuffle = useCallback(() => {
-    setCards(prev => shuffleDeck(prev));
-  }, []);
+  const crossRef = useMemo(() => {
+    if (!expandedCard) return [];
+    return getCrossReference(expandedCard.number);
+  }, [expandedCard]);
 
-  const handleDraw = useCallback(() => {
-    if (cards.length === 0) return;
-    const { card, remaining } = drawCard(cards);
-    setCards(remaining);
-    setDrawnCards(prev => [card, ...prev]);
-  }, [cards]);
-
-  const handleReset = useCallback(() => {
-    setCards(buildDeck(activeDeck));
-    setDrawnCards([]);
-    setExpandedCard(null);
-    setExpandedStages({});
-  }, [activeDeck]);
-
-  const toggleStage = useCallback((stageKey) => {
-    setExpandedStages(prev => ({ ...prev, [stageKey]: !prev[stageKey] }));
-  }, []);
-
-  const info = DECK_INFO[activeDeck];
+  const position = useMemo(() => {
+    if (!expandedCard) return null;
+    return getArcanaPosition(expandedCard.number);
+  }, [expandedCard]);
 
   return (
     <div className="mc-browser">
       <button className="game-mode-back" onClick={onExit}>
         &#8592; Back
       </button>
-      <h2 className="mc-title">Mythic Card Decks</h2>
+      <h2 className="mc-title">Mythic Cards</h2>
 
-      {/* Deck tabs */}
-      <div className="mc-deck-tabs">
-        {DECK_KEYS.map(key => (
-          <button
-            key={key}
-            className={`mc-tab${activeDeck === key ? ' active' : ''}`}
-            style={{ '--tab-color': DECK_INFO[key].color }}
-            onClick={() => switchDeck(key)}
-          >
-            {DECK_INFO[key].label}
-            <span className="mc-tab-count">{DECK_INFO[key].count}</span>
-          </button>
-        ))}
-      </div>
-
-      {/* Action bar */}
-      <div className="mc-actions">
-        <button className="mc-action-btn" onClick={handleShuffle}>Shuffle</button>
-        <button className="mc-action-btn" onClick={handleDraw} disabled={cards.length === 0}>
-          Draw ({cards.length})
+      {/* Section toggle */}
+      <div className="mc-section-toggle-bar">
+        <button
+          className={`mc-tab${section === 'playing' ? ' active' : ''}`}
+          onClick={() => setSection('playing')}
+        >
+          Playing Cards
+          <span className="mc-tab-count">52</span>
         </button>
-        <button className="mc-action-btn" onClick={handleReset}>Reset</button>
+        <button
+          className={`mc-tab${section === 'arcana' ? ' active' : ''}`}
+          onClick={() => setSection('arcana')}
+        >
+          Major Arcana
+          <span className="mc-tab-count">154</span>
+        </button>
       </div>
 
-      {/* Drawn cards row */}
-      {drawnCards.length > 0 && (
-        <div className="mc-drawn-row">
-          {drawnCards.map(card => (
+      {/* === PLAYING CARDS SECTION === */}
+      {section === 'playing' && (
+        <>
+          {/* Suit filter tabs */}
+          <div className="mc-deck-tabs">
             <button
-              key={card.id}
-              className="mc-drawn-thumb"
-              style={{ borderColor: info.color }}
-              onClick={() => { setExpandedCard(card); setExpandedStages({}); }}
+              className={`mc-tab${suitFilter === null ? ' active' : ''}`}
+              onClick={() => setSuitFilter(null)}
             >
-              <span className="mc-drawn-name">{card.name}</span>
-              <span className="mc-drawn-power">{card.power}</span>
+              All
             </button>
-          ))}
-        </div>
+            {SUITS.map(s => (
+              <button
+                key={s.key}
+                className={`mc-tab${suitFilter === s.key ? ' active' : ''}`}
+                style={{ '--tab-color': s.color }}
+                onClick={() => setSuitFilter(s.key)}
+              >
+                <span style={{ color: s.color }}>{s.symbol}</span> {s.key.charAt(0).toUpperCase() + s.key.slice(1)}
+              </button>
+            ))}
+          </div>
+
+          {/* Playing card grid */}
+          <div className="mc-card-grid mc-playing-grid">
+            {filteredPlaying.map(card => (
+              <div key={card.id} className="mc-playing-card">
+                <span className="mc-playing-rank mc-playing-rank-top">{card.rank}</span>
+                <span className="mc-playing-suit" style={{ color: card.suitColor }}>
+                  {card.suitSymbol}
+                </span>
+                <span className="mc-playing-rank mc-playing-rank-bottom">{card.rank}</span>
+                <span className="mc-playing-value">{card.value} pt{card.value !== 1 ? 's' : ''}</span>
+              </div>
+            ))}
+          </div>
+        </>
       )}
 
-      {/* Card grid */}
-      <div className="mc-card-grid">
-        {cards.map(card => (
-          <button
-            key={card.id}
-            className="mc-card"
-            onClick={() => { setExpandedCard(card); setExpandedStages({}); }}
-          >
-            <span className="mc-card-deck" style={{ color: info.color }}>{card.deckLabel}</span>
-            <span className="mc-card-name">{card.name}</span>
-            <span className="mc-card-brief">{card.brief}</span>
-            <span className="mc-card-power">{card.power}</span>
-          </button>
-        ))}
-        {cards.length === 0 && (
-          <p className="mc-empty">All cards drawn. Click Reset to rebuild the deck.</p>
-        )}
-      </div>
-
-      {/* Detail overlay */}
-      {expandedCard && (
-        <div className="mc-detail-overlay" onClick={() => setExpandedCard(null)}>
-          <div className="mc-detail-panel" onClick={e => e.stopPropagation()}>
-            <div className="mc-detail-header">
-              <span className="mc-detail-deck" style={{ color: info.color }}>
-                {expandedCard.deckLabel}
-              </span>
-              <h3 className="mc-detail-name">{expandedCard.name}</h3>
-              <span className="mc-detail-power">{expandedCard.power}</span>
-              <button className="mc-detail-close" onClick={() => setExpandedCard(null)}>
-                &times;
+      {/* === MAJOR ARCANA SECTION === */}
+      {section === 'arcana' && (
+        <>
+          {/* Culture tabs */}
+          <div className="mc-deck-tabs">
+            {CULTURES.map(c => (
+              <button
+                key={c.key}
+                className={`mc-tab${activeCulture === c.key ? ' active' : ''}`}
+                onClick={() => { setActiveCulture(c.key); setExpandedCard(null); }}
+              >
+                {c.label}
+                <span className="mc-tab-count">22</span>
               </button>
-            </div>
-
-            <div className="mc-detail-body">
-              {/* Figures: 8 collapsible stages */}
-              {expandedCard.deck === 'figures' && STAGES.map(s => {
-                const text = expandedCard.detail[s];
-                if (!text || !text.trim()) return null;
-                const isOpen = expandedStages[s];
-                return (
-                  <div key={s} className="mc-detail-section">
-                    <button
-                      className={`mc-section-toggle${isOpen ? ' open' : ''}`}
-                      onClick={() => toggleStage(s)}
-                    >
-                      {STAGE_LABELS[s]}
-                      <span className="mc-section-arrow">{isOpen ? '\u25BC' : '\u25B6'}</span>
-                    </button>
-                    {isOpen && <p className="mc-section-text">{text}</p>}
-                  </div>
-                );
-              })}
-
-              {/* Metals: archetype info + deities */}
-              {expandedCard.deck === 'metals' && (
-                <>
-                  <div className="mc-meta-row">
-                    <span className="mc-meta-tag">{expandedCard.detail.metal}</span>
-                    <span className="mc-meta-tag">{expandedCard.detail.sin}</span>
-                  </div>
-                  <div className="mc-detail-section">
-                    <h4 className="mc-section-heading">Shadow</h4>
-                    <p className="mc-section-text">{expandedCard.detail.shadow}</p>
-                  </div>
-                  <div className="mc-detail-section">
-                    <h4 className="mc-section-heading">Light</h4>
-                    <p className="mc-section-text">{expandedCard.detail.light}</p>
-                  </div>
-                  {expandedCard.detail.deities.length > 0 && (
-                    <div className="mc-detail-section">
-                      <h4 className="mc-section-heading">Deities</h4>
-                      <div className="mc-deity-grid">
-                        {expandedCard.detail.deities.map((d, i) => (
-                          <div key={i} className="mc-deity-card">
-                            <span className="mc-deity-name">{d.name}</span>
-                            <span className="mc-deity-culture">{d.culture}</span>
-                            <span className="mc-deity-domain">{d.domain}</span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </>
-              )}
-
-              {/* Stars: zodiac info + cultural variants */}
-              {expandedCard.deck === 'stars' && (
-                <>
-                  <div className="mc-meta-row">
-                    <span className="mc-meta-tag">{expandedCard.detail.symbol} {expandedCard.detail.element}</span>
-                    <span className="mc-meta-tag">{expandedCard.detail.modality}</span>
-                    <span className="mc-meta-tag">{expandedCard.detail.rulingPlanet}</span>
-                  </div>
-                  <p className="mc-section-text" style={{ marginBottom: 8 }}>
-                    <strong>{expandedCard.detail.dates}</strong> &mdash; {expandedCard.detail.archetype}
-                  </p>
-                  <p className="mc-section-text">{expandedCard.detail.description}</p>
-                  {expandedCard.detail.cultures && (
-                    <div className="mc-detail-section" style={{ marginTop: 12 }}>
-                      <h4 className="mc-section-heading">Cultural Variants</h4>
-                      {Object.entries(expandedCard.detail.cultures).map(([key, c]) => (
-                        <div key={key} className="mc-culture-row">
-                          <span className="mc-culture-label">{key}</span>
-                          <span className="mc-culture-name">{c.name}</span>
-                          <p className="mc-culture-desc">{c.description}</p>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </>
-              )}
-
-              {/* Journey: full essay */}
-              {expandedCard.deck === 'journey' && (
-                <div className="mc-essay-scroll">
-                  {expandedCard.detail.essay.split('\n\n').map((para, i) => (
-                    <p key={i} className="mc-section-text">{para}</p>
-                  ))}
-                </div>
-              )}
-            </div>
+            ))}
           </div>
-        </div>
+
+          {/* Arcana card grid */}
+          <div className="mc-card-grid">
+            {arcanaCards.map(card => {
+              const pos = getArcanaPosition(card.number);
+              return (
+                <button
+                  key={`${card.culture}-${card.number}`}
+                  className="mc-card mc-arcana-card"
+                  onClick={() => handleArcanaClick(card)}
+                >
+                  <span className="mc-card-number">#{card.number}</span>
+                  <span className="mc-card-name">{card.name}</span>
+                  <span className="mc-card-brief">
+                    {card.description.substring(0, 100)}{card.description.length > 100 ? '...' : ''}
+                  </span>
+                  {pos && (
+                    <span className={`mc-card-correspondence mc-corr-${pos.type}`}>
+                      {pos.correspondence}
+                    </span>
+                  )}
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Detail overlay */}
+          {expandedCard && (
+            <div className="mc-detail-overlay" onClick={() => setExpandedCard(null)}>
+              <div className="mc-detail-panel" onClick={e => e.stopPropagation()}>
+                <div className="mc-detail-header">
+                  <span className="mc-card-number" style={{ fontSize: '1rem' }}>
+                    #{expandedCard.number}
+                  </span>
+                  <h3 className="mc-detail-name">{expandedCard.name}</h3>
+                  <span className="mc-detail-culture">
+                    {CULTURES.find(c => c.key === expandedCard.culture)?.label}
+                  </span>
+                  <button className="mc-detail-close" onClick={() => setExpandedCard(null)}>
+                    &times;
+                  </button>
+                </div>
+
+                <div className="mc-detail-body">
+                  {/* Correspondence badge */}
+                  {position && (
+                    <div style={{ marginBottom: 12 }}>
+                      <span className={`mc-card-correspondence mc-corr-${position.type}`}>
+                        {position.type === 'element' ? 'Element' : position.type === 'planet' ? 'Planet' : 'Zodiac'}:
+                        {' '}{position.correspondence}
+                      </span>
+                    </div>
+                  )}
+
+                  {/* Full description */}
+                  <p className="mc-section-text">{expandedCard.description}</p>
+
+                  {/* Cross-reference section */}
+                  <div className="mc-crossref">
+                    <h4 className="mc-section-heading">
+                      Same Position Across Cultures
+                    </h4>
+                    {crossRef.map(ref => {
+                      const cultureLabel = CULTURES.find(c => c.key === ref.culture)?.label;
+                      const isCurrent = ref.culture === expandedCard.culture;
+                      return (
+                        <button
+                          key={ref.culture}
+                          className={`mc-crossref-item${isCurrent ? ' active' : ''}`}
+                          onClick={() => {
+                            if (!isCurrent) {
+                              setActiveCulture(ref.culture);
+                              setExpandedCard(ref);
+                            }
+                          }}
+                        >
+                          <span className="mc-crossref-culture">{cultureLabel}</span>
+                          <span className="mc-crossref-name">{ref.name}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+        </>
       )}
     </div>
   );
