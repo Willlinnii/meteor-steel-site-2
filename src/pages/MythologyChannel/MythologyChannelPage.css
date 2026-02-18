@@ -231,6 +231,33 @@
   line-height: 1.4;
 }
 
+/* ===== CLIMATE BOOTCAMP CTA ===== */
+
+.climate-bootcamp-cta {
+  text-align: center;
+  margin-top: 24px;
+  margin-bottom: 24px;
+}
+
+.climate-bootcamp-btn {
+  display: inline-block;
+  font-family: 'Cinzel', serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--accent-ember);
+  border: 1px solid var(--accent-ember);
+  padding: 12px 28px;
+  transition: all 0.3s ease;
+}
+
+.climate-bootcamp-btn:hover {
+  background: rgba(196, 113, 58, 0.15);
+  box-shadow: 0 0 16px rgba(196, 113, 58, 0.3);
+}
+
 /* ===== MYTHS TV SECTION ===== */
 
 .myths-section {

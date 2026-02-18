@@ -705,7 +705,7 @@ export default function OrbitalDiagram({ selectedPlanet, onSelectPlanet, selecte
           strokeWidth="0.6"
         />
 
-        {/* Zodiac sign labels on curved paths with inline glyph */}
+        {/* Zodiac sign labels on curved paths with SVG glyph icons */}
         {ZODIAC.map((z, i) => {
           const isSelected = selectedSign === z.sign;
           const centerAngle = -(i * 30 + 15);
@@ -713,6 +713,14 @@ export default function OrbitalDiagram({ selectedPlanet, onSelectPlanet, selecte
           const hx = CX + ZODIAC_TEXT_R * Math.cos(rad);
           const hy = CY + ZODIAC_TEXT_R * Math.sin(rad);
           const color = isSelected ? '#f0c040' : 'rgba(201, 169, 97, 0.6)';
+
+          // Position glyph along the arc, before the sign name in reading direction
+          const glyphAngularOffset = i <= 5 ? 9 : -9;
+          const glyphAngleDeg = centerAngle + glyphAngularOffset;
+          const gr = (glyphAngleDeg * Math.PI) / 180;
+          const gx = CX + ZODIAC_TEXT_R * Math.cos(gr);
+          const gy = CY + ZODIAC_TEXT_R * Math.sin(gr);
+          const glyphRot = tangentRotation(glyphAngleDeg);
 
           return (
             <g
@@ -722,19 +730,24 @@ export default function OrbitalDiagram({ selectedPlanet, onSelectPlanet, selecte
               style={{ cursor: 'pointer' }}
             >
               <circle cx={hx} cy={hy} r="24" fill="transparent" />
+              <g transform={`translate(${gx},${gy}) rotate(${glyphRot}) scale(0.75)`}>
+                <path d={ZODIAC_GLYPHS[z.sign]} fill="none" stroke={color}
+                  strokeWidth={isSelected ? '2' : '1.6'} strokeLinecap="round" strokeLinejoin="round"
+                  style={{ transition: 'stroke 0.3s' }} />
+              </g>
               <text
                 fill={color}
-                fontSize="13"
+                fontSize="15"
                 fontFamily="Cinzel, serif"
                 fontWeight={isSelected ? '700' : '500'}
-                letterSpacing="1"
+                letterSpacing="0.5"
               >
                 <textPath
                   href={`#zpath-${z.sign}`}
-                  startOffset="50%"
+                  startOffset="60%"
                   textAnchor="middle"
                 >
-                  {z.symbol + '\uFE0E'} {z.sign}
+                  {z.sign}
                 </textPath>
               </text>
             </g>

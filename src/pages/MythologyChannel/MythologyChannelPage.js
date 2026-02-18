@@ -29,10 +29,22 @@ const SHOWS = [
     description: 'Visionary explorations of myth and the imaginal.',
   },
   {
-    id: 'lionel-corbett',
-    label: 'Lionel Corbett',
-    playlist: 'https://www.youtube.com/embed/videoseries?list=PL6ygcKvnP7CNyqy5clgYGMmZ7RE2Kj7F-',
-    description: 'Talks by Lionel Corbett on Jungian psychology and the numinous.',
+    id: 'journey-of-the-goddess',
+    label: 'Journey of the Goddess',
+    playlist: 'https://www.youtube.com/embed/videoseries?list=PLX31T_KS3jtodFheYcPjTGgbD1lsT-Pqf',
+    description: 'Tracing the feminine divine through myth, culture, and consciousness.',
+  },
+  {
+    id: 'transformational-narrative',
+    label: 'Transformational Narrative',
+    playlist: 'https://www.youtube.com/embed/videoseries?list=PLX31T_KS3jtrYkiA3glbcfa2oqkaj05qW',
+    description: 'The power of story to transform consciousness and culture.',
+  },
+  {
+    id: 'myth-is-all-around-us',
+    label: 'Myth is All Around Us',
+    playlist: 'https://www.youtube.com/embed/videoseries?list=PLX31T_KS3jtplVff23-tgQ5KIt8Z89_Fe',
+    description: 'Discovering mythic patterns in everyday life and the world around us.',
   },
   {
     id: 'scholar-talks',
@@ -41,22 +53,46 @@ const SHOWS = [
     description: 'Academic lectures on mythology, religion, and depth psychology.',
   },
   {
-    id: 'the-tao',
-    label: 'The Tao',
-    playlist: 'https://www.youtube.com/embed/videoseries?list=PL6ygcKvnP7CMh5cYBmYMM8Mq_Q00uinNX',
-    description: 'Explorations of Taoist philosophy and its mythic dimensions.',
-  },
-  {
     id: 'mastery-circle',
     label: 'Mastery Circle',
     playlist: 'https://www.youtube.com/embed/videoseries?list=PL6ygcKvnP7CPCSA14Lzfm3uNlNBA_a0zi',
     description: 'Deep-dive sessions on mythological mastery and practice.',
   },
   {
+    id: 'mythology-classroom',
+    label: 'Mythology Classroom',
+    playlist: 'https://www.youtube.com/embed/videoseries?list=PL9K_KMb-XthdXvDeKlccUWpRoR5znho_v',
+    description: 'Educational sessions teaching the foundations of mythological study.',
+  },
+  {
+    id: 'the-tao',
+    label: 'The Tao',
+    playlist: 'https://www.youtube.com/embed/videoseries?list=PL6ygcKvnP7CMh5cYBmYMM8Mq_Q00uinNX',
+    description: 'Explorations of Taoist philosophy and its mythic dimensions.',
+  },
+  {
+    id: 'lionel-corbett',
+    label: 'Lionel Corbett',
+    playlist: 'https://www.youtube.com/embed/videoseries?list=PL6ygcKvnP7CNyqy5clgYGMmZ7RE2Kj7F-',
+    description: 'Talks by Lionel Corbett on Jungian psychology and the numinous.',
+  },
+  {
     id: 'dennis-slattery',
     label: 'Dennis Slattery',
     playlist: 'https://www.youtube.com/embed/videoseries?list=PLX31T_KS3jtqUrR_L1_fsxw0S4ugOMo50',
     description: 'Talks by Dennis Patrick Slattery on mythopoetics and literature.',
+  },
+  {
+    id: 'pulling-focus',
+    label: 'Pulling Focus',
+    playlist: 'https://www.youtube.com/embed/videoseries?list=PLX31T_KS3jtpAyw0zUzQqRM5LCh_A-Qx_',
+    description: 'Exploring archetypal depths.',
+  },
+  {
+    id: 'climate-journey',
+    label: 'Climate Journey',
+    playlist: 'https://www.youtube.com/embed/videoseries?list=PLX31T_KS3jtrIDNF6v_WameHvlEQ3joMC',
+    description: 'Mythic perspectives on the climate crisis and our relationship to Earth.',
   },
 ];
 
@@ -237,6 +273,19 @@ export default function MythologyChannelPage() {
           ))}
         </div>
       </div>
+
+      {activeShow?.id === 'climate-journey' && (
+        <div className="climate-bootcamp-cta">
+          <a
+            href="https://www.thestoryatlas.com/my-courses/climate-bootcamp"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="climate-bootcamp-btn"
+          >
+            Enter the Climate Bootcamp
+          </a>
+        </div>
+      )}
 
       {isMythsActive && (
         <div className="myths-section">
