@@ -1,5 +1,5 @@
 import React from 'react';
-import { ARCANA_POSITIONS, getCrossReference, getSuitsForCulture, CULTURE_SUITS } from '../../games/mythouse/mythouseCardData';
+import { ARCANA_POSITIONS, getCrossReference, getSuitsForCulture } from '../../games/mythouse/mythouseCardData';
 
 const ROMAN_NUMERALS = ['0','I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII','XIII','XIV','XV','XVI','XVII','XVIII','XIX','XX','XXI'];
 
