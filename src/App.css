@@ -118,6 +118,9 @@ body {
   padding-bottom: 6px;
   border-bottom: 2px solid var(--accent-ember);
   padding-right: 120px;
+  pointer-events: auto;
+  text-decoration: none;
+  cursor: pointer;
 }
 
 @media (max-width: 600px) {

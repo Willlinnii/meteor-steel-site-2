@@ -849,7 +849,7 @@ function SiteNav() {
 function SiteHeader() {
   return (
     <header className="site-header">
-      <span className="site-header-logo">Mythouse</span>
+      <Link to="/metals" className="site-header-logo">Mythouse</Link>
     </header>
   );
 }
