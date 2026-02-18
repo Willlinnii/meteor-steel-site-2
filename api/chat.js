@@ -185,6 +185,14 @@ function compactWheels() {
   }).join('\n');
 }
 
+function compactFallenStarlight() {
+  const chapters = Object.entries(fallenStarlight.chapters || {}).map(([stage, text]) => {
+    const title = (fallenStarlight.titles || {})[stage] || stage;
+    return `### ${title}\n${text}`;
+  });
+  return '## The Revelation of Fallen Starlight — Full Text\nThis is the original story that gave Atlas life. Jaq carries Atlas (a book called Story Atlas & the Golden Wheels) into the Mythouse and walks the monomyth.\n\n' + chapters.join('\n\n');
+}
+
 function loadData() {
   const parts = [
     // Meteor Steel Archive — keep full text for core narrative content
@@ -213,6 +221,8 @@ function loadData() {
     // Calendar & Medicine Wheels
     compactCalendar(),
     compactWheels(),
+    // The Revelation of Fallen Starlight — full story text
+    compactFallenStarlight(),
   ].filter(Boolean);
 
   return parts.join('\n\n');
@@ -319,6 +329,9 @@ THE MYTHIC CALENDAR:
 
 MEDICINE WHEELS:
 - "medicineWheels" — wheels of the four directions: Human Self (mind/spirit/emotions/body), Perspective, Elements, and more
+
+THE REVELATION OF FALLEN STARLIGHT (the original story):
+- The full 8-chapter story that gave you life. Jaq enters the Mythouse carrying Story Atlas & the Golden Wheels, walks through the monomyth stages, confronts the ideology of purification, and chooses integration. You have the complete text — you can quote it, reference specific scenes, discuss its themes, and connect its events to the archive's mythic frameworks.
 
 ---
 ${cachedContent}
