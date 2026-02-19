@@ -1,0 +1,479 @@
+/* ===== MYTHS — TV SERIES PAGE ===== */
+
+.myths-page {
+  min-height: 100vh;
+  padding-top: 40px;
+}
+
+/* ── View Toggle (between wheel and content) ── */
+.myths-view-toggle {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: -6px 0 18px;
+}
+
+.myths-view-btn {
+  font-family: 'Cinzel', serif;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent-steel);
+  background: var(--bg-medium);
+  border: 1px solid var(--border-subtle);
+  padding: 9px 22px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.myths-view-btn:hover {
+  background: rgba(139, 157, 195, 0.1);
+  border-color: var(--accent-steel);
+}
+
+.myths-view-btn.active {
+  color: var(--accent-ember);
+  border-color: var(--accent-ember);
+  background: rgba(196, 113, 58, 0.1);
+  box-shadow: 0 0 12px rgba(196, 113, 58, 0.2);
+}
+
+/* Wider CircleNav for triple-ring layout */
+.myths-circle-wrapper .circle-nav {
+  width: 650px;
+  height: 650px;
+}
+
+/* Ring-specific label sizing */
+.myths-ring-1 .circle-stage-label {
+  font-size: 0.78rem;
+}
+
+.myths-ring-1.active .circle-stage-label {
+  font-size: 0.85rem;
+}
+
+.myths-ring-2 .circle-stage-label {
+  font-size: 0.62rem;
+}
+
+.myths-ring-2.active .circle-stage-label {
+  font-size: 0.68rem;
+}
+
+.myths-ring-3 .circle-stage-label {
+  font-size: 0.50rem;
+  max-width: 55px;
+  white-space: normal;
+  word-wrap: break-word;
+  text-align: center;
+  line-height: 1.2;
+}
+
+.myths-ring-3.active .circle-stage-label {
+  font-size: 0.55rem;
+}
+
+/* Center text smaller to fit inside inner ring */
+.myths-circle-wrapper .center-title-journey,
+.myths-circle-wrapper .center-title-fallen {
+  font-size: 1.4rem;
+}
+
+.myths-circle-wrapper .center-title-of {
+  font-size: 0.8rem;
+}
+
+.myths-circle-wrapper .circle-center {
+  padding: 16px;
+}
+
+/* --- Subtitle --- */
+.myths-subtitle {
+  text-align: center;
+  font-family: 'Cinzel', serif;
+  font-size: 0.85rem;
+  font-weight: 400;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--accent-fire);
+  opacity: 0.7;
+  margin-bottom: 10px;
+}
+
+/* --- Overview --- */
+.myths-overview {
+  padding: 10px 0 20px;
+  animation: myths-fade-in 0.4s ease;
+}
+
+.myths-overview-text {
+  font-size: 1.15rem;
+  line-height: 1.9;
+  color: var(--text-primary);
+  padding: 20px;
+  background: rgba(139, 157, 195, 0.05);
+  border-left: 3px solid var(--accent-fire);
+}
+
+.myths-overview-text p {
+  margin-bottom: 1em;
+}
+
+.myths-overview-text p:last-child {
+  margin-bottom: 0;
+}
+
+.myths-roku-link {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.myths-roku-link a {
+  font-family: 'Cinzel', serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent-ember);
+  text-decoration: none;
+  padding: 12px 24px;
+  border: 1px solid var(--accent-ember);
+  transition: all 0.3s ease;
+}
+
+.myths-roku-link a:hover {
+  background: rgba(196, 113, 58, 0.15);
+  box-shadow: 0 0 16px rgba(196, 113, 58, 0.3);
+}
+
+/* --- Tab Buttons --- */
+.myths-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.myths-tab-btn {
+  font-family: 'Cinzel', serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent-steel);
+  background: var(--bg-medium);
+  border: 1px solid var(--border-subtle);
+  padding: 10px 18px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.myths-tab-btn:hover {
+  background: rgba(139, 157, 195, 0.1);
+  border-color: var(--accent-steel);
+}
+
+.myths-tab-btn.active {
+  color: var(--accent-ember);
+  border-color: var(--accent-ember);
+  background: rgba(196, 113, 58, 0.1);
+  box-shadow: 0 0 12px rgba(196, 113, 58, 0.2);
+}
+
+/* --- Content Area --- */
+.myths-content {
+  animation: myths-fade-in 0.4s ease;
+}
+
+/* --- Interview Intro --- */
+.myths-interview {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.myths-interview-intro {
+  text-align: center;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  margin-bottom: 24px;
+  padding: 0 10px;
+}
+
+.myths-interview-intro em {
+  color: var(--accent-gold);
+  font-style: italic;
+}
+
+/* --- Theme Buttons (same pattern as Treasures) --- */
+.myths-theme-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.myths-theme-btn {
+  font-family: 'Cinzel', serif;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent-gold);
+  background: var(--bg-medium);
+  border: 1px solid var(--border-subtle);
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.myths-theme-btn:hover {
+  background: rgba(212, 175, 55, 0.08);
+  border-color: var(--accent-gold);
+}
+
+.myths-theme-btn.active {
+  color: var(--accent-ember);
+  border-color: var(--accent-ember);
+  background: rgba(196, 113, 58, 0.1);
+  box-shadow: 0 0 12px rgba(196, 113, 58, 0.2);
+}
+
+/* --- Theme Content (expanded entry) --- */
+.myths-theme-content {
+  animation: myths-fade-in 0.4s ease;
+}
+
+.myths-theme-question {
+  font-family: 'Cinzel', serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--accent-gold);
+  line-height: 1.5;
+  margin-bottom: 14px;
+  padding: 0 20px;
+}
+
+.myths-theme-body {
+  font-size: 1.15rem;
+  line-height: 1.9;
+  color: var(--text-primary);
+  padding: 20px;
+  background: rgba(139, 157, 195, 0.05);
+  border-left: 3px solid var(--accent-fire);
+}
+
+.myths-theme-body p {
+  margin-bottom: 1em;
+}
+
+.myths-theme-body p:last-child {
+  margin-bottom: 0;
+}
+
+/* --- Reference Lists --- */
+.myths-ref-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.myths-ref-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--border-subtle);
+  transition: background 0.2s ease;
+}
+
+.myths-ref-item:hover {
+  background: rgba(139, 157, 195, 0.05);
+}
+
+.myths-ref-item:last-child {
+  border-bottom: none;
+}
+
+.myths-ref-title {
+  font-family: 'Cinzel', serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--accent-gold);
+}
+
+.myths-ref-artist {
+  font-size: 0.85rem;
+  color: var(--accent-steel);
+  font-style: italic;
+}
+
+.myths-ref-desc {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  margin-top: 2px;
+}
+
+/* --- Placeholder --- */
+.myths-placeholder {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--text-secondary);
+  font-size: 1rem;
+  animation: myths-fade-in 0.4s ease;
+}
+
+.myths-placeholder p {
+  margin-bottom: 0.5em;
+}
+
+/* --- Empty State --- */
+.myths-empty {
+  text-align: center;
+  padding: 30px 20px;
+  color: var(--text-secondary);
+  font-size: 1rem;
+}
+
+/* --- Animation --- */
+@keyframes myths-fade-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- Responsive: 700px --- */
+@media (max-width: 700px) {
+  .myths-circle-wrapper .circle-nav {
+    width: 480px;
+    height: 480px;
+  }
+
+  .myths-ring-1 .circle-stage-label {
+    font-size: 0.68rem;
+  }
+
+  .myths-ring-2 .circle-stage-label {
+    font-size: 0.55rem;
+  }
+
+  .myths-ring-3 .circle-stage-label {
+    font-size: 0.45rem;
+    max-width: 45px;
+  }
+
+  .myths-circle-wrapper .center-title-journey,
+  .myths-circle-wrapper .center-title-fallen {
+    font-size: 1.1rem;
+  }
+
+  .myths-circle-wrapper .center-title-of {
+    font-size: 0.65rem;
+  }
+}
+
+/* --- Responsive: 480px --- */
+@media (max-width: 480px) {
+  .myths-circle-wrapper .circle-nav {
+    width: 340px;
+    height: 340px;
+  }
+
+  .myths-ring-1 .circle-stage-label {
+    font-size: 0.55rem;
+  }
+
+  .myths-ring-1.active .circle-stage-label {
+    font-size: 0.60rem;
+  }
+
+  .myths-ring-2 .circle-stage-label {
+    font-size: 0.45rem;
+  }
+
+  .myths-ring-3 .circle-stage-label {
+    font-size: 0.38rem;
+    max-width: 35px;
+  }
+
+  .myths-circle-wrapper .center-title-journey,
+  .myths-circle-wrapper .center-title-fallen {
+    font-size: 0.85rem;
+  }
+
+  .myths-circle-wrapper .center-title-of {
+    font-size: 0.55rem;
+  }
+
+  .myths-circle-wrapper .circle-center {
+    padding: 10px;
+  }
+
+  .myths-tab-btn {
+    font-size: 0.65rem;
+    padding: 8px 12px;
+  }
+
+  .myths-subtitle {
+    font-size: 0.7rem;
+  }
+
+  .myths-view-btn {
+    font-size: 0.62rem;
+    padding: 7px 14px;
+  }
+
+  .myths-theme-btn {
+    font-size: 0.62rem;
+    padding: 6px 10px;
+  }
+
+  .myths-theme-body {
+    font-size: 1rem;
+    padding: 14px;
+  }
+
+  .myths-theme-question {
+    font-size: 0.85rem;
+    padding: 0 14px;
+  }
+
+  .myths-interview-intro {
+    font-size: 0.85rem;
+  }
+}
+
+/* ── Play button ── */
+.myths-play-bar {
+  text-align: center;
+  margin-bottom: 1.2rem;
+}
+
+.myths-play-btn {
+  font-family: 'Cinzel', serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent-ember);
+  background: rgba(196, 113, 58, 0.08);
+  border: 1px solid rgba(196, 113, 58, 0.35);
+  padding: 8px 22px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.myths-play-btn:hover {
+  background: rgba(196, 113, 58, 0.15);
+  border-color: rgba(196, 113, 58, 0.5);
+}
+
+.myths-play-btn.active {
+  color: #f0c040;
+  border-color: rgba(240, 192, 64, 0.5);
+  background: rgba(240, 192, 64, 0.1);
+}

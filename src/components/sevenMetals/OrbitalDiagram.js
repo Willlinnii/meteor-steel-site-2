@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useRef, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Body, GeoVector, Ecliptic, MoonPhase } from 'astronomy-engine';
+import { Body, GeoVector, Ecliptic, MoonPhase, EclipticLongitude } from 'astronomy-engine';
 import PlanetNode from './PlanetNode';
 import wheelData from '../../data/medicineWheels.json';
 import starsNorth from '../../data/starsNorth.json';
@@ -22,6 +22,15 @@ const SIGN_SYMBOLS = ['♈','♉','♊','♋','♌','♍','♎','♏','♐','♑
 function getEclipticLongitude(planet) {
   const vec = GeoVector(BODY_MAP[planet], new Date(), true);
   return Ecliptic(vec).elon;
+}
+
+function getHeliocentricLongitude(planet) {
+  if (planet === 'Earth') {
+    // Earth's heliocentric longitude = Sun's geocentric longitude + 180°
+    const vec = GeoVector(Body.Sun, new Date(), true);
+    return (Ecliptic(vec).elon + 180) % 360;
+  }
+  return EclipticLongitude(Body[planet], new Date());
 }
 
 function lonToSignLabel(lon) {
@@ -463,7 +472,7 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
   };
 
   useEffect(() => {
-    if (aligned || livePositions || chakraViewMode) {
+    if (aligned || livePositions || heliocentric || chakraViewMode) {
       lastTimeRef.current = null;
       return;
     }
@@ -522,6 +531,18 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
     }
     return angles;
   }, [livePositions]);
+
+  const helioLiveAngles = useMemo(() => {
+    if (!heliocentric) return null;
+    const angles = {};
+    HELIO_ORBITS.forEach(o => {
+      angles[o.planet] = -getHeliocentricLongitude(o.planet);
+    });
+    const moonGeoLon = getEclipticLongitude('Moon');
+    const earthHelioLon = getHeliocentricLongitude('Earth');
+    angles['Moon-helio'] = -(moonGeoLon - earthHelioLon);
+    return angles;
+  }, [heliocentric]);
 
   const moonPhaseAngle = useMemo(() => MoonPhase(new Date()), []);
 
@@ -1356,7 +1377,7 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
         ))}
         {/* Moon orbit around Earth in heliocentric mode */}
         {heliocentric && (() => {
-          const earthAngle = orbitAngles['Earth'] || 0;
+          const earthAngle = helioLiveAngles ? helioLiveAngles['Earth'] : (orbitAngles['Earth'] || 0);
           const earthRad = (earthAngle * Math.PI) / 180;
           const ex = CX + 140 * Math.cos(earthRad);
           const ey = CY + 140 * Math.sin(earthRad);
@@ -1536,7 +1557,7 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
         {heliocentric ? (
           <>
             {HELIO_ORBITS.map(o => {
-              const angle = orbitAngles[o.planet] || 0;
+              const angle = helioLiveAngles ? helioLiveAngles[o.planet] : (orbitAngles[o.planet] || 0);
               const rad = (angle * Math.PI) / 180;
               const px = CX + o.r * Math.cos(rad);
               const py = CY + o.r * Math.sin(rad);
@@ -1556,7 +1577,7 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
                   />
                   {/* Moon orbiting Earth */}
                   {o.planet === 'Earth' && (() => {
-                    const moonAngle = orbitAngles['Moon-helio'] || 0;
+                    const moonAngle = helioLiveAngles ? helioLiveAngles['Moon-helio'] : (orbitAngles['Moon-helio'] || 0);
                     const mRad = (moonAngle * Math.PI) / 180;
                     const mx = px + HELIO_MOON.r * Math.cos(mRad);
                     const my = py + HELIO_MOON.r * Math.sin(mRad);

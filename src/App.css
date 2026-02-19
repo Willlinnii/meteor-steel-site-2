@@ -403,7 +403,7 @@ body {
   height: 74%;
   border-radius: 50%;
   overflow: hidden;
-  z-index: 2;
+  z-index: 10;
   background: #000;
 }
 

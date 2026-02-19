@@ -7,7 +7,7 @@ const treasuresData = {
     {
       id: 'templar-treasure',
       label: 'Templar Treasure',
-      playlist: '',
+      playlist: 'https://www.youtube.com/embed/videoseries?list=PLX31T_KS3jtq-b_PD3Vl-3wMsbWFgVCXM',
       themes: [
         {
           id: 'ancient-temple-banks',
@@ -134,7 +134,7 @@ The Templars, in this reading, are not the holders of the Grail so much as its c
     {
       id: 'czar-gold',
       label: 'Gold of the Czars',
-      playlist: '',
+      playlist: 'https://www.youtube.com/embed/videoseries?list=PLX31T_KS3jtorgHzwFkK3-nbxnifYqw5n',
       themes: [
         {
           id: 'ane-heartland',

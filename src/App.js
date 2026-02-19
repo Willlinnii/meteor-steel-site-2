@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef, Suspense, lazy } from 'react';
-import { Routes, Route, Link, useLocation, useSearchParams } from 'react-router-dom';
+import { Routes, Route, Link, Navigate, useLocation, useSearchParams } from 'react-router-dom';
 import { useAuth } from './auth/AuthContext';
 import { CourseworkProvider, useCoursework } from './coursework/CourseworkContext';
 import { WritingsProvider, useWritings } from './writings/WritingsContext';
@@ -32,7 +32,7 @@ const AtlasPage = lazy(() => import('./pages/Atlas/AtlasPage'));
 const MythSalonLibraryPage = lazy(() => import('./pages/MythSalonLibrary/MythSalonLibraryPage'));
 const ProfilePage = lazy(() => import('./pages/Profile/ProfilePage'));
 const StoryOfStoriesPage = lazy(() => import('./pages/StoryOfStories/StoryOfStoriesPage'));
-const TreasuresPage = lazy(() => import('./pages/Treasures/TreasuresPage'));
+const MythsPage = lazy(() => import('./pages/Myths/MythsPage'));
 
 const STAGES = [
   { id: 'golden-age', label: 'Golden Age' },
@@ -1071,7 +1071,7 @@ const NAV_ITEMS = [
   { path: 'https://www.thestoryatlas.com/my-courses/psychles/surface', label: 'Story Atlas', external: true },
   { path: '/games', label: 'Game Room' },
   { path: '/story-of-stories', label: 'Story of Stories' },
-  { path: '/treasures', label: 'Treasures' },
+  { path: '/myths', label: 'Myths' },
   { path: '/profile', label: 'Profile' },
 ];
 
@@ -1248,7 +1248,8 @@ function AppContent() {
         <Route path="/journey/:journeyId" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" />Loading Journey...</div>}><OuroborosJourneyPage /></Suspense>} />
         <Route path="/library" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><MythSalonLibraryPage /></Suspense>} />
         <Route path="/story-of-stories" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><StoryOfStoriesPage /></Suspense>} />
-        <Route path="/treasures" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><TreasuresPage /></Suspense>} />
+        <Route path="/treasures" element={<Navigate to="/myths" replace />} />
+        <Route path="/myths" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><MythsPage /></Suspense>} />
         <Route path="/dragon/*" element={<RequireAdmin><Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" />Loading Admin...</div>}><AdminPage /></Suspense></RequireAdmin>} />
       </Routes>
       {!isAtlas && <SiteFooter />}
