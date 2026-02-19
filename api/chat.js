@@ -31,6 +31,7 @@ const medicineWheels = require('../src/data/medicineWheels.json');
 // --- The Revelation of Fallen Starlight ---
 const fallenStarlight = require('../src/data/fallenStarlight.json');
 const fallenStarlightAtlas = require('../src/data/fallenStarlightAtlas.js');
+const storyOfStoriesAtlas = require('../src/data/storyOfStoriesAtlas.js');
 
 // --- NEW: 13 previously-missing data files ---
 const monomythTheorists = require('../src/data/monomythTheorists.json');
@@ -387,6 +388,13 @@ function compactFallenStarlight() {
   return '## The Revelation of Fallen Starlight\nThe original story that gave Atlas life. Jaq carries Atlas (Story Atlas & the Golden Wheels) into the Mythouse and walks the monomyth. All key dialogue, plot events, and thematic content preserved.\n\n' + chapters.join('\n\n');
 }
 
+function compactStoryOfStories() {
+  return `## Story of Stories — Book Proposal Archive
+You have access to Will Linn's complete book proposal for "Story of Stories: Meteor Steel and the Monomyth." You can discuss its structure, themes, audience, chapters, and writing in detail. Be a thoughtful literary collaborator.
+
+${Object.entries(storyOfStoriesAtlas).map(([key, text]) => `### ${key}\n${text}`).join('\n\n')}`;
+}
+
 // --- NEW compact formatters for previously-missing data files ---
 
 function compactTheorists() {
@@ -537,7 +545,7 @@ function compactGameBook() {
 
 // --- Area knowledge loaders ---
 
-const VALID_AREAS = ['celestial-clocks', 'meteor-steel', 'fallen-starlight', 'story-forge', 'mythology-channel', 'games'];
+const VALID_AREAS = ['celestial-clocks', 'meteor-steel', 'fallen-starlight', 'story-forge', 'mythology-channel', 'games', 'story-of-stories'];
 
 function detectAreaFromMessage(messages) {
   const last = [...messages].reverse().find(m => m.role === 'user');
@@ -614,6 +622,9 @@ function getAreaKnowledge(area) {
 
     case 'games':
       return compactGameBook();
+
+    case 'story-of-stories':
+      return compactStoryOfStories();
 
     default:
       return '';

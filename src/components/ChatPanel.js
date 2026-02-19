@@ -44,6 +44,7 @@ export default function ChatPanel() {
     if (path === '/story-forge') return 'story-forge';
     if (path === '/mythology-channel' || path.startsWith('/mythology-channel/')) return 'mythology-channel';
     if (path === '/games') return 'games';
+    if (path === '/story-of-stories') return 'story-of-stories';
     return null;
   }
 
