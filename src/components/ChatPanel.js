@@ -127,7 +127,7 @@ export default function ChatPanel() {
       {open && (
         <div className="chat-panel">
           <div className="chat-header">
-            <span className="chat-title" onClick={() => navigate('/atlas')} style={{ cursor: 'pointer' }} title="Open Atlas AI Chat">Atlas</span>
+            <span className="chat-title" onClick={() => window.open('/atlas', '_blank')} style={{ cursor: 'pointer' }} title="Open Atlas AI Chat">Atlas</span>
             <button className="chat-header-close" onClick={() => setOpen(false)} aria-label="Close chat">{'\u2715'}</button>
           </div>
 
