@@ -861,6 +861,7 @@ const NAV_ITEMS = [
   { path: '/metals/calendar', label: 'Celestial Clocks' },
   { path: '/mythology-channel', label: 'Mythology Channel' },
   { path: '/mythosophia', label: 'Mythosophia' },
+  { path: '/atlas', label: 'Atlas' },
   { path: '/', label: 'Meteor Steel' },
   { path: '/monomyth', label: 'Monomyth' },
   { path: '/fallen-starlight', label: 'Fallen Starlight' },
@@ -995,7 +996,6 @@ function App() {
 
   return (
     <Routes>
-      <Route path="/atlas" element={<Suspense fallback={<div className="celestial-loading" style={{ position: 'fixed', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg-dark)' }}><span className="celestial-loading-spinner" /></div>}><AtlasPage /></Suspense>} />
       <Route path="*" element={
         <div className="app">
           <SiteHeader />
@@ -1011,6 +1011,7 @@ function App() {
             <Route path="/games/*" element={<GamesPage />} />
             <Route path="/mythology-channel/:showId" element={<MythologyChannelPage />} />
             <Route path="/mythosophia" element={<MythosophiaPage />} />
+            <Route path="/atlas" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><AtlasPage /></Suspense>} />
             <Route path="/journey/:journeyId" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" />Loading Journey...</div>}><OuroborosJourneyPage /></Suspense>} />
             <Route path="/dragon/*" element={<RequireAdmin><Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" />Loading Admin...</div>}><AdminPage /></Suspense></RequireAdmin>} />
           </Routes>
