@@ -1852,6 +1852,81 @@ body {
   }
 }
 
+/* ===== VOICE TOGGLE & MIC (ChatPanel + PersonaChatPanel) ===== */
+
+.chat-header-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.chat-voice-toggle {
+  background: none;
+  border: 1px solid rgba(196, 113, 58, 0.25);
+  color: rgba(196, 113, 58, 0.45);
+  font-size: 0.85rem;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  line-height: 1;
+  transition: all 0.3s ease;
+}
+
+.chat-voice-toggle:hover {
+  border-color: rgba(196, 113, 58, 0.6);
+  color: rgba(196, 113, 58, 0.8);
+}
+
+.chat-voice-toggle.active {
+  border-color: rgba(196, 113, 58, 0.7);
+  color: rgba(196, 113, 58, 1);
+  background: rgba(196, 113, 58, 0.1);
+}
+
+.chat-mic-btn {
+  font-size: 0.85rem;
+  width: 30px;
+  height: 30px;
+  background: rgba(196, 113, 58, 0.08);
+  border: 1px solid rgba(196, 113, 58, 0.3);
+  color: var(--accent-ember, #c4713a);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  flex-shrink: 0;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.chat-mic-btn:hover:not(:disabled) {
+  background: rgba(196, 113, 58, 0.15);
+  border-color: rgba(196, 113, 58, 0.6);
+}
+
+.chat-mic-btn.recording {
+  background: rgba(200, 50, 50, 0.2);
+  border-color: rgba(200, 80, 80, 0.7);
+  color: #e05050;
+  animation: chat-mic-pulse 1.2s ease-in-out infinite;
+}
+
+@keyframes chat-mic-pulse {
+  0%, 100% { box-shadow: 0 0 4px rgba(200, 50, 50, 0.3); }
+  50%      { box-shadow: 0 0 14px rgba(200, 50, 50, 0.6); }
+}
+
+.chat-mic-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
 /* ===== FALLEN STARLIGHT AUDIO PLAYER ===== */
 
 .audio-play-toggle {

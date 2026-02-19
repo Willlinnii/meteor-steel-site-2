@@ -924,8 +924,8 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
         {/* Month calendar ring (inside zodiac) */}
         {showCalendar && (
           <g className="month-ring" style={{ opacity: 1, transition: 'opacity 0.4s ease' }}>
-            <circle cx={CX} cy={CY} r={MONTH_RING_INNER} fill="none" stroke="rgba(139, 195, 170, 0.18)" strokeWidth="0.8" />
-            <circle cx={CX} cy={CY} r={MONTH_RING_OUTER} fill="none" stroke="rgba(139, 195, 170, 0.18)" strokeWidth="0.8" />
+            <circle cx={CX} cy={CY} r={MONTH_RING_INNER} fill="none" stroke="rgba(100, 180, 220, 0.22)" strokeWidth="0.8" />
+            <circle cx={CX} cy={CY} r={MONTH_RING_OUTER} fill="none" stroke="rgba(100, 180, 220, 0.22)" strokeWidth="0.8" />
             {/* 12 divider lines */}
             {MONTHS.map((_, i) => {
               const angle = -(i * 30) + MONTH_OFFSET;
@@ -935,7 +935,7 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
                   key={`mdiv-${i}`}
                   x1={CX + MONTH_RING_INNER * Math.cos(rad)} y1={CY + MONTH_RING_INNER * Math.sin(rad)}
                   x2={CX + MONTH_RING_OUTER * Math.cos(rad)} y2={CY + MONTH_RING_OUTER * Math.sin(rad)}
-                  stroke="rgba(139, 195, 170, 0.2)"
+                  stroke="rgba(100, 180, 220, 0.25)"
                   strokeWidth="0.6"
                 />
               );
@@ -963,13 +963,13 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
                 >
                   <circle cx={hx} cy={hy} r="18" fill="transparent" />
                   {isSelected && (
-                    <circle cx={hx} cy={hy} r="14" fill="none" stroke="rgba(139, 195, 170, 0.5)" strokeWidth="0.8">
+                    <circle cx={hx} cy={hy} r="14" fill="none" stroke="rgba(100, 180, 220, 0.5)" strokeWidth="0.8">
                       <animate attributeName="r" values="12;16;12" dur="2s" repeatCount="indefinite" />
                       <animate attributeName="opacity" values="0.5;0.2;0.5" dur="2s" repeatCount="indefinite" />
                     </circle>
                   )}
                   <text
-                    fill={isSelected ? '#5acea0' : isCurrent ? 'rgba(139, 195, 170, 0.8)' : 'rgba(139, 195, 170, 0.5)'}
+                    fill={isSelected ? '#60d8f0' : isCurrent ? 'rgba(100, 180, 220, 0.9)' : 'rgba(100, 180, 220, 0.65)'}
                     fontSize="10"
                     fontFamily="Cinzel, serif"
                     fontWeight={isSelected ? '700' : isCurrent ? '600' : '400'}
@@ -1030,7 +1030,7 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
           const rad = (centerAngle * Math.PI) / 180;
           const hx = CX + ZODIAC_TEXT_R * Math.cos(rad);
           const hy = CY + ZODIAC_TEXT_R * Math.sin(rad);
-          const color = isSelected ? '#f0c040' : 'rgba(201, 169, 97, 0.6)';
+          const color = isSelected ? '#f5d050' : 'rgba(230, 200, 90, 0.75)';
 
           // Position glyph along the arc, before the sign name in reading direction
           const glyphAngularOffset = i <= 5 ? 9 : -9;
@@ -1102,8 +1102,8 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
               {/* Marker diamond */}
               <polygon
                 points={`${cx},${cy - 6} ${cx + 5},${cy} ${cx},${cy + 6} ${cx - 5},${cy}`}
-                fill={isSelected ? '#f0c040' : 'rgba(201, 169, 97, 0.5)'}
-                stroke={isSelected ? '#f0c040' : 'rgba(201, 169, 97, 0.3)'}
+                fill={isSelected ? '#f5d050' : 'rgba(230, 200, 90, 0.65)'}
+                stroke={isSelected ? '#f5d050' : 'rgba(230, 200, 90, 0.4)'}
                 strokeWidth="0.8"
                 style={{ transition: 'fill 0.3s, stroke 0.3s' }}
               />
@@ -1120,7 +1120,7 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
                 y={ly}
                 textAnchor={anchor}
                 dominantBaseline="central"
-                fill={isSelected ? '#f0c040' : 'rgba(201, 169, 97, 0.45)'}
+                fill={isSelected ? '#f5d050' : 'rgba(230, 200, 90, 0.6)'}
                 fontSize="8"
                 fontFamily="Cinzel, serif"
                 fontWeight={isSelected ? '700' : '400'}

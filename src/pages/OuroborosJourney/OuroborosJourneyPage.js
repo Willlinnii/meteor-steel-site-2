@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import useWheelJourney from '../../hooks/useWheelJourney';
+import useVoice, { SpeechRecognition } from '../../hooks/useVoice';
 import useYellowBrickRoad from '../../components/sevenMetals/useYellowBrickRoad';
 import challengeData from '../../data/yellowBrickRoad.json';
 import './OuroborosJourneyPage.css';
@@ -234,29 +235,6 @@ const SMOKE_PARTICLES = [
   { a: -30, d: 13,  s: 5.5, ms: 110 },
 ];
 
-/* ── Voice helpers ── */
-
-const SpeechRecognition = typeof window !== 'undefined'
-  ? (window.SpeechRecognition || window.webkitSpeechRecognition)
-  : null;
-
-function speakText(text, onEnd) {
-  if (!window.speechSynthesis) { onEnd?.(); return; }
-  window.speechSynthesis.cancel();
-  const utter = new SpeechSynthesisUtterance(text);
-  utter.rate = 0.95;
-  utter.pitch = 0.85;
-  // Prefer a deeper English voice when available
-  const voices = window.speechSynthesis.getVoices();
-  const preferred = voices.find(v => /daniel|james|aaron|male/i.test(v.name) && /en/i.test(v.lang))
-    || voices.find(v => /en[-_]US/i.test(v.lang))
-    || voices[0];
-  if (preferred) utter.voice = preferred;
-  if (onEnd) utter.onend = onEnd;
-  utter.onerror = () => onEnd?.();
-  window.speechSynthesis.speak(utter);
-}
-
 /* ── Main component ── */
 
 export default function OuroborosJourneyPage() {
@@ -293,64 +271,11 @@ export default function OuroborosJourneyPage() {
   const [synthesizedStory, setSynthesizedStory] = useState(null);
   const [synthesizing, setSynthesizing] = useState(false);
 
-  /* ── Voice state ── */
-  const [voiceEnabled, setVoiceEnabled] = useState(false);
-  const [recording, setRecording] = useState(false);
-  const [speaking, setSpeaking] = useState(false);
-  const recognitionRef = useRef(null);
-
-  // Preload voices (Chrome loads them async)
-  useEffect(() => {
-    window.speechSynthesis?.getVoices();
-    const handleVoices = () => window.speechSynthesis?.getVoices();
-    window.speechSynthesis?.addEventListener?.('voiceschanged', handleVoices);
-    return () => window.speechSynthesis?.removeEventListener?.('voiceschanged', handleVoices);
-  }, []);
-
-  // Cleanup on unmount
-  useEffect(() => {
-    return () => {
-      window.speechSynthesis?.cancel();
-      recognitionRef.current?.abort();
-    };
-  }, []);
-
-  const toggleVoice = () => {
-    if (voiceEnabled) {
-      window.speechSynthesis?.cancel();
-      recognitionRef.current?.abort();
-      setRecording(false);
-      setSpeaking(false);
-    }
-    setVoiceEnabled(v => !v);
-  };
-
-  const startListening = useCallback(() => {
-    if (!SpeechRecognition || recording) return;
-    const recog = new SpeechRecognition();
-    recog.continuous = false;
-    recog.interimResults = true;
-    recog.lang = 'en-US';
-    recognitionRef.current = recog;
-
-    recog.onstart = () => setRecording(true);
-    recog.onresult = (e) => {
-      const transcript = Array.from(e.results)
-        .map(r => r[0].transcript)
-        .join('');
-      setInputText(transcript);
-    };
-    recog.onerror = () => setRecording(false);
-    recog.onend = () => setRecording(false);
-    recog.start();
-  }, [recording]);
-
-  const stopListening = useCallback(() => {
-    recognitionRef.current?.stop();
-  }, []);
-
   /* ── Chat state ── */
   const [inputText, setInputText] = useState('');
+
+  /* ── Voice ── */
+  const { voiceEnabled, recording, speaking, toggleVoice, startListening, stopListening, speak } = useVoice(setInputText);
   const [loading, setLoading] = useState(false);
   const [messages, setMessages] = useState([]);
   const chatEndRef = useRef(null);
@@ -410,10 +335,9 @@ export default function OuroborosJourneyPage() {
     prevFusedPhaseRef.current = fusedPhase;
     if (stop && messages.length === 0) {
       const prompt = getStagePrompt(gameMode, stop, isCosmic, cosmicChallenge, isFused, fusedPhase);
-      setSpeaking(true);
-      speakText(prompt, () => setSpeaking(false));
+      speak(prompt);
     }
-  }, [voiceEnabled, idx, totalStages, stopDone, stop, messages.length, gameMode, isCosmic, cosmicChallenge, isFused, fusedPhase]);
+  }, [voiceEnabled, speak, idx, totalStages, stopDone, stop, messages.length, gameMode, isCosmic, cosmicChallenge, isFused, fusedPhase]);
 
   /* ── Synthesis trigger ── */
   useEffect(() => {
@@ -470,10 +394,7 @@ export default function OuroborosJourneyPage() {
       setMessages(updated);
 
       // TTS for Atlas reply
-      if (voiceEnabled) {
-        setSpeaking(true);
-        speakText(replyText, () => setSpeaking(false));
-      }
+      speak(replyText);
 
       if (data.passed != null) {
         if (isFused && data.passed) {
@@ -513,7 +434,7 @@ export default function OuroborosJourneyPage() {
     } finally {
       setLoading(false);
     }
-  }, [inputText, loading, messages, stop, isCosmic, isFused, fusedPhase, journeyId, journey, cosmicLevel, gameMode, voiceEnabled]);
+  }, [inputText, loading, messages, stop, isCosmic, isFused, fusedPhase, journeyId, journey, cosmicLevel, gameMode, speak]);
 
   const handleKeyDown = (e) => {
     if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); }

@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import useVoice, { SpeechRecognition } from '../hooks/useVoice';
 
 function parseAtlasMessage(text) {
   const segments = [];
@@ -26,6 +27,7 @@ export default function PersonaChatPanel({ entityType, entityName, entityLabel, 
   const inputRef = useRef(null);
   const hasSentGreeting = useRef(false);
   const navigate = useNavigate();
+  const { voiceEnabled, recording, speaking, toggleVoice, startListening, stopListening, speak } = useVoice(setInput);
 
   // Auto-scroll on new messages
   useEffect(() => {
@@ -66,6 +68,7 @@ export default function PersonaChatPanel({ entityType, entityName, entityLabel, 
         setMessages([...updated, { role: 'assistant', content: data.error || 'Something went wrong.' }]);
       } else {
         setMessages([...updated, { role: 'assistant', content: data.reply }]);
+        speak(data.reply);
       }
     } catch {
       setMessages([...updated, { role: 'assistant', content: 'Network error. Please try again.' }]);
@@ -110,7 +113,16 @@ export default function PersonaChatPanel({ entityType, entityName, entityLabel, 
     <div className="persona-chat-panel">
       <div className="persona-chat-header">
         <span className="persona-chat-title" onClick={() => window.open('/atlas', '_blank')} style={{ cursor: 'pointer' }} title="Open Atlas AI Chat">{entityLabel}</span>
-        <button className="chat-header-close" onClick={onClose} aria-label="Close persona chat">{'\u2715'}</button>
+        <div className="chat-header-controls">
+          <button
+            className={`chat-voice-toggle${voiceEnabled ? ' active' : ''}`}
+            onClick={toggleVoice}
+            title={voiceEnabled ? 'Disable voice' : 'Enable voice'}
+          >
+            {voiceEnabled ? '\u{1F50A}' : '\u{1F507}'}
+          </button>
+          <button className="chat-header-close" onClick={onClose} aria-label="Close persona chat">{'\u2715'}</button>
+        </div>
       </div>
 
       <div className="persona-chat-messages">
@@ -144,10 +156,20 @@ export default function PersonaChatPanel({ entityType, entityName, entityLabel, 
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder={`Speak to ${entityLabel}...`}
+          placeholder={voiceEnabled ? 'Tap mic or type...' : `Speak to ${entityLabel}...`}
           rows={1}
           disabled={loading}
         />
+        {voiceEnabled && SpeechRecognition && (
+          <button
+            className={`chat-mic-btn${recording ? ' recording' : ''}`}
+            onClick={recording ? stopListening : startListening}
+            disabled={loading || speaking}
+            title={recording ? 'Stop recording' : 'Start recording'}
+          >
+            {recording ? '\u{23F9}' : '\u{1F3A4}'}
+          </button>
+        )}
         <button
           className="chat-send persona-chat-send"
           onClick={handleSend}

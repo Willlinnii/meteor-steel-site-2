@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import useVoice, { SpeechRecognition } from '../hooks/useVoice';
 
 function parseAtlasMessage(text) {
   const segments = [];
@@ -31,6 +32,7 @@ export default function ChatPanel() {
   const inputRef = useRef(null);
   const navigate = useNavigate();
   const location = useLocation();
+  const { voiceEnabled, recording, speaking, toggleVoice, startListening, stopListening, speak } = useVoice(setInput);
 
   function getArea() {
     const path = location.pathname;
@@ -99,6 +101,7 @@ export default function ChatPanel() {
         setMessages([...updated, { role: 'assistant', content: data.error || 'Something went wrong.' }]);
       } else {
         setMessages([...updated, { role: 'assistant', content: data.reply }]);
+        speak(data.reply);
       }
     } catch {
       setMessages([...updated, { role: 'assistant', content: 'Network error. Please try again.' }]);
@@ -128,7 +131,16 @@ export default function ChatPanel() {
         <div className="chat-panel">
           <div className="chat-header">
             <span className="chat-title" onClick={() => window.open('/atlas', '_blank')} style={{ cursor: 'pointer' }} title="Open Atlas AI Chat">Atlas</span>
-            <button className="chat-header-close" onClick={() => setOpen(false)} aria-label="Close chat">{'\u2715'}</button>
+            <div className="chat-header-controls">
+              <button
+                className={`chat-voice-toggle${voiceEnabled ? ' active' : ''}`}
+                onClick={toggleVoice}
+                title={voiceEnabled ? 'Disable voice' : 'Enable voice'}
+              >
+                {voiceEnabled ? '\u{1F50A}' : '\u{1F507}'}
+              </button>
+              <button className="chat-header-close" onClick={() => setOpen(false)} aria-label="Close chat">{'\u2715'}</button>
+            </div>
           </div>
 
           <div className="chat-messages">
@@ -162,10 +174,20 @@ export default function ChatPanel() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKeyDown}
-              placeholder="Ask a question..."
+              placeholder={voiceEnabled ? 'Tap mic or type...' : 'Ask a question...'}
               rows={1}
               disabled={loading}
             />
+            {voiceEnabled && SpeechRecognition && (
+              <button
+                className={`chat-mic-btn${recording ? ' recording' : ''}`}
+                onClick={recording ? stopListening : startListening}
+                disabled={loading || speaking}
+                title={recording ? 'Stop recording' : 'Start recording'}
+              >
+                {recording ? '\u{23F9}' : '\u{1F3A4}'}
+              </button>
+            )}
             <button
               className="chat-send"
               onClick={handleSend}

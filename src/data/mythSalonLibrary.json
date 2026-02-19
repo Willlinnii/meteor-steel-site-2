@@ -1,0 +1,271 @@
+{
+  "shelves": [
+    {
+      "id": "monomythic-story",
+      "name": "Monomythic Story",
+      "type": "standard",
+      "description": "The thinkers, writers, and practitioners who shaped the monomyth — from the ancient philosophers who first mapped the structure of story, to the modern screenwriting masters who codified mythic structure for stage and screen.",
+      "books": [
+        { "author": "Joseph Campbell", "title": "The Hero with a Thousand Faces", "year": 1949, "inSite": true, "panelKey": "campbell" },
+        { "author": "C.G. Jung", "title": "The Archetypes and the Collective Unconscious", "year": 1959, "inSite": true, "panelKey": "jung" },
+        { "author": "Friedrich Nietzsche", "title": "Thus Spoke Zarathustra", "year": 1883, "inSite": true, "panelKey": "nietzsche" },
+        { "author": "Friedrich Nietzsche", "title": "The Birth of Tragedy", "year": 1872, "inSite": false, "panelKey": "nietzsche" },
+        { "author": "Leo Frobenius", "title": "Das Zeitalter des Sonnengottes", "year": 1904, "inSite": true, "panelKey": "frobenius" },
+        { "author": "Mircea Eliade", "title": "The Myth of the Eternal Return", "year": 1954, "inSite": true, "panelKey": "eliade" },
+        { "author": "Mircea Eliade", "title": "The Sacred and the Profane", "year": 1957, "inSite": false, "panelKey": "eliade" },
+        { "author": "Plato", "title": "The Republic", "year": "~375 BCE", "inSite": true, "panelKey": "plato" },
+        { "author": "Plato", "title": "Timaeus", "year": "~360 BCE", "inSite": true, "panelKey": "plato" },
+        { "author": "Plato", "title": "Symposium", "year": "~385 BCE", "inSite": false, "panelKey": "plato" },
+        { "author": "Aristotle", "title": "Poetics", "year": "~335 BCE", "inSite": true, "panelKey": "aristotle" },
+        { "author": "Vladimir Propp", "title": "Morphology of the Folktale", "year": 1928, "inSite": true, "panelKey": "propp" },
+        { "author": "Arnold van Gennep", "title": "Les Rites de Passage", "year": 1909, "inSite": true, "panelKey": "vangennep" },
+        { "author": "Sigmund Freud", "title": "The Interpretation of Dreams", "year": 1900, "inSite": false, "panelKey": "freud" },
+        { "author": "Sigmund Freud", "title": "On Dreams", "year": 1901, "inSite": true, "panelKey": "freud" },
+        { "author": "Sigmund Freud", "title": "Civilization and Its Discontents", "year": 1930, "inSite": false, "panelKey": "freud" },
+        { "author": "J.R.R. Tolkien", "title": "On Fairy-Stories", "year": 1947, "inSite": true, "panelKey": "tolkien" },
+        { "author": "J.R.R. Tolkien", "title": "The Lord of the Rings", "year": "1954–1955", "inSite": false, "panelKey": "tolkien" },
+        { "author": "J.R.R. Tolkien", "title": "The Silmarillion", "year": 1977, "inSite": false, "panelKey": "tolkien" },
+        { "author": "J.R.R. Tolkien", "title": "Beowulf: The Monsters and the Critics", "year": 1936, "inSite": false, "panelKey": "tolkien" },
+        { "author": "James George Frazer", "title": "The Golden Bough", "year": 1890, "inSite": true, "panelKey": "frazer" },
+        { "author": "Christopher Vogler", "title": "The Writer's Journey: Mythic Structure for Writers", "year": 1998, "inSite": true, "panelKey": "vogler" },
+        { "author": "Blake Snyder", "title": "Save the Cat!", "year": 2005, "inSite": true, "panelKey": "snyder" },
+        { "author": "Robert McKee", "title": "Story: Substance, Structure, Style and the Principles of Screenwriting", "year": 1997, "inSite": true, "panelKey": "mckee" },
+        { "author": "Syd Field", "title": "Screenplay: The Foundations of Screenwriting", "year": 1979, "inSite": true, "panelKey": "field" },
+        { "author": "Maureen Murdock", "title": "The Heroine's Journey: Woman's Quest for Wholeness", "year": 1990, "inSite": true, "panelKey": "murdock" },
+        { "author": "Dara Marks", "title": "Inside Story: The Power of the Transformational Arc", "year": 2007, "inSite": true, "panelKey": "marks" }
+      ]
+    },
+    {
+      "id": "bollingen",
+      "name": "The Bollingen Series",
+      "type": "collected",
+      "description": "Published by Pantheon and Princeton University Press, funded by the Bollingen Foundation. The most important mythology and depth-psychology publishing project of the 20th century.",
+      "books": [
+        { "volume": "I", "author": "Paul Valéry", "title": "Selected Writings", "year": 1950, "inSite": false },
+        { "volume": "VI", "author": "Erich Neumann", "title": "The Origins and History of Consciousness", "year": 1954, "inSite": false },
+        { "volume": "XI", "author": "Heinrich Zimmer", "editor": "Joseph Campbell", "title": "Philosophies of India", "year": 1951, "inSite": false },
+        { "volume": "XII", "author": "Heinrich Zimmer", "editor": "Joseph Campbell", "title": "Myths and Symbols in Indian Art and Civilization", "year": 1946, "inSite": false },
+        { "volume": "XVII", "author": "Joseph Campbell", "title": "The Hero with a Thousand Faces", "year": 1949, "inSite": true },
+        { "volume": "XIX", "author": "I Ching", "translator": "Richard Wilhelm & Cary F. Baynes", "title": "The I Ching, or Book of Changes", "year": 1950, "inSite": false },
+        { "volume": "XX", "author": "C.G. Jung", "title": "Collected Works (20 volumes)", "year": "1953–1979", "inSite": true },
+        { "volume": "XXVI", "author": "Heinrich Zimmer", "editor": "Joseph Campbell", "title": "The King and the Corpse", "year": 1948, "inSite": false },
+        { "volume": "XXX", "author": "Joseph Campbell", "title": "The Masks of God (4 volumes)", "year": "1959–1968", "inSite": false },
+        { "volume": "XXXIII.1", "author": "Mircea Eliade", "title": "Cosmos and History: The Myth of the Eternal Return", "year": 1954, "inSite": true },
+        { "volume": "XXXIII.2", "author": "Mircea Eliade", "title": "Yoga: Immortality and Freedom", "year": 1958, "inSite": false },
+        { "volume": "XXXIII.4", "author": "Mircea Eliade", "title": "Shamanism: Archaic Techniques of Ecstasy", "year": 1964, "inSite": false },
+        { "volume": "XXXVIII", "author": "Joseph Campbell", "title": "The Mythic Image", "year": 1974, "inSite": false },
+        { "volume": "XLIII", "author": "Heinrich Zimmer", "title": "Artistic Form and Yoga in the Sacred Images of India", "year": 1984, "inSite": false },
+        { "volume": "XLVII", "author": "Paul Radin", "title": "The Trickster: A Study in American Indian Mythology", "year": 1956, "inSite": false },
+        { "volume": "LVI", "author": "Joseph Campbell", "title": "Historical Atlas of World Mythology", "year": "1983–1988", "inSite": false },
+        { "volume": "LXII", "author": "Erich Neumann", "title": "The Great Mother: An Analysis of the Archetype", "year": 1955, "inSite": false },
+        { "volume": "—", "author": "Gershom Scholem", "title": "Major Trends in Jewish Mysticism", "year": 1941, "inSite": false },
+        { "volume": "—", "author": "D.T. Suzuki", "title": "Essays in Zen Buddhism", "year": 1949, "inSite": false },
+        { "volume": "—", "author": "Karl Kerényi", "title": "The Gods of the Greeks", "year": 1951, "inSite": false },
+        { "volume": "—", "author": "Erwin Panofsky", "title": "Studies in Iconology", "year": 1939, "inSite": false },
+        { "volume": "—", "author": "Henry Corbin", "title": "Avicenna and the Visionary Recital", "year": 1960, "inSite": false }
+      ]
+    },
+    {
+      "id": "campbell",
+      "name": "The Complete Works of Joseph Campbell",
+      "type": "collected",
+      "description": "Mythologist, writer, and lecturer whose work on comparative mythology and the hero's journey transformed how we understand story, religion, and the human experience.",
+      "books": [
+        { "title": "The Hero with a Thousand Faces", "year": 1949, "inSite": true, "note": "Bollingen Series XVII" },
+        { "title": "The Masks of God: Primitive Mythology", "year": 1959, "inSite": false },
+        { "title": "The Masks of God: Oriental Mythology", "year": 1962, "inSite": false },
+        { "title": "The Masks of God: Occidental Mythology", "year": 1964, "inSite": false },
+        { "title": "The Masks of God: Creative Mythology", "year": 1968, "inSite": false },
+        { "title": "The Flight of the Wild Gander", "year": 1969, "inSite": false },
+        { "title": "Myths to Live By", "year": 1972, "inSite": false },
+        { "title": "The Mythic Image", "year": 1974, "inSite": false, "note": "Bollingen Series XXXVIII" },
+        { "title": "The Inner Reaches of Outer Space", "year": 1986, "inSite": false },
+        { "title": "The Historical Atlas of World Mythology, Vol. I", "year": 1983, "inSite": false },
+        { "title": "The Historical Atlas of World Mythology, Vol. II", "year": 1988, "inSite": false },
+        { "title": "The Power of Myth (with Bill Moyers)", "year": 1988, "inSite": false },
+        { "title": "Transformations of Myth Through Time", "year": 1990, "inSite": false },
+        { "title": "A Joseph Campbell Companion (ed. Diane Osbon)", "year": 1991, "inSite": false },
+        { "title": "Thou Art That: Transforming Religious Metaphor", "year": 2001, "inSite": false, "note": "Posthumous" },
+        { "title": "Sake & Satori: Asian Journals", "year": 2002, "inSite": false, "note": "Posthumous" },
+        { "title": "Myths of Light: Eastern Metaphors of the Eternal", "year": 2003, "inSite": false, "note": "Posthumous" },
+        { "title": "Pathways to Bliss", "year": 2004, "inSite": false, "note": "Posthumous" },
+        { "title": "Goddesses: Mysteries of the Feminine Divine", "year": 2013, "inSite": false, "note": "Posthumous" },
+        { "title": "Romance of the Grail", "year": 2015, "inSite": false, "note": "Posthumous" },
+        { "title": "The Ecstasy of Being: Mythology and Dance", "year": 2017, "inSite": false, "note": "Posthumous" }
+      ]
+    },
+    {
+      "id": "jung",
+      "name": "The Collected Works of C.G. Jung",
+      "type": "collected",
+      "description": "Bollingen Series XX. The complete psychological works of Carl Gustav Jung, the founder of analytical psychology, whose concepts of the collective unconscious, archetypes, and individuation underlie the mythic structure of this site.",
+      "books": [
+        { "volume": "1", "title": "Psychiatric Studies", "year": 1957, "inSite": false },
+        { "volume": "2", "title": "Experimental Researches", "year": 1973, "inSite": false },
+        { "volume": "3", "title": "Psychogenesis of Mental Disease", "year": 1960, "inSite": false },
+        { "volume": "4", "title": "Freud and Psychoanalysis", "year": 1961, "inSite": false },
+        { "volume": "5", "title": "Symbols of Transformation", "year": 1956, "inSite": false },
+        { "volume": "6", "title": "Psychological Types", "year": 1971, "inSite": false },
+        { "volume": "7", "title": "Two Essays on Analytical Psychology", "year": 1953, "inSite": false },
+        { "volume": "8", "title": "Structure and Dynamics of the Psyche", "year": 1960, "inSite": false },
+        { "volume": "9i", "title": "The Archetypes and the Collective Unconscious", "year": 1959, "inSite": false },
+        { "volume": "9ii", "title": "Aion: Researches into the Phenomenology of the Self", "year": 1959, "inSite": false },
+        { "volume": "10", "title": "Civilization in Transition", "year": 1964, "inSite": false },
+        { "volume": "11", "title": "Psychology and Religion: West and East", "year": 1958, "inSite": false },
+        { "volume": "12", "title": "Psychology and Alchemy", "year": 1953, "inSite": false },
+        { "volume": "13", "title": "Alchemical Studies", "year": 1967, "inSite": false },
+        { "volume": "14", "title": "Mysterium Coniunctionis", "year": 1963, "inSite": false },
+        { "volume": "15", "title": "The Spirit in Man, Art, and Literature", "year": 1966, "inSite": false },
+        { "volume": "16", "title": "The Practice of Psychotherapy", "year": 1954, "inSite": false },
+        { "volume": "17", "title": "The Development of Personality", "year": 1954, "inSite": false },
+        { "volume": "18", "title": "The Symbolic Life", "year": 1976, "inSite": false },
+        { "volume": "—", "title": "Memories, Dreams, Reflections", "year": 1963, "inSite": false, "note": "Autobiography" },
+        { "volume": "—", "title": "The Red Book (Liber Novus)", "year": 2009, "inSite": false, "note": "Published posthumously" },
+        { "volume": "—", "title": "Man and His Symbols", "year": 1964, "inSite": false },
+        { "volume": "—", "title": "Answer to Job", "year": 1952, "inSite": false }
+      ]
+    },
+    {
+      "id": "sacred-texts",
+      "name": "Sacred & Ancient Texts",
+      "type": "standard",
+      "description": "The oldest stories humanity has ever told. Epics, scriptures, and foundational mythologies from every corner of the ancient world.",
+      "books": [
+        { "title": "Epic of Gilgamesh", "tradition": "Sumerian", "year": "~2100 BCE", "inSite": true },
+        { "title": "Enuma Elish", "tradition": "Babylonian", "year": "~1100 BCE", "inSite": true },
+        { "title": "Code of Hammurabi", "tradition": "Babylonian", "year": "~1754 BCE", "inSite": true },
+        { "title": "Rigveda", "tradition": "Vedic", "year": "~1500 BCE", "inSite": true },
+        { "title": "Upanishads", "tradition": "Vedic", "year": "~800 BCE", "inSite": true },
+        { "title": "Mahabharata", "tradition": "Hindu", "year": "~400 BCE", "inSite": true },
+        { "title": "Ramayana", "tradition": "Hindu", "year": "~300 BCE", "inSite": true },
+        { "title": "The Bible", "tradition": "Abrahamic", "year": "~1200 BCE – 100 CE", "inSite": true },
+        { "title": "The Quran", "tradition": "Islamic", "year": "610–632 CE", "inSite": true },
+        { "author": "Snorri Sturluson", "title": "Prose Edda", "tradition": "Norse", "year": "~1220 CE", "inSite": true },
+        { "title": "Volsunga Saga", "tradition": "Norse/Icelandic", "year": "~1260 CE", "inSite": true },
+        { "title": "Nibelungenlied", "tradition": "Germanic", "year": "~1200 CE", "inSite": true },
+        { "title": "Nart Sagas", "tradition": "Caucasian", "year": "ancient oral tradition", "inSite": true },
+        { "title": "Ulster Cycle", "tradition": "Irish", "year": "~1st century CE", "inSite": true },
+        { "title": "Second Battle of Mag Tuired", "tradition": "Irish", "year": "~9th century CE", "inSite": true },
+        { "title": "Hymn to Ullikummi", "tradition": "Hittite", "year": "~1400 BCE", "inSite": true },
+        { "title": "Descent of Inanna", "tradition": "Sumerian", "year": "~1900 BCE", "inSite": true },
+        { "author": "Hyemeyohsts Storm", "title": "Seven Arrows", "tradition": "Cheyenne", "year": 1972, "inSite": true },
+        { "author": "Hyemeyohsts Storm", "title": "Lightningbolt", "tradition": "Cheyenne", "year": 1994, "inSite": true }
+      ]
+    },
+    {
+      "id": "medieval-renaissance",
+      "name": "Medieval & Renaissance Literature",
+      "type": "standard",
+      "description": "The great allegorical and literary works of the Middle Ages and Renaissance that gave narrative form to sin, virtue, quest, and redemption.",
+      "books": [
+        { "author": "Dante Alighieri", "title": "The Divine Comedy", "year": "1308–1321", "inSite": true },
+        { "author": "Geoffrey Chaucer", "title": "The Canterbury Tales", "year": "~1400", "inSite": true },
+        { "author": "Edmund Spenser", "title": "The Faerie Queene", "year": "1590–1596", "inSite": true },
+        { "author": "Christopher Marlowe", "title": "Doctor Faustus", "year": "~1592", "inSite": true },
+        { "author": "Giovanni Boccaccio", "title": "The Decameron", "year": "1353", "inSite": true },
+        { "author": "Wolfram von Eschenbach", "title": "Parzival", "year": "~1210", "inSite": true },
+        { "author": "Thomas Malory", "title": "Le Morte d'Arthur", "year": 1485, "inSite": false },
+        { "title": "The Castle of Perseverance", "author": "Anonymous", "year": "~1425", "inSite": true, "note": "Medieval morality play" },
+        { "author": "Brothers Grimm", "title": "Fairy Tales", "year": "1812–1857", "inSite": true, "note": "Including 'The White Snake'" }
+      ]
+    },
+    {
+      "id": "poetry-visionary",
+      "name": "Poetry & Visionary Literature",
+      "type": "standard",
+      "description": "Poets and visionaries who saw through the surface of the world and rendered the mythic in language.",
+      "books": [
+        { "author": "William Blake", "title": "The Marriage of Heaven and Hell", "year": 1793, "inSite": true },
+        { "author": "William Blake", "title": "The Book of Urizen", "year": 1794, "inSite": true },
+        { "author": "William Blake", "title": "Songs of Innocence and of Experience", "year": 1794, "inSite": true },
+        { "author": "Percy Bysshe Shelley", "title": "The Mask of Anarchy", "year": 1832, "inSite": true },
+        { "author": "T.S. Eliot", "title": "The Waste Land", "year": 1922, "inSite": true },
+        { "author": "James Joyce", "title": "Ulysses", "year": 1922, "inSite": false, "note": "Referenced via Campbell" },
+        { "author": "James Joyce", "title": "Finnegans Wake", "year": 1939, "inSite": false, "note": "Referenced via Campbell" }
+      ]
+    },
+    {
+      "id": "theology-mysticism",
+      "name": "Theology & Mysticism",
+      "type": "standard",
+      "description": "The church fathers, mystics, and spiritual thinkers whose frameworks shaped the Western understanding of sin, virtue, and the soul's dark night.",
+      "books": [
+        { "author": "The Desert Fathers", "title": "Sayings of the Desert Fathers", "year": "4th–5th century", "inSite": true },
+        { "author": "Saint John Cassian", "title": "The Institutes", "year": "~420 CE", "inSite": true, "note": "Codified the Eight Deadly Thoughts" },
+        { "author": "Saint John Cassian", "title": "The Conferences", "year": "~426 CE", "inSite": false },
+        { "author": "Pope Gregory I", "title": "Moralia in Job", "year": "~578 CE", "inSite": true, "note": "Established the canonical Seven Deadly Sins" },
+        { "author": "Saint Thomas Aquinas", "title": "Summa Theologica", "year": "1265–1274", "inSite": true },
+        { "author": "St. John of the Cross", "title": "Dark Night of the Soul", "year": "~1578", "inSite": true },
+        { "author": "Rudolf Steiner", "title": "Way of Initiation", "year": 1904, "inSite": true },
+        { "author": "Gershom Scholem", "title": "Major Trends in Jewish Mysticism", "year": 1941, "inSite": false }
+      ]
+    },
+    {
+      "id": "depth-psychology",
+      "name": "Depth Psychology & Philosophy",
+      "type": "standard",
+      "description": "Thinkers who mapped the interior world — the unconscious, the existential, and the structures beneath everyday experience.",
+      "books": [
+        { "author": "G.W.F. Hegel", "title": "Phenomenology of Spirit", "year": 1807, "inSite": false, "note": "Referenced for dialectic" },
+        { "author": "Søren Kierkegaard", "title": "Fear and Trembling", "year": 1843, "inSite": false, "note": "Knight of Faith concept" },
+        { "author": "Aldous Huxley", "title": "The Perennial Philosophy", "year": 1945, "inSite": false, "note": "Referenced on organized lovelessness" },
+        { "author": "Erich Neumann", "title": "The Origins and History of Consciousness", "year": 1949, "inSite": false },
+        { "author": "Erich Neumann", "title": "The Great Mother", "year": 1955, "inSite": false },
+        { "author": "Evans Lansing Smith", "title": "The Hero Journey in Literature", "year": 1997, "inSite": true, "note": "Descent as modernist myth" },
+        { "author": "Jeff Kripal", "title": "Authors of the Impossible", "year": 2010, "inSite": true, "note": "From Victimhood to Authorship" }
+      ]
+    },
+    {
+      "id": "artists-studio",
+      "name": "The Artists' Studio",
+      "type": "standard",
+      "description": "Visual artists whose depictions of the Seven Deadly Sins serve as meditation, warning, and revelation.",
+      "artists": [
+        { "name": "Hieronymus Bosch", "subject": "The Seven Deadly Sins and the Four Last Things", "year": "~1500", "medium": "Oil on panel", "inSite": true },
+        { "name": "Pieter Bruegel the Elder", "subject": "The Seven Deadly Sins (engraving series)", "year": "1556–1557", "medium": "Engraving", "inSite": true },
+        { "name": "Salvador Dalí", "subject": "The Seven Deadly Sins", "year": 1966, "medium": "Lithograph series", "inSite": true },
+        { "name": "Paul Cadmus", "subject": "The Seven Deadly Sins", "year": "1945–1949", "medium": "Painting series", "inSite": true },
+        { "name": "William Blake", "subject": "Illuminated Books & Engravings", "year": "1789–1827", "medium": "Relief etching / watercolor", "inSite": true }
+      ]
+    },
+    {
+      "id": "screening-room",
+      "name": "Screening Room",
+      "type": "films",
+      "description": "Films mapped to the stages of the monomyth — modern myths projected in light and shadow.",
+      "films": [
+        { "title": "The Wizard of Oz", "year": 1939, "director": "Victor Fleming", "inSite": true },
+        { "title": "2001: A Space Odyssey", "year": 1968, "director": "Stanley Kubrick", "inSite": true, "note": "Arthur C. Clarke co-wrote; uses Strauss's Also Sprach Zarathustra" },
+        { "title": "Star Wars", "year": 1977, "director": "George Lucas", "inSite": true },
+        { "title": "Alien", "year": 1979, "director": "Ridley Scott", "inSite": true },
+        { "title": "Se7en", "year": 1995, "director": "David Fincher", "inSite": true },
+        { "title": "The Devil's Advocate", "year": 1997, "director": "Taylor Hackford", "inSite": true },
+        { "title": "The Truman Show", "year": 1998, "director": "Peter Weir", "inSite": true },
+        { "title": "The Matrix", "year": 1999, "director": "The Wachowskis", "inSite": true },
+        { "title": "The Lord of the Rings: The Fellowship of the Ring", "year": 2001, "director": "Peter Jackson", "inSite": true },
+        { "title": "Harry Potter and the Philosopher's Stone", "year": 2001, "director": "Chris Columbus", "inSite": true },
+        { "title": "Equilibrium", "year": 2002, "director": "Kurt Wimmer", "inSite": true },
+        { "title": "Bruce Almighty", "year": 2003, "director": "Tom Shadyac", "inSite": true },
+        { "title": "V for Vendetta", "year": 2005, "director": "James McTeigue", "inSite": true },
+        { "title": "Iron Man", "year": 2008, "director": "Jon Favreau", "inSite": true },
+        { "title": "The Hunger Games", "year": 2012, "director": "Gary Ross", "inSite": true },
+        { "title": "The Lego Movie", "year": 2014, "director": "Phil Lord & Christopher Miller", "inSite": true },
+        { "title": "Star Wars: The Last Jedi", "year": 2017, "director": "Rian Johnson", "inSite": true },
+        { "title": "Shazam!", "year": 2019, "director": "David F. Sandberg", "inSite": true },
+        { "title": "Memory: The Origins of Alien", "year": 2019, "director": "Alexandre O. Philippe", "inSite": true, "note": "Documentary featuring Will Linn" },
+        { "title": "The Taking", "year": 2023, "director": null, "inSite": true, "note": "Documentary featuring Will Linn" }
+      ]
+    },
+    {
+      "id": "music-performance",
+      "name": "Music & Performance",
+      "type": "standard",
+      "description": "Compositions and performances that embody mythic transformation in sound and movement.",
+      "works": [
+        { "creator": "Richard Wagner", "title": "Parsifal", "year": 1882, "medium": "Opera", "inSite": true, "note": "Based on the Holy Grail legend; originally inspired by the Buddha" },
+        { "creator": "Kurt Weill & Bertolt Brecht", "title": "The Seven Deadly Sins", "year": 1933, "medium": "Ballet chanté", "inSite": true },
+        { "creator": "Richard Strauss", "title": "Also Sprach Zarathustra", "year": 1896, "medium": "Tone poem", "inSite": true, "note": "After Nietzsche; iconic in 2001: A Space Odyssey" }
+      ]
+    }
+  ]
+}

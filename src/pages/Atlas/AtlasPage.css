@@ -12,6 +12,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 12px;
   padding: 12px 20px;
   border-bottom: 1px solid rgba(196, 113, 58, 0.25);
   flex-shrink: 0;
@@ -120,4 +121,74 @@
 .atlas-send:disabled {
   opacity: 0.4;
   cursor: default;
+}
+
+/* ── Voice toggle ── */
+
+.atlas-voice-toggle {
+  background: none;
+  border: 1px solid rgba(196, 113, 58, 0.25);
+  color: rgba(196, 113, 58, 0.45);
+  font-size: 0.9rem;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  line-height: 1;
+  transition: all 0.3s ease;
+}
+
+.atlas-voice-toggle:hover {
+  border-color: rgba(196, 113, 58, 0.6);
+  color: rgba(196, 113, 58, 0.8);
+}
+
+.atlas-voice-toggle.active {
+  border-color: rgba(196, 113, 58, 0.7);
+  color: rgba(196, 113, 58, 1);
+  background: rgba(196, 113, 58, 0.1);
+}
+
+/* ── Mic button ── */
+
+.atlas-mic-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--ember, #c4713a);
+  background: transparent;
+  color: var(--ember, #c4713a);
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+
+.atlas-mic-btn:hover:not(:disabled) {
+  background: rgba(196, 113, 58, 0.15);
+  border-color: rgba(196, 113, 58, 0.8);
+}
+
+.atlas-mic-btn.recording {
+  background: rgba(200, 50, 50, 0.2);
+  border-color: rgba(200, 80, 80, 0.7);
+  color: #e05050;
+  animation: atlas-mic-pulse 1.2s ease-in-out infinite;
+}
+
+@keyframes atlas-mic-pulse {
+  0%, 100% { box-shadow: 0 0 4px rgba(200, 50, 50, 0.3); }
+  50%      { box-shadow: 0 0 14px rgba(200, 50, 50, 0.6); }
+}
+
+.atlas-mic-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
 }

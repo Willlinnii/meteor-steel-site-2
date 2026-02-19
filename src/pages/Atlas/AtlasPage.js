@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
+import useVoice, { SpeechRecognition } from '../../hooks/useVoice';
 import './AtlasPage.css';
 
 function parseAtlasMessage(text) {
@@ -58,6 +59,7 @@ export default function AtlasPage() {
   const inputRef = useRef(null);
   const greetingSent = useRef({});
   const navigate = useNavigate();
+  const { voiceEnabled, recording, speaking, toggleVoice, startListening, stopListening, speak } = useVoice(setInput);
 
   const emptyMessages = useMemo(() => [], []);
   const messages = chatHistories[activeVoice] || emptyMessages;
@@ -100,12 +102,13 @@ export default function AtlasPage() {
       const data = await res.json();
       const reply = res.ok ? data.reply : (data.error || 'Something went wrong.');
       setMessages(vid, [...updated, { role: 'assistant', content: reply }]);
+      if (res.ok) speak(reply);
     } catch {
       setMessages(vid, [...updated, { role: 'assistant', content: 'Network error. Please try again.' }]);
     } finally {
       setLoading(false);
     }
-  }, [activeVoice, chatHistories, setMessages]);
+  }, [activeVoice, chatHistories, setMessages, speak]);
 
   // Auto-greeting for persona voices
   useEffect(() => {
@@ -169,6 +172,13 @@ export default function AtlasPage() {
             </optgroup>
           ))}
         </select>
+        <button
+          className={`atlas-voice-toggle${voiceEnabled ? ' active' : ''}`}
+          onClick={toggleVoice}
+          title={voiceEnabled ? 'Disable voice' : 'Enable voice'}
+        >
+          {voiceEnabled ? '\u{1F50A}' : '\u{1F507}'}
+        </button>
       </div>
 
       <div className="atlas-messages">
@@ -187,12 +197,22 @@ export default function AtlasPage() {
           ref={inputRef}
           className="atlas-input"
           rows={1}
-          placeholder={`Ask ${welcomeLabel}...`}
+          placeholder={voiceEnabled ? 'Tap mic or type...' : `Ask ${welcomeLabel}...`}
           value={input}
           onChange={e => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
           disabled={loading}
         />
+        {voiceEnabled && SpeechRecognition && (
+          <button
+            className={`atlas-mic-btn${recording ? ' recording' : ''}`}
+            onClick={recording ? stopListening : startListening}
+            disabled={loading || speaking}
+            title={recording ? 'Stop recording' : 'Start recording'}
+          >
+            {recording ? '\u{23F9}' : '\u{1F3A4}'}
+          </button>
+        )}
         <button className="atlas-send" onClick={handleSend} disabled={loading || !input.trim()}>&#9654;</button>
       </div>
     </div>

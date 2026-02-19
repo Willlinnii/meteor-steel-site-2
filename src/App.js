@@ -26,6 +26,7 @@ const SevenMetalsVRPage = lazy(() => import('./pages/SevenMetals/SevenMetalsVRPa
 const AdminPage = lazy(() => import('./pages/Admin/AdminPage'));
 const OuroborosJourneyPage = lazy(() => import('./pages/OuroborosJourney/OuroborosJourneyPage'));
 const AtlasPage = lazy(() => import('./pages/Atlas/AtlasPage'));
+const MythSalonLibraryPage = lazy(() => import('./pages/MythSalonLibrary/MythSalonLibraryPage'));
 
 const STAGES = [
   { id: 'golden-age', label: 'Golden Age' },
@@ -1000,6 +1001,7 @@ function AppContent() {
         <Route path="/mythosophia" element={<MythosophiaPage />} />
         <Route path="/atlas" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><AtlasPage /></Suspense>} />
         <Route path="/journey/:journeyId" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" />Loading Journey...</div>}><OuroborosJourneyPage /></Suspense>} />
+        <Route path="/library" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><MythSalonLibraryPage /></Suspense>} />
         <Route path="/dragon/*" element={<RequireAdmin><Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" />Loading Admin...</div>}><AdminPage /></Suspense></RequireAdmin>} />
       </Routes>
       {!isAtlas && <SiteFooter />}
