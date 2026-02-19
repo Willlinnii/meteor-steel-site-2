@@ -39,9 +39,9 @@ function ensureYTApi() {
   });
 }
 
-export default function CircleNav({ stages, currentStage, onSelectStage, clockwise, onToggleDirection, centerLine1, centerLine2, centerLine3, showAuthor = true, videoUrl, onCloseVideo, onAuthorPlay, worldZones, activeWorld, onSelectWorld, modelOverlay, onCloseModel, ybrActive, ybrCurrentStopIndex, ybrStages, onToggleYBR, ybrAutoStart, playIntroAnim, getStageClass }) {
+export default function CircleNav({ stages, currentStage, onSelectStage, clockwise, onToggleDirection, centerLine1, centerLine2, centerLine3, showAuthor = true, videoUrl, onCloseVideo, onAuthorPlay, worldZones, activeWorld, onSelectWorld, modelOverlay, onCloseModel, ybrActive, ybrCurrentStopIndex, ybrStages, onToggleYBR, ybrAutoStart, playIntroAnim, getStageClass, rings, ringCircles }) {
   const radius = 42;
-  const computed = getStageAngles(stages, clockwise);
+  const computed = getStageAngles(stages || [], clockwise);
   const playerRef = useRef(null);
   const playerDivRef = useRef(null);
   const [ybrAnimStage, setYbrAnimStage] = useState(-1);
@@ -57,7 +57,7 @@ export default function CircleNav({ stages, currentStage, onSelectStage, clockwi
     // Run the light-up sequence, then activate
     if (ybrAnimRef.current) clearTimeout(ybrAnimRef.current);
     let i = 0;
-    const total = stages.length;
+    const total = (stages || []).length;
     const step = () => {
       setYbrAnimStage(i);
       i++;
@@ -71,7 +71,7 @@ export default function CircleNav({ stages, currentStage, onSelectStage, clockwi
       }
     };
     step();
-  }, [ybrActive, onToggleYBR, stages.length]);
+  }, [ybrActive, onToggleYBR, stages]);
 
   useEffect(() => {
     return () => { if (ybrAnimRef.current) clearTimeout(ybrAnimRef.current); };
@@ -89,7 +89,7 @@ export default function CircleNav({ stages, currentStage, onSelectStage, clockwi
     if (!playIntroAnim || ybrActive || ybrAnimStage >= 0) return;
     if (ybrAnimRef.current) clearTimeout(ybrAnimRef.current);
     let i = 0;
-    const total = stages.length;
+    const total = (stages || []).length;
     const step = () => {
       setYbrAnimStage(i);
       i++;
@@ -158,8 +158,9 @@ export default function CircleNav({ stages, currentStage, onSelectStage, clockwi
     <div className="circle-nav-wrapper">
       <div className="circle-nav">
         <svg viewBox="0 0 100 100" className="circle-rings">
-          <circle cx="50" cy="50" r="47" className="ring ring-outer" />
-          <circle cx="50" cy="50" r="38" className="ring ring-inner" />
+          {(ringCircles || [47, 38]).map((r, i) => (
+            <circle key={`ring-${i}`} cx="50" cy="50" r={r} className={`ring ${i === 0 ? 'ring-outer' : 'ring-inner'}`} />
+          ))}
           {worldZones && !listId && (
             <line x1="12" y1="50" x2="88" y2="50" className="world-divider" />
           )}
@@ -366,7 +367,32 @@ export default function CircleNav({ stages, currentStage, onSelectStage, clockwi
           });
         })()}
 
-        {computed.map(s => {
+        {rings ? rings.map((ring, ri) => {
+          const ringComputed = getStageAngles(ring.stages, clockwise);
+          return ringComputed.map(s => {
+            const rad = (s.angle * Math.PI) / 180;
+            const x = 50 + ring.radius * Math.cos(rad);
+            const y = 50 + ring.radius * Math.sin(rad);
+            return (
+              <div
+                key={s.id}
+                className={`circle-stage ${ring.className || ''} ${currentStage === s.id ? 'active' : ''} ${getStageClass ? getStageClass(s.id) : ''}`}
+                style={{
+                  left: `${x}%`,
+                  top: `${y}%`,
+                }}
+                onClick={() => onSelectStage(s.id)}
+              >
+                <span
+                  className="circle-stage-label"
+                  style={{ transform: `rotate(${s.labelRotation}deg)` }}
+                >
+                  {s.label}
+                </span>
+              </div>
+            );
+          });
+        }) : computed.map(s => {
           const rad = (s.angle * Math.PI) / 180;
           const x = 50 + radius * Math.cos(rad);
           const y = 50 + radius * Math.sin(rad);

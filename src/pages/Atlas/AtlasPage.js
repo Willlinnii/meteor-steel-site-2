@@ -171,7 +171,7 @@ export default function AtlasPage() {
     } finally {
       setLoading(false);
     }
-  }, [activeVoice, chatHistories, setMessages, speak]);
+  }, [activeVoice, chatHistories, setMessages, speak, buildCourseSummary, trackElement]);
 
   // Auto-greeting for persona voices
   useEffect(() => {

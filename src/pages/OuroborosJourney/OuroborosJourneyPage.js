@@ -262,6 +262,8 @@ export default function OuroborosJourneyPage() {
   const [gameMode, setGameMode] = useState(null); // null | 'riddle' | 'story' | 'personal'
   const [fusedPhase, setFusedPhase] = useState(0); // 0=monomyth, 1=steel (fused journey only)
 
+  const idx = journey.currentStopIndex;
+
   // Page visit tracking
   useEffect(() => {
     trackElement(`journeys.${journeyId}.visited`);
@@ -310,7 +312,6 @@ export default function OuroborosJourneyPage() {
   }, [messages]);
 
   /* ── Derived state ── */
-  const idx = journey.currentStopIndex;
   const stop = (idx >= 0 && idx < totalStages) ? stages[idx] : null;
 
   const cosmicProg = isCosmic && stop
@@ -477,7 +478,7 @@ export default function OuroborosJourneyPage() {
     } finally {
       setLoading(false);
     }
-  }, [inputText, loading, messages, stop, isCosmic, isFused, fusedPhase, journeyId, journey, cosmicLevel, gameMode, speak]);
+  }, [inputText, loading, messages, stop, isCosmic, isFused, fusedPhase, journeyId, journey, cosmicLevel, gameMode, speak, trackElement]);
 
   const handleKeyDown = (e) => {
     if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); }
