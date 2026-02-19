@@ -1,0 +1,428 @@
+/* ===== OUROBOROS JOURNEY PAGE ===== */
+
+/* Full-viewport dark overlay — covers site header/nav/footer */
+.ouroboros-page {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: #0a0a0f;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden;
+  font-family: 'Crimson Pro', serif;
+  color: #e0d6c8;
+}
+
+/* ── Header ── */
+
+.ouroboros-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 12px 24px;
+  flex-shrink: 0;
+}
+
+.ouroboros-title {
+  font-family: 'Cinzel', serif;
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: rgba(218, 165, 32, 0.9);
+  letter-spacing: 0.06em;
+  margin: 0;
+}
+
+.ouroboros-exit {
+  background: none;
+  border: 1px solid rgba(218, 165, 32, 0.4);
+  color: rgba(218, 165, 32, 0.7);
+  font-size: 1.1rem;
+  width: 34px;
+  height: 34px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.ouroboros-exit:hover {
+  background: rgba(218, 165, 32, 0.1);
+  border-color: rgba(218, 165, 32, 0.7);
+  color: rgba(218, 165, 32, 1);
+}
+
+/* ── Arena (holds dragon + labels + chat) ── */
+
+.ouroboros-arena {
+  position: relative;
+  width: 88vmin;
+  height: 88vmin;
+  flex-shrink: 0;
+}
+
+/* ── Dragon image — sits ABOVE the dots so it hides them ── */
+
+.ouroboros-dragon {
+  position: absolute;
+  top: 6%;            /* (100% - 88%) / 2 */
+  left: 6%;
+  width: 88%;
+  height: 88%;
+  object-fit: contain;
+  transition: transform 1.5s ease-in-out;
+  pointer-events: none;
+  z-index: 2;
+  filter: drop-shadow(0 0 20px rgba(218, 165, 32, 0.18));
+  transform: rotate(180deg);
+}
+
+/* ── Stage nodes — BELOW the dragon, hidden by its body ── */
+/* Only the current dot is visible, peeking through the mouth-tail gap */
+
+.ouroboros-node {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* All dots and labels hidden by default */
+.ouroboros-dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: transparent;
+  border: 2px solid transparent;
+  transition: all 0.5s ease;
+}
+
+.ouroboros-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: transparent;
+  white-space: nowrap;
+  transition: all 0.5s ease;
+}
+
+/* Completed & future — stay invisible under the dragon */
+.ouroboros-node.completed .ouroboros-dot,
+.ouroboros-node.future .ouroboros-dot {
+  background: transparent;
+  border-color: transparent;
+}
+
+/* Current dot — lit up, visible in the mouth-tail gap */
+.ouroboros-node.current .ouroboros-dot {
+  background: rgba(218, 165, 32, 1);
+  border-color: #fff;
+  box-shadow: 0 0 20px rgba(218, 165, 32, 0.9), 0 0 40px rgba(218, 165, 32, 0.4);
+  animation: ouro-pulse 2s ease-in-out infinite;
+}
+
+.ouroboros-node.current .ouroboros-label {
+  color: rgba(218, 165, 32, 1);
+  text-shadow: 0 0 10px rgba(218, 165, 32, 0.6), 0 0 4px rgba(0, 0, 0, 1);
+}
+
+@keyframes ouro-pulse {
+  0%, 100% { box-shadow: 0 0 12px rgba(218, 165, 32, 0.5), 0 0 30px rgba(218, 165, 32, 0.2); }
+  50%      { box-shadow: 0 0 24px rgba(218, 165, 32, 1), 0 0 50px rgba(218, 165, 32, 0.5); }
+}
+
+/* Cosmic variant — slightly smaller current dot */
+
+.ouroboros-arena.cosmic .ouroboros-node.current .ouroboros-dot {
+  width: 12px;
+  height: 12px;
+}
+
+.ouroboros-arena.cosmic .ouroboros-node.current .ouroboros-label {
+  font-size: 0.6rem;
+}
+
+/* ── Central chat circle ── */
+
+/* Fills the dragon's natural hollow center — no visible border */
+.ouroboros-chat-circle {
+  position: absolute;
+  top: 26%;
+  left: 26%;
+  width: 48%;
+  height: 48%;
+  border-radius: 50%;
+  background: transparent;
+  border: none;
+  overflow: hidden;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── Screens (intro / active / complete) ── */
+
+.ouro-screen {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 12% 10%;
+  text-align: center;
+  overflow-y: auto;
+}
+
+.ouro-screen p {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  margin: 0 0 8px;
+  color: #c8bfb0;
+}
+
+/* ── Shared button ── */
+
+.ouro-btn {
+  font-family: 'Cinzel', serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: rgba(218, 165, 32, 0.9);
+  background: rgba(218, 165, 32, 0.1);
+  border: 1px solid rgba(218, 165, 32, 0.5);
+  padding: 8px 22px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 10px;
+  white-space: nowrap;
+}
+
+.ouro-btn:hover {
+  background: rgba(218, 165, 32, 0.2);
+  box-shadow: 0 0 14px rgba(218, 165, 32, 0.3);
+  border-color: rgba(218, 165, 32, 0.75);
+}
+
+/* ── Completion ── */
+
+.ouro-done h3 {
+  font-family: 'Cinzel', serif;
+  font-size: 0.95rem;
+  color: rgba(218, 165, 32, 0.9);
+  margin: 0 0 8px;
+}
+
+.ouro-tally {
+  font-family: 'Cinzel', serif;
+  font-size: 0.7rem;
+  color: rgba(218, 165, 32, 0.5);
+}
+
+/* ── Active stage screen ── */
+
+.ouro-active {
+  padding: 10% 8%;
+  justify-content: flex-start;
+}
+
+.ouro-stage-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.ouro-count {
+  font-size: 0.6rem;
+  color: rgba(218, 165, 32, 0.45);
+  font-family: 'Cinzel', serif;
+}
+
+.ouro-name {
+  font-family: 'Cinzel', serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: rgba(218, 165, 32, 0.9);
+}
+
+.ouro-lvl {
+  font-family: 'Cinzel', serif;
+  font-size: 0.55rem;
+  color: rgba(218, 165, 32, 0.55);
+  border: 1px solid rgba(218, 165, 32, 0.25);
+  padding: 1px 6px;
+}
+
+/* ── Messages ── */
+
+.ouro-messages {
+  flex: 1;
+  overflow-y: auto;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-bottom: 6px;
+  min-height: 0;
+}
+
+.ouro-prompt {
+  font-size: 0.9rem;
+  font-style: italic;
+  color: #c8bfb0;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.ouro-msg {
+  font-size: 0.85rem;
+  line-height: 1.5;
+  padding: 6px 10px;
+  border-radius: 6px;
+  max-width: 92%;
+  word-wrap: break-word;
+}
+
+.ouro-msg.user {
+  align-self: flex-end;
+  background: rgba(218, 165, 32, 0.08);
+  border: 1px solid rgba(218, 165, 32, 0.2);
+  color: #e0d6c8;
+}
+
+.ouro-msg.assistant {
+  align-self: flex-start;
+  color: #c8bfb0;
+}
+
+.ouro-typing {
+  animation: ouro-blink 1s step-end infinite;
+}
+
+@keyframes ouro-blink {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.3; }
+}
+
+/* ── Input area ── */
+
+.ouro-input {
+  display: flex;
+  gap: 4px;
+  width: 100%;
+  flex-shrink: 0;
+}
+
+.ouro-input textarea {
+  flex: 1;
+  font-family: 'Crimson Pro', serif;
+  font-size: 0.85rem;
+  color: #e0d6c8;
+  background: rgba(25, 25, 35, 0.9);
+  border: 1px solid rgba(218, 165, 32, 0.2);
+  padding: 6px 8px;
+  resize: none;
+  border-radius: 4px;
+}
+
+.ouro-input textarea:focus {
+  outline: none;
+  border-color: rgba(218, 165, 32, 0.5);
+}
+
+.ouro-input button {
+  font-family: 'Cinzel', serif;
+  font-size: 0.6rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: rgba(218, 165, 32, 0.9);
+  background: rgba(218, 165, 32, 0.1);
+  border: 1px solid rgba(218, 165, 32, 0.4);
+  padding: 5px 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.ouro-input button:hover:not(:disabled) {
+  background: rgba(218, 165, 32, 0.2);
+}
+
+.ouro-input button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ── Passed state ── */
+
+.ouro-passed {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  justify-content: center;
+}
+
+.ouro-passed p {
+  font-style: italic;
+  font-size: 0.85rem;
+  color: #c8bfb0;
+  margin-bottom: 12px;
+}
+
+/* ── Responsive ── */
+
+@media (max-width: 768px) {
+  .ouroboros-arena {
+    width: 98vmin;
+    height: 98vmin;
+  }
+
+  .ouroboros-title {
+    font-size: 1rem;
+  }
+
+  .ouroboros-header {
+    padding: 8px 16px;
+  }
+
+  .ouroboros-label {
+    font-size: 0.5rem;
+  }
+
+  /* Hide cosmic labels on mobile — dots only */
+  .ouroboros-arena.cosmic .cosmic-label {
+    display: none;
+  }
+
+  .ouro-screen p {
+    font-size: 0.78rem;
+  }
+
+  .ouro-msg {
+    font-size: 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .ouroboros-label {
+    font-size: 0.45rem;
+  }
+
+  .ouro-screen {
+    padding: 14% 10%;
+  }
+}
