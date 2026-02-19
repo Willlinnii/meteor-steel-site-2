@@ -109,7 +109,7 @@ export default function PersonaChatPanel({ entityType, entityName, entityLabel, 
   return (
     <div className="persona-chat-panel">
       <div className="persona-chat-header">
-        <span className="persona-chat-title">{entityLabel}</span>
+        <span className="persona-chat-title" onClick={() => navigate('/atlas')} style={{ cursor: 'pointer' }} title="Open Atlas AI Chat">{entityLabel}</span>
         <button className="chat-header-close" onClick={onClose} aria-label="Close persona chat">{'\u2715'}</button>
       </div>
 
