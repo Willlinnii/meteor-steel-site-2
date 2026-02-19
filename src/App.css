@@ -71,9 +71,9 @@ body {
 
 .mythosophia-iframe {
   width: 100%;
-  height: calc(100% + 155px);
+  height: calc(100% + 200px);
   border: none;
-  margin-top: -155px;
+  margin-top: -200px;
 }
 
 

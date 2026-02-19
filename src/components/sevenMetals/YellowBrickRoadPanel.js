@@ -21,6 +21,14 @@ function EarthStartScreen({ onBegin }) {
       <button className="ybr-begin-btn" onClick={onBegin}>
         Begin the Journey
       </button>
+      <a
+        className="ybr-enter-btn"
+        href="/journey/cosmic"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Enter the Journey
+      </a>
     </div>
   );
 }

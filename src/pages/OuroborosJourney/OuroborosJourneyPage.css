@@ -48,10 +48,44 @@
   transition: all 0.3s ease;
 }
 
+.ouroboros-header-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .ouroboros-exit:hover {
   background: rgba(218, 165, 32, 0.1);
   border-color: rgba(218, 165, 32, 0.7);
   color: rgba(218, 165, 32, 1);
+}
+
+/* ── Voice toggle ── */
+
+.ouro-voice-toggle {
+  background: none;
+  border: 1px solid rgba(218, 165, 32, 0.25);
+  color: rgba(218, 165, 32, 0.45);
+  font-size: 1rem;
+  width: 34px;
+  height: 34px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.ouro-voice-toggle:hover {
+  border-color: rgba(218, 165, 32, 0.6);
+  color: rgba(218, 165, 32, 0.8);
+}
+
+.ouro-voice-toggle.active {
+  border-color: rgba(218, 165, 32, 0.7);
+  color: rgba(218, 165, 32, 1);
+  background: rgba(218, 165, 32, 0.1);
+  box-shadow: 0 0 10px rgba(218, 165, 32, 0.15);
 }
 
 /* ── Arena (holds dragon + labels + chat) ── */
@@ -61,6 +95,50 @@
   width: 88vmin;
   height: 88vmin;
   flex-shrink: 0;
+}
+
+/* ── Smoke puff (stage pass) ── */
+
+.ouro-smoke-puff {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  z-index: 1;           /* behind dragon (z-index 2) — smoke seeps out from behind the head */
+  pointer-events: none;
+  width: 0;
+  height: 0;
+}
+
+/* Central flash at the nose — immediate visual feedback */
+.ouro-smoke-flash {
+  position: absolute;
+  width: 6vmin;
+  height: 6vmin;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle,
+    rgba(218, 165, 32, 0.9) 0%,
+    rgba(218, 165, 32, 0.4) 40%,
+    transparent 70%
+  );
+  animation: ouro-flash 0.8s ease-out forwards;
+}
+
+@keyframes ouro-flash {
+  0%   { transform: translate(-50%, -50%) scale(0.5); opacity: 1; }
+  100% { transform: translate(-50%, -50%) scale(2.5); opacity: 0; }
+}
+
+/* Smoke particles — animated via Web Animations API in JS */
+.ouro-smoke-particle {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle,
+    rgba(218, 180, 110, 0.7) 0%,
+    rgba(180, 160, 120, 0.4) 35%,
+    rgba(140, 125, 95, 0.15) 65%,
+    transparent 100%
+  );
+  opacity: 0;
 }
 
 /* ── Dragon image — sits ABOVE the dots so it hides them ── */
@@ -364,6 +442,45 @@
   cursor: not-allowed;
 }
 
+/* ── Mic button ── */
+
+.ouro-mic-btn {
+  font-size: 0.9rem;
+  width: 32px;
+  background: rgba(218, 165, 32, 0.08);
+  border: 1px solid rgba(218, 165, 32, 0.3);
+  color: rgba(218, 165, 32, 0.8);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+  border-radius: 4px;
+}
+
+.ouro-mic-btn:hover:not(:disabled) {
+  background: rgba(218, 165, 32, 0.15);
+  border-color: rgba(218, 165, 32, 0.6);
+}
+
+.ouro-mic-btn.recording {
+  background: rgba(200, 50, 50, 0.2);
+  border-color: rgba(200, 80, 80, 0.7);
+  color: #e05050;
+  animation: ouro-mic-pulse 1.2s ease-in-out infinite;
+}
+
+@keyframes ouro-mic-pulse {
+  0%, 100% { box-shadow: 0 0 4px rgba(200, 50, 50, 0.3); }
+  50%      { box-shadow: 0 0 14px rgba(200, 50, 50, 0.6); }
+}
+
+.ouro-mic-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
 /* ── Passed state ── */
 
 .ouro-passed {
@@ -380,6 +497,149 @@
   font-size: 0.85rem;
   color: #c8bfb0;
   margin-bottom: 12px;
+}
+
+/* ── Mode selector (smoke aesthetic) ── */
+
+.ouro-mode-select {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  margin-top: 8px;
+}
+
+.ouro-mode-btn {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 10px 14px;
+  cursor: pointer;
+  border: none;
+  border-radius: 20px;
+  background:
+    radial-gradient(ellipse 120% 80% at 30% 50%, rgba(80, 70, 55, 0.35) 0%, transparent 70%),
+    radial-gradient(ellipse 100% 90% at 70% 40%, rgba(60, 55, 50, 0.3) 0%, transparent 65%),
+    rgba(15, 14, 18, 0.5);
+  box-shadow:
+    0 0 18px 4px rgba(80, 70, 55, 0.12),
+    inset 0 0 20px 2px rgba(100, 90, 70, 0.08);
+  transition: all 0.5s ease;
+  overflow: hidden;
+}
+
+/* Wispy smoke layer — animates on hover */
+.ouro-mode-btn::before {
+  content: '';
+  position: absolute;
+  inset: -40% -20%;
+  background:
+    radial-gradient(ellipse 50% 60% at 20% 30%, rgba(180, 165, 130, 0.1) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 50% at 80% 60%, rgba(160, 145, 110, 0.08) 0%, transparent 65%),
+    radial-gradient(ellipse 60% 40% at 50% 80%, rgba(140, 125, 95, 0.06) 0%, transparent 60%);
+  filter: blur(8px);
+  opacity: 0;
+  transition: opacity 0.6s ease, transform 2s ease;
+  transform: scale(1) translateY(0);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.ouro-mode-btn:hover {
+  background:
+    radial-gradient(ellipse 130% 90% at 25% 45%, rgba(120, 105, 70, 0.35) 0%, transparent 70%),
+    radial-gradient(ellipse 110% 100% at 75% 35%, rgba(100, 90, 65, 0.3) 0%, transparent 60%),
+    rgba(18, 16, 22, 0.6);
+  box-shadow:
+    0 0 28px 8px rgba(218, 165, 32, 0.1),
+    0 0 50px 12px rgba(80, 70, 55, 0.15),
+    inset 0 0 24px 4px rgba(218, 165, 32, 0.06);
+}
+
+.ouro-mode-btn:hover::before {
+  opacity: 1;
+  transform: scale(1.15) translateY(-5%);
+  animation: ouro-smoke-drift 3s ease-in-out infinite alternate;
+}
+
+@keyframes ouro-smoke-drift {
+  0%   { transform: scale(1.1) translateY(-3%) translateX(-2%); }
+  50%  { transform: scale(1.2) translateY(-6%) translateX(2%); }
+  100% { transform: scale(1.1) translateY(-4%) translateX(-1%); }
+}
+
+.ouro-mode-btn-label {
+  position: relative;
+  z-index: 1;
+  font-family: 'Cinzel', serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: rgba(218, 165, 32, 0.85);
+  text-shadow: 0 0 12px rgba(218, 165, 32, 0.3), 0 0 2px rgba(0, 0, 0, 0.8);
+  transition: all 0.4s ease;
+}
+
+.ouro-mode-btn:hover .ouro-mode-btn-label {
+  color: rgba(218, 165, 32, 1);
+  text-shadow: 0 0 16px rgba(218, 165, 32, 0.5), 0 0 3px rgba(0, 0, 0, 0.9);
+}
+
+.ouro-mode-btn-desc {
+  position: relative;
+  z-index: 1;
+  font-family: 'Crimson Pro', serif;
+  font-size: 0.7rem;
+  color: rgba(200, 191, 176, 0.7);
+  line-height: 1.4;
+  text-shadow: 0 0 4px rgba(0, 0, 0, 0.6);
+  transition: color 0.4s ease;
+}
+
+.ouro-mode-btn:hover .ouro-mode-btn-desc {
+  color: rgba(200, 191, 176, 0.9);
+}
+
+/* ── Synthesis loading + readout ── */
+
+.ouro-synthesis-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin: 12px 0;
+}
+
+.ouro-synthesis-spinner {
+  width: 28px;
+  height: 28px;
+  border: 2px solid rgba(218, 165, 32, 0.2);
+  border-top-color: rgba(218, 165, 32, 0.8);
+  border-radius: 50%;
+  animation: ouro-spin 1s linear infinite;
+}
+
+@keyframes ouro-spin {
+  to { transform: rotate(360deg); }
+}
+
+.ouro-synthesis-readout {
+  flex: 1;
+  overflow-y: auto;
+  width: 100%;
+  text-align: left;
+  padding: 4px 0;
+  min-height: 0;
+}
+
+.ouro-synthesis-readout p {
+  font-size: 0.8rem;
+  line-height: 1.65;
+  color: #c8bfb0;
+  margin: 0 0 8px;
+  text-align: left;
 }
 
 /* ── Responsive ── */
@@ -413,6 +673,23 @@
 
   .ouro-msg {
     font-size: 0.75rem;
+  }
+
+  .ouro-mode-btn {
+    padding: 8px 10px;
+    border-radius: 16px;
+  }
+
+  .ouro-mode-btn-label {
+    font-size: 0.7rem;
+  }
+
+  .ouro-mode-btn-desc {
+    font-size: 0.6rem;
+  }
+
+  .ouro-synthesis-readout p {
+    font-size: 0.72rem;
   }
 }
 

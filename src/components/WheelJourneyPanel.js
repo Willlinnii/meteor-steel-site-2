@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
 
-function IntroScreen({ onBegin, introText }) {
+function IntroScreen({ onBegin, introText, journeyId }) {
   return (
     <div className="ybr-panel ybr-earth-intro">
       <h2 className="ybr-title">Yellow Brick Road</h2>
@@ -12,6 +12,16 @@ function IntroScreen({ onBegin, introText }) {
       <button className="ybr-begin-btn" onClick={onBegin}>
         Begin the Journey
       </button>
+      {journeyId && (
+        <a
+          className="ybr-enter-btn"
+          href={`/journey/${journeyId}`}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Enter the Journey
+        </a>
+      )}
     </div>
   );
 }
@@ -130,7 +140,7 @@ export default function WheelJourneyPanel({
 
   // Intro screen
   if (currentStopIndex === -1) {
-    return <IntroScreen onBegin={onAdvanceFromIntro} introText={introText} />;
+    return <IntroScreen onBegin={onAdvanceFromIntro} introText={introText} journeyId={journeyId} />;
   }
 
   // Complete screen

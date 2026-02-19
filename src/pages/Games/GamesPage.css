@@ -95,6 +95,36 @@
   line-height: 1.4;
 }
 
+.game-card-link {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  text-decoration: none;
+  color: inherit;
+  flex: 1;
+}
+
+.game-card-ouroboros {
+  font-family: 'Cinzel', serif;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: rgba(218, 165, 32, 0.6);
+  text-decoration: none;
+  border: 1px solid rgba(218, 165, 32, 0.25);
+  padding: 4px 12px;
+  margin-top: 6px;
+  text-align: center;
+  transition: all 0.2s ease;
+  align-self: flex-start;
+}
+
+.game-card-ouroboros:hover {
+  color: rgba(218, 165, 32, 0.9);
+  border-color: rgba(218, 165, 32, 0.6);
+  background: rgba(218, 165, 32, 0.08);
+}
+
 /* ===== MODE SELECTOR ===== */
 .game-mode-selector {
   text-align: center;

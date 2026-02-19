@@ -24,6 +24,7 @@ import fallenStarlightData from './data/fallenStarlight.json';
 
 const SevenMetalsVRPage = lazy(() => import('./pages/SevenMetals/SevenMetalsVRPage'));
 const AdminPage = lazy(() => import('./pages/Admin/AdminPage'));
+const OuroborosJourneyPage = lazy(() => import('./pages/OuroborosJourney/OuroborosJourneyPage'));
 
 const STAGES = [
   { id: 'golden-age', label: 'Golden Age' },
@@ -857,14 +858,14 @@ function StoryForgeHome() {
 
 const NAV_ITEMS = [
   { path: '/metals', label: 'Celestial Clocks' },
+  { path: '/mythology-channel', label: 'Mythology Channel' },
+  { path: '/mythosophia', label: 'Mythosophia' },
   { path: '/', label: 'Meteor Steel' },
   { path: '/monomyth', label: 'Monomyth' },
   { path: '/fallen-starlight', label: 'Fallen Starlight' },
   { path: '/story-forge', label: 'Story Forge' },
   { path: 'https://www.thestoryatlas.com/my-courses/psychles/surface', label: 'Story Atlas', external: true },
-  { path: '/mythosophia', label: 'Mythosophia' },
-  { path: '/games', label: 'Mythouse Games' },
-  { path: '/mythology-channel', label: 'Mythology Channel' },
+  { path: '/games', label: 'Game Room' },
 ];
 
 function SiteNav() {
@@ -1001,6 +1002,7 @@ function App() {
         <Route path="/games/*" element={<GamesPage />} />
         <Route path="/mythology-channel/:showId" element={<MythologyChannelPage />} />
         <Route path="/mythosophia" element={<MythosophiaPage />} />
+        <Route path="/journey/:journeyId" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" />Loading Journey...</div>}><OuroborosJourneyPage /></Suspense>} />
         <Route path="/dragon/*" element={<RequireAdmin><Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" />Loading Admin...</div>}><AdminPage /></Suspense></RequireAdmin>} />
       </Routes>
       <SiteFooter />

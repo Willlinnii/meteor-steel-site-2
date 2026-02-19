@@ -931,6 +931,11 @@ const WHEEL_JOURNEY_LABELS = {
     'forge': 'Trials of Forge', 'quenching': 'Quench', 'integration': 'Integration',
     'drawing': 'Draw', 'new-age': 'Age of Steel',
   },
+  fused: {
+    'golden-age': 'Golden Age', 'falling-star': 'Calling Star', 'impact-crater': 'Crater Crossing',
+    'forge': 'Trials of Forge', 'quenching': 'Quench', 'integration': 'Integration',
+    'drawing': 'Draw', 'new-age': 'Age of Steel',
+  },
 };
 
 function buildWheelJourneyPrompt(journeyId, stageId) {
@@ -996,6 +1001,219 @@ INSTRUCTIONS:
    <ybr-result>{"passed": false}</ybr-result>`;
 }
 
+function getWheelStageContent(journeyId, stageId) {
+  if (journeyId === 'monomyth') {
+    const prose = monomyth[stageId] || '';
+    const overview = stageOverviews[stageId] || '';
+    const theorists = monomythTheorists[stageId];
+    let theoristText = '';
+    if (theorists) {
+      for (const [, entries] of Object.entries(theorists)) {
+        for (const [, t] of Object.entries(entries)) {
+          theoristText += `${t.name} (${t.concept}): ${truncate(t.description, 200)}\n`;
+        }
+      }
+    }
+    const myths = monomythMyths[stageId];
+    let mythText = '';
+    if (myths) {
+      for (const m of Object.values(myths)) {
+        mythText += `${m.title} (${m.tradition}): ${truncate(m.description, 200)}\n`;
+      }
+    }
+    const psychles = monomythPsychles[stageId];
+    let cycleText = '';
+    if (psychles?.cycles) {
+      for (const c of Object.values(psychles.cycles)) {
+        cycleText += `${c.label}: ${c.phase} — ${truncate(c.description, 120)}\n`;
+      }
+    }
+    return `STAGE OVERVIEW:\n${overview}\n\nMONOMYTH PROSE (Atlas narration):\n${prose}\n\nTHEORISTS:\n${theoristText}\nMYTHS:\n${mythText}\nCYCLES:\n${cycleText}`;
+  }
+  // meteor-steel
+  const process = steelProcess[stageId] || '';
+  const overview = stageOverviews[stageId] || '';
+  const mono = monomyth[stageId] || '';
+  const synth = synthesis[stageId] || '';
+  return `STAGE OVERVIEW:\n${overview}\n\nSTEEL PROCESS:\n${process}\n\nMONOMYTH:\n${mono}\n\nSYNTHESIS:\n${synth}`;
+}
+
+function buildStoryModePrompt(journeyId, stageId) {
+  const labels = WHEEL_JOURNEY_LABELS[journeyId] || {};
+  const stageLabel = labels[stageId] || stageId;
+  const stageContent = getWheelStageContent(journeyId, stageId);
+  const journeyLabel = journeyId === 'monomyth' ? "the Hero's Journey (Monomyth)" : 'the Meteor Steel process';
+
+  return `You are Atlas, the mythic companion of the Mythouse. A traveler is building a fictional story along the wheel of ${journeyLabel}.
+
+They are currently at the "${stageLabel}" stage.
+
+THEMATIC CONTENT FOR THIS STAGE (use this to understand the stage's themes, not to test knowledge):
+${stageContent}
+
+INSTRUCTIONS:
+1. The traveler is creating a story. They should offer a scene, character moment, or turning point that fits this stage's themes.
+2. If their contribution is very thin (just a word or two with no story element), gently encourage them to add more detail. Do NOT test their knowledge of the theory.
+3. If they offer any meaningful story element — a scene, a character beat, an image, a plot point — pass them. Be generous. Creativity matters more than accuracy.
+4. Reflect back what they've created with warmth, and hint at what the next stage might bring.
+5. Stay in character as Atlas — warm, wise, a creative companion.
+6. Keep responses brief (2-4 sentences + the result tag).
+7. At the END of your response, on a new line, append exactly this tag:
+   <ybr-result>{"passed": true}</ybr-result>
+   or
+   <ybr-result>{"passed": false}</ybr-result>`;
+}
+
+function buildPersonalModePrompt(journeyId, stageId) {
+  const labels = WHEEL_JOURNEY_LABELS[journeyId] || {};
+  const stageLabel = labels[stageId] || stageId;
+  const stageContent = getWheelStageContent(journeyId, stageId);
+  const journeyLabel = journeyId === 'monomyth' ? "the Hero's Journey (Monomyth)" : 'the Meteor Steel process';
+
+  return `You are Atlas, the mythic companion of the Mythouse. A traveler is sharing personal experiences along the wheel of ${journeyLabel}.
+
+They are currently at the "${stageLabel}" stage.
+
+THEMATIC CONTENT FOR THIS STAGE (use this to understand the stage's mythic patterns, not to test knowledge):
+${stageContent}
+
+INSTRUCTIONS:
+1. The traveler is sharing a personal experience related to this stage's themes.
+2. Receive their story with warmth. Reflect back any mythic patterns you see in what they shared — gently, without lecturing.
+3. Be very generous with passing. If they share something genuine — even brief — pass them. Do NOT test their knowledge of the theory.
+4. Do NOT ask follow-up questions that delay them. One warm reflection is enough.
+5. Stay in character as Atlas — warm, perceptive, honoring of vulnerability.
+6. Keep responses brief and warm (2-3 sentences + the result tag).
+7. At the END of your response, on a new line, append exactly this tag:
+   <ybr-result>{"passed": true}</ybr-result>
+   or
+   <ybr-result>{"passed": false}</ybr-result>`;
+}
+
+function buildFusedJourneyPrompt(stageId, aspect, gameMode) {
+  const labels = WHEEL_JOURNEY_LABELS.fused;
+  const stageLabel = labels[stageId] || stageId;
+
+  const monomythContent = getWheelStageContent('monomyth', stageId);
+  const steelContent = getWheelStageContent('meteor-steel', stageId);
+
+  const bothContent = `MONOMYTH CONTENT FOR THIS STAGE:\n${monomythContent}\n\nMETEOR STEEL CONTENT FOR THIS STAGE:\n${steelContent}`;
+
+  if (gameMode === 'story') {
+    if (aspect === 'monomyth') {
+      return `You are Atlas, the mythic companion of the Mythouse. A traveler is building a fictional story along a fused wheel — monomyth and meteor steel combined.
+
+They are currently at the "${stageLabel}" stage, MONOMYTH PHASE.
+
+${bothContent}
+
+INSTRUCTIONS:
+1. The traveler is creating a story. They should offer a scene, character moment, or turning point that fits this stage's MONOMYTH themes — the hero's journey.
+2. If their contribution is very thin, gently encourage more detail. Do NOT test knowledge.
+3. If they offer any meaningful story element, pass them. Be generous.
+4. Reflect back what they've created with warmth. Hint that the forge phase comes next.
+5. Stay in character as Atlas — warm, wise, a creative companion.
+6. Keep responses brief (2-4 sentences + the result tag).
+7. At the END of your response, on a new line, append exactly this tag:
+   <ybr-result>{"passed": true}</ybr-result>
+   or
+   <ybr-result>{"passed": false}</ybr-result>`;
+    }
+    return `You are Atlas, the mythic companion of the Mythouse. A traveler is building a fictional story along a fused wheel — monomyth and meteor steel combined.
+
+They are currently at the "${stageLabel}" stage, METEOR STEEL PHASE.
+
+${bothContent}
+
+INSTRUCTIONS:
+1. The traveler already created a monomyth scene for this stage. Now they're adding the METEOR STEEL dimension — how the forge deepens or transforms their story.
+2. If their contribution is very thin, gently encourage more. Do NOT test knowledge.
+3. If they offer any meaningful creative element connecting to the forge/steel metaphor, pass them. Be generous.
+4. Reflect how the two dimensions weave together.
+5. Stay in character as Atlas — warm, wise, a creative companion.
+6. Keep responses brief (2-4 sentences + the result tag).
+7. At the END of your response, on a new line, append exactly this tag:
+   <ybr-result>{"passed": true}</ybr-result>
+   or
+   <ybr-result>{"passed": false}</ybr-result>`;
+  }
+
+  if (gameMode === 'personal') {
+    if (aspect === 'monomyth') {
+      return `You are Atlas, the mythic companion of the Mythouse. A traveler is sharing personal experiences along a fused wheel — monomyth and meteor steel combined.
+
+They are currently at the "${stageLabel}" stage, MONOMYTH PHASE.
+
+${bothContent}
+
+INSTRUCTIONS:
+1. The traveler is sharing a personal experience related to this stage's MONOMYTH themes — the hero's journey.
+2. Receive their story with warmth. Reflect any mythic patterns gently.
+3. Be very generous with passing. If they share something genuine, pass them. Do NOT test knowledge.
+4. Do NOT ask follow-up questions that delay them. One warm reflection is enough. Hint that the forge phase comes next.
+5. Stay in character as Atlas — warm, perceptive, honoring of vulnerability.
+6. Keep responses brief (2-3 sentences + the result tag).
+7. At the END of your response, on a new line, append exactly this tag:
+   <ybr-result>{"passed": true}</ybr-result>
+   or
+   <ybr-result>{"passed": false}</ybr-result>`;
+    }
+    return `You are Atlas, the mythic companion of the Mythouse. A traveler is sharing personal experiences along a fused wheel — monomyth and meteor steel combined.
+
+They are currently at the "${stageLabel}" stage, METEOR STEEL PHASE.
+
+${bothContent}
+
+INSTRUCTIONS:
+1. The traveler already shared a monomyth experience for this stage. Now ask how the meteor steel metaphor illuminates what they shared — forging, tempering, transformation through fire.
+2. Receive with warmth. Reflect how the steel metaphor deepens what they already shared.
+3. Be very generous. If they engage with the forge/steel metaphor at all, pass them. Do NOT test knowledge.
+4. Stay in character as Atlas — warm, perceptive, honoring of vulnerability.
+5. Keep responses brief (2-3 sentences + the result tag).
+6. At the END of your response, on a new line, append exactly this tag:
+   <ybr-result>{"passed": true}</ybr-result>
+   or
+   <ybr-result>{"passed": false}</ybr-result>`;
+  }
+
+  // Riddle mode
+  if (aspect === 'monomyth') {
+    return `You are Atlas, the mythic companion of the Mythouse. You are testing a traveler on a fused wheel — monomyth and meteor steel combined.
+
+They are currently at the "${stageLabel}" stage, MONOMYTH PHASE.
+
+${bothContent}
+
+INSTRUCTIONS:
+1. The traveler must describe what happens at this stage from the MONOMYTH perspective — the hero's journey. Key events, themes, transformations.
+2. If their answer is vague, surface-level, or wrong, gently correct, offer a hint, and ask them to try again.
+3. If they demonstrate real understanding of the monomyth dimension, pass them.
+4. Hint that the forge phase comes next.
+5. Stay in character as Atlas — warm, wise, grounded.
+6. Keep responses brief (2-4 sentences + the result tag).
+7. At the END of your response, on a new line, append exactly this tag:
+   <ybr-result>{"passed": true}</ybr-result>
+   or
+   <ybr-result>{"passed": false}</ybr-result>`;
+  }
+  return `You are Atlas, the mythic companion of the Mythouse. You are testing a traveler on a fused wheel — monomyth and meteor steel combined.
+
+They are currently at the "${stageLabel}" stage, METEOR STEEL PHASE.
+
+${bothContent}
+
+INSTRUCTIONS:
+1. The traveler already passed the monomyth phase. Now they must show how this stage connects to the METEOR STEEL process — the forge, the metallurgy, the transformation of raw material.
+2. If their answer is vague or misses the steel/forge dimension, gently correct and ask again.
+3. If they demonstrate understanding of how the hero's journey meets the forge at this stage, pass them.
+4. Stay in character as Atlas — warm, wise, grounded.
+5. Keep responses brief (2-4 sentences + the result tag).
+6. At the END of your response, on a new line, append exactly this tag:
+   <ybr-result>{"passed": true}</ybr-result>
+   or
+   <ybr-result>{"passed": false}</ybr-result>`;
+}
+
 module.exports = async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
@@ -1008,7 +1226,52 @@ module.exports = async function handler(req, res) {
     });
   }
 
-  const { messages, area, persona, mode, challengeStop, level, journeyId, stageId } = req.body || {};
+  const { messages, area, persona, mode, challengeStop, level, journeyId, stageId, gameMode, stageData, aspect } = req.body || {};
+
+  // --- Journey Synthesis mode (no messages needed — uses stageData directly) ---
+  if (mode === 'journey-synthesis') {
+    if (!journeyId || !gameMode || !Array.isArray(stageData)) {
+      return res.status(400).json({ error: 'journeyId, gameMode, and stageData are required for synthesis.' });
+    }
+
+    const journeyLabel = journeyId === 'fused' ? 'the Fused Journey (Monomyth & Meteor Steel)'
+                       : journeyId === 'monomyth' ? "the Hero's Journey (Monomyth)" : 'the Meteor Steel process';
+    const stageBlock = stageData.map(s =>
+      `### ${s.stageLabel}\n${(s.userMessages || []).join('\n')}`
+    ).join('\n\n');
+
+    let systemPrompt;
+    if (gameMode === 'story') {
+      systemPrompt = `You are Atlas. A traveler has walked the full wheel of ${journeyLabel}, building a story at each stage. Below are the story elements they created at each stage.
+
+Weave these fragments into a single, cohesive narrative. Honor their ideas and characters. Add connective tissue so it reads as one flowing story. Match the mythic rhythm of the journey. 800-1500 words. Be literary but accessible. Preserve the traveler's voice and ideas.
+
+STORY FRAGMENTS BY STAGE:
+${stageBlock}`;
+    } else {
+      systemPrompt = `You are Atlas. A traveler has walked the full wheel of ${journeyLabel}, sharing personal experiences at each stage. Below are the experiences they shared.
+
+Weave their experiences into a mythic biography in third person. Show how their life follows the pattern of the monomyth. Honor the vulnerability of what they shared. 600-1200 words. Be warm, perceptive, and honoring.
+
+PERSONAL EXPERIENCES BY STAGE:
+${stageBlock}`;
+    }
+
+    const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+    try {
+      const response = await anthropic.messages.create({
+        model: 'claude-sonnet-4-20250514',
+        system: systemPrompt,
+        messages: [{ role: 'user', content: 'Please weave my journey into a complete narrative.' }],
+        max_tokens: 4096,
+      });
+      const story = response.content?.find(c => c.type === 'text')?.text || 'No narrative generated.';
+      return res.status(200).json({ story });
+    } catch (err) {
+      console.error('Synthesis API error:', err?.message, err?.status);
+      return res.status(500).json({ error: `Something went wrong: ${err?.message || 'Unknown error'}` });
+    }
+  }
 
   if (!Array.isArray(messages) || messages.length === 0) {
     return res.status(400).json({ error: 'Messages array is required.' });
@@ -1103,7 +1366,12 @@ module.exports = async function handler(req, res) {
       return res.status(400).json({ error: 'journeyId and stageId are required.' });
     }
 
-    const systemPrompt = buildWheelJourneyPrompt(journeyId, stageId);
+    const effectiveGameMode = gameMode || 'riddle';
+    const systemPrompt = (journeyId === 'fused' && aspect)
+                        ? buildFusedJourneyPrompt(stageId, aspect, effectiveGameMode)
+                        : effectiveGameMode === 'story'   ? buildStoryModePrompt(journeyId, stageId)
+                        : effectiveGameMode === 'personal' ? buildPersonalModePrompt(journeyId, stageId)
+                        :                                    buildWheelJourneyPrompt(journeyId, stageId);
 
     try {
       const response = await anthropic.messages.create({

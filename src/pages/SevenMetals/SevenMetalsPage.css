@@ -559,6 +559,12 @@
   border-left: 2px solid var(--border-subtle);
 }
 
+.body-meta {
+  font-size: 0.85em;
+  color: rgba(201, 169, 97, 0.7);
+  margin-bottom: 4px;
+}
+
 .thematic-essays {
   margin-bottom: 24px;
 }
@@ -1335,6 +1341,31 @@
   background: rgba(218, 165, 32, 0.2);
   box-shadow: 0 0 16px rgba(218, 165, 32, 0.3);
   border-color: rgba(218, 165, 32, 0.8);
+}
+
+.ybr-enter-btn {
+  display: block;
+  margin: 12px auto 0;
+  font-family: 'Cinzel', serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: rgba(218, 165, 32, 0.7);
+  background: none;
+  border: 1px solid rgba(218, 165, 32, 0.3);
+  padding: 10px 28px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  text-align: center;
+  width: fit-content;
+}
+
+.ybr-enter-btn:hover {
+  color: rgba(218, 165, 32, 0.9);
+  background: rgba(218, 165, 32, 0.08);
+  border-color: rgba(218, 165, 32, 0.6);
+  box-shadow: 0 0 12px rgba(218, 165, 32, 0.2);
 }
 
 /* --- Challenge Header --- */

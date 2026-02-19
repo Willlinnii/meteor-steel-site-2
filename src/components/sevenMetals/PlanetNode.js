@@ -12,32 +12,20 @@ const PLANET_COLORS = {
 };
 
 // Build moon shadow path based on phase angle (0-360°)
-// 0=new(dark), 90=first quarter(right lit), 180=full(lit), 270=last quarter(left lit)
+// 0=new(dark), 90=first quarter, 180=full(lit), 270=last quarter
 function moonShadowPath(r, phase) {
-  // terminatorX: +r = shadow on right (waxing, right side lit)
-  //              -r = shadow on left (waning, left side lit)
-  //               0 = quarter (half lit)
-  let terminatorX;
-  if (phase <= 180) {
-    // Waxing: 0=new(full shadow) → 90=first quarter → 180=full(no shadow)
-    terminatorX = r * Math.cos((phase * Math.PI) / 180);
-  } else {
-    // Waning: 180=full(no shadow) → 270=last quarter → 360=new(full shadow)
-    terminatorX = r * Math.cos((phase * Math.PI) / 180);
-  }
+  // terminatorX = cosine of phase maps to the terminator's x-radius:
+  //   +r at phase 0/360 (new moon — full shadow)
+  //    0 at phase 90/270 (quarter — half shadow)
+  //   -r at phase 180 (full moon — no shadow)
+  const terminatorX = r * Math.cos((phase * Math.PI) / 180);
 
-  // Shadow covers the dark side of the moon
-  // For waxing (0-180): shadow is on the left, terminator sweeps right→left
-  // For waning (180-360): shadow is on the right, terminator sweeps left→right
-  const isWaxing = phase <= 180;
+  // Shadow outer edge always sweeps clockwise (via right); the terminator arc
+  // direction controls how much of the disk the shadow covers.
+  const termSweep = terminatorX > 0 ? 1 : 0;
 
-  // The shadow path: one semicircular edge (always on the dark side) + one elliptical terminator edge
-  // Shadow side: left for waxing, right for waning
-  const shadowSweep = isWaxing ? 1 : 0; // which semicircle is the dark edge
-  const termSweep = isWaxing ? (terminatorX > 0 ? 1 : 0) : (terminatorX < 0 ? 0 : 1);
-
-  // Path: top of moon → semicircle on shadow side to bottom → terminator arc back to top
-  return `M 0,${-r} A ${r},${r} 0 0,${shadowSweep} 0,${r} A ${Math.abs(terminatorX)},${r} 0 0,${termSweep} 0,${-r}`;
+  // Path: top of moon → clockwise semicircle to bottom → terminator arc back to top
+  return `M 0,${-r} A ${r},${r} 0 0,1 0,${r} A ${Math.abs(terminatorX)},${r} 0 0,${termSweep} 0,${-r}`;
 }
 
 function renderPlanetDetails(planet, r, moonPhase) {

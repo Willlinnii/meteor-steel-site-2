@@ -69,18 +69,27 @@ const YELLOW_BRICK_ROADS = [
     label: 'Cosmic Journey',
     description: 'Ascend through the planetary spheres, traverse the zodiac, and descend carrying what you\'ve gathered. 26 encounters. 3 levels each.',
     externalPath: '/metals/yellow-brick-road',
+    ouroborosPath: '/journey/cosmic',
   },
   {
     id: 'monomyth-journey',
     label: 'Monomyth Journey',
     description: 'Walk the eight stages of the Hero\'s Journey with Atlas as your guide.',
     externalPath: '/monomyth?journey=true',
+    ouroborosPath: '/journey/monomyth',
   },
   {
     id: 'meteor-steel-journey',
     label: 'Meteor Steel Journey',
     description: 'Walk the eight stages of the Meteor Steel process with Atlas as your guide.',
     externalPath: '/?journey=true',
+    ouroborosPath: '/journey/meteor-steel',
+  },
+  {
+    id: 'fused-journey',
+    label: 'Fused Journey',
+    description: 'Walk monomyth and meteor steel fused into one wheel. Two questions per stage.',
+    ouroborosPath: '/journey/fused',
   },
 ];
 
@@ -167,14 +176,23 @@ export default function GamesPage() {
       <h2 className="games-section-title">Yellow Brick Roads</h2>
       <div className="games-grid">
         {YELLOW_BRICK_ROADS.map(game => (
-          <Link
-            key={game.id}
-            className="game-card featured"
-            to={game.externalPath}
-          >
-            <span className="game-card-title">{game.label}</span>
-            <span className="game-card-desc">{game.description}</span>
-          </Link>
+          <div key={game.id} className="game-card featured">
+            <Link className="game-card-link" to={game.externalPath}>
+              <span className="game-card-title">{game.label}</span>
+              <span className="game-card-desc">{game.description}</span>
+            </Link>
+            {game.ouroborosPath && (
+              <a
+                className="game-card-ouroboros"
+                href={game.ouroborosPath}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={e => e.stopPropagation()}
+              >
+                Ouroboros
+              </a>
+            )}
+          </div>
         ))}
       </div>
 

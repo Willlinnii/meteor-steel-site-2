@@ -7,9 +7,15 @@ import DevelopmentPanel from '../DevelopmentPanel';
 import TarotCardContent from './TarotCardContent';
 import PersonaChatPanel from '../PersonaChatPanel';
 
+const HINDU_GEMS = {
+  Sun: 'Ruby', Moon: 'Pearl', Mars: 'Red Coral', Mercury: 'Emerald',
+  Jupiter: 'Yellow Sapphire', Venus: 'Diamond', Saturn: 'Blue Sapphire',
+};
+
 function OverviewTab({ data }) {
   if (!data) return <p className="metals-empty">Select a planet to begin.</p>;
   const m = data.core;
+  const gem = HINDU_GEMS[m.planet];
   return (
     <div className="tab-content">
       {m.metalDescription && <p className="metal-desc">{m.metalDescription}</p>}
@@ -24,6 +30,7 @@ function OverviewTab({ data }) {
         <div className="overview-item"><span className="ov-label">Day</span><span className="ov-value">{m.day}</span></div>
         <div className="overview-item"><span className="ov-label">Sin</span><span className="ov-value">{m.sin}</span></div>
         <div className="overview-item"><span className="ov-label">Virtue</span><span className="ov-value">{m.virtue}</span></div>
+        {gem && <div className="overview-item"><span className="ov-label">Stone</span><span className="ov-value">{gem}</span></div>}
       </div>
       {m.astrology && <p className="astrology-note">{m.astrology}</p>}
       {m.deities && (
@@ -225,21 +232,101 @@ function DayTab({ data }) {
   );
 }
 
+const PLANET_GLANDS = {
+  Sun:     { gland: 'Pineal',                  hormones: 'Melatonin, DMT' },
+  Moon:    { gland: 'Pituitary',               hormones: 'Oxytocin, Endorphins, Regulatory Hormones' },
+  Mercury: { gland: 'Thyroid & Parathyroid',   hormones: 'Thyroxine, Triiodothyronine, Calcitonin' },
+  Venus:   { gland: 'Thymus',                  hormones: 'Thymosin' },
+  Mars:    { gland: 'Pancreas',                hormones: 'Insulin, Glucagon' },
+  Jupiter: { gland: 'Gonads (Ovaries/Testes)', hormones: 'Estrogen, Progesterone, Testosterone' },
+  Saturn:  { gland: 'Adrenal',                 hormones: 'Adrenaline (Epinephrine), Cortisol' },
+};
+
+const PLANET_CHAKRA_DETAILS = {
+  Saturn: {
+    label: 'Root',
+    sanskrit: 'Muladhara',
+    location: 'Base of spine',
+    theme: 'Survival, safety, grounding, belonging',
+    element: 'Earth',
+    description: 'This chakra concerns the fundamental experience of being safe to exist in the world. It relates to stability, home, resources, tribe, and the sense of being anchored in the body and reality. When balanced, it shows up as groundedness, presence, and a quiet sense of security; when strained, it can appear as anxiety, fear, instability, or disconnection from the body and the material world.',
+  },
+  Jupiter: {
+    label: 'Sacral',
+    sanskrit: 'Svadhisthana',
+    location: 'Lower abdomen / pelvis',
+    theme: 'Emotion, pleasure, sexuality, creativity',
+    element: 'Water',
+    description: 'This chakra reflects the realm of feeling, desire, and creative life force. It governs emotional flow, sensuality, intimacy, and the ability to enjoy life and create. When balanced, emotions move fluidly and creativity feels alive; when imbalanced, it can appear as numbness, shame, repression, emotional overwhelm, or compulsive seeking of pleasure.',
+  },
+  Mars: {
+    label: 'Solar Plexus',
+    sanskrit: 'Manipura',
+    location: 'Upper abdomen',
+    theme: 'Power, will, identity, confidence',
+    element: 'Fire',
+    description: 'This chakra represents personal agency and the capacity to act in the world. It relates to confidence, motivation, self-definition, and boundaries. In balance it supports healthy self-esteem and purposeful action; when strained, it may show up as shame, passivity, lack of direction, or the opposite extreme of control, anger, and domination.',
+  },
+  Venus: {
+    label: 'Heart',
+    sanskrit: 'Anahata',
+    location: 'Center of chest',
+    theme: 'Love, compassion, connection',
+    element: 'Air',
+    description: 'The heart chakra acts as the bridge between the lower and upper chakras, integrating survival and identity with meaning and connection. It relates to empathy, compassion, forgiveness, and relational openness. In balance it allows both giving and receiving love; in imbalance it may manifest as isolation, grief, resentment, or over-giving without boundaries.',
+  },
+  Mercury: {
+    label: 'Throat',
+    sanskrit: 'Vishuddha',
+    location: 'Throat',
+    theme: 'Expression, truth, communication',
+    element: 'Ether / Space',
+    description: 'This chakra governs authentic expression and the capacity to speak and hear truth. It includes communication, honesty, listening, and the ability to give voice to one\'s inner life. When balanced, expression feels clear and natural; when imbalanced, it can appear as fear of speaking, dishonesty, suppression, or the feeling of not being heard.',
+  },
+  Moon: {
+    label: 'Third Eye',
+    sanskrit: 'Ajna',
+    location: 'Between eyebrows',
+    theme: 'Insight, intuition, imagination',
+    element: 'Mind / Light',
+    description: 'This chakra relates to perception, inner vision, and reflective awareness. It includes intuition, imagination, clarity, and the ability to see patterns within oneself and the world. When balanced, it supports insight and self-reflection; when strained, it can appear as confusion, denial, or excessive fantasy disconnected from reality.',
+  },
+  Sun: {
+    label: 'Crown',
+    sanskrit: 'Sahasrara',
+    location: 'Top of head',
+    theme: 'Unity, transcendence, meaning',
+    element: 'Consciousness',
+    description: 'The crown chakra represents the experience of connection to the larger whole\u2014spirituality, meaning, awe, and humility before life. When balanced, it supports a sense of belonging within existence and openness to mystery; when imbalanced, it may manifest as nihilism, spiritual disconnection, or spiritual bypassing and escape from embodied life.',
+  },
+};
+
 function BodyTab({ data }) {
   if (!data?.core?.body) return <p className="metals-empty">No body data available.</p>;
   const b = data.core.body;
+  const planet = data.core.planet;
+  const chakra = PLANET_CHAKRA_DETAILS[planet];
+  const glandInfo = PLANET_GLANDS[planet];
   return (
     <div className="tab-content">
-      {b.chakra && (
+      {chakra && (
         <div className="body-section">
-          <h5>{b.chakra}</h5>
-          {b.chakraDescription && <p>{b.chakraDescription}</p>}
+          <h5>Chakra: {chakra.label}</h5>
+          <p className="body-meta">{chakra.sanskrit} · {chakra.location} · {chakra.element}</p>
+          <p className="body-meta">Theme: {chakra.theme}</p>
+          <p>{chakra.description}</p>
         </div>
       )}
       {b.organ && (
         <div className="body-section">
-          <h5>{b.organ}</h5>
+          <h5>Organ System: {b.organ}</h5>
           {b.organDescription && <p>{b.organDescription}</p>}
+        </div>
+      )}
+      {glandInfo && (
+        <div className="body-section">
+          <h5>Gland: {glandInfo.gland}</h5>
+          <p>{glandInfo.hormones}</p>
         </div>
       )}
     </div>
