@@ -220,7 +220,7 @@ function ensureYTApi() {
   });
 }
 
-export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPlanet, selectedSign, onSelectSign, selectedCardinal, onSelectCardinal, selectedEarth, onSelectEarth, showCalendar, onToggleCalendar, selectedMonth, onSelectMonth, showMedicineWheel, onToggleMedicineWheel, selectedWheelItem, onSelectWheelItem, chakraViewMode, onToggleChakraView, videoUrl, onCloseVideo, ybrActive, ybrCurrentStopIndex, ybrStopProgress, ybrJourneySequence, onToggleYBR, ybrAutoStart }) {
+export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPlanet, hoveredPlanet, selectedSign, onSelectSign, selectedCardinal, onSelectCardinal, selectedEarth, onSelectEarth, showCalendar, onToggleCalendar, selectedMonth, onSelectMonth, showMedicineWheel, onToggleMedicineWheel, selectedWheelItem, onSelectWheelItem, chakraViewMode, onToggleChakraView, videoUrl, onCloseVideo, ybrActive, ybrCurrentStopIndex, ybrStopProgress, ybrJourneySequence, onToggleYBR, ybrAutoStart }) {
   const navigate = useNavigate();
   const wrapperRef = useRef(null);
   const [tooltip, setTooltip] = useState(null);
@@ -1327,6 +1327,7 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
                   cx={pos.x}
                   cy={pos.y}
                   selected={selectedPlanet === planet}
+                  hovered={hoveredPlanet === planet}
                   onClick={() => onSelectPlanet(planet)}
                   onMouseEnter={(e) => handleTooltipEnter('planet', planet, e)}
                   onMouseLeave={handleTooltipLeave}
@@ -1410,9 +1411,9 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
               );
             })}
             <circle cx={CX} cy={CY} r="16"
-              fill="#f0c040" fillOpacity={selectedPlanet === 'Sun' ? 0.9 : 0.7}
-              stroke="#f0c040" strokeWidth={selectedPlanet === 'Sun' ? 2 : 1}
-              filter={selectedPlanet === 'Sun' ? 'url(#glow-Sun)' : undefined}
+              fill="#f0c040" fillOpacity={selectedPlanet === 'Sun' || hoveredPlanet === 'Sun' ? 0.9 : 0.7}
+              stroke="#f0c040" strokeWidth={selectedPlanet === 'Sun' || hoveredPlanet === 'Sun' ? 2 : 1}
+              filter={selectedPlanet === 'Sun' || hoveredPlanet === 'Sun' ? 'url(#glow-Sun)' : undefined}
             />
             {selectedPlanet === 'Sun' && (
               <circle cx={CX} cy={CY} r="22" fill="none" stroke="#f0c040" strokeWidth="1" opacity="0.4">
@@ -1420,8 +1421,11 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
                 <animate attributeName="opacity" values="0.4;0.15;0.4" dur="2s" repeatCount="indefinite" />
               </circle>
             )}
-            <text x={CX} y={CY + 30} textAnchor="middle" fill={selectedPlanet === 'Sun' ? '#f0c040' : '#a8a8b8'}
-              fontSize={selectedPlanet === 'Sun' ? '11' : '10'} fontFamily="Cinzel, serif" fontWeight={selectedPlanet === 'Sun' ? '700' : '400'}>
+            {hoveredPlanet === 'Sun' && selectedPlanet !== 'Sun' && (
+              <circle cx={CX} cy={CY} r="21" fill="none" stroke="#f0c040" strokeWidth="1" opacity="0.3" />
+            )}
+            <text x={CX} y={CY + 30} textAnchor="middle" fill={selectedPlanet === 'Sun' || hoveredPlanet === 'Sun' ? '#f0c040' : '#a8a8b8'}
+              fontSize={selectedPlanet === 'Sun' || hoveredPlanet === 'Sun' ? '11' : '10'} fontFamily="Cinzel, serif" fontWeight={selectedPlanet === 'Sun' || hoveredPlanet === 'Sun' ? '700' : '400'}>
               Sun
             </text>
           </g>
@@ -1484,89 +1488,7 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
           );
         })()}
 
-        {/* Planet nodes */}
-        {heliocentric ? (
-          <>
-            {HELIO_ORBITS.map(o => {
-              const angle = orbitAngles[o.planet] || 0;
-              const rad = (angle * Math.PI) / 180;
-              const px = CX + o.r * Math.cos(rad);
-              const py = CY + o.r * Math.sin(rad);
-              return (
-                <g key={o.planet}>
-                  <PlanetNode
-                    planet={o.planet}
-                    metal={o.planet === 'Earth' ? '' : ORBITS.find(x => x.planet === o.planet)?.metal || ''}
-                    cx={px}
-                    cy={py}
-                    selected={selectedPlanet === o.planet}
-                    onClick={() => onSelectPlanet(o.planet)}
-                    onMouseEnter={(e) => handleTooltipEnter('planet', o.planet, e)}
-                    onMouseLeave={handleTooltipLeave}
-                    smooth={false}
-                  />
-                  {/* Moon orbiting Earth */}
-                  {o.planet === 'Earth' && (() => {
-                    const moonAngle = orbitAngles['Moon-helio'] || 0;
-                    const mRad = (moonAngle * Math.PI) / 180;
-                    const mx = px + HELIO_MOON.r * Math.cos(mRad);
-                    const my = py + HELIO_MOON.r * Math.sin(mRad);
-                    return (
-                      <g>
-                        <circle cx={mx} cy={my} r="4"
-                          fill="#c8d8e8" fillOpacity="0.7"
-                          stroke="#c8d8e8" strokeWidth="0.5" />
-                        <text x={mx} y={my + 10} textAnchor="middle" fill="rgba(200,216,232,0.5)" fontSize="6" fontFamily="Cinzel, serif">
-                          Moon
-                        </text>
-                      </g>
-                    );
-                  })()}
-                </g>
-              );
-            })}
-          </>
-        ) : ORBITS.map(o => {
-          const angle = aligned ? ALIGN_ANGLE : liveAngles ? liveAngles[o.planet].svgAngle : orbitAngles[o.planet];
-          const rad = (angle * Math.PI) / 180;
-          const px = CX + o.r * Math.cos(rad);
-          const py = CY + o.r * Math.sin(rad);
-          return (
-            <g key={o.planet}>
-              <PlanetNode
-                planet={o.planet}
-                metal={o.metal}
-                cx={px}
-                cy={py}
-                selected={selectedPlanet === o.planet}
-                onClick={() => onSelectPlanet(o.planet)}
-                onMouseEnter={(e) => handleTooltipEnter('planet', o.planet, e)}
-                onMouseLeave={handleTooltipLeave}
-                moonPhase={o.planet === 'Moon' ? (
-                  !aligned && !livePositions
-                    ? ((90 - orbitAngles['Moon']) % 360 + 360) % 360
-                    : moonPhaseAngle
-                ) : undefined}
-                smooth={aligned || livePositions}
-              />
-              {liveAngles && (
-                <g style={{ transform: `translate(${px}px, ${py}px)`, transition: 'transform 0.8s ease-in-out' }}>
-                  <text
-                    x={0}
-                    y={-18}
-                    textAnchor="middle"
-                    fill="rgba(201, 169, 97, 0.8)"
-                    fontSize="8"
-                    fontFamily="Crimson Pro, serif"
-                  >
-                    {lonToSignLabel(liveAngles[o.planet].lon)}
-                  </text>
-                </g>
-              )}
-            </g>
-          );
-        })}
-
+        {/* North star layer — rendered before planets so planets receive clicks */}
         {starMapMode === 'north' && (
           <g className="star-layer star-layer-north" opacity={hoveredConstellation ? 0.15 : 1}>
             {starPositionsNorth.map((s, i) => (
@@ -1609,6 +1531,92 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
             ))}
           </g>
         )}
+
+        {/* Planet nodes — rendered last so they're on top for clicks */}
+        {heliocentric ? (
+          <>
+            {HELIO_ORBITS.map(o => {
+              const angle = orbitAngles[o.planet] || 0;
+              const rad = (angle * Math.PI) / 180;
+              const px = CX + o.r * Math.cos(rad);
+              const py = CY + o.r * Math.sin(rad);
+              return (
+                <g key={o.planet}>
+                  <PlanetNode
+                    planet={o.planet}
+                    metal={o.planet === 'Earth' ? '' : ORBITS.find(x => x.planet === o.planet)?.metal || ''}
+                    cx={px}
+                    cy={py}
+                    selected={selectedPlanet === o.planet}
+                    hovered={hoveredPlanet === o.planet}
+                    onClick={() => onSelectPlanet(o.planet)}
+                    onMouseEnter={(e) => handleTooltipEnter('planet', o.planet, e)}
+                    onMouseLeave={handleTooltipLeave}
+                    smooth={false}
+                  />
+                  {/* Moon orbiting Earth */}
+                  {o.planet === 'Earth' && (() => {
+                    const moonAngle = orbitAngles['Moon-helio'] || 0;
+                    const mRad = (moonAngle * Math.PI) / 180;
+                    const mx = px + HELIO_MOON.r * Math.cos(mRad);
+                    const my = py + HELIO_MOON.r * Math.sin(mRad);
+                    return (
+                      <g>
+                        <circle cx={mx} cy={my} r="4"
+                          fill="#c8d8e8" fillOpacity="0.7"
+                          stroke="#c8d8e8" strokeWidth="0.5" />
+                        <text x={mx} y={my + 10} textAnchor="middle" fill="rgba(200,216,232,0.5)" fontSize="6" fontFamily="Cinzel, serif">
+                          Moon
+                        </text>
+                      </g>
+                    );
+                  })()}
+                </g>
+              );
+            })}
+          </>
+        ) : ORBITS.map(o => {
+          const angle = aligned ? ALIGN_ANGLE : liveAngles ? liveAngles[o.planet].svgAngle : orbitAngles[o.planet];
+          const rad = (angle * Math.PI) / 180;
+          const px = CX + o.r * Math.cos(rad);
+          const py = CY + o.r * Math.sin(rad);
+          return (
+            <g key={o.planet}>
+              <PlanetNode
+                planet={o.planet}
+                metal={o.metal}
+                cx={px}
+                cy={py}
+                selected={selectedPlanet === o.planet}
+                hovered={hoveredPlanet === o.planet}
+                onClick={() => onSelectPlanet(o.planet)}
+                onMouseEnter={(e) => handleTooltipEnter('planet', o.planet, e)}
+                onMouseLeave={handleTooltipLeave}
+                moonPhase={o.planet === 'Moon' ? (
+                  !aligned && !livePositions
+                    ? ((90 - orbitAngles['Moon']) % 360 + 360) % 360
+                    : moonPhaseAngle
+                ) : undefined}
+                smooth={aligned || livePositions}
+              />
+              {liveAngles && (
+                <g style={{ transform: `translate(${px}px, ${py}px)`, transition: 'transform 0.8s ease-in-out' }}>
+                  <text
+                    x={0}
+                    y={-18}
+                    textAnchor="middle"
+                    fill="rgba(201, 169, 97, 0.8)"
+                    fontSize="8"
+                    fontFamily="Crimson Pro, serif"
+                  >
+                    {lonToSignLabel(liveAngles[o.planet].lon)}
+                  </text>
+                </g>
+              )}
+            </g>
+          );
+        })}
+
           </>
         )}
 

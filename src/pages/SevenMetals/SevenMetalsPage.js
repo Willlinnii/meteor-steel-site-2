@@ -392,11 +392,12 @@ export default function SevenMetalsPage() {
   const location = useLocation();
   const navigate = useNavigate();
   const [selectedPlanet, setSelectedPlanet] = useState('Sun');
+  const [hoveredPlanet, setHoveredPlanet] = useState(null);
   const [activeTab, setActiveTab] = useState('overview');
   const [activeCulture, setActiveCulture] = useState('Greek');
   const [selectedSign, setSelectedSign] = useState(null);
   const [selectedCardinal, setSelectedCardinal] = useState(null);
-  const [selectedEarth, setSelectedEarth] = useState('day');
+  const [selectedEarth, setSelectedEarth] = useState(() => location.pathname.endsWith('/calendar') ? null : 'day');
   const [devEntries, setDevEntries] = useState({});
   const [showCalendar, setShowCalendar] = useState(() => location.pathname.endsWith('/calendar'));
   const [selectedMonth, setSelectedMonth] = useState(() => location.pathname.endsWith('/calendar') ? MONTHS[new Date().getMonth()] : null);
@@ -551,6 +552,7 @@ export default function SevenMetalsPage() {
         <OrbitalDiagram
           tooltipData={tooltipData}
           selectedPlanet={selectedPlanet}
+          hoveredPlanet={hoveredPlanet}
           onSelectPlanet={(p) => { setSelectedPlanet(p); setSelectedSign(null); setSelectedCardinal(null); setSelectedEarth(null); setSelectedMonth(null); setVideoUrl(null); setPersonaChatOpen(null); if (chakraViewMode) setActiveTab('body'); }}
           selectedSign={selectedSign}
           onSelectSign={(sign) => { setSelectedSign(sign); setSelectedCardinal(null); setSelectedEarth(null); setSelectedMonth(null); setVideoUrl(null); setPersonaChatOpen(null); }}
@@ -733,7 +735,10 @@ export default function SevenMetalsPage() {
                   onClick={() => {
                     setSelectedPlanet(w.planet);
                     setSelectedMonth(null);
+                    setHoveredPlanet(null);
                   }}
+                  onMouseEnter={() => setHoveredPlanet(w.planet)}
+                  onMouseLeave={() => setHoveredPlanet(null)}
                   title={`${w.day} — ruled by ${w.planet}`}
                 >
                   {w.label}

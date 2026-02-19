@@ -167,9 +167,10 @@ function renderPlanetDetails(planet, r, moonPhase) {
   }
 }
 
-export default function PlanetNode({ planet, metal, cx, cy, selected, onClick, moonPhase, smooth, onMouseEnter, onMouseLeave }) {
+export default function PlanetNode({ planet, metal, cx, cy, selected, hovered, onClick, moonPhase, smooth, onMouseEnter, onMouseLeave }) {
   const color = PLANET_COLORS[planet] || '#aaa';
-  const r = selected ? 14 : 11;
+  const highlighted = selected || hovered;
+  const r = selected ? 14 : hovered ? 12 : 11;
 
   return (
     <g
@@ -179,38 +180,43 @@ export default function PlanetNode({ planet, metal, cx, cy, selected, onClick, m
       onMouseLeave={onMouseLeave}
       style={{ cursor: 'pointer', transform: `translate(${cx}px, ${cy}px)`, transition: smooth ? 'transform 0.8s ease-in-out' : 'none' }}
     >
+      {/* Larger invisible hit target for easier clicking/tapping */}
+      <circle cx={0} cy={0} r={24} fill="transparent" />
       {selected && (
         <circle cx={0} cy={0} r={r + 6} fill="none" stroke={color} strokeWidth="1" opacity="0.4">
           <animate attributeName="r" values={`${r + 4};${r + 8};${r + 4}`} dur="2s" repeatCount="indefinite" />
           <animate attributeName="opacity" values="0.4;0.15;0.4" dur="2s" repeatCount="indefinite" />
         </circle>
       )}
+      {hovered && !selected && (
+        <circle cx={0} cy={0} r={r + 5} fill="none" stroke={color} strokeWidth="1" opacity="0.3" />
+      )}
       {/* Sun rays render behind the base circle */}
       {planet === 'Sun' && renderPlanetDetails('Sun', r)}
       <circle
         cx={0} cy={0} r={r}
         fill={color}
-        fillOpacity={selected ? 0.9 : 0.7}
+        fillOpacity={highlighted ? 0.9 : 0.7}
         stroke={color}
-        strokeWidth={selected ? 2 : 1}
-        filter={selected ? `url(#glow-${planet})` : undefined}
+        strokeWidth={highlighted ? 2 : 1}
+        filter={highlighted ? `url(#glow-${planet})` : undefined}
       />
       {/* Planet surface details render on top */}
       {planet !== 'Sun' && renderPlanetDetails(planet, r, moonPhase)}
       <text
         x={0} y={r + 14}
         textAnchor="middle"
-        fill={selected ? color : '#a8a8b8'}
-        fontSize={selected ? '11' : '10'}
+        fill={highlighted ? color : '#a8a8b8'}
+        fontSize={highlighted ? '11' : '10'}
         fontFamily="Cinzel, serif"
-        fontWeight={selected ? '700' : '400'}
+        fontWeight={highlighted ? '700' : '400'}
       >
         {planet}
       </text>
       <text
         x={0} y={r + 26}
         textAnchor="middle"
-        fill={selected ? color : '#888'}
+        fill={highlighted ? color : '#888'}
         fontSize="8"
         fontFamily="Crimson Pro, serif"
         opacity="0.7"
