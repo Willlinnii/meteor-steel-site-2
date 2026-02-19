@@ -6,6 +6,7 @@ import TextBlock from '../../components/sevenMetals/TextBlock';
 import useWheelJourney from '../../hooks/useWheelJourney';
 import WheelJourneyPanel from '../../components/WheelJourneyPanel';
 import { useCoursework } from '../../coursework/CourseworkContext';
+import { useWritings } from '../../writings/WritingsContext';
 import './MonomythPage.css';
 
 import monomythProse from '../../data/monomyth.json';
@@ -468,6 +469,29 @@ export default function MonomythPage() {
 
   const journey = useWheelJourney('monomyth', MONOMYTH_STAGES);
   const { trackElement, trackTime, isElementCompleted, courseworkMode } = useCoursework();
+  const { notesData, saveNotes, loaded: writingsLoaded } = useWritings();
+
+  // Load dev entries from persisted notes
+  useEffect(() => {
+    if (writingsLoaded && notesData.entries) {
+      const relevant = {};
+      Object.entries(notesData.entries).forEach(([key, val]) => {
+        if (key.startsWith('monomyth-')) relevant[key] = val;
+      });
+      if (Object.keys(relevant).length > 0) setDevEntries(prev => ({ ...relevant, ...prev }));
+    }
+  }, [writingsLoaded]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Save dev entries on change
+  const prevDevEntries = useRef(devEntries);
+  useEffect(() => {
+    if (!writingsLoaded) return;
+    if (prevDevEntries.current === devEntries) return;
+    prevDevEntries.current = devEntries;
+    Object.entries(devEntries).forEach(([key, val]) => {
+      saveNotes(key, val);
+    });
+  }, [devEntries, writingsLoaded, saveNotes]);
 
   // Track page visit
   useEffect(() => {

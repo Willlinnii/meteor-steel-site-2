@@ -5,6 +5,7 @@ import useVoice, { SpeechRecognition } from '../../hooks/useVoice';
 import useYellowBrickRoad from '../../components/sevenMetals/useYellowBrickRoad';
 import challengeData from '../../data/yellowBrickRoad.json';
 import { useCoursework } from '../../coursework/CourseworkContext';
+import { useWritings } from '../../writings/WritingsContext';
 import './OuroborosJourneyPage.css';
 
 const { challenges } = challengeData;
@@ -255,6 +256,7 @@ export default function OuroborosJourneyPage() {
   const config = JOURNEY_CONFIG[journeyId] || JOURNEY_CONFIG.monomyth;
 
   const { trackElement, trackTime } = useCoursework();
+  const { addJourneySynthesis } = useWritings();
 
   /* ── Game mode state (non-cosmic only) ── */
   const [gameMode, setGameMode] = useState(null); // null | 'riddle' | 'story' | 'personal'
@@ -391,10 +393,14 @@ export default function OuroborosJourneyPage() {
       body: JSON.stringify({ mode: 'journey-synthesis', journeyId, gameMode, stageData }),
     })
       .then(r => r.json())
-      .then(data => { setSynthesizedStory(data.story || 'Atlas could not weave the story.'); })
+      .then(data => {
+        const story = data.story || 'Atlas could not weave the story.';
+        setSynthesizedStory(story);
+        if (data.story) addJourneySynthesis(journeyId, gameMode, story);
+      })
       .catch(() => { setSynthesizedStory('Something went wrong while weaving your story.'); })
       .finally(() => { setSynthesizing(false); });
-  }, [isComplete, isCosmic, gameMode, synthesizedStory, synthesizing, stages, journey.stopProgress, journeyId]);
+  }, [isComplete, isCosmic, gameMode, synthesizedStory, synthesizing, stages, journey.stopProgress, journeyId, addJourneySynthesis]);
 
   /* ── Handlers ── */
 

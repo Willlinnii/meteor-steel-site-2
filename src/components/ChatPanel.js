@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import useVoice, { SpeechRecognition } from '../hooks/useVoice';
 import { useCoursework } from '../coursework/CourseworkContext';
+import { useWritings } from '../writings/WritingsContext';
 
 function parseAtlasMessage(text) {
   const segments = [];
@@ -35,6 +36,24 @@ export default function ChatPanel() {
   const location = useLocation();
   const { voiceEnabled, recording, speaking, toggleVoice, startListening, stopListening, speak } = useVoice(setInput);
   const { trackElement, buildCourseSummary } = useCoursework();
+  const { getConversation, saveConversation, loaded: writingsLoaded } = useWritings();
+
+  // Load previous Atlas conversation on mount
+  useEffect(() => {
+    if (writingsLoaded) {
+      const prev = getConversation('atlas', null);
+      if (prev.length > 0) setMessages(prev);
+    }
+  }, [writingsLoaded]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Save conversation when messages change (debounced via context flush)
+  const prevMsgsRef = useRef(messages);
+  useEffect(() => {
+    if (!writingsLoaded || messages.length === 0) return;
+    if (prevMsgsRef.current === messages) return;
+    prevMsgsRef.current = messages;
+    saveConversation('atlas', null, messages);
+  }, [messages, writingsLoaded, saveConversation]);
 
   function getArea() {
     const path = location.pathname;

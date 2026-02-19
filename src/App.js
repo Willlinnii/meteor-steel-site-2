@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback, useRef, Suspense, lazy } from 
 import { Routes, Route, Link, useLocation, useSearchParams } from 'react-router-dom';
 import { useAuth } from './auth/AuthContext';
 import { CourseworkProvider, useCoursework } from './coursework/CourseworkContext';
+import { WritingsProvider, useWritings } from './writings/WritingsContext';
 import { ProfileProvider } from './profile/ProfileContext';
 import LoginPage from './auth/LoginPage';
 import './App.css';
@@ -31,6 +32,7 @@ const AtlasPage = lazy(() => import('./pages/Atlas/AtlasPage'));
 const MythSalonLibraryPage = lazy(() => import('./pages/MythSalonLibrary/MythSalonLibraryPage'));
 const ProfilePage = lazy(() => import('./pages/Profile/ProfilePage'));
 const StoryOfStoriesPage = lazy(() => import('./pages/StoryOfStories/StoryOfStoriesPage'));
+const TreasuresPage = lazy(() => import('./pages/Treasures/TreasuresPage'));
 
 const STAGES = [
   { id: 'golden-age', label: 'Golden Age' },
@@ -299,6 +301,32 @@ function MeteorSteelHome() {
 
   const journey = useWheelJourney('meteor-steel', STAGES);
   const { trackElement, trackTime, isElementCompleted, courseworkMode } = useCoursework();
+  const { notesData, saveNotes, loaded: writingsLoaded } = useWritings();
+
+  // Load dev entries from persisted notes on mount
+  useEffect(() => {
+    if (writingsLoaded && notesData.entries) {
+      const relevant = {};
+      Object.entries(notesData.entries).forEach(([key, val]) => {
+        // Home page keys don't have a prefix (stage keys like "golden-age-noting")
+        if (!key.startsWith('starlight-') && !key.startsWith('forge-') && !key.startsWith('monomyth-') && !key.startsWith('metals-')) {
+          relevant[key] = val;
+        }
+      });
+      if (Object.keys(relevant).length > 0) setDevEntries(prev => ({ ...relevant, ...prev }));
+    }
+  }, [writingsLoaded]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Save dev entries to writings context on change
+  const prevDevEntries = useRef(devEntries);
+  useEffect(() => {
+    if (!writingsLoaded) return;
+    if (prevDevEntries.current === devEntries) return;
+    prevDevEntries.current = devEntries;
+    Object.entries(devEntries).forEach(([key, val]) => {
+      saveNotes(key, val);
+    });
+  }, [devEntries, writingsLoaded, saveNotes]);
 
   // Page visit tracking
   useEffect(() => { trackElement('home.page.visited'); }, [trackElement]);
@@ -464,6 +492,29 @@ function FallenStarlightHome() {
   const [devEntries, setDevEntries] = useState({});
   const [audioPlaying, setAudioPlaying] = useState(false);
   const { trackElement, trackTime, isElementCompleted, courseworkMode } = useCoursework();
+  const { notesData, saveNotes, loaded: writingsLoaded } = useWritings();
+
+  // Load dev entries from persisted notes on mount
+  useEffect(() => {
+    if (writingsLoaded && notesData.entries) {
+      const relevant = {};
+      Object.entries(notesData.entries).forEach(([key, val]) => {
+        if (key.startsWith('starlight-')) relevant[key] = val;
+      });
+      if (Object.keys(relevant).length > 0) setDevEntries(prev => ({ ...relevant, ...prev }));
+    }
+  }, [writingsLoaded]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Save dev entries to writings context on change
+  const prevDevEntries = useRef(devEntries);
+  useEffect(() => {
+    if (!writingsLoaded) return;
+    if (prevDevEntries.current === devEntries) return;
+    prevDevEntries.current = devEntries;
+    Object.entries(devEntries).forEach(([key, val]) => {
+      saveNotes(key, val);
+    });
+  }, [devEntries, writingsLoaded, saveNotes]);
 
   // Page visit tracking
   useEffect(() => { trackElement('fallen-starlight.page.visited'); }, [trackElement]);
@@ -669,7 +720,32 @@ function StoryForgeHome() {
   const [generatedStory, setGeneratedStory] = useState({});
   const [generating, setGenerating] = useState(false);
   const [viewMode, setViewMode] = useState('write');
+  const [libraryExpanded, setLibraryExpanded] = useState(null);
   const { trackElement, trackTime, isElementCompleted, courseworkMode } = useCoursework();
+  const { forgeData, saveForge, getAllWritings, loaded: writingsLoaded } = useWritings();
+
+  // Load forge data from persisted writings on mount
+  useEffect(() => {
+    if (writingsLoaded && forgeData) {
+      if (forgeData.template) setTemplate(forgeData.template);
+      if (forgeData.entries && Object.keys(forgeData.entries).length > 0) {
+        setForgeEntries(prev => ({ ...forgeData.entries, ...prev }));
+      }
+      if (forgeData.stories && Object.keys(forgeData.stories).length > 0) {
+        setGeneratedStory(prev => ({ ...forgeData.stories, ...prev }));
+      }
+    }
+  }, [writingsLoaded]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Save forge data to writings context on change
+  const prevForgeState = useRef({ entries: forgeEntries, stories: generatedStory, template });
+  useEffect(() => {
+    if (!writingsLoaded) return;
+    const prev = prevForgeState.current;
+    if (prev.entries === forgeEntries && prev.stories === generatedStory && prev.template === template) return;
+    prevForgeState.current = { entries: forgeEntries, stories: generatedStory, template };
+    saveForge(forgeEntries, generatedStory, template);
+  }, [forgeEntries, generatedStory, template, writingsLoaded, saveForge]);
 
   // Page visit tracking
   useEffect(() => { trackElement('story-forge.page.visited'); }, [trackElement]);
@@ -819,6 +895,7 @@ function StoryForgeHome() {
               <div className="forge-view-toggle">
                 <button className={`dev-mode-btn ${viewMode === 'write' ? 'active' : ''}`} onClick={() => setViewMode('write')}>Write</button>
                 <button className={`dev-mode-btn ${viewMode === 'read' ? 'active' : ''}`} onClick={() => setViewMode('read')}>Read</button>
+                <button className={`dev-mode-btn ${viewMode === 'library' ? 'active' : ''}`} onClick={() => setViewMode('library')}>Library</button>
               </div>
 
               <div className="forge-progress">
@@ -862,6 +939,41 @@ function StoryForgeHome() {
                       <p>{generatedStory[s.id].substring(0, 150)}...</p>
                     </div>
                   ) : null)}
+                </div>
+              )}
+
+              {viewMode === 'library' && (
+                <div className="forge-library">
+                  {getAllWritings().length === 0 ? (
+                    <div className="empty-content">No writings saved yet. Explore the site, write in the forge, take journeys, and chat with Atlas to build your library.</div>
+                  ) : (
+                    getAllWritings().map((item, i) => (
+                      <div key={i} className={`forge-library-card${libraryExpanded === i ? ' expanded' : ''}`} onClick={() => setLibraryExpanded(libraryExpanded === i ? null : i)}>
+                        <div className="forge-library-card-header">
+                          <span className={`forge-library-source ${item.source}`}>{item.source}</span>
+                          <h4 className="forge-library-card-title">{item.title}</h4>
+                          {item.date && <span className="forge-library-date">{new Date(item.date).toLocaleDateString()}</span>}
+                        </div>
+                        {libraryExpanded === i ? (
+                          <div className="forge-library-card-body">
+                            {item.text ? (
+                              item.text.split('\n\n').map((p, j) => <p key={j}>{p}</p>)
+                            ) : item.messages ? (
+                              item.messages.slice(-20).map((m, j) => (
+                                <div key={j} className={`forge-library-msg ${m.role}`}>
+                                  <strong>{m.role === 'user' ? 'You' : 'Atlas'}:</strong> {m.content.substring(0, 500)}
+                                </div>
+                              ))
+                            ) : item.entries ? (
+                              item.entries.map((e, j) => <p key={j}>{e.text}</p>)
+                            ) : null}
+                          </div>
+                        ) : (
+                          <p className="forge-library-preview">{item.preview}</p>
+                        )}
+                      </div>
+                    ))
+                  )}
                 </div>
               )}
             </div>
@@ -959,6 +1071,7 @@ const NAV_ITEMS = [
   { path: 'https://www.thestoryatlas.com/my-courses/psychles/surface', label: 'Story Atlas', external: true },
   { path: '/games', label: 'Game Room' },
   { path: '/story-of-stories', label: 'Story of Stories' },
+  { path: '/treasures', label: 'Treasures' },
   { path: '/profile', label: 'Profile' },
 ];
 
@@ -1135,6 +1248,7 @@ function AppContent() {
         <Route path="/journey/:journeyId" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" />Loading Journey...</div>}><OuroborosJourneyPage /></Suspense>} />
         <Route path="/library" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><MythSalonLibraryPage /></Suspense>} />
         <Route path="/story-of-stories" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><StoryOfStoriesPage /></Suspense>} />
+        <Route path="/treasures" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><TreasuresPage /></Suspense>} />
         <Route path="/dragon/*" element={<RequireAdmin><Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" />Loading Admin...</div>}><AdminPage /></Suspense></RequireAdmin>} />
       </Routes>
       {!isAtlas && <SiteFooter />}
@@ -1160,11 +1274,13 @@ function App() {
 
   return (
     <CourseworkProvider>
-      <ProfileProvider>
-        <Routes>
-          <Route path="*" element={<AppContent />} />
-        </Routes>
-      </ProfileProvider>
+      <WritingsProvider>
+        <ProfileProvider>
+          <Routes>
+            <Route path="*" element={<AppContent />} />
+          </Routes>
+        </ProfileProvider>
+      </WritingsProvider>
     </CourseworkProvider>
   );
 }

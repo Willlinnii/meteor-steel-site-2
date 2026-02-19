@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom';
 import useVoice, { SpeechRecognition } from '../../hooks/useVoice';
 import { useCoursework } from '../../coursework/CourseworkContext';
+import { useWritings } from '../../writings/WritingsContext';
 import './AtlasPage.css';
 
 function parseAtlasMessage(text) {
@@ -62,6 +63,45 @@ export default function AtlasPage() {
   const navigate = useNavigate();
   const { voiceEnabled, recording, speaking, toggleVoice, startListening, stopListening, speak } = useVoice(setInput);
   const { trackElement, trackTime, buildCourseSummary } = useCoursework();
+  const { getConversation, saveConversation, loaded: writingsLoaded } = useWritings();
+
+  // Load per-voice chat histories from persisted writings
+  useEffect(() => {
+    if (!writingsLoaded) return;
+    const loaded = {};
+    // Load atlas conversation
+    const atlasConv = getConversation('atlas', null);
+    if (atlasConv.length > 0) loaded['atlas'] = atlasConv;
+    // Load persona conversations
+    VOICES.forEach(v => {
+      if (v.id === 'atlas') return;
+      const key = v.name || v.id;
+      const conv = getConversation('persona', key);
+      if (conv.length > 0) {
+        loaded[v.id] = conv;
+        greetingSent.current[v.id] = true; // Don't re-send greeting for loaded convos
+      }
+    });
+    if (Object.keys(loaded).length > 0) setChatHistories(prev => ({ ...loaded, ...prev }));
+  }, [writingsLoaded]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Save chat histories on change (debounced via context flush)
+  const prevHistories = useRef(chatHistories);
+  useEffect(() => {
+    if (!writingsLoaded) return;
+    if (prevHistories.current === chatHistories) return;
+    prevHistories.current = chatHistories;
+    Object.entries(chatHistories).forEach(([voiceId, msgs]) => {
+      if (!msgs || msgs.length === 0) return;
+      if (voiceId === 'atlas') {
+        saveConversation('atlas', null, msgs);
+      } else {
+        const voice = VOICES.find(v => v.id === voiceId);
+        const key = voice?.name || voiceId;
+        saveConversation('persona', key, msgs);
+      }
+    });
+  }, [chatHistories, writingsLoaded, saveConversation]);
 
   // Page visit tracking
   useEffect(() => { trackElement('atlas.page.visited'); }, [trackElement]);

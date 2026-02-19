@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useProfile } from './ProfileContext';
+import { useWritings } from '../writings/WritingsContext';
 import useVoice, { SpeechRecognition } from '../hooks/useVoice';
 
 export default function ProfileChat({ onComplete, isUpdate }) {
@@ -11,6 +12,25 @@ export default function ProfileChat({ onComplete, isUpdate }) {
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
   const { voiceEnabled, recording, speaking, toggleVoice, startListening, stopListening, speak } = useVoice(setInput);
+  const { getConversation, saveConversation, loaded: writingsLoaded } = useWritings();
+
+  // Load previous profile conversation
+  useEffect(() => {
+    if (writingsLoaded) {
+      const prev = getConversation('profile', null);
+      if (prev.length > 0) setMessages(prev);
+    }
+  }, [writingsLoaded]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Save on message changes
+  const prevMsgsRef = useRef(messages);
+  useEffect(() => {
+    if (!writingsLoaded || messages.length === 0) return;
+    if (prevMsgsRef.current === messages) return;
+    prevMsgsRef.current = messages;
+    // Strip hidden flag for storage
+    saveConversation('profile', null, messages.map(m => ({ role: m.role, content: m.content })));
+  }, [messages, writingsLoaded, saveConversation]);
 
   const visibleMessageCount = messages.filter(m => !m.hidden).length;
 

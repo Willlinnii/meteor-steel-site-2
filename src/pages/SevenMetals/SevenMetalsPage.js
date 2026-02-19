@@ -27,6 +27,7 @@ import dayNightData from '../../data/dayNight.json';
 import useYellowBrickRoad from '../../components/sevenMetals/useYellowBrickRoad';
 import YellowBrickRoadPanel from '../../components/sevenMetals/YellowBrickRoadPanel';
 import { useCoursework } from '../../coursework/CourseworkContext';
+import { useWritings } from '../../writings/WritingsContext';
 
 const MONTHS = ['January','February','March','April','May','June',
   'July','August','September','October','November','December'];
@@ -414,6 +415,29 @@ export default function SevenMetalsPage() {
 
   const [ybrAutoStart, setYbrAutoStart] = useState(false);
   const { trackElement, trackTime, isElementCompleted, courseworkMode } = useCoursework();
+  const { notesData, saveNotes, loaded: writingsLoaded } = useWritings();
+
+  // Load dev entries from persisted notes
+  useEffect(() => {
+    if (writingsLoaded && notesData.entries) {
+      const relevant = {};
+      Object.entries(notesData.entries).forEach(([key, val]) => {
+        if (key.startsWith('metals-')) relevant[key] = val;
+      });
+      if (Object.keys(relevant).length > 0) setDevEntries(prev => ({ ...relevant, ...prev }));
+    }
+  }, [writingsLoaded]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Save dev entries on change
+  const prevDevEntries = useRef(devEntries);
+  useEffect(() => {
+    if (!writingsLoaded) return;
+    if (prevDevEntries.current === devEntries) return;
+    prevDevEntries.current = devEntries;
+    Object.entries(devEntries).forEach(([key, val]) => {
+      saveNotes(key, val);
+    });
+  }, [devEntries, writingsLoaded, saveNotes]);
 
   // Page visit tracking
   useEffect(() => { trackElement('metals.page.visited'); }, [trackElement]);

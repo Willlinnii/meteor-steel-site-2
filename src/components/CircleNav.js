@@ -1,7 +1,8 @@
 import React, { useRef, useEffect, useCallback, useState } from 'react';
 
 function getStageAngles(stages, clockwise) {
-  const step = clockwise ? 45 : -45;
+  const stepSize = 360 / Math.max(stages.length, 1);
+  const step = clockwise ? stepSize : -stepSize;
   return stages.map((s, i) => {
     const angle = -90 + step * i;
     const tangent = angle + 90;
@@ -166,7 +167,8 @@ export default function CircleNav({ stages, currentStage, onSelectStage, clockwi
             const m = modelOverlay;
             const r = 28;
             const mr = 1.8;
-            const step = clockwise ? 45 : -45;
+            const stepSize = 360 / Math.max(stages.length, 1);
+            const step = clockwise ? stepSize : -stepSize;
             const isLunar = m.id === 'lunar-month';
             return (
               <g className="model-overlay-ring">
@@ -232,7 +234,8 @@ export default function CircleNav({ stages, currentStage, onSelectStage, clockwi
             );
           })()}
           {(ybrActive || ybrAnimStage >= 0) && (() => {
-            const step = clockwise ? 45 : -45;
+            const stepSize = 360 / Math.max(stages.length, 1);
+            const step = clockwise ? stepSize : -stepSize;
             const r = 42;
             const isAnim = ybrAnimStage >= 0;
             const points = (ybrStages || stages).map((s, i) => {
@@ -327,7 +330,8 @@ export default function CircleNav({ stages, currentStage, onSelectStage, clockwi
         {modelOverlay && !listId && (() => {
           const m = modelOverlay;
           const r = 33;
-          const step = clockwise ? 45 : -45;
+          const stepSize = 360 / Math.max(stages.length, 1);
+          const step = clockwise ? stepSize : -stepSize;
           return m.stages.map((label, i) => {
             if (!label) return null;
             const angle = -90 + step * i;

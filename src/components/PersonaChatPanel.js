@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import useVoice, { SpeechRecognition } from '../hooks/useVoice';
 import { useCoursework } from '../coursework/CourseworkContext';
+import { useWritings } from '../writings/WritingsContext';
 
 function parseAtlasMessage(text) {
   const segments = [];
@@ -31,6 +32,18 @@ export default function PersonaChatPanel({ entityType, entityName, entityLabel, 
   const location = useLocation();
   const { voiceEnabled, recording, speaking, toggleVoice, startListening, stopListening, speak } = useVoice(setInput);
   const { buildCourseSummary } = useCoursework();
+  const { saveConversation } = useWritings();
+
+  // Save conversation on unmount
+  const messagesRef = useRef(messages);
+  useEffect(() => { messagesRef.current = messages; }, [messages]);
+  useEffect(() => {
+    return () => {
+      if (messagesRef.current.length > 0) {
+        saveConversation('persona', entityName, messagesRef.current);
+      }
+    };
+  }, [entityName, saveConversation]);
 
   // Auto-scroll on new messages
   useEffect(() => {
