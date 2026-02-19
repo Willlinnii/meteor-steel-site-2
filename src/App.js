@@ -979,6 +979,35 @@ function RequireAdmin({ children }) {
   return children;
 }
 
+function AppContent() {
+  const location = useLocation();
+  const isAtlas = location.pathname === '/atlas';
+
+  return (
+    <div className="app">
+      <SiteHeader />
+      <SiteNav />
+      <Routes>
+        <Route path="/" element={<MeteorSteelHome />} />
+        <Route path="/metals/vr" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" />Loading 3D...</div>}><SevenMetalsVRPage /></Suspense>} />
+        <Route path="/metals/*" element={<SevenMetalsPage />} />
+        <Route path="/fallen-starlight" element={<FallenStarlightHome />} />
+        <Route path="/story-forge" element={<StoryForgeHome />} />
+        <Route path="/monomyth" element={<MonomythPage />} />
+        <Route path="/mythology-channel" element={<MythologyChannelPage />} />
+        <Route path="/games/*" element={<GamesPage />} />
+        <Route path="/mythology-channel/:showId" element={<MythologyChannelPage />} />
+        <Route path="/mythosophia" element={<MythosophiaPage />} />
+        <Route path="/atlas" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><AtlasPage /></Suspense>} />
+        <Route path="/journey/:journeyId" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" />Loading Journey...</div>}><OuroborosJourneyPage /></Suspense>} />
+        <Route path="/dragon/*" element={<RequireAdmin><Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" />Loading Admin...</div>}><AdminPage /></Suspense></RequireAdmin>} />
+      </Routes>
+      {!isAtlas && <SiteFooter />}
+      {!isAtlas && <ChatPanel />}
+    </div>
+  );
+}
+
 function App() {
   const { user, loading } = useAuth();
 
@@ -996,29 +1025,7 @@ function App() {
 
   return (
     <Routes>
-      <Route path="*" element={
-        <div className="app">
-          <SiteHeader />
-          <SiteNav />
-          <Routes>
-            <Route path="/" element={<MeteorSteelHome />} />
-            <Route path="/metals/vr" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" />Loading 3D...</div>}><SevenMetalsVRPage /></Suspense>} />
-            <Route path="/metals/*" element={<SevenMetalsPage />} />
-            <Route path="/fallen-starlight" element={<FallenStarlightHome />} />
-            <Route path="/story-forge" element={<StoryForgeHome />} />
-            <Route path="/monomyth" element={<MonomythPage />} />
-            <Route path="/mythology-channel" element={<MythologyChannelPage />} />
-            <Route path="/games/*" element={<GamesPage />} />
-            <Route path="/mythology-channel/:showId" element={<MythologyChannelPage />} />
-            <Route path="/mythosophia" element={<MythosophiaPage />} />
-            <Route path="/atlas" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><AtlasPage /></Suspense>} />
-            <Route path="/journey/:journeyId" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" />Loading Journey...</div>}><OuroborosJourneyPage /></Suspense>} />
-            <Route path="/dragon/*" element={<RequireAdmin><Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" />Loading Admin...</div>}><AdminPage /></Suspense></RequireAdmin>} />
-          </Routes>
-          <SiteFooter />
-          <ChatPanel />
-        </div>
-      } />
+      <Route path="*" element={<AppContent />} />
     </Routes>
   );
 }

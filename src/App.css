@@ -98,6 +98,18 @@ body {
   color: var(--accent-ember);
 }
 
+.site-footer-copyright {
+  margin-top: 20px;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  opacity: 0.6;
+  line-height: 1.6;
+}
+
+.site-footer-copyright p {
+  margin: 0;
+}
+
 /* ===== SITE HEADER ===== */
 .site-header {
   position: fixed;

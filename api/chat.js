@@ -539,6 +539,19 @@ function compactGameBook() {
 
 const VALID_AREAS = ['celestial-clocks', 'meteor-steel', 'fallen-starlight', 'story-forge', 'mythology-channel', 'games'];
 
+function detectAreaFromMessage(messages) {
+  const last = [...messages].reverse().find(m => m.role === 'user');
+  if (!last) return null;
+  const t = String(last.content).toLowerCase();
+  if (/zodiac|planet|metal|chakra|astrology|natal|horoscope|seven metals|hebrew|kabbal|sephir|medicine wheel|\\b(sun|moon|mercury|venus|mars|jupiter|saturn)\\b|\\b(aries|taurus|gemini|cancer|leo|virgo|libra|scorpio|sagittarius|capricorn|aquarius|pisces)\\b|equinox|solstice/.test(t)) return 'celestial-clocks';
+  if (/monomyth|hero.?s? journey|golden age|falling star|meteor steel|forge|quench|campbell|vogler|snyder/.test(t)) return 'meteor-steel';
+  if (/fallen starlight|\\bjaq\\b|revelation/.test(t)) return 'fallen-starlight';
+  if (/story forge|narrative|screenplay|story structure|writing craft/.test(t)) return 'story-forge';
+  if (/mythology channel|episode|myths tv|myth salon/.test(t)) return 'mythology-channel';
+  if (/board game|senet|pachisi|mehen|snakes.?ladders|game of ur|mythouse game/.test(t)) return 'games';
+  return null;
+}
+
 function getAreaKnowledge(area) {
   switch (area) {
     case 'celestial-clocks':
@@ -1277,8 +1290,8 @@ ${stageBlock}`;
     return res.status(400).json({ error: 'Messages array is required.' });
   }
 
-  // Validate area
-  const validArea = area && VALID_AREAS.includes(area) ? area : null;
+  // Validate area (area: 'auto' triggers keyword detection from message content)
+  const validArea = area === 'auto' ? detectAreaFromMessage(messages) : (area && VALID_AREAS.includes(area) ? area : null);
 
   // Validate: cap at 20 messages, 4000 chars each
   // Anthropic requires alternating user/assistant roles; merge consecutive same-role messages
