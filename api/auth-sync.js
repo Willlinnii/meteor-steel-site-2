@@ -1,17 +1,34 @@
 const admin = require('firebase-admin');
 
-if (!admin.apps.length) {
-  const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY || '{}');
-  admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
-  });
-}
+let initialized = false;
 
-const db = admin.firestore();
+function ensureInit() {
+  if (initialized || admin.apps.length) {
+    initialized = true;
+    return true;
+  }
+  try {
+    const raw = process.env.FIREBASE_SERVICE_ACCOUNT_KEY;
+    if (!raw || raw === '{}') return false;
+    const serviceAccount = JSON.parse(raw);
+    admin.initializeApp({
+      credential: admin.credential.cert(serviceAccount),
+    });
+    initialized = true;
+    return true;
+  } catch (err) {
+    console.error('Firebase Admin init failed:', err.message);
+    return false;
+  }
+}
 
 module.exports = async (req, res) => {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
+  }
+
+  if (!ensureInit()) {
+    return res.status(500).json({ error: 'Firebase Admin not configured' });
   }
 
   const { token } = req.body || {};
@@ -20,6 +37,7 @@ module.exports = async (req, res) => {
   }
 
   try {
+    const db = admin.firestore();
     const decoded = await admin.auth().verifyIdToken(token);
     const { uid, email, name, firebase } = decoded;
     const provider = firebase?.sign_in_provider || 'unknown';
