@@ -1,6 +1,8 @@
-import React, { useState, useEffect, useCallback, Suspense, lazy } from 'react';
+import React, { useState, useEffect, useCallback, useRef, Suspense, lazy } from 'react';
 import { Routes, Route, Link, useLocation, useSearchParams } from 'react-router-dom';
 import { useAuth } from './auth/AuthContext';
+import { CourseworkProvider, useCoursework } from './coursework/CourseworkContext';
+import { ProfileProvider } from './profile/ProfileContext';
 import LoginPage from './auth/LoginPage';
 import './App.css';
 import ChatPanel from './components/ChatPanel';
@@ -27,6 +29,8 @@ const AdminPage = lazy(() => import('./pages/Admin/AdminPage'));
 const OuroborosJourneyPage = lazy(() => import('./pages/OuroborosJourney/OuroborosJourneyPage'));
 const AtlasPage = lazy(() => import('./pages/Atlas/AtlasPage'));
 const MythSalonLibraryPage = lazy(() => import('./pages/MythSalonLibrary/MythSalonLibraryPage'));
+const ProfilePage = lazy(() => import('./pages/Profile/ProfilePage'));
+const StoryOfStoriesPage = lazy(() => import('./pages/StoryOfStories/StoryOfStoriesPage'));
 
 const STAGES = [
   { id: 'golden-age', label: 'Golden Age' },
@@ -294,25 +298,58 @@ function MeteorSteelHome() {
   const [ybrAutoStart, setYbrAutoStart] = useState(false);
 
   const journey = useWheelJourney('meteor-steel', STAGES);
+  const { trackElement, trackTime, isElementCompleted, courseworkMode } = useCoursework();
+
+  // Page visit tracking
+  useEffect(() => { trackElement('home.page.visited'); }, [trackElement]);
+
+  // Time tracking per stage
+  const timeRef = useRef({ stage: currentStage, start: Date.now() });
+  useEffect(() => {
+    const prev = timeRef.current;
+    const elapsed = Math.round((Date.now() - prev.start) / 1000);
+    if (elapsed > 0 && prev.stage !== 'overview') {
+      trackTime(`home.stage.${prev.stage}.time`, elapsed);
+    }
+    timeRef.current = { stage: currentStage, start: Date.now() };
+    return () => {
+      const cur = timeRef.current;
+      const secs = Math.round((Date.now() - cur.start) / 1000);
+      if (secs > 0 && cur.stage !== 'overview') {
+        trackTime(`home.stage.${cur.stage}.time`, secs);
+      }
+    };
+  }, [currentStage, trackTime]);
+
+  // Meteor shower on page open
+  useEffect(() => {
+    const t = setTimeout(() => {
+      setShowMeteors(false);
+      requestAnimationFrame(() => setShowMeteors(true));
+    }, 400);
+    return () => clearTimeout(t);
+  }, []);
 
   const handleYBRToggle = useCallback(() => {
     if (journey.active) {
       journey.exitGame();
     } else {
       journey.startGame();
+      trackElement('home.ybr.started');
     }
-  }, [journey]);
+  }, [journey, trackElement]);
 
   const handleSelectStage = useCallback((stage) => {
     setCurrentStage(stage);
     setVideoUrl(null);
+    if (stage !== 'overview') trackElement(`home.stage.${stage}`);
     if (stage === 'falling-star') {
       setShowMeteors(false);
       requestAnimationFrame(() => setShowMeteors(true));
     } else {
       setShowMeteors(false);
     }
-  }, []);
+  }, [trackElement]);
 
   // When journey advances to a new stage, auto-select it on the wheel
   useEffect(() => {
@@ -337,7 +374,8 @@ function MeteorSteelHome() {
 
   const handlePlayVideo = useCallback((url) => {
     setVideoUrl(url);
-  }, []);
+    trackElement(`home.video.${currentStage}`);
+  }, [trackElement, currentStage]);
 
   const currentLabel = currentStage === 'overview'
     ? null
@@ -360,6 +398,7 @@ function MeteorSteelHome() {
         ybrStages={STAGES}
         onToggleYBR={handleYBRToggle}
         ybrAutoStart={ybrAutoStart}
+        getStageClass={courseworkMode ? (id) => isElementCompleted(`home.stage.${id}`) ? 'cw-completed' : 'cw-incomplete' : undefined}
       />
 
       {currentStage !== 'overview' && currentStage !== 'bio' && (
@@ -424,16 +463,39 @@ function FallenStarlightHome() {
   const [showMeteors, setShowMeteors] = useState(false);
   const [devEntries, setDevEntries] = useState({});
   const [audioPlaying, setAudioPlaying] = useState(false);
+  const { trackElement, trackTime, isElementCompleted, courseworkMode } = useCoursework();
+
+  // Page visit tracking
+  useEffect(() => { trackElement('fallen-starlight.page.visited'); }, [trackElement]);
+
+  // Time tracking per chapter
+  const timeRef = useRef({ stage: currentStage, start: Date.now() });
+  useEffect(() => {
+    const prev = timeRef.current;
+    const elapsed = Math.round((Date.now() - prev.start) / 1000);
+    if (elapsed > 0 && prev.stage !== 'overview' && prev.stage !== 'bio') {
+      trackTime(`fallen-starlight.chapter.${prev.stage}.time`, elapsed);
+    }
+    timeRef.current = { stage: currentStage, start: Date.now() };
+    return () => {
+      const cur = timeRef.current;
+      const secs = Math.round((Date.now() - cur.start) / 1000);
+      if (secs > 0 && cur.stage !== 'overview' && cur.stage !== 'bio') {
+        trackTime(`fallen-starlight.chapter.${cur.stage}.time`, secs);
+      }
+    };
+  }, [currentStage, trackTime]);
 
   const handleSelectStage = useCallback((stage) => {
     setCurrentStage(stage);
+    if (stage !== 'overview' && stage !== 'bio') trackElement(`fallen-starlight.chapter.${stage}`);
     if (stage === 'falling-star') {
       setShowMeteors(false);
       requestAnimationFrame(() => setShowMeteors(true));
     } else {
       setShowMeteors(false);
     }
-  }, []);
+  }, [trackElement]);
 
   // Deep link from Atlas navigation
   useEffect(() => {
@@ -467,6 +529,7 @@ function FallenStarlightHome() {
         onSelectStage={handleSelectStage}
         clockwise={clockwise}
         onToggleDirection={() => setClockwise(!clockwise)}
+        getStageClass={courseworkMode ? (id) => isElementCompleted(`fallen-starlight.chapter.${id}`) ? 'cw-completed' : 'cw-incomplete' : undefined}
       />
 
       {currentLabel && (
@@ -524,7 +587,7 @@ function FallenStarlightHome() {
 
       <button
         className={`audio-play-toggle${audioPlaying ? ' active' : ''}`}
-        onClick={() => setAudioPlaying(!audioPlaying)}
+        onClick={() => { if (!audioPlaying) trackElement('fallen-starlight.audio.played'); setAudioPlaying(!audioPlaying); }}
         title={audioPlaying ? 'Pause audio' : 'Play Revelation of Fallen Starlight'}
       >
         {audioPlaying ? '\u25A0' : '\u25B6'}
@@ -606,16 +669,39 @@ function StoryForgeHome() {
   const [generatedStory, setGeneratedStory] = useState({});
   const [generating, setGenerating] = useState(false);
   const [viewMode, setViewMode] = useState('write');
+  const { trackElement, trackTime, isElementCompleted, courseworkMode } = useCoursework();
+
+  // Page visit tracking
+  useEffect(() => { trackElement('story-forge.page.visited'); }, [trackElement]);
+
+  // Time tracking per stage
+  const timeRef = useRef({ stage: currentStage, start: Date.now() });
+  useEffect(() => {
+    const prev = timeRef.current;
+    const elapsed = Math.round((Date.now() - prev.start) / 1000);
+    if (elapsed > 0 && prev.stage !== 'overview' && prev.stage !== 'bio') {
+      trackTime(`story-forge.stage.${prev.stage}.time`, elapsed);
+    }
+    timeRef.current = { stage: currentStage, start: Date.now() };
+    return () => {
+      const cur = timeRef.current;
+      const secs = Math.round((Date.now() - cur.start) / 1000);
+      if (secs > 0 && cur.stage !== 'overview' && cur.stage !== 'bio') {
+        trackTime(`story-forge.stage.${cur.stage}.time`, secs);
+      }
+    };
+  }, [currentStage, trackTime]);
 
   const handleSelectStage = useCallback((stage) => {
     setCurrentStage(stage);
+    if (stage !== 'overview' && stage !== 'bio') trackElement(`story-forge.stage.${stage}`);
     if (stage === 'falling-star') {
       setShowMeteors(false);
       requestAnimationFrame(() => setShowMeteors(true));
     } else {
       setShowMeteors(false);
     }
-  }, []);
+  }, [trackElement]);
 
   const stagesWithContent = STAGES.filter(s => {
     const modes = ['noting', 'reflecting', 'creating'];
@@ -637,6 +723,7 @@ function StoryForgeHome() {
 
   const handleGenerate = async (targetStage) => {
     setGenerating(true);
+    trackElement(`story-forge.generate.${template}${targetStage ? `.${targetStage}` : ''}`);
     try {
       const templateLabel = TEMPLATE_OPTIONS.find(t => t.id === template)?.label || template;
       const stageContent = STAGES.map(s => {
@@ -683,6 +770,7 @@ function StoryForgeHome() {
           centerLine2=""
           centerLine3="Forge"
           showAuthor={false}
+          getStageClass={courseworkMode ? (id) => isElementCompleted(`story-forge.stage.${id}`) ? 'cw-completed' : 'cw-incomplete' : undefined}
         />
         <div className="container">
           <div className="static-overview">
@@ -692,7 +780,7 @@ function StoryForgeHome() {
           </div>
           <div className="forge-template-grid">
             {TEMPLATE_OPTIONS.map(t => (
-              <button key={t.id} className="forge-template-btn" onClick={() => setTemplate(t.id)}>
+              <button key={t.id} className={`forge-template-btn${courseworkMode ? (isElementCompleted(`story-forge.template.${t.id}`) ? ' cw-completed' : ' cw-incomplete') : ''}`} onClick={() => { trackElement(`story-forge.template.${t.id}`); setTemplate(t.id); }}>
                 <span className="forge-template-label">{t.label}</span>
                 <span className="forge-template-desc">{t.desc}</span>
               </button>
@@ -718,6 +806,7 @@ function StoryForgeHome() {
         centerLine2=""
         centerLine3="Forge"
         showAuthor={false}
+        getStageClass={courseworkMode ? (id) => isElementCompleted(`story-forge.stage.${id}`) ? 'cw-completed' : 'cw-incomplete' : undefined}
       />
 
       {currentLabel && <h2 className="stage-heading">{currentLabel}</h2>}
@@ -869,12 +958,24 @@ const NAV_ITEMS = [
   { path: '/story-forge', label: 'Story Forge' },
   { path: 'https://www.thestoryatlas.com/my-courses/psychles/surface', label: 'Story Atlas', external: true },
   { path: '/games', label: 'Game Room' },
+  { path: '/profile', label: 'Profile' },
+];
+
+const HIDDEN_NAV_ITEMS = [
+  { path: '/story-of-stories', label: 'Story of Stories' },
 ];
 
 function SiteNav() {
   const location = useLocation();
   const [open, setOpen] = useState(false);
-  const current = NAV_ITEMS.find(n => !n.external && n.path === location.pathname) || NAV_ITEMS[0];
+
+  // Include hidden nav items only when we're currently on that page
+  const visibleItems = [
+    ...NAV_ITEMS,
+    ...HIDDEN_NAV_ITEMS.filter(h => location.pathname === h.path),
+  ];
+
+  const current = visibleItems.find(n => !n.external && n.path === location.pathname) || NAV_ITEMS[0];
 
   return (
     <nav className="site-nav">
@@ -883,7 +984,7 @@ function SiteNav() {
       </button>
       {open && (
         <div className="site-nav-dropdown">
-          {NAV_ITEMS.map(item => item.external ? (
+          {visibleItems.map(item => item.external ? (
             <a
               key={item.path}
               className="site-nav-option"
@@ -912,11 +1013,19 @@ function SiteNav() {
 
 function SiteHeader() {
   const { user, signOut } = useAuth();
+  const { courseworkMode, toggleCourseworkMode } = useCoursework();
   return (
     <header className="site-header">
       <Link to="/metals/calendar" className="site-header-logo">Mythouse</Link>
       {user && (
         <div className="site-header-user">
+          <button
+            className={`coursework-toggle${courseworkMode ? ' active' : ''}`}
+            onClick={toggleCourseworkMode}
+          >
+            {courseworkMode ? 'Coursework On' : 'Coursework'}
+          </button>
+          <Link to="/profile" className="site-header-profile">Profile</Link>
           <button className="site-header-signout" onClick={signOut}>Sign Out</button>
         </div>
       )}
@@ -980,14 +1089,36 @@ function RequireAdmin({ children }) {
   return children;
 }
 
+function CourseCompletionPopup() {
+  const { newlyCompleted, dismissCompletion } = useCoursework();
+  if (!newlyCompleted) return null;
+  return (
+    <div className="course-completion-overlay" onClick={dismissCompletion}>
+      <div className="course-completion-panel" onClick={e => e.stopPropagation()}>
+        <span className="course-completion-star">{'\u2B50'}</span>
+        <h2 className="course-completion-title">Congratulations!</h2>
+        <p className="course-completion-name">
+          You have completed all the requirements of <strong>{newlyCompleted.name}</strong>.
+        </p>
+        <p className="course-completion-cert">
+          Your certificate is now available in your profile page.
+        </p>
+        <button className="course-completion-btn" onClick={dismissCompletion}>Continue</button>
+      </div>
+    </div>
+  );
+}
+
 function AppContent() {
   const location = useLocation();
   const isAtlas = location.pathname === '/atlas';
+  const { courseworkMode } = useCoursework();
 
   return (
-    <div className="app">
+    <div className={`app${courseworkMode ? ' cw-mode' : ''}`}>
       <SiteHeader />
       <SiteNav />
+      <CourseCompletionPopup />
       <Routes>
         <Route path="/" element={<MeteorSteelHome />} />
         <Route path="/metals/vr" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" />Loading 3D...</div>}><SevenMetalsVRPage /></Suspense>} />
@@ -999,9 +1130,11 @@ function AppContent() {
         <Route path="/games/*" element={<GamesPage />} />
         <Route path="/mythology-channel/:showId" element={<MythologyChannelPage />} />
         <Route path="/mythosophia" element={<MythosophiaPage />} />
+        <Route path="/profile" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><ProfilePage /></Suspense>} />
         <Route path="/atlas" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><AtlasPage /></Suspense>} />
         <Route path="/journey/:journeyId" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" />Loading Journey...</div>}><OuroborosJourneyPage /></Suspense>} />
         <Route path="/library" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><MythSalonLibraryPage /></Suspense>} />
+        <Route path="/story-of-stories" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><StoryOfStoriesPage /></Suspense>} />
         <Route path="/dragon/*" element={<RequireAdmin><Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" />Loading Admin...</div>}><AdminPage /></Suspense></RequireAdmin>} />
       </Routes>
       {!isAtlas && <SiteFooter />}
@@ -1026,9 +1159,13 @@ function App() {
   }
 
   return (
-    <Routes>
-      <Route path="*" element={<AppContent />} />
-    </Routes>
+    <CourseworkProvider>
+      <ProfileProvider>
+        <Routes>
+          <Route path="*" element={<AppContent />} />
+        </Routes>
+      </ProfileProvider>
+    </CourseworkProvider>
   );
 }
 

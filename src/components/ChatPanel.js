@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import useVoice, { SpeechRecognition } from '../hooks/useVoice';
+import { useCoursework } from '../coursework/CourseworkContext';
 
 function parseAtlasMessage(text) {
   const segments = [];
@@ -33,6 +34,7 @@ export default function ChatPanel() {
   const navigate = useNavigate();
   const location = useLocation();
   const { voiceEnabled, recording, speaking, toggleVoice, startListening, stopListening, speak } = useVoice(setInput);
+  const { trackElement, buildCourseSummary } = useCoursework();
 
   function getArea() {
     const path = location.pathname;
@@ -88,11 +90,17 @@ export default function ChatPanel() {
     setInput('');
     setLoading(true);
 
+    // Track atlas message by page area
+    const area = getArea();
+    if (area) trackElement(`atlas.messages.${area}`);
+    trackElement('atlas.messages.total');
+
     try {
+      const courseSummary = buildCourseSummary(location.pathname);
       const res = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: updated, area: getArea() }),
+        body: JSON.stringify({ messages: updated, area, courseSummary }),
       });
 
       const data = await res.json();

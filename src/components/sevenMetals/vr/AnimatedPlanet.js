@@ -3,7 +3,7 @@ import { useFrame } from '@react-three/fiber';
 import Planet3D from './Planet3D';
 
 // Wrapper that imperatively positions a Planet3D each frame using shared anglesRef
-export default function AnimatedPlanet({ planet, orbitRadius, size, anglesRef, moonPhaseRef, selected, onClick }) {
+export default function AnimatedPlanet({ planet, orbitRadius, size, anglesRef, moonPhaseRef, selected, onClick, cameraAR }) {
   const groupRef = useRef();
 
   useFrame(() => {
@@ -26,6 +26,7 @@ export default function AnimatedPlanet({ planet, orbitRadius, size, anglesRef, m
         selected={selected}
         onClick={onClick}
         moonPhase={moonPhase}
+        cameraAR={cameraAR}
       />
     </group>
   );

@@ -1,10 +1,11 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import CircleNav from '../../components/CircleNav';
 import DevelopmentPanel from '../../components/DevelopmentPanel';
 import TextBlock from '../../components/sevenMetals/TextBlock';
 import useWheelJourney from '../../hooks/useWheelJourney';
 import WheelJourneyPanel from '../../components/WheelJourneyPanel';
+import { useCoursework } from '../../coursework/CourseworkContext';
 import './MonomythPage.css';
 
 import monomythProse from '../../data/monomyth.json';
@@ -463,8 +464,45 @@ export default function MonomythPage() {
   const [activeWorld, setActiveWorld] = useState(null);
   const [selectedModel, setSelectedModel] = useState(null);
   const [ybrAutoStart, setYbrAutoStart] = useState(false);
+  const [introAnim, setIntroAnim] = useState(false);
 
   const journey = useWheelJourney('monomyth', MONOMYTH_STAGES);
+  const { trackElement, trackTime, isElementCompleted, courseworkMode } = useCoursework();
+
+  // Track page visit
+  useEffect(() => {
+    trackElement('monomyth.page.visited');
+  }, [trackElement]);
+
+  // Track time spent on current tab+stage
+  const timeRef = useRef({ tab: null, stage: null, start: null });
+  useEffect(() => {
+    // Flush previous timer
+    const prev = timeRef.current;
+    if (prev.tab && prev.stage && prev.start) {
+      const elapsed = Math.round((Date.now() - prev.start) / 1000);
+      if (elapsed >= 1) {
+        trackTime(`monomyth.${prev.tab}.${prev.stage}`, elapsed);
+      }
+    }
+    // Start new timer
+    timeRef.current = { tab: activeTab, stage: currentStage, start: Date.now() };
+    return () => {
+      const cur = timeRef.current;
+      if (cur.tab && cur.stage && cur.start) {
+        const elapsed = Math.round((Date.now() - cur.start) / 1000);
+        if (elapsed >= 1) {
+          trackTime(`monomyth.${cur.tab}.${cur.stage}`, elapsed);
+        }
+      }
+    };
+  }, [activeTab, currentStage, trackTime]);
+
+  // Play YBR light-up animation on page open
+  useEffect(() => {
+    const t = setTimeout(() => setIntroAnim(true), 400);
+    return () => clearTimeout(t);
+  }, []);
 
   const handleYBRToggle = useCallback(() => {
     if (journey.active) {
@@ -487,16 +525,18 @@ export default function MonomythPage() {
     if (!modelId) return;
     const model = getModelById(modelId);
     if (!model) return;
+    trackElement(`monomyth.theorists.${currentStage}.${theoristKey}`);
     setSelectedModel(prev => prev?.id === model.id ? null : model);
-  }, []);
+  }, [trackElement, currentStage]);
 
   const handleSelectCycle = useCallback((cycleKey) => {
     const cycleId = CYCLE_TO_MODEL[cycleKey];
     if (!cycleId) return;
     const cycle = getCycleById(cycleId);
     if (!cycle) return;
+    trackElement(`monomyth.cycles.${currentStage}.${cycleKey}`);
     setSelectedModel(prev => prev?.id === cycle.id ? null : cycle);
-  }, []);
+  }, [trackElement, currentStage]);
 
   // Deep link from Atlas navigation
   useEffect(() => {
@@ -546,6 +586,7 @@ export default function MonomythPage() {
   const isStage = currentStage !== 'overview';
 
   const handleSelectStage = (id) => {
+    if (id !== 'overview') trackElement(`monomyth.stage.${id}`);
     setCurrentStage(id);
     setVideoUrl(null);
     setActiveWorld(null);
@@ -584,6 +625,8 @@ export default function MonomythPage() {
         ybrStages={MONOMYTH_STAGES}
         onToggleYBR={handleYBRToggle}
         ybrAutoStart={ybrAutoStart}
+        playIntroAnim={introAnim}
+        getStageClass={courseworkMode ? (id) => isElementCompleted(`monomyth.stage.${id}`) ? 'cw-completed' : 'cw-incomplete' : undefined}
       />
 
       {isStage && stageLabel && (
@@ -626,15 +669,19 @@ export default function MonomythPage() {
           ) : isStage ? (
             <div className="metal-detail-panel">
               <div className="metal-tabs">
-                {TABS.map(t => (
-                  <button
-                    key={t.id}
-                    className={`metal-tab${activeTab === t.id ? ' active' : ''}`}
-                    onClick={() => setActiveTab(t.id)}
-                  >
-                    {t.label}
-                  </button>
-                ))}
+                {TABS.map(t => {
+                  const eid = `monomyth.${t.id}.${currentStage}`;
+                  const cwClass = courseworkMode ? (isElementCompleted(eid) ? ' cw-completed' : ' cw-incomplete') : '';
+                  return (
+                    <button
+                      key={t.id}
+                      className={`metal-tab${activeTab === t.id ? ' active' : ''}${cwClass}`}
+                      onClick={() => { trackElement(eid); setActiveTab(t.id); }}
+                    >
+                      {t.label}
+                    </button>
+                  );
+                })}
                 {(() => {
                   const stage = MONOMYTH_STAGES.find(s => s.id === currentStage);
                   if (!stage?.playlist) return null;

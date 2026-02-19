@@ -170,7 +170,7 @@ export default function GameShell({
               <button className="game-btn game-btn-roll" onClick={restartFn}>
                 Play Again
               </button>
-              <button className="game-btn game-btn-restart" onClick={onExit}>
+              <button className="game-btn game-btn-restart" onClick={() => onExit && onExit('completed')}>
                 Back to Games
               </button>
             </div>

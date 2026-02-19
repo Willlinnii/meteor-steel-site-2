@@ -1,4 +1,7 @@
 import React, { useState, useMemo, useEffect, useCallback, lazy, Suspense } from 'react';
+import { collection, getDocs } from 'firebase/firestore';
+import { db, firebaseConfigured } from '../../auth/firebase';
+import { COURSES, checkRequirement, requirementProgress } from '../../coursework/courseEngine';
 
 import campaignData from '../../data/campaigns/mythicYear.json';
 import './AdminPage.css';
@@ -154,6 +157,7 @@ function CampaignListView({ campaigns, onSelect, getStatusForCampaign }) {
 // --- Section tabs ---
 const SECTIONS = [
   { id: 'campaigns', label: 'Campaign Manager' },
+  { id: 'coursework', label: 'Coursework' },
   { id: 'contacts', label: 'Contacts' },
 ];
 
@@ -500,6 +504,175 @@ function CampaignManagerSection() {
 }
 
 // --- Main Admin Page with section tabs ---
+// --- Coursework Manager Section ---
+function CourseworkManagerSection() {
+  const [selectedCourse, setSelectedCourse] = useState(COURSES[0]?.id || null);
+  const [userStats, setUserStats] = useState(null);
+  const [loadingStats, setLoadingStats] = useState(false);
+
+  const course = COURSES.find(c => c.id === selectedCourse);
+
+  const loadUserStats = useCallback(async () => {
+    if (!firebaseConfigured || !db) return;
+    setLoadingStats(true);
+    try {
+      const usersSnap = await getDocs(collection(db, 'users'));
+      const stats = { totalUsers: 0, courseCompletions: {}, userDetails: [] };
+
+      for (const userDoc of usersSnap.docs) {
+        stats.totalUsers++;
+        const uid = userDoc.id;
+        const userData = userDoc.data();
+
+        // Load progress for this user
+        const progressSnap = await getDocs(collection(db, 'users', uid, 'progress'));
+        const progress = {};
+        progressSnap.forEach(doc => { progress[doc.id] = doc.data(); });
+
+        // Load certificates
+        let certs = {};
+        try {
+          const certSnap = await getDocs(collection(db, 'users', uid, 'meta'));
+          certSnap.forEach(doc => {
+            if (doc.id === 'certificates') certs = doc.data().completed || {};
+          });
+        } catch { /* no certs */ }
+
+        const userCourseStates = COURSES.map(c => ({
+          courseId: c.id,
+          completed: !!certs[c.id],
+          progress: c.requirements.reduce((sum, req) => sum + requirementProgress(req, progress), 0) / Math.max(c.requirements.length, 1),
+          reqDetails: c.requirements.map(req => ({
+            id: req.id,
+            description: req.description,
+            met: checkRequirement(req, progress),
+            progress: requirementProgress(req, progress),
+          })),
+        }));
+
+        stats.userDetails.push({
+          uid,
+          email: userData.email || uid,
+          displayName: userData.displayName || '',
+          courses: userCourseStates,
+        });
+
+        for (const cs of userCourseStates) {
+          if (cs.completed) {
+            stats.courseCompletions[cs.courseId] = (stats.courseCompletions[cs.courseId] || 0) + 1;
+          }
+        }
+      }
+
+      setUserStats(stats);
+    } catch (err) {
+      console.error('Failed to load user stats:', err);
+    }
+    setLoadingStats(false);
+  }, []);
+
+  return (
+    <div className="admin-coursework">
+      <h2 className="admin-coursework-title">COURSE MANAGEMENT</h2>
+
+      <div className="admin-coursework-selector">
+        <label className="admin-coursework-label">Select Course:</label>
+        <select
+          className="admin-coursework-select"
+          value={selectedCourse || ''}
+          onChange={e => setSelectedCourse(e.target.value)}
+        >
+          {COURSES.map(c => (
+            <option key={c.id} value={c.id}>{c.name} {c.active ? '' : '(inactive)'}</option>
+          ))}
+        </select>
+      </div>
+
+      {course && (
+        <div className="admin-coursework-detail">
+          <div className="admin-coursework-info">
+            <h3 className="admin-coursework-course-name">{course.name}</h3>
+            <span className={`admin-coursework-badge ${course.active ? 'active' : 'inactive'}`}>
+              {course.active ? 'Active' : 'Inactive'}
+            </span>
+          </div>
+          <p className="admin-coursework-desc">{course.description}</p>
+
+          <h4 className="admin-coursework-req-title">Requirements ({course.requirements.length})</h4>
+          <div className="admin-coursework-req-list">
+            {course.requirements.map(req => (
+              <div key={req.id} className="admin-coursework-req">
+                <span className="admin-coursework-req-id">{req.id}</span>
+                <span className="admin-coursework-req-type">{req.type}</span>
+                <span className="admin-coursework-req-desc">{req.description}</span>
+                {req.elements && (
+                  <span className="admin-coursework-req-count">{req.elements.length} elements</span>
+                )}
+                {req.threshold && (
+                  <span className="admin-coursework-req-count">threshold: {req.threshold}</span>
+                )}
+                {req.percent && (
+                  <span className="admin-coursework-req-count">{req.percent}%</span>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      <div className="admin-coursework-analytics">
+        <h4 className="admin-coursework-req-title">User Analytics</h4>
+        <button
+          className="admin-coursework-load-btn"
+          onClick={loadUserStats}
+          disabled={loadingStats}
+        >
+          {loadingStats ? 'Loading...' : 'Load User Data'}
+        </button>
+
+        {userStats && (
+          <div className="admin-coursework-stats">
+            <div className="admin-coursework-stat-row">
+              <span>Total users:</span>
+              <strong>{userStats.totalUsers}</strong>
+            </div>
+            {COURSES.map(c => (
+              <div key={c.id} className="admin-coursework-stat-row">
+                <span>{c.name} completions:</span>
+                <strong>{userStats.courseCompletions[c.id] || 0}</strong>
+              </div>
+            ))}
+
+            {selectedCourse && (
+              <div className="admin-coursework-users">
+                <h4 className="admin-coursework-req-title">
+                  User Progress: {course?.name}
+                </h4>
+                {userStats.userDetails.map(u => {
+                  const cs = u.courses.find(c => c.courseId === selectedCourse);
+                  if (!cs) return null;
+                  const pct = Math.round(cs.progress * 100);
+                  return (
+                    <div key={u.uid} className="admin-coursework-user-row">
+                      <span className="admin-coursework-user-email">{u.email}</span>
+                      <span className={`admin-coursework-user-status ${cs.completed ? 'done' : pct > 0 ? 'progress' : 'none'}`}>
+                        {cs.completed ? 'Completed' : `${pct}%`}
+                      </span>
+                      <div className="admin-coursework-user-bar">
+                        <div className="admin-coursework-user-fill" style={{ width: `${pct}%` }} />
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 function AdminPage() {
   const [activeSection, setActiveSection] = useState('campaigns');
 
@@ -518,6 +691,7 @@ function AdminPage() {
       </div>
 
       {activeSection === 'campaigns' && <CampaignManagerSection />}
+      {activeSection === 'coursework' && <CourseworkManagerSection />}
       {activeSection === 'contacts' && (
         <Suspense fallback={<div className="contacts-loading">Loading Contacts...</div>}>
           <ContactsPage />

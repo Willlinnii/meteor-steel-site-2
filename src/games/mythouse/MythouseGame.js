@@ -31,10 +31,10 @@ const ELEMENT_COLORS = {
 };
 
 const DICE_TIERS = [
-  { name: 'd6', sides: 6, unlockRing: 1 },
-  { name: 'd8', sides: 8, unlockRing: 2 },
-  { name: 'd12', sides: 12, unlockRing: 4 },
-  { name: 'd20', sides: 20, unlockRing: 6 },
+  { name: 'd6', sides: 6, unlockRing: 1, solid: 'Cube' },
+  { name: 'd8', sides: 8, unlockRing: 2, solid: 'Octahedron' },
+  { name: 'd12', sides: 12, unlockRing: 4, solid: 'Dodecahedron' },
+  { name: 'd20', sides: 20, unlockRing: 6, solid: 'Icosahedron' },
 ];
 
 function pentagonPoints(cx, cy, r) {
@@ -200,7 +200,23 @@ export default function MythouseGame({ mode, onExit }) {
   const [showCollected, setShowCollected] = useState(false);
 
   const aiTimer = useRef(null);
+  const boardWrapperRef = useRef(null);
+  const [tooltip, setTooltip] = useState(null);
   const isAI = mode === 'ai';
+
+  const showTooltip = useCallback((e, text) => {
+    const wrapper = boardWrapperRef.current;
+    if (!wrapper) return;
+    const wrapperRect = wrapper.getBoundingClientRect();
+    const targetRect = e.currentTarget.getBoundingClientRect();
+    const x = targetRect.left + targetRect.width / 2 - wrapperRect.left;
+    const y = targetRect.top - wrapperRect.top - 8;
+    setTooltip({ text, x, y });
+  }, []);
+
+  const hideTooltip = useCallback(() => {
+    setTooltip(null);
+  }, []);
 
   // Build decks based on mode and culture selections
   const buildDecks = useCallback((dMode, c0, c1) => {
@@ -768,7 +784,7 @@ export default function MythouseGame({ mode, onExit }) {
       secrets={GAME_BOOK['mythouse'].secrets}
     >
       <div className="mythouse-layout">
-      <div style={{ position: 'relative', display: 'inline-block' }}>
+      <div ref={boardWrapperRef} style={{ position: 'relative', display: 'inline-block' }}>
       <svg className="game-board-svg" viewBox={`0 0 ${BOARD_SIZE} ${BOARD_SIZE}`}>
 
         {/* ====== CELESTIAL FRAME ====== */}
@@ -810,10 +826,11 @@ export default function MythouseGame({ mode, onExit }) {
           const selGlyph = selected ? '#c9a961' : glyphCol;
 
           return (
-            <g key={`z-${i}`} className="mythouse-celestial-hit"
+            <g key={`z-${i}`} className="mythouse-celestial-hit mythouse-hoverable"
               onClick={() => setSelectedCelestial(prev => prev?.type === 'zodiac' && prev?.index === i ? null : { type: 'zodiac', index: i })}
+              onMouseEnter={(e) => showTooltip(e, z.sign)}
+              onMouseLeave={hideTooltip}
               style={{ cursor: 'pointer' }}>
-              <title>{z.sign}</title>
               <line x1={d1.x} y1={d1.y} x2={d2.x} y2={d2.y}
                 stroke="rgba(201,169,97,0.15)" strokeWidth="0.5" />
               {(active || selected) && (
@@ -869,10 +886,11 @@ export default function MythouseGame({ mode, onExit }) {
           const mCol = mSelected ? 'rgba(139,195,170,1)' : col;
 
           return (
-            <g key={`m-${i}`} className="mythouse-celestial-hit"
+            <g key={`m-${i}`} className="mythouse-celestial-hit mythouse-hoverable"
               onClick={() => setSelectedCelestial(prev => prev?.type === 'month' && prev?.index === i ? null : { type: 'month', index: i })}
+              onMouseEnter={(e) => showTooltip(e, m)}
+              onMouseLeave={hideTooltip}
               style={{ cursor: 'pointer' }}>
-              <title>{m}</title>
               <line x1={d1.x} y1={d1.y} x2={d2.x} y2={d2.y}
                 stroke="rgba(139,195,170,0.1)" strokeWidth="0.4" />
               <text x={tp.x} y={tp.y}
@@ -914,6 +932,9 @@ export default function MythouseGame({ mode, onExit }) {
                 fill="rgba(26,26,36,0.8)"
                 stroke="var(--border-subtle)"
                 strokeWidth="0.3"
+                className="mythouse-hoverable"
+                onMouseEnter={(e) => showTooltip(e, `Ring ${ring}, Space ${pi}`)}
+                onMouseLeave={hideTooltip}
               />
             );
           });
@@ -924,8 +945,9 @@ export default function MythouseGame({ mode, onExit }) {
           const from = ringPosToSVG(l.fromRing, l.fromPos, CENTER, CENTER, direction);
           const to = ringPosToSVG(l.toRing, l.toPos, CENTER, CENTER, direction);
           return (
-            <g key={`lad-${i}`}>
-              <title>{`Ladder: R${l.fromRing} \u2192 R${l.toRing}`}</title>
+            <g key={`lad-${i}`} className="mythouse-hoverable"
+              onMouseEnter={(e) => showTooltip(e, `Ladder \u2191 Ring ${l.fromRing} \u2192 Ring ${l.toRing}`)}
+              onMouseLeave={hideTooltip}>
               <line x1={from.x} y1={from.y} x2={to.x} y2={to.y}
                 stroke="transparent" strokeWidth="6" />
               <line x1={from.x} y1={from.y} x2={to.x} y2={to.y}
@@ -939,8 +961,9 @@ export default function MythouseGame({ mode, onExit }) {
           const from = ringPosToSVG(c.fromRing, c.fromPos, CENTER, CENTER, direction);
           const to = ringPosToSVG(c.toRing, c.toPos, CENTER, CENTER, direction);
           return (
-            <g key={`chu-${i}`}>
-              <title>{`Chute: R${c.fromRing} \u2192 R${c.toRing}`}</title>
+            <g key={`chu-${i}`} className="mythouse-hoverable"
+              onMouseEnter={(e) => showTooltip(e, `Chute \u2193 Ring ${c.fromRing} \u2192 Ring ${c.toRing}`)}
+              onMouseLeave={hideTooltip}>
               <line x1={from.x} y1={from.y} x2={to.x} y2={to.y}
                 stroke="transparent" strokeWidth="6" />
               <line x1={from.x} y1={from.y} x2={to.x} y2={to.y}
@@ -955,8 +978,9 @@ export default function MythouseGame({ mode, onExit }) {
           const r = Number(ring);
           const { x, y } = ringPosToSVG(r, 0, CENTER, CENTER, direction);
           return (
-            <g key={`gem-${ring}`}>
-              <title>{`Gemstone (${GEMSTONE_VALUES[r]} pts)`}</title>
+            <g key={`gem-${ring}`} className="mythouse-hoverable"
+              onMouseEnter={(e) => showTooltip(e, `Gemstone \u2014 ${GEMSTONE_VALUES[r]} pts`)}
+              onMouseLeave={hideTooltip}>
               <polygon
                 points={`${x},${y - 6} ${x + 5},${y + 3} ${x - 5},${y + 3}`}
                 className="mythouse-gem"
@@ -967,8 +991,9 @@ export default function MythouseGame({ mode, onExit }) {
 
         {/* Fallen Starlight at center */}
         {!starlightClaimed && (
-          <g>
-            <title>Fallen Starlight (588 pts)</title>
+          <g className="mythouse-hoverable"
+            onMouseEnter={(e) => showTooltip(e, `Fallen Starlight \u2014 ${FALLEN_STARLIGHT_VALUE} pts`)}
+            onMouseLeave={hideTooltip}>
             <polygon
               points={`${CENTER},${CENTER - 12} ${CENTER + 4},${CENTER - 3} ${CENTER + 12},${CENTER - 3} ${CENTER + 6},${CENTER + 3} ${CENTER + 8},${CENTER + 12} ${CENTER},${CENTER + 6} ${CENTER - 8},${CENTER + 12} ${CENTER - 6},${CENTER + 3} ${CENTER - 12},${CENTER - 3} ${CENTER - 4},${CENTER - 3}`}
               className="mythouse-star"
@@ -986,11 +1011,12 @@ export default function MythouseGame({ mode, onExit }) {
             return (
               <g
                 key={`p${player}-${i}`}
-                className={`board-piece${isClickable ? ' board-piece-highlight' : ''}`}
+                className={`board-piece${isClickable ? ' board-piece-highlight' : ''} mythouse-hoverable`}
                 onClick={() => isClickable && handlePieceClick(i)}
+                onMouseEnter={(e) => showTooltip(e, `${PIECE_TYPES[i].symbol} ${PIECE_TYPES[i].name} (${players[player].name})`)}
+                onMouseLeave={hideTooltip}
                 style={{ cursor: isClickable ? 'pointer' : 'default' }}
               >
-                <title>{`${PIECE_TYPES[i].name} (${players[player].name})`}</title>
                 <circle
                   cx={x + offset} cy={y} r={6}
                   fill={PLAYER_COLORS[player]}
@@ -1028,40 +1054,52 @@ export default function MythouseGame({ mode, onExit }) {
         {/* Dice tier icons */}
         <g className="mythouse-dice-tiers">
           {DICE_TIERS.map((tier, i) => {
-            const tx = 530 + i * 30;
-            const ty = 30;
-            const s = 10;
+            const tx = 510 + i * 38;
+            const ty = 34;
+            const s = active => active ? 14 : 12;
+            const sz = s(activeDieSides === tier.sides);
             const unlocked = highestRing >= tier.unlockRing;
             const active = activeDieSides === tier.sides;
             const fillColor = unlocked ? 'var(--accent-gold)' : 'var(--bg-medium)';
             const strokeColor = active ? 'var(--accent-ember)' : 'var(--border-subtle)';
+            const status = active ? 'active' : unlocked ? 'unlocked' : 'locked';
             return (
-              <g key={tier.name} opacity={unlocked ? 1 : 0.25}>
-                <title>{`${tier.name.toUpperCase()} (${active ? 'active' : unlocked ? 'unlocked' : 'locked'})`}</title>
+              <g key={tier.name}
+                opacity={unlocked ? 1 : 0.25}
+                className={`mythouse-die-group${active ? ' mythouse-die-active' : ''} mythouse-hoverable`}
+                onMouseEnter={(e) => showTooltip(e, `${tier.name} \u2014 ${tier.solid} (${status})`)}
+                onMouseLeave={hideTooltip}>
                 {active && (
-                  <rect x={tx - s - 3} y={ty - s - 3} width={(s + 3) * 2} height={(s + 3) * 2} rx={4}
-                    fill="none" stroke="var(--accent-ember)" strokeWidth={1.5} opacity={0.5} />
+                  <rect x={tx - sz - 5} y={ty - sz - 5} width={(sz + 5) * 2} height={(sz + 5) * 2 + 16} rx={5}
+                    fill="none" stroke="var(--accent-ember)" strokeWidth={1.5}
+                    className="mythouse-die-glow-rect" />
                 )}
                 {tier.sides === 6 && (
-                  <rect x={tx - s} y={ty - s} width={s * 2} height={s * 2} rx={2}
-                    fill={fillColor} stroke={strokeColor} strokeWidth={0.8} />
+                  <rect x={tx - sz} y={ty - sz} width={sz * 2} height={sz * 2} rx={2}
+                    fill={fillColor} stroke={strokeColor} strokeWidth={active ? 1.2 : 0.8} />
                 )}
                 {tier.sides === 8 && (
-                  <polygon points={`${tx},${ty - s} ${tx + s},${ty} ${tx},${ty + s} ${tx - s},${ty}`}
-                    fill={fillColor} stroke={strokeColor} strokeWidth={0.8} />
+                  <polygon points={`${tx},${ty - sz} ${tx + sz},${ty} ${tx},${ty + sz} ${tx - sz},${ty}`}
+                    fill={fillColor} stroke={strokeColor} strokeWidth={active ? 1.2 : 0.8} />
                 )}
                 {tier.sides === 12 && (
-                  <polygon points={pentagonPoints(tx, ty, s)}
-                    fill={fillColor} stroke={strokeColor} strokeWidth={0.8} />
+                  <polygon points={pentagonPoints(tx, ty, sz)}
+                    fill={fillColor} stroke={strokeColor} strokeWidth={active ? 1.2 : 0.8} />
                 )}
                 {tier.sides === 20 && (
-                  <polygon points={`${tx},${ty - s} ${tx + s},${ty + s} ${tx - s},${ty + s}`}
-                    fill={fillColor} stroke={strokeColor} strokeWidth={0.8} />
+                  <polygon points={`${tx},${ty - sz} ${tx + sz},${ty + sz} ${tx - sz},${ty + sz}`}
+                    fill={fillColor} stroke={strokeColor} strokeWidth={active ? 1.2 : 0.8} />
                 )}
-                <text x={tx} y={ty + 3} textAnchor="middle" fontSize="8"
+                <text x={tx} y={ty + 3} textAnchor="middle" fontSize={active ? '10' : '8'}
                   fill={active ? 'var(--bg-dark)' : 'var(--text-secondary)'}
                   pointerEvents="none" fontWeight={active ? 'bold' : 'normal'}>
                   {tier.sides}
+                </text>
+                <text x={tx} y={ty + sz + 10} textAnchor="middle" fontSize="5.5"
+                  fill={active ? 'var(--accent-ember)' : 'var(--text-secondary)'}
+                  pointerEvents="none" opacity={unlocked ? 0.85 : 0.4}
+                  style={{ fontFamily: 'Cinzel, serif' }}>
+                  {tier.solid}
                 </text>
               </g>
             );
@@ -1075,8 +1113,11 @@ export default function MythouseGame({ mode, onExit }) {
       >
         {direction === 1 ? '\u21BB' : '\u21BA'}
       </button>
-      </div>
-
+      {tooltip && (
+        <div className="mythouse-tooltip" style={{ left: tooltip.x, top: tooltip.y }}>
+          {tooltip.text}
+        </div>
+      )}
       <div className="mythouse-score-bar">
         {players.map((p, i) => (
           <span key={i} className="mythouse-score-item">
@@ -1091,6 +1132,7 @@ export default function MythouseGame({ mode, onExit }) {
             <span className="mythouse-score-value" style={{ color: PLAYER_COLORS[i] }}>{scores[i]} pts</span>
           </span>
         ))}
+      </div>
       </div>
 
       {/* Collected cards toggle */}

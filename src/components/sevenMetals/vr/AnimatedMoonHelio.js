@@ -4,7 +4,7 @@ import Planet3D from './Planet3D';
 import { HELIO_MOON_3D } from './constants3D';
 
 // Moon that orbits Earth in heliocentric mode
-export default function AnimatedMoonHelio({ anglesRef, moonPhaseRef, earthOrbitRadius, selected, onClick }) {
+export default function AnimatedMoonHelio({ anglesRef, moonPhaseRef, earthOrbitRadius, selected, onClick, cameraAR }) {
   const groupRef = useRef();
 
   useFrame(() => {
@@ -29,6 +29,7 @@ export default function AnimatedMoonHelio({ anglesRef, moonPhaseRef, earthOrbitR
         selected={selected}
         onClick={onClick}
         moonPhase={moonPhaseRef?.current || 135}
+        cameraAR={cameraAR}
       />
     </group>
   );

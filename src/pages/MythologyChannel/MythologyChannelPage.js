@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import mythsData from '../../data/mythsEpisodes.json';
+import { useCoursework } from '../../coursework/CourseworkContext';
 import './MythologyChannelPage.css';
 
 const SHOWS = [
@@ -132,7 +133,32 @@ export default function MythologyChannelPage() {
   const playerRef = useRef(null);
   const playerContainerRef = useRef(null);
 
+  const { trackElement, trackTime, isElementCompleted, courseworkMode } = useCoursework();
   const triggerZap = useCallback(() => setZapKey(k => k + 1), []);
+
+  // Page visit tracking
+  useEffect(() => { trackElement('mythology-channel.page.visited'); }, [trackElement]);
+
+  // Time tracking per active show
+  const timeRef = useRef({ show: null, start: Date.now() });
+  useEffect(() => {
+    const showId = activeShow?.id || null;
+    const prev = timeRef.current;
+    const elapsed = Math.round((Date.now() - prev.start) / 1000);
+    if (elapsed > 0 && prev.show) trackTime(`mythology-channel.show.${prev.show}.time`, elapsed);
+    timeRef.current = { show: showId, start: Date.now() };
+    return () => {
+      const cur = timeRef.current;
+      const secs = Math.round((Date.now() - cur.start) / 1000);
+      if (secs > 0 && cur.show) trackTime(`mythology-channel.show.${cur.show}.time`, secs);
+    };
+  }, [activeShow, trackTime]);
+
+  // Zap antennas on first open
+  useEffect(() => {
+    const t = setTimeout(triggerZap, 400);
+    return () => clearTimeout(t);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Deep link from URL param
   useEffect(() => {
@@ -209,6 +235,7 @@ export default function MythologyChannelPage() {
       setActiveEpisode(null);
       navigate('/mythology-channel', { replace: true });
     } else {
+      trackElement(`mythology-channel.show.${show.id}`);
       setActiveShow(show);
       setActiveEpisode(null);
       setVideoUrl(show.playlist || null);
@@ -239,6 +266,9 @@ export default function MythologyChannelPage() {
   };
 
   const handleEpisodeClick = (episode) => {
+    if (!activeEpisode || activeEpisode.id !== episode.id) {
+      trackElement(`mythology-channel.episode.${episode.id}`);
+    }
     setActiveEpisode(prev => prev?.id === episode.id ? null : episode);
   };
 
@@ -299,7 +329,7 @@ export default function MythologyChannelPage() {
           {SHOWS.map(show => (
             <button
               key={show.id}
-              className={`show-card${activeShow?.id === show.id ? ' active' : ''}${show.isMythsTV ? ' myths-tv-card' : ''}`}
+              className={`show-card${activeShow?.id === show.id ? ' active' : ''}${show.isMythsTV ? ' myths-tv-card' : ''}${courseworkMode ? (isElementCompleted(`mythology-channel.show.${show.id}`) ? ' cw-completed' : ' cw-incomplete') : ''}`}
               onClick={() => handleShowClick(show)}
             >
               <span className="show-card-title">{show.label}</span>

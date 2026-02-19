@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import libraryData from '../../data/mythSalonLibrary.json';
+import { useCoursework } from '../../coursework/CourseworkContext';
 import './MythSalonLibraryPage.css';
 
 /* ===== TRAIL OF THE LIBRARY ===== */
@@ -517,6 +518,24 @@ export default function MythSalonLibraryPage() {
   const [selectedShelfId, setSelectedShelfId] = useState(null);
   const [selectedBook, setSelectedBook] = useState(null);
   const shelves = libraryData.shelves;
+  const { trackElement, trackTime, isElementCompleted, courseworkMode } = useCoursework();
+
+  // Page visit tracking
+  useEffect(() => { trackElement('library.page.visited'); }, [trackElement]);
+
+  // Time tracking for trail stops
+  const timeRef = useRef({ stop: null, start: Date.now() });
+  useEffect(() => {
+    const prev = timeRef.current;
+    const elapsed = Math.round((Date.now() - prev.start) / 1000);
+    if (elapsed > 0 && prev.stop !== null) trackTime(`library.trail.stop.${prev.stop}.time`, elapsed);
+    timeRef.current = { stop: activeTrailStop, start: Date.now() };
+    return () => {
+      const cur = timeRef.current;
+      const secs = Math.round((Date.now() - cur.start) / 1000);
+      if (secs > 0 && cur.stop !== null) trackTime(`library.trail.stop.${cur.stop}.time`, secs);
+    };
+  }, [activeTrailStop, trackTime]);
 
   const selectedShelf = shelves.find(s => s.id === selectedShelfId);
   const shelfItems = selectedShelf
@@ -542,7 +561,11 @@ export default function MythSalonLibraryPage() {
       <section className="trail-section">
         <TrailLoop
           activeStop={activeTrailStop}
-          onSelectStop={(i) => setActiveTrailStop(activeTrailStop === i ? null : i)}
+          onSelectStop={(i) => {
+            const next = activeTrailStop === i ? null : i;
+            if (next !== null) trackElement(`library.trail.stop.${next}`);
+            setActiveTrailStop(next);
+          }}
         />
         <TrailContent stopIndex={activeTrailStop} />
       </section>
@@ -562,8 +585,9 @@ export default function MythSalonLibraryPage() {
           return (
             <button
               key={shelf.id}
-              className={`shelf-tab${isActive ? ' active' : ''}${shelf.type === 'collected' ? ' collected' : ''}`}
+              className={`shelf-tab${isActive ? ' active' : ''}${shelf.type === 'collected' ? ' collected' : ''}${courseworkMode ? (isElementCompleted(`library.shelf.${shelf.id}`) ? ' cw-completed' : ' cw-incomplete') : ''}`}
               onClick={() => {
+                if (!isActive) trackElement(`library.shelf.${shelf.id}`);
                 setSelectedShelfId(isActive ? null : shelf.id);
                 setSelectedBook(null);
               }}
@@ -589,7 +613,7 @@ export default function MythSalonLibraryPage() {
                   key={`${item.title}-${i}`}
                   book={item}
                   isSelected={selectedBook === i}
-                  onClick={() => setSelectedBook(selectedBook === i ? null : i)}
+                  onClick={() => { if (selectedBook !== i) trackElement(`library.shelf.${selectedShelfId}.book.${i}`); setSelectedBook(selectedBook === i ? null : i); }}
                   colorIndex={i}
                 />
               ))}

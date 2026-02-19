@@ -40,7 +40,7 @@ function SunLight({ anglesRef, isHelio, orbitRadius }) {
 }
 
 // Earth day/night wrapper that reads Sun angle each frame
-function AnimatedEarth({ anglesRef, selectedEarth, onSelectEarth }) {
+function AnimatedEarth({ anglesRef, selectedEarth, onSelectEarth, cameraAR }) {
   const sunAngleRef = useRef(0);
 
   useFrame(() => {
@@ -53,6 +53,7 @@ function AnimatedEarth({ anglesRef, selectedEarth, onSelectEarth }) {
       sunAngle={sunAngleRef.current}
       selectedEarth={selectedEarth}
       onSelectEarth={onSelectEarth}
+      cameraAR={cameraAR}
     />
   );
 }
@@ -154,12 +155,14 @@ export default function OrbitalScene({
           size={0.7 * sizeScale}
           selected={selectedPlanet === 'Sun'}
           onClick={() => onSelectPlanet('Sun')}
+          cameraAR={cameraAR}
         />
       ) : (
         <AnimatedEarth
           anglesRef={anglesRef}
           selectedEarth={selectedEarth}
           onSelectEarth={onSelectEarth}
+          cameraAR={cameraAR}
         />
       )}
 
@@ -174,6 +177,7 @@ export default function OrbitalScene({
           moonPhaseRef={moonPhaseRef}
           selected={selectedPlanet === o.planet}
           onClick={() => onSelectPlanet(o.planet)}
+          cameraAR={cameraAR}
         />
       ))}
 
@@ -185,6 +189,7 @@ export default function OrbitalScene({
           earthOrbitRadius={HELIO_ORBITS_3D.find(o => o.planet === 'Earth')?.radius || 7}
           selected={selectedPlanet === 'Moon'}
           onClick={() => onSelectPlanet('Moon')}
+          cameraAR={cameraAR}
         />
       )}
 

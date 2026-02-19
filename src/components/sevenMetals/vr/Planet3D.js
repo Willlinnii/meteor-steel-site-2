@@ -78,7 +78,7 @@ function PlanetSurface({ planet, radius }) {
   }
 }
 
-export default function Planet3D({ planet, position, size, selected, onClick, moonPhase }) {
+export default function Planet3D({ planet, position, size, selected, onClick, moonPhase, cameraAR }) {
   const color = PLANET_COLORS[planet] || '#aaa';
   const meshRef = useRef();
   const glowRef = useRef();
@@ -113,11 +113,12 @@ export default function Planet3D({ planet, position, size, selected, onClick, mo
 
       {/* Invisible expanded hit area for easier clicking */}
       <mesh
-        onClick={(e) => { e.stopPropagation(); onClick && onClick(); }}
+        onClick={cameraAR ? undefined : (e) => { e.stopPropagation(); onClick && onClick(); }}
+        onPointerDown={cameraAR ? (e) => { e.stopPropagation(); onClick && onClick(); } : undefined}
         onPointerOver={(e) => { e.stopPropagation(); setHovered(true); document.body.style.cursor = 'pointer'; }}
         onPointerOut={() => { setHovered(false); document.body.style.cursor = 'auto'; }}
       >
-        <sphereGeometry args={[size * 2.2, 16, 16]} />
+        <sphereGeometry args={[size * (cameraAR ? 4 : 2.2), 16, 16]} />
         <meshBasicMaterial transparent opacity={0} depthWrite={false} />
       </mesh>
 

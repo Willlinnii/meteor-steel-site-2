@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useCoursework } from '../../coursework/CourseworkContext';
 import SnakesAndLaddersGame from '../../games/snakesAndLadders/SnakesAndLaddersGame';
 import RoyalGameOfUrGame from '../../games/royalGameOfUr/RoyalGameOfUrGame';
 import SenetGame from '../../games/senet/SenetGame';
@@ -106,6 +107,7 @@ const GAME_COMPONENTS = {
 export default function GamesPage() {
   const { '*': splat } = useParams();
   const navigate = useNavigate();
+  const { trackElement, isElementCompleted, courseworkMode } = useCoursework();
 
   // Parse URL: /games/:gameId/:mode
   const parts = splat ? splat.split('/').filter(Boolean) : [];
@@ -114,7 +116,23 @@ export default function GamesPage() {
 
   const activeGame = gameId ? GAMES.find(g => g.id === gameId) : null;
 
-  const handleExit = () => {
+  // Track page visit
+  useEffect(() => {
+    trackElement('games.page.visited');
+  }, [trackElement]);
+
+  // Track game start when mode is selected
+  useEffect(() => {
+    if (activeGame && mode) {
+      trackElement(`games.${activeGame.id}.started`);
+    }
+  }, [activeGame, mode, trackElement]);
+
+  const handleExit = (result) => {
+    // Track game completion if the game was actually finished (not just backed out)
+    if (activeGame && result === 'completed') {
+      trackElement(`games.${activeGame.id}.completed`);
+    }
     navigate('/games');
   };
 
@@ -201,8 +219,9 @@ export default function GamesPage() {
         {GAMES.map(game => (
           <Link
             key={game.id}
-            className={`game-card${game.featured ? ' featured' : ''}`}
+            className={`game-card${game.featured ? ' featured' : ''}${courseworkMode ? (isElementCompleted(`games.${game.id}.clicked`) ? ' cw-completed' : ' cw-incomplete') : ''}`}
             to={game.externalPath || `/games/${game.id}`}
+            onClick={() => trackElement(`games.${game.id}.clicked`)}
           >
             <span className="game-card-title">{game.label}</span>
             <span className="game-card-origin">{game.origin}</span>

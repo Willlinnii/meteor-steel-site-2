@@ -12,13 +12,13 @@ const TABS = [
   { id: 'development', label: 'Development' },
 ];
 
-export default function MetalContentTabs({ activeTab, onSelectTab, playlistUrl, videoActive, onToggleVideo, onTogglePersonaChat, personaChatActive }) {
+export default function MetalContentTabs({ activeTab, onSelectTab, playlistUrl, videoActive, onToggleVideo, onTogglePersonaChat, personaChatActive, getTabClass }) {
   return (
     <div className="metal-tabs">
       {TABS.map(t => (
         <button
           key={t.id}
-          className={`metal-tab${activeTab === t.id ? ' active' : ''}`}
+          className={`metal-tab${activeTab === t.id ? ' active' : ''} ${getTabClass ? getTabClass(t.id) : ''}`}
           onClick={() => onSelectTab(t.id)}
         >
           {t.label}

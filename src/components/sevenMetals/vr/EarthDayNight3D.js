@@ -3,7 +3,7 @@ import { useFrame } from '@react-three/fiber';
 import { EARTH_RADIUS } from './constants3D';
 import * as THREE from 'three';
 
-export default function EarthDayNight3D({ sunAngle = 0, selectedEarth, onSelectEarth }) {
+export default function EarthDayNight3D({ sunAngle = 0, selectedEarth, onSelectEarth, cameraAR }) {
   const groupRef = useRef();
   const glowRef = useRef();
   const r = EARTH_RADIUS;
@@ -43,7 +43,8 @@ export default function EarthDayNight3D({ sunAngle = 0, selectedEarth, onSelectE
       {/* Day hemisphere (facing sun) */}
       <mesh
         rotation={[0, -sunRad + Math.PI / 2, 0]}
-        onClick={(e) => { e.stopPropagation(); onSelectEarth && onSelectEarth(selectedEarth === 'day' ? null : 'day'); }}
+        onClick={cameraAR ? undefined : (e) => { e.stopPropagation(); onSelectEarth && onSelectEarth(selectedEarth === 'day' ? null : 'day'); }}
+        onPointerDown={cameraAR ? (e) => { e.stopPropagation(); onSelectEarth && onSelectEarth(selectedEarth === 'day' ? null : 'day'); } : undefined}
         onPointerOver={(e) => { e.stopPropagation(); document.body.style.cursor = 'pointer'; }}
         onPointerOut={() => { document.body.style.cursor = 'auto'; }}
       >
@@ -61,7 +62,8 @@ export default function EarthDayNight3D({ sunAngle = 0, selectedEarth, onSelectE
       {/* Night hemisphere (away from sun) */}
       <mesh
         rotation={[0, -sunRad - Math.PI / 2, 0]}
-        onClick={(e) => { e.stopPropagation(); onSelectEarth && onSelectEarth(selectedEarth === 'night' ? null : 'night'); }}
+        onClick={cameraAR ? undefined : (e) => { e.stopPropagation(); onSelectEarth && onSelectEarth(selectedEarth === 'night' ? null : 'night'); }}
+        onPointerDown={cameraAR ? (e) => { e.stopPropagation(); onSelectEarth && onSelectEarth(selectedEarth === 'night' ? null : 'night'); } : undefined}
         onPointerOver={(e) => { e.stopPropagation(); document.body.style.cursor = 'pointer'; }}
         onPointerOut={() => { document.body.style.cursor = 'auto'; }}
       >

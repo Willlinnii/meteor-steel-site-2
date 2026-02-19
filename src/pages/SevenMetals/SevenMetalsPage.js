@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
 import OrbitalDiagram from '../../components/sevenMetals/OrbitalDiagram';
 import MetalDetailPanel from '../../components/sevenMetals/MetalDetailPanel';
 import CultureSelector from '../../components/sevenMetals/CultureSelector';
@@ -26,6 +26,7 @@ import wheelContent from '../../data/medicineWheelContent.json';
 import dayNightData from '../../data/dayNight.json';
 import useYellowBrickRoad from '../../components/sevenMetals/useYellowBrickRoad';
 import YellowBrickRoadPanel from '../../components/sevenMetals/YellowBrickRoadPanel';
+import { useCoursework } from '../../coursework/CourseworkContext';
 
 const MONTHS = ['January','February','March','April','May','June',
   'July','August','September','October','November','December'];
@@ -412,6 +413,29 @@ export default function SevenMetalsPage() {
   const ybr = useYellowBrickRoad();
 
   const [ybrAutoStart, setYbrAutoStart] = useState(false);
+  const { trackElement, trackTime, isElementCompleted, courseworkMode } = useCoursework();
+
+  // Page visit tracking
+  useEffect(() => { trackElement('metals.page.visited'); }, [trackElement]);
+
+  // Time tracking for current view
+  const timeRef = useRef({ view: `planet.${selectedPlanet}.${activeTab}`, start: Date.now() });
+  useEffect(() => {
+    const view = selectedSign ? `zodiac.${selectedSign}`
+      : selectedCardinal ? `cardinal.${selectedCardinal}`
+      : selectedMonth ? `calendar.${selectedMonth}`
+      : showMedicineWheel ? 'medicine-wheel'
+      : `planet.${selectedPlanet}.${activeTab}`;
+    const prev = timeRef.current;
+    const elapsed = Math.round((Date.now() - prev.start) / 1000);
+    if (elapsed > 0) trackTime(`metals.${prev.view}.time`, elapsed);
+    timeRef.current = { view, start: Date.now() };
+    return () => {
+      const cur = timeRef.current;
+      const secs = Math.round((Date.now() - cur.start) / 1000);
+      if (secs > 0) trackTime(`metals.${cur.view}.time`, secs);
+    };
+  }, [selectedPlanet, activeTab, selectedSign, selectedCardinal, selectedMonth, showMedicineWheel, trackTime]);
 
   // Sync view state with URL on back/forward navigation
   useEffect(() => {
@@ -516,6 +540,7 @@ export default function SevenMetalsPage() {
     if (personaChatOpen === key) {
       setPersonaChatOpen(null);
     } else {
+      trackElement(`metals.persona-chat.${key}`);
       setPersonaChatOpen(key);
       if (!personaChatHistory[key]) {
         setPersonaChatHistory(prev => ({ ...prev, [key]: [] }));
@@ -553,18 +578,19 @@ export default function SevenMetalsPage() {
           tooltipData={tooltipData}
           selectedPlanet={selectedPlanet}
           hoveredPlanet={hoveredPlanet}
-          onSelectPlanet={(p) => { setSelectedPlanet(p); setSelectedSign(null); setSelectedCardinal(null); setSelectedEarth(null); setSelectedMonth(null); setVideoUrl(null); setPersonaChatOpen(null); if (chakraViewMode) setActiveTab('body'); }}
+          onSelectPlanet={(p) => { trackElement(`metals.planet.${p}`); setSelectedPlanet(p); setSelectedSign(null); setSelectedCardinal(null); setSelectedEarth(null); setSelectedMonth(null); setVideoUrl(null); setPersonaChatOpen(null); if (chakraViewMode) setActiveTab('body'); }}
           selectedSign={selectedSign}
-          onSelectSign={(sign) => { setSelectedSign(sign); setSelectedCardinal(null); setSelectedEarth(null); setSelectedMonth(null); setVideoUrl(null); setPersonaChatOpen(null); }}
+          onSelectSign={(sign) => { trackElement(`metals.zodiac.${sign}`); setSelectedSign(sign); setSelectedCardinal(null); setSelectedEarth(null); setSelectedMonth(null); setVideoUrl(null); setPersonaChatOpen(null); }}
           selectedCardinal={selectedCardinal}
-          onSelectCardinal={(c) => { setSelectedCardinal(c); setSelectedSign(null); setSelectedEarth(null); setSelectedMonth(null); setVideoUrl(null); setPersonaChatOpen(null); }}
+          onSelectCardinal={(c) => { trackElement(`metals.cardinal.${c}`); setSelectedCardinal(c); setSelectedSign(null); setSelectedEarth(null); setSelectedMonth(null); setVideoUrl(null); setPersonaChatOpen(null); }}
           selectedEarth={selectedEarth}
-          onSelectEarth={(e) => { setSelectedEarth(e); setSelectedSign(null); setSelectedCardinal(null); setSelectedMonth(null); setVideoUrl(null); setPersonaChatOpen(null); }}
+          onSelectEarth={(e) => { trackElement(`metals.earth.${e}`); setSelectedEarth(e); setSelectedSign(null); setSelectedCardinal(null); setSelectedMonth(null); setVideoUrl(null); setPersonaChatOpen(null); }}
           showCalendar={showCalendar}
           onToggleCalendar={() => {
             const next = !showCalendar;
             setShowCalendar(next);
             if (next) {
+              trackElement('metals.calendar.opened');
               setSelectedMonth(MONTHS[new Date().getMonth()]);
               setActiveMonthTab('stone');
               setSelectedSign(null); setSelectedCardinal(null); setSelectedEarth(null);
@@ -574,17 +600,17 @@ export default function SevenMetalsPage() {
             navigate(next ? '/metals/calendar' : '/metals');
           }}
           selectedMonth={selectedMonth}
-          onSelectMonth={(m) => { setSelectedMonth(m); setActiveMonthTab('stone'); if (m) { setSelectedSign(null); setSelectedCardinal(null); setSelectedEarth(null); } }}
+          onSelectMonth={(m) => { if (m) trackElement(`metals.calendar.month.${m}`); setSelectedMonth(m); setActiveMonthTab('stone'); if (m) { setSelectedSign(null); setSelectedCardinal(null); setSelectedEarth(null); } }}
           showMedicineWheel={showMedicineWheel}
           onToggleMedicineWheel={() => {
             const next = !showMedicineWheel;
             setShowMedicineWheel(next);
             setSelectedWheelItem(null);
-            if (next) { setChakraViewMode(null); setSelectedSign(null); setSelectedCardinal(null); setSelectedEarth(null); setSelectedMonth(null); setShowCalendar(false); navigate('/metals/medicine-wheel'); }
+            if (next) { trackElement('metals.medicine-wheel.opened'); setChakraViewMode(null); setSelectedSign(null); setSelectedCardinal(null); setSelectedEarth(null); setSelectedMonth(null); setShowCalendar(false); navigate('/metals/medicine-wheel'); }
             else { setSelectedPlanet('Sun'); navigate('/metals'); }
           }}
           selectedWheelItem={selectedWheelItem}
-          onSelectWheelItem={(item) => { setSelectedWheelItem(item); setActiveWheelTab(null); if (item) { setSelectedSign(null); setSelectedCardinal(null); setSelectedEarth(null); setSelectedMonth(null); } }}
+          onSelectWheelItem={(item) => { if (item) trackElement(`metals.medicine-wheel.${item}`); setSelectedWheelItem(item); setActiveWheelTab(null); if (item) { setSelectedSign(null); setSelectedCardinal(null); setSelectedEarth(null); setSelectedMonth(null); } }}
           chakraViewMode={chakraViewMode}
           onToggleChakraView={() => {
             setChakraViewMode(prev => {
@@ -891,9 +917,9 @@ export default function SevenMetalsPage() {
                   <MetalDetailPanel
                     data={currentData}
                     activeTab={activeTab}
-                    onSelectTab={setActiveTab}
+                    onSelectTab={(tab) => { trackElement(`metals.tab.${tab}.${selectedPlanet}`); setActiveTab(tab); }}
                     activeCulture={activeCulture}
-                    onSelectCulture={setActiveCulture}
+                    onSelectCulture={(c) => { trackElement(`metals.culture.${c}`); setActiveCulture(c); }}
                     devEntries={devEntries}
                     setDevEntries={setDevEntries}
                     playlistUrl={PLANET_PLAYLISTS[selectedPlanet]}
@@ -907,6 +933,7 @@ export default function SevenMetalsPage() {
                     personaChatMessages={personaChatHistory[`planet:${selectedPlanet}`] || []}
                     setPersonaChatMessages={setCurrentPersonaMessages}
                     onClosePersonaChat={() => setPersonaChatOpen(null)}
+                    getTabClass={courseworkMode ? (tab) => isElementCompleted(`metals.tab.${tab}.${selectedPlanet}`) ? 'cw-completed' : 'cw-incomplete' : undefined}
                   />
                   {activeTab === 'overview' && (
                     <div className="planet-culture-wrapper">

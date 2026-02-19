@@ -1,0 +1,184 @@
+/* ===== STORY OF STORIES — BOOK PROPOSAL PAGE ===== */
+
+.sos-page {
+  min-height: 100vh;
+  padding-top: 40px;
+}
+
+.sos-subtitle {
+  text-align: center;
+  font-family: 'Cinzel', serif;
+  font-size: 0.85rem;
+  font-weight: 400;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--accent-fire);
+  opacity: 0.7;
+  margin-bottom: 10px;
+}
+
+/* --- Overview / Proposal View --- */
+.sos-overview {
+  padding: 10px 0 20px;
+}
+
+.sos-section-group {
+  margin-bottom: 20px;
+}
+
+.sos-group-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--accent-gold);
+  opacity: 0.6;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.sos-section-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+}
+
+.sos-section-btn {
+  font-family: 'Cinzel', serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent-steel);
+  background: var(--bg-medium);
+  border: 1px solid var(--border-subtle);
+  padding: 10px 18px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.sos-section-btn:hover {
+  background: rgba(139, 157, 195, 0.1);
+  border-color: var(--accent-steel);
+}
+
+.sos-section-btn.active {
+  color: var(--accent-ember);
+  border-color: var(--accent-ember);
+  background: rgba(196, 113, 58, 0.1);
+  box-shadow: 0 0 12px rgba(196, 113, 58, 0.2);
+}
+
+/* --- Section Content --- */
+.sos-section-content {
+  animation: sos-fade-in 0.4s ease;
+  margin-top: 20px;
+}
+
+.sos-section-body {
+  font-size: 1.15rem;
+  line-height: 1.9;
+  color: var(--text-primary);
+  padding: 20px;
+  background: rgba(139, 157, 195, 0.05);
+  border-left: 3px solid var(--accent-fire);
+}
+
+.sos-section-body p {
+  margin-bottom: 1em;
+}
+
+.sos-section-body p:last-child {
+  margin-bottom: 0;
+}
+
+/* Poem formatting */
+.sos-section-body.sos-poem {
+  text-align: center;
+  border-left: none;
+  background: none;
+  font-style: italic;
+}
+
+.sos-section-body.sos-poem p {
+  margin-bottom: 0.5em;
+}
+
+/* --- Audio Play Button --- */
+.sos-audio-control {
+  margin-bottom: 20px;
+}
+
+.sos-play-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  margin: 0 auto;
+  border-radius: 50%;
+  border: 1px solid var(--accent-gold);
+  background: rgba(212, 175, 55, 0.08);
+  color: var(--accent-gold);
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.sos-play-btn:hover {
+  background: rgba(212, 175, 55, 0.18);
+  box-shadow: 0 0 14px rgba(212, 175, 55, 0.25);
+}
+
+/* --- Bio Section --- */
+.sos-bio {
+  padding: 20px 0;
+  animation: sos-fade-in 0.4s ease;
+}
+
+.sos-bio-text {
+  font-size: 1.15rem;
+  line-height: 1.9;
+  color: var(--text-primary);
+  padding: 20px;
+  background: rgba(139, 157, 195, 0.05);
+  border-left: 3px solid var(--accent-gold);
+}
+
+.sos-bio-text p {
+  margin-bottom: 1em;
+}
+
+.sos-bio-text p:last-child {
+  margin-bottom: 0;
+}
+
+/* --- Chapter Summary (stage view) --- */
+.sos-chapter {
+  padding: 20px 0;
+  animation: sos-fade-in 0.4s ease;
+}
+
+/* --- Animation --- */
+@keyframes sos-fade-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- Responsive --- */
+@media (max-width: 600px) {
+  .sos-section-btn {
+    font-size: 0.65rem;
+    padding: 8px 12px;
+  }
+
+  .sos-subtitle {
+    font-size: 0.7rem;
+  }
+
+  .sos-group-label {
+    font-size: 0.6rem;
+  }
+}

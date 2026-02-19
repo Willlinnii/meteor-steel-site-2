@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useVoice, { SpeechRecognition } from '../../hooks/useVoice';
+import { useCoursework } from '../../coursework/CourseworkContext';
 import './AtlasPage.css';
 
 function parseAtlasMessage(text) {
@@ -60,6 +61,24 @@ export default function AtlasPage() {
   const greetingSent = useRef({});
   const navigate = useNavigate();
   const { voiceEnabled, recording, speaking, toggleVoice, startListening, stopListening, speak } = useVoice(setInput);
+  const { trackElement, trackTime, buildCourseSummary } = useCoursework();
+
+  // Page visit tracking
+  useEffect(() => { trackElement('atlas.page.visited'); }, [trackElement]);
+
+  // Time tracking per voice
+  const timeRef = useRef({ voice: activeVoice, start: Date.now() });
+  useEffect(() => {
+    const prev = timeRef.current;
+    const elapsed = Math.round((Date.now() - prev.start) / 1000);
+    if (elapsed > 0) trackTime(`atlas.voice.${prev.voice}.time`, elapsed);
+    timeRef.current = { voice: activeVoice, start: Date.now() };
+    return () => {
+      const cur = timeRef.current;
+      const secs = Math.round((Date.now() - cur.start) / 1000);
+      if (secs > 0) trackTime(`atlas.voice.${cur.voice}.time`, secs);
+    };
+  }, [activeVoice, trackTime]);
 
   const emptyMessages = useMemo(() => [], []);
   const messages = chatHistories[activeVoice] || emptyMessages;
@@ -85,7 +104,11 @@ export default function AtlasPage() {
     setMessages(vid, updated);
     setLoading(true);
 
-    const body = { messages: updated };
+    trackElement(`atlas.voice.${vid}.message`);
+    trackElement('atlas.messages.total');
+
+    const courseSummary = buildCourseSummary('/atlas');
+    const body = { messages: updated, courseSummary };
     if (vid === 'atlas') {
       body.area = 'auto';
     } else {
@@ -135,6 +158,7 @@ export default function AtlasPage() {
   }
 
   function handleVoiceChange(e) {
+    trackElement(`atlas.voice.${e.target.value}.selected`);
     setActiveVoice(e.target.value);
   }
 

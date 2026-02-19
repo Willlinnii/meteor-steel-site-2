@@ -1227,6 +1227,74 @@ INSTRUCTIONS:
    <ybr-result>{"passed": false}</ybr-result>`;
 }
 
+// --- Profile Onboarding tool + prompt ---
+
+const UPDATE_PROFILE_TOOL = {
+  name: 'update_profile',
+  description: 'Update a professional credential category for the user. Call this as soon as you have enough information to assign a level for a category. You may call it multiple times during the conversation — once per category.',
+  input_schema: {
+    type: 'object',
+    properties: {
+      category: { type: 'string', enum: ['scholar', 'mediaVoice', 'storyteller', 'healer', 'adventurer'] },
+      level: { type: 'integer', description: '1-4 depending on category' },
+      details: { type: 'string', description: 'Brief summary of what the user shared that justifies this level' },
+    },
+    required: ['category', 'level', 'details'],
+  },
+};
+
+function buildProfileOnboardingPrompt(existingCredentials) {
+  const existing = existingCredentials || {};
+  const existingList = Object.entries(existing)
+    .filter(([, d]) => d && d.level > 0)
+    .map(([cat, d]) => `${cat}: level ${d.level} — ${d.details || 'no details'}`)
+    .join('\n');
+
+  return `You are Atlas, the mythic companion of the Mythouse. You are having a conversation to learn about a member's professional background and lived experience — to understand who they are beyond their coursework.
+
+THERE ARE FIVE CREDENTIAL CATEGORIES. Go through them conversationally:
+
+1. **Scholar** — Academic credentials in mythology, depth psychology, philosophy, anthropology, or related fields.
+   - Level 1: Has academic credentials (degree, certification, or equivalent study)
+   - Level 2: Teaches at the collegiate or university level
+   - Level 3: Full professor with published research
+
+2. **Media Voice** — Work in media, podcasts, digital content, broadcasting.
+   - Level 1: Active in podcasts, web content, or digital media
+   - Level 2: Television, radio, or documentary work
+
+3. **Storyteller** — Writing, oral storytelling, narrative craft.
+   - Level 1: Active writer or oral storyteller
+   - Level 2: Published work or professional sales
+   - Level 3: Work with six-figure budgets or major distribution
+   - Level 4: Has a recognized hit or landmark work
+
+4. **Healer** — Coaching, therapy, psychological practice.
+   - Level 1: Coach, therapist, or psychological practitioner
+   - Level 2: Years of practice with established clientele
+   - Level 3: Well-known practice or significant body of therapeutic work
+
+5. **Adventurer** — Travel to mythic sites, fieldwork, experiential mythology.
+   - Level 1: Has traveled to mythic sites or engaged with myth in the field
+   - Level 2: Research expeditions, archaeological digs, or led mythic coursework
+   - Level 3: Has visited the Seven Wonders or equivalent mythic pilgrimage
+
+INSTRUCTIONS:
+- Start by warmly asking which of these categories they identify with. List them briefly and invitingly.
+- Do NOT go through all five as a checklist. Ask which resonate, then explore those.
+- For each category they identify with, ask enough to determine the right tier. One or two follow-up questions is usually enough.
+- Call the update_profile tool AS SOON as you can assign a level — don't wait until the end. This saves partial progress.
+- If they don't identify with a category, skip it gracefully.
+- Keep the conversation to 5-10 exchanges total. Be warm and mythic but concise.
+- On return visits, acknowledge existing credentials and ask if anything has changed.
+${existingList ? `\nEXISTING CREDENTIALS (the user already has these — acknowledge them):\n${existingList}` : ''}
+
+VOICE:
+- You are Atlas — warm, curious, grounded. Not a form. Not an interview. A conversation between companions.
+- "Tell me about your path..." not "Please list your qualifications."
+- Celebrate what they share. Connect it to the mythic when natural.`;
+}
+
 module.exports = async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
@@ -1239,7 +1307,7 @@ module.exports = async function handler(req, res) {
     });
   }
 
-  const { messages, area, persona, mode, challengeStop, level, journeyId, stageId, gameMode, stageData, aspect } = req.body || {};
+  const { messages, area, persona, mode, challengeStop, level, journeyId, stageId, gameMode, stageData, aspect, courseSummary, existingCredentials } = req.body || {};
 
   // --- Journey Synthesis mode (no messages needed — uses stageData directly) ---
   if (mode === 'journey-synthesis') {
@@ -1413,9 +1481,98 @@ ${stageBlock}`;
     }
   }
 
+  // --- Profile Onboarding mode ---
+  if (mode === 'profile-onboarding') {
+    const profileSystemPrompt = buildProfileOnboardingPrompt(existingCredentials);
+    const profileTools = [UPDATE_PROFILE_TOOL];
+
+    try {
+      const response = await anthropic.messages.create({
+        model: 'claude-haiku-4-5-20251001',
+        system: profileSystemPrompt,
+        messages: trimmed,
+        max_tokens: 1024,
+        tools: profileTools,
+      });
+
+      let reply = '';
+      const credentialUpdates = {};
+
+      // Handle tool_use responses (may have multiple tool calls)
+      const toolBlocks = response.content.filter(c => c.type === 'tool_use');
+      const textBlock = response.content.find(c => c.type === 'text');
+
+      if (toolBlocks.length > 0) {
+        // Collect credential updates from tool calls
+        for (const tb of toolBlocks) {
+          if (tb.name === 'update_profile' && tb.input) {
+            credentialUpdates[tb.input.category] = {
+              level: tb.input.level,
+              details: tb.input.details,
+            };
+          }
+        }
+
+        // Build tool results and do a follow-up call for the text reply
+        const toolResults = toolBlocks.map(tb => ({
+          type: 'tool_result',
+          tool_use_id: tb.id,
+          content: JSON.stringify({ success: true, category: tb.input.category, level: tb.input.level }),
+        }));
+
+        const followUp = await anthropic.messages.create({
+          model: 'claude-haiku-4-5-20251001',
+          system: profileSystemPrompt,
+          messages: [
+            ...trimmed,
+            { role: 'assistant', content: response.content },
+            { role: 'user', content: toolResults },
+          ],
+          max_tokens: 1024,
+          tools: profileTools,
+        });
+
+        reply = followUp.content?.find(c => c.type === 'text')?.text || 'Profile updated.';
+
+        // Check if follow-up also has tool calls
+        const followUpTools = followUp.content.filter(c => c.type === 'tool_use');
+        for (const tb of followUpTools) {
+          if (tb.name === 'update_profile' && tb.input) {
+            credentialUpdates[tb.input.category] = {
+              level: tb.input.level,
+              details: tb.input.details,
+            };
+          }
+        }
+      } else {
+        reply = textBlock?.text || 'No response generated.';
+      }
+
+      return res.status(200).json({ reply, credentialUpdates: Object.keys(credentialUpdates).length > 0 ? credentialUpdates : undefined });
+    } catch (err) {
+      console.error('Profile Onboarding API error:', err?.message, err?.status);
+      return res.status(500).json({ error: `Something went wrong: ${err?.message || 'Unknown error'}` });
+    }
+  }
+
   // Determine system prompt: persona-specific or standard area-based
   const personaPrompt = persona ? getPersonaPrompt(persona) : null;
-  const systemPrompt = personaPrompt || getSystemPrompt(validArea);
+  let systemPrompt = personaPrompt || getSystemPrompt(validArea);
+
+  // Append coursework context if available
+  if (courseSummary && typeof courseSummary === 'string' && courseSummary.length > 0) {
+    systemPrompt += `\n\n--- COURSEWORK STATUS ---
+The student's current coursework progress on Mythouse:
+${courseSummary}
+
+COURSE ADVISOR GUIDELINES:
+- You are aware of their course progress but don't lead with it. Weave it in naturally.
+- If they ask about progress, courses, or what to do next — give specific, actionable guidance based on incomplete requirements.
+- Celebrate completions warmly. If a course is close to done (>80%), mention it once naturally.
+- Connect the current conversation topic to relevant course requirements when it fits organically.
+- Never interrupt a mythic, emotional, or creative conversation just to mention courses.
+- If they have no courses active, do not mention coursework at all.`;
+  }
 
   try {
     const response = await anthropic.messages.create({

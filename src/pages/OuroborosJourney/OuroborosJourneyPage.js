@@ -4,6 +4,7 @@ import useWheelJourney from '../../hooks/useWheelJourney';
 import useVoice, { SpeechRecognition } from '../../hooks/useVoice';
 import useYellowBrickRoad from '../../components/sevenMetals/useYellowBrickRoad';
 import challengeData from '../../data/yellowBrickRoad.json';
+import { useCoursework } from '../../coursework/CourseworkContext';
 import './OuroborosJourneyPage.css';
 
 const { challenges } = challengeData;
@@ -124,7 +125,7 @@ const JOURNEY_CONFIG = {
 // Two coordinate systems, both 0° = 12 o'clock, measured CW:
 //
 // DRAGON (original unflipped image):
-//   Mouth tip ≈ 55°, Tail tip ≈ 125°, body fills the rest.
+//   Mouth tip ≈ 76°, Tail tip ≈ 82°, body fills the rest.
 //   TAIL_TIP is the tail-tip angle in the original image.
 //
 // DOTS (stage nodes behind the dragon):
@@ -136,7 +137,7 @@ const JOURNEY_CONFIG = {
 // To place the tail tip at `target`:
 //   (360 − TAIL_TIP) + R = target  ⟹  R = target + TAIL_TIP − 360
 //   equivalently  R = target + TAIL_TIP  (mod 360, kept continuous)
-const TAIL_TIP = 125;
+const TAIL_TIP = 82;
 
 function getStageAngle(index, total) {
   return index * (360 / total);
@@ -253,9 +254,30 @@ export default function OuroborosJourneyPage() {
   const totalStages = stages.length;
   const config = JOURNEY_CONFIG[journeyId] || JOURNEY_CONFIG.monomyth;
 
+  const { trackElement, trackTime } = useCoursework();
+
   /* ── Game mode state (non-cosmic only) ── */
   const [gameMode, setGameMode] = useState(null); // null | 'riddle' | 'story' | 'personal'
   const [fusedPhase, setFusedPhase] = useState(0); // 0=monomyth, 1=steel (fused journey only)
+
+  // Page visit tracking
+  useEffect(() => {
+    trackElement(`journeys.${journeyId}.visited`);
+  }, [trackElement, journeyId]);
+
+  // Time tracking per stage
+  const timeRef = useRef({ idx, start: Date.now() });
+  useEffect(() => {
+    const prev = timeRef.current;
+    const elapsed = Math.round((Date.now() - prev.start) / 1000);
+    if (elapsed > 0 && prev.idx >= 0) trackTime(`journeys.${journeyId}.stage.${prev.idx}.time`, elapsed);
+    timeRef.current = { idx, start: Date.now() };
+    return () => {
+      const cur = timeRef.current;
+      const secs = Math.round((Date.now() - cur.start) / 1000);
+      if (secs > 0 && cur.idx >= 0) trackTime(`journeys.${journeyId}.stage.${cur.idx}.time`, secs);
+    };
+  }, [idx, journeyId, trackTime]);
 
   // Cosmic auto-starts; non-cosmic waits for mode selection
   useEffect(() => {
@@ -263,6 +285,7 @@ export default function OuroborosJourneyPage() {
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleSelectMode = (modeId) => {
+    trackElement(`journeys.${journeyId}.mode.${modeId}`);
     setGameMode(modeId);
     journey.startGame();
   };
@@ -339,6 +362,15 @@ export default function OuroborosJourneyPage() {
     }
   }, [voiceEnabled, speak, idx, totalStages, stopDone, stop, messages.length, gameMode, isCosmic, cosmicChallenge, isFused, fusedPhase]);
 
+  // Track journey completion
+  const completionTracked = useRef(false);
+  useEffect(() => {
+    if (isComplete && !completionTracked.current) {
+      completionTracked.current = true;
+      trackElement(`journeys.${journeyId}.completed`);
+    }
+  }, [isComplete, journeyId, trackElement]);
+
   /* ── Synthesis trigger ── */
   useEffect(() => {
     if (!isComplete || isCosmic || !gameMode || gameMode === 'riddle') return;
@@ -400,10 +432,13 @@ export default function OuroborosJourneyPage() {
         if (isFused && data.passed) {
           // Fused two-phase handling
           if (fusedPhase === 0) {
+            trackElement(`journeys.${journeyId}.stage.${stop.id}.monomyth.passed`);
             journey.recordResult(stop.id, false, updated); // store conversations, don't complete
             setFusedPhase(1);                               // advance to steel phase
             setMessages([]);                                // clear for new prompt
           } else {
+            trackElement(`journeys.${journeyId}.stage.${stop.id}.steel.passed`);
+            trackElement(`journeys.${journeyId}.stage.${stop.id}.completed`);
             journey.recordResult(stop.id, true, updated);   // complete the stage
             setFusedPhase(0);                               // reset for next stage
             setSmokePuff(true);
@@ -414,6 +449,7 @@ export default function OuroborosJourneyPage() {
         } else if (isCosmic) {
           journey.recordResult(stop.id, cosmicLevel, data.passed, updated);
           if (data.passed) {
+            trackElement(`journeys.cosmic.${stop.id}.level.${cosmicLevel}.passed`);
             setSmokePuff(true);
             clearTimeout(smokePuffTimer.current);
             smokePuffTimer.current = setTimeout(() => setSmokePuff(false), 2200);
@@ -422,6 +458,7 @@ export default function OuroborosJourneyPage() {
         } else {
           journey.recordResult(stop.id, data.passed, updated);
           if (data.passed) {
+            trackElement(`journeys.${journeyId}.stage.${stop.id}.completed`);
             setSmokePuff(true);
             clearTimeout(smokePuffTimer.current);
             smokePuffTimer.current = setTimeout(() => setSmokePuff(false), 2200);

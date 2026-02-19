@@ -38,7 +38,7 @@ function ensureYTApi() {
   });
 }
 
-export default function CircleNav({ stages, currentStage, onSelectStage, clockwise, onToggleDirection, centerLine1, centerLine2, centerLine3, showAuthor = true, videoUrl, onCloseVideo, onAuthorPlay, worldZones, activeWorld, onSelectWorld, modelOverlay, onCloseModel, ybrActive, ybrCurrentStopIndex, ybrStages, onToggleYBR, ybrAutoStart }) {
+export default function CircleNav({ stages, currentStage, onSelectStage, clockwise, onToggleDirection, centerLine1, centerLine2, centerLine3, showAuthor = true, videoUrl, onCloseVideo, onAuthorPlay, worldZones, activeWorld, onSelectWorld, modelOverlay, onCloseModel, ybrActive, ybrCurrentStopIndex, ybrStages, onToggleYBR, ybrAutoStart, playIntroAnim, getStageClass }) {
   const radius = 42;
   const computed = getStageAngles(stages, clockwise);
   const playerRef = useRef(null);
@@ -82,6 +82,24 @@ export default function CircleNav({ stages, currentStage, onSelectStage, clockwi
       handleYBRClick();
     }
   }, [ybrAutoStart]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Visual-only intro light-up (no journey activation)
+  useEffect(() => {
+    if (!playIntroAnim || ybrActive || ybrAnimStage >= 0) return;
+    if (ybrAnimRef.current) clearTimeout(ybrAnimRef.current);
+    let i = 0;
+    const total = stages.length;
+    const step = () => {
+      setYbrAnimStage(i);
+      i++;
+      if (i <= total) {
+        ybrAnimRef.current = setTimeout(step, 140);
+      } else {
+        ybrAnimRef.current = setTimeout(() => setYbrAnimStage(-1), 200);
+      }
+    };
+    step();
+  }, [playIntroAnim]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Extract list ID from embed URL
   const listId = videoUrl ? new URL(videoUrl).searchParams.get('list') : null;
@@ -351,7 +369,7 @@ export default function CircleNav({ stages, currentStage, onSelectStage, clockwi
           return (
             <div
               key={s.id}
-              className={`circle-stage ${currentStage === s.id ? 'active' : ''}`}
+              className={`circle-stage ${currentStage === s.id ? 'active' : ''} ${getStageClass ? getStageClass(s.id) : ''}`}
               style={{
                 left: `${x}%`,
                 top: `${y}%`,
