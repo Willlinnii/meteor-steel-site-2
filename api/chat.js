@@ -826,9 +826,9 @@ Celestial Clocks (/metals):
 - [[Label|/metals]]
 - [[Walk the Yellow Brick Road|/metals/yellow-brick-road]]
 
-Wheel Journeys:
-- [[Walk the Monomyth|/monomyth?journey=true]]
-- [[Walk Meteor Steel|/?journey=true]]
+Yellow Brick Roads:
+- [[Monomyth Journey|/monomyth?journey=true]]
+- [[Meteor Steel Journey|/?journey=true]]
 
 Fallen Starlight (/fallen-starlight):
 - [[Label|/fallen-starlight?stage=STAGE_ID]]

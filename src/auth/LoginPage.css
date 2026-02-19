@@ -150,6 +150,34 @@
   padding: 0;
 }
 
+.login-agree {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  text-align: left;
+  margin-bottom: 24px;
+  cursor: pointer;
+}
+
+.login-agree input[type="checkbox"] {
+  margin-top: 3px;
+  flex-shrink: 0;
+  accent-color: var(--accent-ember);
+  cursor: pointer;
+}
+
+.login-agree span {
+  font-family: 'Crimson Pro', serif;
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: var(--text-secondary);
+}
+
+.login-google-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
 .login-error {
   color: #e57373;
   font-size: 0.9rem;

@@ -28,6 +28,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
+  const [agreed, setAgreed] = useState(false);
 
   async function handleGoogle() {
     setError('');
@@ -83,7 +84,18 @@ export default function LoginPage() {
         <h1 className="login-title">Mythouse</h1>
         <p className="login-subtitle">Enter the mythic archive</p>
 
-        <button className="login-google-btn" onClick={handleGoogle} type="button">
+        <label className="login-agree">
+          <input
+            type="checkbox"
+            checked={agreed}
+            onChange={(e) => setAgreed(e.target.checked)}
+          />
+          <span>
+            I acknowledge that all content on this site is the intellectual property of Glinter LLC. All rights reserved. Unauthorized reproduction, distribution, or use of any materials is prohibited.
+          </span>
+        </label>
+
+        <button className="login-google-btn" onClick={handleGoogle} type="button" disabled={!agreed}>
           <svg viewBox="0 0 24 24">
             <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"/>
             <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
@@ -114,7 +126,7 @@ export default function LoginPage() {
             required
             autoComplete={isSignUp ? 'new-password' : 'current-password'}
           />
-          <button className="login-submit-btn" type="submit" disabled={busy}>
+          <button className="login-submit-btn" type="submit" disabled={busy || !agreed}>
             {busy ? '...' : isSignUp ? 'Create Account' : 'Sign In'}
           </button>
         </form>

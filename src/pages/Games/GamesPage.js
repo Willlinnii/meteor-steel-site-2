@@ -61,28 +61,25 @@ const GAMES = [
     description: 'Browse 52 playing cards and 8 full tarot decks (78 cards each) across 7 cultures.',
     direct: true,
   },
+];
+
+const YELLOW_BRICK_ROADS = [
   {
     id: 'yellow-brick-road',
-    label: 'Yellow Brick Road',
-    origin: 'Mythouse Original',
+    label: 'Cosmic Journey',
     description: 'Ascend through the planetary spheres, traverse the zodiac, and descend carrying what you\'ve gathered. 26 encounters. 3 levels each.',
-    featured: true,
     externalPath: '/metals/yellow-brick-road',
   },
   {
     id: 'monomyth-journey',
-    label: 'Walk the Monomyth',
-    origin: 'Mythouse Original',
+    label: 'Monomyth Journey',
     description: 'Walk the eight stages of the Hero\'s Journey with Atlas as your guide.',
-    featured: true,
     externalPath: '/monomyth?journey=true',
   },
   {
     id: 'meteor-steel-journey',
-    label: 'Walk Meteor Steel',
-    origin: 'Mythouse Original',
+    label: 'Meteor Steel Journey',
     description: 'Walk the eight stages of the Meteor Steel process with Atlas as your guide.',
-    featured: true,
     externalPath: '/?journey=true',
   },
 ];
@@ -166,6 +163,22 @@ export default function GamesPage() {
       <p className="games-page-subtitle">
         Ancient board games brought to life. Choose a game to begin.
       </p>
+
+      <h2 className="games-section-title">Yellow Brick Roads</h2>
+      <div className="games-grid">
+        {YELLOW_BRICK_ROADS.map(game => (
+          <Link
+            key={game.id}
+            className="game-card featured"
+            to={game.externalPath}
+          >
+            <span className="game-card-title">{game.label}</span>
+            <span className="game-card-desc">{game.description}</span>
+          </Link>
+        ))}
+      </div>
+
+      <h2 className="games-section-title">Board Games</h2>
       <div className="games-grid">
         {GAMES.map(game => (
           <Link

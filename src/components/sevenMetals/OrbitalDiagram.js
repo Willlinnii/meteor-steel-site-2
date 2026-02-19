@@ -220,7 +220,7 @@ function ensureYTApi() {
   });
 }
 
-export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPlanet, selectedSign, onSelectSign, selectedCardinal, onSelectCardinal, selectedEarth, onSelectEarth, showCalendar, onToggleCalendar, selectedMonth, onSelectMonth, showMedicineWheel, onToggleMedicineWheel, selectedWheelItem, onSelectWheelItem, chakraViewMode, onToggleChakraView, videoUrl, onCloseVideo, ybrActive, ybrCurrentStopIndex, ybrStopProgress, ybrJourneySequence, onToggleYBR }) {
+export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPlanet, selectedSign, onSelectSign, selectedCardinal, onSelectCardinal, selectedEarth, onSelectEarth, showCalendar, onToggleCalendar, selectedMonth, onSelectMonth, showMedicineWheel, onToggleMedicineWheel, selectedWheelItem, onSelectWheelItem, chakraViewMode, onToggleChakraView, videoUrl, onCloseVideo, ybrActive, ybrCurrentStopIndex, ybrStopProgress, ybrJourneySequence, onToggleYBR, ybrAutoStart }) {
   const navigate = useNavigate();
   const wrapperRef = useRef(null);
   const [tooltip, setTooltip] = useState(null);
@@ -434,6 +434,17 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
   const startYbrIntro = useCallback(() => {
     setYbrIntroStep(0);
   }, []);
+
+  // Auto-start YBR animation when requested (e.g., from Games page navigation)
+  // First activate YBR (which triggers planet alignment at 0.8s transition),
+  // then wait for alignment to finish before starting the yellow circle animation
+  useEffect(() => {
+    if (ybrAutoStart && !ybrActive && ybrIntroStep < 0) {
+      onToggleYBR && onToggleYBR();
+      const t = setTimeout(() => startYbrIntro(), 1000);
+      return () => clearTimeout(t);
+    }
+  }, [ybrAutoStart]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleWheelMove = (e) => {
     const svg = e.currentTarget.closest('svg');

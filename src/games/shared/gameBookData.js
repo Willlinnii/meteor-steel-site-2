@@ -246,7 +246,7 @@ const GAME_BOOK = {
       },
       {
         heading: 'Atlas as Guide',
-        text: 'Unlike the Yellow Brick Road where each entity tests you in their own voice, here Atlas speaks as Atlas — the mythic companion who has walked this wheel before. Atlas draws on the full depth of the Mythouse archive: theorists, myths, cycles, depth psychology, and symbols. The test is not memorization but understanding.',
+        text: 'Unlike the Cosmic Journey where each entity tests you in their own voice, here Atlas speaks as Atlas — the mythic companion who has walked this wheel before. Atlas draws on the full depth of the Mythouse archive: theorists, myths, cycles, depth psychology, and symbols. The test is not memorization but understanding.',
       },
     ],
   },

@@ -3,7 +3,7 @@ import React, { useState, useCallback } from 'react';
 function IntroScreen({ onBegin, introText }) {
   return (
     <div className="ybr-panel ybr-earth-intro">
-      <h2 className="ybr-title">Walk the Wheel</h2>
+      <h2 className="ybr-title">Yellow Brick Road</h2>
       <div className="ybr-intro-text">
         {introText.map((p, i) => (
           <p key={i}>{p}</p>

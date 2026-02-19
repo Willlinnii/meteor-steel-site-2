@@ -22,6 +22,17 @@
   margin-bottom: 28px;
 }
 
+/* ===== SECTION TITLES ===== */
+.games-section-title {
+  font-family: 'Cinzel', serif;
+  color: var(--accent-gold);
+  font-size: 1.1rem;
+  letter-spacing: 0.06em;
+  margin: 24px 0 12px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
 /* ===== GAMES GRID ===== */
 .games-grid {
   display: grid;

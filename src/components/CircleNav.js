@@ -38,7 +38,7 @@ function ensureYTApi() {
   });
 }
 
-export default function CircleNav({ stages, currentStage, onSelectStage, clockwise, onToggleDirection, centerLine1, centerLine2, centerLine3, showAuthor = true, videoUrl, onCloseVideo, onAuthorPlay, worldZones, activeWorld, onSelectWorld, modelOverlay, onCloseModel, ybrActive, ybrCurrentStopIndex, ybrStages, onToggleYBR }) {
+export default function CircleNav({ stages, currentStage, onSelectStage, clockwise, onToggleDirection, centerLine1, centerLine2, centerLine3, showAuthor = true, videoUrl, onCloseVideo, onAuthorPlay, worldZones, activeWorld, onSelectWorld, modelOverlay, onCloseModel, ybrActive, ybrCurrentStopIndex, ybrStages, onToggleYBR, ybrAutoStart }) {
   const radius = 42;
   const computed = getStageAngles(stages, clockwise);
   const playerRef = useRef(null);
@@ -61,7 +61,7 @@ export default function CircleNav({ stages, currentStage, onSelectStage, clockwi
       setYbrAnimStage(i);
       i++;
       if (i <= total) {
-        ybrAnimRef.current = setTimeout(step, 120);
+        ybrAnimRef.current = setTimeout(step, 140);
       } else {
         ybrAnimRef.current = setTimeout(() => {
           setYbrAnimStage(-1);
@@ -75,6 +75,13 @@ export default function CircleNav({ stages, currentStage, onSelectStage, clockwi
   useEffect(() => {
     return () => { if (ybrAnimRef.current) clearTimeout(ybrAnimRef.current); };
   }, []);
+
+  // Auto-start YBR animation when requested (e.g., from Games page URL param)
+  useEffect(() => {
+    if (ybrAutoStart && !ybrActive && ybrAnimStage < 0) {
+      handleYBRClick();
+    }
+  }, [ybrAutoStart]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Extract list ID from embed URL
   const listId = videoUrl ? new URL(videoUrl).searchParams.get('list') : null;
@@ -365,7 +372,7 @@ export default function CircleNav({ stages, currentStage, onSelectStage, clockwi
           <button
             className={`circle-ybr-toggle${ybrActive ? ' active' : ''}${ybrAnimStage >= 0 ? ' animating' : ''}`}
             onClick={handleYBRClick}
-            title={ybrActive ? 'Exit Wheel Journey' : 'Walk the Wheel'}
+            title={ybrActive ? 'Exit Yellow Brick Road' : 'Yellow Brick Road'}
           >
             <svg viewBox="0 0 20 14" width="16" height="11" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinejoin="round">
               <path d="M1,4 L7,1 L19,1 L13,4 Z" />

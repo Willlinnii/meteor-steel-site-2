@@ -299,14 +299,14 @@
       "otherWorldLabel": "Unconscious",
       "color": "#aa7a3a",
       "stages": [
-        "Home · Persona",
-        "Call to Adventure",
-        "King & Cosmos",
-        "Road of Trials",
-        "Nadir · Anima/Animus",
-        "Chaos",
-        "Return Flight",
-        "Resurrection"
+        "Persona · Ego",
+        "Shadow Synchronicity",
+        "Descent · Unconscious",
+        "Inferior Functions",
+        "Anima/Animus · Self",
+        "Confronting Regression",
+        "Individuation",
+        "Realized Self"
       ],
       "layers": [
         { "ring": 1, "label": "Ego", "description": "Center of conscious awareness" },

@@ -288,6 +288,7 @@ function MeteorSteelHome() {
   const [showMeteors, setShowMeteors] = useState(false);
   const [devEntries, setDevEntries] = useState({});
   const [videoUrl, setVideoUrl] = useState(null);
+  const [ybrAutoStart, setYbrAutoStart] = useState(false);
 
   const journey = useWheelJourney('meteor-steel', STAGES);
 
@@ -322,7 +323,7 @@ function MeteorSteelHome() {
     const stageParam = searchParams.get('stage');
     const journeyParam = searchParams.get('journey');
     if (journeyParam === 'true') {
-      journey.startGame();
+      setYbrAutoStart(true);
     } else if (stageParam && STAGES.find(s => s.id === stageParam)) {
       handleSelectStage(stageParam);
     }
@@ -355,6 +356,7 @@ function MeteorSteelHome() {
         ybrCurrentStopIndex={journey.currentStopIndex}
         ybrStages={STAGES}
         onToggleYBR={handleYBRToggle}
+        ybrAutoStart={ybrAutoStart}
       />
 
       {currentStage !== 'overview' && currentStage !== 'bio' && (
@@ -376,7 +378,7 @@ function MeteorSteelHome() {
             onAdvanceToNext={journey.advanceToNext}
             onExit={journey.exitGame}
             introText={[
-              "Atlas invites you to walk the wheel of Meteor Steel.",
+              "Atlas invites you to walk the Yellow Brick Road of Meteor Steel.",
               "Eight stages. Eight stops around the wheel. At each one, Atlas will ask you to describe what happens at that stage — the technology, the mythology, and the transformation.",
               "You are encouraged to explore each stage's content on the page before answering. The tabs above hold the knowledge you need — technology, figures, saviors, monomyth, synthesis.",
               "Steel cuts. Life flows.",

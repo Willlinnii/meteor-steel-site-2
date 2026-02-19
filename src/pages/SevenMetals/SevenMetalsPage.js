@@ -397,13 +397,15 @@ export default function SevenMetalsPage() {
   const [personaChatHistory, setPersonaChatHistory] = useState({});
   const ybr = useYellowBrickRoad();
 
+  const [ybrAutoStart, setYbrAutoStart] = useState(false);
+
   // Sync view state with URL on back/forward navigation
   useEffect(() => {
     const path = location.pathname;
     setShowMedicineWheel(path.endsWith('/medicine-wheel'));
     setShowCalendar(path.endsWith('/calendar'));
     if (path.endsWith('/yellow-brick-road') && !ybr.active) {
-      ybr.startGame();
+      setYbrAutoStart(true);
     }
   }, [location.pathname]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -569,6 +571,7 @@ export default function SevenMetalsPage() {
           ybrStopProgress={ybr.stopProgress}
           ybrJourneySequence={ybr.journeySequence}
           onToggleYBR={handleYBRToggle}
+          ybrAutoStart={ybrAutoStart}
         />
       </div>
 

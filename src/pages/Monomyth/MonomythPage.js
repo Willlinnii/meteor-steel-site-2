@@ -462,6 +462,7 @@ export default function MonomythPage() {
   const [videoUrl, setVideoUrl] = useState(null);
   const [activeWorld, setActiveWorld] = useState(null);
   const [selectedModel, setSelectedModel] = useState(null);
+  const [ybrAutoStart, setYbrAutoStart] = useState(false);
 
   const journey = useWheelJourney('monomyth', MONOMYTH_STAGES);
 
@@ -506,7 +507,7 @@ export default function MonomythPage() {
     const journeyParam = searchParams.get('journey');
 
     if (journeyParam === 'true') {
-      journey.startGame();
+      setYbrAutoStart(true);
     } else if (worldParam && ['normal', 'other', 'threshold'].includes(worldParam)) {
       setActiveWorld(worldParam);
       setCurrentStage('overview');
@@ -582,6 +583,7 @@ export default function MonomythPage() {
         ybrCurrentStopIndex={journey.currentStopIndex}
         ybrStages={MONOMYTH_STAGES}
         onToggleYBR={handleYBRToggle}
+        ybrAutoStart={ybrAutoStart}
       />
 
       {isStage && stageLabel && (
@@ -603,7 +605,7 @@ export default function MonomythPage() {
             onAdvanceToNext={journey.advanceToNext}
             onExit={journey.exitGame}
             introText={[
-              "Atlas invites you to walk the wheel of the Hero's Journey.",
+              "Atlas invites you to walk the Yellow Brick Road of the Hero's Journey.",
               "Eight stages. Eight stops around the wheel. At each one, Atlas will ask you to describe what happens at that stage — the events, themes, and transformations that define it.",
               "You are encouraged to explore each stage's content on the page before answering. The tabs above hold the knowledge you need — overview, cycles, theorists, myths, films.",
               "There are no wrong answers, only deeper ones.",
