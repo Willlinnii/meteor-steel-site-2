@@ -958,11 +958,11 @@ const NAV_ITEMS = [
   { path: '/story-forge', label: 'Story Forge' },
   { path: 'https://www.thestoryatlas.com/my-courses/psychles/surface', label: 'Story Atlas', external: true },
   { path: '/games', label: 'Game Room' },
+  { path: '/story-of-stories', label: 'Story of Stories' },
   { path: '/profile', label: 'Profile' },
 ];
 
 const HIDDEN_NAV_ITEMS = [
-  { path: '/story-of-stories', label: 'Story of Stories' },
 ];
 
 function SiteNav() {
