@@ -66,10 +66,10 @@
 }
 
 .celestial-back-link {
-  position: absolute;
-  top: 16px;
-  left: 16px;
-  z-index: 10;
+  position: fixed;
+  top: 80px;
+  left: 20px;
+  z-index: 99;
   color: rgba(201, 169, 97, 0.7);
   text-decoration: none;
   font-family: 'Cinzel', serif;
@@ -501,5 +501,12 @@
 
   .celestial-panel-body .overview-grid {
     grid-template-columns: 1fr;
+  }
+
+  .celestial-back-link {
+    top: 72px;
+    left: 10px;
+    font-size: 12px;
+    padding: 5px 10px;
   }
 }
