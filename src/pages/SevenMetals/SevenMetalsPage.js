@@ -27,6 +27,19 @@ import dayNightData from '../../data/dayNight.json';
 import useYellowBrickRoad from '../../components/sevenMetals/useYellowBrickRoad';
 import YellowBrickRoadPanel from '../../components/sevenMetals/YellowBrickRoadPanel';
 
+const MONTHS = ['January','February','March','April','May','June',
+  'July','August','September','October','November','December'];
+
+const WEEKDAYS = [
+  { label: 'Sun', day: 'Sunday', planet: 'Sun' },
+  { label: 'Mon', day: 'Monday', planet: 'Moon' },
+  { label: 'Tue', day: 'Tuesday', planet: 'Mars' },
+  { label: 'Wed', day: 'Wednesday', planet: 'Mercury' },
+  { label: 'Thu', day: 'Thursday', planet: 'Jupiter' },
+  { label: 'Fri', day: 'Friday', planet: 'Venus' },
+  { label: 'Sat', day: 'Saturday', planet: 'Saturn' },
+];
+
 const PLANET_PLAYLISTS = {
   Moon: 'https://www.youtube.com/playlist?list=PLX31T_KS3jtq-GwZQZtrFaqTbvs6QPiBR',
   Mercury: 'https://www.youtube.com/playlist?list=PLX31T_KS3jtqvqEVpF80i8C3BarI-r4v8',
@@ -386,7 +399,7 @@ export default function SevenMetalsPage() {
   const [selectedEarth, setSelectedEarth] = useState('day');
   const [devEntries, setDevEntries] = useState({});
   const [showCalendar, setShowCalendar] = useState(() => location.pathname.endsWith('/calendar'));
-  const [selectedMonth, setSelectedMonth] = useState(null);
+  const [selectedMonth, setSelectedMonth] = useState(() => location.pathname.endsWith('/calendar') ? MONTHS[new Date().getMonth()] : null);
   const [activeMonthTab, setActiveMonthTab] = useState('stone');
   const [showMedicineWheel, setShowMedicineWheel] = useState(() => location.pathname.endsWith('/medicine-wheel'));
   const [selectedWheelItem, setSelectedWheelItem] = useState(null);
@@ -403,7 +416,12 @@ export default function SevenMetalsPage() {
   useEffect(() => {
     const path = location.pathname;
     setShowMedicineWheel(path.endsWith('/medicine-wheel'));
-    setShowCalendar(path.endsWith('/calendar'));
+    const cal = path.endsWith('/calendar');
+    setShowCalendar(cal);
+    if (cal && !selectedMonth) {
+      setSelectedMonth(MONTHS[new Date().getMonth()]);
+      setActiveMonthTab('stone');
+    }
     if (path.endsWith('/yellow-brick-road') && !ybr.active) {
       setYbrAutoStart(true);
     }
@@ -541,7 +559,18 @@ export default function SevenMetalsPage() {
           selectedEarth={selectedEarth}
           onSelectEarth={(e) => { setSelectedEarth(e); setSelectedSign(null); setSelectedCardinal(null); setSelectedMonth(null); setVideoUrl(null); setPersonaChatOpen(null); }}
           showCalendar={showCalendar}
-          onToggleCalendar={() => { const next = !showCalendar; setShowCalendar(next); navigate(next ? '/metals/calendar' : '/metals'); }}
+          onToggleCalendar={() => {
+            const next = !showCalendar;
+            setShowCalendar(next);
+            if (next) {
+              setSelectedMonth(MONTHS[new Date().getMonth()]);
+              setActiveMonthTab('stone');
+              setSelectedSign(null); setSelectedCardinal(null); setSelectedEarth(null);
+            } else {
+              setSelectedMonth(null);
+            }
+            navigate(next ? '/metals/calendar' : '/metals');
+          }}
           selectedMonth={selectedMonth}
           onSelectMonth={(m) => { setSelectedMonth(m); setActiveMonthTab('stone'); if (m) { setSelectedSign(null); setSelectedCardinal(null); setSelectedEarth(null); } }}
           showMedicineWheel={showMedicineWheel}
@@ -692,6 +721,26 @@ export default function SevenMetalsPage() {
             {selectedMonth}
             <span className="metals-sub">Mythic Calendar</span>
           </h2>
+          <div className="calendar-weekday-bar">
+            <p className="calendar-today-label">
+              {new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
+            </p>
+            <div className="calendar-weekday-buttons">
+              {WEEKDAYS.map((w, i) => (
+                <button
+                  key={w.day}
+                  className={`calendar-weekday-btn${new Date().getDay() === i ? ' active' : ''}`}
+                  onClick={() => {
+                    setSelectedPlanet(w.planet);
+                    setSelectedMonth(null);
+                  }}
+                  title={`${w.day} — ruled by ${w.planet}`}
+                >
+                  {w.label}
+                </button>
+              ))}
+            </div>
+          </div>
           <div className="container">
             <div id="content-container">
               <div className="metal-detail-panel">

@@ -260,6 +260,7 @@ export default function SevenMetalsVRPage() {
 
   // Camera AR mode — phone camera as background, gyroscope controls
   const [cameraAR, setCameraAR] = useState(false);
+  const [arPassthrough, setArPassthrough] = useState(false);
   const videoRef = useRef(null);
   const streamRef = useRef(null);
 
@@ -296,6 +297,7 @@ export default function SevenMetalsVRPage() {
       streamRef.current = null;
     }
     setCameraAR(false);
+    setArPassthrough(false);
     setArPanelLocked(false);
     panelLockedExtRef.current = false;
   }, []);
@@ -460,6 +462,7 @@ export default function SevenMetalsVRPage() {
           infoPanelContent={cameraAR && hasSelection ? panelContent : null}
           xrStore={xrStore}
           cameraAR={cameraAR}
+          arPassthrough={arPassthrough}
           arZoom={arZoom}
           joystickRef={joystickRef}
           flyToTarget={flyToTarget}
@@ -525,9 +528,18 @@ export default function SevenMetalsVRPage() {
               Phone AR
             </button>
           ) : (
-            <button className="celestial-btn celestial-xr-enter" onClick={stopCameraAR} title="Exit camera AR mode">
-              Exit AR
-            </button>
+            <>
+              <button
+                className={`celestial-btn celestial-xr-enter${arPassthrough ? ' active' : ''}`}
+                onClick={() => setArPassthrough(p => !p)}
+                title={arPassthrough ? 'Show starfield background' : 'Passthrough — camera only with artifacts'}
+              >
+                {arPassthrough ? 'Stars Off' : 'Passthrough'}
+              </button>
+              <button className="celestial-btn celestial-xr-enter" onClick={stopCameraAR} title="Exit camera AR mode">
+                Exit AR
+              </button>
+            </>
           )}
           {arSupported && (
             <button className="celestial-btn celestial-xr-enter" onClick={enterAR} title="Enter AR — view in your space">

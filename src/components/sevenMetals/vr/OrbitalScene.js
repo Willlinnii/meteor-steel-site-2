@@ -87,6 +87,7 @@ export default function OrbitalScene({
   onSelectEarth,
   infoPanelContent,
   cameraAR,
+  arPassthrough,
   anglesRef: externalAnglesRef,
   panelLockedRef,
   onPanelLock,
@@ -113,8 +114,8 @@ export default function OrbitalScene({
       <ambientLight intensity={0.3} />
       <SunLight anglesRef={anglesRef} isHelio={isHelio} orbitRadius={sunOrbitR} />
 
-      {/* Stars */}
-      <StarfieldBackground cameraAR={cameraAR} />
+      {/* Stars — hidden in passthrough mode so only artifacts show over camera */}
+      {!arPassthrough && <StarfieldBackground cameraAR={cameraAR} />}
 
       {/* Zodiac ring */}
       <ZodiacSphere selectedSign={selectedSign} onSelectSign={onSelectSign} />

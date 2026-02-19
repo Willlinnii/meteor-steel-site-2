@@ -189,6 +189,13 @@
   color: #8cf;
 }
 
+.celestial-xr-enter.active {
+  background: rgba(100, 180, 255, 0.15);
+  border-color: rgba(100, 180, 255, 0.6);
+  color: #8cf;
+  box-shadow: 0 0 12px rgba(100, 180, 255, 0.25);
+}
+
 /* ===== VR Layout: 3D + Side Panel ===== */
 
 .celestial-vr-layout {

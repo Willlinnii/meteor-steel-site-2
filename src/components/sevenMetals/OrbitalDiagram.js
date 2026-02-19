@@ -495,6 +495,15 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
     };
   }, [aligned, livePositions, heliocentric, chakraViewMode]);
 
+  // When calendar mode is activated, also activate live planet positions
+  useEffect(() => {
+    if (showCalendar) {
+      setLivePositions(true);
+      setHeliocentric(false);
+      setAligned(false);
+    }
+  }, [showCalendar]);
+
   // Auto-align when Yellow Brick Road activates
   useEffect(() => {
     if (ybrActive) {

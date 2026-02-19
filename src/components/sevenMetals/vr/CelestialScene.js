@@ -66,6 +66,7 @@ export default function CelestialScene({
   infoPanelContent,
   xrStore,
   cameraAR,
+  arPassthrough,
   arZoom,
   joystickRef,
   flyToTarget,
@@ -104,6 +105,7 @@ export default function CelestialScene({
                 onSelectEarth={onSelectEarth}
                 infoPanelContent={infoPanelContent}
                 cameraAR={cameraAR}
+                arPassthrough={arPassthrough}
                 anglesRef={anglesRef}
                 panelLockedRef={panelLockedRef}
                 onPanelLock={onPanelLock}

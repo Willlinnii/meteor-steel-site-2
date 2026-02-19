@@ -25,6 +25,7 @@ import fallenStarlightData from './data/fallenStarlight.json';
 const SevenMetalsVRPage = lazy(() => import('./pages/SevenMetals/SevenMetalsVRPage'));
 const AdminPage = lazy(() => import('./pages/Admin/AdminPage'));
 const OuroborosJourneyPage = lazy(() => import('./pages/OuroborosJourney/OuroborosJourneyPage'));
+const AtlasPage = lazy(() => import('./pages/Atlas/AtlasPage'));
 
 const STAGES = [
   { id: 'golden-age', label: 'Golden Age' },
@@ -857,7 +858,7 @@ function StoryForgeHome() {
 }
 
 const NAV_ITEMS = [
-  { path: '/metals', label: 'Celestial Clocks' },
+  { path: '/metals/calendar', label: 'Celestial Clocks' },
   { path: '/mythology-channel', label: 'Mythology Channel' },
   { path: '/mythosophia', label: 'Mythosophia' },
   { path: '/', label: 'Meteor Steel' },
@@ -911,7 +912,7 @@ function SiteHeader() {
   const { user, signOut } = useAuth();
   return (
     <header className="site-header">
-      <Link to="/metals" className="site-header-logo">Mythouse</Link>
+      <Link to="/metals/calendar" className="site-header-logo">Mythouse</Link>
       {user && (
         <div className="site-header-user">
           <button className="site-header-signout" onClick={signOut}>Sign Out</button>
@@ -940,6 +941,11 @@ function SiteFooter() {
             <path d="M10 15l5.19-3L10 9v6m11.56-7.83c.13.47.22 1.1.28 1.9.07.8.1 1.49.1 2.09L22 12c0 2.19-.16 3.8-.44 4.83-.25.9-.83 1.48-1.73 1.73-.47.13-1.33.22-2.65.28-1.3.07-2.49.1-3.59.1L12 19c-4.19 0-6.8-.16-7.83-.44-.9-.25-1.48-.83-1.73-1.73-.13-.47-.22-1.1-.28-1.9-.07-.8-.1-1.49-.1-2.09L2 12c0-2.19.16-3.8.44-4.83.25-.9.83-1.48 1.73-1.73.47-.13 1.33-.22 2.65-.28 1.3-.07 2.49-.1 3.59-.1L12 5c4.19 0 6.8.16 7.83.44.9.25 1.48.83 1.73 1.73z"/>
           </svg>
         </a>
+      </div>
+      <div className="site-footer-copyright">
+        <p>&copy; 2026 Mythouse. All rights reserved.</p>
+        <p>Content may not be reproduced, distributed, or transmitted without written permission.</p>
+        <p>All content, images, and materials are the intellectual property of Mythouse.</p>
       </div>
     </footer>
   );
@@ -988,26 +994,31 @@ function App() {
   }
 
   return (
-    <div className="app">
-      <SiteHeader />
-      <SiteNav />
-      <Routes>
-        <Route path="/" element={<MeteorSteelHome />} />
-        <Route path="/metals/vr" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" />Loading 3D...</div>}><SevenMetalsVRPage /></Suspense>} />
-        <Route path="/metals/*" element={<SevenMetalsPage />} />
-        <Route path="/fallen-starlight" element={<FallenStarlightHome />} />
-        <Route path="/story-forge" element={<StoryForgeHome />} />
-        <Route path="/monomyth" element={<MonomythPage />} />
-        <Route path="/mythology-channel" element={<MythologyChannelPage />} />
-        <Route path="/games/*" element={<GamesPage />} />
-        <Route path="/mythology-channel/:showId" element={<MythologyChannelPage />} />
-        <Route path="/mythosophia" element={<MythosophiaPage />} />
-        <Route path="/journey/:journeyId" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" />Loading Journey...</div>}><OuroborosJourneyPage /></Suspense>} />
-        <Route path="/dragon/*" element={<RequireAdmin><Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" />Loading Admin...</div>}><AdminPage /></Suspense></RequireAdmin>} />
-      </Routes>
-      <SiteFooter />
-      <ChatPanel />
-    </div>
+    <Routes>
+      <Route path="/atlas" element={<Suspense fallback={<div className="celestial-loading" style={{ position: 'fixed', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg-dark)' }}><span className="celestial-loading-spinner" /></div>}><AtlasPage /></Suspense>} />
+      <Route path="*" element={
+        <div className="app">
+          <SiteHeader />
+          <SiteNav />
+          <Routes>
+            <Route path="/" element={<MeteorSteelHome />} />
+            <Route path="/metals/vr" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" />Loading 3D...</div>}><SevenMetalsVRPage /></Suspense>} />
+            <Route path="/metals/*" element={<SevenMetalsPage />} />
+            <Route path="/fallen-starlight" element={<FallenStarlightHome />} />
+            <Route path="/story-forge" element={<StoryForgeHome />} />
+            <Route path="/monomyth" element={<MonomythPage />} />
+            <Route path="/mythology-channel" element={<MythologyChannelPage />} />
+            <Route path="/games/*" element={<GamesPage />} />
+            <Route path="/mythology-channel/:showId" element={<MythologyChannelPage />} />
+            <Route path="/mythosophia" element={<MythosophiaPage />} />
+            <Route path="/journey/:journeyId" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" />Loading Journey...</div>}><OuroborosJourneyPage /></Suspense>} />
+            <Route path="/dragon/*" element={<RequireAdmin><Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" />Loading Admin...</div>}><AdminPage /></Suspense></RequireAdmin>} />
+          </Routes>
+          <SiteFooter />
+          <ChatPanel />
+        </div>
+      } />
+    </Routes>
   );
 }
 

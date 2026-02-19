@@ -158,6 +158,54 @@
   margin-bottom: 16px;
 }
 
+/* ===== CALENDAR WEEKDAY BAR ===== */
+
+.calendar-weekday-bar {
+  text-align: center;
+  margin-bottom: 1.2rem;
+}
+
+.calendar-today-label {
+  font-family: 'Cinzel', serif;
+  font-size: 1rem;
+  color: var(--text-secondary);
+  margin: 0 0 0.6rem;
+}
+
+.calendar-weekday-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.calendar-weekday-btn {
+  font-family: 'Cinzel', serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: rgba(139, 195, 170, 0.7);
+  background: rgba(139, 195, 170, 0.05);
+  border: 1px solid rgba(139, 195, 170, 0.25);
+  padding: 8px 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.calendar-weekday-btn:hover {
+  color: rgba(139, 195, 170, 0.95);
+  background: rgba(139, 195, 170, 0.1);
+  border-color: rgba(139, 195, 170, 0.5);
+}
+
+.calendar-weekday-btn.active {
+  color: var(--accent-ember);
+  border-color: var(--accent-ember);
+  background: rgba(196, 113, 58, 0.12);
+  box-shadow: 0 0 10px rgba(196, 113, 58, 0.2);
+}
+
 /* ===== ZODIAC SIGNS ===== */
 
 .zodiac-sign text {
@@ -784,6 +832,7 @@
   .vr-view-toggle {
     font-size: 0.7rem;
   }
+
 }
 
 /* ===== CULTURE BLOCKS ===== */
