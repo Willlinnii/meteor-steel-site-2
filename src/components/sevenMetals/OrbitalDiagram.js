@@ -1434,8 +1434,8 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
               );
             })}
 
-            {/* Mode label */}
-            <text x={CX} y={620} textAnchor="middle" fill="rgba(155,89,182,0.6)" fontSize="11" fontFamily="Cinzel, serif" fontWeight="500" letterSpacing="1">
+            {/* Mode label — above the month ring */}
+            <text x={CX} y={585} textAnchor="middle" fill="rgba(155,89,182,0.6)" fontSize="11" fontFamily="Cinzel, serif" fontWeight="500" letterSpacing="1">
               {CHAKRA_MODE_LABELS[chakraViewMode]}
             </text>
           </g>
@@ -1860,7 +1860,10 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
                 'Weekday Order — click to exit'
               }
             >
-              ☸
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" stroke="none">
+                <circle cx="12" cy="4" r="2.5" />
+                <path d="M12 8 C9 8 7 10 7 12 L7 16 L9.5 16 L9.5 23 L14.5 23 L14.5 16 L17 16 L17 12 C17 10 15 8 12 8Z" />
+              </svg>
             </button>
             <button className="star-map-toggle" onClick={cycleStarMap}
               title={starMapMode === 'none' ? 'Show northern star map' :
