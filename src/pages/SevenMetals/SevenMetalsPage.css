@@ -131,6 +131,28 @@
   box-shadow: 0 0 10px rgba(139, 195, 170, 0.3);
 }
 
+.clock-toggle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid rgba(139, 195, 170, 0.3);
+  background: transparent;
+  color: rgba(139, 195, 170, 0.8);
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  opacity: 0.7;
+}
+
+.clock-toggle:hover {
+  opacity: 1;
+  background: rgba(139, 195, 170, 0.1);
+  box-shadow: 0 0 10px rgba(139, 195, 170, 0.3);
+}
+
 /* ===== MONTH RING ===== */
 
 .month-segment text {
@@ -138,11 +160,11 @@
 }
 
 .month-segment:hover text {
-  fill: rgba(139, 195, 170, 0.85) !important;
+  fill: rgba(150, 210, 185, 0.95) !important;
 }
 
 .month-segment.active text {
-  fill: #5acea0 !important;
+  fill: #6ee0b0 !important;
 }
 
 /* ===== MONTH MOOD ===== */

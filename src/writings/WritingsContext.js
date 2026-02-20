@@ -7,7 +7,7 @@ const WritingsContext = createContext(null);
 
 const FLUSH_INTERVAL = 30000; // 30 seconds
 const MAX_CONVERSATION_MESSAGES = 200;
-const WRITING_DOCS = ['forge', 'journeys', 'conversations', 'notes'];
+const WRITING_DOCS = ['forge', 'journeys', 'conversations', 'notes', 'personal-stories'];
 
 export function useWritings() {
   const ctx = useContext(WritingsContext);
@@ -23,6 +23,7 @@ export function WritingsProvider({ children }) {
   const [journeySyntheses, setJourneySyntheses] = useState({});
   const [conversationsData, setConversationsData] = useState({ atlas: [], personas: {}, profile: [] });
   const [notesData, setNotesData] = useState({ entries: {} });
+  const [personalStories, setPersonalStories] = useState({ stories: {} });
   const [loaded, setLoaded] = useState(false);
 
   const dirtyRef = useRef(new Set());
@@ -30,6 +31,7 @@ export function WritingsProvider({ children }) {
   const journeysRef = useRef(journeySyntheses);
   const conversationsRef = useRef(conversationsData);
   const notesRef = useRef(notesData);
+  const personalStoriesRef = useRef(personalStories);
   const userRef = useRef(user);
   const flushTimerRef = useRef(null);
 
@@ -38,6 +40,7 @@ export function WritingsProvider({ children }) {
   useEffect(() => { journeysRef.current = journeySyntheses; }, [journeySyntheses]);
   useEffect(() => { conversationsRef.current = conversationsData; }, [conversationsData]);
   useEffect(() => { notesRef.current = notesData; }, [notesData]);
+  useEffect(() => { personalStoriesRef.current = personalStories; }, [personalStories]);
   useEffect(() => { userRef.current = user; }, [user]);
 
   // Load all writing docs from Firestore on login
@@ -47,6 +50,7 @@ export function WritingsProvider({ children }) {
       setJourneySyntheses({});
       setConversationsData({ atlas: [], personas: {}, profile: [] });
       setNotesData({ entries: {} });
+      setPersonalStories({ stories: {} });
       setLoaded(false);
       return;
     }
@@ -82,6 +86,9 @@ export function WritingsProvider({ children }) {
           }
           if (results.notes) {
             setNotesData({ entries: results.notes.entries || {} });
+          }
+          if (results['personal-stories']) {
+            setPersonalStories({ stories: results['personal-stories'].stories || {} });
           }
           setLoaded(true);
         }
@@ -119,6 +126,9 @@ export function WritingsProvider({ children }) {
             break;
           case 'notes':
             data = { entries: notesRef.current.entries, updatedAt: serverTimestamp() };
+            break;
+          case 'personal-stories':
+            data = { stories: personalStoriesRef.current.stories, updatedAt: serverTimestamp() };
             break;
           default:
             continue;
@@ -204,6 +214,114 @@ export function WritingsProvider({ children }) {
       entries: { ...prev.entries, [key]: entriesForKey },
     }));
     dirtyRef.current.add('notes');
+  }, []);
+
+  // --- Personal Stories ---
+  const addStory = useCallback((storyId, name, source) => {
+    setPersonalStories(prev => ({
+      stories: {
+        ...prev.stories,
+        [storyId]: {
+          name,
+          createdAt: Date.now(),
+          updatedAt: Date.now(),
+          source: source || 'manual',
+          stages: {},
+        },
+      },
+    }));
+    dirtyRef.current.add('personal-stories');
+  }, []);
+
+  const addStoryEntry = useCallback((storyId, stageId, entry) => {
+    setPersonalStories(prev => {
+      const story = prev.stories[storyId];
+      if (!story) return prev;
+      const stage = story.stages[stageId] || { entries: [], generated: null, edited: null };
+      return {
+        stories: {
+          ...prev.stories,
+          [storyId]: {
+            ...story,
+            updatedAt: Date.now(),
+            stages: {
+              ...story.stages,
+              [stageId]: {
+                ...stage,
+                entries: [...stage.entries, { text: entry.text, source: entry.source || 'manual', createdAt: Date.now() }],
+              },
+            },
+          },
+        },
+      };
+    });
+    dirtyRef.current.add('personal-stories');
+  }, []);
+
+  const updateStoryGenerated = useCallback((storyId, stageId, text) => {
+    setPersonalStories(prev => {
+      const story = prev.stories[storyId];
+      if (!story) return prev;
+      const stage = story.stages[stageId] || { entries: [], generated: null, edited: null };
+      return {
+        stories: {
+          ...prev.stories,
+          [storyId]: {
+            ...story,
+            updatedAt: Date.now(),
+            stages: {
+              ...story.stages,
+              [stageId]: { ...stage, generated: text },
+            },
+          },
+        },
+      };
+    });
+    dirtyRef.current.add('personal-stories');
+  }, []);
+
+  const updateStoryEdited = useCallback((storyId, stageId, text) => {
+    setPersonalStories(prev => {
+      const story = prev.stories[storyId];
+      if (!story) return prev;
+      const stage = story.stages[stageId] || { entries: [], generated: null, edited: null };
+      return {
+        stories: {
+          ...prev.stories,
+          [storyId]: {
+            ...story,
+            updatedAt: Date.now(),
+            stages: {
+              ...story.stages,
+              [stageId]: { ...stage, edited: text },
+            },
+          },
+        },
+      };
+    });
+    dirtyRef.current.add('personal-stories');
+  }, []);
+
+  const updateStoryName = useCallback((storyId, name) => {
+    setPersonalStories(prev => {
+      const story = prev.stories[storyId];
+      if (!story) return prev;
+      return {
+        stories: {
+          ...prev.stories,
+          [storyId]: { ...story, name, updatedAt: Date.now() },
+        },
+      };
+    });
+    dirtyRef.current.add('personal-stories');
+  }, []);
+
+  const getStoriesForStage = useCallback((stageId) => {
+    const stories = personalStoriesRef.current.stories;
+    return Object.entries(stories).filter(([, story]) => {
+      const stage = story.stages[stageId];
+      return stage && (stage.entries.length > 0 || stage.generated || stage.edited);
+    }).map(([id, story]) => ({ id, ...story }));
   }, []);
 
   // --- Library: aggregated view of all writings ---
@@ -293,6 +411,13 @@ export function WritingsProvider({ children }) {
     saveConversation,
     notesData,
     saveNotes,
+    personalStories,
+    addStory,
+    addStoryEntry,
+    updateStoryGenerated,
+    updateStoryEdited,
+    updateStoryName,
+    getStoriesForStage,
     getAllWritings,
     loaded,
   };

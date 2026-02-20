@@ -399,10 +399,11 @@ export default function SevenMetalsPage() {
   const [activeCulture, setActiveCulture] = useState('Greek');
   const [selectedSign, setSelectedSign] = useState(null);
   const [selectedCardinal, setSelectedCardinal] = useState(null);
-  const [selectedEarth, setSelectedEarth] = useState(() => location.pathname.endsWith('/calendar') ? null : 'day');
+  const [selectedEarth, setSelectedEarth] = useState(null);
   const [devEntries, setDevEntries] = useState({});
-  const [showCalendar, setShowCalendar] = useState(() => location.pathname.endsWith('/calendar'));
-  const [selectedMonth, setSelectedMonth] = useState(() => location.pathname.endsWith('/calendar') ? MONTHS[new Date().getMonth()] : null);
+  const [showClock, setShowClock] = useState(true);
+  const [showCalendar, setShowCalendar] = useState(true);
+  const [selectedMonth, setSelectedMonth] = useState(() => MONTHS[new Date().getMonth()]);
   const [activeMonthTab, setActiveMonthTab] = useState('stone');
   const [showMedicineWheel, setShowMedicineWheel] = useState(() => location.pathname.endsWith('/medicine-wheel'));
   const [selectedWheelItem, setSelectedWheelItem] = useState(null);
@@ -498,6 +499,14 @@ export default function SevenMetalsPage() {
         astrology: item.astrology,
       };
     });
+    planets['Earth'] = {
+      metal: 'All Seven',
+      day: 'Every day',
+      chakra: 'Heart',
+      sin: '',
+      virtue: 'Balance',
+      astrology: 'Home — the ground beneath all seven metals.',
+    };
     const zodiac = {};
     zodiacData.forEach(z => {
       zodiac[z.sign] = {
@@ -625,6 +634,17 @@ export default function SevenMetalsPage() {
           }}
           selectedMonth={selectedMonth}
           onSelectMonth={(m) => { if (m) trackElement(`metals.calendar.month.${m}`); setSelectedMonth(m); setActiveMonthTab('stone'); if (m) { setSelectedSign(null); setSelectedCardinal(null); setSelectedEarth(null); } }}
+          showClock={showClock}
+          onToggleClock={() => {
+            const next = !showClock;
+            setShowClock(next);
+            if (next && !showCalendar) {
+              setShowCalendar(true);
+              setSelectedMonth(MONTHS[new Date().getMonth()]);
+              setActiveMonthTab('stone');
+              setSelectedSign(null); setSelectedCardinal(null); setSelectedEarth(null);
+            }
+          }}
           showMedicineWheel={showMedicineWheel}
           onToggleMedicineWheel={() => {
             const next = !showMedicineWheel;

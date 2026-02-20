@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../auth/AuthContext';
 import { useCoursework } from '../../coursework/CourseworkContext';
+import { useWritings } from '../../writings/WritingsContext';
 import { useProfile } from '../../profile/ProfileContext';
 import { RANKS, rankProgress } from '../../profile/profileEngine';
 import ProfileChat from '../../profile/ProfileChat';
@@ -9,6 +11,8 @@ export default function ProfilePage() {
   const { user } = useAuth();
   const { getCourseStates, completedCourses, allCourses } = useCoursework();
   const { earnedRanks, highestRank, activeCredentials, hasProfile, loaded: profileLoaded } = useProfile();
+  const { personalStories, loaded: writingsLoaded } = useWritings();
+  const navigate = useNavigate();
   const [showChat, setShowChat] = useState(false);
 
   const courseStates = getCourseStates();
@@ -122,6 +126,43 @@ export default function ProfilePage() {
           ))}
         </div>
       )}
+
+      {/* My Stories */}
+      <h2 className="profile-section-title">My Stories</h2>
+      {writingsLoaded && (() => {
+        const stories = personalStories?.stories || {};
+        const storyEntries = Object.entries(stories).sort((a, b) => (b[1].updatedAt || 0) - (a[1].updatedAt || 0));
+        if (storyEntries.length === 0) {
+          return (
+            <div className="profile-empty">
+              No personal stories yet. Visit the <button className="profile-update-btn" style={{ display: 'inline', padding: '4px 12px', fontSize: '0.85em' }} onClick={() => navigate('/story-forge')}>Story Forge</button> to begin.
+            </div>
+          );
+        }
+        return (
+          <div className="profile-course-list">
+            {storyEntries.map(([id, story]) => {
+              const stageCount = Object.values(story.stages || {}).filter(st => st.entries?.length > 0).length;
+              return (
+                <div key={id} className="profile-course-card" onClick={() => navigate('/story-forge')} style={{ cursor: 'pointer' }}>
+                  <div className="profile-course-header">
+                    <span className="profile-course-name">{story.name || 'Untitled Story'}</span>
+                    <span className="profile-course-badge in-progress">
+                      {stageCount}/8 stages
+                    </span>
+                  </div>
+                  <div className="profile-course-desc">
+                    {story.source === 'atlas-interview' ? 'Atlas Interview' : 'Manual'} {'\u00B7'} {story.updatedAt ? new Date(story.updatedAt).toLocaleDateString() : ''}
+                  </div>
+                  <div className="profile-progress-bar">
+                    <div className="profile-progress-fill" style={{ width: `${Math.round((stageCount / 8) * 100)}%` }} />
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        );
+      })()}
 
       {/* Certificates */}
       <h2 className="profile-section-title">Certificates</h2>

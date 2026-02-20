@@ -1492,6 +1492,174 @@ ${stageBlock}`;
     }
   }
 
+  // --- Story Interview mode (Personal Stories) ---
+  if (mode === 'story-interview') {
+    const STAGE_IDS = ['golden-age', 'falling-star', 'impact-crater', 'forge', 'quenching', 'integration', 'drawing', 'new-age'];
+    const STAGE_LABELS = { 'golden-age': 'Golden Age', 'falling-star': 'Calling Star', 'impact-crater': 'Crater Crossing', 'forge': 'Trials of Forge', 'quenching': 'Quench', 'integration': 'Integration', 'drawing': 'Draw', 'new-age': 'Age of Steel' };
+
+    const UPDATE_STORY_TOOL = {
+      name: 'update_story',
+      description: 'Organize parts of the user\'s story into monomyth stages. Call this when you have enough of the user\'s story to assign content to one or more stages. You may call it multiple times as the conversation progresses. Also use this to name the story.',
+      input_schema: {
+        type: 'object',
+        properties: {
+          name: { type: 'string', description: 'A short, evocative name for this story based on its essence (e.g., "The Career Crossing", "Finding Home")' },
+          stageEntries: {
+            type: 'object',
+            description: 'Map of stage IDs to the user\'s story content for that stage. Stage IDs: golden-age, falling-star, impact-crater, forge, quenching, integration, drawing, new-age',
+            additionalProperties: { type: 'string' },
+          },
+        },
+        required: [],
+      },
+    };
+
+    const storyInterviewPrompt = `You are Atlas, the mythic companion of the Mythouse. You are conducting a personal story interview — helping someone tell the story of a real experience from their life and find the mythic pattern within it.
+
+THE 8 MONOMYTH STAGES:
+${STAGE_IDS.map(id => `- ${id} (${STAGE_LABELS[id]})`).join('\n')}
+
+INTERVIEW PROCESS:
+1. FIRST: Ask the user to tell their story as a whole, however it comes to them. Don't interrupt or structure it yet. Let them speak.
+2. AFTER they share: Organize what they told you into the 8 monomyth stages using the update_story tool. Some stages may not have content yet — that's fine.
+3. THEN: Ask targeted follow-up questions to fill gaps. Focus on:
+   - Stages that are empty or thin
+   - The emotional core of transitions between stages
+   - For long, winding stories, concentrate expansion in the forge (Road of Trials) stage
+   - Earlier stages (golden-age, falling-star, impact-crater) should open the narrative
+   - Later stages (quenching, integration, drawing, new-age) should wrap and resolve it
+4. NAME THE STORY: Based on its essence, give the story an evocative name via the tool.
+5. CONTINUE until all 8 stages have meaningful content, then let the user know their story is complete.
+
+VOICE:
+- Be warm, curious, and deeply present. You are hearing someone's real life.
+- Reflect back the mythic patterns you see without lecturing. "What you're describing sounds like a crossing — the moment the ground shifted beneath you."
+- Honor vulnerability. Don't rush. Don't analyze when they need to be heard.
+- Use the monomyth language naturally, not academically.
+
+TOOL USAGE:
+- Call update_story as soon as you can assign content to stages — don't wait until the end.
+- You can call it multiple times as more of the story emerges.
+- Always include a name once you understand the story's core theme.
+
+Keep responses conversational and relatively brief (3-5 sentences). Ask one question at a time.`;
+
+    try {
+      const response = await anthropic.messages.create({
+        model: 'claude-haiku-4-5-20251001',
+        system: storyInterviewPrompt,
+        messages: trimmed,
+        max_tokens: 1024,
+        tools: [UPDATE_STORY_TOOL],
+      });
+
+      let reply = '';
+      let storyUpdate = null;
+
+      const toolBlocks = response.content.filter(c => c.type === 'tool_use');
+      const textBlock = response.content.find(c => c.type === 'text');
+
+      if (toolBlocks.length > 0) {
+        storyUpdate = {};
+        for (const tb of toolBlocks) {
+          if (tb.name === 'update_story' && tb.input) {
+            if (tb.input.name) storyUpdate.name = tb.input.name;
+            if (tb.input.stageEntries) {
+              storyUpdate.stageEntries = { ...(storyUpdate.stageEntries || {}), ...tb.input.stageEntries };
+            }
+          }
+        }
+
+        const toolResults = toolBlocks.map(tb => ({
+          type: 'tool_result',
+          tool_use_id: tb.id,
+          content: JSON.stringify({ success: true }),
+        }));
+
+        const followUp = await anthropic.messages.create({
+          model: 'claude-haiku-4-5-20251001',
+          system: storyInterviewPrompt,
+          messages: [
+            ...trimmed,
+            { role: 'assistant', content: response.content },
+            { role: 'user', content: toolResults },
+          ],
+          max_tokens: 1024,
+          tools: [UPDATE_STORY_TOOL],
+        });
+
+        reply = followUp.content?.find(c => c.type === 'text')?.text || 'Story updated.';
+
+        // Check follow-up for additional tool calls
+        const followUpTools = followUp.content.filter(c => c.type === 'tool_use');
+        for (const tb of followUpTools) {
+          if (tb.name === 'update_story' && tb.input) {
+            if (!storyUpdate) storyUpdate = {};
+            if (tb.input.name) storyUpdate.name = tb.input.name;
+            if (tb.input.stageEntries) {
+              storyUpdate.stageEntries = { ...(storyUpdate.stageEntries || {}), ...tb.input.stageEntries };
+            }
+          }
+        }
+      } else {
+        reply = textBlock?.text || 'No response generated.';
+      }
+
+      return res.status(200).json({ reply, storyUpdate: storyUpdate && Object.keys(storyUpdate).length > 0 ? storyUpdate : undefined });
+    } catch (err) {
+      console.error('Story Interview API error:', err?.message, err?.status);
+      return res.status(500).json({ error: `Something went wrong: ${err?.message || 'Unknown error'}` });
+    }
+  }
+
+  // --- Story Synthesis mode (Archetypal Journey) ---
+  if (mode === 'story-synthesis') {
+    const { stageId: synthStageId, stageData: synthData } = req.body || {};
+    if (!synthData || !Array.isArray(synthData)) {
+      return res.status(400).json({ error: 'stageData array is required for story synthesis.' });
+    }
+
+    const isFullSynthesis = synthStageId === 'full';
+    const entriesBlock = synthData.map(e => {
+      const prefix = e.storyName ? `[${e.storyName}]` : '';
+      const stagePrefix = e.stage ? ` (${e.stage})` : '';
+      return `${prefix}${stagePrefix}: ${e.text}`;
+    }).join('\n\n');
+
+    const STAGE_LABELS_SYN = { 'golden-age': 'Golden Age', 'falling-star': 'Calling Star', 'impact-crater': 'Crater Crossing', 'forge': 'Trials of Forge', 'quenching': 'Quench', 'integration': 'Integration', 'drawing': 'Draw', 'new-age': 'Age of Steel' };
+
+    const synthPrompt = isFullSynthesis
+      ? `You are Atlas. A person has shared multiple personal stories organized across the 8 stages of the monomyth. Below are ALL their entries from ALL stories across ALL stages.
+
+Synthesize these into a unified Archetypal Journey — a personal mythic biography that weaves the threads of all their stories into one coherent narrative. Preserve the user's own words and phrases as much as possible. Show how the patterns of their different stories echo and reinforce each other across the monomyth stages.
+
+Structure the synthesis by stage, using the stage names as section headers. 800-1500 words. Be literary but honor their voice.
+
+ALL ENTRIES:
+${entriesBlock}`
+      : `You are Atlas. A person has shared multiple personal stories. Below are all their entries for the "${STAGE_LABELS_SYN[synthStageId] || synthStageId}" stage of the monomyth, drawn from different stories.
+
+Synthesize these entries into a unified personal narrative for this single stage. Preserve the user's own words and phrases. Show how different stories echo the same archetypal pattern at this stage. 200-500 words. Be warm, perceptive, and honoring of what they shared.
+
+ENTRIES FOR THIS STAGE:
+${entriesBlock}`;
+
+    const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+    try {
+      const response = await anthropic.messages.create({
+        model: 'claude-sonnet-4-20250514',
+        system: synthPrompt,
+        messages: [{ role: 'user', content: 'Please synthesize my stories.' }],
+        max_tokens: 4096,
+      });
+      const synthesis = response.content?.find(c => c.type === 'text')?.text || 'No synthesis generated.';
+      return res.status(200).json({ synthesis });
+    } catch (err) {
+      console.error('Story Synthesis API error:', err?.message, err?.status);
+      return res.status(500).json({ error: `Something went wrong: ${err?.message || 'Unknown error'}` });
+    }
+  }
+
   // --- Profile Onboarding mode ---
   if (mode === 'profile-onboarding') {
     const profileSystemPrompt = buildProfileOnboardingPrompt(existingCredentials);

@@ -229,10 +229,42 @@ function ensureYTApi() {
   });
 }
 
-export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPlanet, hoveredPlanet, selectedSign, onSelectSign, selectedCardinal, onSelectCardinal, selectedEarth, onSelectEarth, showCalendar, onToggleCalendar, selectedMonth, onSelectMonth, showMedicineWheel, onToggleMedicineWheel, selectedWheelItem, onSelectWheelItem, chakraViewMode, onToggleChakraView, videoUrl, onCloseVideo, ybrActive, ybrCurrentStopIndex, ybrStopProgress, ybrJourneySequence, onToggleYBR, ybrAutoStart }) {
+export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPlanet, hoveredPlanet, selectedSign, onSelectSign, selectedCardinal, onSelectCardinal, selectedEarth, onSelectEarth, showCalendar, onToggleCalendar, selectedMonth, onSelectMonth, showMedicineWheel, onToggleMedicineWheel, selectedWheelItem, onSelectWheelItem, chakraViewMode, onToggleChakraView, videoUrl, onCloseVideo, ybrActive, ybrCurrentStopIndex, ybrStopProgress, ybrJourneySequence, onToggleYBR, ybrAutoStart, showClock, onToggleClock }) {
   const navigate = useNavigate();
   const wrapperRef = useRef(null);
   const [tooltip, setTooltip] = useState(null);
+
+  // --- Analog clock state & effects ---
+  const [clockTime, setClockTime] = useState({ h: 0, m: 0, s: 0 });
+  const clockTzRef = useRef(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch('https://worldtimeapi.org/api/ip')
+      .then(r => r.json())
+      .then(data => { if (!cancelled && data.timezone) clockTzRef.current = data.timezone; })
+      .catch(() => {});
+    return () => { cancelled = true; };
+  }, []);
+
+  useEffect(() => {
+    if (!showClock) return;
+    const tick = () => {
+      const now = new Date();
+      const tz = clockTzRef.current;
+      if (tz) {
+        const fmt = new Intl.DateTimeFormat('en-US', { timeZone: tz, hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: false });
+        const parts = fmt.formatToParts(now);
+        const get = (type) => parseInt(parts.find(p => p.type === type)?.value || '0', 10);
+        setClockTime({ h: get('hour'), m: get('minute'), s: get('second') });
+      } else {
+        setClockTime({ h: now.getHours(), m: now.getMinutes(), s: now.getSeconds() });
+      }
+    };
+    tick();
+    const id = setInterval(tick, 1000);
+    return () => clearInterval(id);
+  }, [showClock]);
 
   const handleTooltipEnter = useCallback((type, key, e) => {
     if (showMedicineWheel || chakraViewMode) return;
@@ -504,14 +536,14 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
     };
   }, [aligned, livePositions, heliocentric, chakraViewMode]);
 
-  // When calendar mode is activated, also activate live planet positions
+  // When calendar/clock mode is activated, switch to heliocentric with live positions
   useEffect(() => {
-    if (showCalendar) {
-      setLivePositions(true);
-      setHeliocentric(false);
+    if (showCalendar || showClock) {
+      setHeliocentric(true);
+      setLivePositions(false);
       setAligned(false);
     }
-  }, [showCalendar]);
+  }, [showCalendar, showClock]);
 
   // Auto-align when Yellow Brick Road activates
   useEffect(() => {
@@ -889,9 +921,20 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
             // Inset 2° from dividers so text doesn't touch lines
             const inset = 2;
 
-            // Top half (signs 0–5): text reads along outer arc, CCW
-            // Path goes from startBoundary toward endBoundary (sweep=0 = CCW in SVG)
-            if (i <= 5) {
+            // Flip overrides: Aries (0) and Virgo (5) use opposite direction
+            const flipZodiac = i === 0 || i === 5;
+            // Top half (signs 0–5): reverse path, unless flipped
+            if (i <= 5 && !flipZodiac) {
+              return (
+                <path
+                  key={`zpath-${z.sign}`}
+                  id={`zpath-${z.sign}`}
+                  d={arcPath(CX, CY, ZODIAC_TEXT_R, endBoundary + inset, startBoundary - inset, 1)}
+                  fill="none"
+                />
+              );
+            }
+            if (i <= 5 && flipZodiac) {
               return (
                 <path
                   key={`zpath-${z.sign}`}
@@ -901,13 +944,12 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
                 />
               );
             }
-            // Bottom half (signs 6–11): reverse path direction so text reads right-side up
-            // Path goes from endBoundary toward startBoundary (sweep=1 = CW in SVG)
+            // Bottom half (signs 6–11): normal path direction
             return (
               <path
                 key={`zpath-${z.sign}`}
                 id={`zpath-${z.sign}`}
-                d={arcPath(CX, CY, ZODIAC_TEXT_R, endBoundary + inset, startBoundary - inset, 1)}
+                d={arcPath(CX, CY, ZODIAC_TEXT_R, startBoundary - inset, endBoundary + inset, 0)}
                 fill="none"
               />
             );
@@ -921,7 +963,10 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
             const midAngle = (startBoundary + endBoundary) / 2;
             const normMid = ((midAngle % 360) + 360) % 360;
             const isBottom = normMid > 0 && normMid < 180;
-            if (!isBottom) {
+            // Flip override: September (8) uses opposite direction
+            const flipMonth = i === 8;
+            const useNormal = flipMonth ? !isBottom : isBottom;
+            if (useNormal) {
               return (
                 <path
                   key={`mpath-${m}`}
@@ -990,10 +1035,10 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
                     </circle>
                   )}
                   <text
-                    fill={isSelected ? '#60d8f0' : isCurrent ? 'rgba(100, 180, 220, 0.9)' : 'rgba(100, 180, 220, 0.65)'}
-                    fontSize="10"
+                    fill={isSelected ? '#60d8f0' : isCurrent ? 'rgba(120, 200, 235, 0.95)' : 'rgba(120, 200, 235, 0.8)'}
+                    fontSize="12"
                     fontFamily="Cinzel, serif"
-                    fontWeight={isSelected ? '700' : isCurrent ? '600' : '400'}
+                    fontWeight={isSelected ? '700' : isCurrent ? '600' : '500'}
                     letterSpacing="0.5"
                   >
                     <textPath
@@ -1009,6 +1054,38 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
             })}
           </g>
         )}
+
+        {/* Analog clock overlay — hour numbers + hands */}
+        {showClock && showCalendar && (() => {
+          const CLOCK_NUM_R = 240;
+          const hourAngles = Array.from({ length: 12 }, (_, i) => {
+            const num = i === 0 ? 12 : i;
+            const deg = i * 30 - 90; // 12 at top
+            const rad = (deg * Math.PI) / 180;
+            return { num, x: CX + CLOCK_NUM_R * Math.cos(rad), y: CY + CLOCK_NUM_R * Math.sin(rad) };
+          });
+          const sDeg = clockTime.s * 6 - 90;
+          const mDeg = clockTime.m * 6 + clockTime.s * 0.1 - 90;
+          const hDeg = (clockTime.h % 12) * 30 + clockTime.m * 0.5 - 90;
+          const hand = (deg, len, width, color) => {
+            const rad = (deg * Math.PI) / 180;
+            return <line x1={CX} y1={CY} x2={CX + len * Math.cos(rad)} y2={CY + len * Math.sin(rad)} stroke={color} strokeWidth={width} strokeLinecap="round" />;
+          };
+          return (
+            <g className="clock-overlay">
+              {hourAngles.map(({ num, x, y }) => (
+                <text key={`clk-${num}`} x={x} y={y} textAnchor="middle" dominantBaseline="central"
+                  fill="rgba(139, 195, 170, 0.95)" fontSize="14" fontFamily="Cinzel, serif" fontWeight="600">
+                  {num}
+                </text>
+              ))}
+              {hand(hDeg, 140, 3.5, 'rgba(201, 169, 97, 0.95)')}
+              {hand(mDeg, 200, 2.5, 'rgba(201, 169, 97, 0.95)')}
+              {hand(sDeg, 230, 1, 'rgba(220, 130, 65, 0.95)')}
+              <circle cx={CX} cy={CY} r={5} fill="rgba(201, 169, 97, 0.95)" />
+            </g>
+          );
+        })()}
 
         {/* Zodiac band — two concentric circles */}
         <circle cx={CX} cy={CY} r={ZODIAC_INNER_R} fill="none" stroke="rgba(201, 169, 97, 0.18)" strokeWidth="0.8" />
@@ -1582,7 +1659,14 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
                     const mx = px + HELIO_MOON.r * Math.cos(mRad);
                     const my = py + HELIO_MOON.r * Math.sin(mRad);
                     return (
-                      <g>
+                      <g
+                        style={{ cursor: 'pointer' }}
+                        onClick={() => onSelectPlanet('Moon')}
+                        onMouseEnter={(e) => handleTooltipEnter('planet', 'Moon', e)}
+                        onMouseMove={handleTooltipMove}
+                        onMouseLeave={handleTooltipLeave}
+                      >
+                        <circle cx={mx} cy={my} r="8" fill="transparent" />
                         <circle cx={mx} cy={my} r="4"
                           fill="#c8d8e8" fillOpacity="0.7"
                           stroke="#c8d8e8" strokeWidth="0.5" />
@@ -1758,6 +1842,13 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
               title={showCalendar ? 'Hide mythic calendar' : 'Show mythic calendar'}
             >
               {showCalendar ? '📅' : '📆'}
+            </button>
+            <button
+              className="clock-toggle"
+              onClick={() => onToggleClock && onToggleClock()}
+              title={showClock ? 'Hide clock' : 'Show clock'}
+            >
+              {showClock ? '⏱' : '🕐'}
             </button>
             <button
               className="chakra-view-toggle"

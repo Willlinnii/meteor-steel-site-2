@@ -661,11 +661,23 @@ function FallenStarlightHome() {
   );
 }
 
+const FORGE_STAGES = [
+  { id: 'golden-age', label: 'Surface' },
+  { id: 'falling-star', label: 'Calling' },
+  { id: 'impact-crater', label: 'Crossing', flipLabel: true },
+  { id: 'forge', label: 'Initiating' },
+  { id: 'quenching', label: 'Nadir' },
+  { id: 'integration', label: 'Return' },
+  { id: 'drawing', label: 'Arrival', flipLabel: true },
+  { id: 'new-age', label: 'Renewal' },
+];
+
 const TEMPLATE_OPTIONS = [
   { id: 'personal', label: 'Personal Myth', desc: 'Your own life as monomyth' },
   { id: 'fiction', label: 'Fiction', desc: 'A character and world you invent' },
   { id: 'screenplay', label: 'Screenplay', desc: 'Visual, cinematic storytelling' },
   { id: 'reflection', label: 'Reflection', desc: 'Philosophical exploration' },
+  { id: 'my-stories', label: 'My Stories', desc: 'Your personal story journal' },
 ];
 
 const FORGE_PROMPTS = {
@@ -721,8 +733,21 @@ function StoryForgeHome() {
   const [generating, setGenerating] = useState(false);
   const [viewMode, setViewMode] = useState('write');
   const [libraryExpanded, setLibraryExpanded] = useState(null);
+  // Personal Stories state
+  const [activeStoryFilter, setActiveStoryFilter] = useState(null); // storyId or 'archetypal'
+  const [expandedStory, setExpandedStory] = useState(null);
+  const [storyViewTab, setStoryViewTab] = useState('entries'); // 'entries' | 'generated'
+  const [editingStage, setEditingStage] = useState(null); // { storyId, stageId }
+  const [editDraft, setEditDraft] = useState('');
+  const [showStoryInterview, setShowStoryInterview] = useState(false);
+  const [interviewMessages, setInterviewMessages] = useState([]);
+  const [interviewLoading, setInterviewLoading] = useState(false);
+  const [interviewInput, setInterviewInput] = useState('');
+  const [interviewStoryId, setInterviewStoryId] = useState(null);
+  const [synthesisLoading, setSynthesisLoading] = useState(false);
+  const [synthesisText, setSynthesisText] = useState(null);
   const { trackElement, trackTime, isElementCompleted, courseworkMode } = useCoursework();
-  const { forgeData, saveForge, getAllWritings, loaded: writingsLoaded } = useWritings();
+  const { forgeData, saveForge, getAllWritings, personalStories, addStory, addStoryEntry, updateStoryEdited, updateStoryName, saveConversation, loaded: writingsLoaded } = useWritings();
 
   // Load forge data from persisted writings on mount
   useEffect(() => {
@@ -779,22 +804,22 @@ function StoryForgeHome() {
     }
   }, [trackElement]);
 
-  const stagesWithContent = STAGES.filter(s => {
+  const stagesWithContent = FORGE_STAGES.filter(s => {
     const modes = ['noting', 'reflecting', 'creating'];
     return modes.some(m => (forgeEntries[`forge-${s.id}-${m}`] || []).length > 0);
   });
 
   const currentLabel = currentStage !== 'overview' && currentStage !== 'bio'
-    ? STAGES.find(s => s.id === currentStage)?.label
+    ? FORGE_STAGES.find(s => s.id === currentStage)?.label
     : null;
 
-  const currentIdx = STAGES.findIndex(s => s.id === currentStage);
+  const currentIdx = FORGE_STAGES.findIndex(s => s.id === currentStage);
 
   const goNext = () => {
-    if (currentIdx < STAGES.length - 1) handleSelectStage(STAGES[currentIdx + 1].id);
+    if (currentIdx < FORGE_STAGES.length - 1) handleSelectStage(FORGE_STAGES[currentIdx + 1].id);
   };
   const goPrev = () => {
-    if (currentIdx > 0) handleSelectStage(STAGES[currentIdx - 1].id);
+    if (currentIdx > 0) handleSelectStage(FORGE_STAGES[currentIdx - 1].id);
   };
 
   const handleGenerate = async (targetStage) => {
@@ -802,7 +827,7 @@ function StoryForgeHome() {
     trackElement(`story-forge.generate.${template}${targetStage ? `.${targetStage}` : ''}`);
     try {
       const templateLabel = TEMPLATE_OPTIONS.find(t => t.id === template)?.label || template;
-      const stageContent = STAGES.map(s => {
+      const stageContent = FORGE_STAGES.map(s => {
         const modes = ['noting', 'reflecting', 'creating'];
         const entries = modes.flatMap(m =>
           (forgeEntries[`forge-${s.id}-${m}`] || []).map(e => `[${m}] ${e.text}`)
@@ -837,7 +862,7 @@ function StoryForgeHome() {
       <>
         <MeteorShower active={showMeteors} />
         <CircleNav
-          stages={STAGES}
+          stages={FORGE_STAGES}
           currentStage={currentStage}
           onSelectStage={handleSelectStage}
           clockwise={clockwise}
@@ -867,13 +892,368 @@ function StoryForgeHome() {
     );
   }
 
+  // --- My Stories mode ---
+  if (template === 'my-stories') {
+    const stories = personalStories.stories || {};
+    const storyEntries = Object.entries(stories).sort((a, b) => (b[1].updatedAt || 0) - (a[1].updatedAt || 0));
+    const isStage = currentStage !== 'overview' && currentStage !== 'bio';
+    const stageStories = isStage ? storyEntries.filter(([, s]) => {
+      const st = s.stages[currentStage];
+      return st && (st.entries.length > 0 || st.generated || st.edited);
+    }) : storyEntries;
+    const filteredStories = activeStoryFilter && activeStoryFilter !== 'archetypal'
+      ? stageStories.filter(([id]) => id === activeStoryFilter)
+      : stageStories;
+
+    const handleStartInterview = () => {
+      const id = `story-${Date.now()}`;
+      setInterviewStoryId(id);
+      setInterviewMessages([]);
+      setInterviewInput('');
+      setShowStoryInterview(true);
+      trackElement('story-forge.my-stories.interview.start');
+    };
+
+    const handleInterviewSend = async () => {
+      const text = interviewInput.trim();
+      if (!text || interviewLoading) return;
+      const userMsg = { role: 'user', content: text };
+      const updated = [...interviewMessages, userMsg];
+      setInterviewMessages(updated);
+      setInterviewInput('');
+      setInterviewLoading(true);
+      try {
+        const res = await fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ messages: updated, mode: 'story-interview', storyId: interviewStoryId }),
+        });
+        const data = await res.json();
+        if (data.reply) {
+          setInterviewMessages(prev => [...prev, { role: 'assistant', content: data.reply }]);
+          // Auto-save story updates from structured response
+          if (data.storyUpdate) {
+            const su = data.storyUpdate;
+            if (!stories[interviewStoryId]) {
+              addStory(interviewStoryId, su.name || 'Untitled Story', 'atlas-interview');
+            }
+            if (su.name && stories[interviewStoryId]) {
+              updateStoryName(interviewStoryId, su.name);
+            }
+            if (su.stageEntries) {
+              Object.entries(su.stageEntries).forEach(([stageId, entryText]) => {
+                if (entryText) addStoryEntry(interviewStoryId, stageId, { text: entryText, source: 'atlas-interview' });
+              });
+            }
+          }
+        }
+        // Save conversation
+        const key = `story-interview-${interviewStoryId}`;
+        const newMsgs = data.reply ? [...updated, { role: 'assistant', content: data.reply }] : updated;
+        saveConversation('persona', key, newMsgs);
+      } catch {
+        setInterviewMessages(prev => [...prev, { role: 'assistant', content: 'Network error. Please try again.' }]);
+      }
+      setInterviewLoading(false);
+    };
+
+    const handleSynthesis = async (stageId) => {
+      setSynthesisLoading(true);
+      setSynthesisText(null);
+      trackElement('story-forge.my-stories.synthesis' + (stageId ? `.${stageId}` : '.full'));
+      try {
+        // Gather all entries across all stories for synthesis
+        const allEntries = stageId
+          ? storyEntries.flatMap(([, s]) => {
+              const st = s.stages[stageId];
+              return st ? st.entries.map(e => ({ storyName: s.name, text: e.text })) : [];
+            })
+          : FORGE_STAGES.flatMap(stage =>
+              storyEntries.flatMap(([, s]) => {
+                const st = s.stages[stage.id];
+                return st ? st.entries.map(e => ({ storyName: s.name, stage: stage.label, text: e.text })) : [];
+              })
+            );
+        const res = await fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ mode: 'story-synthesis', stageId: stageId || 'full', stageData: allEntries }),
+        });
+        const data = await res.json();
+        setSynthesisText(data.synthesis || data.error || 'No synthesis generated.');
+      } catch {
+        setSynthesisText('Network error. Please try again.');
+      }
+      setSynthesisLoading(false);
+    };
+
+    const handleEditSave = (storyId, stageId) => {
+      updateStoryEdited(storyId, stageId, editDraft);
+      setEditingStage(null);
+      setEditDraft('');
+    };
+
+    // Story interview chat overlay
+    if (showStoryInterview) {
+      return (
+        <>
+          <MeteorShower active={showMeteors} />
+          <CircleNav
+            stages={FORGE_STAGES}
+            currentStage={currentStage}
+            onSelectStage={handleSelectStage}
+            clockwise={clockwise}
+            onToggleDirection={() => setClockwise(!clockwise)}
+            centerLine1="My"
+            centerLine2=""
+            centerLine3="Stories"
+            showAuthor={false}
+          />
+          <div className="container">
+            <div className="story-interview-panel">
+              <div className="story-interview-header">
+                <h3>Tell Atlas Your Story</h3>
+                <button className="forge-change-btn" onClick={() => setShowStoryInterview(false)}>Back to Stories</button>
+              </div>
+              <div className="chat-messages" style={{ maxHeight: '400px', overflowY: 'auto' }}>
+                {interviewMessages.length === 0 && (
+                  <div className="chat-welcome">
+                    Tell me a story from your life. It can be about anything — a transition, a challenge, a transformation. Share it however it comes to you, and I will help you find the mythic pattern within it.
+                  </div>
+                )}
+                {interviewMessages.map((msg, i) => (
+                  <div key={i} className={`chat-msg chat-msg-${msg.role}`}>
+                    <div className="chat-msg-content">{msg.content}</div>
+                  </div>
+                ))}
+                {interviewLoading && (
+                  <div className="chat-msg chat-msg-assistant">
+                    <div className="chat-msg-content chat-loading">Listening...</div>
+                  </div>
+                )}
+              </div>
+              <div className="chat-input-area">
+                <textarea
+                  className="chat-input"
+                  value={interviewInput}
+                  onChange={e => setInterviewInput(e.target.value)}
+                  onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleInterviewSend(); } }}
+                  placeholder="Share your story..."
+                  rows={3}
+                  disabled={interviewLoading}
+                />
+                <button className="chat-send" onClick={handleInterviewSend} disabled={interviewLoading || !interviewInput.trim()}>&#10148;</button>
+              </div>
+            </div>
+          </div>
+        </>
+      );
+    }
+
+    return (
+      <>
+        <MeteorShower active={showMeteors} />
+        <CircleNav
+          stages={FORGE_STAGES}
+          currentStage={currentStage}
+          onSelectStage={handleSelectStage}
+          clockwise={clockwise}
+          onToggleDirection={() => setClockwise(!clockwise)}
+          centerLine1="My"
+          centerLine2=""
+          centerLine3="Stories"
+          showAuthor={false}
+        />
+        {isStage && <h2 className="stage-heading">{FORGE_STAGES.find(s => s.id === currentStage)?.label}</h2>}
+        <div className="container">
+          <div id="content-container">
+            {!isStage ? (
+              /* My Journeys — overview of all stories */
+              <div className="forge-hub">
+                <div className="forge-view-toggle">
+                  <button className="forge-change-btn" onClick={() => { setTemplate(null); setCurrentStage('overview'); }}>Change Template</button>
+                </div>
+                <h3 style={{ marginBottom: '12px' }}>My Journeys</h3>
+                {storyEntries.length === 0 ? (
+                  <div className="empty-content">
+                    <p>No stories yet. Click "Tell a Story" to begin your first personal narrative with Atlas, or select a stage on the wheel to start writing directly.</p>
+                  </div>
+                ) : (
+                  <div className="forge-story-overview">
+                    {storyEntries.map(([id, story]) => {
+                      const stageCount = Object.values(story.stages || {}).filter(st => st.entries.length > 0).length;
+                      return (
+                        <div key={id} className="forge-chapter-preview" onClick={() => {
+                          setActiveStoryFilter(id);
+                          const firstStage = FORGE_STAGES.find(s => story.stages[s.id]?.entries.length > 0);
+                          if (firstStage) handleSelectStage(firstStage.id);
+                        }}>
+                          <h4>{story.name || 'Untitled Story'}</h4>
+                          <p>{stageCount} of 8 stages {'\u00B7'} {story.source === 'atlas-interview' ? 'Atlas Interview' : 'Manual'}</p>
+                          <p style={{ fontSize: '0.8em', opacity: 0.6 }}>{story.updatedAt ? new Date(story.updatedAt).toLocaleDateString() : ''}</p>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+                <div className="forge-actions">
+                  <button className="forge-generate-btn" onClick={handleStartInterview}>+ Tell a Story</button>
+                  {storyEntries.length > 0 && (
+                    <button
+                      className="forge-generate-btn"
+                      onClick={() => handleSynthesis(null)}
+                      disabled={synthesisLoading}
+                      style={{ marginLeft: '10px' }}
+                    >
+                      {synthesisLoading ? 'Synthesizing...' : 'Archetypal Journey'}
+                    </button>
+                  )}
+                </div>
+                {synthesisText && (
+                  <div className="forge-story-overview" style={{ marginTop: '20px' }}>
+                    <h4>Archetypal Journey</h4>
+                    {synthesisText.split('\n\n').map((p, i) => <p key={i}>{p}</p>)}
+                  </div>
+                )}
+              </div>
+            ) : (
+              /* Stage view — stories for this stage */
+              <div className="forge-hub">
+                {/* Story filter buttons */}
+                <div className="forge-view-toggle" style={{ flexWrap: 'wrap', gap: '6px' }}>
+                  <button
+                    className={`dev-mode-btn ${!activeStoryFilter ? 'active' : ''}`}
+                    onClick={() => setActiveStoryFilter(null)}
+                  >All</button>
+                  {stageStories.map(([id, s]) => (
+                    <button
+                      key={id}
+                      className={`dev-mode-btn ${activeStoryFilter === id ? 'active' : ''}`}
+                      onClick={() => setActiveStoryFilter(id)}
+                    >{s.name || 'Untitled'}</button>
+                  ))}
+                  <button
+                    className={`dev-mode-btn ${activeStoryFilter === 'archetypal' ? 'active' : ''}`}
+                    onClick={() => { setActiveStoryFilter('archetypal'); handleSynthesis(currentStage); }}
+                  >Archetypal Journey</button>
+                </div>
+
+                {activeStoryFilter === 'archetypal' ? (
+                  <div style={{ marginTop: '16px' }}>
+                    {synthesisLoading ? (
+                      <div className="empty-content">Synthesizing archetypal narrative...</div>
+                    ) : synthesisText ? (
+                      <div className="forge-story-overview">
+                        {synthesisText.split('\n\n').map((p, i) => <p key={i}>{p}</p>)}
+                      </div>
+                    ) : (
+                      <div className="empty-content">No entries to synthesize for this stage.</div>
+                    )}
+                  </div>
+                ) : filteredStories.length === 0 ? (
+                  <div className="empty-content" style={{ marginTop: '16px' }}>
+                    <p>No stories have entries for this stage yet.</p>
+                  </div>
+                ) : (
+                  <div style={{ marginTop: '16px' }}>
+                    {filteredStories.map(([id, story]) => {
+                      const stage = story.stages[currentStage] || { entries: [], generated: null, edited: null };
+                      const isExpanded = expandedStory === id;
+                      const isEditing = editingStage?.storyId === id && editingStage?.stageId === currentStage;
+
+                      return (
+                        <div key={id} className={`forge-library-card${isExpanded ? ' expanded' : ''}`}>
+                          <div className="forge-library-card-header" onClick={() => setExpandedStory(isExpanded ? null : id)} style={{ cursor: 'pointer' }}>
+                            <h4 className="forge-library-card-title">{story.name || 'Untitled Story'}</h4>
+                            <span style={{ fontSize: '0.8em', opacity: 0.6 }}>{stage.entries.length} entries</span>
+                          </div>
+                          {isExpanded && (
+                            <div className="forge-library-card-body">
+                              <div className="forge-view-toggle" style={{ marginBottom: '10px' }}>
+                                <button className={`dev-mode-btn ${storyViewTab === 'entries' ? 'active' : ''}`} onClick={() => setStoryViewTab('entries')}>Entries</button>
+                                <button className={`dev-mode-btn ${storyViewTab === 'generated' ? 'active' : ''}`} onClick={() => setStoryViewTab('generated')}>Generated</button>
+                                {!isEditing && (
+                                  <button className="dev-mode-btn" onClick={() => {
+                                    setEditingStage({ storyId: id, stageId: currentStage });
+                                    setEditDraft(stage.edited || stage.generated || stage.entries.map(e => e.text).join('\n\n'));
+                                  }}>Edit</button>
+                                )}
+                              </div>
+                              {isEditing ? (
+                                <div>
+                                  <textarea
+                                    className="dev-input"
+                                    value={editDraft}
+                                    onChange={e => setEditDraft(e.target.value)}
+                                    rows={8}
+                                  />
+                                  <div className="dev-actions">
+                                    <button className="dev-save-btn" onClick={() => handleEditSave(id, currentStage)}>Save</button>
+                                    <button className="dev-relate-btn" onClick={() => { setEditingStage(null); setEditDraft(''); }}>Cancel</button>
+                                  </div>
+                                </div>
+                              ) : storyViewTab === 'entries' ? (
+                                <div className="dev-entries">
+                                  {stage.entries.map((entry, i) => (
+                                    <div key={i} className="dev-entry">
+                                      <p>{entry.text}</p>
+                                      <span style={{ fontSize: '0.7em', opacity: 0.5 }}>{entry.source} {'\u00B7'} {new Date(entry.createdAt).toLocaleDateString()}</span>
+                                    </div>
+                                  ))}
+                                </div>
+                              ) : (
+                                <div>
+                                  {stage.edited ? (
+                                    stage.edited.split('\n\n').map((p, i) => <p key={i}>{p}</p>)
+                                  ) : stage.generated ? (
+                                    stage.generated.split('\n\n').map((p, i) => <p key={i}>{p}</p>)
+                                  ) : (
+                                    <div className="empty-content">No generated narrative yet. Complete an Atlas interview to generate stage narratives.</div>
+                                  )}
+                                </div>
+                              )}
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+
+                {/* Stage navigation + Tell a Story */}
+                <div className="forge-actions" style={{ marginTop: '16px' }}>
+                  <button className="forge-generate-btn" onClick={handleStartInterview}>+ Tell a Story</button>
+                </div>
+                <div className="forge-stage-nav">
+                  {currentIdx > 0 && (
+                    <button className="forge-nav-btn" onClick={goPrev}>
+                      {'\u2190'} {FORGE_STAGES[currentIdx - 1].label}
+                    </button>
+                  )}
+                  <button className="forge-nav-btn forge-nav-overview" onClick={() => setCurrentStage('overview')}>
+                    My Journeys
+                  </button>
+                  {currentIdx < FORGE_STAGES.length - 1 && (
+                    <button className="forge-nav-btn" onClick={goNext}>
+                      {FORGE_STAGES[currentIdx + 1].label} {'\u2192'}
+                    </button>
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </>
+    );
+  }
+
   const isStageView = currentStage !== 'overview' && currentStage !== 'bio';
 
   return (
     <>
       <MeteorShower active={showMeteors} />
       <CircleNav
-        stages={STAGES}
+        stages={FORGE_STAGES}
         currentStage={currentStage}
         onSelectStage={handleSelectStage}
         clockwise={clockwise}
@@ -901,7 +1281,7 @@ function StoryForgeHome() {
               <div className="forge-progress">
                 <h4 className="forge-progress-title">Progress — {TEMPLATE_OPTIONS.find(t => t.id === template)?.label}</h4>
                 <div className="forge-progress-stages">
-                  {STAGES.map(s => {
+                  {FORGE_STAGES.map(s => {
                     const has = stagesWithContent.find(sc => sc.id === s.id);
                     return (
                       <button
@@ -933,7 +1313,7 @@ function StoryForgeHome() {
 
               {Object.keys(generatedStory).length > 0 && viewMode === 'read' && (
                 <div className="forge-story-overview">
-                  {STAGES.map(s => generatedStory[s.id] ? (
+                  {FORGE_STAGES.map(s => generatedStory[s.id] ? (
                     <div key={s.id} className="forge-chapter-preview" onClick={() => { handleSelectStage(s.id); }}>
                       <h4>{s.label}</h4>
                       <p>{generatedStory[s.id].substring(0, 150)}...</p>
@@ -990,21 +1370,22 @@ function StoryForgeHome() {
                     stageKey={`forge-${currentStage}`}
                     entries={forgeEntries}
                     setEntries={setForgeEntries}
+                    atlasOpener={FORGE_PROMPTS[template]?.[currentStage]}
                   />
                 </div>
               </div>
               <div className="forge-stage-nav">
                 {currentIdx > 0 && (
                   <button className="forge-nav-btn" onClick={goPrev}>
-                    ← {STAGES[currentIdx - 1].label}
+                    ← {FORGE_STAGES[currentIdx - 1].label}
                   </button>
                 )}
                 <button className="forge-nav-btn forge-nav-overview" onClick={() => setCurrentStage('overview')}>
                   Hub
                 </button>
-                {currentIdx < STAGES.length - 1 && (
+                {currentIdx < FORGE_STAGES.length - 1 && (
                   <button className="forge-nav-btn" onClick={goNext}>
-                    {STAGES[currentIdx + 1].label} →
+                    {FORGE_STAGES[currentIdx + 1].label} →
                   </button>
                 )}
               </div>
@@ -1039,15 +1420,15 @@ function StoryForgeHome() {
               <div className="forge-stage-nav">
                 {currentIdx > 0 && (
                   <button className="forge-nav-btn" onClick={goPrev}>
-                    ← {STAGES[currentIdx - 1].label}
+                    ← {FORGE_STAGES[currentIdx - 1].label}
                   </button>
                 )}
                 <button className="forge-nav-btn forge-nav-overview" onClick={() => setCurrentStage('overview')}>
                   Hub
                 </button>
-                {currentIdx < STAGES.length - 1 && (
+                {currentIdx < FORGE_STAGES.length - 1 && (
                   <button className="forge-nav-btn" onClick={goNext}>
-                    {STAGES[currentIdx + 1].label} →
+                    {FORGE_STAGES[currentIdx + 1].label} →
                   </button>
                 )}
               </div>
@@ -1066,12 +1447,11 @@ const NAV_ITEMS = [
   { path: '/atlas', label: 'Atlas' },
   { path: '/', label: 'Meteor Steel' },
   { path: '/monomyth', label: 'Monomyth' },
-  { path: '/fallen-starlight', label: 'Fallen Starlight' },
-  { path: '/story-forge', label: 'Story Forge' },
-  { path: 'https://www.thestoryatlas.com/my-courses/psychles/surface', label: 'Story Atlas', external: true },
-  { path: '/games', label: 'Game Room' },
-  { path: '/story-of-stories', label: 'Story of Stories' },
   { path: '/myths', label: 'Myths' },
+  { path: '/fallen-starlight', label: 'Fallen Starlight' },
+  { path: '/story-of-stories', label: 'Story of Stories' },
+  { path: '/story-forge', label: 'Story Forge' },
+  { path: '/games', label: 'Game Room' },
   { path: '/profile', label: 'Profile' },
 ];
 
@@ -1233,7 +1613,7 @@ function AppContent() {
       <SiteNav />
       <CourseCompletionPopup />
       <Routes>
-        <Route path="/" element={<MeteorSteelHome />} />
+        <Route path="/" element={<Navigate to="/metals" replace />} />
         <Route path="/metals/vr" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" />Loading 3D...</div>}><SevenMetalsVRPage /></Suspense>} />
         <Route path="/metals/*" element={<SevenMetalsPage />} />
         <Route path="/fallen-starlight" element={<FallenStarlightHome />} />
