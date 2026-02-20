@@ -59,6 +59,18 @@ module.exports = async (req, res) => {
       });
     }
 
+    // Ensure user profile document exists (for multiplayer, handles, etc.)
+    const profileRef = db.collection('users').doc(uid).collection('meta').doc('profile');
+    const profileDoc = await profileRef.get();
+    if (!profileDoc.exists) {
+      await profileRef.set({
+        email: email || null,
+        displayName: name || null,
+        createdAt: admin.firestore.FieldValue.serverTimestamp(),
+        updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+      });
+    }
+
     return res.status(200).json({ ok: true });
   } catch (err) {
     console.error('auth-sync error:', err);

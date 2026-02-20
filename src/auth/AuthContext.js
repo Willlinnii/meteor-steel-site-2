@@ -21,7 +21,7 @@ export function AuthProvider({ children }) {
       setLoading(false);
 
       if (firebaseUser) {
-        const syncKey = `auth-synced-${firebaseUser.uid}`;
+        const syncKey = `auth-synced-v2-${firebaseUser.uid}`;
         if (!localStorage.getItem(syncKey)) {
           try {
             const token = await firebaseUser.getIdToken();

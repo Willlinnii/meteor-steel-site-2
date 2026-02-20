@@ -20,6 +20,12 @@ export async function registerHandle(handle) {
     body: JSON.stringify({ token, handle }),
   });
 
+  // Handle non-JSON responses (e.g. HTML error pages, 404s)
+  const contentType = res.headers.get('content-type') || '';
+  if (!contentType.includes('application/json')) {
+    throw new Error(`Server error (${res.status}): expected JSON but got ${contentType || 'unknown'}`);
+  }
+
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || 'Failed to register handle');
   return data;
@@ -33,6 +39,11 @@ export async function searchHandles(query) {
   const res = await fetch(`/api/search-handles?q=${encodeURIComponent(query)}`, {
     headers: { Authorization: `Bearer ${token}` },
   });
+
+  const contentType = res.headers.get('content-type') || '';
+  if (!contentType.includes('application/json')) {
+    throw new Error(`Server error (${res.status})`);
+  }
 
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || 'Search failed');
