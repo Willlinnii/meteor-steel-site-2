@@ -1,0 +1,552 @@
+.mythic-earth-page {
+  width: 100%;
+  background: var(--bg-dark);
+}
+
+.mythic-earth-map-area {
+  position: relative;
+  width: 100%;
+  height: calc(100vh - 90px);
+}
+
+.mythic-earth-map {
+  width: 100%;
+  height: 100%;
+}
+
+/* Filter bar */
+.mythic-earth-filters {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  z-index: 10;
+  padding: 8px 14px;
+  background: rgba(10, 10, 15, 0.85);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--border-subtle);
+  border-radius: 24px;
+}
+
+.mythic-earth-filter-btn {
+  font-family: 'Cinzel', serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  padding: 6px 14px;
+  border: 1px solid var(--border-subtle);
+  border-radius: 16px;
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.mythic-earth-filter-btn:hover {
+  border-color: var(--accent-gold);
+  color: var(--text-primary);
+}
+
+.mythic-earth-filter-btn.active {
+  background: rgba(201, 169, 97, 0.15);
+  border-color: var(--accent-gold);
+  color: var(--accent-gold);
+}
+
+.mythic-earth-filter-btn.active.sacred-site {
+  background: rgba(201, 169, 97, 0.15);
+  border-color: var(--accent-gold);
+  color: var(--accent-gold);
+}
+
+.mythic-earth-filter-btn.active.mythic-location {
+  background: rgba(196, 113, 58, 0.15);
+  border-color: var(--accent-ember);
+  color: var(--accent-ember);
+}
+
+.mythic-earth-filter-btn.active.literary-location {
+  background: rgba(139, 157, 195, 0.15);
+  border-color: var(--accent-steel);
+  color: var(--accent-steel);
+}
+
+/* ── Detail panel ── */
+.mythic-earth-detail {
+  position: relative;
+  border-top: 2px solid var(--accent-fire);
+  background: var(--bg-dark);
+  padding-bottom: 40px;
+  animation: detailSlideIn 0.3s ease;
+}
+
+@keyframes detailSlideIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.mythic-earth-detail-close {
+  position: absolute;
+  top: 16px;
+  right: 24px;
+  background: none;
+  border: 1px solid var(--border-subtle);
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  color: var(--text-secondary);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mythic-earth-detail-close:hover {
+  color: var(--text-primary);
+  border-color: var(--accent-gold);
+}
+
+/* Tags row */
+.mythic-earth-detail-tags {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.mythic-earth-detail-tag {
+  font-family: 'Cinzel', serif;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 4px 12px;
+  border-radius: 12px;
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+}
+
+.mythic-earth-detail-tag.sacred-site {
+  background: rgba(201, 169, 97, 0.12);
+  border-color: rgba(201, 169, 97, 0.4);
+  color: var(--accent-gold);
+}
+
+.mythic-earth-detail-tag.mythic-location {
+  background: rgba(196, 113, 58, 0.12);
+  border-color: rgba(196, 113, 58, 0.4);
+  color: var(--accent-ember);
+}
+
+.mythic-earth-detail-tag.literary-location {
+  background: rgba(139, 157, 195, 0.12);
+  border-color: rgba(139, 157, 195, 0.4);
+  color: var(--accent-steel);
+}
+
+.mythic-earth-detail-tag.tradition {
+  background: rgba(212, 165, 116, 0.1);
+  border-color: rgba(212, 165, 116, 0.3);
+  color: var(--accent-fire);
+}
+
+.mythic-earth-detail-tag.region {
+  background: rgba(168, 168, 184, 0.08);
+  border-color: rgba(168, 168, 184, 0.2);
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+/* ── Excerpt section ── */
+.mythic-earth-excerpt {
+  margin-top: 28px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.mythic-earth-excerpt-heading {
+  font-family: 'Cinzel', serif;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent-fire);
+  margin-bottom: 16px;
+}
+
+.mythic-earth-excerpt-body {
+  font-family: 'Crimson Pro', serif;
+  font-size: 1.1rem;
+  line-height: 1.9;
+  color: var(--text-primary);
+  padding: 20px 24px;
+  background: rgba(139, 157, 195, 0.04);
+  border-left: 3px solid var(--accent-steel);
+  border-radius: 0 4px 4px 0;
+}
+
+.mythic-earth-excerpt-body p {
+  margin-bottom: 14px;
+}
+
+.mythic-earth-excerpt-body p:last-child {
+  margin-bottom: 0;
+}
+
+/* Read link */
+.mythic-earth-read-link {
+  margin-top: 24px;
+  text-align: center;
+  padding-bottom: 8px;
+}
+
+.mythic-earth-read-link a {
+  font-family: 'Cinzel', serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--accent-gold);
+  text-decoration: none;
+  padding: 10px 28px;
+  border: 1px solid rgba(201, 169, 97, 0.4);
+  border-radius: 20px;
+  transition: all 0.2s ease;
+  display: inline-block;
+}
+
+.mythic-earth-read-link a:hover {
+  background: rgba(201, 169, 97, 0.12);
+  border-color: var(--accent-gold);
+}
+
+/* ── Reader toggle ── */
+.mythic-earth-reader-toggle {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  align-items: center;
+  margin-top: 24px;
+  padding: 20px 0;
+}
+
+.mythic-earth-reader-btn {
+  font-family: 'Cinzel', serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--accent-gold);
+  background: rgba(201, 169, 97, 0.08);
+  border: 1px solid rgba(201, 169, 97, 0.4);
+  border-radius: 20px;
+  padding: 10px 28px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.mythic-earth-reader-btn:hover {
+  background: rgba(201, 169, 97, 0.18);
+  border-color: var(--accent-gold);
+}
+
+.mythic-earth-reader-external {
+  font-family: 'Cinzel', serif;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  text-decoration: none;
+  padding: 8px 16px;
+  border: 1px solid var(--border-subtle);
+  border-radius: 16px;
+  transition: all 0.2s ease;
+}
+
+.mythic-earth-reader-external:hover {
+  color: var(--text-primary);
+  border-color: var(--accent-steel);
+}
+
+/* ── Reader panel ── */
+.mythic-earth-reader {
+  margin-top: 24px;
+  border: 1px solid var(--border-subtle);
+  background: var(--bg-medium);
+  border-radius: 4px;
+  overflow: hidden;
+  animation: detailSlideIn 0.3s ease;
+}
+
+.mythic-earth-reader-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px;
+  border-bottom: 1px solid var(--border-subtle);
+  background: rgba(10, 10, 15, 0.4);
+}
+
+.mythic-earth-reader-title {
+  font-family: 'Cinzel', serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent-fire);
+}
+
+.mythic-earth-reader-close {
+  font-family: 'Cinzel', serif;
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+  background: none;
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
+  padding: 4px 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.mythic-earth-reader-close:hover {
+  color: var(--text-primary);
+  border-color: var(--accent-gold);
+}
+
+/* Reader body — sidebar + text */
+.mythic-earth-reader-body {
+  display: flex;
+  min-height: 400px;
+  max-height: 70vh;
+}
+
+.mythic-earth-reader-chapters {
+  width: 240px;
+  min-width: 240px;
+  border-right: 1px solid var(--border-subtle);
+  background: rgba(10, 10, 15, 0.3);
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent-steel) var(--bg-dark);
+}
+
+.mythic-earth-reader-chapter-list {
+  display: flex;
+  flex-direction: column;
+  padding: 8px 0;
+}
+
+.mythic-earth-reader-chapter-btn {
+  font-family: 'Crimson Pro', serif;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  background: none;
+  border: none;
+  border-left: 3px solid transparent;
+  padding: 8px 16px;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  line-height: 1.4;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mythic-earth-reader-chapter-btn:hover {
+  color: var(--text-primary);
+  background: rgba(139, 157, 195, 0.06);
+}
+
+.mythic-earth-reader-chapter-btn.active {
+  color: var(--accent-gold);
+  border-left-color: var(--accent-gold);
+  background: rgba(201, 169, 97, 0.08);
+}
+
+/* Reader text area */
+.mythic-earth-reader-text {
+  flex: 1;
+  overflow-y: auto;
+  padding: 30px 36px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent-steel) var(--bg-dark);
+}
+
+.mythic-earth-reader-content {
+  font-family: 'Crimson Pro', serif;
+  font-size: 1.1rem;
+  line-height: 1.9;
+  color: var(--text-primary);
+}
+
+.mythic-earth-reader-content p {
+  margin-bottom: 14px;
+}
+
+.mythic-earth-reader-chapter-heading {
+  font-family: 'Cinzel', serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--accent-fire);
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.mythic-earth-reader-section-heading {
+  font-family: 'Cinzel', serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--accent-steel);
+  margin: 28px 0 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.mythic-earth-reader-divider {
+  border: none;
+  border-top: 1px solid var(--border-subtle);
+  margin: 24px 0;
+}
+
+.mythic-earth-reader-placeholder {
+  font-family: 'Crimson Pro', serif;
+  font-size: 1.05rem;
+  color: var(--text-secondary);
+  text-align: center;
+  padding: 60px 20px;
+}
+
+.mythic-earth-reader-loading {
+  font-family: 'Cinzel', serif;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  text-align: center;
+  padding: 30px 20px;
+}
+
+.mythic-earth-reader-error {
+  font-family: 'Crimson Pro', serif;
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  text-align: center;
+  padding: 20px;
+}
+
+.mythic-earth-reader-error a {
+  color: var(--accent-gold);
+  text-decoration: none;
+}
+
+.mythic-earth-reader-error a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .mythic-earth-reader-body {
+    flex-direction: column;
+    max-height: none;
+  }
+
+  .mythic-earth-reader-chapters {
+    width: 100%;
+    min-width: unset;
+    max-height: 200px;
+    border-right: none;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .mythic-earth-reader-chapter-list {
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: 8px;
+    gap: 4px;
+  }
+
+  .mythic-earth-reader-chapter-btn {
+    border-left: none;
+    border-bottom: 2px solid transparent;
+    padding: 6px 12px;
+    font-size: 0.8rem;
+  }
+
+  .mythic-earth-reader-chapter-btn.active {
+    border-bottom-color: var(--accent-gold);
+    border-left-color: transparent;
+  }
+
+  .mythic-earth-reader-text {
+    padding: 20px 16px;
+    max-height: 60vh;
+  }
+}
+
+/* No API key fallback */
+.mythic-earth-no-key {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  text-align: center;
+  padding: 40px;
+}
+
+.mythic-earth-no-key h2 {
+  font-family: 'Cinzel', serif;
+  font-size: 1.6rem;
+  color: var(--accent-gold);
+  margin-bottom: 16px;
+}
+
+.mythic-earth-no-key p {
+  font-family: 'Crimson Pro', serif;
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  max-width: 500px;
+  line-height: 1.6;
+  margin-bottom: 8px;
+}
+
+.mythic-earth-no-key code {
+  font-family: monospace;
+  background: var(--bg-light);
+  padding: 2px 8px;
+  border-radius: 4px;
+  color: var(--accent-ember);
+  font-size: 0.9rem;
+}
+
+/* Loading state */
+.mythic-earth-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: var(--text-secondary);
+  font-family: 'Cinzel', serif;
+  font-size: 1rem;
+}
+
+@media (max-width: 600px) {
+  .mythic-earth-filters {
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 90vw;
+    gap: 4px;
+    padding: 6px 10px;
+  }
+
+  .mythic-earth-filter-btn {
+    font-size: 0.6rem;
+    padding: 4px 10px;
+  }
+
+  .mythic-earth-detail-tags {
+    padding: 0 16px;
+  }
+}

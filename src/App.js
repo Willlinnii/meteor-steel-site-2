@@ -34,6 +34,7 @@ const MythSalonLibraryPage = lazy(() => import('./pages/MythSalonLibrary/MythSal
 const ProfilePage = lazy(() => import('./pages/Profile/ProfilePage'));
 const StoryOfStoriesPage = lazy(() => import('./pages/StoryOfStories/StoryOfStoriesPage'));
 const MythsPage = lazy(() => import('./pages/Myths/MythsPage'));
+const MythicEarthPage = lazy(() => import('./pages/MythicEarth/MythicEarthPage'));
 
 const STAGES = [
   { id: 'golden-age', label: 'Golden Age' },
@@ -1452,6 +1453,7 @@ const NAV_ITEMS = [
   { path: '/fallen-starlight', label: 'Fallen Starlight' },
   { path: '/story-of-stories', label: 'Story of Stories' },
   { path: '/story-forge', label: 'Story Forge' },
+  { path: '/mythic-earth', label: 'Mythic Earth' },
   { path: '/games', label: 'Game Room' },
   { path: '/profile', label: 'Profile' },
 ];
@@ -1631,6 +1633,7 @@ function AppContent() {
         <Route path="/story-of-stories" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><StoryOfStoriesPage /></Suspense>} />
         <Route path="/treasures" element={<Navigate to="/myths" replace />} />
         <Route path="/myths" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><MythsPage /></Suspense>} />
+        <Route path="/mythic-earth" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><MythicEarthPage /></Suspense>} />
         <Route path="/dragon/*" element={<RequireAdmin><Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" />Loading Admin...</div>}><AdminPage /></Suspense></RequireAdmin>} />
       </Routes>
       {!isAtlas && <SiteFooter />}

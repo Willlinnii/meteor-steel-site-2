@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@anthropic-ai/sdk": "^0.75.0",
+    "@react-google-maps/api": "^2.20.8",
     "@react-three/drei": "^10.7.7",
     "@react-three/fiber": "^9.5.0",
     "@react-three/xr": "^6.6.29",
