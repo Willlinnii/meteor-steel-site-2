@@ -1,14 +1,30 @@
 import React, { useState, useMemo, useEffect, useCallback, useRef } from 'react';
+import { useAuth } from '../../auth/AuthContext';
 import './ContactsPage.css';
 
 const PAGE_SIZE = 50;
 
-const SOURCE_LABELS = {
-  all: 'All',
-  wix: 'Wix',
-  constant_contact: 'CC',
-  both: 'Both',
+// Consolidated list groups — any email list matching these keywords gets folded in
+const LIST_GROUPS = {
+  clicked:          (name) => /click/i.test(name),
+  writers_journey:  (name) => /writer.*journey/i.test(name),
+  myth_salon:       (name) => /myth.salon/i.test(name),
 };
+
+// Individual lists to keep as-is in the dropdown
+const KEEP_LISTS = ['Mythouse Website', 'Zoom', 'climate'];
+
+function getListGroup(name) { // eslint-disable-line no-unused-vars
+  for (const [group, test] of Object.entries(LIST_GROUPS)) {
+    if (test(name)) return group;
+  }
+  if (KEEP_LISTS.includes(name)) return null; // keep standalone
+  return '__hide'; // hide from dropdown
+}
+
+function matchesListGroup(emailLists, group) {
+  return emailLists.some(l => LIST_GROUPS[group]?.(l));
+}
 
 function getInitials(contact) {
   const f = (contact.firstName || '')[0] || '';
@@ -29,18 +45,20 @@ function sourceLabel(source) {
 }
 
 export default function ContactsPage() {
+  const { user } = useAuth();
   const [contacts, setContacts] = useState([]);
   const [meta, setMeta] = useState(null);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
-  const [sourceFilter, setSourceFilter] = useState('all');
+  const [listFilter, setListFilter] = useState('all');
   const [statusFilter, setStatusFilter] = useState('all');
   const [tagFilter, setTagFilter] = useState('all');
-  const [listFilter, setListFilter] = useState('all');
   const [sortKey, setSortKey] = useState('name');
   const [sortDir, setSortDir] = useState('asc');
   const [page, setPage] = useState(0);
   const [selectedId, setSelectedId] = useState(null);
+  const [siteMemberEmails, setSiteMemberEmails] = useState(new Set());
+  const [siteMemberUsers, setSiteMemberUsers] = useState([]);
   const searchTimer = useRef(null);
   const [debouncedSearch, setDebouncedSearch] = useState('');
 
@@ -69,6 +87,38 @@ export default function ContactsPage() {
     return () => { cancelled = true; };
   }, []);
 
+  // Load site members from Firebase Auth via API
+  useEffect(() => {
+    if (!user) return;
+    let cancelled = false;
+    async function loadMembers() {
+      try {
+        const token = await user.getIdToken();
+        const res = await fetch('/api/list-users', {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (!res.ok) throw new Error(`API ${res.status}`);
+        const { users: fbUsers } = await res.json();
+        const emails = new Set();
+        const userList = [];
+        fbUsers.forEach(u => {
+          if (u.email) {
+            emails.add(u.email.toLowerCase());
+            userList.push({ uid: u.uid, email: u.email, displayName: u.displayName || '' });
+          }
+        });
+        if (!cancelled) {
+          setSiteMemberEmails(emails);
+          setSiteMemberUsers(userList);
+        }
+      } catch (err) {
+        console.error('[ContactsPage] Failed to load site members:', err);
+      }
+    }
+    loadMembers();
+    return () => { cancelled = true; };
+  }, [user]);
+
   // Debounce search
   const handleSearch = useCallback((val) => {
     setSearch(val);
@@ -96,9 +146,36 @@ export default function ContactsPage() {
   const filtered = useMemo(() => {
     let list = contacts;
 
-    // Source filter
-    if (sourceFilter !== 'all') {
-      list = list.filter(c => c.source === sourceFilter);
+    // Unified list filter (sources + consolidated groups + individual lists)
+    if (listFilter === 'site_members') {
+      // Include contacts that match a Firebase user
+      list = list.filter(c => (c.emails || []).some(e => siteMemberEmails.has(e.toLowerCase())));
+      // Add Firebase users not in contacts
+      const contactEmails = new Set(contacts.flatMap(c => (c.emails || []).map(e => e.toLowerCase())));
+      const firebaseOnly = siteMemberUsers
+        .filter(u => !contactEmails.has(u.email.toLowerCase()))
+        .map(u => {
+          const parts = (u.displayName || '').split(' ');
+          return {
+            id: `fb-${u.uid}`,
+            firstName: parts[0] || '',
+            lastName: parts.slice(1).join(' ') || '',
+            emails: [u.email],
+            source: 'site',
+            createdAt: null,
+          };
+        });
+      list = [...firebaseOnly, ...list];
+    } else if (listFilter === 'wix') {
+      list = list.filter(c => c.source === 'wix');
+    } else if (listFilter === 'constant_contact') {
+      list = list.filter(c => c.source === 'constant_contact');
+    } else if (listFilter === 'both') {
+      list = list.filter(c => c.source === 'both');
+    } else if (LIST_GROUPS[listFilter]) {
+      list = list.filter(c => matchesListGroup(c.cc?.emailLists || [], listFilter));
+    } else if (listFilter !== 'all') {
+      list = list.filter(c => (c.cc?.emailLists || []).includes(listFilter));
     }
 
     // Status filter
@@ -113,11 +190,6 @@ export default function ContactsPage() {
     // Tag filter
     if (tagFilter !== 'all') {
       list = list.filter(c => (c.cc?.tags || []).includes(tagFilter));
-    }
-
-    // List filter
-    if (listFilter !== 'all') {
-      list = list.filter(c => (c.cc?.emailLists || []).includes(listFilter));
     }
 
     // Search
@@ -160,7 +232,7 @@ export default function ContactsPage() {
     });
 
     return list;
-  }, [contacts, sourceFilter, statusFilter, tagFilter, listFilter, debouncedSearch, sortKey, sortDir]);
+  }, [contacts, siteMemberEmails, siteMemberUsers, statusFilter, tagFilter, listFilter, debouncedSearch, sortKey, sortDir]);
 
   // Pagination
   const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
@@ -170,7 +242,33 @@ export default function ContactsPage() {
   const selected = selectedId != null ? contacts.find(c => c.id === selectedId) : null;
 
   // Reset page when filters change
-  useEffect(() => { setPage(0); }, [sourceFilter, statusFilter, tagFilter, listFilter]);
+  useEffect(() => { setPage(0); }, [statusFilter, tagFilter, listFilter]);
+
+  const exportCSV = useCallback(() => {
+    if (filtered.length === 0) return;
+    const headers = ['First Name', 'Last Name', 'Email', 'Phone', 'Company', 'Source', 'Created'];
+    const escape = (val) => {
+      const s = String(val || '');
+      return s.includes(',') || s.includes('"') || s.includes('\n') ? `"${s.replace(/"/g, '""')}"` : s;
+    };
+    const rows = filtered.map(c => [
+      escape(c.firstName),
+      escape(c.lastName),
+      escape(c.emails?.[0]),
+      escape(c.phones?.[0]),
+      escape(c.company),
+      escape(c.source),
+      escape(c.createdAt?.split('T')[0]),
+    ].join(','));
+    const csv = [headers.join(','), ...rows].join('\n');
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `contacts-${listFilter}-${new Date().toISOString().split('T')[0]}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }, [filtered, listFilter]);
 
   if (loading) {
     return <div className="contacts-loading">Loading contacts...</div>;
@@ -189,20 +287,23 @@ export default function ContactsPage() {
           value={search}
           onChange={e => handleSearch(e.target.value)}
         />
-        <div className="contacts-source-pills">
-          {Object.entries(SOURCE_LABELS).map(([key, label]) => (
-            <button
-              key={key}
-              className={`contacts-source-pill ${sourceFilter === key ? 'active' : ''}`}
-              data-source={key}
-              onClick={() => setSourceFilter(key)}
-            >
-              {label}
-              {meta && key !== 'all' && ` (${meta.sources[key] || 0})`}
-              {meta && key === 'all' && ` (${meta.totalContacts})`}
-            </button>
+        <select
+          className="contacts-filter-select"
+          value={listFilter}
+          onChange={e => setListFilter(e.target.value)}
+        >
+          <option value="all">All{meta ? ` (${meta.totalContacts})` : ''}</option>
+          <option value="site_members">Site Members{siteMemberEmails.size > 0 ? ` (${siteMemberEmails.size})` : ''}</option>
+          <option value="wix">Wix{meta ? ` (${meta.sources.wix})` : ''}</option>
+          <option value="constant_contact">CC{meta ? ` (${meta.sources.constant_contact})` : ''}</option>
+          <option value="both">Both{meta ? ` (${meta.sources.both})` : ''}</option>
+          <option value="clicked">Clicked</option>
+          <option value="writers_journey">Writer's Journey</option>
+          <option value="myth_salon">Myth Salon</option>
+          {KEEP_LISTS.map(l => (
+            <option key={l} value={l}>{l}</option>
           ))}
-        </div>
+        </select>
         {meta && meta.ccEmailStatuses.length > 0 && (
           <select
             className="contacts-filter-select"
@@ -227,18 +328,6 @@ export default function ContactsPage() {
             ))}
           </select>
         )}
-        {meta && meta.emailLists.length > 0 && (
-          <select
-            className="contacts-filter-select"
-            value={listFilter}
-            onChange={e => setListFilter(e.target.value)}
-          >
-            <option value="all">All Lists</option>
-            {meta.emailLists.map(l => (
-              <option key={l} value={l}>{l}</option>
-            ))}
-          </select>
-        )}
       </div>
 
       {/* Stats bar */}
@@ -252,6 +341,9 @@ export default function ContactsPage() {
             Wix: {meta.sources.wix} | CC: {meta.sources.constant_contact} | Both: {meta.sources.both}
           </span>
         )}
+        <button className="contacts-export-btn" onClick={exportCSV} disabled={filtered.length === 0}>
+          Export CSV ({filtered.length})
+        </button>
       </div>
 
       {/* Main split panel */}
@@ -271,6 +363,7 @@ export default function ContactsPage() {
             >
               Email{sortArrow('email')}
             </button>
+            <span className="contacts-col-member">Member</span>
             <button
               className={`contacts-col-source ${sortKey === 'source' ? 'sorted' : ''}`}
               onClick={() => handleSort('source')}
@@ -299,6 +392,9 @@ export default function ContactsPage() {
                     : '(no name)'}
                 </span>
                 <span className="contacts-row-email">{c.emails?.[0] || '-'}</span>
+                <span className="contacts-row-member">
+                  {(c.emails || []).some(e => siteMemberEmails.has(e.toLowerCase())) ? '✓' : ''}
+                </span>
                 <span className="contacts-row-source">
                   <span className={`contacts-source-badge ${c.source}`}>
                     {sourceLabel(c.source)}

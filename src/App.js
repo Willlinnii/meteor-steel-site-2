@@ -4,6 +4,7 @@ import { useAuth } from './auth/AuthContext';
 import { CourseworkProvider, useCoursework } from './coursework/CourseworkContext';
 import { WritingsProvider, useWritings } from './writings/WritingsContext';
 import { ProfileProvider } from './profile/ProfileContext';
+import { MultiplayerProvider } from './multiplayer/MultiplayerContext';
 import LoginPage from './auth/LoginPage';
 import './App.css';
 import ChatPanel from './components/ChatPanel';
@@ -290,7 +291,7 @@ function MeteorShower({ active }) {
   );
 }
 
-function MeteorSteelHome() {
+function MeteorSteelHome() { // eslint-disable-line no-unused-vars
   const [searchParams, setSearchParams] = useSearchParams();
   const [currentStage, setCurrentStage] = useState('overview');
   const [clockwise, setClockwise] = useState(false);
@@ -1571,6 +1572,7 @@ function MythosophiaPage() {
 function RequireAdmin({ children }) {
   const { user } = useAuth();
   const adminEmail = process.env.REACT_APP_ADMIN_EMAIL;
+  console.log('[RequireAdmin]', { userEmail: user?.email, adminEmail, match: user?.email === adminEmail });
   if (!user || user.email !== adminEmail) {
     return (
       <div style={{ padding: '80px 20px', textAlign: 'center', color: 'var(--text-secondary)' }}>
@@ -1657,9 +1659,11 @@ function App() {
     <CourseworkProvider>
       <WritingsProvider>
         <ProfileProvider>
-          <Routes>
-            <Route path="*" element={<AppContent />} />
-          </Routes>
+          <MultiplayerProvider>
+            <Routes>
+              <Route path="*" element={<AppContent />} />
+            </Routes>
+          </MultiplayerProvider>
         </ProfileProvider>
       </WritingsProvider>
     </CourseworkProvider>
