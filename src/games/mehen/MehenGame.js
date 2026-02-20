@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useEffect, useRef, useMemo } from 'react';
 import GameShell from '../shared/GameShell';
+import MultiplayerChat from '../shared/MultiplayerChat'; // eslint-disable-line no-unused-vars
 import GAME_BOOK from '../shared/gameBookData';
 import { D6Display } from '../shared/DiceDisplay';
 import { rollD6 } from '../shared/diceEngine';
@@ -8,19 +9,43 @@ import { TOTAL_SPACES, CENTER, mehenPositionToSVG } from './mehenData';
 const PLAYER_COLORS = ['#c9a961', '#8b9dc3'];
 const PIECE_COUNT = 3;
 
-function MehenGame({ mode, onExit }) {
-  const [pieces, setPieces] = useState([[0, 0, 0], [0, 0, 0]]);
-  const [currentPlayer, setCurrentPlayer] = useState(0);
-  const [diceValue, setDiceValue] = useState(null);
-  const [gamePhase, setGamePhase] = useState('roll'); // roll, selectPiece, gameOver
-  const [winner, setWinner] = useState(null);
-  const [turnCount, setTurnCount] = useState(0);
-  const [message, setMessage] = useState('Roll the die to begin!');
-  const [moveLog, setMoveLog] = useState([]);
+function MehenGame({
+  mode, onExit,
+  // Online multiplayer props (optional)
+  onlineState, myPlayerIndex, isMyTurn, onStateChange, matchData, playerNames: onlinePlayerNames,
+  chatMessages, sendChat, onForfeit, onPlayerClick,
+}) {
+  const isOnline = mode === 'online';
+
+  const [pieces, setPieces] = useState(isOnline ? (onlineState?.pieces || [[0, 0, 0], [0, 0, 0]]) : [[0, 0, 0], [0, 0, 0]]);
+  const [currentPlayer, setCurrentPlayer] = useState(isOnline ? (matchData?.currentPlayer ?? 0) : 0);
+  const [diceValue, setDiceValue] = useState(isOnline ? (onlineState?.diceValue || null) : null);
+  const [gamePhase, setGamePhase] = useState(isOnline ? (matchData?.gamePhase || 'roll') : 'roll'); // roll, selectPiece, gameOver
+  const [winner, setWinner] = useState(isOnline ? (matchData?.winner ?? null) : null);
+  const [turnCount, setTurnCount] = useState(isOnline ? (matchData?.turnCount || 0) : 0);
+  const [message, setMessage] = useState(isOnline ? (onlineState?.message || '') : 'Roll the die to begin!');
+  const [moveLog, setMoveLog] = useState(isOnline ? (onlineState?.moveLog || []) : []);
   const aiTimeoutRef = useRef(null);
 
+  // Sync from Firestore when online state changes
+  useEffect(() => {
+    if (!isOnline || !onlineState || !matchData) return;
+    setPieces(onlineState.pieces || [[0, 0, 0], [0, 0, 0]]);
+    setDiceValue(onlineState.diceValue || null);
+    setMessage(onlineState.message || '');
+    setMoveLog(onlineState.moveLog || []);
+    setCurrentPlayer(matchData.currentPlayer ?? 0);
+    setGamePhase(matchData.gamePhase || 'roll');
+    setWinner(matchData.winner ?? null);
+    setTurnCount(matchData.turnCount || 0);
+  }, [isOnline, onlineState, matchData]);
+
   const isAI = mode === 'ai';
-  const playerNames = useMemo(() => isAI ? ['You', 'Atlas'] : ['Player 1', 'Player 2'], [isAI]);
+  const playerNames = useMemo(() =>
+    isOnline
+      ? [onlinePlayerNames?.[0] || 'Player 1', onlinePlayerNames?.[1] || 'Player 2']
+      : isAI ? ['You', 'Atlas'] : ['Player 1', 'Player 2'],
+    [isAI, isOnline, onlinePlayerNames]);
 
   // Cleanup AI timeouts on unmount
   useEffect(() => {
@@ -57,78 +82,119 @@ function MehenGame({ mode, onExit }) {
 
   // Execute a move
   const executeMove = useCallback((pieceIdx) => {
-    setPieces(prev => {
-      const newPieces = [prev[0].slice(), prev[1].slice()];
-      const player = currentPlayer;
-      const opponent = 1 - player;
-      const newPos = newPieces[player][pieceIdx] + diceValue;
+    const newPieces = [pieces[0].slice(), pieces[1].slice()];
+    const player = currentPlayer;
+    const opponent = 1 - player;
+    const newPos = newPieces[player][pieceIdx] + diceValue;
 
-      newPieces[player][pieceIdx] = newPos;
-      setMoveLog(log => [...log, `${playerNames[player]} rolled ${diceValue}, moved piece to position ${newPos}`]);
+    newPieces[player][pieceIdx] = newPos;
+    let msg = `${playerNames[player]} rolled ${diceValue}, moved piece to position ${newPos}`;
+    const newLog = [...moveLog, msg];
 
-      // Landing on opponent's piece pushes them back 3
-      if (newPos > 0 && newPos < TOTAL_SPACES) {
-        for (let i = 0; i < PIECE_COUNT; i++) {
-          if (newPieces[opponent][i] === newPos) {
-            newPieces[opponent][i] = Math.max(0, newPieces[opponent][i] - 3);
-            setMessage(`${playerNames[player]} bumped ${playerNames[opponent]}'s piece back!`);
-            setMoveLog(log => [...log, `${playerNames[player]} bumped ${playerNames[1-player]}'s piece back!`]);
-          }
+    // Landing on opponent's piece pushes them back 3
+    if (newPos > 0 && newPos < TOTAL_SPACES) {
+      for (let i = 0; i < PIECE_COUNT; i++) {
+        if (newPieces[opponent][i] === newPos) {
+          newPieces[opponent][i] = Math.max(0, newPieces[opponent][i] - 3);
+          msg = `${playerNames[player]} bumped ${playerNames[opponent]}'s piece back!`;
+          newLog.push(msg);
         }
       }
+    }
 
-      // Check for win
-      const allFinished = newPieces[player].every(p => p === TOTAL_SPACES);
-      if (allFinished) {
-        setWinner(player);
-        setGamePhase('gameOver');
-        setMessage(`${playerNames[player]} wins!`);
-        setMoveLog(log => [...log, `${playerNames[player]} wins!`]);
-        return newPieces;
+    // Check for win
+    const allFinished = newPieces[player].every(p => p === TOTAL_SPACES);
+    if (allFinished) {
+      const winMsg = `${playerNames[player]} wins!`;
+      newLog.push(winMsg);
+
+      if (isOnline && onStateChange) {
+        onStateChange(
+          { pieces: newPieces, diceValue, message: winMsg, moveLog: newLog },
+          { currentPlayer: player, gamePhase: 'gameOver', winner: player, status: 'completed', completedAt: new Date() }
+        );
+        return;
       }
 
-      // Switch turns
-      const nextPlayer = 1 - player;
-      setCurrentPlayer(nextPlayer);
-      setDiceValue(null);
-      setGamePhase('roll');
-      setTurnCount(tc => tc + 1);
-      setMessage(`${playerNames[nextPlayer]}'s turn — roll the die!`);
+      setPieces(newPieces);
+      setWinner(player);
+      setGamePhase('gameOver');
+      setMessage(winMsg);
+      setMoveLog(newLog);
+      return;
+    }
 
-      return newPieces;
-    });
-  }, [currentPlayer, diceValue, playerNames]);
+    // Switch turns
+    const nextPlayer = 1 - player;
+    const turnMsg = `${playerNames[nextPlayer]}'s turn — roll the die!`;
+
+    if (isOnline && onStateChange) {
+      onStateChange(
+        { pieces: newPieces, diceValue, message: turnMsg, moveLog: newLog },
+        { currentPlayer: nextPlayer, gamePhase: 'roll' }
+      );
+      return;
+    }
+
+    setPieces(newPieces);
+    setMoveLog(newLog);
+    setMessage(turnMsg);
+    setCurrentPlayer(nextPlayer);
+    setDiceValue(null);
+    setGamePhase('roll');
+    setTurnCount(tc => tc + 1);
+  }, [pieces, currentPlayer, diceValue, playerNames, moveLog, isOnline, onStateChange]);
 
   // Handle rolling the die
   const handleRoll = useCallback(() => {
     if (gamePhase !== 'roll' || winner !== null) return;
+    if (isOnline && !isMyTurn) return;
     const roll = rollD6();
     setDiceValue(roll);
 
     const validMoves = getValidMoves(pieces[currentPlayer], roll);
     if (validMoves.length === 0) {
-      setMessage(`${playerNames[currentPlayer]} rolled ${roll} — no valid moves! Turn skipped.`);
-      setMoveLog(log => [...log, `${playerNames[currentPlayer]} rolled ${roll} — no valid moves`]);
+      const skipMsg = `${playerNames[currentPlayer]} rolled ${roll} — no valid moves! Turn skipped.`;
       const nextPlayer = 1 - currentPlayer;
-      setTimeout(() => {
-        setCurrentPlayer(nextPlayer);
-        setDiceValue(null);
-        setGamePhase('roll');
-        setTurnCount(tc => tc + 1);
-        setMessage(`${playerNames[nextPlayer]}'s turn — roll the die!`);
-      }, 800);
+
+      if (isOnline && onStateChange) {
+        const newLog = [...moveLog, `${playerNames[currentPlayer]} rolled ${roll} — no valid moves`];
+        onStateChange(
+          { pieces, diceValue: roll, message: skipMsg, moveLog: newLog },
+          { currentPlayer: nextPlayer, gamePhase: 'roll' }
+        );
+      } else {
+        setMessage(skipMsg);
+        setMoveLog(log => [...log, `${playerNames[currentPlayer]} rolled ${roll} — no valid moves`]);
+        setTimeout(() => {
+          setCurrentPlayer(nextPlayer);
+          setDiceValue(null);
+          setGamePhase('roll');
+          setTurnCount(tc => tc + 1);
+          setMessage(`${playerNames[nextPlayer]}'s turn — roll the die!`);
+        }, 800);
+      }
     } else {
-      setGamePhase('selectPiece');
-      setMessage(`${playerNames[currentPlayer]} rolled ${roll}. Select a piece to move.`);
+      if (isOnline && onStateChange) {
+        const newLog = [...moveLog, `${playerNames[currentPlayer]} rolled ${roll}`];
+        onStateChange(
+          { pieces, diceValue: roll, message: `${playerNames[currentPlayer]} rolled ${roll}. Select a piece to move.`, moveLog: newLog },
+          { currentPlayer, gamePhase: 'selectPiece' }
+        );
+      } else {
+        setGamePhase('selectPiece');
+        setMessage(`${playerNames[currentPlayer]} rolled ${roll}. Select a piece to move.`);
+      }
     }
-  }, [gamePhase, winner, pieces, currentPlayer, getValidMoves, playerNames]);
+  }, [gamePhase, winner, pieces, currentPlayer, getValidMoves, playerNames, isOnline, isMyTurn, onStateChange, moveLog]);
 
   // Handle piece selection
   const handleSelectPiece = useCallback((pieceIdx) => {
     if (gamePhase !== 'selectPiece' || winner !== null) return;
+    if (isOnline && !isMyTurn) return;
     if (!canMovePiece(pieces[currentPlayer], pieceIdx, diceValue)) return;
     executeMove(pieceIdx);
-  }, [gamePhase, winner, pieces, currentPlayer, diceValue, canMovePiece, executeMove]);
+  }, [gamePhase, winner, pieces, currentPlayer, diceValue, canMovePiece, executeMove, isOnline, isMyTurn]);
 
   // AI logic
   useEffect(() => {
@@ -212,7 +278,7 @@ function MehenGame({ mode, onExit }) {
     ? getValidMoves(pieces[currentPlayer], diceValue)
     : [];
 
-  const isPlayerTurn = !isAI || currentPlayer === 0;
+  const isPlayerTurn = isOnline ? isMyTurn : (!isAI || currentPlayer === 0);
 
   const renderBoard = () => (
     <svg viewBox="0 0 500 500" style={{ width: '100%', maxWidth: 500, display: 'block', margin: '0 auto' }}>
@@ -384,7 +450,19 @@ function MehenGame({ mode, onExit }) {
   );
 
   return (
-    <GameShell gameName="Mehen" onExit={onExit} onReset={handleReset} moveLog={moveLog} rules={GAME_BOOK['mehen'].rules} secrets={GAME_BOOK['mehen'].secrets}>
+    <GameShell
+      gameName="Mehen"
+      onExit={onExit}
+      onReset={isOnline ? null : handleReset}
+      moveLog={moveLog}
+      rules={GAME_BOOK['mehen'].rules}
+      secrets={GAME_BOOK['mehen'].secrets}
+      onForfeit={isOnline ? onForfeit : undefined}
+      onPlayerClick={isOnline ? onPlayerClick : undefined}
+      isOnline={isOnline}
+      isMyTurn={isMyTurn}
+      chatPanel={isOnline ? <MultiplayerChat messages={chatMessages || []} onSend={sendChat} myUid={matchData?.players?.[myPlayerIndex]?.uid} /> : null}
+    >
       <div style={{ textAlign: 'center', marginBottom: 8 }}>
         <div style={{ color: '#b0a080', fontSize: 13, marginBottom: 4 }}>
           Turn {turnCount + 1} &mdash;{' '}
@@ -395,7 +473,9 @@ function MehenGame({ mode, onExit }) {
             </span>
           )}
         </div>
-        <div style={{ color: '#d0c8a8', fontSize: 12, minHeight: 18 }}>{message}</div>
+        <div style={{ color: '#d0c8a8', fontSize: 12, minHeight: 18 }}>
+          {isOnline && !isMyTurn && !winner ? "Waiting for opponent's move..." : message}
+        </div>
       </div>
 
       {renderBoard()}
@@ -406,15 +486,16 @@ function MehenGame({ mode, onExit }) {
         {gamePhase === 'roll' && winner === null && isPlayerTurn && (
           <button
             onClick={handleRoll}
+            disabled={isOnline && !isMyTurn}
             style={{
-              background: '#c9a961',
+              background: (isOnline && !isMyTurn) ? '#666' : '#c9a961',
               color: '#1a1a2e',
               border: 'none',
               borderRadius: 8,
               padding: '8px 24px',
               fontWeight: 'bold',
               fontSize: 14,
-              cursor: 'pointer',
+              cursor: (isOnline && !isMyTurn) ? 'not-allowed' : 'pointer',
             }}
           >
             Roll Die

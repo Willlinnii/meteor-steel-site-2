@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import GameShell from '../shared/GameShell';
+import MultiplayerChat from '../shared/MultiplayerChat';
 import GAME_BOOK from '../shared/gameBookData';
 import { CowrieDiceDisplay } from '../shared/DiceDisplay';
 import { rollCowrieShells } from '../shared/diceEngine';
@@ -36,20 +37,45 @@ function initPieces() {
   ];
 }
 
-export default function PachisiGame({ mode, onExit }) {
-  const [pieces, setPieces] = useState(initPieces);
-  const [currentPlayer, setCurrentPlayer] = useState(0);
-  const [diceResult, setDiceResult] = useState(null);
-  const [gamePhase, setGamePhase] = useState('rolling');
-  const [winner, setWinner] = useState(null);
-  const [turnCount, setTurnCount] = useState(0);
-  const [message, setMessage] = useState('Roll the cowrie shells! Roll 1, 6, or 25 to enter a piece.');
-  const [legalMoves, setLegalMoves] = useState([]);
-  const [moveLog, setMoveLog] = useState([]);
+export default function PachisiGame({
+  mode, onExit,
+  // Online multiplayer props (optional)
+  onlineState, myPlayerIndex, isMyTurn, onStateChange, matchData, playerNames: onlinePlayerNames,
+  chatMessages, sendChat, onForfeit, onPlayerClick,
+}) {
+  const isOnline = mode === 'online';
+
+  const [pieces, setPieces] = useState(isOnline ? (onlineState?.pieces || initPieces()) : initPieces());
+  const [currentPlayer, setCurrentPlayer] = useState(isOnline ? (matchData?.currentPlayer ?? 0) : 0);
+  const [diceResult, setDiceResult] = useState(isOnline ? (onlineState?.diceResult || null) : null);
+  const [gamePhase, setGamePhase] = useState(isOnline ? (matchData?.gamePhase || 'rolling') : 'rolling');
+  const [winner, setWinner] = useState(isOnline ? (matchData?.winner ?? null) : null);
+  const [turnCount, setTurnCount] = useState(isOnline ? (matchData?.turnCount || 0) : 0);
+  const [message, setMessage] = useState(isOnline ? (onlineState?.message || '') : 'Roll the cowrie shells! Roll 1, 6, or 25 to enter a piece.');
+  const [legalMoves, setLegalMoves] = useState(isOnline ? (onlineState?.legalMoves || []) : []);
+  const [moveLog, setMoveLog] = useState(isOnline ? (onlineState?.moveLog || []) : []);
   const aiTimer = useRef(null);
   const isAI = mode === 'ai';
 
-  const pName = useCallback((p) => isAI ? (p === 0 ? 'You' : 'Atlas') : `Player ${p + 1}`, [isAI]);
+  // Sync from Firestore when online state changes
+  useEffect(() => {
+    if (!isOnline || !onlineState || !matchData) return;
+    setPieces(onlineState.pieces || initPieces());
+    setDiceResult(onlineState.diceResult || null);
+    setMessage(onlineState.message || '');
+    setMoveLog(onlineState.moveLog || []);
+    setLegalMoves(onlineState.legalMoves || []);
+    setCurrentPlayer(matchData.currentPlayer ?? 0);
+    setGamePhase(matchData.gamePhase || 'rolling');
+    setWinner(matchData.winner ?? null);
+    setTurnCount(matchData.turnCount || 0);
+  }, [isOnline, onlineState, matchData]);
+
+  const pName = useCallback((p) => {
+    if (isOnline) return onlinePlayerNames?.[p] || `Player ${p + 1}`;
+    if (isAI) return p === 0 ? 'You' : 'Atlas';
+    return `Player ${p + 1}`;
+  }, [isAI, isOnline, onlinePlayerNames]);
 
   const resetGame = useCallback(() => {
     setPieces(initPieces());
@@ -125,33 +151,62 @@ export default function PachisiGame({ mode, onExit }) {
 
   const handleRoll = useCallback(() => {
     if (gamePhase !== 'rolling' || winner !== null) return;
+    if (isOnline && !isMyTurn) return;
     if (isAI && currentPlayer === 1) return; // AI rolls automatically
     const result = rollCowrieShells();
     setDiceResult(result);
 
     const moves = getLegalMoves(currentPlayer, result.total, pieces);
     if (moves.length === 0) {
-      setMessage(`Rolled ${result.total} — no legal moves!`);
-      setMoveLog(log => [...log, `${pName(currentPlayer)} rolled ${result.total} — no legal moves`]);
-      setGamePhase('rolling');
-      setTurnCount(t => t + 1);
-      if (!result.extraTurn) {
-        setCurrentPlayer(p => 1 - p);
+      const msg = `Rolled ${result.total} — no legal moves!`;
+      const newLog = [...moveLog, `${pName(currentPlayer)} rolled ${result.total} — no legal moves`];
+      const nextPlayer = result.extraTurn ? currentPlayer : 1 - currentPlayer;
+
+      if (isOnline && onStateChange) {
+        onStateChange(
+          { pieces, diceResult: result, message: msg, moveLog: newLog, legalMoves: [] },
+          { currentPlayer: nextPlayer, gamePhase: 'rolling' }
+        );
+      } else {
+        setMessage(msg);
+        setMoveLog(newLog);
+        setGamePhase('rolling');
+        setTurnCount(t => t + 1);
+        if (!result.extraTurn) {
+          setCurrentPlayer(p => 1 - p);
+        }
       }
       return;
     }
 
-    setLegalMoves(moves);
-    setGamePhase('moving');
-    const hasEnter = moves.some(m => m.type === 'enter');
-    if (hasEnter && moves.every(m => m.type === 'enter')) {
-      setMessage(`Rolled ${result.total} — grace throw! Click a waiting piece to enter.`);
-    } else if (hasEnter) {
-      setMessage(`Rolled ${result.total} — move a piece or enter a new one from waiting.`);
+    if (isOnline && onStateChange) {
+      // In online mode, broadcast the roll + legal moves so the moving phase is synced
+      const hasEnter = moves.some(m => m.type === 'enter');
+      let rollMsg;
+      if (hasEnter && moves.every(m => m.type === 'enter')) {
+        rollMsg = `Rolled ${result.total} — grace throw! Click a waiting piece to enter.`;
+      } else if (hasEnter) {
+        rollMsg = `Rolled ${result.total} — move a piece or enter a new one from waiting.`;
+      } else {
+        rollMsg = `Rolled ${result.total} — choose a piece to move.`;
+      }
+      onStateChange(
+        { pieces, diceResult: result, message: rollMsg, moveLog, legalMoves: moves },
+        { currentPlayer, gamePhase: 'moving' }
+      );
     } else {
-      setMessage(`Rolled ${result.total} — choose a piece to move.`);
+      setLegalMoves(moves);
+      setGamePhase('moving');
+      const hasEnter = moves.some(m => m.type === 'enter');
+      if (hasEnter && moves.every(m => m.type === 'enter')) {
+        setMessage(`Rolled ${result.total} — grace throw! Click a waiting piece to enter.`);
+      } else if (hasEnter) {
+        setMessage(`Rolled ${result.total} — move a piece or enter a new one from waiting.`);
+      } else {
+        setMessage(`Rolled ${result.total} — choose a piece to move.`);
+      }
     }
-  }, [gamePhase, winner, currentPlayer, pieces, getLegalMoves, isAI, pName]);
+  }, [gamePhase, winner, currentPlayer, pieces, getLegalMoves, isAI, pName, isOnline, isMyTurn, onStateChange, moveLog]);
 
   // makeMove — state setters pulled out of setPieces updater (fixes React batching)
   const makeMove = useCallback((move) => {
@@ -175,14 +230,25 @@ export default function PachisiGame({ mode, onExit }) {
     }
 
     next[currentPlayer][move.pieceIdx] = move.to;
-    setPieces(next);
 
-    if (next[currentPlayer].every(p => p >= FINISH)) {
-      setWinner(currentPlayer);
-      setGamePhase('gameover');
+    const isGameOver = next[currentPlayer].every(p => p >= FINISH);
+
+    if (isGameOver) {
       const msg = `${pName(currentPlayer)} wins!`;
-      setMessage(msg);
-      setMoveLog(log => [...log, msg]);
+      const newLog = [...moveLog, msg];
+
+      if (isOnline && onStateChange) {
+        onStateChange(
+          { pieces: next, diceResult, message: msg, moveLog: newLog, legalMoves: [] },
+          { currentPlayer, gamePhase: 'gameover', winner: currentPlayer, status: 'completed', completedAt: new Date() }
+        );
+      } else {
+        setPieces(next);
+        setWinner(currentPlayer);
+        setGamePhase('gameover');
+        setMessage(msg);
+        setMoveLog(newLog);
+      }
       return;
     }
 
@@ -192,24 +258,39 @@ export default function PachisiGame({ mode, onExit }) {
     else if (move.type === 'finish') msgParts.push('Piece reaches home!');
     else msgParts.push(`Moved to position ${move.to}`);
 
-    if (diceResult?.extraTurn) {
+    // Extra turns on rolls of 1, 6, or 25 — don't switch player
+    const isExtraTurn = diceResult?.extraTurn;
+    if (isExtraTurn) {
       msgParts.push('Extra turn!');
-      setGamePhase('rolling');
-    } else {
-      setCurrentPlayer(p => 1 - p);
-      setGamePhase('rolling');
     }
-    setTurnCount(t => t + 1);
-    setMessage(msgParts.join(' '));
-    setMoveLog(log => [...log, `${pName(currentPlayer)}: ${msgParts.join(' ')}`]);
-    setLegalMoves([]);
-  }, [currentPlayer, diceResult, pieces, pName]);
+
+    const nextPlayer = isExtraTurn ? currentPlayer : 1 - currentPlayer;
+    const newLog = [...moveLog, `${pName(currentPlayer)}: ${msgParts.join(' ')}`];
+
+    if (isOnline && onStateChange) {
+      onStateChange(
+        { pieces: next, diceResult, message: msgParts.join(' '), moveLog: newLog, legalMoves: [] },
+        { currentPlayer: nextPlayer, gamePhase: 'rolling' }
+      );
+    } else {
+      setPieces(next);
+      if (!isExtraTurn) {
+        setCurrentPlayer(p => 1 - p);
+      }
+      setGamePhase('rolling');
+      setTurnCount(t => t + 1);
+      setMessage(msgParts.join(' '));
+      setMoveLog(newLog);
+      setLegalMoves([]);
+    }
+  }, [currentPlayer, diceResult, pieces, pName, isOnline, onStateChange, moveLog]);
 
   const handlePieceClick = useCallback((pieceIdx) => {
     if (gamePhase !== 'moving') return;
+    if (isOnline && !isMyTurn) return;
     const move = legalMoves.find(m => m.pieceIdx === pieceIdx);
     if (move) makeMove(move);
-  }, [gamePhase, legalMoves, makeMove]);
+  }, [gamePhase, legalMoves, makeMove, isOnline, isMyTurn]);
 
   // AI auto-play — consolidated single sequence (no two-phase race condition)
   useEffect(() => {
@@ -300,9 +381,11 @@ export default function PachisiGame({ mode, onExit }) {
     };
   }, [isAI, currentPlayer, winner, gamePhase, pieces, getLegalMoves]);
 
-  const players = isAI
-    ? [{ name: 'You', color: PLAYER_COLORS[0] }, { name: 'Atlas', color: PLAYER_COLORS[1] }]
-    : [{ name: 'Player 1', color: PLAYER_COLORS[0] }, { name: 'Player 2', color: PLAYER_COLORS[1] }];
+  const players = isOnline
+    ? [{ name: onlinePlayerNames?.[0] || 'Player 1', color: PLAYER_COLORS[0] }, { name: onlinePlayerNames?.[1] || 'Player 2', color: PLAYER_COLORS[1] }]
+    : isAI
+      ? [{ name: 'You', color: PLAYER_COLORS[0] }, { name: 'Atlas', color: PLAYER_COLORS[1] }]
+      : [{ name: 'Player 1', color: PLAYER_COLORS[0] }, { name: 'Player 2', color: PLAYER_COLORS[1] }];
 
   const boardCells = getAllBoardCells();
   const legalPieceIndices = new Set(legalMoves.map(m => m.pieceIdx));
@@ -319,11 +402,16 @@ export default function PachisiGame({ mode, onExit }) {
       gamePhase={gamePhase}
       winner={winner}
       turnCount={turnCount}
-      onRoll={handleRoll}
-      onRestart={resetGame}
+      onRoll={(!isOnline || isMyTurn) ? handleRoll : null}
+      onRestart={isOnline ? null : resetGame}
       onExit={onExit}
+      onForfeit={isOnline ? onForfeit : undefined}
+      onPlayerClick={isOnline ? onPlayerClick : undefined}
+      isOnline={isOnline}
+      isMyTurn={isMyTurn}
+      chatPanel={isOnline ? <MultiplayerChat messages={chatMessages || []} onSend={sendChat} myUid={matchData?.players?.[myPlayerIndex]?.uid} /> : null}
       diceDisplay={diceResult ? <CowrieDiceDisplay shells={diceResult.shells} /> : null}
-      extraInfo={message}
+      extraInfo={isOnline && !isMyTurn && !winner ? "Waiting for opponent's move..." : message}
       moveLog={moveLog}
       rules={GAME_BOOK['pachisi'].rules}
       secrets={GAME_BOOK['pachisi'].secrets}
@@ -406,7 +494,7 @@ export default function PachisiGame({ mode, onExit }) {
             if (pos < 0 || pos >= FINISH) return null;
             const { x, y } = piecePositionToSVG(pos, player);
             const offset = player === 0 ? -4 : 4;
-            const isClickable = gamePhase === 'moving' && player === currentPlayer && legalPieceIndices.has(i);
+            const isClickable = gamePhase === 'moving' && player === currentPlayer && legalPieceIndices.has(i) && (!isOnline || isMyTurn);
             return (
               <circle
                 key={`p${player}-${i}`}
@@ -430,7 +518,7 @@ export default function PachisiGame({ mode, onExit }) {
             if (pos !== -1) return null;
             const stagingPos = STAGING[player][i];
             const { x, y } = gridToSVG(stagingPos.row, stagingPos.col);
-            const isClickable = gamePhase === 'moving' && player === currentPlayer && legalPieceIndices.has(i);
+            const isClickable = gamePhase === 'moving' && player === currentPlayer && legalPieceIndices.has(i) && (!isOnline || isMyTurn);
             return (
               <circle
                 key={`staging-${player}-${i}`}

@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import GameShell from '../shared/GameShell';
+import MultiplayerChat from '../shared/MultiplayerChat';
 import GAME_BOOK from '../shared/gameBookData';
 import { D6Display } from '../shared/DiceDisplay';
 import { rollD6 } from '../shared/diceEngine';
@@ -77,16 +78,38 @@ function drawSnakes() {
   });
 }
 
-export default function SnakesAndLaddersGame({ mode, onExit }) {
-  const [positions, setPositions] = useState([0, 0]);
-  const [currentPlayer, setCurrentPlayer] = useState(0);
-  const [diceValue, setDiceValue] = useState(null);
-  const [gamePhase, setGamePhase] = useState('rolling'); // rolling | animating | gameover
-  const [winner, setWinner] = useState(null);
-  const [turnCount, setTurnCount] = useState(0);
-  const [message, setMessage] = useState('Roll the dice to begin!');
-  const [moveLog, setMoveLog] = useState([]);
+export default function SnakesAndLaddersGame({
+  mode, onExit,
+  // Online multiplayer props (optional)
+  onlineState, myPlayerIndex, isMyTurn, onStateChange, matchData, playerNames: onlinePlayerNames,
+  chatMessages, sendChat, onForfeit, onPlayerClick,
+}) {
+  const isOnline = mode === 'online';
+
+  const [positions, setPositions] = useState(isOnline ? (onlineState?.positions || [0, 0]) : [0, 0]);
+  const [currentPlayer, setCurrentPlayer] = useState(isOnline ? (matchData?.currentPlayer ?? 0) : 0);
+  const [diceValue, setDiceValue] = useState(isOnline ? (onlineState?.diceValue || null) : null);
+  const [gamePhase, setGamePhase] = useState(isOnline ? (matchData?.gamePhase || 'rolling') : 'rolling');
+  const [winner, setWinner] = useState(isOnline ? (matchData?.winner ?? null) : null);
+  const [turnCount, setTurnCount] = useState(isOnline ? (matchData?.turnCount || 0) : 0);
+  const [message, setMessage] = useState(isOnline ? (onlineState?.message || '') : 'Roll the dice to begin!');
+  const [moveLog, setMoveLog] = useState(isOnline ? (onlineState?.moveLog || []) : []);
+  const moveLogRef = useRef(moveLog);
+  useEffect(() => { moveLogRef.current = moveLog; }, [moveLog]);
   const aiTimer = useRef(null);
+
+  // Sync from Firestore when online state changes
+  useEffect(() => {
+    if (!isOnline || !onlineState || !matchData) return;
+    setPositions(onlineState.positions || [0, 0]);
+    setDiceValue(onlineState.diceValue || null);
+    setMessage(onlineState.message || '');
+    setMoveLog(onlineState.moveLog || []);
+    setCurrentPlayer(matchData.currentPlayer ?? 0);
+    setGamePhase(matchData.gamePhase || 'rolling');
+    setWinner(matchData.winner ?? null);
+    setTurnCount(matchData.turnCount || 0);
+  }, [isOnline, onlineState, matchData]);
 
   const isAI = mode === 'ai';
 
@@ -107,69 +130,107 @@ export default function SnakesAndLaddersGame({ mode, onExit }) {
       const newPos = [...prev];
       const name = pNames[player];
       let dest = newPos[player] + roll;
+      const currentLog = moveLogRef.current;
 
       if (dest > 100) {
         const msg = `${name} rolled ${roll} — overshoot!`;
-        setMessage(msg);
-        setMoveLog(log => [...log, msg]);
         const next = player === 0 ? 1 : 0;
-        setCurrentPlayer(next);
-        setGamePhase('rolling');
-        setTurnCount(t => t + 1);
+        const newLog = [...currentLog, msg];
+
+        if (isOnline && onStateChange) {
+          onStateChange(
+            { positions: prev, diceValue: roll, message: msg, moveLog: newLog },
+            { currentPlayer: next, gamePhase: 'rolling' }
+          );
+        } else {
+          setMessage(msg);
+          setMoveLog(newLog);
+          setCurrentPlayer(next);
+          setGamePhase('rolling');
+          setTurnCount(t => t + 1);
+        }
         return prev;
       }
 
       if (dest === 100) {
         newPos[player] = 100;
-        setWinner(player);
-        setGamePhase('gameover');
         const msg = `${name} rolled ${roll} → square 100. ${name} wins!`;
-        setMessage(msg);
-        setMoveLog(log => [...log, msg]);
+        const newLog = [...currentLog, msg];
+
+        if (isOnline && onStateChange) {
+          onStateChange(
+            { positions: newPos, diceValue: roll, message: msg, moveLog: newLog },
+            { currentPlayer: player, gamePhase: 'gameover', winner: player, status: 'completed', completedAt: new Date() }
+          );
+        } else {
+          setWinner(player);
+          setGamePhase('gameover');
+          setMessage(msg);
+          setMoveLog(newLog);
+        }
         return newPos;
       }
 
       newPos[player] = dest;
+      let msg;
 
       if (LADDERS[dest]) {
         const top = LADDERS[dest];
-        const msg = `${name} rolled ${roll} → square ${dest} — Ladder! Climbed to ${top}`;
-        setMessage(msg);
-        setMoveLog(log => [...log, msg]);
+        msg = `${name} rolled ${roll} → square ${dest} — Ladder! Climbed to ${top}`;
         newPos[player] = top;
         if (top === 100) {
-          setWinner(player);
-          setGamePhase('gameover');
+          const newLog = [...currentLog, msg];
+          if (isOnline && onStateChange) {
+            onStateChange(
+              { positions: newPos, diceValue: roll, message: msg, moveLog: newLog },
+              { currentPlayer: player, gamePhase: 'gameover', winner: player, status: 'completed', completedAt: new Date() }
+            );
+          } else {
+            setWinner(player);
+            setGamePhase('gameover');
+            setMessage(msg);
+            setMoveLog(newLog);
+          }
           return newPos;
         }
       } else if (SNAKES[dest]) {
         const tail = SNAKES[dest];
-        const msg = `${name} rolled ${roll} → square ${dest} — Snake! Slid to ${tail}`;
-        setMessage(msg);
-        setMoveLog(log => [...log, msg]);
+        msg = `${name} rolled ${roll} → square ${dest} — Snake! Slid to ${tail}`;
         newPos[player] = tail;
       } else {
-        const msg = `${name} rolled ${roll} → square ${dest}`;
-        setMessage(msg);
-        setMoveLog(log => [...log, msg]);
+        msg = `${name} rolled ${roll} → square ${dest}`;
       }
 
       const next = player === 0 ? 1 : 0;
-      setCurrentPlayer(next);
-      setGamePhase('rolling');
-      setTurnCount(t => t + 1);
+      const newLog = [...currentLog, msg];
+
+      if (isOnline && onStateChange) {
+        onStateChange(
+          { positions: newPos, diceValue: roll, message: msg, moveLog: newLog },
+          { currentPlayer: next, gamePhase: 'rolling' }
+        );
+      } else {
+        setMessage(msg);
+        setMoveLog(newLog);
+        setCurrentPlayer(next);
+        setGamePhase('rolling');
+        setTurnCount(t => t + 1);
+      }
       return newPos;
     });
-  }, []);
+  }, [isOnline, onStateChange]);
 
-  const players = isAI
-    ? [{ name: 'You', color: PLAYERS[0].color }, { name: 'Atlas', color: PLAYERS[1].color }]
-    : [{ name: 'Player 1', color: PLAYERS[0].color }, { name: 'Player 2', color: PLAYERS[1].color }];
+  const players = isOnline
+    ? [{ name: onlinePlayerNames?.[0] || 'Player 1', color: PLAYERS[0].color }, { name: onlinePlayerNames?.[1] || 'Player 2', color: PLAYERS[1].color }]
+    : isAI
+      ? [{ name: 'You', color: PLAYERS[0].color }, { name: 'Atlas', color: PLAYERS[1].color }]
+      : [{ name: 'Player 1', color: PLAYERS[0].color }, { name: 'Player 2', color: PLAYERS[1].color }];
 
   const playerNamesList = players.map(p => p.name);
 
   const handleRoll = useCallback(() => {
     if (gamePhase !== 'rolling' || winner !== null) return;
+    if (isOnline && !isMyTurn) return;
     const roll = rollD6();
     setDiceValue(roll);
     setGamePhase('animating');
@@ -177,7 +238,7 @@ export default function SnakesAndLaddersGame({ mode, onExit }) {
     setTimeout(() => {
       applyMove(currentPlayer, roll, playerNamesList);
     }, 400);
-  }, [gamePhase, winner, currentPlayer, applyMove, playerNamesList]);
+  }, [gamePhase, winner, currentPlayer, applyMove, playerNamesList, isOnline, isMyTurn]);
 
   // AI auto-play
   useEffect(() => {
@@ -198,11 +259,16 @@ export default function SnakesAndLaddersGame({ mode, onExit }) {
       gamePhase={gamePhase}
       winner={winner}
       turnCount={turnCount}
-      onRoll={handleRoll}
-      onRestart={resetGame}
+      onRoll={(!isOnline || isMyTurn) ? handleRoll : null}
+      onRestart={isOnline ? null : resetGame}
       onExit={onExit}
+      onForfeit={isOnline ? onForfeit : undefined}
+      onPlayerClick={isOnline ? onPlayerClick : undefined}
+      isOnline={isOnline}
+      isMyTurn={isMyTurn}
+      chatPanel={isOnline ? <MultiplayerChat messages={chatMessages || []} onSend={sendChat} myUid={matchData?.players?.[myPlayerIndex]?.uid} /> : null}
       diceDisplay={diceValue ? <D6Display value={diceValue} /> : null}
-      extraInfo={message}
+      extraInfo={isOnline && !isMyTurn && !winner ? "Waiting for opponent's move..." : message}
       moveLog={moveLog}
       rules={GAME_BOOK['snakes-and-ladders'].rules}
       secrets={GAME_BOOK['snakes-and-ladders'].secrets}

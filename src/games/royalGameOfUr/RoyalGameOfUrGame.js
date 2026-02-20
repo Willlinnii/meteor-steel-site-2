@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useEffect, useRef, useMemo } from 'react';
 import GameShell from '../shared/GameShell';
+import MultiplayerChat from '../shared/MultiplayerChat';
 import GAME_BOOK from '../shared/gameBookData';
 import { TetrahedralDiceDisplay } from '../shared/DiceDisplay';
 import { rollTetrahedralDice } from '../shared/diceEngine';
@@ -246,21 +247,44 @@ function MoveTarget({ cx, cy }) {
 
 // ── Main Component ───────────────────────────────────────────────────────────
 
-export default function RoyalGameOfUrGame({ mode, onExit }) {
-  const [pieces, setPieces] = useState([
-    [0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0],
-  ]);
-  const [currentPlayer, setCurrentPlayer] = useState(0);
-  const [diceResult, setDiceResult] = useState(null);
-  const [gamePhase, setGamePhase] = useState('rolling'); // rolling | moving | gameover
-  const [winner, setWinner] = useState(null);
-  const [turnCount, setTurnCount] = useState(0);
-  const [message, setMessage] = useState('Roll the dice to begin!');
-  const [moveLog, setMoveLog] = useState([]);
+export default function RoyalGameOfUrGame({
+  mode, onExit,
+  // Online multiplayer props (optional)
+  onlineState, myPlayerIndex, isMyTurn, onStateChange, matchData, playerNames: onlinePlayerNames,
+  chatMessages, sendChat, onForfeit, onPlayerClick,
+}) {
+  const isOnline = mode === 'online';
+
+  const [pieces, setPieces] = useState(
+    isOnline ? (onlineState?.pieces || [[0,0,0,0,0,0,0],[0,0,0,0,0,0,0]]) : [[0,0,0,0,0,0,0],[0,0,0,0,0,0,0]]
+  );
+  const [currentPlayer, setCurrentPlayer] = useState(isOnline ? (matchData?.currentPlayer ?? 0) : 0);
+  const [diceResult, setDiceResult] = useState(isOnline ? (onlineState?.diceResult || null) : null);
+  const [gamePhase, setGamePhase] = useState(isOnline ? (matchData?.gamePhase || 'rolling') : 'rolling');
+  const [winner, setWinner] = useState(isOnline ? (matchData?.winner ?? null) : null);
+  const [turnCount, setTurnCount] = useState(isOnline ? (matchData?.turnCount || 0) : 0);
+  const [message, setMessage] = useState(isOnline ? (onlineState?.message || '') : 'Roll the dice to begin!');
+  const [moveLog, setMoveLog] = useState(isOnline ? (onlineState?.moveLog || []) : []);
   const aiTimeoutRef = useRef(null);
   const isAI = mode === 'ai';
-  const playerNames = useMemo(() => isAI ? ['You', 'Atlas'] : ['Player 1', 'Player 2'], [isAI]);
+
+  const playerNames = useMemo(() => {
+    if (isOnline) return [onlinePlayerNames?.[0] || 'Player 1', onlinePlayerNames?.[1] || 'Player 2'];
+    return isAI ? ['You', 'Atlas'] : ['Player 1', 'Player 2'];
+  }, [isAI, isOnline, onlinePlayerNames]);
+
+  // Sync from Firestore when online state changes
+  useEffect(() => {
+    if (!isOnline || !onlineState || !matchData) return;
+    setPieces(onlineState.pieces || [[0,0,0,0,0,0,0],[0,0,0,0,0,0,0]]);
+    setDiceResult(onlineState.diceResult || null);
+    setMessage(onlineState.message || '');
+    setMoveLog(onlineState.moveLog || []);
+    setCurrentPlayer(matchData.currentPlayer ?? 0);
+    setGamePhase(matchData.gamePhase || 'rolling');
+    setWinner(matchData.winner ?? null);
+    setTurnCount(matchData.turnCount || 0);
+  }, [isOnline, onlineState, matchData]);
 
   // Cleanup timeouts on unmount
   useEffect(() => {
@@ -273,6 +297,7 @@ export default function RoyalGameOfUrGame({ mode, onExit }) {
 
   const handleRoll = useCallback(() => {
     if (gamePhase !== 'rolling') return;
+    if (isOnline && !isMyTurn) return;
     if (isAI && currentPlayer === 1) return; // AI rolls automatically
 
     const result = rollTetrahedralDice(4);
@@ -280,41 +305,73 @@ export default function RoyalGameOfUrGame({ mode, onExit }) {
     setDiceResult(result);
 
     if (total === 0) {
-      setMessage(`${playerNames[currentPlayer]} rolled 0. Turn skipped!`);
-      setMoveLog(log => [...log, `${playerNames[currentPlayer]} rolled 0 — turn skipped`]);
-      setTurnCount((t) => t + 1);
-      // Switch player after brief delay
-      setTimeout(() => {
-        setCurrentPlayer((p) => 1 - p);
-        setDiceResult(null);
-        setMessage(`${playerNames[1 - currentPlayer]}'s turn. Roll the dice!`);
-      }, 1000);
+      const msg = `${playerNames[currentPlayer]} rolled 0. Turn skipped!`;
+      const newLog = [...moveLog, `${playerNames[currentPlayer]} rolled 0 — turn skipped`];
+      const nextPlayer = 1 - currentPlayer;
+
+      if (isOnline && onStateChange) {
+        // Immediately send state change for zero roll
+        onStateChange(
+          { pieces, diceResult: result, message: msg, moveLog: newLog },
+          { currentPlayer: nextPlayer, gamePhase: 'rolling' }
+        );
+      } else {
+        setMessage(msg);
+        setMoveLog(newLog);
+        setTurnCount((t) => t + 1);
+        // Switch player after brief delay
+        setTimeout(() => {
+          setCurrentPlayer(nextPlayer);
+          setDiceResult(null);
+          setMessage(`${playerNames[nextPlayer]}'s turn. Roll the dice!`);
+        }, 1000);
+      }
     } else {
       const moves = getLegalMoves(pieces, currentPlayer, total);
       if (moves.length === 0) {
-        setMessage(`${playerNames[currentPlayer]} rolled ${total} but has no legal moves!`);
-        setMoveLog(log => [...log, `${playerNames[currentPlayer]} rolled ${total} — no legal moves`]);
-        setTurnCount((t) => t + 1);
-        setTimeout(() => {
-          setCurrentPlayer((p) => 1 - p);
-          setDiceResult(null);
-          setMessage(`${playerNames[1 - currentPlayer]}'s turn. Roll the dice!`);
-        }, 1000);
+        const msg = `${playerNames[currentPlayer]} rolled ${total} but has no legal moves!`;
+        const newLog = [...moveLog, `${playerNames[currentPlayer]} rolled ${total} — no legal moves`];
+        const nextPlayer = 1 - currentPlayer;
+
+        if (isOnline && onStateChange) {
+          onStateChange(
+            { pieces, diceResult: result, message: msg, moveLog: newLog },
+            { currentPlayer: nextPlayer, gamePhase: 'rolling' }
+          );
+        } else {
+          setMessage(msg);
+          setMoveLog(newLog);
+          setTurnCount((t) => t + 1);
+          setTimeout(() => {
+            setCurrentPlayer(nextPlayer);
+            setDiceResult(null);
+            setMessage(`${playerNames[nextPlayer]}'s turn. Roll the dice!`);
+          }, 1000);
+        }
       } else {
-        setGamePhase('moving');
-        setMessage(`${playerNames[currentPlayer]} rolled ${total}. Choose a piece to move.`);
-        setMoveLog(log => [...log, `${playerNames[currentPlayer]} rolled ${total}`]);
+        if (isOnline && onStateChange) {
+          // Transition to moving phase — send dice result to opponent
+          const msg = `${playerNames[currentPlayer]} rolled ${total}. Choose a piece to move.`;
+          const newLog = [...moveLog, `${playerNames[currentPlayer]} rolled ${total}`];
+          onStateChange(
+            { pieces, diceResult: result, message: msg, moveLog: newLog },
+            { currentPlayer, gamePhase: 'moving' }
+          );
+        } else {
+          setGamePhase('moving');
+          setMessage(`${playerNames[currentPlayer]} rolled ${total}. Choose a piece to move.`);
+          setMoveLog(log => [...log, `${playerNames[currentPlayer]} rolled ${total}`]);
+        }
       }
     }
-  }, [gamePhase, currentPlayer, pieces, isAI, playerNames]);
+  }, [gamePhase, currentPlayer, pieces, isAI, playerNames, isOnline, isMyTurn, onStateChange, moveLog]);
 
   // ── Execute Move ─────────────────────────────────────────────────────────
 
   const executeMove = useCallback(
     (move) => {
       const newPieces = applyMove(pieces, currentPlayer, move);
-      setPieces(newPieces);
-      
+
       // Check for capture messaging
       let captureMsg = '';
       if (move.to >= 1 && move.to <= 14 && isSharedZone(move.to)) {
@@ -334,45 +391,76 @@ export default function RoyalGameOfUrGame({ mode, onExit }) {
         bearMsg = ' Piece borne off!';
       }
 
-      // Log the move
+      // Build log entry
+      let logEntry;
       if (captureMsg) {
-        setMoveLog(log => [...log, `${playerNames[currentPlayer]} moved to position ${move.to}. Captured opponent!`]);
+        logEntry = `${playerNames[currentPlayer]} moved to position ${move.to}. Captured opponent!`;
       } else if (move.to === BEAR_OFF) {
-        setMoveLog(log => [...log, `${playerNames[currentPlayer]} bore off a piece!`]);
+        logEntry = `${playerNames[currentPlayer]} bore off a piece!`;
       } else if (move.to >= 1 && move.to <= 14 && ROSETTE_POSITIONS.has(move.to)) {
-        setMoveLog(log => [...log, `${playerNames[currentPlayer]} landed on a rosette — extra turn!`]);
+        logEntry = `${playerNames[currentPlayer]} landed on a rosette — extra turn!`;
       } else {
-        setMoveLog(log => [...log, `${playerNames[currentPlayer]} moved from ${move.from} to ${move.to}`]);
+        logEntry = `${playerNames[currentPlayer]} moved from ${move.from} to ${move.to}`;
       }
+      const newLog = [...moveLog, logEntry];
 
       // Check win
       const w = checkWinner(newPieces);
       if (w !== null) {
-        setWinner(w);
-        setGamePhase('gameover');
-        setMessage(`${playerNames[w]} wins!${captureMsg}${bearMsg}`);
-        setTurnCount((t) => t + 1);
+        const msg = `${playerNames[w]} wins!${captureMsg}${bearMsg}`;
+        if (isOnline && onStateChange) {
+          onStateChange(
+            { pieces: newPieces, diceResult: null, message: msg, moveLog: newLog },
+            { currentPlayer, gamePhase: 'gameover', winner: w, status: 'completed', completedAt: new Date() }
+          );
+        } else {
+          setPieces(newPieces);
+          setWinner(w);
+          setGamePhase('gameover');
+          setMessage(msg);
+          setMoveLog(newLog);
+          setTurnCount((t) => t + 1);
+        }
         return;
       }
 
-      // Rosette = extra turn
+      // Rosette = extra turn (currentPlayer stays the same!)
       if (move.to >= 1 && move.to <= 14 && ROSETTE_POSITIONS.has(move.to)) {
-        setMessage(
-          `${playerNames[currentPlayer]} lands on a rosette! Extra turn.${captureMsg}${bearMsg}`
-        );
-        setGamePhase('rolling');
-        setDiceResult(null);
-        setTurnCount((t) => t + 1);
+        const msg = `${playerNames[currentPlayer]} lands on a rosette! Extra turn.${captureMsg}${bearMsg}`;
+        if (isOnline && onStateChange) {
+          // Extra turn: keep currentPlayer the same
+          onStateChange(
+            { pieces: newPieces, diceResult: null, message: msg, moveLog: newLog },
+            { currentPlayer, gamePhase: 'rolling' }
+          );
+        } else {
+          setPieces(newPieces);
+          setMessage(msg);
+          setGamePhase('rolling');
+          setDiceResult(null);
+          setMoveLog(newLog);
+          setTurnCount((t) => t + 1);
+        }
       } else {
-        setTurnCount((t) => t + 1);
         const nextPlayer = 1 - currentPlayer;
-        setCurrentPlayer(nextPlayer);
-        setGamePhase('rolling');
-        setDiceResult(null);
-        setMessage(`${playerNames[nextPlayer]}'s turn. Roll the dice!${captureMsg}${bearMsg}`);
+        const msg = `${playerNames[nextPlayer]}'s turn. Roll the dice!${captureMsg}${bearMsg}`;
+        if (isOnline && onStateChange) {
+          onStateChange(
+            { pieces: newPieces, diceResult: null, message: msg, moveLog: newLog },
+            { currentPlayer: nextPlayer, gamePhase: 'rolling' }
+          );
+        } else {
+          setPieces(newPieces);
+          setTurnCount((t) => t + 1);
+          setCurrentPlayer(nextPlayer);
+          setGamePhase('rolling');
+          setDiceResult(null);
+          setMessage(msg);
+          setMoveLog(newLog);
+        }
       }
     },
-    [pieces, currentPlayer, playerNames]
+    [pieces, currentPlayer, playerNames, isOnline, onStateChange, moveLog]
   );
 
   // ── Handle Piece Click ───────────────────────────────────────────────────
@@ -380,6 +468,7 @@ export default function RoyalGameOfUrGame({ mode, onExit }) {
   const handlePieceClick = useCallback(
     (pieceFrom) => {
       if (gamePhase !== 'moving') return;
+      if (isOnline && !isMyTurn) return;
       if (isAI && currentPlayer === 1) return;
       if (!diceResult) return;
 
@@ -389,7 +478,7 @@ export default function RoyalGameOfUrGame({ mode, onExit }) {
         executeMove(move);
       }
     },
-    [gamePhase, currentPlayer, diceResult, pieces, isAI, executeMove]
+    [gamePhase, currentPlayer, diceResult, pieces, isAI, isOnline, isMyTurn, executeMove]
   );
 
   // ── AI Turn ──────────────────────────────────────────────────────────────
@@ -560,6 +649,7 @@ export default function RoyalGameOfUrGame({ mode, onExit }) {
 
   function isHighlightCell(row, col) {
     if (gamePhase !== 'moving' || (isAI && currentPlayer === 1)) return false;
+    if (isOnline && !isMyTurn) return false;
     for (const move of legalMoves) {
       if (move.to >= 1 && move.to <= 14) {
         const targetCell = PLAYER_PATHS[currentPlayer][move.to - 1];
@@ -624,6 +714,7 @@ export default function RoyalGameOfUrGame({ mode, onExit }) {
                   gamePhase === 'moving' &&
                   currentPlayer === player &&
                   !(isAI && player === 1) &&
+                  !(isOnline && !isMyTurn) &&
                   legalFromPositions.has(0)
                     ? { cursor: 'pointer' }
                     : undefined
@@ -633,6 +724,7 @@ export default function RoyalGameOfUrGame({ mode, onExit }) {
                     gamePhase === 'moving' &&
                     currentPlayer === player &&
                     !(isAI && player === 1) &&
+                    !(isOnline && !isMyTurn) &&
                     legalFromPositions.has(0)
                   ) {
                     handlePieceClick(0);
@@ -643,6 +735,7 @@ export default function RoyalGameOfUrGame({ mode, onExit }) {
             {gamePhase === 'moving' &&
               currentPlayer === player &&
               !(isAI && player === 1) &&
+              !(isOnline && !isMyTurn) &&
               legalFromPositions.has(0) && (
                 <circle
                   cx={-30}
@@ -694,6 +787,7 @@ export default function RoyalGameOfUrGame({ mode, onExit }) {
       {/* Move targets (dots showing where pieces can go) */}
       {gamePhase === 'moving' &&
         !(isAI && currentPlayer === 1) &&
+        !(isOnline && !isMyTurn) &&
         legalMoves.map((move) => {
           if (move.to >= 1 && move.to <= 14) {
             const pos = pathToSVG(move.to, currentPlayer, CELL_SIZE, PADDING);
@@ -727,6 +821,7 @@ export default function RoyalGameOfUrGame({ mode, onExit }) {
             gamePhase === 'moving' &&
             p.player === currentPlayer &&
             !(isAI && currentPlayer === 1) &&
+            !(isOnline && !isMyTurn) &&
             legalFromPositions.has(p.pathPos);
           return (
             <Piece
@@ -804,15 +899,15 @@ export default function RoyalGameOfUrGame({ mode, onExit }) {
     <GameShell
       gameName="Royal Game of Ur"
       onExit={onExit}
-      onReset={handleReset}
-      message={message}
+      onReset={isOnline ? null : handleReset}
+      message={isOnline && !isMyTurn && !winner ? "Waiting for opponent's move..." : message}
       gamePhase={gamePhase}
       winner={winner !== null ? playerNames[winner] : null}
       currentPlayer={currentPlayer}
       playerNames={playerNames}
       diceDisplay={diceDisplay}
       onRoll={
-        gamePhase === 'rolling' && !(isAI && currentPlayer === 1)
+        gamePhase === 'rolling' && !(isAI && currentPlayer === 1) && (!isOnline || isMyTurn)
           ? handleRoll
           : undefined
       }
@@ -820,6 +915,11 @@ export default function RoyalGameOfUrGame({ mode, onExit }) {
       moveLog={moveLog}
       rules={GAME_BOOK['royal-game-of-ur'].rules}
       secrets={GAME_BOOK['royal-game-of-ur'].secrets}
+      onForfeit={isOnline ? onForfeit : undefined}
+      onPlayerClick={isOnline ? onPlayerClick : undefined}
+      isOnline={isOnline}
+      isMyTurn={isMyTurn}
+      chatPanel={isOnline ? <MultiplayerChat messages={chatMessages || []} onSend={sendChat} myUid={matchData?.players?.[myPlayerIndex]?.uid} /> : null}
     >
       {scoreInfo}
       {renderBoard()}

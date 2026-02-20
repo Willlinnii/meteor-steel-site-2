@@ -2350,6 +2350,97 @@ body {
   font-size: 0.85rem;
 }
 
+.profile-handle {
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.profile-handle-at {
+  color: var(--accent-gold);
+  font-family: 'Cinzel', serif;
+  font-size: 1rem;
+}
+
+.profile-handle-edit-btn,
+.profile-handle-cancel-btn {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.profile-handle-setup {
+  margin-top: 12px;
+  text-align: center;
+}
+
+.profile-handle-prompt {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  margin-bottom: 8px;
+}
+
+.profile-handle-form {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.profile-handle-input {
+  background: rgba(26, 26, 36, 0.7);
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  color: var(--text-primary);
+  padding: 6px 12px;
+  font-size: 0.9rem;
+  width: 180px;
+}
+
+.profile-handle-input:focus {
+  outline: none;
+  border-color: var(--accent-gold);
+}
+
+.profile-handle-save-btn {
+  background: var(--accent-gold);
+  color: var(--bg-dark);
+  border: none;
+  border-radius: 6px;
+  padding: 6px 16px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.profile-handle-save-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.profile-handle-status {
+  font-size: 0.75rem;
+  margin-top: 4px;
+  color: var(--text-secondary);
+}
+
+.profile-handle-status.available {
+  color: #6fcc6f;
+}
+
+.profile-handle-status.taken {
+  color: #cc6f6f;
+}
+
+.profile-handle-status.error {
+  color: #cc6f6f;
+}
+
 .profile-section-title {
   font-family: 'Cinzel', serif;
   color: var(--accent-gold);

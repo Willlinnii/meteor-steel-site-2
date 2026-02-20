@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useEffect, useRef, useMemo } from 'react';
 import GameShell from '../shared/GameShell';
+import MultiplayerChat from '../shared/MultiplayerChat';
 import GAME_BOOK from '../shared/gameBookData';
 import { StickDiceDisplay } from '../shared/DiceDisplay';
 import { rollStickDice } from '../shared/diceEngine';
@@ -452,19 +453,25 @@ function SenetBoard({
 /* ------------------------------------------------------------------ */
 /*  Main Game Component                                                */
 /* ------------------------------------------------------------------ */
-export default function SenetGame({ mode, onExit }) {
+export default function SenetGame({
+  mode, onExit,
+  // Online multiplayer props (optional)
+  onlineState, myPlayerIndex, isMyTurn, onStateChange, matchData, playerNames: onlinePlayerNames,
+  chatMessages, sendChat, onForfeit, onPlayerClick,
+}) {
+  const isOnline = mode === 'online';
   const initialPieces = () => [[1, 3, 5, 7, 9], [2, 4, 6, 8, 10]];
 
-  const [pieces, setPieces] = useState(initialPieces);
-  const [currentPlayer, setCurrentPlayer] = useState(0);
-  const [diceResult, setDiceResult] = useState(null);
-  const [gamePhase, setGamePhase] = useState('rolling'); // rolling | moving | gameover
-  const [winner, setWinner] = useState(null);
-  const [turnCount, setTurnCount] = useState(0);
-  const [message, setMessage] = useState(mode === 'ai' ? 'You roll first.' : 'Gold rolls first.');
-  const [selectedPiece, setSelectedPiece] = useState(null);
+  const [pieces, setPieces] = useState(isOnline ? (onlineState?.pieces || initialPieces()) : initialPieces);
+  const [currentPlayer, setCurrentPlayer] = useState(isOnline ? (matchData?.currentPlayer ?? 0) : 0);
+  const [diceResult, setDiceResult] = useState(isOnline ? (onlineState?.diceResult || null) : null);
+  const [gamePhase, setGamePhase] = useState(isOnline ? (matchData?.gamePhase || 'rolling') : 'rolling');
+  const [winner, setWinner] = useState(isOnline ? (matchData?.winner ?? null) : null);
+  const [turnCount, setTurnCount] = useState(isOnline ? (matchData?.turnCount || 0) : 0);
+  const [message, setMessage] = useState(isOnline ? (onlineState?.message || '') : (mode === 'ai' ? 'You roll first.' : 'Gold rolls first.'));
+  const [selectedPiece, setSelectedPiece] = useState(isOnline ? (onlineState?.selectedPiece ?? null) : null);
   const [legalMoves, setLegalMoves] = useState([]);
-  const [moveLog, setMoveLog] = useState([]);
+  const [moveLog, setMoveLog] = useState(isOnline ? (onlineState?.moveLog || []) : []);
 
   const aiTimerRef = useRef(null);
 
@@ -475,7 +482,25 @@ export default function SenetGame({ mode, onExit }) {
     };
   }, []);
 
-  const labels = useMemo(() => mode === 'ai' ? ['You', 'Atlas'] : PLAYER_LABELS, [mode]);
+  // Sync from Firestore when online state changes
+  useEffect(() => {
+    if (!isOnline || !onlineState || !matchData) return;
+    setPieces(onlineState.pieces || initialPieces());
+    setDiceResult(onlineState.diceResult || null);
+    setMessage(onlineState.message || '');
+    setMoveLog(onlineState.moveLog || []);
+    setSelectedPiece(onlineState.selectedPiece ?? null);
+    setCurrentPlayer(matchData.currentPlayer ?? 0);
+    setGamePhase(matchData.gamePhase || 'rolling');
+    setWinner(matchData.winner ?? null);
+    setTurnCount(matchData.turnCount || 0);
+  }, [isOnline, onlineState, matchData]);
+
+  const labels = useMemo(() =>
+    isOnline
+      ? [onlinePlayerNames?.[0] || 'Player 1', onlinePlayerNames?.[1] || 'Player 2']
+      : mode === 'ai' ? ['You', 'Atlas'] : PLAYER_LABELS,
+    [mode, isOnline, onlinePlayerNames]);
 
   /* ---- Reset ---- */
   const resetGame = useCallback(() => {
@@ -493,45 +518,51 @@ export default function SenetGame({ mode, onExit }) {
   }, [labels]);
 
   /* ---- Switch turn ---- */
-  const switchTurn = useCallback((pcs, roll) => {
-    const next = grantsExtraTurn(roll) ? (p) => p : (p) => 1 - p;
-    setCurrentPlayer(prev => {
-      const nextPlayer = next(prev);
-      const label = labels[nextPlayer];
-      if (grantsExtraTurn(roll)) {
-        setMessage(`${labels[prev]} rolled ${roll} — extra turn!`);
-      } else {
-        setMessage(`${label}'s turn to roll.`);
-      }
-      return nextPlayer;
-    });
-    setDiceResult(null);
-    setGamePhase('rolling');
-    setSelectedPiece(null);
-    setLegalMoves([]);
-    setTurnCount(t => t + 1);
-  }, [labels]);
+  const switchTurn = useCallback((pcs, roll, msg, log) => {
+    const extraTurn = grantsExtraTurn(roll);
+    const nextPlayer = extraTurn ? currentPlayer : 1 - currentPlayer;
+    const turnMsg = extraTurn
+      ? `${labels[currentPlayer]} rolled ${roll} — extra turn!`
+      : `${labels[nextPlayer]}'s turn to roll.`;
+
+    if (isOnline && onStateChange) {
+      onStateChange(
+        { pieces: pcs, diceResult: null, message: turnMsg, moveLog: log || moveLog, selectedPiece: null },
+        { currentPlayer: nextPlayer, gamePhase: 'rolling' }
+      );
+    } else {
+      setCurrentPlayer(nextPlayer);
+      setMessage(turnMsg);
+      setDiceResult(null);
+      setGamePhase('rolling');
+      setSelectedPiece(null);
+      setLegalMoves([]);
+      setTurnCount(t => t + 1);
+    }
+  }, [labels, currentPlayer, isOnline, onStateChange, moveLog]);
 
   /* ---- Roll dice ---- */
   const handleRoll = useCallback(() => {
     if (gamePhase !== 'rolling') return;
+    if (isOnline && !isMyTurn) return;
 
     const result = rollStickDice();
     const roll = result.total === 0 ? 5 : result.total;
-    setDiceResult({ ...result, effectiveTotal: roll });
+    const newDiceResult = { ...result, effectiveTotal: roll };
+    setDiceResult(newDiceResult);
 
     // Generate legal moves
     const moves = generateMoves(pieces, currentPlayer, roll);
     if (moves.length === 0) {
-      setMessage(
-        `${labels[currentPlayer]} rolled ${roll} — no legal moves.`
-      );
-      setMoveLog(log => [...log, `${labels[currentPlayer]} rolled ${roll} — no legal moves`]);
+      const msg = `${labels[currentPlayer]} rolled ${roll} — no legal moves.`;
+      const newLog = [...moveLog, `${labels[currentPlayer]} rolled ${roll} — no legal moves`];
+      setMessage(msg);
+      setMoveLog(newLog);
       setGamePhase('moving'); // briefly show, then auto-switch
       setLegalMoves([]);
       // auto pass after a delay
       setTimeout(() => {
-        switchTurn(pieces, roll);
+        switchTurn(pieces, roll, msg, newLog);
       }, 800);
       return;
     }
@@ -542,14 +573,13 @@ export default function SenetGame({ mode, onExit }) {
       `${labels[currentPlayer]} rolled ${roll}. Pick a piece to move.`
     );
     setMoveLog(log => [...log, `${labels[currentPlayer]} rolled ${roll}`]);
-  }, [gamePhase, pieces, currentPlayer, switchTurn, labels]);
+  }, [gamePhase, pieces, currentPlayer, switchTurn, labels, isOnline, isMyTurn, moveLog]);
 
   /* ---- Execute a move ---- */
   const executeMove = useCallback(
     (move) => {
       const roll = diceResult ? diceResult.effectiveTotal : 0;
       const newPieces = applyMove(pieces, currentPlayer, move);
-      setPieces(newPieces);
 
       let msg = `${labels[currentPlayer]} moved from ${move.from}`;
       if (move.to === BORNE_OFF) {
@@ -561,29 +591,54 @@ export default function SenetGame({ mode, onExit }) {
       } else {
         msg += ` to ${move.to}.`;
       }
-      setMessage(msg);
-      setMoveLog(log => [...log, msg]);
-      setSelectedPiece(null);
-      setLegalMoves([]);
+      const newLog = [...moveLog, msg];
 
       // Check win
       if (checkWin(newPieces, currentPlayer)) {
-        setGamePhase('gameover');
-        setWinner(currentPlayer);
-        setMessage(`${labels[currentPlayer]} wins!`);
+        if (isOnline && onStateChange) {
+          onStateChange(
+            { pieces: newPieces, diceResult: null, message: `${labels[currentPlayer]} wins!`, moveLog: newLog, selectedPiece: null },
+            { currentPlayer, gamePhase: 'gameover', winner: currentPlayer, status: 'completed', completedAt: new Date() }
+          );
+        } else {
+          setPieces(newPieces);
+          setGamePhase('gameover');
+          setWinner(currentPlayer);
+          setMessage(`${labels[currentPlayer]} wins!`);
+          setMoveLog(newLog);
+          setSelectedPiece(null);
+          setLegalMoves([]);
+        }
         return;
       }
 
-      // Schedule turn switch
-      setTimeout(() => switchTurn(newPieces, roll), 400);
+      if (isOnline && onStateChange) {
+        // For online, send state change immediately (switchTurn will call onStateChange)
+        setPieces(newPieces);
+        setMessage(msg);
+        setMoveLog(newLog);
+        setSelectedPiece(null);
+        setLegalMoves([]);
+        // Switch turn (handles extra turn logic and calls onStateChange)
+        setTimeout(() => switchTurn(newPieces, roll, msg, newLog), 400);
+      } else {
+        setPieces(newPieces);
+        setMessage(msg);
+        setMoveLog(newLog);
+        setSelectedPiece(null);
+        setLegalMoves([]);
+        // Schedule turn switch
+        setTimeout(() => switchTurn(newPieces, roll, msg, newLog), 400);
+      }
     },
-    [pieces, currentPlayer, diceResult, switchTurn, labels]
+    [pieces, currentPlayer, diceResult, switchTurn, labels, isOnline, onStateChange, moveLog]
   );
 
   /* ---- Board click handler (human) ---- */
   const handleCellClick = useCallback(
     (pos) => {
       if (gamePhase !== 'moving') return;
+      if (isOnline && !isMyTurn) return;
       if (mode === 'ai' && currentPlayer === 1) return; // AI's turn
 
       // If clicking a bear-off target
@@ -625,7 +680,7 @@ export default function SenetGame({ mode, onExit }) {
         executeMove(legalMoves[0]);
       }
     },
-    [gamePhase, mode, currentPlayer, pieces, legalMoves, selectedPiece, executeMove]
+    [gamePhase, mode, currentPlayer, pieces, legalMoves, selectedPiece, executeMove, isOnline, isMyTurn]
   );
 
   /* ---- AI turn logic ---- */
@@ -659,6 +714,12 @@ export default function SenetGame({ mode, onExit }) {
     }, 500);
   }, [mode, currentPlayer, gamePhase, legalMoves, pieces, executeMove]);
 
+  /* ---- Build player objects for GameShell ---- */
+  const players = [
+    { name: labels[0], color: PLAYER_COLORS[0] },
+    { name: labels[1], color: PLAYER_COLORS[1] },
+  ];
+
   /* ---- Render ---- */
   const statusText = gamePhase === 'gameover'
     ? `Game over — ${labels[winner]} wins!`
@@ -666,16 +727,37 @@ export default function SenetGame({ mode, onExit }) {
 
   const isHumanTurn =
     gamePhase !== 'gameover' &&
-    (mode === 'local' || currentPlayer === 0);
+    (isOnline ? isMyTurn : (mode === 'local' || currentPlayer === 0));
+
+  const displayMessage = isOnline && !isMyTurn && !winner
+    ? "Waiting for opponent's move..."
+    : message;
 
   return (
-    <GameShell gameName="Senet" onExit={onExit} onReset={resetGame} moveLog={moveLog} rules={GAME_BOOK['senet'].rules} secrets={GAME_BOOK['senet'].secrets}>
+    <GameShell
+      gameName="Senet"
+      players={players}
+      currentPlayer={currentPlayer}
+      gamePhase={gamePhase}
+      winner={winner}
+      turnCount={turnCount}
+      onExit={onExit}
+      onReset={isOnline ? null : resetGame}
+      onForfeit={isOnline ? onForfeit : undefined}
+      onPlayerClick={isOnline ? onPlayerClick : undefined}
+      isOnline={isOnline}
+      isMyTurn={isMyTurn}
+      chatPanel={isOnline ? <MultiplayerChat messages={chatMessages || []} onSend={sendChat} myUid={matchData?.players?.[myPlayerIndex]?.uid} /> : null}
+      moveLog={moveLog}
+      rules={GAME_BOOK['senet'].rules}
+      secrets={GAME_BOOK['senet'].secrets}
+    >
       <div style={{ textAlign: 'center', marginBottom: 8 }}>
         <div style={{ fontSize: 14, fontWeight: 600, marginBottom: 4 }}>
           {statusText}
         </div>
         <div style={{ fontSize: 13, color: '#666', minHeight: 20 }}>
-          {message}
+          {displayMessage}
         </div>
       </div>
 
@@ -724,8 +806,8 @@ export default function SenetGame({ mode, onExit }) {
           </button>
         )}
 
-        {/* Game over */}
-        {gamePhase === 'gameover' && (
+        {/* Game over - only show Play Again for offline */}
+        {gamePhase === 'gameover' && !isOnline && (
           <button
             onClick={resetGame}
             style={{

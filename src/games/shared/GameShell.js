@@ -20,6 +20,12 @@ export default function GameShell({
   moveLog,
   rules,
   secrets,
+  // Multiplayer props
+  chatPanel,
+  onForfeit,
+  onPlayerClick,
+  isOnline,
+  isMyTurn,
 }) {
   const logRef = useRef(null);
   const [openPanel, setOpenPanel] = useState(null); // 'rules' | 'secrets' | null
@@ -66,7 +72,8 @@ export default function GameShell({
           {players.map((p, i) => (
             <div
               key={i}
-              className={`game-shell-player${currentPlayer === i ? ' active' : ''}${winner === i ? ' winner' : ''}`}
+              className={`game-shell-player${currentPlayer === i ? ' active' : ''}${winner === i ? ' winner' : ''}${onPlayerClick ? ' clickable' : ''}`}
+              onClick={onPlayerClick ? () => onPlayerClick(i) : undefined}
             >
               <span className="player-dot" style={{ background: p.color }} />
               <span className="player-name">{p.name}</span>
@@ -94,14 +101,19 @@ export default function GameShell({
               <button
                 className="game-btn game-btn-roll"
                 onClick={onRoll}
-                disabled={!isRolling}
+                disabled={!isRolling || (isOnline && !isMyTurn)}
               >
-                Roll Dice
+                {isOnline && !isMyTurn ? 'Waiting...' : 'Roll Dice'}
               </button>
             )}
             {restartFn && (
               <button className="game-btn game-btn-restart" onClick={restartFn}>
                 Restart
+              </button>
+            )}
+            {onForfeit && !winnerName && (
+              <button className="game-btn game-btn-forfeit" onClick={onForfeit}>
+                Forfeit
               </button>
             )}
           </div>
@@ -115,6 +127,8 @@ export default function GameShell({
           ))}
         </div>
       )}
+
+      {chatPanel}
 
       {(rules || secrets) && (
         <div className="game-book-section">

@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import GameShell from '../shared/GameShell';
+import MultiplayerChat from '../shared/MultiplayerChat';
 import GAME_BOOK from '../shared/gameBookData';
 import { D6Display } from '../shared/DiceDisplay';
 import { chooseBestMove, evaluateWithNoise } from '../shared/aiCore';
@@ -158,7 +159,13 @@ function initPieces() {
   ];
 }
 
-export default function MythouseGame({ mode, onExit }) {
+export default function MythouseGame({
+  mode, onExit,
+  // Online multiplayer props (optional)
+  onlineState, myPlayerIndex, isMyTurn, onStateChange, matchData, playerNames: onlinePlayerNames,
+  chatMessages, sendChat, onForfeit, onPlayerClick,
+}) {
+  const isOnline = mode === 'online';
   // === SETUP STATE ===
   const [deckMode, setDeckMode] = useState(null); // 'single'|'each'|'mixed'
   const [cultures, setCultures] = useState([null, null]); // [P0 culture, P1 culture]
@@ -204,6 +211,36 @@ export default function MythouseGame({ mode, onExit }) {
   const [tooltip, setTooltip] = useState(null);
   const isAI = mode === 'ai';
 
+  // Sync from Firestore when online state changes
+  useEffect(() => {
+    if (!isOnline || !onlineState || !matchData) return;
+    if (onlineState.pieces) setPieces(onlineState.pieces);
+    if (onlineState.scores) setScores(onlineState.scores);
+    if (onlineState.cardScores) setCardScores(onlineState.cardScores);
+    if (onlineState.gems) setGems(onlineState.gems);
+    if (onlineState.starlightClaimed !== undefined) setStarlightClaimed(onlineState.starlightClaimed);
+    if (onlineState.starlightPlayer !== undefined) setStarlightPlayer(onlineState.starlightPlayer);
+    if (onlineState.diceValue !== undefined) setDiceValue(onlineState.diceValue);
+    if (onlineState.direction !== undefined) setDirection(onlineState.direction);
+    if (onlineState.ordeal !== undefined) setOrdeal(onlineState.ordeal);
+    if (onlineState.gameDeck) setGameDeck(onlineState.gameDeck);
+    if (onlineState.gameDeckP2) setGameDeckP2(onlineState.gameDeckP2);
+    if (onlineState.majorDeck) setMajorDeck(onlineState.majorDeck);
+    if (onlineState.majorDeckP2) setMajorDeckP2(onlineState.majorDeckP2);
+    if (onlineState.collectedMinor) setCollectedMinor(onlineState.collectedMinor);
+    if (onlineState.collectedMajor) setCollectedMajor(onlineState.collectedMajor);
+    if (onlineState.majorReveal !== undefined) setMajorReveal(onlineState.majorReveal);
+    if (onlineState.message !== undefined) setMessage(onlineState.message);
+    if (onlineState.moveLog) setMoveLog(onlineState.moveLog);
+    if (onlineState.deckMode !== undefined) setDeckMode(onlineState.deckMode);
+    if (onlineState.cultures) setCultures(onlineState.cultures);
+    if (onlineState.legalMoves) setLegalMoves(onlineState.legalMoves);
+    setCurrentPlayer(matchData.currentPlayer ?? 0);
+    setGamePhase(matchData.gamePhase || 'setup');
+    setWinner(matchData.winner ?? null);
+    setTurnCount(matchData.turnCount || 0);
+  }, [isOnline, onlineState, matchData]);
+
   const showTooltip = useCallback((e, text) => {
     const wrapper = boardWrapperRef.current;
     if (!wrapper) return;
@@ -218,8 +255,42 @@ export default function MythouseGame({ mode, onExit }) {
     setTooltip(null);
   }, []);
 
-  // Build decks based on mode and culture selections
-  const buildDecks = useCallback((dMode, c0, c1) => {
+  // Build a full snapshot of current game state for online sync
+  const buildOnlineSnapshot = useCallback((overrides = {}) => {
+    return {
+      pieces: overrides.pieces !== undefined ? overrides.pieces : pieces,
+      scores: overrides.scores !== undefined ? overrides.scores : scores,
+      cardScores: overrides.cardScores !== undefined ? overrides.cardScores : cardScores,
+      gems: overrides.gems !== undefined ? overrides.gems : gems,
+      starlightClaimed: overrides.starlightClaimed !== undefined ? overrides.starlightClaimed : starlightClaimed,
+      starlightPlayer: overrides.starlightPlayer !== undefined ? overrides.starlightPlayer : starlightPlayer,
+      diceValue: overrides.diceValue !== undefined ? overrides.diceValue : diceValue,
+      direction: overrides.direction !== undefined ? overrides.direction : direction,
+      ordeal: overrides.ordeal !== undefined ? overrides.ordeal : ordeal,
+      gameDeck: overrides.gameDeck !== undefined ? overrides.gameDeck : gameDeck,
+      gameDeckP2: overrides.gameDeckP2 !== undefined ? overrides.gameDeckP2 : gameDeckP2,
+      majorDeck: overrides.majorDeck !== undefined ? overrides.majorDeck : majorDeck,
+      majorDeckP2: overrides.majorDeckP2 !== undefined ? overrides.majorDeckP2 : majorDeckP2,
+      collectedMinor: overrides.collectedMinor !== undefined ? overrides.collectedMinor : collectedMinor,
+      collectedMajor: overrides.collectedMajor !== undefined ? overrides.collectedMajor : collectedMajor,
+      majorReveal: overrides.majorReveal !== undefined ? overrides.majorReveal : majorReveal,
+      message: overrides.message !== undefined ? overrides.message : message,
+      moveLog: overrides.moveLog !== undefined ? overrides.moveLog : moveLog,
+      deckMode: overrides.deckMode !== undefined ? overrides.deckMode : deckMode,
+      cultures: overrides.cultures !== undefined ? overrides.cultures : cultures,
+      legalMoves: overrides.legalMoves !== undefined ? overrides.legalMoves : [],
+      setupComplete: true,
+    };
+  }, [pieces, scores, cardScores, gems, starlightClaimed, starlightPlayer, diceValue, direction,
+      ordeal, gameDeck, gameDeckP2, majorDeck, majorDeckP2, collectedMinor, collectedMajor,
+      majorReveal, message, moveLog, deckMode, cultures]);
+
+  // Start game after setup
+  const startGame = useCallback((dMode, c0, c1) => {
+    setDeckMode(dMode);
+    setCultures([c0, c1]);
+
+    // Build decks locally
     let minor, minorP2, major, majorP2;
     if (dMode === 'mixed') {
       minor = buildMixedMinorDeck();
@@ -237,16 +308,44 @@ export default function MythouseGame({ mode, onExit }) {
     }
     setGameDeck(minor); setGameDeckP2(minorP2);
     setMajorDeck(major); setMajorDeckP2(majorP2);
-  }, []);
 
-  // Start game after setup
-  const startGame = useCallback((dMode, c0, c1) => {
-    setDeckMode(dMode);
-    setCultures([c0, c1]);
-    buildDecks(dMode, c0, c1);
     setGamePhase('rolling');
     setMessage('Roll the dice to begin your ascent!');
-  }, [buildDecks]);
+
+    // For online mode, broadcast the setup result so both players sync
+    if (isOnline && onStateChange) {
+      const initialPieces = initPieces();
+      const initialGems = {};
+      for (let r = 1; r <= RINGS; r++) initialGems[r] = true;
+      onStateChange(
+        {
+          pieces: initialPieces,
+          scores: [0, 0],
+          cardScores: [0, 0],
+          gems: initialGems,
+          starlightClaimed: false,
+          starlightPlayer: null,
+          diceValue: null,
+          direction: 1,
+          ordeal: null,
+          gameDeck: minor,
+          gameDeckP2: minorP2,
+          majorDeck: major,
+          majorDeckP2: majorP2,
+          collectedMinor: [[], []],
+          collectedMajor: [[], []],
+          majorReveal: null,
+          message: 'Roll the dice to begin your ascent!',
+          moveLog: [],
+          deckMode: dMode,
+          cultures: [c0, c1],
+          legalMoves: [],
+          setupComplete: true,
+        },
+        { currentPlayer: 0, gamePhase: 'rolling', turnCount: 0 }
+      );
+    }
+  }, [isOnline, onStateChange]);
 
   // Setup: select deck mode
   const handleDeckMode = useCallback((dMode) => {
@@ -390,65 +489,84 @@ export default function MythouseGame({ mode, onExit }) {
 
   const handleRoll = useCallback(() => {
     if (gamePhase !== 'rolling' || winner !== null) return;
+    if (isOnline && !isMyTurn) return;
     const highRing = getHighestRing(currentPlayer);
     const roll = rollForRing(highRing);
     setDiceValue(roll);
 
+    const pNames = isOnline ? onlinePlayerNames : (isAI ? ['You', 'Atlas'] : ['Player 1', 'Player 2']);
     const moves = getLegalMovesForPlayer(currentPlayer, roll, pieces);
     if (moves.length === 0) {
-      setMessage(`Rolled ${roll} \u2014 no legal moves`);
-      setMoveLog(log => [...log, `${isAI ? (currentPlayer === 0 ? 'You' : 'Atlas') : 'Player ' + (currentPlayer + 1)} rolled ${roll} \u2014 no legal moves`]);
-      setCurrentPlayer(p => 1 - p);
-      setGamePhase('rolling');
-      setTurnCount(t => t + 1);
-      return;
-    }
-
-    setLegalMoves(moves);
-    setGamePhase('moving');
-    setMessage(`Rolled ${roll} (${RING_DICE[highRing].name}) \u2014 choose a piece`);
-  }, [gamePhase, winner, currentPlayer, pieces, getHighestRing, getLegalMovesForPlayer, isAI]);
-
-  const applyMove = useCallback((move) => {
-    setPieces(prev => {
-      const next = [prev[0].map(p => ({ ...p })), prev[1].map(p => ({ ...p }))];
-
-      if (move.type === 'summit') {
-        next[currentPlayer][move.pieceIdx].finished = true;
-
-        const allFinished = next[currentPlayer].every(p => p.finished);
-        if (allFinished || !starlightClaimed) {
-          if (!starlightClaimed) {
-            setStarlightClaimed(true);
-            setStarlightPlayer(currentPlayer);
-            setScores(s => {
-              const ns = [...s];
-              ns[currentPlayer] += FALLEN_STARLIGHT_VALUE;
-              return ns;
-            });
-            setMessage(`Reached the summit! Claimed Fallen Starlight (+${FALLEN_STARLIGHT_VALUE})`);
-            setMoveLog(log => [...log, `Reached the summit! Claimed Fallen Starlight (+${FALLEN_STARLIGHT_VALUE})`]);
-          }
-
-          setWinner(null);
-          setGamePhase('gameover');
-
-          const finalScores = [...scores];
-          finalScores[currentPlayer] += FALLEN_STARLIGHT_VALUE;
-          const w = finalScores[0] > finalScores[1] ? 0 : finalScores[1] > finalScores[0] ? 1 : 0;
-          setWinner(w);
-          return next;
-        }
-
-        setMessage('Piece reaches the summit!');
-        setMoveLog(log => [...log, 'Piece reaches the summit!']);
+      const msg = `Rolled ${roll} \u2014 no legal moves`;
+      const logEntry = `${pNames[currentPlayer]} rolled ${roll} \u2014 no legal moves`;
+      const newLog = [...moveLog, logEntry];
+      if (isOnline && onStateChange) {
+        onStateChange(
+          buildOnlineSnapshot({ diceValue: roll, message: msg, moveLog: newLog, legalMoves: [] }),
+          { currentPlayer: 1 - currentPlayer, gamePhase: 'rolling', turnCount: turnCount + 1 }
+        );
+      } else {
+        setMessage(msg);
+        setMoveLog(newLog);
         setCurrentPlayer(p => 1 - p);
         setGamePhase('rolling');
         setTurnCount(t => t + 1);
-        setLegalMoves([]);
-        return next;
       }
+      return;
+    }
 
+    if (isOnline && onStateChange) {
+      onStateChange(
+        buildOnlineSnapshot({ diceValue: roll, message: `Rolled ${roll} (${RING_DICE[highRing].name}) \u2014 choose a piece`, legalMoves: moves }),
+        { currentPlayer, gamePhase: 'moving' }
+      );
+    } else {
+      setLegalMoves(moves);
+      setGamePhase('moving');
+      setMessage(`Rolled ${roll} (${RING_DICE[highRing].name}) \u2014 choose a piece`);
+    }
+  }, [gamePhase, winner, currentPlayer, pieces, getHighestRing, getLegalMovesForPlayer, isAI,
+      isOnline, isMyTurn, onStateChange, buildOnlineSnapshot, moveLog, turnCount, onlinePlayerNames]);
+
+  const applyMove = useCallback((move) => {
+    const next = [pieces[0].map(p => ({ ...p })), pieces[1].map(p => ({ ...p }))];
+    let newScores = [...scores];
+    let newCardScores = [...cardScores];
+    let newGems = { ...gems };
+    let newStarlightClaimed = starlightClaimed;
+    let newStarlightPlayer = starlightPlayer;
+    let newMessage = message;
+    let newMoveLog = [...moveLog];
+    let newOrdeal = null;
+    let nextPhase = 'rolling';
+    let nextPlayer = 1 - currentPlayer;
+    let newTurnCount = turnCount + 1;
+    let newWinner = null;
+    let isGameOver = false;
+
+    if (move.type === 'summit') {
+      next[currentPlayer][move.pieceIdx].finished = true;
+
+      const allFinished = next[currentPlayer].every(p => p.finished);
+      if (allFinished || !newStarlightClaimed) {
+        if (!newStarlightClaimed) {
+          newStarlightClaimed = true;
+          newStarlightPlayer = currentPlayer;
+          newScores[currentPlayer] += FALLEN_STARLIGHT_VALUE;
+          newMessage = `Reached the summit! Claimed Fallen Starlight (+${FALLEN_STARLIGHT_VALUE})`;
+          newMoveLog = [...newMoveLog, newMessage];
+        }
+
+        const w = newScores[0] > newScores[1] ? 0 : newScores[1] > newScores[0] ? 1 : 0;
+        newWinner = w;
+        nextPhase = 'gameover';
+        nextPlayer = currentPlayer;
+        isGameOver = true;
+      } else {
+        newMessage = 'Piece reaches the summit!';
+        newMoveLog = [...newMoveLog, 'Piece reaches the summit!'];
+      }
+    } else {
       let destRing = move.toRing;
       let destPos = move.toPos;
 
@@ -477,65 +595,102 @@ export default function MythouseGame({ mode, onExit }) {
       if (ladder) {
         next[currentPlayer][move.pieceIdx].ring = ladder.toRing;
         next[currentPlayer][move.pieceIdx].pos = ladder.toPos;
-        setMessage(`Ladder! Climb to ring ${ladder.toRing}`);
-        setMoveLog(log => [...log, `Ladder! Climb to ring ${ladder.toRing}`]);
+        newMessage = `Ladder! Climb to ring ${ladder.toRing}`;
+        newMoveLog = [...newMoveLog, newMessage];
       } else {
         const chute = getChuteAt(destRing, destPos);
         if (chute) {
           next[currentPlayer][move.pieceIdx].ring = chute.toRing;
           next[currentPlayer][move.pieceIdx].pos = chute.toPos;
-          setMessage(`Chute! Slide to ring ${chute.toRing}`);
-          setMoveLog(log => [...log, `Chute! Slide to ring ${chute.toRing}`]);
+          newMessage = `Chute! Slide to ring ${chute.toRing}`;
+          newMoveLog = [...newMoveLog, newMessage];
         } else {
-          setMessage(`Moved to ring ${destRing}, position ${destPos}`);
-          setMoveLog(log => [...log, `Moved to ring ${destRing}, position ${destPos}`]);
+          newMessage = `Moved to ring ${destRing}, position ${destPos}`;
+          newMoveLog = [...newMoveLog, newMessage];
         }
       }
 
-      if (gems[destRing] && destPos === 0) {
-        setGems(g => ({ ...g, [destRing]: false }));
+      if (newGems[destRing] && destPos === 0) {
+        newGems[destRing] = false;
         const val = GEMSTONE_VALUES[destRing];
-        setScores(s => {
-          const ns = [...s];
-          ns[currentPlayer] += val;
-          return ns;
-        });
-        setMessage(m => m + ` Collected gemstone (+${val} pts)!`);
-        setMoveLog(log => [...log, `Collected gemstone (+${val} pts)!`]);
+        newScores[currentPlayer] += val;
+        newMessage = newMessage + ` Collected gemstone (+${val} pts)!`;
+        newMoveLog = [...newMoveLog, `Collected gemstone (+${val} pts)!`];
       }
 
       const finalRing = next[currentPlayer][move.pieceIdx].ring;
       if (ORDEAL_POSITIONS.includes(finalRing) && next[currentPlayer][move.pieceIdx].pos === 0 &&
           move.fromRing !== finalRing) {
-        setOrdeal({
+        newOrdeal = {
           challenger: currentPlayer,
           defender: 1 - currentPlayer,
           cards: [null, null],
           revealed: false,
           pieceIdx: move.pieceIdx,
           ring: finalRing,
-        });
-        setGamePhase('ordeal');
-        setLegalMoves([]);
-        return next;
+        };
+        nextPhase = 'ordeal';
+        nextPlayer = currentPlayer; // stay on current player during ordeal
+        newTurnCount = turnCount; // don't increment turn yet
       }
+    }
 
-      setCurrentPlayer(p => 1 - p);
-      setGamePhase('rolling');
-      setTurnCount(t => t + 1);
+    if (isOnline && onStateChange) {
+      onStateChange(
+        buildOnlineSnapshot({
+          pieces: next,
+          scores: newScores,
+          cardScores: newCardScores,
+          gems: newGems,
+          starlightClaimed: newStarlightClaimed,
+          starlightPlayer: newStarlightPlayer,
+          message: newMessage,
+          moveLog: newMoveLog,
+          ordeal: newOrdeal,
+          legalMoves: [],
+        }),
+        {
+          currentPlayer: nextPlayer,
+          gamePhase: nextPhase,
+          turnCount: newTurnCount,
+          ...(isGameOver ? { winner: newWinner, status: 'completed', completedAt: new Date() } : {}),
+        }
+      );
+    } else {
+      setPieces(next);
+      setScores(newScores);
+      setCardScores(newCardScores);
+      setGems(newGems);
+      setStarlightClaimed(newStarlightClaimed);
+      setStarlightPlayer(newStarlightPlayer);
+      setMessage(newMessage);
+      setMoveLog(newMoveLog);
       setLegalMoves([]);
-      return next;
-    });
-  }, [currentPlayer, gems, scores, starlightClaimed]);
+      if (newOrdeal) {
+        setOrdeal(newOrdeal);
+        setGamePhase('ordeal');
+      } else if (isGameOver) {
+        setWinner(newWinner);
+        setGamePhase('gameover');
+      } else {
+        setCurrentPlayer(1 - currentPlayer);
+        setGamePhase('rolling');
+        setTurnCount(t => t + 1);
+      }
+    }
+  }, [currentPlayer, pieces, scores, cardScores, gems, starlightClaimed, starlightPlayer,
+      message, moveLog, turnCount, isOnline, onStateChange, buildOnlineSnapshot]);
 
   const handlePieceClick = useCallback((pieceIdx) => {
     if (gamePhase !== 'moving') return;
+    if (isOnline && !isMyTurn) return;
     const move = legalMoves.find(m => m.pieceIdx === pieceIdx);
     if (move) applyMove(move);
-  }, [gamePhase, legalMoves, applyMove]);
+  }, [gamePhase, legalMoves, applyMove, isOnline, isMyTurn]);
 
   const handleOrdealReveal = useCallback(() => {
     if (!ordeal || ordeal.revealed) return;
+    if (isOnline && !isMyTurn) return;
     const challenger = ordeal.challenger;
     const defender = ordeal.defender;
 
@@ -555,22 +710,38 @@ export default function MythouseGame({ mode, onExit }) {
     }
     const draw2 = drawCard(dDeck);
 
-    // Update decks
-    if (deckMode === 'each') {
-      if (challenger === 0) { setGameDeck(draw1.remaining); setGameDeckP2(draw2.remaining); }
-      else { setGameDeckP2(draw1.remaining); setGameDeck(draw2.remaining); }
-    } else {
-      setGameDeck(draw2.remaining);
-    }
-
     const fallback = { label: '?', value: 1, suitSymbol: '', suitColor: '#ddd', element: 'Air' };
     const card0 = draw1.card || fallback;
     const card1 = draw2.card || fallback;
-    setOrdeal(prev => ({ ...prev, cards: [card0, card1], revealed: true }));
-  }, [ordeal, deckMode, getMinorDeckFor, rebuildMinorDeck]);
+
+    // Compute new deck states
+    let newGameDeck = gameDeck;
+    let newGameDeckP2 = gameDeckP2;
+    if (deckMode === 'each') {
+      if (challenger === 0) { newGameDeck = draw1.remaining; newGameDeckP2 = draw2.remaining; }
+      else { newGameDeckP2 = draw1.remaining; newGameDeck = draw2.remaining; }
+    } else {
+      newGameDeck = draw2.remaining;
+    }
+
+    const revealedOrdeal = { ...ordeal, cards: [card0, card1], revealed: true };
+
+    if (isOnline && onStateChange) {
+      onStateChange(
+        buildOnlineSnapshot({ ordeal: revealedOrdeal, gameDeck: newGameDeck, gameDeckP2: newGameDeckP2 }),
+        { currentPlayer, gamePhase: 'ordeal' }
+      );
+    } else {
+      setGameDeck(newGameDeck);
+      setGameDeckP2(newGameDeckP2);
+      setOrdeal(revealedOrdeal);
+    }
+  }, [ordeal, deckMode, getMinorDeckFor, rebuildMinorDeck, isOnline, isMyTurn, onStateChange,
+      buildOnlineSnapshot, currentPlayer, gameDeck, gameDeckP2]);
 
   const handleOrdealClose = useCallback(() => {
     if (!ordeal || !ordeal.revealed) return;
+    if (isOnline && !isMyTurn) return;
     const c0 = ordeal.cards[0]; // challenger's card
     const c1 = ordeal.cards[1]; // defender's card
     const v0 = c0.value;
@@ -578,34 +749,27 @@ export default function MythouseGame({ mode, onExit }) {
     const ordealWinner = v0 >= v1 ? ordeal.challenger : ordeal.defender;
     const winnerCard = ordealWinner === ordeal.challenger ? c0 : c1;
 
+    let newScores = [...scores];
+    let newCardScores = [...cardScores];
+    let newMessage = message;
+    let newMoveLog = [...moveLog];
+    let newCollectedMinor = [collectedMinor[0].slice(), collectedMinor[1].slice()];
+    let newPieces = [pieces[0].map(p => ({ ...p })), pieces[1].map(p => ({ ...p }))];
+
     if (ordealWinner === ordeal.challenger) {
-      const msg = `Won with ${c0.label} (${v0}) vs ${c1.label} (${v1}) — +${v0} pts!`;
-      setMessage(msg);
-      setMoveLog(log => [...log, msg]);
-      setScores(s => { const ns = [...s]; ns[ordeal.challenger] += v0; return ns; });
-      setCardScores(s => { const ns = [...s]; ns[ordeal.challenger] += v0; return ns; });
-      setCollectedMinor(prev => {
-        const next = [prev[0].slice(), prev[1].slice()];
-        next[ordeal.challenger].push(winnerCard);
-        return next;
-      });
+      newMessage = `Won with ${c0.label} (${v0}) vs ${c1.label} (${v1}) \u2014 +${v0} pts!`;
+      newMoveLog = [...newMoveLog, newMessage];
+      newScores[ordeal.challenger] += v0;
+      newCardScores[ordeal.challenger] += v0;
+      newCollectedMinor[ordeal.challenger].push(winnerCard);
     } else {
-      const msg = `Lost! ${c0.label} (${v0}) vs ${c1.label} (${v1}). Pushed back.`;
-      setMessage(msg);
-      setMoveLog(log => [...log, msg]);
-      setScores(s => { const ns = [...s]; ns[ordeal.defender] += v1; return ns; });
-      setCardScores(s => { const ns = [...s]; ns[ordeal.defender] += v1; return ns; });
-      setCollectedMinor(prev => {
-        const next = [prev[0].slice(), prev[1].slice()];
-        next[ordeal.defender].push(winnerCard);
-        return next;
-      });
-      setPieces(prev => {
-        const next = [prev[0].map(p => ({ ...p })), prev[1].map(p => ({ ...p }))];
-        const piece = next[ordeal.challenger][ordeal.pieceIdx];
-        piece.pos = Math.max(0, piece.pos - 5);
-        return next;
-      });
+      newMessage = `Lost! ${c0.label} (${v0}) vs ${c1.label} (${v1}). Pushed back.`;
+      newMoveLog = [...newMoveLog, newMessage];
+      newScores[ordeal.defender] += v1;
+      newCardScores[ordeal.defender] += v1;
+      newCollectedMinor[ordeal.defender].push(winnerCard);
+      const piece = newPieces[ordeal.challenger][ordeal.pieceIdx];
+      piece.pos = Math.max(0, piece.pos - 5);
     }
 
     // Now draw a Major Arcana card for the ordeal-triggering player (challenger)
@@ -614,12 +778,20 @@ export default function MythouseGame({ mode, onExit }) {
     if (mDeck.length < 1) mDeck = rebuildMajorDeck(triggerPlayer);
     const majorDraw = drawCard(mDeck);
 
-    // Update major deck
+    // Compute new major deck states
+    let newMajorDeck = majorDeck;
+    let newMajorDeckP2 = majorDeckP2;
     if (deckMode === 'each' && triggerPlayer === 1) {
-      setMajorDeckP2(majorDraw.remaining);
+      newMajorDeckP2 = majorDraw.remaining;
     } else {
-      setMajorDeck(majorDraw.remaining);
+      newMajorDeck = majorDraw.remaining;
     }
+
+    let newMajorReveal = null;
+    let newCollectedMajor = [collectedMajor[0].slice(), collectedMajor[1].slice()];
+    let nextPhase;
+    let nextPlayer;
+    let newTurnCount = turnCount;
 
     if (majorDraw.card) {
       const mCard = majorDraw.card;
@@ -627,34 +799,82 @@ export default function MythouseGame({ mode, onExit }) {
       const aligned = mCard.correspondence === ringPlanet;
       const pts = aligned ? mCard.number * 2 : mCard.number;
 
-      setScores(s => { const ns = [...s]; ns[triggerPlayer] += pts; return ns; });
-      setCardScores(s => { const ns = [...s]; ns[triggerPlayer] += pts; return ns; });
-      setCollectedMajor(prev => {
-        const next = [prev[0].slice(), prev[1].slice()];
-        next[triggerPlayer].push(mCard);
-        return next;
-      });
+      newScores[triggerPlayer] += pts;
+      newCardScores[triggerPlayer] += pts;
+      newCollectedMajor[triggerPlayer].push(mCard);
 
-      setMajorReveal({ card: mCard, player: triggerPlayer, pts, aligned, ring: ordeal.ring });
-      setOrdeal(null);
-      setGamePhase('majorReveal');
+      newMajorReveal = { card: mCard, player: triggerPlayer, pts, aligned, ring: ordeal.ring };
+      nextPhase = 'majorReveal';
+      nextPlayer = currentPlayer; // stay on current player during major reveal
     } else {
+      nextPhase = 'rolling';
+      nextPlayer = 1 - currentPlayer;
+      newTurnCount = turnCount + 1;
+    }
+
+    if (isOnline && onStateChange) {
+      onStateChange(
+        buildOnlineSnapshot({
+          pieces: newPieces,
+          scores: newScores,
+          cardScores: newCardScores,
+          message: newMessage,
+          moveLog: newMoveLog,
+          collectedMinor: newCollectedMinor,
+          collectedMajor: newCollectedMajor,
+          majorDeck: newMajorDeck,
+          majorDeckP2: newMajorDeckP2,
+          majorReveal: newMajorReveal,
+          ordeal: null,
+          legalMoves: [],
+        }),
+        { currentPlayer: nextPlayer, gamePhase: nextPhase, turnCount: newTurnCount }
+      );
+    } else {
+      setPieces(newPieces);
+      setScores(newScores);
+      setCardScores(newCardScores);
+      setMessage(newMessage);
+      setMoveLog(newMoveLog);
+      setCollectedMinor(newCollectedMinor);
+      setCollectedMajor(newCollectedMajor);
+      setMajorDeck(newMajorDeck);
+      setMajorDeckP2(newMajorDeckP2);
       setOrdeal(null);
+      if (newMajorReveal) {
+        setMajorReveal(newMajorReveal);
+        setGamePhase('majorReveal');
+      } else {
+        setCurrentPlayer(1 - currentPlayer);
+        setGamePhase('rolling');
+        setTurnCount(t => t + 1);
+      }
+    }
+  }, [ordeal, deckMode, getMajorDeckFor, rebuildMajorDeck, isOnline, isMyTurn, onStateChange,
+      buildOnlineSnapshot, currentPlayer, scores, cardScores, message, moveLog, collectedMinor,
+      collectedMajor, majorDeck, majorDeckP2, pieces, turnCount]);
+
+  const handleMajorRevealClose = useCallback(() => {
+    if (!majorReveal) return;
+    if (isOnline && !isMyTurn) return;
+    const pNames = isOnline ? onlinePlayerNames : (isAI ? ['You', 'Atlas'] : ['Player 1', 'Player 2']);
+    const msg = `${pNames[majorReveal.player]} drew ${majorReveal.card.name}${majorReveal.aligned ? ' (aligned!)' : ''} \u2014 +${majorReveal.pts} pts`;
+    const newMoveLog = [...moveLog, msg];
+
+    if (isOnline && onStateChange) {
+      onStateChange(
+        buildOnlineSnapshot({ majorReveal: null, moveLog: newMoveLog, legalMoves: [] }),
+        { currentPlayer: 1 - currentPlayer, gamePhase: 'rolling', turnCount: turnCount + 1 }
+      );
+    } else {
+      setMoveLog(newMoveLog);
+      setMajorReveal(null);
       setCurrentPlayer(p => 1 - p);
       setGamePhase('rolling');
       setTurnCount(t => t + 1);
     }
-  }, [ordeal, deckMode, getMajorDeckFor, rebuildMajorDeck]);
-
-  const handleMajorRevealClose = useCallback(() => {
-    if (!majorReveal) return;
-    const msg = `${isAI && majorReveal.player === 1 ? 'Atlas' : isAI ? 'You' : 'Player ' + (majorReveal.player + 1)} drew ${majorReveal.card.name}${majorReveal.aligned ? ' (aligned!)' : ''} — +${majorReveal.pts} pts`;
-    setMoveLog(log => [...log, msg]);
-    setMajorReveal(null);
-    setCurrentPlayer(p => 1 - p);
-    setGamePhase('rolling');
-    setTurnCount(t => t + 1);
-  }, [majorReveal, isAI]);
+  }, [majorReveal, isAI, isOnline, isMyTurn, onStateChange, buildOnlineSnapshot, currentPlayer,
+      moveLog, turnCount, onlinePlayerNames]);
 
   // AI auto-play
   useEffect(() => {
@@ -695,12 +915,26 @@ export default function MythouseGame({ mode, onExit }) {
 
   // === RENDER ===
 
-  const players = isAI
-    ? [{ name: 'You', color: PLAYER_COLORS[0] }, { name: 'Atlas', color: PLAYER_COLORS[1] }]
-    : [{ name: 'Player 1', color: PLAYER_COLORS[0] }, { name: 'Player 2', color: PLAYER_COLORS[1] }];
+  const players = isOnline
+    ? [{ name: onlinePlayerNames?.[0] || 'Player 1', color: PLAYER_COLORS[0] }, { name: onlinePlayerNames?.[1] || 'Player 2', color: PLAYER_COLORS[1] }]
+    : isAI
+      ? [{ name: 'You', color: PLAYER_COLORS[0] }, { name: 'Atlas', color: PLAYER_COLORS[1] }]
+      : [{ name: 'Player 1', color: PLAYER_COLORS[0] }, { name: 'Player 2', color: PLAYER_COLORS[1] }];
 
   // === SETUP PHASE ===
   if (gamePhase === 'setup') {
+    // In online mode, only the match creator (player 0) handles setup
+    if (isOnline && myPlayerIndex !== 0) {
+      return (
+        <div className="mythouse-setup">
+          <button className="game-mode-back" onClick={onExit}>&larr; Back</button>
+          <h2 className="mythouse-setup-title">Waiting for Host</h2>
+          <p className="mythouse-setup-desc">
+            The match creator is choosing the deck configuration...
+          </p>
+        </div>
+      );
+    }
     return (
       <div className="mythouse-setup">
         <button className="game-mode-back" onClick={onExit}>&larr; Back</button>
@@ -717,7 +951,7 @@ export default function MythouseGame({ mode, onExit }) {
             </button>
             <button className="game-mode-btn" onClick={() => handleDeckMode('each')}>
               <span className="game-mode-label">Each Picks Own</span>
-              <span className="game-mode-sublabel">{isAI ? 'You pick, Atlas picks randomly' : 'Each player picks a culture'}</span>
+              <span className="game-mode-sublabel">{isOnline ? 'You choose for both players' : isAI ? 'You pick, Atlas picks randomly' : 'Each player picks a culture'}</span>
             </button>
             <button className="game-mode-btn" onClick={() => handleDeckMode('mixed')}>
               <span className="game-mode-label">Mixed Deck</span>
@@ -730,8 +964,8 @@ export default function MythouseGame({ mode, onExit }) {
           <>
             <p className="mythouse-setup-pick">
               {setupStep === 'culture' && 'Choose a culture for both players:'}
-              {setupStep === 'p1culture' && (isAI ? 'Choose your culture:' : 'Player 1, choose your culture:')}
-              {setupStep === 'p2culture' && 'Player 2, choose your culture:'}
+              {setupStep === 'p1culture' && (isAI ? 'Choose your culture:' : isOnline ? 'Choose a culture for Player 1:' : 'Player 1, choose your culture:')}
+              {setupStep === 'p2culture' && (isOnline ? 'Choose a culture for Player 2:' : 'Player 2, choose your culture:')}
             </p>
             <div className="mythouse-setup-cultures">
               {ALL_CULTURES.map(c => (
@@ -774,11 +1008,16 @@ export default function MythouseGame({ mode, onExit }) {
       gamePhase={gamePhase}
       winner={winner}
       turnCount={turnCount}
-      onRoll={handleRoll}
-      onRestart={resetGame}
+      onRoll={(!isOnline || isMyTurn) ? handleRoll : null}
+      onRestart={isOnline ? null : resetGame}
       onExit={onExit}
+      onForfeit={isOnline ? onForfeit : undefined}
+      onPlayerClick={isOnline ? onPlayerClick : undefined}
+      isOnline={isOnline}
+      isMyTurn={isMyTurn}
+      chatPanel={isOnline ? <MultiplayerChat messages={chatMessages || []} onSend={sendChat} myUid={matchData?.players?.[myPlayerIndex]?.uid} /> : null}
       diceDisplay={diceValue ? <><D6Display value={Math.min(diceValue, 6)} /><div style={{ fontSize: '0.7rem', color: 'var(--text-secondary)', textAlign: 'center', marginTop: 2 }}>{RING_DICE[highestRing].name}: {diceValue}</div></> : null}
-      extraInfo={message}
+      extraInfo={isOnline && !isMyTurn && !winner ? "Waiting for opponent's move..." : message}
       moveLog={moveLog}
       rules={GAME_BOOK['mythouse'].rules}
       secrets={GAME_BOOK['mythouse'].secrets}

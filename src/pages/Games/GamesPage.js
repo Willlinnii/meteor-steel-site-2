@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useCoursework } from '../../coursework/CourseworkContext';
+import { useMultiplayer } from '../../multiplayer/MultiplayerContext';
+import { useAuth } from '../../auth/AuthContext';
 import SnakesAndLaddersGame from '../../games/snakesAndLadders/SnakesAndLaddersGame';
 import RoyalGameOfUrGame from '../../games/royalGameOfUr/RoyalGameOfUrGame';
 import SenetGame from '../../games/senet/SenetGame';
@@ -9,6 +11,8 @@ import MehenGame from '../../games/mehen/MehenGame';
 import PachisiGame from '../../games/pachisi/PachisiGame';
 import MythouseGame from '../../games/mythouse/MythouseGame';
 import MythouseCards from '../../games/mythouse/MythouseCards';
+import GameLobby from '../../games/shared/GameLobby';
+import MultiplayerWrapper from '../../games/shared/MultiplayerWrapper';
 import './GamesPage.css';
 
 const GAMES = [
@@ -108,11 +112,14 @@ export default function GamesPage() {
   const { '*': splat } = useParams();
   const navigate = useNavigate();
   const { trackElement, isElementCompleted, courseworkMode } = useCoursework();
+  const { user } = useAuth();
+  const { activeMatches, getMatchesForGame } = useMultiplayer(); // eslint-disable-line no-unused-vars
 
-  // Parse URL: /games/:gameId/:mode
+  // Parse URL: /games/:gameId/:mode or /games/:gameId/online/:matchId
   const parts = splat ? splat.split('/').filter(Boolean) : [];
   const gameId = parts[0] || null;
   const mode = parts[1] || null;
+  const matchId = mode === 'online' ? (parts[2] || null) : null;
 
   const activeGame = gameId ? GAMES.find(g => g.id === gameId) : null;
 
@@ -145,7 +152,35 @@ export default function GamesPage() {
     );
   }
 
-  // Playing a game
+  // Online multiplayer — lobby or active match
+  if (activeGame && mode === 'online') {
+    const GameComponent = GAME_COMPONENTS[activeGame.id];
+    if (GameComponent && matchId) {
+      // Active match
+      return (
+        <div className="games-page">
+          <MultiplayerWrapper
+            gameId={activeGame.id}
+            matchId={matchId}
+            GameComponent={GameComponent}
+            onExit={handleExit}
+          />
+        </div>
+      );
+    }
+    // Lobby
+    return (
+      <div className="games-page">
+        <GameLobby
+          gameId={activeGame.id}
+          gameName={activeGame.label}
+          onExit={() => navigate(`/games/${activeGame.id}`)}
+        />
+      </div>
+    );
+  }
+
+  // Playing a game (ai or local)
   if (activeGame && mode) {
     const GameComponent = GAME_COMPONENTS[activeGame.id];
     if (GameComponent && (mode === 'ai' || mode === 'local')) {
@@ -177,6 +212,10 @@ export default function GamesPage() {
               <span className="game-mode-label">Two Players</span>
               <span className="game-mode-sublabel">Hot-seat on this device</span>
             </Link>
+            <Link className="game-mode-btn game-mode-btn-online" to={`/games/${activeGame.id}/online`}>
+              <span className="game-mode-label">Online</span>
+              <span className="game-mode-sublabel">Challenge a friend</span>
+            </Link>
           </div>
         </div>
       </div>
@@ -190,6 +229,32 @@ export default function GamesPage() {
       <p className="games-page-subtitle">
         Ancient board games brought to life. Choose a game to begin.
       </p>
+
+      {/* My Matches section */}
+      {activeMatches.length > 0 && (
+        <>
+          <h2 className="games-section-title">My Matches</h2>
+          <div className="games-my-matches">
+            {activeMatches.map(match => {
+              const gameInfo = GAMES.find(g => g.id === match.gameType);
+              const opponentIdx = match.players?.[0]?.uid === user?.uid ? 1 : 0;
+              const opponent = match.players?.[opponentIdx];
+              const myTurn = match.players?.[match.currentPlayer]?.uid === user?.uid;
+              return (
+                <button
+                  key={match.id}
+                  className={`games-match-card${myTurn ? ' my-turn' : ''}`}
+                  onClick={() => navigate(`/games/${match.gameType}/online/${match.id}`)}
+                >
+                  <span className="games-match-game">{gameInfo?.label || match.gameType}</span>
+                  <span className="games-match-vs">vs @{opponent?.handle || 'opponent'}</span>
+                  <span className="games-match-turn">{match.status === 'waiting' ? 'Waiting...' : myTurn ? 'Your turn' : 'Their turn'}</span>
+                </button>
+              );
+            })}
+          </div>
+        </>
+      )}
 
       <h2 className="games-section-title">Yellow Brick Roads</h2>
       <div className="games-grid">
@@ -216,18 +281,25 @@ export default function GamesPage() {
 
       <h2 className="games-section-title">Board Games</h2>
       <div className="games-grid">
-        {GAMES.map(game => (
-          <Link
-            key={game.id}
-            className={`game-card${game.featured ? ' featured' : ''}${courseworkMode ? (isElementCompleted(`games.${game.id}.clicked`) ? ' cw-completed' : ' cw-incomplete') : ''}`}
-            to={game.externalPath || `/games/${game.id}`}
-            onClick={() => trackElement(`games.${game.id}.clicked`)}
-          >
-            <span className="game-card-title">{game.label}</span>
-            <span className="game-card-origin">{game.origin}</span>
-            <span className="game-card-desc">{game.description}</span>
-          </Link>
-        ))}
+        {GAMES.map(game => {
+          const gameMatches = getMatchesForGame(game.id);
+          const hasActiveMatch = gameMatches.length > 0;
+          return (
+            <Link
+              key={game.id}
+              className={`game-card${game.featured ? ' featured' : ''}${hasActiveMatch ? ' has-match' : ''}${courseworkMode ? (isElementCompleted(`games.${game.id}.clicked`) ? ' cw-completed' : ' cw-incomplete') : ''}`}
+              to={game.externalPath || `/games/${game.id}`}
+              onClick={() => trackElement(`games.${game.id}.clicked`)}
+            >
+              <span className="game-card-title">{game.label}</span>
+              <span className="game-card-origin">{game.origin}</span>
+              <span className="game-card-desc">{game.description}</span>
+              {hasActiveMatch && (
+                <span className="game-card-match-badge">{gameMatches.length} active</span>
+              )}
+            </Link>
+          );
+        })}
       </div>
     </div>
   );

@@ -99,6 +99,21 @@ export function ProfileProvider({ children }) {
     }
   }, [user]);
 
+  // Handle from profile data
+  const handle = profileData?.handle || null;
+
+  // Refresh profile data (e.g. after handle registration)
+  const refreshProfile = useCallback(async () => {
+    if (!user || !firebaseConfigured || !db) return;
+    try {
+      const ref = doc(db, 'users', user.uid, 'meta', 'profile');
+      const snap = await getDoc(ref);
+      setProfileData(snap.exists() ? snap.data() : null);
+    } catch (err) {
+      console.error('Failed to refresh profile:', err);
+    }
+  }, [user]);
+
   const value = {
     profileData,
     earnedRanks,
@@ -106,8 +121,10 @@ export function ProfileProvider({ children }) {
     activeCredentials,
     hasProfile,
     loaded,
+    handle,
     updateCredentials,
     completeOnboarding,
+    refreshProfile,
   };
 
   return (

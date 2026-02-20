@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../auth/AuthContext';
 import { useCoursework } from '../../coursework/CourseworkContext';
@@ -6,14 +6,48 @@ import { useWritings } from '../../writings/WritingsContext';
 import { useProfile } from '../../profile/ProfileContext';
 import { RANKS, rankProgress } from '../../profile/profileEngine';
 import ProfileChat from '../../profile/ProfileChat';
+import { checkAvailability, registerHandle } from '../../multiplayer/handleService';
 
 export default function ProfilePage() {
   const { user } = useAuth();
   const { getCourseStates, completedCourses, allCourses } = useCoursework();
-  const { earnedRanks, highestRank, activeCredentials, hasProfile, loaded: profileLoaded } = useProfile();
+  const { earnedRanks, highestRank, activeCredentials, hasProfile, loaded: profileLoaded, handle, refreshProfile } = useProfile();
   const { personalStories, loaded: writingsLoaded } = useWritings();
   const navigate = useNavigate();
   const [showChat, setShowChat] = useState(false);
+  const [handleInput, setHandleInput] = useState('');
+  const [handleStatus, setHandleStatus] = useState(null); // null | 'checking' | 'available' | 'taken' | 'error'
+  const [handleSaving, setHandleSaving] = useState(false);
+  const [showHandleEdit, setShowHandleEdit] = useState(false);
+
+  const checkHandle = useCallback(async (value) => {
+    if (!value || value.length < 3) { setHandleStatus(null); return; }
+    if (!/^[a-zA-Z0-9_-]{3,20}$/.test(value)) { setHandleStatus('format'); return; }
+    setHandleStatus('checking');
+    try {
+      const available = await checkAvailability(value);
+      setHandleStatus(available ? 'available' : 'taken');
+    } catch (err) {
+      console.error('Handle availability check failed:', err);
+      setHandleStatus('check-error');
+    }
+  }, []);
+
+  const saveHandle = useCallback(async () => {
+    if (handleStatus !== 'available' || handleSaving) return;
+    setHandleSaving(true);
+    try {
+      await registerHandle(handleInput);
+      await refreshProfile();
+      setShowHandleEdit(false);
+      setHandleInput('');
+      setHandleStatus(null);
+    } catch (err) {
+      console.error('Handle registration failed:', err);
+      setHandleStatus('save-error');
+    }
+    setHandleSaving(false);
+  }, [handleInput, handleStatus, handleSaving, refreshProfile]);
 
   const courseStates = getCourseStates();
   const activeCourses = courseStates.filter(c => c.active);
@@ -41,6 +75,47 @@ export default function ProfilePage() {
           </div>
         )}
         <div className="profile-email">{user?.email}</div>
+        {/* Handle Section */}
+        {handle && !showHandleEdit ? (
+          <div className="profile-handle">
+            <span className="profile-handle-at">@{handle}</span>
+            <button className="profile-handle-edit-btn" onClick={() => { setShowHandleEdit(true); setHandleInput(handle); }}>Change</button>
+          </div>
+        ) : (
+          <div className="profile-handle-setup">
+            {!handle && <div className="profile-handle-prompt">Set a handle for multiplayer</div>}
+            <div className="profile-handle-form">
+              <input
+                className="profile-handle-input"
+                type="text"
+                placeholder="Choose a handle..."
+                value={handleInput}
+                maxLength={20}
+                onChange={e => {
+                  const v = e.target.value;
+                  setHandleInput(v);
+                  checkHandle(v);
+                }}
+              />
+              <button
+                className="profile-handle-save-btn"
+                disabled={handleStatus !== 'available' || handleSaving}
+                onClick={saveHandle}
+              >
+                {handleSaving ? 'Saving...' : 'Save'}
+              </button>
+              {showHandleEdit && (
+                <button className="profile-handle-cancel-btn" onClick={() => { setShowHandleEdit(false); setHandleInput(''); setHandleStatus(null); }}>Cancel</button>
+              )}
+            </div>
+            {handleStatus === 'checking' && <div className="profile-handle-status">Checking...</div>}
+            {handleStatus === 'available' && <div className="profile-handle-status available">Available</div>}
+            {handleStatus === 'taken' && <div className="profile-handle-status taken">Already taken</div>}
+            {handleStatus === 'format' && <div className="profile-handle-status error">3-20 chars, letters/numbers/_/- only</div>}
+            {handleStatus === 'check-error' && <div className="profile-handle-status error">Could not check availability — check console</div>}
+            {handleStatus === 'save-error' && <div className="profile-handle-status error">Failed to save handle — check console</div>}
+          </div>
+        )}
       </div>
 
       {/* Credentials Section */}

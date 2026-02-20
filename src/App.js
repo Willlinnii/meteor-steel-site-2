@@ -1572,7 +1572,6 @@ function MythosophiaPage() {
 function RequireAdmin({ children }) {
   const { user } = useAuth();
   const adminEmail = process.env.REACT_APP_ADMIN_EMAIL;
-  console.log('[RequireAdmin]', { userEmail: user?.email, adminEmail, match: user?.email === adminEmail });
   if (!user || user.email !== adminEmail) {
     return (
       <div style={{ padding: '80px 20px', textAlign: 'center', color: 'var(--text-secondary)' }}>
