@@ -1084,12 +1084,12 @@ const SERVICES = [
   },
   {
     name: 'Google Maps',
-    url: 'https://console.cloud.google.com/apis',
-    category: 'Mapping',
-    usedFor: 'Location features',
+    url: 'https://console.cloud.google.com/google/maps-apis/home?project=mythouse-site',
+    category: 'Mapping / 360 VR',
+    usedFor: 'Street View 360 panoramas on Mythic Earth sites, Maps Embed API',
     paid: 'Free tier',
-    status: 'Configured',
-    envVars: ['REACT_APP_GOOGLE_MAPS_KEY'],
+    status: 'Active',
+    envVars: ['REACT_APP_GOOGLE_MAPS_API_KEY'],
   },
   {
     name: 'Cesium.js',
