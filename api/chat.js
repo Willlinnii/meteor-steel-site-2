@@ -571,14 +571,16 @@ function compactLibrary() {
 }
 
 function compactConstellations() {
-  const entries = Object.entries(constellationContent).map(([abbr, c]) => {
-    const cultures = constellationCultures[abbr];
-    const cultureNames = cultures
-      ? Object.entries(cultures).map(([k, v]) => `${k}: ${v}`).join(', ')
-      : '';
-    return `${c.name} (${abbr}): ${truncate(c.mythology, 100)} | Star: ${c.brightestStar} | Best: ${c.bestSeen}${cultureNames ? `\n  Cultural: ${cultureNames}` : ''}`;
-  });
-  return '## Constellations\n88 constellations with mythology, cultural names across traditions (Greek, Roman, Norse, Babylonian, Vedic, Islamic, Medieval).\n\n' + entries.join('\n');
+  // Only include constellations that have cultural name data (zodiac + prominent mythic ones)
+  // to keep token count manageable (~30 vs 88)
+  const entries = Object.entries(constellationContent)
+    .filter(([abbr]) => constellationCultures[abbr])
+    .map(([abbr, c]) => {
+      const cultures = constellationCultures[abbr];
+      const cultureNames = Object.entries(cultures).map(([k, v]) => `${k}: ${v}`).join(', ');
+      return `${c.name} (${abbr}): ${truncate(c.mythology, 80)} | Star: ${c.brightestStar} | Best: ${c.bestSeen}\n  Cultural: ${cultureNames}`;
+    });
+  return `## Constellations (${entries.length} major)\nZodiac constellations and prominent mythic constellations with cultural names across traditions (Greek, Roman, Norse, Babylonian, Vedic, Islamic, Medieval). You also know the other 58 modern constellations — ask if needed.\n\n` + entries.join('\n');
 }
 
 // --- Area knowledge loaders ---
@@ -597,6 +599,7 @@ function detectAreaFromMessage(messages) {
   if (/board game|senet|pachisi|mehen|snakes.?ladders|game of ur|mythouse game/.test(t)) return 'games';
   if (/mythic earth|sacred site|globe|delphi|oracle|pyramid|giza|stonehenge|angkor|uluru|varanasi|mount olympus|troy|gilgamesh|uruk|babylon|temple|shrine|pilgrimage/.test(t)) return 'mythic-earth';
   if (/\blibrary\b|\bbook\b|shelf|shelves|reading list|myth salon library|bollingen|recommend.*read/.test(t)) return 'library';
+  if (/story of stories|book proposal|will linn.*book|manuscript/.test(t)) return 'story-of-stories';
   return null;
 }
 
@@ -800,6 +803,9 @@ MYTHS: The Greatest Mysteries of Humanity — TV series episodes with thematic a
 
 ## Mythic Earth (the user reaches this on /mythic-earth)
 Interactive 3D globe with 45 sacred, mythic, and literary sites worldwide. Sacred sites (Delphi, Giza, Stonehenge, Uluru, Varanasi, Angkor Wat, Teotihuacan). Mythic locations (Mount Olympus, Troy, Mount Ararat, Pillars of Hercules). Literary locations with sacred text excerpts (Ithaca/Odyssey, Avalon/Le Morte d'Arthur, Cumae/Aeneid, Jerusalem/Bible, Mecca/Qur'an, Uruk/Gilgamesh). When on this page, you have a highlight_sites tool to navigate the globe to specific sites.
+
+## Story of Stories (the user reaches this on /story-of-stories)
+Will Linn's book proposal for "Story of Stories: Meteor Steel and the Monomyth." A meta-narrative exploring how the monomyth operates across cultures, how steel-forging mirrors transformation, and how story itself is the oldest technology of consciousness. 8 chapters mirroring the 8 monomyth stages.
 
 ## Myth Salon Library (the user reaches this on /library)
 A curated physical & digital library with 9 shelves: Monomythic Story, Bollingen Series, Deep Thinkers, Psychology, Spirituality & Theology, Visual Arts & Film, World Mythology, Science & Cosmos, and Music & Sound. 100+ books from Campbell, Jung, Nietzsche, Eliade, Tolkien, Frazer, Hillman, Corbin, Tarnas, and many more. Books marked "in site" link directly to in-depth theorist panels on the monomyth page.`;
