@@ -458,6 +458,72 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
   const prevMeteorSteelRef = useRef(false);
   const wheelOpenedRef = useRef(false); // eslint-disable-line no-unused-vars
 
+  // --- Pinch-to-zoom state & handlers ---
+  const [pinchTransform, setPinchTransform] = useState({ scale: 1, x: 0, y: 0 });
+  const pinchRef = useRef(null);
+  const pinchTransformRef = useRef(pinchTransform);
+  pinchTransformRef.current = pinchTransform;
+
+  useEffect(() => {
+    const el = wrapperRef.current;
+    if (!el) return;
+
+    const onTouchStart = (e) => {
+      if (e.touches.length === 2) {
+        e.preventDefault();
+        const t0 = e.touches[0], t1 = e.touches[1];
+        const dist = Math.hypot(t1.clientX - t0.clientX, t1.clientY - t0.clientY);
+        const pt = pinchTransformRef.current;
+        pinchRef.current = {
+          startDist: dist,
+          startCx: (t0.clientX + t1.clientX) / 2,
+          startCy: (t0.clientY + t1.clientY) / 2,
+          startScale: pt.scale,
+          startX: pt.x,
+          startY: pt.y,
+        };
+      }
+    };
+
+    const onTouchMove = (e) => {
+      if (e.touches.length === 2 && pinchRef.current) {
+        e.preventDefault();
+        const t0 = e.touches[0], t1 = e.touches[1];
+        const dist = Math.hypot(t1.clientX - t0.clientX, t1.clientY - t0.clientY);
+        const cx = (t0.clientX + t1.clientX) / 2;
+        const cy = (t0.clientY + t1.clientY) / 2;
+        const p = pinchRef.current;
+        const newScale = Math.min(Math.max(p.startScale * (dist / p.startDist), 1), 4);
+        setPinchTransform({
+          scale: newScale,
+          x: p.startX + (cx - p.startCx),
+          y: p.startY + (cy - p.startCy),
+        });
+      }
+    };
+
+    const onTouchEnd = (e) => {
+      if (e.touches.length < 2) {
+        pinchRef.current = null;
+        setPinchTransform(prev => prev.scale < 1.08 ? { scale: 1, x: 0, y: 0 } : prev);
+      }
+    };
+
+    el.addEventListener('touchstart', onTouchStart, { passive: false });
+    el.addEventListener('touchmove', onTouchMove, { passive: false });
+    el.addEventListener('touchend', onTouchEnd);
+    return () => {
+      el.removeEventListener('touchstart', onTouchStart);
+      el.removeEventListener('touchmove', onTouchMove);
+      el.removeEventListener('touchend', onTouchEnd);
+    };
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const pinchStyle = pinchTransform.scale > 1 ? {
+    transform: `translate(${pinchTransform.x}px, ${pinchTransform.y}px) scale(${pinchTransform.scale})`,
+    transformOrigin: 'center center',
+  } : undefined;
+
   const playThunder = useCallback(() => {
     try {
       const ctx = new (window.AudioContext || window.webkitAudioContext)();
@@ -775,7 +841,11 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
   }, [onSelectConstellation]);
 
   return (
-    <div className="orbital-diagram-wrapper" ref={wrapperRef}>
+    <div
+      className={`orbital-diagram-wrapper${pinchTransform.scale > 1 ? ' pinch-zoomed' : ''}`}
+      ref={wrapperRef}
+      style={pinchStyle}
+    >
       <svg viewBox={(showMonomyth || showFallenStarlight) ? '-50 -50 800 800' : '0 0 700 700'} className="orbital-svg" role="img" aria-label={showMedicineWheel ? "Medicine wheel diagram" : showMonomyth ? "Celestial clock with monomyth ring" : showFallenStarlight ? "Celestial clock with starlight ring" : heliocentric ? "Heliocentric orbital diagram" : "Geocentric orbital diagram with zodiac"}>
         {showMedicineWheel ? (
           <g className="medicine-wheel" onMouseMove={handleWheelMove} onMouseLeave={() => { hoveredRingRef.current = null; setHoveredRing(null); }}>
