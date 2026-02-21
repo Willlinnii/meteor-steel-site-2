@@ -51,6 +51,11 @@ const gameBookData = gameBookDataModule.default || gameBookDataModule;
 const yellowBrickRoad = require('../src/data/yellowBrickRoad.json');
 // --- Mythic Earth ---
 const mythicEarthSites = require('../src/data/mythicEarthSites.json');
+// --- Library ---
+const mythSalonLibrary = require('../src/data/mythSalonLibrary.json');
+// --- Constellations ---
+const constellationContent = require('../src/data/constellationContent.json');
+const constellationCultures = require('../src/data/constellationCultures.json');
 
 // --- Persona tone instructions per planet ---
 const PLANET_TONES = {
@@ -554,9 +559,31 @@ function compactMythicEarthSites() {
   }).join('\n');
 }
 
+function compactLibrary() {
+  const shelves = (mythSalonLibrary.shelves || []).map(shelf => {
+    const books = (shelf.books || []).map(b => {
+      const link = b.inSite ? ` [→ /monomyth?theorist=${b.panelKey}]` : '';
+      return `  ${b.author} — "${b.title}" (${b.year})${link}`;
+    }).join('\n');
+    return `### ${shelf.name}\n${truncate(shelf.description, 120)}\n${books}`;
+  });
+  return `## Myth Salon Library\nA curated library with ${(mythSalonLibrary.shelves || []).length} shelves spanning mythology, depth psychology, spirituality, film, science, and world traditions. Books marked [→] link directly to in-depth theorist panels on the monomyth page.\n\n` + shelves.join('\n\n');
+}
+
+function compactConstellations() {
+  const entries = Object.entries(constellationContent).map(([abbr, c]) => {
+    const cultures = constellationCultures[abbr];
+    const cultureNames = cultures
+      ? Object.entries(cultures).map(([k, v]) => `${k}: ${v}`).join(', ')
+      : '';
+    return `${c.name} (${abbr}): ${truncate(c.mythology, 100)} | Star: ${c.brightestStar} | Best: ${c.bestSeen}${cultureNames ? `\n  Cultural: ${cultureNames}` : ''}`;
+  });
+  return '## Constellations\n88 constellations with mythology, cultural names across traditions (Greek, Roman, Norse, Babylonian, Vedic, Islamic, Medieval).\n\n' + entries.join('\n');
+}
+
 // --- Area knowledge loaders ---
 
-const VALID_AREAS = ['celestial-clocks', 'meteor-steel', 'fallen-starlight', 'story-forge', 'mythology-channel', 'games', 'story-of-stories', 'mythic-earth'];
+const VALID_AREAS = ['celestial-clocks', 'meteor-steel', 'fallen-starlight', 'story-forge', 'mythology-channel', 'games', 'story-of-stories', 'mythic-earth', 'library'];
 
 function detectAreaFromMessage(messages) {
   const last = [...messages].reverse().find(m => m.role === 'user');
@@ -569,6 +596,7 @@ function detectAreaFromMessage(messages) {
   if (/mythology channel|episode|myths tv|myth salon/.test(t)) return 'mythology-channel';
   if (/board game|senet|pachisi|mehen|snakes.?ladders|game of ur|mythouse game/.test(t)) return 'games';
   if (/mythic earth|sacred site|globe|delphi|oracle|pyramid|giza|stonehenge|angkor|uluru|varanasi|mount olympus|troy|gilgamesh|uruk|babylon|temple|shrine|pilgrimage/.test(t)) return 'mythic-earth';
+  if (/\blibrary\b|\bbook\b|shelf|shelves|reading list|myth salon library|bollingen|recommend.*read/.test(t)) return 'library';
   return null;
 }
 
@@ -593,6 +621,7 @@ function getAreaKnowledge(area) {
         compactCalendar(),
         compactWheels(),
         compactMedicineWheelContent(),
+        compactConstellations(),
         NATAL_CHART_GUIDANCE,
       ].join('\n\n');
 
@@ -640,6 +669,9 @@ function getAreaKnowledge(area) {
 
     case 'mythic-earth':
       return compactMythicEarthSites();
+
+    case 'library':
+      return compactLibrary();
 
     default:
       return '';
@@ -767,7 +799,10 @@ MYTHS: The Greatest Mysteries of Humanity — TV series episodes with thematic a
 7 mythic board games: Snakes & Ladders (Moksha Patam — karma, liberation), Senet (Egyptian afterlife journey, 30 squares/30 days), Royal Game of Ur (oldest playable game, rosettes as divine protection), Mehen (spiral snake god, solar barque), Jackals & Hounds (palm tree of life, shortcuts as fate), Pachisi (cross-shaped cosmos, Mahabharata dice, Akbar's living board), and the Mythouse Game (7-ring spiral mountain, planetary metals, Platonic solid dice, chess-piece archetypes, lunar months).
 
 ## Mythic Earth (the user reaches this on /mythic-earth)
-Interactive 3D globe with 45 sacred, mythic, and literary sites worldwide. Sacred sites (Delphi, Giza, Stonehenge, Uluru, Varanasi, Angkor Wat, Teotihuacan). Mythic locations (Mount Olympus, Troy, Mount Ararat, Pillars of Hercules). Literary locations with sacred text excerpts (Ithaca/Odyssey, Avalon/Le Morte d'Arthur, Cumae/Aeneid, Jerusalem/Bible, Mecca/Qur'an, Uruk/Gilgamesh). When on this page, you have a highlight_sites tool to navigate the globe to specific sites.`;
+Interactive 3D globe with 45 sacred, mythic, and literary sites worldwide. Sacred sites (Delphi, Giza, Stonehenge, Uluru, Varanasi, Angkor Wat, Teotihuacan). Mythic locations (Mount Olympus, Troy, Mount Ararat, Pillars of Hercules). Literary locations with sacred text excerpts (Ithaca/Odyssey, Avalon/Le Morte d'Arthur, Cumae/Aeneid, Jerusalem/Bible, Mecca/Qur'an, Uruk/Gilgamesh). When on this page, you have a highlight_sites tool to navigate the globe to specific sites.
+
+## Myth Salon Library (the user reaches this on /library)
+A curated physical & digital library with 9 shelves: Monomythic Story, Bollingen Series, Deep Thinkers, Psychology, Spirituality & Theology, Visual Arts & Film, World Mythology, Science & Cosmos, and Music & Sound. 100+ books from Campbell, Jung, Nietzsche, Eliade, Tolkien, Frazer, Hillman, Corbin, Tarnas, and many more. Books marked "in site" link directly to in-depth theorist panels on the monomyth page.`;
 }
 
 // --- System prompt construction ---
@@ -904,6 +939,9 @@ Mythouse Games (/games):
 
 Mythic Earth (/mythic-earth):
 - [[Label|/mythic-earth]]
+
+Myth Salon Library (/library):
+- [[Label|/library]]
 
 LINK GUIDELINES:
 - Include 1-3 links per response when relevant, woven naturally into your prose.

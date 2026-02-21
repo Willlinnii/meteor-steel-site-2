@@ -61,13 +61,16 @@ export default function ChatPanel() {
     // Area override from page-level mode (e.g. monomyth/meteor-steel on celestial clocks)
     if (areaOverride) return areaOverride;
     const path = location.pathname;
-    if (path === '/metals') return 'celestial-clocks';
+    if (path.startsWith('/metals')) return 'celestial-clocks';
     if (path === '/' || path === '/monomyth') return 'meteor-steel';
     if (path === '/fallen-starlight') return 'fallen-starlight';
     if (path === '/story-forge') return 'story-forge';
     if (path === '/mythology-channel' || path.startsWith('/mythology-channel/')) return 'mythology-channel';
     if (path === '/games') return 'games';
     if (path === '/story-of-stories') return 'story-of-stories';
+    if (path === '/mythic-earth') return 'mythic-earth';
+    if (path === '/library') return 'library';
+    if (path === '/myths') return 'mythology-channel';
     return null;
   }
 

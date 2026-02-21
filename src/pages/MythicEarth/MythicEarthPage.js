@@ -1,4 +1,5 @@
 import React, { useState, useCallback, useMemo, useRef, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { Viewer, Entity, BillboardGraphics, LabelGraphics } from 'resium';
 import {
   Cartesian3, Color, VerticalOrigin, HorizontalOrigin,
@@ -6,9 +7,11 @@ import {
   ImageryLayer as CesiumImageryLayer,
   ArcGisMapServerImageryProvider,
   BoundingSphere, Cartographic,
+  Math as CesiumMath, HeadingPitchRoll,
 } from 'cesium';
 import 'cesium/Build/Cesium/Widgets/widgets.css';
 import sites from '../../data/mythicEarthSites.json';
+import { useAreaOverride } from '../../App';
 import './MythicEarthPage.css';
 
 /* ArcGIS World Imagery — high-res satellite tiles, free for display */
@@ -227,7 +230,7 @@ function SiteDetail({ site }) {
   );
 }
 
-function MythicEarthGlobe({ activeFilters, onSelectSite, onReady, highlightedSiteIds }) {
+function MythicEarthGlobe({ activeFilters, onSelectSite, onReady, highlightedSiteIds, cameraAR, vrSupported, onViewerReady }) {
   const viewerRef = useRef(null);
   const readyFired = useRef(false);
 
@@ -252,38 +255,64 @@ function MythicEarthGlobe({ activeFilters, onSelectSite, onReady, highlightedSit
     }
   }, [onSelectSite]);
 
-  // Expose flyTo methods to parent via onReady callback
+  // Expose flyTo methods + viewer to parent via onReady callback
   useEffect(() => {
     if (readyFired.current) return;
     const viewer = viewerRef.current?.cesiumElement;
-    if (!viewer || !onReady) return;
+    if (!viewer) return;
     readyFired.current = true;
 
-    onReady({
-      flyTo(site) {
-        viewer.camera.flyTo({
-          destination: Cartesian3.fromDegrees(site.lng, site.lat, 800000),
-          duration: 1.5,
-        });
-      },
-      flyToMultiple(siteList) {
-        if (siteList.length === 0) return;
-        if (siteList.length === 1) {
+    if (onViewerReady) onViewerReady(viewer);
+
+    if (onReady) {
+      onReady({
+        flyTo(site) {
           viewer.camera.flyTo({
-            destination: Cartesian3.fromDegrees(siteList[0].lng, siteList[0].lat, 800000),
+            destination: Cartesian3.fromDegrees(site.lng, site.lat, 800000),
             duration: 1.5,
           });
-          return;
-        }
-        const points = siteList.map(s => Cartesian3.fromDegrees(s.lng, s.lat));
-        const sphere = BoundingSphere.fromPoints(points);
-        viewer.camera.flyToBoundingSphere(sphere, {
-          offset: new Cartographic(0, -0.3, 0),
-          duration: 1.8,
-        });
-      },
-    });
+        },
+        flyToMultiple(siteList) {
+          if (siteList.length === 0) return;
+          if (siteList.length === 1) {
+            viewer.camera.flyTo({
+              destination: Cartesian3.fromDegrees(siteList[0].lng, siteList[0].lat, 800000),
+              duration: 1.5,
+            });
+            return;
+          }
+          const points = siteList.map(s => Cartesian3.fromDegrees(s.lng, s.lat));
+          const sphere = BoundingSphere.fromPoints(points);
+          viewer.camera.flyToBoundingSphere(sphere, {
+            offset: new Cartographic(0, -0.3, 0),
+            duration: 1.8,
+          });
+        },
+      });
+    }
   });
+
+  // Make Cesium scene transparent in AR mode
+  useEffect(() => {
+    const viewer = viewerRef.current?.cesiumElement;
+    if (!viewer) return;
+    const scene = viewer.scene;
+    if (cameraAR) {
+      scene.backgroundColor = new Color(0, 0, 0, 0);
+      if (scene.skyBox) scene.skyBox.show = false;
+      if (scene.skyAtmosphere) scene.skyAtmosphere.show = false;
+      if (scene.sun) scene.sun.show = false;
+      if (scene.moon) scene.moon.show = false;
+      scene.globe.baseColor = new Color(0, 0, 0, 0);
+    } else {
+      scene.backgroundColor = Color.BLACK;
+      if (scene.skyBox) scene.skyBox.show = true;
+      if (scene.skyAtmosphere) scene.skyAtmosphere.show = true;
+      if (scene.sun) scene.sun.show = true;
+      if (scene.moon) scene.moon.show = true;
+      scene.globe.baseColor = Color.BLACK;
+    }
+  }, [cameraAR]);
 
   return (
     <Viewer
@@ -299,6 +328,7 @@ function MythicEarthGlobe({ activeFilters, onSelectSite, onReady, highlightedSit
       sceneModePicker={false}
       geocoder={false}
       fullscreenButton={false}
+      vrButton={vrSupported || false}
       selectionIndicator={false}
       infoBox={false}
       scene3DOnly={true}
@@ -544,6 +574,138 @@ function MythicEarthPage({ embedded, onSiteSelect: onSiteSelectExternal, externa
   const detailRef = useRef(null);
   const globeApi = useRef(null);
 
+  // VR/AR state
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const [cameraAR, setCameraAR] = useState(false);
+  const [vrSupported, setVrSupported] = useState(false);
+  const videoRef = useRef(null);
+  const streamRef = useRef(null);
+  const cesiumViewerRef = useRef(null);
+  const gyroAnglesRef = useRef({ heading: 0, pitch: -0.5 });
+
+  // Register Atlas area so ChatPanel knows we're on Mythic Earth
+  const { register: registerArea } = useAreaOverride();
+  useEffect(() => {
+    if (!embedded) registerArea('mythic-earth');
+    return () => registerArea(null);
+  }, [embedded, registerArea]);
+
+  // Detect WebXR VR support
+  useEffect(() => {
+    const xr = navigator.xr;
+    if (xr && typeof xr.isSessionSupported === 'function') {
+      xr.isSessionSupported('immersive-vr').then(ok => {
+        const isMobileOrHeadset = /Mobile|Quest|Pico|Vive/i.test(navigator.userAgent);
+        setVrSupported(ok && isMobileOrHeadset);
+      }).catch(() => {});
+    }
+  }, []);
+
+  // Track fullscreen changes
+  useEffect(() => {
+    const onChange = () => setIsFullscreen(!!document.fullscreenElement);
+    document.addEventListener('fullscreenchange', onChange);
+    return () => document.removeEventListener('fullscreenchange', onChange);
+  }, []);
+
+  const toggleFullscreen = useCallback(() => {
+    if (document.fullscreenElement) {
+      document.exitFullscreen();
+    } else {
+      document.documentElement.requestFullscreen().catch(() => {});
+    }
+  }, []);
+
+  const startCameraAR = useCallback(async () => {
+    try {
+      // iOS requires user gesture for deviceorientation permission
+      if (typeof DeviceOrientationEvent !== 'undefined' &&
+          typeof DeviceOrientationEvent.requestPermission === 'function') {
+        const perm = await DeviceOrientationEvent.requestPermission();
+        if (perm !== 'granted') {
+          alert('Gyroscope permission is needed for AR mode. Please allow motion access.');
+          return;
+        }
+      }
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 720 } },
+        audio: false,
+      });
+      streamRef.current = stream;
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream;
+        videoRef.current.play();
+      }
+      setCameraAR(true);
+    } catch (err) {
+      console.warn('Camera AR failed:', err);
+      alert('Could not access camera. Make sure you allow camera access and are on HTTPS.');
+    }
+  }, []);
+
+  const stopCameraAR = useCallback(() => {
+    if (streamRef.current) {
+      streamRef.current.getTracks().forEach(t => t.stop());
+      streamRef.current = null;
+    }
+    setCameraAR(false);
+  }, []);
+
+  // Gyroscope-driven camera control in AR mode
+  useEffect(() => {
+    if (!cameraAR) return;
+    const viewer = cesiumViewerRef.current;
+    if (!viewer) return;
+
+    // Store initial camera position to preserve height
+    const startPos = viewer.camera.positionCartographic.clone();
+    const smoothing = 0.15;
+
+    const handleOrientation = (e) => {
+      if (e.alpha == null || e.beta == null) return;
+
+      // alpha: 0-360 compass heading, beta: -180 to 180 pitch, gamma: -90 to 90 roll
+      const targetHeading = CesiumMath.toRadians(e.alpha);
+      // Map beta: ~90 = looking at horizon, <90 = looking up, >90 = looking down
+      const targetPitch = CesiumMath.toRadians(Math.max(-90, Math.min(0, -(e.beta - 90))));
+
+      // Smooth interpolation
+      const angles = gyroAnglesRef.current;
+      // Handle heading wrap-around
+      let dh = targetHeading - angles.heading;
+      if (dh > Math.PI) dh -= 2 * Math.PI;
+      if (dh < -Math.PI) dh += 2 * Math.PI;
+      angles.heading += dh * smoothing;
+      angles.pitch += (targetPitch - angles.pitch) * smoothing;
+
+      viewer.camera.setView({
+        destination: Cartesian3.fromRadians(
+          startPos.longitude, startPos.latitude, startPos.height
+        ),
+        orientation: new HeadingPitchRoll(angles.heading, angles.pitch, 0),
+      });
+    };
+
+    window.addEventListener('deviceorientation', handleOrientation, true);
+    // Disable default Cesium mouse/touch interactions in AR
+    viewer.scene.screenSpaceCameraController.enableRotate = false;
+    viewer.scene.screenSpaceCameraController.enableZoom = false;
+    viewer.scene.screenSpaceCameraController.enableTilt = false;
+
+    return () => {
+      window.removeEventListener('deviceorientation', handleOrientation, true);
+      if (viewer && !viewer.isDestroyed()) {
+        viewer.scene.screenSpaceCameraController.enableRotate = true;
+        viewer.scene.screenSpaceCameraController.enableZoom = true;
+        viewer.scene.screenSpaceCameraController.enableTilt = true;
+      }
+    };
+  }, [cameraAR]);
+
+  const handleViewerReady = useCallback((viewer) => {
+    cesiumViewerRef.current = viewer;
+  }, []);
+
   const toggleFilter = useCallback((catId) => {
     setActiveFilters(prev => {
       const next = new Set(prev);
@@ -579,50 +741,99 @@ function MythicEarthPage({ embedded, onSiteSelect: onSiteSelectExternal, externa
     }
   }, [selectedSite]);
 
+  const [headerSlot, setHeaderSlot] = useState(null);
+  useEffect(() => {
+    const el = document.getElementById('mythic-earth-header-slot');
+    if (el) setHeaderSlot(el);
+  }, []);
+
   return (
-    <div className="mythic-earth-page">
-      <div className="mythic-earth-map-area">
-        <MythicEarthGlobe
-          activeFilters={activeFilters}
-          onSelectSite={handleSelectSite}
-          onReady={handleGlobeReady}
-          highlightedSiteIds={highlightedSiteIds}
-        />
+    <>
+      <div className={`mythic-earth-page${cameraAR ? ' ar-active' : ''}`}>
+        <div className="mythic-earth-map-area">
+          {cameraAR && (
+            <video
+              ref={videoRef}
+              className="mythic-earth-camera-video"
+              autoPlay
+              playsInline
+              muted
+            />
+          )}
 
-        <MythicEarthSearch
-          onSelectSite={handleSelectSite}
-          globeApi={globeApi}
-          onHighlight={handleHighlight}
-        />
+          <MythicEarthGlobe
+            activeFilters={activeFilters}
+            onSelectSite={handleSelectSite}
+            onReady={handleGlobeReady}
+            highlightedSiteIds={highlightedSiteIds}
+            cameraAR={cameraAR}
+            vrSupported={vrSupported}
+            onViewerReady={handleViewerReady}
+          />
 
-        {!embedded && (
-          <div className="mythic-earth-filters">
-            {CATEGORIES.map(cat => (
-              <button
-                key={cat.id}
-                className={`mythic-earth-filter-btn ${cat.id}${activeFilters.has(cat.id) ? ' active' : ''}`}
-                onClick={() => toggleFilter(cat.id)}
-              >
-                {cat.label}
-              </button>
-            ))}
+          {!cameraAR && (
+            <MythicEarthSearch
+              onSelectSite={handleSelectSite}
+              globeApi={globeApi}
+              onHighlight={handleHighlight}
+            />
+          )}
+
+          {!embedded && !cameraAR && (
+            <div className="mythic-earth-filters">
+              {CATEGORIES.map(cat => (
+                <button
+                  key={cat.id}
+                  className={`mythic-earth-filter-btn ${cat.id}${activeFilters.has(cat.id) ? ' active' : ''}`}
+                  onClick={() => toggleFilter(cat.id)}
+                >
+                  {cat.label}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {!embedded && !cameraAR && selectedSite && (
+          <div className="mythic-earth-detail" ref={detailRef}>
+            <button
+              className="mythic-earth-detail-close"
+              onClick={() => setSelectedSite(null)}
+              title="Close"
+            >
+              {'\u2715'}
+            </button>
+            <SiteDetail site={selectedSite} />
           </div>
         )}
       </div>
 
-      {!embedded && selectedSite && (
-        <div className="mythic-earth-detail" ref={detailRef}>
-          <button
-            className="mythic-earth-detail-close"
-            onClick={() => setSelectedSite(null)}
-            title="Close"
-          >
-            {'\u2715'}
+      {headerSlot && createPortal(
+        <>
+          <button className="mythic-earth-ctrl-btn" onClick={toggleFullscreen} title={isFullscreen ? 'Exit fullscreen' : 'Fullscreen'}>
+            {isFullscreen ? 'Exit FS' : 'Fullscreen'}
           </button>
-          <SiteDetail site={selectedSite} />
-        </div>
+          {!cameraAR ? (
+            <button className="mythic-earth-ctrl-btn" onClick={startCameraAR} title="Phone AR — camera passthrough with globe overlay">
+              Phone AR
+            </button>
+          ) : (
+            <button className="mythic-earth-ctrl-btn" onClick={stopCameraAR} title="Exit AR mode">
+              Exit AR
+            </button>
+          )}
+          {vrSupported && (
+            <button className="mythic-earth-ctrl-btn" onClick={() => {
+              const vrBtn = document.querySelector('.cesium-VRButton');
+              if (vrBtn) vrBtn.click();
+            }} title="Enter VR — stereoscopic view">
+              VR
+            </button>
+          )}
+        </>,
+        headerSlot
       )}
-    </div>
+    </>
   );
 }
 

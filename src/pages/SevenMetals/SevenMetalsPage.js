@@ -681,6 +681,10 @@ export default function SevenMetalsPage() {
   useEffect(() => {
     if (mode === 'monomyth' || mode === 'meteor-steel') {
       registerArea('meteor-steel');
+    } else if (mode === 'fallen-starlight') {
+      registerArea('fallen-starlight');
+    } else if (mode === 'story-of-stories') {
+      registerArea('story-of-stories');
     } else {
       registerArea(null); // default: celestial-clocks (from pathname)
     }
