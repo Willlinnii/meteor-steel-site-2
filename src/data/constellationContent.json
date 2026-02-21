@@ -1,0 +1,530 @@
+{
+  "And": {
+    "name": "Andromeda",
+    "mythology": "In Greek myth, Andromeda was the princess of Ethiopia, chained to a rock as a sacrifice to the sea monster Cetus to appease Poseidon's wrath. She was rescued by the hero Perseus, who wielded the severed head of Medusa to turn the beast to stone. Their love story became one of the great romances of the heavens, and the gods placed them side by side among the stars for eternity.",
+    "brightestStar": "Alpheratz (Alpha Andromedae)",
+    "bestSeen": "November"
+  },
+  "Ant": {
+    "name": "Antlia",
+    "mythology": "Antlia is a modern constellation created by the French astronomer Nicolas-Louis de Lacaille in the 1750s during his survey of the southern skies from the Cape of Good Hope. It represents the air pump, honoring the scientific instrument perfected by Robert Boyle and Denis Papin that revolutionized the study of gases and vacuums. Though it lacks ancient mythological roots, it stands as a tribute to the Age of Enlightenment's faith in scientific progress.",
+    "brightestStar": "Alpha Antliae",
+    "bestSeen": "April"
+  },
+  "Aps": {
+    "name": "Apus",
+    "mythology": "Apus was introduced by the Dutch navigators Pieter Dirkszoon Keyser and Frederick de Houtman in the late 16th century, drawn from their observations during voyages to the East Indies. It represents the bird of paradise, the exotic creature from New Guinea whose dazzling plumage so captivated European explorers that early specimens arrived without feet, leading to the myth that these birds never landed and lived their entire lives in flight. The name derives from the Greek apous, meaning 'footless.'",
+    "brightestStar": "Alpha Apodis",
+    "bestSeen": "July"
+  },
+  "Aqr": {
+    "name": "Aquarius",
+    "mythology": "Aquarius, the Water Bearer, is one of the oldest recognized constellations, associated in Babylonian astronomy with the god Ea, who brought the gift of water to humanity. In Greek myth, the figure is often identified as Ganymede, the beautiful Trojan youth abducted by Zeus in the form of an eagle to serve as cupbearer to the gods on Mount Olympus. As a zodiac sign, Aquarius governs the period of late winter rains, and its symbolism of flowing water connects to themes of purification, knowledge, and the collective spirit of humanity.",
+    "brightestStar": "Sadalsuud (Beta Aquarii)",
+    "bestSeen": "October"
+  },
+  "Aql": {
+    "name": "Aquila",
+    "mythology": "Aquila represents the mighty eagle of Zeus, the king of birds who carried the thunderbolts of the supreme god and served as his messenger. In one celebrated myth, it was this eagle that Zeus sent to carry the shepherd boy Ganymede up to Olympus. In another tradition, the eagle was placed among the stars in gratitude for its role in the Titan war, where it faithfully bore Zeus's lightning. Its brightest star, Altair, forms one vertex of the famous Summer Triangle.",
+    "brightestStar": "Altair (Alpha Aquilae)",
+    "bestSeen": "August"
+  },
+  "Ara": {
+    "name": "Ara",
+    "mythology": "Ara, the Altar, represents the sacred altar upon which the Olympian gods swore their oath of allegiance before waging war against the Titans. According to Eratosthenes, it was placed in the sky to commemorate that solemn pact, with its smoke and incense rising toward the Milky Way. The constellation sits low in the southern sky, its inverted orientation suggesting an altar whose offerings pour down toward the southern horizon, symbolizing the gods' covenant with the cosmos.",
+    "brightestStar": "Beta Arae",
+    "bestSeen": "July"
+  },
+  "Ari": {
+    "name": "Aries",
+    "mythology": "Aries represents the golden-fleeced ram sent by the god Hermes to rescue Phrixus and Helle, the children of the Boeotian king Athamas, from their murderous stepmother Ino. The ram carried them through the sky, though Helle fell into the strait that bears her name, the Hellespont. Phrixus arrived safely in Colchis, where he sacrificed the ram to Zeus and hung its golden fleece in a sacred grove, setting the stage for Jason and the Argonauts' legendary quest. As the first sign of the zodiac, Aries marks the vernal equinox and the rebirth of spring, embodying initiative, courage, and new beginnings.",
+    "brightestStar": "Hamal (Alpha Arietis)",
+    "bestSeen": "December"
+  },
+  "Aur": {
+    "name": "Auriga",
+    "mythology": "Auriga, the Charioteer, is most commonly identified with Erichthonius, the legendary king of Athens who invented the four-horse chariot and was rewarded by Zeus with a place among the stars. Some traditions associate the figure with Myrtilus, the treacherous charioteer of King Oenomaus, or with Hephaestus, the lame smith-god who crafted a chariot to carry himself across the sky. The constellation's brightest star, Capella, represents the she-goat Amalthea who nursed the infant Zeus in a cave on Crete, her horn becoming the legendary cornucopia.",
+    "brightestStar": "Capella (Alpha Aurigae)",
+    "bestSeen": "February"
+  },
+  "Boo": {
+    "name": "Bootes",
+    "mythology": "Bootes, the Herdsman, is often identified as Arcas, the son of Zeus and the nymph Callisto, who was placed in the sky to forever follow his mother, transformed into the Great Bear. Another tradition names him as Icarius, the Athenian farmer who received the gift of wine from Dionysus and was murdered by his own neighbors when they mistook their drunkenness for poisoning. His brilliant orange star Arcturus, meaning 'guardian of the bear,' was one of the first stars to be named and has guided farmers and navigators since antiquity.",
+    "brightestStar": "Arcturus (Alpha Bootis)",
+    "bestSeen": "June"
+  },
+  "Cae": {
+    "name": "Caelum",
+    "mythology": "Caelum is one of the faint southern constellations invented by Nicolas-Louis de Lacaille in the 1750s, representing an engraving chisel or burin, the tool used by artists and craftsmen to incise fine lines into metal printing plates. Though it carries no ancient myth, the chisel was a fundamental instrument of Renaissance art and science, enabling the reproduction of detailed maps, anatomical drawings, and astronomical charts that transformed European knowledge. It is one of the smallest and dimmest constellations in the sky.",
+    "brightestStar": "Alpha Caeli",
+    "bestSeen": "January"
+  },
+  "Cam": {
+    "name": "Camelopardalis",
+    "mythology": "Camelopardalis, the Giraffe, was introduced by the Dutch astronomer Petrus Plancius in 1613 to fill a large empty region near the north celestial pole. Some scholars have connected it to the biblical story of Rebecca's camel journey to meet Isaac, though this association was likely a later invention. The name itself comes from the Greek for 'camel-leopard,' the ancient term for the giraffe, which the Greeks believed was a hybrid creature combining the camel's height with the leopard's spots.",
+    "brightestStar": "Beta Camelopardalis",
+    "bestSeen": "February"
+  },
+  "Cnc": {
+    "name": "Cancer",
+    "mythology": "Cancer, the Crab, plays a small but memorable role in Greek mythology: during Heracles' battle with the many-headed Hydra of Lerna, the goddess Hera sent a giant crab to distract the hero by pinching his feet. Heracles crushed it underfoot, but Hera rewarded the creature's loyalty by placing it among the stars. As the zodiac sign governing midsummer, Cancer is associated with the summer solstice, the point where the sun reaches its highest declination and begins its retreat southward. The constellation contains the Beehive Cluster, Praesepe, known to the ancients as a celestial manger flanked by two donkeys.",
+    "brightestStar": "Al Tarf (Beta Cancri)",
+    "bestSeen": "March"
+  },
+  "CVn": {
+    "name": "Canes Venatici",
+    "mythology": "Canes Venatici, the Hunting Dogs, was created by the Polish astronomer Johannes Hevelius in 1687, representing the two dogs Asterion and Chara held on a leash by Bootes the Herdsman as they chase the Great Bear around the pole. The constellation houses the magnificent Whirlpool Galaxy and the bright star Cor Caroli, 'the Heart of Charles,' named in honor of King Charles I of England or possibly Charles II, depending on the tradition.",
+    "brightestStar": "Cor Caroli (Alpha Canum Venaticorum)",
+    "bestSeen": "May"
+  },
+  "CMa": {
+    "name": "Canis Major",
+    "mythology": "Canis Major, the Greater Dog, is the faithful hunting companion of Orion, following his master eternally across the winter sky. In one tradition, the dog is Laelaps, a magical hound that never failed to catch its prey, given as a gift from Zeus to Europa. The constellation's blazing star Sirius, the Dog Star, was the most important star in the ancient Egyptian calendar: its heliacal rising heralded the annual flooding of the Nile that renewed the farmlands, marking the Egyptian New Year and the season of abundance.",
+    "brightestStar": "Sirius (Alpha Canis Majoris)",
+    "bestSeen": "February"
+  },
+  "CMi": {
+    "name": "Canis Minor",
+    "mythology": "Canis Minor, the Lesser Dog, is sometimes identified as Maera, the faithful hound of Icarius who led his master's daughter Erigone to discover her father's murdered body, after which the grieving dog leaped into a well. In another tradition, it is the second of Orion's hunting dogs, smaller and swifter than its companion. Its brilliant star Procyon, meaning 'before the dog,' rises just ahead of Sirius and served as an early warning to ancient observers that the blazing Dog Star was about to appear.",
+    "brightestStar": "Procyon (Alpha Canis Minoris)",
+    "bestSeen": "March"
+  },
+  "Cap": {
+    "name": "Capricornus",
+    "mythology": "Capricornus, the Sea-Goat, is one of the oldest zodiac constellations, its hybrid form of a goat with a fish's tail traced back to Babylonian astronomy and the god Ea-Oannes, a creature of wisdom who emerged from the sea. In Greek myth, the constellation represents Pan, who leaped into the Nile to escape the monster Typhon and transformed his lower half into a fish while keeping his goat's head above water. As the zodiac sign of the winter solstice in antiquity, Capricornus marks the point where the sun reaches its lowest arc and begins its slow climb back toward longer days, symbolizing ambition, endurance, and the promise of eventual renewal.",
+    "brightestStar": "Deneb Algedi (Delta Capricorni)",
+    "bestSeen": "September"
+  },
+  "Car": {
+    "name": "Carina",
+    "mythology": "Carina, the Keel, was once part of the vast ancient constellation Argo Navis, the ship that carried Jason and the Argonauts on their perilous quest for the Golden Fleece. The French astronomer Nicolas-Louis de Lacaille divided the unwieldy ship into three separate constellations in the 1750s, with Carina representing the hull. Its brilliant star Canopus, the second brightest in the entire sky, was named for the legendary pilot of King Menelaus's fleet during the Trojan War and has served as a vital navigation star for southern seafarers for millennia.",
+    "brightestStar": "Canopus (Alpha Carinae)",
+    "bestSeen": "March"
+  },
+  "Cas": {
+    "name": "Cassiopeia",
+    "mythology": "Cassiopeia was the vain queen of Ethiopia who boasted that her beauty surpassed that of the Nereids, the sea nymphs attendant upon Poseidon. Enraged by her hubris, the sea god sent the monster Cetus to ravage the coast, and only the sacrifice of her daughter Andromeda could appease his wrath. As punishment for her arrogance, Cassiopeia was bound to her throne and placed in the sky, condemned to circle the north celestial pole and spend half the year hanging ignominiously upside down. Her distinctive W-shaped pattern has made her one of the most easily recognized constellations across cultures worldwide.",
+    "brightestStar": "Schedar (Alpha Cassiopeiae)",
+    "bestSeen": "November"
+  },
+  "Cen": {
+    "name": "Centaurus",
+    "mythology": "Centaurus represents Chiron, the wisest and most noble of the centaurs, who unlike his savage brethren was renowned as a healer, teacher, and mentor to heroes including Achilles, Jason, Asclepius, and Heracles. Son of the Titan Kronos and the nymph Philyra, Chiron was immortal but chose to give up his eternal life to free Prometheus from his torment, and Zeus honored his sacrifice by placing him among the stars. The constellation contains Alpha Centauri, the closest star system to our sun, a triple star just 4.37 light-years distant, as well as the spectacular globular cluster Omega Centauri.",
+    "brightestStar": "Rigil Kentaurus (Alpha Centauri)",
+    "bestSeen": "May"
+  },
+  "Cep": {
+    "name": "Cepheus",
+    "mythology": "Cepheus was the king of Ethiopia, husband of the vain Cassiopeia and father of the princess Andromeda. Caught between his wife's arrogance and Poseidon's vengeance, Cepheus reluctantly agreed to chain his own daughter to the rocks as a sacrifice to the sea monster, before Perseus arrived to save the day. The constellation contains Delta Cephei, the prototype of the Cepheid variable stars whose pulsations became one of the most important tools in measuring cosmic distances, giving this ancient king an unexpected role in modern cosmology.",
+    "brightestStar": "Alderamin (Alpha Cephei)",
+    "bestSeen": "October"
+  },
+  "Cet": {
+    "name": "Cetus",
+    "mythology": "Cetus represents the fearsome sea monster sent by Poseidon to punish Queen Cassiopeia's vanity by terrorizing the Ethiopian coast. The beast could only be appeased by the sacrifice of the princess Andromeda, who was chained to the coastal rocks until Perseus swooped down on his winged sandals and turned the creature to stone with the head of Medusa. In Mesopotamian tradition, the figure was associated with Tiamat, the primordial sea goddess of chaos. The constellation contains the remarkable variable star Mira, 'the Wonderful,' whose dramatic changes in brightness over an eleven-month cycle astonished early astronomers.",
+    "brightestStar": "Diphda (Beta Ceti)",
+    "bestSeen": "November"
+  },
+  "Cha": {
+    "name": "Chamaeleon",
+    "mythology": "Chamaeleon was introduced by the Dutch navigators Keyser and de Houtman at the end of the 16th century, based on observations made during trading voyages to the East Indies. It represents the chameleon, the remarkable lizard whose color-changing abilities and independently rotating eyes fascinated European naturalists encountering exotic tropical fauna for the first time. Tucked close to the south celestial pole, it is a small and faint constellation visible only from the Southern Hemisphere.",
+    "brightestStar": "Alpha Chamaeleontis",
+    "bestSeen": "April"
+  },
+  "Cir": {
+    "name": "Circinus",
+    "mythology": "Circinus was created by Nicolas-Louis de Lacaille in the 1750s and represents the drafting compass, the essential instrument used by architects, cartographers, and navigators to draw precise circles and measure distances on charts. Nestled beside the brilliant stars of Centaurus, it is one of the smallest constellations in the sky. Though it has no ancient mythology, the compass it honors was a cornerstone of the scientific and navigational advances that made the Age of Exploration possible.",
+    "brightestStar": "Alpha Circini",
+    "bestSeen": "June"
+  },
+  "Col": {
+    "name": "Columba",
+    "mythology": "Columba, the Dove, was established as a constellation by Petrus Plancius in the late 16th century and is traditionally associated with the dove that Noah sent from the Ark to find dry land after the great flood. Some scholars also connect it to the dove sent by the Argonauts through the Clashing Rocks of the Symplegades, testing whether their ship could safely pass. The constellation flies just south of the great hunter Orion and his hare Lepus, adding a gentle note of peace to the warlike winter sky.",
+    "brightestStar": "Phact (Alpha Columbae)",
+    "bestSeen": "February"
+  },
+  "Com": {
+    "name": "Coma Berenices",
+    "mythology": "Coma Berenices, Berenice's Hair, commemorates the historical Queen Berenice II of Egypt, who vowed to cut off her beautiful amber tresses and offer them to Aphrodite if her husband Ptolemy III returned safely from war. When the offering mysteriously vanished from the temple, the court astronomer Conon of Samos declared that the gods had been so pleased they placed the queen's hair among the stars. The constellation contains the Coma Star Cluster, a delicate scattering of stars visible to the naked eye, as well as the northern part of the Virgo Galaxy Cluster.",
+    "brightestStar": "Beta Comae Berenices",
+    "bestSeen": "May"
+  },
+  "CrA": {
+    "name": "Corona Australis",
+    "mythology": "Corona Australis, the Southern Crown, was known to the ancient Greeks, though its mythology is less well-established than its northern counterpart. Some traditions identify it as the crown placed at the feet of Sagittarius, perhaps the wreath of laurel that Dionysus placed in the sky after rescuing his mother Semele from the underworld. Others see it as the crown of the centaur Chiron, who stands nearby as the constellation Centaurus. The delicate arc of faint stars sits just below the Teapot asterism of Sagittarius.",
+    "brightestStar": "Meridiana (Alpha Coronae Australis)",
+    "bestSeen": "August"
+  },
+  "CrB": {
+    "name": "Corona Borealis",
+    "mythology": "Corona Borealis, the Northern Crown, represents the jeweled crown given by Dionysus to Ariadne, the Cretan princess who helped Theseus navigate the Labyrinth and slay the Minotaur with her famous thread. After Theseus abandoned Ariadne on the island of Naxos, Dionysus found her, fell in love, and married her, tossing her crown into the heavens where its gems became stars. The constellation's elegant semicircle of stars, anchored by the gem-like Alphecca, has been recognized as a crown or wreath by cultures from the Arabs to the Australian Aboriginals.",
+    "brightestStar": "Alphecca (Alpha Coronae Borealis)",
+    "bestSeen": "July"
+  },
+  "Crv": {
+    "name": "Corvus",
+    "mythology": "Corvus, the Crow, tells the tale of Apollo's sacred bird, sent to fetch water in a cup but who lingered by a fig tree waiting for the fruit to ripen. To explain his delay, the crow seized a water snake and brought it back, claiming the serpent had blocked the spring. Apollo saw through the lie and banished all three to the sky: the crow, the cup, and the serpent. As further punishment, Apollo turned the crow's feathers from white to black and cursed its voice to a harsh croak for eternity.",
+    "brightestStar": "Gienah (Gamma Corvi)",
+    "bestSeen": "May"
+  },
+  "Crt": {
+    "name": "Crater",
+    "mythology": "Crater, the Cup, is the vessel Apollo gave to his crow for fetching water from a sacred spring. In another tradition, it represents the mixing bowl of Dionysus, the god of wine, or the cup from which the gods drank nectar on Olympus. The constellation sits atop the back of Hydra, the great water serpent, forever out of reach of the thirsty crow Corvus perched nearby, a celestial tableau of desire and punishment.",
+    "brightestStar": "Labrum (Delta Crateris)",
+    "bestSeen": "April"
+  },
+  "Cru": {
+    "name": "Crux",
+    "mythology": "Crux, the Southern Cross, is the smallest of all 88 constellations yet one of the most culturally significant. Though its stars were visible from the Mediterranean in ancient times and may have been known to the Greeks as part of Centaurus, precession carried them below the European horizon, and the Cross was formally recognized as a separate constellation only in the 16th century by European navigators venturing south. It became the supreme navigational symbol of the Southern Hemisphere, appearing on the flags of Australia, New Zealand, Brazil, Papua New Guinea, and Samoa, and holds deep significance in Aboriginal Australian, Maori, and South American indigenous sky lore.",
+    "brightestStar": "Acrux (Alpha Crucis)",
+    "bestSeen": "May"
+  },
+  "Cyg": {
+    "name": "Cygnus",
+    "mythology": "Cygnus, the Swan, is most often identified as Zeus himself, who disguised himself as a magnificent swan to seduce Leda, queen of Sparta, from whose union Helen of Troy was born. Another tradition names the swan as Orpheus, the great musician who was transformed into a swan and placed in the sky beside his lyre after his death. The constellation's brightest star Deneb marks the tail of the swan and forms one corner of the Summer Triangle, while the star Albireo at the swan's head is celebrated as one of the finest double stars in the sky, glowing gold and blue.",
+    "brightestStar": "Deneb (Alpha Cygni)",
+    "bestSeen": "September"
+  },
+  "Del": {
+    "name": "Delphinus",
+    "mythology": "Delphinus, the Dolphin, represents the messenger sent by Poseidon to persuade the sea nymph Amphitrite to become his bride. When the clever dolphin succeeded where the god himself had failed, the grateful Poseidon placed it among the stars as a reward. In another tradition, the dolphin saved the life of the poet Arion, who was thrown overboard by pirates but carried safely to shore on the creature's back, his music having charmed it from the deep. The constellation's compact diamond shape has also been called 'Job's Coffin' in Western folk astronomy.",
+    "brightestStar": "Rotanev (Beta Delphini)",
+    "bestSeen": "September"
+  },
+  "Dor": {
+    "name": "Dorado",
+    "mythology": "Dorado, the Swordfish or Dolphinfish, was introduced by the Dutch navigators Keyser and de Houtman in the late 16th century, inspired by the brilliantly colored mahi-mahi they encountered in tropical seas during their voyages to the East Indies. The constellation is notable for containing the Large Magellanic Cloud, the Milky Way's brightest satellite galaxy, which appears as a luminous patch visible to the naked eye from southern latitudes. Within the LMC lies the Tarantula Nebula, one of the most active star-forming regions in the local universe.",
+    "brightestStar": "Alpha Doradus",
+    "bestSeen": "January"
+  },
+  "Dra": {
+    "name": "Draco",
+    "mythology": "Draco, the Dragon, is most commonly identified as Ladon, the hundred-headed serpent that guarded the golden apples in the Garden of the Hesperides, slain by Heracles as his eleventh labor. In another tradition, it is the dragon that Athena seized during the war between the gods and the giants and hurled into the sky, where it became tangled around the north celestial pole. The constellation's star Thuban served as the pole star around 2700 BCE, during the age of the Egyptian pyramids, and the descending passage of the Great Pyramid of Giza is aligned to point at it.",
+    "brightestStar": "Eltanin (Gamma Draconis)",
+    "bestSeen": "July"
+  },
+  "Equ": {
+    "name": "Equuleus",
+    "mythology": "Equuleus, the Little Horse, is the second smallest constellation in the sky and one of the most obscure of the ancient Greek groupings. It is sometimes identified as Celeris, the brother or foal of Pegasus, given by Hermes to Castor, the mortal twin of the Dioscuri. In another tradition, it represents Hippe, the daughter of the centaur Chiron, who was transformed into a horse by the gods. Only the head of the horse is visible above the horizon, as if leaping up before its larger sibling Pegasus.",
+    "brightestStar": "Kitalpha (Alpha Equulei)",
+    "bestSeen": "September"
+  },
+  "Eri": {
+    "name": "Eridanus",
+    "mythology": "Eridanus, the great celestial River, is most famously associated with the myth of Phaethon, the reckless son of Helios who lost control of the sun's chariot and scorched the earth until Zeus struck him down with a thunderbolt. Phaethon's burning body fell into the river Eridanus, where his grieving sisters, the Heliades, wept tears of amber on its banks and were transformed into poplar trees. The constellation stretches from near Orion's foot all the way to the deep southern sky, where its brilliant terminus star Achernar, meaning 'end of the river,' marks one of the brightest stars visible from Earth.",
+    "brightestStar": "Achernar (Alpha Eridani)",
+    "bestSeen": "January"
+  },
+  "For": {
+    "name": "Fornax",
+    "mythology": "Fornax was created by Nicolas-Louis de Lacaille in the 1750s and originally named Fornax Chemica, the Chemical Furnace, in tribute to the apparatus used by chemists and alchemists in their laboratories. It honors the tradition of experimental science that grew from the mystical practices of alchemy into the rigorous discipline of modern chemistry. Though faint and devoid of ancient legend, the constellation contains the Fornax Cluster, one of the richest nearby galaxy clusters, offering a deep window into the large-scale structure of the universe.",
+    "brightestStar": "Alpha Fornacis",
+    "bestSeen": "December"
+  },
+  "Gem": {
+    "name": "Gemini",
+    "mythology": "Gemini represents the Dioscuri, the divine twins Castor and Pollux, sons of Leda and brothers of Helen of Troy. Castor was mortal, fathered by King Tyndareus, while Pollux was immortal, sired by Zeus in the form of a swan. When Castor was killed in battle, Pollux begged his father to let him share his immortality, and Zeus placed them together in the sky, where they could never be separated. As a zodiac sign, Gemini governs communication, duality, and the bonds between siblings, and the twin stars Castor and Pollux have served as patron saints of sailors, believed to appear as St. Elmo's fire on ship masts during storms.",
+    "brightestStar": "Pollux (Beta Geminorum)",
+    "bestSeen": "February"
+  },
+  "Gru": {
+    "name": "Grus",
+    "mythology": "Grus, the Crane, was introduced by the Dutch navigators Keyser and de Houtman in the late 16th century, though the crane itself carried deep significance in many ancient cultures. In Greek tradition, the crane was sacred to Hermes and associated with vigilance, as cranes were said to post sentries that held stones in their claws to stay awake. In East Asian cultures, the crane symbolized longevity, wisdom, and immortality, and in Aboriginal Australian traditions, the constellation's stars were associated with the Brolga, a dancing crane of great spiritual importance.",
+    "brightestStar": "Alnair (Alpha Gruis)",
+    "bestSeen": "October"
+  },
+  "Her": {
+    "name": "Hercules",
+    "mythology": "Hercules, the great strongman of Greek mythology, was the son of Zeus and the mortal woman Alcmene, hated by Hera from the moment of his birth. Driven mad by the goddess, he slew his own family and was condemned to perform twelve impossible labors as penance, from slaying the Nemean Lion to capturing Cerberus from the underworld. Despite being the fifth-largest constellation, Hercules contains no first-magnitude stars, and his figure is often recognized by the Keystone asterism at his torso. The constellation houses the great globular cluster M13, a swarm of several hundred thousand ancient stars visible through binoculars.",
+    "brightestStar": "Kornephoros (Beta Herculis)",
+    "bestSeen": "July"
+  },
+  "Hor": {
+    "name": "Horologium",
+    "mythology": "Horologium was created by Nicolas-Louis de Lacaille in the 1750s and represents the pendulum clock, honoring the invention of Christiaan Huygens, the Dutch polymath who in 1656 built the first practical pendulum clock and revolutionized the measurement of time. Accurate timekeeping was essential for determining longitude at sea, making Huygens' invention a cornerstone of navigation and astronomy. The constellation is faint and elongated, stretching through an unremarkable region of the southern sky near Eridanus.",
+    "brightestStar": "Alpha Horologii",
+    "bestSeen": "December"
+  },
+  "Hya": {
+    "name": "Hydra",
+    "mythology": "Hydra, the Water Serpent, is the largest of all 88 constellations, stretching nearly a quarter of the way around the sky. It is most often identified as the Lernaean Hydra, the monstrous multi-headed serpent slain by Heracles as his second labor; each time he cut off a head, two more grew in its place, until his nephew Iolaus cauterized the stumps with fire. Its head lies near Cancer and its tail extends past Libra, and perched on its back sit the constellations Corvus and Crater, participants in Apollo's tale of the deceitful crow.",
+    "brightestStar": "Alphard (Alpha Hydrae)",
+    "bestSeen": "April"
+  },
+  "Hyi": {
+    "name": "Hydrus",
+    "mythology": "Hydrus, the Lesser Water Snake, was introduced by the Dutch navigators Keyser and de Houtman in the late 16th century during their charting of the southern heavens. It is sometimes said to represent one of the serpents that Heracles strangled in his cradle as an infant, an early demonstration of his divine strength. The constellation winds between the two Magellanic Clouds, the bright satellite galaxies of the Milky Way that dominate the deep southern sky.",
+    "brightestStar": "Beta Hydri",
+    "bestSeen": "December"
+  },
+  "Ind": {
+    "name": "Indus",
+    "mythology": "Indus, the Indian, was introduced by the Dutch navigators Keyser and de Houtman at the end of the 16th century, representing an indigenous person of the lands they encountered during their East Indies expeditions. Historical depictions showed the figure holding arrows or a spear, reflecting European impressions of the peoples of Madagascar, Southeast Asia, or the Americas. While the constellation carries the cultural biases of its era, it serves as a reminder of the Age of Exploration's encounters between vastly different civilizations.",
+    "brightestStar": "Alpha Indi",
+    "bestSeen": "September"
+  },
+  "Lac": {
+    "name": "Lacerta",
+    "mythology": "Lacerta, the Lizard, was introduced by the Polish astronomer Johannes Hevelius in 1687 to fill a gap between Cygnus and Andromeda. Hevelius chose a lizard because only a small creature could squeeze into the narrow space between the larger surrounding constellations. Though it lacks mythological heritage, the constellation contains BL Lacertae, the prototype of a class of active galactic nuclei called blazars, making this unassuming lizard an important landmark in the study of distant, energetic galaxies.",
+    "brightestStar": "Alpha Lacertae",
+    "bestSeen": "October"
+  },
+  "Leo": {
+    "name": "Leo",
+    "mythology": "Leo represents the Nemean Lion, a fearsome beast with an impenetrable golden hide that terrorized the valley of Nemea until Heracles strangled it to death with his bare hands as the first of his twelve labors. The hero afterward wore the lion's skin as his signature cloak, a trophy no weapon could pierce. As a zodiac constellation, Leo has been associated with royalty and the power of the sun across cultures; in Egypt, the annual flooding of the Nile coincided with the sun's passage through Leo, and the Sphinx at Giza may represent this celestial lion. Its brightest star Regulus, meaning 'little king,' sits almost exactly on the ecliptic.",
+    "brightestStar": "Regulus (Alpha Leonis)",
+    "bestSeen": "April"
+  },
+  "LMi": {
+    "name": "Leo Minor",
+    "mythology": "Leo Minor, the Little Lion, was introduced by Johannes Hevelius in 1687 to occupy the space between the larger constellations of Leo and Ursa Major. Unlike its majestic neighbor, Leo Minor has no classical mythology and is one of the few constellations whose brightest star was never assigned an alpha designation by Bayer, an oversight that has persisted for centuries. Despite its obscurity, the constellation contains several interesting deep-sky objects and serves as a quiet companion to the great celestial lion.",
+    "brightestStar": "Praecipua (46 Leonis Minoris)",
+    "bestSeen": "April"
+  },
+  "Lep": {
+    "name": "Lepus",
+    "mythology": "Lepus, the Hare, crouches at the feet of Orion the Hunter, forever fleeing from his hounds Canis Major and Canis Minor. According to one legend, the hare was placed in the sky to commemorate the devastation caused when hares were introduced to the island of Leros and multiplied so rapidly they devoured all the crops, teaching the islanders a lesson about ecological balance. In Egyptian astronomy, the constellation was associated with Osiris's boat, and in some Arabic traditions it represented the throne of the great hunter above it.",
+    "brightestStar": "Arneb (Alpha Leporis)",
+    "bestSeen": "January"
+  },
+  "Lib": {
+    "name": "Libra",
+    "mythology": "Libra, the Scales, is the only zodiac constellation representing an inanimate object, and for much of ancient history its stars were considered the claws of neighboring Scorpius. The Romans established it as an independent constellation representing the scales of justice held by Astraea, the goddess of innocence and purity who was the last immortal to leave Earth at the end of the Golden Age. As the zodiac sign of the autumn equinox, Libra embodies balance, harmony, and the equal weighing of day and night. Its two brightest stars still carry Arabic names referencing their former identity: Zubenelgenubi, 'the southern claw,' and Zubeneschamali, 'the northern claw.'",
+    "brightestStar": "Zubeneschamali (Beta Librae)",
+    "bestSeen": "June"
+  },
+  "Lup": {
+    "name": "Lupus",
+    "mythology": "Lupus, the Wolf, was known to the ancient Greeks and Romans simply as Therion, 'the Wild Animal,' impaled on a long pole carried by the neighboring centaur. Its specific identification as a wolf came later in the medieval period. Some traditions connect it to the story of King Lycaon of Arcadia, who was transformed into a wolf by Zeus as punishment for serving human flesh at a banquet for the gods, a tale that gives us the word 'lycanthropy.' The constellation lies in a rich region of the Milky Way near Scorpius and Centaurus.",
+    "brightestStar": "Alpha Lupi",
+    "bestSeen": "June"
+  },
+  "Lyn": {
+    "name": "Lynx",
+    "mythology": "Lynx was introduced by Johannes Hevelius in 1687, who reportedly chose the name because one would need the eyes of a lynx to see its faint stars. The lynx itself was an animal of symbolic importance in classical mythology: it was said to have the sharpest eyesight of any creature, and in some medieval bestiaries its gaze could penetrate solid walls. The constellation stretches as a long, faint chain of stars between Auriga and Ursa Major in a region that the ancients left uncharted.",
+    "brightestStar": "Alpha Lyncis",
+    "bestSeen": "March"
+  },
+  "Lyr": {
+    "name": "Lyra",
+    "mythology": "Lyra represents the lyre invented by Hermes from a tortoise shell and given to Apollo, who in turn gifted it to Orpheus, the greatest musician who ever lived. Orpheus's music could charm animals, move stones, and even bend the will of the gods of the underworld, where he journeyed to rescue his beloved Eurydice from death. After his tragic end at the hands of the Maenads, Zeus placed his lyre among the stars, where its brilliant star Vega, one of the brightest in the northern sky, forms the apex of the Summer Triangle and was Earth's pole star around 12,000 BCE.",
+    "brightestStar": "Vega (Alpha Lyrae)",
+    "bestSeen": "August"
+  },
+  "Men": {
+    "name": "Mensa",
+    "mythology": "Mensa, the Table Mountain, was created by Nicolas-Louis de Lacaille in the 1750s and is the only constellation named for a specific geographic feature: Table Mountain in Cape Town, South Africa, from whose slopes Lacaille conducted his pioneering survey of the southern stars. The Large Magellanic Cloud spills across its border, evoking the famous tablecloth of cloud that drapes the real mountain's summit when the southeast wind blows. Mensa is the faintest of all 88 constellations, containing no star brighter than fifth magnitude.",
+    "brightestStar": "Alpha Mensae",
+    "bestSeen": "January"
+  },
+  "Mic": {
+    "name": "Microscopium",
+    "mythology": "Microscopium was created by Nicolas-Louis de Lacaille in the 1750s and represents the compound microscope, the revolutionary optical instrument that opened the invisible world of the very small to human investigation. From Antonie van Leeuwenhoek's discovery of microorganisms to Robert Hooke's revelation of the cellular structure of life, the microscope transformed humanity's understanding of nature. The constellation is faint and inconspicuous, lying just south of Capricornus in a dim stretch of sky.",
+    "brightestStar": "Gamma Microscopii",
+    "bestSeen": "September"
+  },
+  "Mon": {
+    "name": "Monoceros",
+    "mythology": "Monoceros, the Unicorn, was introduced by the Dutch cartographer Petrus Plancius in 1613 and later popularized by Jakob Bartsch. The unicorn appears in the mythology of many cultures, from the single-horned aurochs of Mesopotamian seals to the medieval European symbol of purity and grace that could only be tamed by a virgin. Though a modern constellation without classical roots, Monoceros lies within one of the richest regions of the winter Milky Way, containing the spectacular Rosette Nebula and the Christmas Tree Cluster.",
+    "brightestStar": "Beta Monocerotis",
+    "bestSeen": "February"
+  },
+  "Mus": {
+    "name": "Musca",
+    "mythology": "Musca, the Fly, was introduced by the Dutch navigators Keyser and de Houtman in the late 16th century, originally under the name Apis, the Bee. It was later renamed Musca Australis, the Southern Fly, to distinguish it from a now-defunct Northern Fly constellation, and eventually simply Musca. Located just south of Crux, the Southern Cross, this small constellation lies within a dense and beautiful region of the southern Milky Way rich with star clusters and nebulae.",
+    "brightestStar": "Alpha Muscae",
+    "bestSeen": "May"
+  },
+  "Nor": {
+    "name": "Norma",
+    "mythology": "Norma was created by Nicolas-Louis de Lacaille in the 1750s and represents the carpenter's square or right angle, the essential tool for ensuring precise perpendicular lines in construction and draftsmanship. Lacaille originally named it l'Equerre et la Regle, the Square and Ruler, honoring the practical instruments that enabled the architectural and engineering achievements of human civilization. The constellation lies along the Milky Way between Scorpius and Lupus, in a region rich with star clusters and nebulae despite the constellation's own faintness.",
+    "brightestStar": "Gamma2 Normae",
+    "bestSeen": "July"
+  },
+  "Oct": {
+    "name": "Octans",
+    "mythology": "Octans was created by Nicolas-Louis de Lacaille in the 1750s and represents the octant, the navigational instrument invented by John Hadley in 1731 that was the forerunner of the sextant. The octant allowed sailors to measure the angle of celestial bodies above the horizon with unprecedented accuracy, revolutionizing navigation at sea. Fittingly, the constellation contains the south celestial pole, the fixed point around which the entire southern sky appears to rotate, though unlike the north pole's Polaris, Octans lacks any bright pole star to mark the spot.",
+    "brightestStar": "Nu Octantis",
+    "bestSeen": "October"
+  },
+  "Oph": {
+    "name": "Ophiuchus",
+    "mythology": "Ophiuchus, the Serpent Bearer, represents Asclepius, the legendary physician and son of Apollo who learned the secrets of life and death by observing one serpent heal another with medicinal herbs. His healing powers became so great that he could raise the dead, which alarmed Hades, god of the underworld, who persuaded Zeus to strike Asclepius down with a thunderbolt to preserve the natural order. Zeus placed both healer and serpent among the stars, and the Rod of Asclepius, a staff entwined by a single snake, remains the symbol of medicine to this day. Though the ecliptic passes through Ophiuchus, it was never included among the traditional zodiac signs.",
+    "brightestStar": "Rasalhague (Alpha Ophiuchi)",
+    "bestSeen": "July"
+  },
+  "Ori": {
+    "name": "Orion",
+    "mythology": "Orion, the great Hunter, is perhaps the most magnificent and universally recognized constellation in the sky. In Greek myth, he was a giant of extraordinary beauty and strength, a hunter so skilled he boasted he could slay every beast on Earth, prompting Gaia to send the Scorpion to humble him. In death, the gods placed Orion and the Scorpion on opposite sides of the sky so they would never meet again. His belt of three aligned stars has been recognized across nearly every human culture, from the ancient Egyptians, who saw the god Osiris, to the Norse, who called them Frigg's Distaff. The Great Orion Nebula, visible as a fuzzy patch in his sword, is one of the most spectacular stellar nurseries in the galaxy.",
+    "brightestStar": "Rigel (Beta Orionis)",
+    "bestSeen": "January"
+  },
+  "Pav": {
+    "name": "Pavo",
+    "mythology": "Pavo, the Peacock, was introduced by the Dutch navigators Keyser and de Houtman in the late 16th century. In Greek mythology, the peacock was sacred to Hera, queen of the gods, who placed the hundred eyes of her slain guardian Argus Panoptes onto the bird's magnificent tail feathers after Hermes killed him on Zeus's orders. The peacock's iridescent plumage has symbolized immortality, watchfulness, and divine beauty across cultures from ancient Greece to India, where it is the vehicle of the god Kartikeya and the national bird.",
+    "brightestStar": "Peacock (Alpha Pavonis)",
+    "bestSeen": "August"
+  },
+  "Peg": {
+    "name": "Pegasus",
+    "mythology": "Pegasus, the Winged Horse, sprang fully formed from the blood of the Gorgon Medusa when Perseus severed her head. The immortal steed was later tamed by the hero Bellerophon with the aid of a golden bridle given by Athena, and together they slew the fire-breathing Chimera. When Bellerophon arrogantly tried to ride Pegasus to Mount Olympus, Zeus sent a gadfly to sting the horse, throwing the rider back to earth, while the faithful steed continued upward to become a constellation. The Great Square of Pegasus, formed by four stars marking the horse's body, is one of autumn's most prominent asterisms and serves as a gateway to the Andromeda Galaxy.",
+    "brightestStar": "Enif (Epsilon Pegasi)",
+    "bestSeen": "October"
+  },
+  "Per": {
+    "name": "Perseus",
+    "mythology": "Perseus was the son of Zeus and the mortal Danae, conceived when the god visited her as a shower of golden light in her bronze prison. Equipped with winged sandals, a cap of invisibility, and a mirrored shield from Athena, he slew the snake-haired Gorgon Medusa by viewing her reflection to avoid her petrifying gaze. On his return, he rescued the princess Andromeda from the sea monster Cetus, turning the beast to stone with Medusa's severed head. The constellation contains the famous eclipsing binary star Algol, the 'Demon Star,' whose regular dimming the ancients noticed and associated with the blinking eye of Medusa's head held in Perseus's hand.",
+    "brightestStar": "Mirfak (Alpha Persei)",
+    "bestSeen": "December"
+  },
+  "Phe": {
+    "name": "Phoenix",
+    "mythology": "Phoenix was introduced by the Dutch navigators Keyser and de Houtman in the late 16th century, drawing on one of the most enduring symbols in world mythology. The phoenix was a sacred bird in Egyptian, Greek, and later Christian tradition, a creature of extraordinary beauty that lived for five hundred years before immolating itself on a pyre of aromatic spices, only to be reborn from its own ashes. For the Egyptians, it was the Bennu bird associated with the sun god Ra and the cycles of creation, while for the Greeks and Romans it embodied the promise of resurrection and the eternal return of life from death.",
+    "brightestStar": "Ankaa (Alpha Phoenicis)",
+    "bestSeen": "November"
+  },
+  "Pic": {
+    "name": "Pictor",
+    "mythology": "Pictor was created by Nicolas-Louis de Lacaille in the 1750s and originally named Le Chevalet du Peintre, the Painter's Easel, representing the stand on which an artist rests a canvas. Though devoid of ancient myth, the easel symbolizes the visual arts and the human impulse to capture the world in paint and pigment. The constellation is notable for containing Beta Pictoris, one of the first stars around which a circumstellar disk of dust and debris was directly imaged, offering an extraordinary glimpse into the process of planetary formation.",
+    "brightestStar": "Alpha Pictoris",
+    "bestSeen": "January"
+  },
+  "Psc": {
+    "name": "Pisces",
+    "mythology": "Pisces, the Fishes, represents Aphrodite and her son Eros, who transformed themselves into fish and tied their tails together with a cord to escape the monster Typhon as he pursued the Olympian gods along the banks of the Euphrates. The Babylonians knew this region as the Great Swallow and associated it with the fertility goddess Inanna. As the zodiac sign that encompasses the spring equinox in the current astrological age, Pisces is linked to themes of transcendence, intuition, and the dissolution of boundaries. The constellation marks the vernal equinox point, and its 'Age of Pisces' has been symbolically connected to the rise of Christianity, whose early adherents used the fish as their secret sign.",
+    "brightestStar": "Eta Piscium",
+    "bestSeen": "November"
+  },
+  "PsA": {
+    "name": "Piscis Austrinus",
+    "mythology": "Piscis Austrinus, the Southern Fish, is an ancient constellation known to the Babylonians and Greeks, often depicted drinking the water flowing from the urn of nearby Aquarius. In one tradition, it represents the great fish that saved the Syrian goddess Derceto when she fell into a lake near the Euphrates, for which the fish was placed among the stars. Its brilliant star Fomalhaut, meaning 'mouth of the fish' in Arabic, is one of the four ancient Royal Stars that marked the solstices and equinoxes around 3000 BCE, and was one of the first stars around which an exoplanet was directly imaged.",
+    "brightestStar": "Fomalhaut (Alpha Piscis Austrini)",
+    "bestSeen": "October"
+  },
+  "Pup": {
+    "name": "Puppis",
+    "mythology": "Puppis, the Stern, was once part of the immense ancient constellation Argo Navis, the ship that carried Jason and his band of heroes on their quest for the Golden Fleece. When Nicolas-Louis de Lacaille divided the great ship in the 1750s, Puppis received the stern, the commanding position from which the helmsman steered the vessel through treacherous waters. The constellation lies within a rich stretch of the Milky Way and contains numerous open star clusters, fitting for a ship sailing through a river of stars.",
+    "brightestStar": "Naos (Zeta Puppis)",
+    "bestSeen": "February"
+  },
+  "Pyx": {
+    "name": "Pyxis",
+    "mythology": "Pyxis, the Compass, was created by Nicolas-Louis de Lacaille in the 1750s, positioned near the former location of the mast of Argo Navis, the great ship of the Argonauts. Lacaille intended it to represent the mariner's compass, the instrument that revolutionized oceanic navigation and made the Age of Exploration possible. Though not part of the original Argo Navis, its placement beside the remnants of the great ship gives it an honorary connection to Jason's legendary voyage.",
+    "brightestStar": "Alpha Pyxidis",
+    "bestSeen": "March"
+  },
+  "Ret": {
+    "name": "Reticulum",
+    "mythology": "Reticulum was created by Nicolas-Louis de Lacaille in the 1750s and represents the reticle, the crosshair eyepiece fitted into his telescope that allowed him to measure precise star positions during his catalog of the southern sky. It is one of the most personal of Lacaille's instrument constellations, commemorating the specific tool that made his groundbreaking survey possible. The constellation is small and faint, lying near the Large Magellanic Cloud in the deep southern sky.",
+    "brightestStar": "Alpha Reticuli",
+    "bestSeen": "January"
+  },
+  "Sge": {
+    "name": "Sagitta",
+    "mythology": "Sagitta, the Arrow, is the third smallest constellation but one of the most ancient, recognized by the Greeks as an arrow without a bow. It is variously identified as the arrow Heracles used to slay the eagle that tormented Prometheus, the arrow Apollo used to kill the Cyclopes in revenge for Zeus's slaying of Asclepius, or one of the arrows of Eros, the god of love. Despite its tiny size, the constellation is easy to spot within the rich star fields of the summer Milky Way, flying between the constellations of the Eagle and the Swan.",
+    "brightestStar": "Gamma Sagittae",
+    "bestSeen": "August"
+  },
+  "Sgr": {
+    "name": "Sagittarius",
+    "mythology": "Sagittarius, the Archer, is often identified as the centaur Crotus, son of the goat-god Pan and the nurse Eupheme, who invented the art of archery and was placed among the stars by the Muses whom he entertained on Mount Helicon. Unlike the wise Chiron of Centaurus, Crotus was a satyr-centaur associated with the hunt, music, and the untamed wilderness. As a zodiac constellation, Sagittarius marks the direction of the center of our Milky Way galaxy, and its famous Teapot asterism points toward the densest star clouds visible from Earth. The Babylonians knew this region as Pabilsag, a winged archer god of war and the hunt, making Sagittarius one of the oldest continuously recognized sky figures.",
+    "brightestStar": "Kaus Australis (Epsilon Sagittarii)",
+    "bestSeen": "August"
+  },
+  "Sco": {
+    "name": "Scorpius",
+    "mythology": "Scorpius represents the giant scorpion sent by Gaia, the Earth goddess, to slay the boastful hunter Orion after he declared he would kill every animal on Earth. The scorpion's sting proved lethal even to the mighty giant, and both were placed on opposite sides of the sky so that when Scorpius rises in the east, Orion flees below the western horizon. As a zodiac sign, Scorpius is associated with transformation, death and rebirth, passion, and the hidden depths of the psyche. Its brilliant red supergiant Antares, whose name means 'rival of Mars,' pulses at the scorpion's heart with a diameter that would engulf the orbit of Mars if placed at the center of our solar system.",
+    "brightestStar": "Antares (Alpha Scorpii)",
+    "bestSeen": "July"
+  },
+  "Scl": {
+    "name": "Sculptor",
+    "mythology": "Sculptor was created by Nicolas-Louis de Lacaille in the 1750s, originally named l'Atelier du Sculpteur, the Sculptor's Workshop, representing the studio of a sculptor with its tools and partially completed works. Though devoid of classical mythology, it honors the ancient art of sculpture that produced some of humanity's greatest cultural achievements, from Phidias's Athena to Michelangelo's David. The constellation contains the south galactic pole and the Sculptor Galaxy (NGC 253), one of the brightest galaxies beyond the Local Group.",
+    "brightestStar": "Alpha Sculptoris",
+    "bestSeen": "November"
+  },
+  "Sct": {
+    "name": "Scutum",
+    "mythology": "Scutum, the Shield, was created by Johannes Hevelius in 1684, originally as Scutum Sobiescianum, the Shield of Sobieski, in honor of King John III Sobieski of Poland, whose cavalry charge at the 1683 Battle of Vienna helped break the Ottoman siege and was hailed as a turning point in European history. It is the only constellation named for a real historical person's heraldic device. Despite its small size, the constellation lies within one of the most spectacular regions of the summer Milky Way and contains the Wild Duck Cluster (M11), one of the richest open clusters known.",
+    "brightestStar": "Alpha Scuti",
+    "bestSeen": "August"
+  },
+  "Ser": {
+    "name": "Serpens",
+    "mythology": "Serpens, the Serpent, is the only constellation divided into two separate parts: Serpens Caput (the Head) and Serpens Cauda (the Tail), split by the body of Ophiuchus, the Serpent Bearer, who grasps the snake in his hands. The serpent represents the creature from which Asclepius learned the secrets of healing after watching one snake revive another with medicinal herbs. In ancient cultures worldwide, the serpent was a symbol of wisdom, renewal, and the eternal cycle of life, shedding its skin to be reborn. Serpens Cauda contains the Eagle Nebula (M16), home to the famous Pillars of Creation.",
+    "brightestStar": "Unukalhai (Alpha Serpentis)",
+    "bestSeen": "July"
+  },
+  "Sex": {
+    "name": "Sextans",
+    "mythology": "Sextans was created by Johannes Hevelius in 1687 and represents the astronomical sextant, the precision instrument he used for measuring star positions from his observatory in Gdansk. Hevelius placed it in the sky as a memorial after his beloved instruments were destroyed in a devastating fire that consumed his observatory in 1679, an act of devotion to the tools that had enabled his life's work. The constellation straddles the celestial equator between Leo and Hydra in an otherwise barren region of sky.",
+    "brightestStar": "Alpha Sextantis",
+    "bestSeen": "April"
+  },
+  "Tau": {
+    "name": "Taurus",
+    "mythology": "Taurus, the Bull, represents Zeus in disguise, who transformed himself into a magnificent white bull to abduct the Phoenician princess Europa. She was enchanted by the creature's beauty and climbed upon its back, whereupon Zeus swam across the sea to Crete, where she became the mother of King Minos and the first queen of Europe, a continent that bears her name. As one of the oldest zodiac constellations, the bull was sacred across the ancient world: in Mesopotamia it represented the Bull of Heaven slain by Gilgamesh, and in Egypt the great Apis bull was a living god. The Pleiades star cluster on the bull's shoulder and the V-shaped Hyades cluster forming its face have been recognized and named by cultures on every inhabited continent.",
+    "brightestStar": "Aldebaran (Alpha Tauri)",
+    "bestSeen": "January"
+  },
+  "Tel": {
+    "name": "Telescopium",
+    "mythology": "Telescopium was created by Nicolas-Louis de Lacaille in the 1750s and represents the refracting telescope, the instrument that transformed humanity's understanding of the cosmos from Galileo's first observations of Jupiter's moons to the great refractors of the 19th century. Though it lacks mythological heritage, the telescope it honors is arguably the most important scientific instrument ever invented for astronomy. The constellation is faint, lying just south of Sagittarius and Corona Australis.",
+    "brightestStar": "Alpha Telescopii",
+    "bestSeen": "August"
+  },
+  "Tri": {
+    "name": "Triangulum",
+    "mythology": "Triangulum, the Triangle, is one of the ancient Greek constellations, known to early astronomers as Deltoton for its resemblance to the Greek letter delta. Some mythographers identified it as the island of Sicily, sacred to the harvest goddess Demeter, which Zeus placed in the sky at her request to honor the island's triangular shape and its role as the breadbasket of the ancient world. The constellation contains the Triangulum Galaxy (M33), the third-largest member of our Local Group and one of the most distant objects visible to the unaided eye.",
+    "brightestStar": "Beta Trianguli",
+    "bestSeen": "December"
+  },
+  "TrA": {
+    "name": "Triangulum Australe",
+    "mythology": "Triangulum Australe, the Southern Triangle, was introduced by the Dutch navigators Keyser and de Houtman in the late 16th century as a southern counterpart to the northern Triangulum. It is brighter and more prominent than its northern namesake, with three second-magnitude stars forming a nearly equilateral triangle near the brilliant stars of Alpha and Beta Centauri. While it carries no mythology of its own, its clear geometric form has made it a useful navigational reference point in the southern sky for centuries.",
+    "brightestStar": "Atria (Alpha Trianguli Australis)",
+    "bestSeen": "July"
+  },
+  "Tuc": {
+    "name": "Tucana",
+    "mythology": "Tucana, the Toucan, was introduced by the Dutch navigators Keyser and de Houtman in the late 16th century, inspired by the exotic tropical birds with enormous colorful bills that Europeans encountered in the Americas and Southeast Asia. The toucan's striking appearance made it one of the most iconic creatures of the New World, a symbol of the biological wonders awaiting European explorers in distant lands. The constellation is notable for containing 47 Tucanae, the second brightest globular cluster in the sky, as well as the Small Magellanic Cloud.",
+    "brightestStar": "Alpha Tucanae",
+    "bestSeen": "November"
+  },
+  "UMa": {
+    "name": "Ursa Major",
+    "mythology": "Ursa Major, the Great Bear, tells the tragic story of the nymph Callisto, a hunting companion of Artemis who was seduced by Zeus and transformed into a bear by the jealous Hera. Years later, her son Arcas nearly killed her while hunting, but Zeus intervened and placed them both in the sky as the Great and Little Bears. Hera, still furious, persuaded Poseidon to forbid the bears from ever bathing in the sea, which is why these circumpolar constellations never set below the horizon at northern latitudes. The seven brightest stars form the Big Dipper, known across cultures as a plough, a wagon, and a funeral bier, and the pointer stars Dubhe and Merak have guided travelers to Polaris, the North Star, for millennia.",
+    "brightestStar": "Alioth (Epsilon Ursae Majoris)",
+    "bestSeen": "April"
+  },
+  "UMi": {
+    "name": "Ursa Minor",
+    "mythology": "Ursa Minor, the Little Bear, is identified in Greek myth as Arcas, the son of Callisto and Zeus, placed in the sky beside his mother after he nearly killed her in her bear form. In the earliest Greek tradition, the constellation was known as the Dog's Tail, and the Phoenician sailors were reportedly the first to use it for navigation, recognizing that its stars circled more tightly around the celestial pole than those of the Great Bear. Its most famous star, Polaris, currently sits less than a degree from the north celestial pole, serving as the most reliable directional marker in the northern sky, a cosmic lighthouse that has guided countless travelers, sailors, and escaped slaves following the North Star to freedom.",
+    "brightestStar": "Polaris (Alpha Ursae Minoris)",
+    "bestSeen": "June"
+  },
+  "Vel": {
+    "name": "Vela",
+    "mythology": "Vela, the Sails, was once part of the enormous ancient constellation Argo Navis, the legendary ship built by Argus with the guidance of Athena to carry Jason and his Argonauts on their quest for the Golden Fleece. When Lacaille divided the great ship in the 1750s, Vela received the billowing sails that caught the divine winds. The constellation contains the Vela Pulsar, the remnant of a supernova that exploded roughly 11,000 years ago and would have been one of the brightest objects prehistoric humans ever witnessed in the sky.",
+    "brightestStar": "Gamma Velorum (Regor)",
+    "bestSeen": "March"
+  },
+  "Vir": {
+    "name": "Virgo",
+    "mythology": "Virgo, the Maiden, is most commonly identified as Demeter, the Greek goddess of the harvest, or her daughter Persephone, whose annual descent to the underworld as the bride of Hades caused the earth to grow cold and barren in winter. In another tradition, Virgo is Astraea, the goddess of justice and innocence, the last of the immortals to abandon Earth at the end of the Golden Age, ascending to the heavens with her scales of justice, which became the neighboring constellation Libra. As the largest zodiac constellation and the second-largest in the entire sky, Virgo straddles the celestial equator in a region teeming with galaxies; the Virgo Cluster, containing over a thousand galaxies, lies at the heart of the Local Supercluster to which our own Milky Way belongs. Its brightest star Spica, meaning 'ear of grain,' represents the sheaf of wheat held in the maiden's hand.",
+    "brightestStar": "Spica (Alpha Virginis)",
+    "bestSeen": "May"
+  },
+  "Vol": {
+    "name": "Volans",
+    "mythology": "Volans, the Flying Fish, was introduced by the Dutch navigators Keyser and de Houtman in the late 16th century, inspired by the remarkable flying fish they observed leaping from tropical seas and gliding on outstretched pectoral fins during their voyages to the East Indies. These extraordinary creatures, capable of soaring over a hundred meters above the waves, astonished European sailors encountering them for the first time. The constellation lies near the Large Magellanic Cloud, between Carina and the south celestial pole.",
+    "brightestStar": "Beta Volantis",
+    "bestSeen": "March"
+  },
+  "Vul": {
+    "name": "Vulpecula",
+    "mythology": "Vulpecula, the Little Fox, was introduced by Johannes Hevelius in 1687, originally depicted as a fox carrying a goose in its jaws, under the name Vulpecula cum Ansere. The goose has since been dropped from the official name, but the image evokes Aesop's fable of the fox and the goose, a tale of cunning and greed. The constellation is notable for containing the Dumbbell Nebula (M27), the first planetary nebula ever discovered, a glowing shell of gas cast off by a dying star that offers a preview of our own sun's distant fate.",
+    "brightestStar": "Anser (Alpha Vulpeculae)",
+    "bestSeen": "September"
+  }
+}

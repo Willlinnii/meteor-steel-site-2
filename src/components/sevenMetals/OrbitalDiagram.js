@@ -1,11 +1,12 @@
 import React, { useState, useMemo, useRef, useEffect, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Body, GeoVector, Ecliptic, MoonPhase, EclipticLongitude } from 'astronomy-engine';
+import { Body, GeoVector, Ecliptic, MoonPhase, EclipticLongitude, SearchRiseSet, Observer } from 'astronomy-engine';
 import PlanetNode from './PlanetNode';
 import wheelData from '../../data/medicineWheels.json';
+import psychlesData from '../../data/monomythPsychles.json';
 import starsNorth from '../../data/starsNorth.json';
 import starsSouth from '../../data/starsSouth.json';
 import constellationsData from '../../data/constellations.json';
+import zodiacCultureData from '../../data/sevenMetalsZodiac.json';
 
 const BODY_MAP = {
   Moon: Body.Moon,
@@ -60,13 +61,13 @@ const HELIO_ORBITS = [
 const HELIO_MOON = { r: 18, speed: 13.37 };
 
 const CHAKRA_POSITIONS = [
-  { label: 'Crown',        x: 350, y: 120, color: '#9b59b6' },
-  { label: 'Third Eye',    x: 350, y: 155, color: '#6a5acd' },
-  { label: 'Throat',       x: 350, y: 190, color: '#4a9bd9' },
-  { label: 'Heart',        x: 350, y: 245, color: '#4caf50' },
-  { label: 'Solar Plexus', x: 350, y: 300, color: '#f0c040' },
-  { label: 'Sacral',       x: 350, y: 355, color: '#e67e22' },
-  { label: 'Root',         x: 350, y: 400, color: '#c04040' },
+  { label: 'Crown',        x: 350, y: 72,  color: '#9b59b6' },
+  { label: 'Third Eye',    x: 350, y: 112, color: '#6a5acd' },
+  { label: 'Throat',       x: 350, y: 152, color: '#4a9bd9' },
+  { label: 'Heart',        x: 350, y: 190, color: '#4caf50' },
+  { label: 'Solar Plexus', x: 350, y: 225, color: '#f0c040' },
+  { label: 'Sacral',       x: 350, y: 260, color: '#e67e22' },
+  { label: 'Root',         x: 350, y: 295, color: '#c04040' },
 ];
 
 const CHAKRA_ORDERINGS = {
@@ -111,6 +112,13 @@ const ZODIAC = [
   { sign: 'Aquarius',    symbol: '♒' },
   { sign: 'Pisces',      symbol: '♓' },
 ];
+
+const ZODIAC_TAROT = {
+  Aries: 'The Emperor', Taurus: 'The Hierophant', Gemini: 'The Lovers',
+  Cancer: 'The Chariot', Leo: 'Strength', Virgo: 'The Hermit',
+  Libra: 'Justice', Scorpio: 'Death', Sagittarius: 'Temperance',
+  Capricorn: 'The Devil', Aquarius: 'The Star', Pisces: 'The Moon',
+};
 
 const CARDINALS = [
   { id: 'vernal-equinox',   label: 'Vernal Equinox',   angle: 0,    symbol: '☽' },
@@ -200,6 +208,20 @@ const MW_QUADRANTS = [
   { dir: 'W', startDeg: 135, endDeg: 225 },
 ];
 
+const CYCLE_RINGS = [
+  { key: 'wakingDreaming', label: 'Wake & Sleep', cycleName: 'Wake & Sleep', innerR: 30, outerR: 70, textR: 50, fontSize: 5.5 },
+  { key: 'procreation', label: 'Procreation', cycleName: 'Procreation', innerR: 75, outerR: 115, textR: 95, fontSize: 6.5 },
+  { key: 'lifeDeath', label: 'Life & Death', cycleName: 'Mortality', innerR: 120, outerR: 160, textR: 140, fontSize: 7.5 },
+  { key: 'solarDay', label: 'Solar Day', cycleName: 'Solar Day', innerR: 165, outerR: 205, textR: 185, fontSize: 8.5 },
+  { key: 'lunarMonth', label: 'Lunar Month', cycleName: 'Lunar Month', innerR: 210, outerR: 250, textR: 230, fontSize: 9 },
+  { key: 'solarYear', label: 'Solar Year', cycleName: 'Solar Year', innerR: 255, outerR: 295, textR: 275, fontSize: 10 },
+];
+
+const PLANET_COLORS = {
+  Moon: '#c8d8e8', Mercury: '#b8b8c8', Venus: '#e8b060',
+  Sun: '#f0c040', Mars: '#d06040', Jupiter: '#a0b8c0', Saturn: '#908070',
+};
+
 function quadrantArc(cx, cy, r, startDeg, endDeg) {
   const s = (startDeg * Math.PI) / 180;
   const e = (endDeg * Math.PI) / 180;
@@ -229,14 +251,16 @@ function ensureYTApi() {
   });
 }
 
-export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPlanet, hoveredPlanet, selectedSign, onSelectSign, selectedCardinal, onSelectCardinal, selectedEarth, onSelectEarth, showCalendar, onToggleCalendar, selectedMonth, onSelectMonth, showMedicineWheel, onToggleMedicineWheel, selectedWheelItem, onSelectWheelItem, chakraViewMode, onToggleChakraView, videoUrl, onCloseVideo, ybrActive, ybrCurrentStopIndex, ybrStopProgress, ybrJourneySequence, onToggleYBR, ybrAutoStart, showClock, onToggleClock }) {
-  const navigate = useNavigate();
+export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPlanet, hoveredPlanet, selectedSign, onSelectSign, selectedCardinal, onSelectCardinal, selectedEarth, onSelectEarth, showCalendar, onToggleCalendar, selectedMonth, onSelectMonth, showMedicineWheel, onToggleMedicineWheel, selectedWheelItem, onSelectWheelItem, chakraViewMode, onToggleChakraView, videoUrl, onCloseVideo, ybrActive, ybrCurrentStopIndex, ybrStopProgress, ybrJourneySequence, onToggleYBR, ybrAutoStart, clockMode, onToggleClock, showMythicEarth, onToggleMythicEarth, showMonomyth, showMeteorSteel, monomythStages, selectedMonomythStage, onSelectMonomythStage, onToggleMonomyth, monomythModel, showCycles, onSelectCycleSegment, activeCulture, showFallenStarlight, showStoryOfStories, onToggleStarlight, starlightStages, selectedStarlightStage, onSelectStarlightStage, selectedConstellation, onSelectConstellation }) {
   const wrapperRef = useRef(null);
   const [tooltip, setTooltip] = useState(null);
 
   // --- Analog clock state & effects ---
+  const showClock = !!clockMode;
   const [clockTime, setClockTime] = useState({ h: 0, m: 0, s: 0 });
   const clockTzRef = useRef(null);
+
+  const [geoLocation, setGeoLocation] = useState(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -244,8 +268,49 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
       .then(r => r.json())
       .then(data => { if (!cancelled && data.timezone) clockTzRef.current = data.timezone; })
       .catch(() => {});
+    fetch('https://ipwho.is/')
+      .then(r => r.json())
+      .then(data => {
+        if (!cancelled && data.latitude != null && data.longitude != null) {
+          setGeoLocation({ lat: data.latitude, lon: data.longitude });
+        }
+      })
+      .catch(() => {});
     return () => { cancelled = true; };
   }, []);
+
+  // Sunrise/sunset times for the 24h clock
+  const sunriseSunset = useMemo(() => {
+    if (clockMode !== '24h' || !geoLocation) return null;
+    try {
+      const obs = new Observer(geoLocation.lat, geoLocation.lon, 0);
+      const now = new Date();
+      const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      const rise = SearchRiseSet(Body.Sun, obs, 1, startOfDay, 1);
+      const set = SearchRiseSet(Body.Sun, obs, -1, startOfDay, 1);
+      if (!rise || !set) return null;
+      const toLocalHours = (astroTime) => {
+        const d = astroTime.date;
+        const tz = clockTzRef.current;
+        if (tz) {
+          const fmt = new Intl.DateTimeFormat('en-US', { timeZone: tz, hour: 'numeric', minute: 'numeric', hour12: false });
+          const parts = fmt.formatToParts(d);
+          const h = parseInt(parts.find(p => p.type === 'hour')?.value || '0', 10);
+          const m = parseInt(parts.find(p => p.type === 'minute')?.value || '0', 10);
+          return h + m / 60;
+        }
+        return d.getHours() + d.getMinutes() / 60;
+      };
+      const riseH = toLocalHours(rise);
+      const setH = toLocalHours(set);
+      const fmtTime = (h) => {
+        const hr = Math.floor(h);
+        const mn = Math.round((h - hr) * 60);
+        return `${hr}:${mn.toString().padStart(2, '0')}`;
+      };
+      return { riseHours: riseH, setHours: setH, riseLabel: fmtTime(riseH), setLabel: fmtTime(setH) };
+    } catch (e) { console.warn('sunrise/sunset calc failed:', e); return null; }
+  }, [clockMode, geoLocation]);
 
   useEffect(() => {
     if (!showClock) return;
@@ -388,6 +453,8 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
   const [hoveredRing, setHoveredRing] = useState(null);
   const hoveredRingRef = useRef(null);
   const [stormFlash, setStormFlash] = useState(false);
+  const [meteorShower, setMeteorShower] = useState(false);
+  const prevMeteorSteelRef = useRef(false);
   const wheelOpenedRef = useRef(false);
 
   const playThunder = useCallback(() => {
@@ -430,6 +497,16 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
       source.onended = () => ctx.close();
     } catch (e) { /* audio not available */ }
   }, []);
+
+  // Trigger meteor shower animation when entering meteor steel mode
+  useEffect(() => {
+    if (showMeteorSteel && !prevMeteorSteelRef.current) {
+      setMeteorShower(true);
+      const t = setTimeout(() => setMeteorShower(false), 3000);
+      return () => clearTimeout(t);
+    }
+    prevMeteorSteelRef.current = showMeteorSteel;
+  }, [showMeteorSteel]);
 
   const triggerStormFlash = useCallback(() => {
     if (stormFlash) return;
@@ -536,14 +613,14 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
     };
   }, [aligned, livePositions, heliocentric, chakraViewMode]);
 
-  // When calendar/clock mode is activated, switch to heliocentric with live positions
+  // When calendar/clock mode is activated, switch view mode
   useEffect(() => {
     if (showCalendar || showClock) {
-      setHeliocentric(true);
+      setHeliocentric(clockMode !== '24h');
       setLivePositions(false);
       setAligned(false);
     }
-  }, [showCalendar, showClock]);
+  }, [showCalendar, showClock, clockMode]);
 
   // Auto-align when Yellow Brick Road activates
   useEffect(() => {
@@ -577,6 +654,42 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
   }, [heliocentric]);
 
   const moonPhaseAngle = useMemo(() => MoonPhase(new Date()), []);
+
+  // Live geocentric planet angles for 24h clock mode
+  // Each planet orbits once per 24h (like the sun), offset by its real ecliptic longitude difference from the sun
+  const geoClockAngles = useMemo(() => {
+    if (clockMode !== '24h') return null;
+    const sunLon = getEclipticLongitude('Sun');
+    const sunClockDeg = clockTime.h * 15 + clockTime.m * 0.25 + 90; // sun's clock angle (matches hour hand)
+    const angles = {};
+    for (const planet of Object.keys(BODY_MAP)) {
+      if (planet === 'Sun') continue; // Sun rides the hour hand
+      const lon = getEclipticLongitude(planet);
+      angles[planet] = sunClockDeg + (lon - sunLon); // same daily rotation, real angular offset
+    }
+    return angles;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [clockMode, clockTime]); // recompute each second when clock ticks
+
+  // Ecliptic longitudes for cycle rings (Solar Year ring + Lunar Month ring)
+  const eclipticAngles = useMemo(() => {
+    if (!showCycles) return null;
+    const angles = {};
+    for (const planet of Object.keys(BODY_MAP)) {
+      angles[planet] = -getEclipticLongitude(planet);
+    }
+    return angles;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [showCycles, clockTime]);
+
+  // Rotation for zodiac/month rings in 24h mode so Sun's sign aligns with hour hand
+  const zodiacRotationDeg = useMemo(() => {
+    if (chakraViewMode || showMonomyth) return 0; // static zodiac in body/monomyth view
+    if (clockMode !== '24h') return 0;
+    const sunLon = getEclipticLongitude('Sun');
+    const hDeg24 = clockTime.h * 15 + clockTime.m * 0.25 + 90;
+    return hDeg24 + sunLon;
+  }, [clockMode, clockTime, chakraViewMode, showMonomyth]);
 
   const starPositionsNorth = useMemo(() =>
     starsNorth.map(([ra, dec, mag]) => ({ ...starToSvg(ra, dec), r: starRadius(mag), o: starOpacity(mag) })), []
@@ -637,22 +750,6 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
   const handleVideoPrev = useCallback(() => { if (videoPlayerRef.current?.previousVideo) videoPlayerRef.current.previousVideo(); }, []);
   const handleVideoNext = useCallback(() => { if (videoPlayerRef.current?.nextVideo) videoPlayerRef.current.nextVideo(); }, []);
 
-  // Cycle: earth-centered → heliocentric → live positions → aligned → earth-centered
-  const cycleOrbitalMode = () => {
-    if (!aligned && !livePositions && !heliocentric) {
-      setHeliocentric(true);
-    } else if (heliocentric) {
-      setHeliocentric(false);
-      setLivePositions(true);
-    } else if (livePositions) {
-      setLivePositions(false);
-      setAligned(true);
-    } else {
-      setAligned(false);
-    }
-  };
-
-  const cycleStarMap = () => setStarMapMode(p => p === 'none' ? 'north' : p === 'north' ? 'south' : 'none');
 
   const handleConstellationOver = useCallback((e) => {
     const cid = e.target.dataset.cid;
@@ -669,9 +766,16 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
     }
   }, []);
 
+  const handleConstellationClick = useCallback((e) => {
+    const cid = e.target.dataset.cid;
+    if (cid && onSelectConstellation) {
+      onSelectConstellation(cid);
+    }
+  }, [onSelectConstellation]);
+
   return (
     <div className="orbital-diagram-wrapper" ref={wrapperRef}>
-      <svg viewBox="0 0 700 700" className="orbital-svg" role="img" aria-label={showMedicineWheel ? "Medicine wheel diagram" : heliocentric ? "Heliocentric orbital diagram" : "Geocentric orbital diagram with zodiac"}>
+      {!showMythicEarth && <svg viewBox={(showMonomyth || showFallenStarlight) ? '-50 -50 800 800' : '0 0 700 700'} className="orbital-svg" role="img" aria-label={showMedicineWheel ? "Medicine wheel diagram" : showMonomyth ? "Celestial clock with monomyth ring" : showFallenStarlight ? "Celestial clock with starlight ring" : heliocentric ? "Heliocentric orbital diagram" : "Geocentric orbital diagram with zodiac"}>
         {showMedicineWheel ? (
           <g className="medicine-wheel" onMouseMove={handleWheelMove} onMouseLeave={() => { hoveredRingRef.current = null; setHoveredRing(null); }}>
             {/* Quadrant background sectors */}
@@ -912,19 +1016,22 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
             <stop offset="100%" stopColor="#1a3a3a" stopOpacity="0" />
           </radialGradient>
 
-          {/* Arc paths for zodiac text */}
-          {ZODIAC.map((z, i) => {
-            // Each sign occupies 30°, counter-clockwise from east (0°)
-            // In SVG coords, CCW visually = negative angles
-            const startBoundary = -(i * 30);       // boundary closer to 0°
-            const endBoundary = -(i * 30 + 30);    // boundary further from 0°
-            // Inset 2° from dividers so text doesn't touch lines
-            const inset = 2;
+        </defs>
 
-            // Flip overrides: Aries (0) and Virgo (5) use opposite direction
-            const flipZodiac = i === 0 || i === 5;
-            // Top half (signs 0–5): reverse path, unless flipped
-            if (i <= 5 && !flipZodiac) {
+        {/* Zodiac + month rings — rotated in 24h mode so Sun's sign aligns with hour hand */}
+        <g transform={zodiacRotationDeg ? `rotate(${zodiacRotationDeg}, ${CX}, ${CY})` : undefined}>
+          {/* Arc paths for zodiac text (inside rotated group so textPath follows rotation) */}
+          {ZODIAC.map((z, i) => {
+            const startBoundary = -(i * 30);
+            const endBoundary = -(i * 30 + 30);
+            const inset = 2;
+            // Determine if sign is in upper or lower half after rotation
+            const centerAngle = -(i * 30 + 15);
+            const effectiveAngle = ((centerAngle + zodiacRotationDeg) % 360 + 360) % 360;
+            // Upper half (text reads CW): effectiveAngle 181-360 (sin < 0 in SVG)
+            // Lower half (text reads CCW): effectiveAngle 1-180 (sin > 0 in SVG)
+            const isUpper = effectiveAngle > 180 || effectiveAngle === 0;
+            if (isUpper) {
               return (
                 <path
                   key={`zpath-${z.sign}`}
@@ -934,17 +1041,6 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
                 />
               );
             }
-            if (i <= 5 && flipZodiac) {
-              return (
-                <path
-                  key={`zpath-${z.sign}`}
-                  id={`zpath-${z.sign}`}
-                  d={arcPath(CX, CY, ZODIAC_TEXT_R, startBoundary - inset, endBoundary + inset, 0)}
-                  fill="none"
-                />
-              );
-            }
-            // Bottom half (signs 6–11): normal path direction
             return (
               <path
                 key={`zpath-${z.sign}`}
@@ -955,23 +1051,20 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
             );
           })}
           {/* Arc paths for month text */}
-          {showCalendar && MONTHS.map((m, i) => {
+          {(showCalendar || showClock) && !chakraViewMode && !showCycles && MONTHS.map((m, i) => {
             const startBoundary = -(i * 30) + MONTH_OFFSET;
             const endBoundary = -(i * 30 + 30) + MONTH_OFFSET;
             const inset = 2;
-            // Determine which half needs reversed text (bottom = SVG y positive)
-            const midAngle = (startBoundary + endBoundary) / 2;
-            const normMid = ((midAngle % 360) + 360) % 360;
-            const isBottom = normMid > 0 && normMid < 180;
-            // Flip override: September (8) uses opposite direction
-            const flipMonth = i === 8;
-            const useNormal = flipMonth ? !isBottom : isBottom;
-            if (useNormal) {
+            // Determine if month is in upper or lower half after rotation
+            const centerAngle = (startBoundary + endBoundary) / 2;
+            const effectiveAngle = ((centerAngle + zodiacRotationDeg) % 360 + 360) % 360;
+            const isUpper = effectiveAngle > 180 || effectiveAngle === 0;
+            if (isUpper) {
               return (
                 <path
                   key={`mpath-${m}`}
                   id={`mpath-${m}`}
-                  d={arcPath(CX, CY, MONTH_TEXT_R, startBoundary - inset, endBoundary + inset, 0)}
+                  d={arcPath(CX, CY, MONTH_TEXT_R, endBoundary + inset, startBoundary - inset, 1)}
                   fill="none"
                 />
               );
@@ -980,15 +1073,14 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
               <path
                 key={`mpath-${m}`}
                 id={`mpath-${m}`}
-                d={arcPath(CX, CY, MONTH_TEXT_R, endBoundary + inset, startBoundary - inset, 1)}
+                d={arcPath(CX, CY, MONTH_TEXT_R, startBoundary - inset, endBoundary + inset, 0)}
                 fill="none"
               />
             );
           })}
-        </defs>
 
         {/* Month calendar ring (inside zodiac) */}
-        {showCalendar && (
+        {(showCalendar || showClock) && !chakraViewMode && !showCycles && (
           <g className="month-ring" style={{ opacity: 1, transition: 'opacity 0.4s ease' }}>
             <circle cx={CX} cy={CY} r={MONTH_RING_INNER} fill="none" stroke="rgba(100, 180, 220, 0.22)" strokeWidth="0.8" />
             <circle cx={CX} cy={CY} r={MONTH_RING_OUTER} fill="none" stroke="rgba(100, 180, 220, 0.22)" strokeWidth="0.8" />
@@ -1055,38 +1147,6 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
           </g>
         )}
 
-        {/* Analog clock overlay — hour numbers + hands */}
-        {showClock && showCalendar && (() => {
-          const CLOCK_NUM_R = 240;
-          const hourAngles = Array.from({ length: 12 }, (_, i) => {
-            const num = i === 0 ? 12 : i;
-            const deg = i * 30 - 90; // 12 at top
-            const rad = (deg * Math.PI) / 180;
-            return { num, x: CX + CLOCK_NUM_R * Math.cos(rad), y: CY + CLOCK_NUM_R * Math.sin(rad) };
-          });
-          const sDeg = clockTime.s * 6 - 90;
-          const mDeg = clockTime.m * 6 + clockTime.s * 0.1 - 90;
-          const hDeg = (clockTime.h % 12) * 30 + clockTime.m * 0.5 - 90;
-          const hand = (deg, len, width, color) => {
-            const rad = (deg * Math.PI) / 180;
-            return <line x1={CX} y1={CY} x2={CX + len * Math.cos(rad)} y2={CY + len * Math.sin(rad)} stroke={color} strokeWidth={width} strokeLinecap="round" />;
-          };
-          return (
-            <g className="clock-overlay">
-              {hourAngles.map(({ num, x, y }) => (
-                <text key={`clk-${num}`} x={x} y={y} textAnchor="middle" dominantBaseline="central"
-                  fill="rgba(139, 195, 170, 0.95)" fontSize="14" fontFamily="Cinzel, serif" fontWeight="600">
-                  {num}
-                </text>
-              ))}
-              {hand(hDeg, 140, 3.5, 'rgba(201, 169, 97, 0.95)')}
-              {hand(mDeg, 200, 2.5, 'rgba(201, 169, 97, 0.95)')}
-              {hand(sDeg, 230, 1, 'rgba(220, 130, 65, 0.95)')}
-              <circle cx={CX} cy={CY} r={5} fill="rgba(201, 169, 97, 0.95)" />
-            </g>
-          );
-        })()}
-
         {/* Zodiac band — two concentric circles */}
         <circle cx={CX} cy={CY} r={ZODIAC_INNER_R} fill="none" stroke="rgba(201, 169, 97, 0.18)" strokeWidth="0.8" />
         <circle cx={CX} cy={CY} r={ZODIAC_OUTER_R} fill="none" stroke="rgba(201, 169, 97, 0.18)" strokeWidth="0.8" />
@@ -1128,10 +1188,20 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
           const rad = (centerAngle * Math.PI) / 180;
           const hx = CX + ZODIAC_TEXT_R * Math.cos(rad);
           const hy = CY + ZODIAC_TEXT_R * Math.sin(rad);
-          const color = isSelected ? '#f5d050' : 'rgba(230, 200, 90, 0.75)';
+          const color = isSelected ? '#f5d050' : showMonomyth ? 'rgba(230, 200, 90, 0.5)' : 'rgba(230, 200, 90, 0.75)';
+
+          // Culture-specific display name (strip parenthetical suffixes; use tarot card names for Tarot)
+          const cultureKey = activeCulture ? activeCulture.toLowerCase() : null;
+          const rawName = cultureKey === 'tarot'
+            ? (ZODIAC_TAROT[z.sign] || z.sign)
+            : (zodiacCultureData.find(d => d.sign === z.sign)?.cultures?.[cultureKey]?.name || z.sign);
+          const displayName = rawName.replace(/\s*\(.*\)/, '').trim();
+          const labelSize = displayName.length > 14 ? 12 : 15;
 
           // Position glyph along the arc, before the sign name in reading direction
-          const glyphAngularOffset = i <= 5 ? 9 : -9;
+          const effectiveAngle = ((centerAngle + zodiacRotationDeg) % 360 + 360) % 360;
+          const isUpper = effectiveAngle > 180 || effectiveAngle === 0;
+          const glyphAngularOffset = isUpper ? 9 : -9;
           const glyphAngleDeg = centerAngle + glyphAngularOffset;
           const gr = (glyphAngleDeg * Math.PI) / 180;
           const gx = CX + ZODIAC_TEXT_R * Math.cos(gr);
@@ -1156,17 +1226,17 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
               </g>
               <text
                 fill={color}
-                fontSize="15"
+                fontSize={labelSize}
                 fontFamily="Cinzel, serif"
                 fontWeight={isSelected ? '700' : '500'}
                 letterSpacing="0.5"
               >
                 <textPath
                   href={`#zpath-${z.sign}`}
-                  startOffset="60%"
+                  startOffset="50%"
                   textAnchor="middle"
                 >
-                  {z.sign}
+                  {displayName}
                 </textPath>
               </text>
             </g>
@@ -1212,189 +1282,672 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
                   <animate attributeName="opacity" values="0.5;0.2;0.5" dur="2s" repeatCount="indefinite" />
                 </circle>
               )}
-              {/* Label */}
-              <text
-                x={lx}
-                y={ly}
-                textAnchor={anchor}
-                dominantBaseline="central"
-                fill={isSelected ? '#f5d050' : 'rgba(230, 200, 90, 0.6)'}
-                fontSize="8"
-                fontFamily="Cinzel, serif"
-                fontWeight={isSelected ? '700' : '400'}
-                letterSpacing="0.5"
-                style={{ transition: 'fill 0.3s' }}
-              >
-                {c.label}
-              </text>
+              {/* Label — hidden when monomyth/starlight ring is active (ring covers that space) */}
+              {!showMonomyth && !showFallenStarlight && (
+                <text
+                  x={lx}
+                  y={ly}
+                  textAnchor={anchor}
+                  dominantBaseline="central"
+                  fill={isSelected ? '#f5d050' : 'rgba(230, 200, 90, 0.6)'}
+                  fontSize="8"
+                  fontFamily="Cinzel, serif"
+                  fontWeight={isSelected ? '700' : '400'}
+                  letterSpacing="0.5"
+                  style={{ transition: 'fill 0.3s' }}
+                >
+                  {c.label}
+                </text>
+              )}
             </g>
           );
         })}
 
+        </g>{/* end zodiac/month rotated group */}
+
+        {/* Monomyth outer ring — 8 stages counter-clockwise, Surface at noon (top), Nadir at midnight (bottom) */}
+        {showMonomyth && monomythStages && (() => {
+          const MONO_INNER_R = 348;
+          const MONO_OUTER_R = 388;
+          const MONO_TEXT_R = 368;
+          const SLICE_DEG = 360 / monomythStages.length; // 45°
+
+          // Counter-clockwise: stage i centered at -90 - i*45
+          // Surface(0)=-90° (top/noon), Calling(1)=-135°, Crossing(2)=-180°,
+          // Initiating(3)=-225°, Nadir(4)=-270°/90° (bottom/midnight),
+          // Return(5)=-315°, Arrival(6)=0° (right), Renewal(7)=-45° (upper-right)
+          const stageCenter = (i) => -90 - i * SLICE_DEG;
+          // Dividers sit at segment boundaries (offset half a slice from centers)
+          const dividerAngle = (i) => -90 + SLICE_DEG / 2 - i * SLICE_DEG;
+
+          return (
+            <g className="monomyth-ring">
+              {/* Ring circles */}
+              <circle cx={CX} cy={CY} r={MONO_INNER_R} fill="none" stroke="rgba(232, 192, 128, 0.22)" strokeWidth="0.8" />
+              <circle cx={CX} cy={CY} r={MONO_OUTER_R} fill="none" stroke="rgba(232, 192, 128, 0.22)" strokeWidth="0.8" />
+
+              {/* 8 divider lines at segment boundaries */}
+              {monomythStages.map((_, i) => {
+                const angle = dividerAngle(i);
+                const rad = (angle * Math.PI) / 180;
+                return (
+                  <line
+                    key={`mono-div-${i}`}
+                    x1={CX + MONO_INNER_R * Math.cos(rad)} y1={CY + MONO_INNER_R * Math.sin(rad)}
+                    x2={CX + MONO_OUTER_R * Math.cos(rad)} y2={CY + MONO_OUTER_R * Math.sin(rad)}
+                    stroke="rgba(232, 192, 128, 0.25)"
+                    strokeWidth="0.6"
+                  />
+                );
+              })}
+
+              {/* Arc paths for text + clickable labels (counter-clockwise) */}
+              {monomythStages.map((stage, i) => {
+                const center = stageCenter(i);
+                const cwEdge = center + SLICE_DEG / 2;   // clockwise boundary (higher angle)
+                const ccwEdge = center - SLICE_DEG / 2;  // counter-clockwise boundary (lower angle)
+                const isSelected = selectedMonomythStage === stage.id;
+
+                // Determine text direction: upper half → CW arc, lower half → CCW arc
+                const effectiveAngle = ((center % 360) + 360) % 360;
+                const isUpper = effectiveAngle > 180 || effectiveAngle === 0;
+                const inset = 2;
+
+                const pathId = `monopath-${stage.id}`;
+                // Upper half: path from ccwEdge to cwEdge (sweep=1 = CW), text reads L→R
+                // Lower half: path from cwEdge to ccwEdge (sweep=0 = CCW), text reads L→R upside-up
+                const pathD = isUpper
+                  ? arcPath(CX, CY, MONO_TEXT_R, ccwEdge + inset, cwEdge - inset, 1)
+                  : arcPath(CX, CY, MONO_TEXT_R, cwEdge - inset, ccwEdge + inset, 0);
+
+                // Hit target center
+                const cRad = (center * Math.PI) / 180;
+                const hx = CX + MONO_TEXT_R * Math.cos(cRad);
+                const hy = CY + MONO_TEXT_R * Math.sin(cRad);
+
+                // Selected highlight: segment arc (inner CCW to outer CW back)
+                const cwRad = (cwEdge * Math.PI) / 180;
+                const ccwRad = (ccwEdge * Math.PI) / 180;
+
+                return (
+                  <g
+                    key={stage.id}
+                    className={`monomyth-stage${isSelected ? ' active' : ''}`}
+                    onClick={() => onSelectMonomythStage && onSelectMonomythStage(isSelected ? null : stage.id)}
+                    style={{ cursor: 'pointer' }}
+                  >
+                    {/* Segment highlight background */}
+                    {isSelected && (
+                      <path
+                        d={`M ${CX + MONO_INNER_R * Math.cos(cwRad)},${CY + MONO_INNER_R * Math.sin(cwRad)} A ${MONO_INNER_R},${MONO_INNER_R} 0 0,0 ${CX + MONO_INNER_R * Math.cos(ccwRad)},${CY + MONO_INNER_R * Math.sin(ccwRad)} L ${CX + MONO_OUTER_R * Math.cos(ccwRad)},${CY + MONO_OUTER_R * Math.sin(ccwRad)} A ${MONO_OUTER_R},${MONO_OUTER_R} 0 0,1 ${CX + MONO_OUTER_R * Math.cos(cwRad)},${CY + MONO_OUTER_R * Math.sin(cwRad)} Z`}
+                        fill="rgba(232, 192, 128, 0.12)"
+                      />
+                    )}
+                    {/* Hit target */}
+                    <circle cx={hx} cy={hy} r="20" fill="transparent" />
+                    {/* Text arc path */}
+                    <path id={pathId} d={pathD} fill="none" />
+                    {/* Pulse ring on selected */}
+                    {isSelected && (
+                      <circle cx={hx} cy={hy} r="14" fill="none" stroke="rgba(232, 192, 128, 0.5)" strokeWidth="0.8">
+                        <animate attributeName="r" values="12;16;12" dur="2s" repeatCount="indefinite" />
+                        <animate attributeName="opacity" values="0.5;0.2;0.5" dur="2s" repeatCount="indefinite" />
+                      </circle>
+                    )}
+                    {/* Label */}
+                    <text
+                      fill={isSelected ? '#f0d090' : 'rgba(232, 192, 128, 0.95)'}
+                      fontSize="15"
+                      fontFamily="Cinzel, serif"
+                      fontWeight={isSelected ? '700' : '600'}
+                      letterSpacing="0.5"
+                    >
+                      <textPath
+                        href={`#${pathId}`}
+                        startOffset="50%"
+                        textAnchor="middle"
+                      >
+                        {stage.label}
+                      </textPath>
+                    </text>
+                  </g>
+                );
+              })}
+
+              {/* Model overlay dots on ring (if a theorist model is selected) */}
+              {monomythModel && monomythModel.stages && monomythStages.map((stage, i) => {
+                const modelStage = monomythModel.stages.find(s => s.id === stage.id);
+                if (!modelStage) return null;
+                const angle = stageCenter(i);
+                const rad = (angle * Math.PI) / 180;
+                const dotR = MONO_OUTER_R + 8;
+                const dx = CX + dotR * Math.cos(rad);
+                const dy = CY + dotR * Math.sin(rad);
+                return (
+                  <g key={`model-dot-${stage.id}`}>
+                    <circle cx={dx} cy={dy} r="4" fill="rgba(232, 192, 128, 0.7)" stroke="rgba(232, 192, 128, 0.4)" strokeWidth="0.5" />
+                    <title>{modelStage.label || modelStage.name}</title>
+                  </g>
+                );
+              })}
+            </g>
+          );
+        })()}
+
+        {/* Starlight outer ring — Fallen Starlight / Story of Stories */}
+        {showFallenStarlight && starlightStages && (() => {
+          const SL_INNER_R = 348;
+          const SL_OUTER_R = 388;
+          const SL_TEXT_R = 368;
+          const SLICE_DEG = 360 / starlightStages.length; // 45°
+          const stageCenter = (i) => -90 - i * SLICE_DEG;
+          const dividerAngle = (i) => -90 + SLICE_DEG / 2 - i * SLICE_DEG;
+
+          return (
+            <g className="starlight-ring">
+              {/* Ring circles */}
+              <circle cx={CX} cy={CY} r={SL_INNER_R} fill="none" stroke="rgba(196, 113, 58, 0.22)" strokeWidth="0.8" />
+              <circle cx={CX} cy={CY} r={SL_OUTER_R} fill="none" stroke="rgba(196, 113, 58, 0.22)" strokeWidth="0.8" />
+
+              {/* 8 divider lines at segment boundaries */}
+              {starlightStages.map((_, i) => {
+                const angle = dividerAngle(i);
+                const rad = (angle * Math.PI) / 180;
+                return (
+                  <line
+                    key={`sl-div-${i}`}
+                    x1={CX + SL_INNER_R * Math.cos(rad)} y1={CY + SL_INNER_R * Math.sin(rad)}
+                    x2={CX + SL_OUTER_R * Math.cos(rad)} y2={CY + SL_OUTER_R * Math.sin(rad)}
+                    stroke="rgba(196, 113, 58, 0.25)"
+                    strokeWidth="0.6"
+                  />
+                );
+              })}
+
+              {/* Arc paths for text + clickable labels */}
+              {starlightStages.map((stage, i) => {
+                const center = stageCenter(i);
+                const cwEdge = center + SLICE_DEG / 2;
+                const ccwEdge = center - SLICE_DEG / 2;
+                const isSelected = selectedStarlightStage === stage.id;
+
+                const effectiveAngle = ((center % 360) + 360) % 360;
+                const isUpper = effectiveAngle > 180 || effectiveAngle === 0;
+                const inset = 2;
+
+                const pathId = `slpath-${stage.id}`;
+                const pathD = isUpper
+                  ? arcPath(CX, CY, SL_TEXT_R, ccwEdge + inset, cwEdge - inset, 1)
+                  : arcPath(CX, CY, SL_TEXT_R, cwEdge - inset, ccwEdge + inset, 0);
+
+                const cRad = (center * Math.PI) / 180;
+                const hx = CX + SL_TEXT_R * Math.cos(cRad);
+                const hy = CY + SL_TEXT_R * Math.sin(cRad);
+
+                const cwRad = (cwEdge * Math.PI) / 180;
+                const ccwRad = (ccwEdge * Math.PI) / 180;
+
+                return (
+                  <g
+                    key={stage.id}
+                    className={`starlight-stage${isSelected ? ' active' : ''}`}
+                    onClick={() => onSelectStarlightStage && onSelectStarlightStage(isSelected ? null : stage.id)}
+                    style={{ cursor: 'pointer' }}
+                  >
+                    {/* Segment highlight background */}
+                    {isSelected && (
+                      <path
+                        d={`M ${CX + SL_INNER_R * Math.cos(cwRad)},${CY + SL_INNER_R * Math.sin(cwRad)} A ${SL_INNER_R},${SL_INNER_R} 0 0,0 ${CX + SL_INNER_R * Math.cos(ccwRad)},${CY + SL_INNER_R * Math.sin(ccwRad)} L ${CX + SL_OUTER_R * Math.cos(ccwRad)},${CY + SL_OUTER_R * Math.sin(ccwRad)} A ${SL_OUTER_R},${SL_OUTER_R} 0 0,1 ${CX + SL_OUTER_R * Math.cos(cwRad)},${CY + SL_OUTER_R * Math.sin(cwRad)} Z`}
+                        fill="rgba(196, 113, 58, 0.12)"
+                      />
+                    )}
+                    {/* Hit target */}
+                    <circle cx={hx} cy={hy} r="20" fill="transparent" />
+                    {/* Text arc path */}
+                    <path id={pathId} d={pathD} fill="none" />
+                    {/* Pulse ring on selected */}
+                    {isSelected && (
+                      <circle cx={hx} cy={hy} r="14" fill="none" stroke="rgba(196, 113, 58, 0.5)" strokeWidth="0.8">
+                        <animate attributeName="r" values="12;16;12" dur="2s" repeatCount="indefinite" />
+                        <animate attributeName="opacity" values="0.5;0.2;0.5" dur="2s" repeatCount="indefinite" />
+                      </circle>
+                    )}
+                    {/* Label */}
+                    <text
+                      fill={isSelected ? '#e0a060' : 'rgba(196, 113, 58, 0.95)'}
+                      fontSize="15"
+                      fontFamily="Cinzel, serif"
+                      fontWeight={isSelected ? '700' : '600'}
+                      letterSpacing="0.5"
+                    >
+                      <textPath
+                        href={`#${pathId}`}
+                        startOffset="50%"
+                        textAnchor="middle"
+                      >
+                        {stage.label}
+                      </textPath>
+                    </text>
+                  </g>
+                );
+              })}
+            </g>
+          );
+        })()}
+
+        {/* Cycle rings — 6 concentric rings inside zodiac, each divided into 8 monomyth-synchronized segments */}
+        {showCycles && monomythStages && (() => {
+          const SLICE_DEG = 45;
+          const stageCenter = (i) => -90 - i * SLICE_DEG;
+          const dividerAngle = (i) => -90 + SLICE_DEG / 2 - i * SLICE_DEG;
+
+          return (
+            <g className="cycle-rings">
+              {CYCLE_RINGS.map((ring, ri) => {
+                // Color palette: inner 3 mystical/purple, outer 3 astronomical/blue
+                const ringColor = ri < 3
+                  ? 'rgba(180, 160, 200, ALPHA)'
+                  : 'rgba(100, 180, 220, ALPHA)';
+                const circleStroke = ringColor.replace('ALPHA', '0.18');
+                const dividerStroke = ringColor.replace('ALPHA', '0.22');
+                const textFill = ringColor.replace('ALPHA', '0.6');
+                const textFillActive = ringColor.replace('ALPHA', '0.95');
+                const titleFill = ringColor.replace('ALPHA', '0.15');
+
+                return (
+                  <g key={ring.key}>
+                    {/* Ring circles */}
+                    <circle cx={CX} cy={CY} r={ring.innerR} fill="none" stroke={circleStroke} strokeWidth="0.6" />
+                    <circle cx={CX} cy={CY} r={ring.outerR} fill="none" stroke={circleStroke} strokeWidth="0.6" />
+
+                    {/* Ring title label (faint, at upper-right) */}
+                    {(() => {
+                      const titleAngle = -60;
+                      const titleR = ring.outerR - 4;
+                      const tRad = (titleAngle * Math.PI) / 180;
+                      const tx = CX + titleR * Math.cos(tRad);
+                      const ty = CY + titleR * Math.sin(tRad);
+                      return (
+                        <text x={tx} y={ty} textAnchor="middle" dominantBaseline="central"
+                          fill={titleFill} fontSize={Math.max(5, ring.fontSize - 2)}
+                          fontFamily="Cinzel, serif" fontWeight="400" letterSpacing="0.3"
+                          transform={`rotate(${tangentRotation(titleAngle)}, ${tx}, ${ty})`}>
+                          {ring.label}
+                        </text>
+                      );
+                    })()}
+
+                    {/* 8 divider lines at segment boundaries */}
+                    {monomythStages.map((_, i) => {
+                      const angle = dividerAngle(i);
+                      const rad = (angle * Math.PI) / 180;
+                      return (
+                        <line key={`cdiv-${ring.key}-${i}`}
+                          x1={CX + ring.innerR * Math.cos(rad)} y1={CY + ring.innerR * Math.sin(rad)}
+                          x2={CX + ring.outerR * Math.cos(rad)} y2={CY + ring.outerR * Math.sin(rad)}
+                          stroke={dividerStroke} strokeWidth="0.4" />
+                      );
+                    })}
+
+                    {/* Phase labels on arc paths */}
+                    {monomythStages.map((stage, i) => {
+                      const phase = psychlesData[stage.id]?.cycles[ring.key]?.phase;
+                      if (!phase) return null;
+                      const center = stageCenter(i);
+                      const cwEdge = center + SLICE_DEG / 2;
+                      const ccwEdge = center - SLICE_DEG / 2;
+                      const effectiveAngle = ((center % 360) + 360) % 360;
+                      const isUpper = effectiveAngle > 180 || effectiveAngle === 0;
+                      const inset = 1.5;
+                      const pathId = `cpath-${ring.key}-${stage.id}`;
+                      const pathD = isUpper
+                        ? arcPath(CX, CY, ring.textR, ccwEdge + inset, cwEdge - inset, 1)
+                        : arcPath(CX, CY, ring.textR, cwEdge - inset, ccwEdge + inset, 0);
+                      const isSelected = selectedMonomythStage === stage.id;
+
+                      // Hit target center
+                      const cRad = (center * Math.PI) / 180;
+                      const hx = CX + ring.textR * Math.cos(cRad);
+                      const hy = CY + ring.textR * Math.sin(cRad);
+
+                      return (
+                        <g key={`clabel-${ring.key}-${stage.id}`}
+                          onClick={() => onSelectCycleSegment && onSelectCycleSegment(stage.id, ring.cycleName)}
+                          style={{ cursor: 'pointer' }}>
+                          {/* Segment highlight when stage selected */}
+                          {isSelected && (() => {
+                            const cwRad = (cwEdge * Math.PI) / 180;
+                            const ccwRad = (ccwEdge * Math.PI) / 180;
+                            return (
+                              <path
+                                d={`M ${CX + ring.innerR * Math.cos(cwRad)},${CY + ring.innerR * Math.sin(cwRad)} A ${ring.innerR},${ring.innerR} 0 0,0 ${CX + ring.innerR * Math.cos(ccwRad)},${CY + ring.innerR * Math.sin(ccwRad)} L ${CX + ring.outerR * Math.cos(ccwRad)},${CY + ring.outerR * Math.sin(ccwRad)} A ${ring.outerR},${ring.outerR} 0 0,1 ${CX + ring.outerR * Math.cos(cwRad)},${CY + ring.outerR * Math.sin(cwRad)} Z`}
+                                fill={ri < 3 ? 'rgba(180, 160, 200, 0.08)' : 'rgba(100, 180, 220, 0.08)'}
+                              />
+                            );
+                          })()}
+                          <circle cx={hx} cy={hy} r={Math.max(12, ring.textR * 0.12)} fill="transparent" />
+                          <path id={pathId} d={pathD} fill="none" />
+                          <text fill={isSelected ? textFillActive : textFill}
+                            fontSize={ring.fontSize} fontFamily="Cinzel, serif"
+                            fontWeight={isSelected ? '600' : '400'} letterSpacing="0.3">
+                            <textPath href={`#${pathId}`} startOffset="50%" textAnchor="middle">
+                              {phase}
+                            </textPath>
+                          </text>
+                        </g>
+                      );
+                    })}
+                  </g>
+                );
+              })}
+
+              {/* Planet dots on Solar Day ring (hour angles) */}
+              {geoClockAngles && (() => {
+                const dayRing = CYCLE_RINGS[3]; // solarDay
+                const sunDeg = clockTime.h * 15 + clockTime.m * 0.25 + 90;
+                const allDayPlanets = [
+                  { planet: 'Sun', angle: sunDeg },
+                  ...Object.entries(geoClockAngles).map(([planet, angle]) => ({ planet, angle })),
+                ];
+                return allDayPlanets.map(({ planet, angle }) => {
+                  const rad = (angle * Math.PI) / 180;
+                  const px = CX + dayRing.textR * Math.cos(rad);
+                  const py = CY + dayRing.textR * Math.sin(rad);
+                  const isSel = selectedPlanet === planet;
+                  const r = planet === 'Sun' ? 5 : 4;
+                  return (
+                    <g key={`day-${planet}`} style={{ cursor: 'pointer' }}
+                      onClick={() => onSelectPlanet && onSelectPlanet(planet)}>
+                      <circle cx={px} cy={py} r="10" fill="transparent" />
+                      {isSel && (
+                        <circle cx={px} cy={py} r={r + 4} fill="none"
+                          stroke={PLANET_COLORS[planet]} strokeWidth="0.8" opacity="0.6">
+                          <animate attributeName="r" values={`${r + 2};${r + 6};${r + 2}`} dur="2s" repeatCount="indefinite" />
+                          <animate attributeName="opacity" values="0.6;0.2;0.6" dur="2s" repeatCount="indefinite" />
+                        </circle>
+                      )}
+                      <circle cx={px} cy={py} r={r}
+                        fill={PLANET_COLORS[planet]} fillOpacity={isSel ? 1 : 0.85}
+                        stroke={isSel ? '#fff' : PLANET_COLORS[planet]} strokeWidth={isSel ? 1 : 0.5} />
+                      <title>{planet}</title>
+                    </g>
+                  );
+                });
+              })()}
+
+              {/* Planet dots on Solar Year ring (ecliptic longitudes) */}
+              {eclipticAngles && Object.entries(eclipticAngles).map(([planet, angle]) => {
+                const yearRing = CYCLE_RINGS[5]; // solarYear
+                const rad = (angle * Math.PI) / 180;
+                const px = CX + yearRing.textR * Math.cos(rad);
+                const py = CY + yearRing.textR * Math.sin(rad);
+                const isSel = selectedPlanet === planet;
+                return (
+                  <g key={`year-${planet}`} style={{ cursor: 'pointer' }}
+                    onClick={() => onSelectPlanet && onSelectPlanet(planet)}>
+                    <circle cx={px} cy={py} r="10" fill="transparent" />
+                    {isSel && (
+                      <circle cx={px} cy={py} r="8" fill="none"
+                        stroke={PLANET_COLORS[planet]} strokeWidth="0.8" opacity="0.6">
+                        <animate attributeName="r" values="6;10;6" dur="2s" repeatCount="indefinite" />
+                        <animate attributeName="opacity" values="0.6;0.2;0.6" dur="2s" repeatCount="indefinite" />
+                      </circle>
+                    )}
+                    <circle cx={px} cy={py} r="4"
+                      fill={PLANET_COLORS[planet]} fillOpacity={isSel ? 1 : 0.8}
+                      stroke={isSel ? '#fff' : PLANET_COLORS[planet]} strokeWidth={isSel ? 1 : 0.3} />
+                    <title>{planet}</title>
+                  </g>
+                );
+              })}
+
+              {/* Moon on Lunar Month ring (ecliptic position) */}
+              {eclipticAngles && (() => {
+                const monthRing = CYCLE_RINGS[4]; // lunarMonth
+                const moonAngle = eclipticAngles['Moon'];
+                const rad = (moonAngle * Math.PI) / 180;
+                const px = CX + monthRing.textR * Math.cos(rad);
+                const py = CY + monthRing.textR * Math.sin(rad);
+                const isSel = selectedPlanet === 'Moon';
+                return (
+                  <g style={{ cursor: 'pointer' }}
+                    onClick={() => onSelectPlanet && onSelectPlanet('Moon')}>
+                    <circle cx={px} cy={py} r="10" fill="transparent" />
+                    {isSel && (
+                      <circle cx={px} cy={py} r="9" fill="none"
+                        stroke={PLANET_COLORS.Moon} strokeWidth="0.8" opacity="0.6">
+                        <animate attributeName="r" values="7;11;7" dur="2s" repeatCount="indefinite" />
+                        <animate attributeName="opacity" values="0.6;0.2;0.6" dur="2s" repeatCount="indefinite" />
+                      </circle>
+                    )}
+                    <circle cx={px} cy={py} r="5"
+                      fill={PLANET_COLORS.Moon} fillOpacity={isSel ? 1 : 0.85}
+                      stroke={isSel ? '#fff' : PLANET_COLORS.Moon} strokeWidth={isSel ? 1 : 0.5} />
+                    <title>Moon</title>
+                  </g>
+                );
+              })()}
+            </g>
+          );
+        })()}
+
+        {/* Cardinal click targets on top of cycle rings (when monomyth active, cycle ring hit areas overlap the diamonds in the zodiac group) */}
+        {showMonomyth && CARDINALS.map(c => {
+          const rad = (c.angle * Math.PI) / 180;
+          const cx = CX + CARDINAL_R * Math.cos(rad);
+          const cy = CY + CARDINAL_R * Math.sin(rad);
+          return (
+            <circle
+              key={`card-top-${c.id}`}
+              cx={cx} cy={cy} r="16" fill="transparent"
+              style={{ cursor: 'pointer' }}
+              onClick={() => onSelectCardinal && onSelectCardinal(selectedCardinal === c.id ? null : c.id)}
+            />
+          );
+        })}
+
+        {/* Analog clock overlay — 12h or 24h mode (outside rotated group) */}
+        {showClock && clockMode === '12h' && !chakraViewMode && (() => {
+          const CLOCK_NUM_R = 240;
+          const hourAngles = Array.from({ length: 12 }, (_, i) => {
+            const num = i === 0 ? 12 : i;
+            const deg = i * 30 - 90; // 12 at top
+            const rad = (deg * Math.PI) / 180;
+            return { num, x: CX + CLOCK_NUM_R * Math.cos(rad), y: CY + CLOCK_NUM_R * Math.sin(rad) };
+          });
+          const sDeg = clockTime.s * 6 - 90;
+          const mDeg = clockTime.m * 6 + clockTime.s * 0.1 - 90;
+          const hDeg = (clockTime.h % 12) * 30 + clockTime.m * 0.5 - 90;
+          const hand = (deg, len, width, color) => {
+            const rad = (deg * Math.PI) / 180;
+            return <line x1={CX} y1={CY} x2={CX + len * Math.cos(rad)} y2={CY + len * Math.sin(rad)} stroke={color} strokeWidth={width} strokeLinecap="round" />;
+          };
+          return (
+            <g className="clock-overlay">
+              {hourAngles.map(({ num, x, y }) => (
+                <text key={`clk-${num}`} x={x} y={y} textAnchor="middle" dominantBaseline="central"
+                  fill="rgba(139, 195, 170, 0.95)" fontSize="14" fontFamily="Cinzel, serif" fontWeight="600">
+                  {num}
+                </text>
+              ))}
+              {hand(hDeg, 140, 3.5, 'rgba(201, 169, 97, 0.95)')}
+              {hand(mDeg, 200, 2.5, 'rgba(201, 169, 97, 0.95)')}
+              {hand(sDeg, 230, 1, 'rgba(220, 130, 65, 0.95)')}
+
+              {/* Compass directions — map convention: N top, S bottom, E right, W left (Cancer/N, Aries/E, Capricorn/S, Libra/W) */}
+              <text x={CX} y={2} textAnchor="middle" dominantBaseline="hanging"
+                fill={starMapMode === 'north' ? 'rgba(180, 220, 255, 0.95)' : 'rgba(201, 169, 97, 0.7)'}
+                fontSize="16" fontFamily="Cinzel, serif" fontWeight="700" letterSpacing="2"
+                style={{ cursor: 'pointer' }}
+                onClick={() => setStarMapMode(p => p === 'north' ? 'none' : 'north')}>N</text>
+              <text x={CX} y={698} textAnchor="middle" dominantBaseline="auto"
+                fill={starMapMode === 'south' ? 'rgba(180, 220, 255, 0.95)' : 'rgba(201, 169, 97, 0.7)'}
+                fontSize="16" fontFamily="Cinzel, serif" fontWeight="700" letterSpacing="2"
+                style={{ cursor: 'pointer' }}
+                onClick={() => setStarMapMode(p => p === 'south' ? 'none' : 'south')}>S</text>
+              <text x={698} y={CY} textAnchor="end" dominantBaseline="central"
+                fill="rgba(201, 169, 97, 0.7)" fontSize="16" fontFamily="Cinzel, serif" fontWeight="700" letterSpacing="2">E</text>
+              <text x={2} y={CY} textAnchor="start" dominantBaseline="central"
+                fill="rgba(201, 169, 97, 0.7)" fontSize="16" fontFamily="Cinzel, serif" fontWeight="700" letterSpacing="2">W</text>
+
+              <circle cx={CX} cy={CY} r={5} fill="rgba(201, 169, 97, 0.95)" />
+            </g>
+          );
+        })()}
+
+        {/* 24-hour geocentric astronomical clock (hands, numbers, sun — planets rendered in planet layer below) */}
+        {showClock && clockMode === '24h' && !chakraViewMode && (() => {
+          const CLOCK_NUM_R = 240;
+          const SUN_R = 160; // same orbital radius as geocentric Sun orbit
+          const hourAngles24 = Array.from({ length: 24 }, (_, i) => {
+            const deg = i * 15 + 90; // 0 at bottom (midnight), 12 at top (noon)
+            const rad = (deg * Math.PI) / 180;
+            return { num: i, x: CX + CLOCK_NUM_R * Math.cos(rad), y: CY + CLOCK_NUM_R * Math.sin(rad) };
+          });
+          const hDeg24 = clockTime.h * 15 + clockTime.m * 0.25 + 90;
+          const hRad24 = (hDeg24 * Math.PI) / 180;
+          const sunTipX = CX + SUN_R * Math.cos(hRad24);
+          const sunTipY = CY + SUN_R * Math.sin(hRad24);
+          const mDeg24 = clockTime.m * 6 + clockTime.s * 0.1 + 90;
+          const sDeg24 = clockTime.s * 6 + 90;
+          const hand24 = (deg, len, width, color) => {
+            const rad = (deg * Math.PI) / 180;
+            return <line x1={CX} y1={CY} x2={CX + len * Math.cos(rad)} y2={CY + len * Math.sin(rad)} stroke={color} strokeWidth={width} strokeLinecap="round" />;
+          };
+
+          return (
+            <g className="clock-overlay clock-24h">
+              {/* 24 hour numbers */}
+              {!showCycles && hourAngles24.map(({ num, x, y }) => (
+                <text key={`clk24-${num}`} x={x} y={y} textAnchor="middle" dominantBaseline="central"
+                  fill={num % 6 === 0 ? 'rgba(139, 195, 170, 0.95)' : 'rgba(139, 195, 170, 0.6)'}
+                  fontSize={num % 6 === 0 ? '13' : '10'} fontFamily="Cinzel, serif"
+                  fontWeight={num % 6 === 0 ? '600' : '400'}>
+                  {num}
+                </text>
+              ))}
+
+              {/* Sun at its orbital radius — conceptually the hour hand tip (hidden when cycles active) */}
+              {!showCycles && (<>
+              <radialGradient id="sun-clock-glow" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stopColor="#f0c040" stopOpacity="0.5" />
+                <stop offset="100%" stopColor="#f0a020" stopOpacity="0" />
+              </radialGradient>
+              <circle cx={sunTipX} cy={sunTipY} r={32} fill="url(#sun-clock-glow)" />
+              {Array.from({ length: 8 }, (_, i) => {
+                const a = (i * 45 * Math.PI) / 180;
+                const inner = 15;
+                const outer = 25;
+                const spread = 0.18;
+                return (
+                  <polygon key={`sun-ray-${i}`}
+                    points={`${sunTipX + inner * Math.cos(a - spread)},${sunTipY + inner * Math.sin(a - spread)} ${sunTipX + outer * Math.cos(a)},${sunTipY + outer * Math.sin(a)} ${sunTipX + inner * Math.cos(a + spread)},${sunTipY + inner * Math.sin(a + spread)}`}
+                    fill="#f0c040" opacity="0.55" />
+                );
+              })}
+              <circle cx={sunTipX} cy={sunTipY} r={16} fill="#f0c040" fillOpacity="0.85"
+                stroke="#f0c040" strokeWidth="0.8" />
+              </>)}
+
+              {/* Horizon line from sunrise to sunset */}
+              {sunriseSunset && (() => {
+                const HR = 278;
+                const riseDeg = sunriseSunset.riseHours * 15 + 90;
+                const setDeg = sunriseSunset.setHours * 15 + 90;
+                const riseRad = (riseDeg * Math.PI) / 180;
+                const setRad = (setDeg * Math.PI) / 180;
+                return (
+                  <line
+                    x1={CX + HR * Math.cos(riseRad)} y1={CY + HR * Math.sin(riseRad)}
+                    x2={CX + HR * Math.cos(setRad)} y2={CY + HR * Math.sin(setRad)}
+                    stroke="rgba(100, 180, 220, 0.35)" strokeWidth="1" />
+                );
+              })()}
+
+              {/* Compass directions — when monomyth active: map convention (N top); otherwise sky convention (S top) */}
+              {showMonomyth ? (
+                <>
+                  <text x={CX} y={2} textAnchor="middle" dominantBaseline="hanging"
+                    fill={starMapMode === 'north' ? 'rgba(180, 220, 255, 0.95)' : 'rgba(201, 169, 97, 0.7)'}
+                    fontSize="16" fontFamily="Cinzel, serif" fontWeight="700" letterSpacing="2"
+                    style={{ cursor: 'pointer' }}
+                    onClick={() => setStarMapMode(p => p === 'north' ? 'none' : 'north')}>N</text>
+                  <text x={CX} y={698} textAnchor="middle" dominantBaseline="auto"
+                    fill={starMapMode === 'south' ? 'rgba(180, 220, 255, 0.95)' : 'rgba(201, 169, 97, 0.7)'}
+                    fontSize="16" fontFamily="Cinzel, serif" fontWeight="700" letterSpacing="2"
+                    style={{ cursor: 'pointer' }}
+                    onClick={() => setStarMapMode(p => p === 'south' ? 'none' : 'south')}>S</text>
+                  <text x={698} y={CY} textAnchor="end" dominantBaseline="central"
+                    fill="rgba(201, 169, 97, 0.7)" fontSize="16" fontFamily="Cinzel, serif" fontWeight="700" letterSpacing="2">E</text>
+                  <text x={2} y={CY} textAnchor="start" dominantBaseline="central"
+                    fill="rgba(201, 169, 97, 0.7)" fontSize="16" fontFamily="Cinzel, serif" fontWeight="700" letterSpacing="2">W</text>
+                </>
+              ) : (
+                <>
+                  <text x={CX} y={2} textAnchor="middle" dominantBaseline="hanging"
+                    fill={starMapMode === 'south' ? 'rgba(180, 220, 255, 0.95)' : 'rgba(201, 169, 97, 0.7)'}
+                    fontSize="16" fontFamily="Cinzel, serif" fontWeight="700" letterSpacing="2"
+                    style={{ cursor: 'pointer' }}
+                    onClick={() => setStarMapMode(p => p === 'south' ? 'none' : 'south')}>S</text>
+                  <text x={CX} y={698} textAnchor="middle" dominantBaseline="auto"
+                    fill={starMapMode === 'north' ? 'rgba(180, 220, 255, 0.95)' : 'rgba(201, 169, 97, 0.7)'}
+                    fontSize="16" fontFamily="Cinzel, serif" fontWeight="700" letterSpacing="2"
+                    style={{ cursor: 'pointer' }}
+                    onClick={() => setStarMapMode(p => p === 'north' ? 'none' : 'north')}>N</text>
+                  <text x={698} y={CY} textAnchor="end" dominantBaseline="central"
+                    fill="rgba(201, 169, 97, 0.7)" fontSize="16" fontFamily="Cinzel, serif" fontWeight="700" letterSpacing="2">W</text>
+                  <text x={2} y={CY} textAnchor="start" dominantBaseline="central"
+                    fill="rgba(201, 169, 97, 0.7)" fontSize="16" fontFamily="Cinzel, serif" fontWeight="700" letterSpacing="2">E</text>
+                </>
+              )}
+
+              {/* Clock hands — hour, minute, second */}
+              {hand24(hDeg24, 140, 3.5, 'rgba(201, 169, 97, 0.95)')}
+              {hand24(mDeg24, 200, 2.5, 'rgba(201, 169, 97, 0.95)')}
+              {hand24(sDeg24, 230, 1, 'rgba(220, 130, 65, 0.95)')}
+
+              {/* Center dot */}
+              <circle cx={CX} cy={CY} r={5} fill="rgba(201, 169, 97, 0.95)" />
+            </g>
+          );
+        })()}
+
         {/* Chakra body viewer — Vitruvian figure + planets at chakra positions */}
         {chakraViewMode ? (
           <g className="chakra-body-viewer">
-            {/* Vitruvian figure — Da Vinci-style with two overlapping poses */}
+            {/* Compass directions — map convention: N top, E right, S bottom, W left */}
+            <text x={CX} y={2} textAnchor="middle" dominantBaseline="hanging"
+              fill={starMapMode === 'north' ? 'rgba(180, 220, 255, 0.95)' : 'rgba(201, 169, 97, 0.7)'}
+              fontSize="16" fontFamily="Cinzel, serif" fontWeight="700" letterSpacing="2"
+              style={{ cursor: 'pointer' }}
+              onClick={() => setStarMapMode(p => p === 'north' ? 'none' : 'north')}>N</text>
+            <text x={CX} y={698} textAnchor="middle" dominantBaseline="auto"
+              fill={starMapMode === 'south' ? 'rgba(180, 220, 255, 0.95)' : 'rgba(201, 169, 97, 0.7)'}
+              fontSize="16" fontFamily="Cinzel, serif" fontWeight="700" letterSpacing="2"
+              style={{ cursor: 'pointer' }}
+              onClick={() => setStarMapMode(p => p === 'south' ? 'none' : 'south')}>S</text>
+            <text x={698} y={CY} textAnchor="end" dominantBaseline="central"
+              fill="rgba(201, 169, 97, 0.7)" fontSize="16" fontFamily="Cinzel, serif" fontWeight="700" letterSpacing="2">E</text>
+            <text x={2} y={CY} textAnchor="start" dominantBaseline="central"
+              fill="rgba(201, 169, 97, 0.7)" fontSize="16" fontFamily="Cinzel, serif" fontWeight="700" letterSpacing="2">W</text>
+            {/* Vitruvian figure — wheel-bound marble statue */}
             <g className="vitruvian-figure">
-              {/* Inscribed circle — centered on navel */}
-              <circle cx={350} cy={295} r={240} fill="none" stroke="rgba(201,169,97,0.15)" strokeWidth="0.8" />
-              {/* Inscribed square — centered on groin */}
-              <rect x={120} y={100} width={460} height={460} fill="none" stroke="rgba(201,169,97,0.10)" strokeWidth="0.8" />
-
-              {/* ══ HEAD ══ */}
-              <ellipse cx={350} cy={128} rx={22} ry={28} fill="none" stroke="rgba(201,169,97,0.4)" strokeWidth="1.2" />
-              {/* Hair — curly suggestion */}
-              <path d="M328,120 C324,108 330,96 342,94 C348,93 352,93 358,94 C370,96 376,108 372,120" fill="none" stroke="rgba(201,169,97,0.22)" strokeWidth="0.8" strokeLinecap="round" />
-              <path d="M330,115 C328,105 335,98 345,97" fill="none" stroke="rgba(201,169,97,0.15)" strokeWidth="0.6" />
-              <path d="M370,115 C372,105 365,98 355,97" fill="none" stroke="rgba(201,169,97,0.15)" strokeWidth="0.6" />
-              {/* Eyes — minimal */}
-              <line x1={340} y1={124} x2={346} y2={124} stroke="rgba(201,169,97,0.25)" strokeWidth="0.7" />
-              <line x1={354} y1={124} x2={360} y2={124} stroke="rgba(201,169,97,0.25)" strokeWidth="0.7" />
-              {/* Nose */}
-              <line x1={350} y1={127} x2={350} y2={135} stroke="rgba(201,169,97,0.18)" strokeWidth="0.5" />
-              {/* Mouth */}
-              <path d="M345,140 C348,142 352,142 355,140" fill="none" stroke="rgba(201,169,97,0.15)" strokeWidth="0.5" />
-
-              {/* ══ NECK ══ */}
-              <line x1={343} y1={156} x2={343} y2={172} stroke="rgba(201,169,97,0.3)" strokeWidth="0.9" />
-              <line x1={357} y1={156} x2={357} y2={172} stroke="rgba(201,169,97,0.3)" strokeWidth="0.9" />
-
-              {/* ══ TORSO ══ */}
-              {/* Shoulder / clavicle lines */}
-              <path d="M343,172 C335,174 310,180 298,186" fill="none" stroke="rgba(201,169,97,0.38)" strokeWidth="1.1" strokeLinecap="round" />
-              <path d="M357,172 C365,174 390,180 402,186" fill="none" stroke="rgba(201,169,97,0.38)" strokeWidth="1.1" strokeLinecap="round" />
-              {/* Pectoral contours */}
-              <path d="M305,195 C315,208 338,212 350,210" fill="none" stroke="rgba(201,169,97,0.2)" strokeWidth="0.7" />
-              <path d="M395,195 C385,208 362,212 350,210" fill="none" stroke="rgba(201,169,97,0.2)" strokeWidth="0.7" />
-              {/* Nipple dots */}
-              <circle cx={325} cy={205} r="1.5" fill="rgba(201,169,97,0.2)" />
-              <circle cx={375} cy={205} r="1.5" fill="rgba(201,169,97,0.2)" />
-              {/* Ribcage hints */}
-              <path d="M318,222 C332,227 368,227 382,222" fill="none" stroke="rgba(201,169,97,0.12)" strokeWidth="0.6" />
-              <path d="M322,236 C336,240 364,240 378,236" fill="none" stroke="rgba(201,169,97,0.12)" strokeWidth="0.6" />
-              {/* Abdominal center line */}
-              <line x1={350} y1={212} x2={350} y2={340} stroke="rgba(201,169,97,0.15)" strokeWidth="0.6" />
-              {/* Navel */}
-              <circle cx={350} cy={295} r={3} fill="none" stroke="rgba(201,169,97,0.22)" strokeWidth="0.6" />
-              {/* Torso outline — left */}
-              <path d="M298,186 C290,210 288,250 296,290 C302,320 310,340 318,355" fill="none" stroke="rgba(201,169,97,0.35)" strokeWidth="1" strokeLinecap="round" />
-              {/* Torso outline — right */}
-              <path d="M402,186 C410,210 412,250 404,290 C398,320 390,340 382,355" fill="none" stroke="rgba(201,169,97,0.35)" strokeWidth="1" strokeLinecap="round" />
-              {/* Waist indentation */}
-              <path d="M302,280 C318,276 340,275 350,275" fill="none" stroke="rgba(201,169,97,0.12)" strokeWidth="0.5" />
-              <path d="M398,280 C382,276 360,275 350,275" fill="none" stroke="rgba(201,169,97,0.12)" strokeWidth="0.5" />
-              {/* Hip bones */}
-              <path d="M312,340 C325,348 340,352 350,353" fill="none" stroke="rgba(201,169,97,0.15)" strokeWidth="0.6" />
-              <path d="M388,340 C375,348 360,352 350,353" fill="none" stroke="rgba(201,169,97,0.15)" strokeWidth="0.6" />
-
-              {/* ══ PRIMARY POSE — LEFT ARM (square pose) ══ */}
-              {/* Deltoid cap */}
-              <path d="M298,179 C291,175 285,179 284,185 C283,191 287,196 296,198" fill="none" stroke="rgba(201,169,97,0.35)" strokeWidth="0.9" strokeLinecap="round" />
-              {/* Anterior contour (top of arm) — shoulder to wrist */}
-              <path d="M298,179 C275,182 255,185 237,188 C218,190 195,192 170,194 C152,195 142,196 132,196" fill="none" stroke="rgba(201,169,97,0.38)" strokeWidth="1" strokeLinecap="round" />
-              {/* Posterior contour (bottom of arm) — armpit to wrist */}
-              <path d="M296,198 C275,201 255,204 237,205 C218,206 195,207 170,206 C152,206 142,205 132,204" fill="none" stroke="rgba(201,169,97,0.38)" strokeWidth="1" strokeLinecap="round" />
-              {/* Elbow crease */}
-              <path d="M237,188 C236,193 236,200 237,205" fill="none" stroke="rgba(201,169,97,0.12)" strokeWidth="0.5" />
-              {/* Bicep contour */}
-              <path d="M290,184 C275,188 262,191 250,193" fill="none" stroke="rgba(201,169,97,0.1)" strokeWidth="0.5" />
-              {/* Left hand — palm outline */}
-              <path d="M132,196 C126,195 120,196 118,200 C120,204 126,205 132,204" fill="none" stroke="rgba(201,169,97,0.3)" strokeWidth="0.8" strokeLinecap="round" />
-              {/* Fingers */}
-              <path d="M118,196 L106,191" fill="none" stroke="rgba(201,169,97,0.28)" strokeWidth="0.7" strokeLinecap="round" />
-              <path d="M118,198 L104,196" fill="none" stroke="rgba(201,169,97,0.28)" strokeWidth="0.7" strokeLinecap="round" />
-              <path d="M118,200 L103,200" fill="none" stroke="rgba(201,169,97,0.28)" strokeWidth="0.7" strokeLinecap="round" />
-              <path d="M118,202 L105,206" fill="none" stroke="rgba(201,169,97,0.28)" strokeWidth="0.7" strokeLinecap="round" />
-              <path d="M119,204 L112,210" fill="none" stroke="rgba(201,169,97,0.22)" strokeWidth="0.6" strokeLinecap="round" />
-
-              {/* ══ PRIMARY POSE — RIGHT ARM (square pose) ══ */}
-              {/* Deltoid cap */}
-              <path d="M402,179 C409,175 415,179 416,185 C417,191 413,196 404,198" fill="none" stroke="rgba(201,169,97,0.35)" strokeWidth="0.9" strokeLinecap="round" />
-              {/* Anterior contour */}
-              <path d="M402,179 C425,182 445,185 463,188 C482,190 505,192 530,194 C548,195 558,196 568,196" fill="none" stroke="rgba(201,169,97,0.38)" strokeWidth="1" strokeLinecap="round" />
-              {/* Posterior contour */}
-              <path d="M404,198 C425,201 445,204 463,205 C482,206 505,207 530,206 C548,206 558,205 568,204" fill="none" stroke="rgba(201,169,97,0.38)" strokeWidth="1" strokeLinecap="round" />
-              {/* Elbow crease */}
-              <path d="M463,188 C464,193 464,200 463,205" fill="none" stroke="rgba(201,169,97,0.12)" strokeWidth="0.5" />
-              {/* Bicep contour */}
-              <path d="M410,184 C425,188 438,191 450,193" fill="none" stroke="rgba(201,169,97,0.1)" strokeWidth="0.5" />
-              {/* Right hand — palm outline */}
-              <path d="M568,196 C574,195 580,196 582,200 C580,204 574,205 568,204" fill="none" stroke="rgba(201,169,97,0.3)" strokeWidth="0.8" strokeLinecap="round" />
-              {/* Fingers */}
-              <path d="M582,196 L594,191" fill="none" stroke="rgba(201,169,97,0.28)" strokeWidth="0.7" strokeLinecap="round" />
-              <path d="M582,198 L596,196" fill="none" stroke="rgba(201,169,97,0.28)" strokeWidth="0.7" strokeLinecap="round" />
-              <path d="M582,200 L597,200" fill="none" stroke="rgba(201,169,97,0.28)" strokeWidth="0.7" strokeLinecap="round" />
-              <path d="M582,202 L595,206" fill="none" stroke="rgba(201,169,97,0.28)" strokeWidth="0.7" strokeLinecap="round" />
-              <path d="M581,204 L588,210" fill="none" stroke="rgba(201,169,97,0.22)" strokeWidth="0.6" strokeLinecap="round" />
-
-              {/* ══ SECONDARY POSE — LEFT ARM RAISED ══ */}
-              {/* Upper contour (above arm) */}
-              <path d="M297,176 C272,164 250,154 232,147 C212,140 192,134 172,130 C158,127 148,126 140,125" fill="none" stroke="rgba(201,169,97,0.22)" strokeWidth="0.9" strokeLinecap="round" />
-              {/* Lower contour (below arm) */}
-              <path d="M293,190 C270,178 250,168 232,161 C212,154 192,148 172,144 C158,141 148,140 140,139" fill="none" stroke="rgba(201,169,97,0.22)" strokeWidth="0.9" strokeLinecap="round" />
-              {/* Raised palm */}
-              <path d="M140,125 C136,124 132,126 131,131 C132,136 136,138 140,139" fill="none" stroke="rgba(201,169,97,0.18)" strokeWidth="0.7" strokeLinecap="round" />
-              {/* Raised fingers */}
-              <path d="M131,126 L121,120" fill="none" stroke="rgba(201,169,97,0.15)" strokeWidth="0.6" strokeLinecap="round" />
-              <path d="M131,128 L119,124" fill="none" stroke="rgba(201,169,97,0.15)" strokeWidth="0.6" strokeLinecap="round" />
-              <path d="M131,131 L118,130" fill="none" stroke="rgba(201,169,97,0.15)" strokeWidth="0.6" strokeLinecap="round" />
-              <path d="M131,134 L121,137" fill="none" stroke="rgba(201,169,97,0.15)" strokeWidth="0.6" strokeLinecap="round" />
-
-              {/* ══ SECONDARY POSE — RIGHT ARM RAISED ══ */}
-              {/* Upper contour */}
-              <path d="M403,176 C428,164 450,154 468,147 C488,140 508,134 528,130 C542,127 552,126 560,125" fill="none" stroke="rgba(201,169,97,0.22)" strokeWidth="0.9" strokeLinecap="round" />
-              {/* Lower contour */}
-              <path d="M407,190 C430,178 450,168 468,161 C488,154 508,148 528,144 C542,141 552,140 560,139" fill="none" stroke="rgba(201,169,97,0.22)" strokeWidth="0.9" strokeLinecap="round" />
-              {/* Raised palm */}
-              <path d="M560,125 C564,124 568,126 569,131 C568,136 564,138 560,139" fill="none" stroke="rgba(201,169,97,0.18)" strokeWidth="0.7" strokeLinecap="round" />
-              {/* Raised fingers */}
-              <path d="M569,126 L579,120" fill="none" stroke="rgba(201,169,97,0.15)" strokeWidth="0.6" strokeLinecap="round" />
-              <path d="M569,128 L581,124" fill="none" stroke="rgba(201,169,97,0.15)" strokeWidth="0.6" strokeLinecap="round" />
-              <path d="M569,131 L582,130" fill="none" stroke="rgba(201,169,97,0.15)" strokeWidth="0.6" strokeLinecap="round" />
-              <path d="M569,134 L579,137" fill="none" stroke="rgba(201,169,97,0.15)" strokeWidth="0.6" strokeLinecap="round" />
-
-              {/* ══ PRIMARY POSE — LEFT LEG (square pose, together) ══ */}
-              {/* Lateral (outer) contour — hip to ankle with calf shape */}
-              <path d="M318,358 C314,378 312,405 314,435 C316,452 317,464 316,478 C317,492 321,512 326,532 C330,546 332,553 334,558" fill="none" stroke="rgba(201,169,97,0.38)" strokeWidth="1" strokeLinecap="round" />
-              {/* Medial (inner) contour */}
-              <path d="M340,358 C342,378 344,405 344,435 C344,452 343,464 343,478 C343,492 343,512 343,532 C343,546 343,553 343,558" fill="none" stroke="rgba(201,169,97,0.35)" strokeWidth="0.9" strokeLinecap="round" />
-              {/* Kneecap */}
-              <path d="M316,470 C318,466 322,464 328,464 C334,464 340,466 343,470" fill="none" stroke="rgba(201,169,97,0.12)" strokeWidth="0.5" />
-              {/* Calf muscle bulge */}
-              <path d="M318,488 C319,498 322,508 326,516" fill="none" stroke="rgba(201,169,97,0.1)" strokeWidth="0.5" />
-              {/* Left foot */}
-              <path d="M334,558 C330,560 323,562 318,564 C322,566 332,567 341,566 C343,565 344,562 343,558" fill="none" stroke="rgba(201,169,97,0.3)" strokeWidth="0.8" strokeLinecap="round" />
-
-              {/* ══ PRIMARY POSE — RIGHT LEG (square pose, together) ══ */}
-              {/* Lateral (outer) contour */}
-              <path d="M382,358 C386,378 388,405 386,435 C384,452 383,464 384,478 C383,492 379,512 374,532 C370,546 368,553 366,558" fill="none" stroke="rgba(201,169,97,0.38)" strokeWidth="1" strokeLinecap="round" />
-              {/* Medial (inner) contour */}
-              <path d="M360,358 C358,378 356,405 356,435 C356,452 357,464 357,478 C357,492 357,512 357,532 C357,546 357,553 357,558" fill="none" stroke="rgba(201,169,97,0.35)" strokeWidth="0.9" strokeLinecap="round" />
-              {/* Kneecap */}
-              <path d="M384,470 C382,466 378,464 372,464 C366,464 360,466 357,470" fill="none" stroke="rgba(201,169,97,0.12)" strokeWidth="0.5" />
-              {/* Calf muscle bulge */}
-              <path d="M382,488 C381,498 378,508 374,516" fill="none" stroke="rgba(201,169,97,0.1)" strokeWidth="0.5" />
-              {/* Right foot */}
-              <path d="M366,558 C370,560 377,562 382,564 C378,566 368,567 359,566 C357,565 356,562 357,558" fill="none" stroke="rgba(201,169,97,0.3)" strokeWidth="0.8" strokeLinecap="round" />
-
-              {/* ══ SECONDARY POSE — LEFT LEG SPREAD ══ */}
-              {/* Lateral (outer) contour */}
-              <path d="M315,358 C298,392 278,430 260,468 C248,494 240,514 232,534 C228,542 225,548 223,552" fill="none" stroke="rgba(201,169,97,0.22)" strokeWidth="0.9" strokeLinecap="round" />
-              {/* Medial (inner) contour */}
-              <path d="M338,362 C322,394 304,430 287,466 C276,490 268,510 261,530 C258,538 255,544 253,548" fill="none" stroke="rgba(201,169,97,0.22)" strokeWidth="0.9" strokeLinecap="round" />
-              {/* Left spread foot */}
-              <path d="M223,552 C218,554 212,558 210,561 C215,564 224,564 234,562 C242,559 250,554 253,548" fill="none" stroke="rgba(201,169,97,0.16)" strokeWidth="0.7" strokeLinecap="round" />
-
-              {/* ══ SECONDARY POSE — RIGHT LEG SPREAD ══ */}
-              {/* Lateral (outer) contour */}
-              <path d="M385,358 C402,392 422,430 440,468 C452,494 460,514 468,534 C472,542 475,548 477,552" fill="none" stroke="rgba(201,169,97,0.22)" strokeWidth="0.9" strokeLinecap="round" />
-              {/* Medial (inner) contour */}
-              <path d="M362,362 C378,394 396,430 413,466 C424,490 432,510 439,530 C442,538 445,544 447,548" fill="none" stroke="rgba(201,169,97,0.22)" strokeWidth="0.9" strokeLinecap="round" />
-              {/* Right spread foot */}
-              <path d="M477,552 C482,554 488,558 490,561 C485,564 476,564 466,562 C458,559 450,554 447,548" fill="none" stroke="rgba(201,169,97,0.16)" strokeWidth="0.7" strokeLinecap="round" />
-
-              {/* Hip / groin area */}
-              <path d="M318,358 C330,362 345,363 350,363 C355,363 370,362 382,358" fill="none" stroke="rgba(201,169,97,0.15)" strokeWidth="0.6" />
+              <defs>
+                <clipPath id="wheel-clip">
+                  <circle cx={CX} cy={CY} r={ZODIAC_OUTER_R} />
+                </clipPath>
+                <filter id="golden-tint">
+                  <feColorMatrix type="matrix" values="0.6 0.3 0.1 0 0  0.5 0.4 0.1 0 0  0.2 0.15 0.1 0 0  0 0 0 1 0" />
+                </filter>
+              </defs>
+              <image
+                href="/images/wheel-figure.png"
+                x={-25} y={-19} width={751} height={739}
+                opacity={0.18}
+                clipPath="url(#wheel-clip)"
+                filter="url(#golden-tint)"
+                style={{ mixBlendMode: 'screen' }}
+              />
             </g>
 
             {/* Chakra color dots */}
@@ -1441,14 +1994,17 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
           </g>
         ) : (
           <>
-        {/* Orbital rings */}
-        {(heliocentric ? HELIO_ORBITS : ORBITS).map(o => (
+        {/* Orbital rings (hidden when cycles active) */}
+        {!showCycles && (clockMode === '24h'
+          ? ORBITS.filter(o => o.planet !== 'Sun')
+          : heliocentric ? HELIO_ORBITS : ORBITS
+        ).map(o => (
           <circle
             key={o.planet}
             cx={CX} cy={CY} r={o.r}
             fill="none"
-            stroke="rgba(139, 157, 195, 0.12)"
-            strokeWidth="0.8"
+            stroke={clockMode === '24h' ? 'rgba(139, 157, 195, 0.10)' : 'rgba(139, 157, 195, 0.12)'}
+            strokeWidth={clockMode === '24h' ? '0.6' : '0.8'}
             strokeDasharray="4 3"
           />
         ))}
@@ -1470,16 +2026,6 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
             strokeWidth="1"
             strokeDasharray="6 4"
           />
-        )}
-
-        {starMapMode === 'south' && (
-          <g className="star-layer star-layer-south" opacity={hoveredConstellation ? 0.15 : 1}>
-            {starPositionsSouth.map((s, i) => (
-              twinkleSouth.has(i)
-                ? <circle key={i} cx={s.x} cy={s.y} r={s.r} fill="#e8e0d0" className="star-twinkle" style={{ '--star-base-o': s.o, animationDelay: `${(i * 2.3) % 14}s`, animationDuration: `${12 + (i * 1.1) % 5}s` }} />
-                : <circle key={i} cx={s.x} cy={s.y} r={s.r} fill="#e8e0d0" opacity={s.o} />
-            ))}
-          </g>
         )}
 
         {/* Center body: Sun (heliocentric) or Earth (geocentric) */}
@@ -1528,7 +2074,9 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
             </text>
           </g>
         ) : (() => {
-          const sunAngle = aligned ? ALIGN_ANGLE : liveAngles ? liveAngles['Sun'].svgAngle : orbitAngles['Sun'];
+          const sunAngle = clockMode === '24h'
+            ? (clockTime.h * 15 + clockTime.m * 0.25 + 90)
+            : aligned ? ALIGN_ANGLE : liveAngles ? liveAngles['Sun'].svgAngle : orbitAngles['Sun'];
           const er = 14;
           const daySelected = selectedEarth === 'day';
           const nightSelected = selectedEarth === 'night';
@@ -1586,52 +2134,33 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
           );
         })()}
 
-        {/* North star layer — rendered before planets so planets receive clicks */}
-        {starMapMode === 'north' && (
-          <g className="star-layer star-layer-north" opacity={hoveredConstellation ? 0.15 : 1}>
-            {starPositionsNorth.map((s, i) => (
-              twinkleNorth.has(i)
-                ? <circle key={i} cx={s.x} cy={s.y} r={s.r} fill="#e8e0d0" className="star-twinkle" style={{ '--star-base-o': s.o, animationDelay: `${(i * 2.3) % 14}s`, animationDuration: `${12 + (i * 1.1) % 5}s` }} />
-                : <circle key={i} cx={s.x} cy={s.y} r={s.r} fill="#e8e0d0" opacity={s.o} />
-            ))}
-          </g>
-        )}
-
-        {/* Constellation highlight: lines + bright stars */}
-        {hoveredConstellation && starMapMode !== 'none' && constellationMap[hoveredConstellation] && (
-          <g className="constellation-highlight">
-            {constellationMap[hoveredConstellation].lines
-              .filter(l => starMapMode === 'north' ? (l.dec1 >= 0 && l.dec2 >= 0) : (l.dec1 < 0 && l.dec2 < 0))
-              .map((l, i) => (
-              <line key={i} x1={l.x1} y1={l.y1} x2={l.x2} y2={l.y2}
-                stroke="rgba(232, 224, 208, 0.4)" strokeWidth="0.8" />
-            ))}
-            {(starMapMode === 'north'
-              ? constellationMap[hoveredConstellation].northStars.map(i => ({ ...starPositionsNorth[i], i }))
-              : constellationMap[hoveredConstellation].southStars.map(i => ({ ...starPositionsSouth[i], i }))
-            ).map(s => (
-              <circle key={s.i} cx={s.x} cy={s.y} r={s.r * 1.8}
-                fill="#e8e0d0" opacity={1} />
-            ))}
-          </g>
-        )}
-
-        {/* Invisible hit targets for constellation star hover */}
-        {starMapMode !== 'none' && (
-          <g className="constellation-hit-layer"
-            onMouseOver={handleConstellationOver}
-            onMouseMove={handleTooltipMove}
-            onMouseOut={handleConstellationOut}>
-            {constellationHits.map(s => (
-              <circle key={`${s.cid}-${s.idx}`} cx={s.x} cy={s.y}
-                r={Math.max(s.r + 2, 5)} fill="transparent" data-cid={s.cid}
-                style={{ cursor: 'pointer' }} />
-            ))}
-          </g>
-        )}
-
-        {/* Planet nodes — rendered last so they're on top for clicks */}
-        {heliocentric ? (
+        {/* Planet nodes — rendered last so they're on top for clicks (hidden when cycles active) */}
+        {!showCycles && (clockMode === '24h' ? (
+          /* 24h mode: planets at real geocentric positions (no Sun — it's on the hour hand) */
+          geoClockAngles && ORBITS.filter(o => o.planet !== 'Sun').map(o => {
+            const angle = geoClockAngles[o.planet];
+            if (angle == null) return null;
+            const rad = (angle * Math.PI) / 180;
+            const px = CX + o.r * Math.cos(rad);
+            const py = CY + o.r * Math.sin(rad);
+            return (
+              <PlanetNode
+                key={`geo24-${o.planet}`}
+                planet={o.planet}
+                metal={o.metal}
+                cx={px}
+                cy={py}
+                selected={selectedPlanet === o.planet}
+                hovered={hoveredPlanet === o.planet}
+                onClick={() => onSelectPlanet(o.planet)}
+                onMouseEnter={(e) => handleTooltipEnter('planet', o.planet, e)}
+                onMouseLeave={handleTooltipLeave}
+                moonPhase={o.planet === 'Moon' ? moonPhaseAngle : undefined}
+                smooth={true}
+              />
+            );
+          })
+        ) : heliocentric ? (
           <>
             {HELIO_ORBITS.map(o => {
               const angle = helioLiveAngles ? helioLiveAngles[o.planet] : (orbitAngles[o.planet] || 0);
@@ -1720,9 +2249,70 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
               )}
             </g>
           );
-        })}
+        }))}
 
           </>
+        )}
+
+        {/* Star layers — outside chakra/normal ternary so they render in both modes (hidden in cycles mode) */}
+        {starMapMode === 'south' && !showCycles && (
+          <g className="star-layer star-layer-south" opacity={hoveredConstellation ? 0.15 : 1}>
+            {starPositionsSouth.map((s, i) => (
+              twinkleSouth.has(i)
+                ? <circle key={i} cx={s.x} cy={s.y} r={s.r} fill="#e8e0d0" className="star-twinkle" style={{ '--star-base-o': s.o, animationDelay: `${(i * 2.3) % 14}s`, animationDuration: `${12 + (i * 1.1) % 5}s` }} />
+                : <circle key={i} cx={s.x} cy={s.y} r={s.r} fill="#e8e0d0" opacity={s.o} />
+            ))}
+          </g>
+        )}
+
+        {starMapMode === 'north' && !showCycles && (
+          <g className="star-layer star-layer-north" opacity={hoveredConstellation ? 0.15 : 1}>
+            {starPositionsNorth.map((s, i) => (
+              twinkleNorth.has(i)
+                ? <circle key={i} cx={s.x} cy={s.y} r={s.r} fill="#e8e0d0" className="star-twinkle" style={{ '--star-base-o': s.o, animationDelay: `${(i * 2.3) % 14}s`, animationDuration: `${12 + (i * 1.1) % 5}s` }} />
+                : <circle key={i} cx={s.x} cy={s.y} r={s.r} fill="#e8e0d0" opacity={s.o} />
+            ))}
+          </g>
+        )}
+
+        {/* Constellation highlight: lines + bright stars (hover or selected) */}
+        {(hoveredConstellation || selectedConstellation) && !showCycles && starMapMode !== 'none' && (() => {
+          const activeCid = hoveredConstellation || selectedConstellation;
+          const cData = constellationMap[activeCid];
+          if (!cData) return null;
+          const isSelected = selectedConstellation === activeCid && !hoveredConstellation;
+          return (
+            <g className="constellation-highlight">
+              {cData.lines
+                .filter(l => starMapMode === 'north' ? (l.dec1 >= 0 && l.dec2 >= 0) : (l.dec1 < 0 && l.dec2 < 0))
+                .map((l, i) => (
+                <line key={i} x1={l.x1} y1={l.y1} x2={l.x2} y2={l.y2}
+                  stroke={isSelected ? "rgba(201, 169, 97, 0.6)" : "rgba(232, 224, 208, 0.4)"} strokeWidth={isSelected ? "1.2" : "0.8"} />
+              ))}
+              {(starMapMode === 'north'
+                ? cData.northStars.map(i => ({ ...starPositionsNorth[i], i }))
+                : cData.southStars.map(i => ({ ...starPositionsSouth[i], i }))
+              ).map(s => (
+                <circle key={s.i} cx={s.x} cy={s.y} r={s.r * 1.8}
+                  fill={isSelected ? "#c9a961" : "#e8e0d0"} opacity={1} />
+              ))}
+            </g>
+          );
+        })()}
+
+        {/* Invisible hit targets for constellation star hover + click */}
+        {starMapMode !== 'none' && !showCycles && (
+          <g className="constellation-hit-layer"
+            onMouseOver={handleConstellationOver}
+            onMouseMove={handleTooltipMove}
+            onMouseOut={handleConstellationOut}
+            onClick={handleConstellationClick}>
+            {constellationHits.map(s => (
+              <circle key={`${s.cid}-${s.idx}`} cx={s.x} cy={s.y}
+                r={Math.max(s.r + 2, 5)} fill="transparent" data-cid={s.cid}
+                style={{ cursor: 'pointer' }} />
+            ))}
+          </g>
         )}
 
         {/* Yellow Brick Road overlay */}
@@ -1823,98 +2413,153 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
           );
         })()}
         </>)}
-      </svg>
+      </svg>}
+      {stormFlash && (
+        <div className="storm-shield-overlay">
+          <img src="/storm-shield.png" alt="" className="storm-shield-img" />
+        </div>
+      )}
+      {meteorShower && (
+        <div className="meteor-shower-overlay" aria-hidden="true">
+          <svg viewBox="0 0 700 700" className="meteor-shower-svg">
+            <line className="meteor-streak m1"  x1="180" y1="-20" x2="130" y2="80"  />
+            <line className="meteor-streak m2"  x1="350" y1="-30" x2="300" y2="70"  />
+            <line className="meteor-streak m3"  x1="520" y1="-10" x2="470" y2="90"  />
+            <line className="meteor-streak m4"  x1="100" y1="30"  x2="50"  y2="130" />
+            <line className="meteor-streak m5"  x1="430" y1="-40" x2="380" y2="60"  />
+            <line className="meteor-streak m6"  x1="600" y1="10"  x2="550" y2="110" />
+            <line className="meteor-streak m7"  x1="250" y1="50"  x2="200" y2="150" />
+            <line className="meteor-streak m8"  x1="480" y1="40"  x2="430" y2="140" />
+            <line className="meteor-streak m9"  x1="150" y1="100" x2="100" y2="200" />
+            <line className="meteor-streak m10" x1="560" y1="80"  x2="510" y2="180" />
+            <line className="meteor-streak m11" x1="320" y1="20"  x2="270" y2="120" />
+            <line className="meteor-streak m12" x1="650" y1="-15" x2="600" y2="85"  />
+            <circle className="meteor-impact" cx="350" cy="350" r="0" />
+          </svg>
+        </div>
+      )}
       <div className="orbital-btn-row">
-        {!showMedicineWheel && (
-          <>
-            {!chakraViewMode && (
-              <button
-                className="orbital-mode-toggle"
-                onClick={cycleOrbitalMode}
-                title={aligned ? 'Aligned — click to orbit' : livePositions ? 'Live Positions — click to align' : heliocentric ? 'Heliocentric — click for live positions' : 'Earth Centered — click for heliocentric'}
-              >
-                {aligned ? '☍' : livePositions ? '◉' : heliocentric ? '☉' : '◎'}
-              </button>
-            )}
-            <button
-              className="calendar-toggle"
-              onClick={() => onToggleCalendar && onToggleCalendar()}
-              title={showCalendar ? 'Hide mythic calendar' : 'Show mythic calendar'}
-            >
-              {showCalendar ? '📅' : '📆'}
-            </button>
-            <button
-              className="clock-toggle"
-              onClick={() => onToggleClock && onToggleClock()}
-              title={showClock ? 'Hide clock' : 'Show clock'}
-            >
-              {showClock ? '⏱' : '🕐'}
-            </button>
-            <button
-              className="chakra-view-toggle"
-              onClick={() => onToggleChakraView && onToggleChakraView()}
-              title={
-                !chakraViewMode ? 'Show chakra body viewer (Chaldean)' :
-                chakraViewMode === 'chaldean' ? 'Chaldean Order — click for Heliocentric' :
-                chakraViewMode === 'heliocentric' ? 'Heliocentric Order — click for Weekday' :
-                'Weekday Order — click to exit'
-              }
-            >
-              <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" stroke="none">
-                <circle cx="12" cy="4" r="2.5" />
-                <path d="M12 8 C9 8 7 10 7 12 L7 16 L9.5 16 L9.5 23 L14.5 23 L14.5 16 L17 16 L17 12 C17 10 15 8 12 8Z" />
-              </svg>
-            </button>
-            <button className="star-map-toggle" onClick={cycleStarMap}
-              title={starMapMode === 'none' ? 'Show northern star map' :
-                     starMapMode === 'north' ? 'Northern — click for southern' :
-                     'Southern — click to hide'}>
-              {starMapMode === 'none' ? '☆' : starMapMode === 'north' ? '★N' : '★S'}
-            </button>
-          </>
-        )}
         <button
-          className="medicine-wheel-toggle"
-          onClick={() => {
-            if (!showMedicineWheel && !wheelOpenedRef.current) {
-              wheelOpenedRef.current = true;
-              triggerStormFlash();
-            }
-            onToggleMedicineWheel && onToggleMedicineWheel();
-          }}
-          title={showMedicineWheel ? 'Show celestial wheels' : 'Show medicine wheel'}
+          className="clock-toggle"
+          onClick={() => onToggleClock && onToggleClock()}
+          title={!clockMode ? 'Show 12h clock' : clockMode === '12h' ? 'Switch to 24h geocentric' : 'Hide clock'}
         >
-          {showMedicineWheel ? '\u2726' : '\u2727'}
-        </button>
-        <button
-          className={`ybr-toggle${ybrActive ? ' active' : ''}`}
-          onClick={() => {
-            if (ybrActive) {
-              startYbrIntro();
-            } else {
-              startYbrIntro();
-              onToggleYBR && onToggleYBR();
-            }
-          }}
-          title={ybrActive ? 'Exit Yellow Brick Road' : 'Walk the Yellow Brick Road'}
-        >
-          <svg viewBox="0 0 20 14" width="18" height="13" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinejoin="round">
-            <path d="M1,4 L7,1 L19,1 L13,4 Z" />
-            <path d="M1,4 L1,13 L13,13 L13,4" />
-            <path d="M13,4 L19,1 L19,10 L13,13" />
-            <line x1="7" y1="4" x2="7" y2="13" />
-            <line x1="1" y1="8.5" x2="13" y2="8.5" />
-            <line x1="4" y1="8.5" x2="4" y2="13" />
-            <line x1="10" y1="4" x2="10" y2="8.5" />
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="12" cy="12" r="10" />
+            <path d="M12 6 L12 12 L16 14" />
+            {clockMode && <circle cx="12" cy="12" r="2.5" fill={clockMode === '12h' ? '#f0c040' : '#4a9bd9'} stroke="none" />}
           </svg>
         </button>
         <button
-          className="vr-view-toggle"
-          onClick={() => navigate('/metals/vr')}
-          title="View in 3D"
+          className="chakra-view-toggle"
+          onClick={() => onToggleChakraView && onToggleChakraView()}
+          title={
+            !chakraViewMode ? 'Show chakra body viewer (Chaldean)' :
+            chakraViewMode === 'chaldean' ? 'Chaldean Order — click for Heliocentric' :
+            chakraViewMode === 'heliocentric' ? 'Heliocentric Order — click for Weekday' :
+            'Weekday Order — click to exit'
+          }
         >
-          3D
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" stroke="none">
+            <circle cx="12" cy="4" r="2.5" />
+            <path d="M12 8 C9 8 7 10 7 12 L7 16 L9.5 16 L9.5 23 L14.5 23 L14.5 16 L17 16 L17 12 C17 10 15 8 12 8Z" />
+          </svg>
         </button>
+        <button
+          className={`mythic-earth-toggle${showMythicEarth ? ' active' : ''}`}
+          onClick={() => onToggleMythicEarth && onToggleMythicEarth()}
+          title={showMythicEarth ? 'Exit Mythic Earth' : 'Show Mythic Earth globe'}
+        >
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="12" cy="12" r="10" />
+            <ellipse cx="12" cy="12" rx="4.5" ry="10" />
+            <path d="M2.5 9 L21.5 9" />
+            <path d="M2.5 15 L21.5 15" />
+          </svg>
+        </button>
+
+        <button
+          className={`monomyth-toggle${showMonomyth ? ' active' : ''}${showCycles ? ' cycles' : ''}${showMeteorSteel ? ' steel' : ''}`}
+          onClick={() => onToggleMonomyth && onToggleMonomyth()}
+          title={showMeteorSteel ? 'Meteor steel — click for monomyth' : showMonomyth ? 'Monomyth — click for meteor steel' : 'Show monomyth journey ring'}
+          style={showCycles && !showMeteorSteel ? { color: '#6ecf8a' } : undefined}
+        >
+          {showMeteorSteel ? (
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" stroke="none">
+              {/* Main flame tongue */}
+              <path d="M1 1 L10 12 L6.5 10.5 Z" opacity="0.55" />
+              {/* Second flame tongue */}
+              <path d="M4.5 0 L11 11 L8.5 12.5 Z" opacity="0.75" />
+              {/* Meteor body */}
+              <circle cx="15" cy="15" r="5.5" />
+              {/* Swoosh arc around body */}
+              <path d="M9.5 19 C11.5 22.5 18.5 22.5 21.5 17" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+            </svg>
+          ) : (
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2">
+              <circle cx="12" cy="12" r="9" />
+              <path d="M12 3 L14 6 L10 6 Z" fill="currentColor" stroke="none" />
+            </svg>
+          )}
+        </button>
+
+        <button
+          className={`starlight-toggle${showFallenStarlight ? ' active' : ''}${showStoryOfStories ? ' stories' : ''}`}
+          onClick={() => onToggleStarlight && onToggleStarlight()}
+          title={showStoryOfStories ? 'Story of Stories — click for Fallen Starlight' : showFallenStarlight ? 'Fallen Starlight — click for Story of Stories' : 'Show Fallen Starlight'}
+        >
+          {showStoryOfStories ? (
+            /* Open book with golden circle on cover */
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
+              {/* Open book shape — left page */}
+              <path d="M2 3 C2 3 5 2 12 4 L12 21 C5 19 2 20 2 20 Z" />
+              {/* Open book shape — right page */}
+              <path d="M22 3 C22 3 19 2 12 4 L12 21 C19 19 22 20 22 20 Z" />
+              {/* Golden circle on left page */}
+              <circle cx="7" cy="11" r="3.5" stroke="rgba(232, 192, 128, 0.9)" strokeWidth="1.8" fill="none" />
+            </svg>
+          ) : showFallenStarlight ? (
+            /* Open book with star on cover */
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
+              {/* Open book shape — left page */}
+              <path d="M2 3 C2 3 5 2 12 4 L12 21 C5 19 2 20 2 20 Z" />
+              {/* Open book shape — right page */}
+              <path d="M22 3 C22 3 19 2 12 4 L12 21 C19 19 22 20 22 20 Z" />
+              {/* Star on left page */}
+              <path d="M7 7 L6.2 9.4 L3.7 9.4 L5.7 11 L5 13.4 L7 12 L9 13.4 L8.3 11 L10.3 9.4 L7.8 9.4 Z" fill="currentColor" stroke="none" />
+            </svg>
+          ) : (
+            /* Closed book with star on cover */
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
+              {/* Book body */}
+              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+              {/* Star on cover */}
+              <path d="M12 6 L10.8 9.2 L7.5 9.2 L10.1 11.3 L9.1 14.5 L12 12.5 L14.9 14.5 L13.9 11.3 L16.5 9.2 L13.2 9.2 Z" fill="currentColor" stroke="none" />
+            </svg>
+          )}
+        </button>
+
+        <span style={{ position: 'relative' }}>
+          <button
+            className={`medicine-wheel-toggle${showMedicineWheel ? ' active' : ''}`}
+            onClick={() => {
+              triggerStormFlash();
+              onToggleMedicineWheel && onToggleMedicineWheel();
+            }}
+            title={showMedicineWheel ? 'Show celestial wheels' : 'Show medicine wheel'}
+          >
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M13 2 L5 14 L11 14 L11 22 L19 10 L13 10 Z" />
+            </svg>
+          </button>
+          {stormFlash && (
+            <>
+              <div className="storm-flash-btn-bg" />
+              <img src="/storm-shield.png" alt="" className="storm-flash-btn-img" />
+            </>
+          )}
+        </span>
       </div>
       {videoListId && (
         <div className="orbital-video-container">
@@ -1944,14 +2589,6 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
           </div>
         );
       })()}
-      {stormFlash && (
-        <>
-          <div className="storm-flash-bg" />
-          <div className="storm-flash-img-wrap">
-            <img src="/storm-shield.png" alt="Storm Shield" className="storm-flash-img" />
-          </div>
-        </>
-      )}
     </div>
   );
 }

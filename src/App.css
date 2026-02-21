@@ -1692,13 +1692,13 @@ body {
   position: fixed;
   bottom: 24px;
   right: 24px;
-  width: 56px;
-  height: 56px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   border: 1px solid var(--accent-ember);
   background: var(--bg-medium);
   color: var(--accent-ember);
-  font-size: 1.6rem;
+  font-size: 1.3rem;
   cursor: pointer;
   z-index: 1000;
   display: flex;
@@ -1715,7 +1715,7 @@ body {
 
 .chat-panel {
   position: fixed;
-  bottom: 96px;
+  bottom: 76px;
   right: 24px;
   width: 400px;
   max-height: 520px;
@@ -1909,9 +1909,9 @@ body {
   .chat-toggle {
     bottom: 16px;
     right: 16px;
-    width: 48px;
-    height: 48px;
-    font-size: 1.3rem;
+    width: 36px;
+    height: 36px;
+    font-size: 1.1rem;
   }
 }
 
@@ -2141,17 +2141,17 @@ body {
 
 /* Header toggle button */
 .coursework-toggle {
-  font-family: 'Cinzel', serif;
-  font-size: 0.7rem;
-  letter-spacing: 0.04em;
   color: var(--text-secondary);
   background: none;
   border: 1px solid var(--border-subtle);
   border-radius: 6px;
-  padding: 3px 10px;
+  padding: 4px 6px;
   cursor: pointer;
   transition: all 0.25s ease;
-  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
 }
 
 .coursework-toggle:hover {
@@ -2166,17 +2166,84 @@ body {
   box-shadow: 0 0 8px rgba(201, 169, 97, 0.15);
 }
 
-/* Profile link in header */
-.site-header-profile {
+/* YBR toggle in site header */
+.header-ybr-toggle {
+  background: none;
+  border: 1px solid rgba(218, 165, 32, 0.4);
+  border-radius: 6px;
+  padding: 3px 8px;
+  cursor: pointer;
+  color: rgba(218, 165, 32, 0.6);
+  transition: all 0.25s ease;
+  display: flex;
+  align-items: center;
+}
+
+.header-ybr-toggle:hover {
+  color: rgba(218, 165, 32, 0.9);
+  border-color: rgba(218, 165, 32, 0.7);
+  background: rgba(218, 165, 32, 0.08);
+}
+
+.header-ybr-toggle.active {
+  color: rgba(218, 165, 32, 1);
+  border-color: rgba(218, 165, 32, 0.8);
+  background: rgba(218, 165, 32, 0.15);
+  box-shadow: 0 0 8px rgba(218, 165, 32, 0.3);
+}
+
+/* Story Forge toggle in site header */
+.header-forge-toggle {
+  display: flex;
+  align-items: center;
+  color: var(--text-secondary);
+  text-decoration: none;
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  padding: 3px 8px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.header-forge-toggle:hover {
+  color: var(--accent-gold);
+  border-color: var(--accent-gold);
+  background: rgba(201, 169, 97, 0.08);
+}
+
+/* 3D view toggle in site header */
+.header-3d-toggle {
   font-family: 'Cinzel', serif;
-  font-size: 0.7rem;
+  font-size: 0.65rem;
+  font-weight: 700;
   letter-spacing: 0.04em;
   color: var(--text-secondary);
   text-decoration: none;
   border: 1px solid var(--border-subtle);
   border-radius: 6px;
-  padding: 3px 10px;
+  padding: 3px 8px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.header-3d-toggle:hover {
+  color: var(--accent-gold);
+  border-color: var(--accent-gold);
+  background: rgba(201, 169, 97, 0.08);
+}
+
+/* Profile link in header */
+.site-header-profile {
+  color: var(--text-secondary);
+  text-decoration: none;
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  padding: 4px 6px;
   transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
 }
 
 .site-header-profile:hover {
@@ -2793,6 +2860,136 @@ body {
   padding: 7px 18px;
 }
 
+/* ===== PROFILE: NATAL CHART ===== */
+.natal-chart-display {
+  margin-bottom: 20px;
+}
+
+.natal-big-three {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.natal-big-three-card {
+  flex: 1;
+  background: rgba(201, 169, 97, 0.06);
+  border: 1px solid rgba(201, 169, 97, 0.25);
+  border-radius: 10px;
+  padding: 14px 8px;
+  text-align: center;
+}
+
+.natal-big-three-card.natal-big-three-unknown {
+  border-style: dashed;
+  opacity: 0.4;
+}
+
+.natal-big-three-symbol {
+  font-size: 1.8rem;
+  line-height: 1;
+  margin-bottom: 4px;
+  color: var(--accent-gold);
+}
+
+.natal-big-three-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.65rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  margin-bottom: 2px;
+}
+
+.natal-big-three-sign {
+  font-family: 'Cinzel', serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.natal-big-three-degree {
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+}
+
+.natal-planets-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 12px;
+}
+
+.natal-planet-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(26, 26, 36, 0.5);
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-size: 0.78rem;
+}
+
+.natal-planet-symbol {
+  font-size: 1rem;
+  width: 22px;
+  text-align: center;
+  color: var(--accent-gold);
+}
+
+.natal-planet-name {
+  width: 70px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.natal-planet-metal {
+  width: 80px;
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+}
+
+.natal-planet-sign {
+  flex: 1;
+  color: var(--text-primary);
+}
+
+.natal-planet-house {
+  width: 65px;
+  text-align: right;
+  color: var(--text-secondary);
+  font-size: 0.72rem;
+}
+
+.natal-chinese {
+  background: rgba(201, 169, 97, 0.08);
+  border: 1px solid rgba(201, 169, 97, 0.2);
+  border-radius: 8px;
+  padding: 10px 14px;
+  text-align: center;
+  font-family: 'Cinzel', serif;
+  font-size: 0.85rem;
+  color: var(--accent-gold);
+  margin-bottom: 10px;
+}
+
+.natal-time-note {
+  text-align: center;
+  font-style: italic;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  opacity: 0.7;
+}
+
+@media (max-width: 480px) {
+  .natal-big-three {
+    flex-direction: column;
+  }
+  .natal-planet-metal {
+    display: none;
+  }
+}
+
 /* ===== PROFILE: EMBEDDED CHAT ===== */
 .profile-chat {
   border: 1px solid var(--border-subtle);
@@ -2909,12 +3106,15 @@ body {
     gap: 10px;
   }
   .coursework-toggle {
-    font-size: 0.6rem;
-    padding: 2px 6px;
+    padding: 3px 5px;
+  }
+  .coursework-toggle svg,
+  .site-header-profile svg {
+    width: 15px;
+    height: 15px;
   }
   .site-header-profile {
-    font-size: 0.6rem;
-    padding: 2px 6px;
+    padding: 3px 5px;
   }
   .course-completion-panel {
     padding: 24px 20px;

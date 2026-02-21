@@ -85,6 +85,20 @@ export function ProfileProvider({ children }) {
     }
   }, [user]);
 
+  // Update natal chart
+  const updateNatalChart = useCallback(async (chartData) => {
+    if (!user || !firebaseConfigured || !db) return;
+
+    setProfileData(prev => ({ ...prev, natalChart: chartData }));
+
+    try {
+      const ref = doc(db, 'users', user.uid, 'meta', 'profile');
+      await setDoc(ref, { natalChart: chartData, updatedAt: serverTimestamp() }, { merge: true });
+    } catch (err) {
+      console.error('Failed to update natal chart:', err);
+    }
+  }, [user]);
+
   // Mark onboarding complete
   const completeOnboarding = useCallback(async () => {
     if (!user || !firebaseConfigured || !db) return;
@@ -114,6 +128,8 @@ export function ProfileProvider({ children }) {
     }
   }, [user]);
 
+  const natalChart = profileData?.natalChart || null;
+
   const value = {
     profileData,
     earnedRanks,
@@ -122,7 +138,9 @@ export function ProfileProvider({ children }) {
     hasProfile,
     loaded,
     handle,
+    natalChart,
     updateCredentials,
+    updateNatalChart,
     completeOnboarding,
     refreshProfile,
   };

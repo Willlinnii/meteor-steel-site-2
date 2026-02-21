@@ -7,6 +7,7 @@ import useWheelJourney from '../../hooks/useWheelJourney';
 import WheelJourneyPanel from '../../components/WheelJourneyPanel';
 import { useCoursework } from '../../coursework/CourseworkContext';
 import { useWritings } from '../../writings/WritingsContext';
+import { useYBRHeader } from '../../App';
 import './MonomythPage.css';
 
 import monomythProse from '../../data/monomyth.json';
@@ -19,45 +20,7 @@ import filmsData from '../../data/monomythFilms.json';
 import worldData from '../../data/normalOtherWorld.json';
 import monomythModels from '../../data/monomythModels.json';
 import monomythCycles from '../../data/monomythCycles.json';
-
-const THEORIST_TO_MODEL = {
-  campbell: 'campbell', jung: 'jung', nietzsche: 'nietzsche',
-  frobenius: 'frobenius', eliade: 'eliade', plato: 'plato',
-  vogler: 'vogler', snyder: 'snyder', aristotle: 'aristotle',
-  mckee: 'mckee-field', field: 'mckee-field',
-  freud: 'dream', gennep: 'vangennep', murdoch: 'murdock',
-  tolkien: 'tolkien', fraser: 'frazer', marks: 'marks',
-  propp: 'propp', murdock: 'murdock', vangennep: 'vangennep',
-  frazer: 'frazer',
-};
-
-const CYCLE_TO_MODEL = {
-  'Solar Day': 'solar-day',
-  'Lunar Month': 'lunar-month',
-  'Solar Year': 'solar-year',
-  'Wake & Sleep': 'wake-sleep',
-  'Procreation': 'procreation',
-  'Mortality': 'mortality',
-};
-
-function getModelById(id) {
-  return monomythModels.models.find(m => m.id === id) || null;
-}
-
-function getCycleById(id) {
-  return monomythCycles.cycles.find(c => c.id === id) || null;
-}
-
-const MONOMYTH_STAGES = [
-  { id: 'golden-age', label: 'Surface', playlist: 'https://www.youtube.com/playlist?list=PLX31T_KS3jtpduuWlv1HDEoVMtrhOhXF_' },
-  { id: 'falling-star', label: 'Calling', playlist: 'https://www.youtube.com/playlist?list=PLX31T_KS3jto4aGkJe3hvMfHAvBO6XSxt' },
-  { id: 'impact-crater', label: 'Crossing', flipLabel: true, playlist: 'https://www.youtube.com/playlist?list=PLX31T_KS3jtp43zjmPLi4xXkmC3N3yn8p' },
-  { id: 'forge', label: 'Initiating', playlist: 'https://www.youtube.com/playlist?list=PLX31T_KS3jtoxHSSqRRdiOhinC8Gua8mm' },
-  { id: 'quenching', label: 'Nadir', playlist: 'https://www.youtube.com/playlist?list=PLX31T_KS3jtpw9cTgM3Kj5okUQr2zFK3v' },
-  { id: 'integration', label: 'Return', playlist: 'https://www.youtube.com/playlist?list=PLX31T_KS3jtpSnXrPdWpxjvcrzzJ9dPJ7' },
-  { id: 'drawing', label: 'Arrival', flipLabel: true, playlist: 'https://www.youtube.com/playlist?list=PLX31T_KS3jtp6RIa4-lI5UyDHjv0PJHfB' },
-  { id: 'new-age', label: 'Renewal', playlist: 'https://youtube.com/playlist?list=PLX31T_KS3jtqspHndrqJQ-LK1kBWklQU0' },
-];
+import { MONOMYTH_STAGES, THEORIST_TO_MODEL, CYCLE_TO_MODEL, getModelById, getCycleById } from '../../data/monomythConstants';
 
 const TABS = [
   { id: 'overview', label: 'Overview' },
@@ -536,6 +499,13 @@ export default function MonomythPage() {
     }
   }, [journey]);
 
+  // Register YBR toggle with the site header
+  const { register: registerYBR } = useYBRHeader();
+  useEffect(() => {
+    registerYBR({ active: journey.active, toggle: handleYBRToggle });
+    return () => registerYBR({ active: false, toggle: null });
+  }, [journey.active, handleYBRToggle, registerYBR]);
+
   // When journey advances to a new stage, auto-select it on the wheel
   useEffect(() => {
     if (journey.active && journey.currentStopIndex >= 0 && journey.currentStopIndex < MONOMYTH_STAGES.length) {
@@ -633,9 +603,9 @@ export default function MonomythPage() {
         onSelectStage={handleSelectStage}
         clockwise={clockwise}
         onToggleDirection={() => setClockwise(!clockwise)}
-        centerLine1="Hero's Journey"
+        centerLine1="Monomyth"
         centerLine2="& the"
-        centerLine3="Monomyth"
+        centerLine3="Hero's Journey"
         showAuthor={false}
         videoUrl={videoUrl}
         onCloseVideo={() => setVideoUrl(null)}

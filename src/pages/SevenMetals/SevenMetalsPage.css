@@ -43,7 +43,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 40px 20px 56px;
+  padding: 40px 20px 20px;
 }
 
 /* ===== ORBITAL SVG ===== */
@@ -70,17 +70,17 @@
   display: inline-block;
 }
 
-/* ===== BUTTON ROW (below diagram) ===== */
+/* ===== BUTTON ROW (fixed bottom-right, stacked above Atlas chat) ===== */
 
 .orbital-btn-row {
-  position: absolute;
-  bottom: -36px;
-  left: 50%;
-  transform: translateX(-50%);
+  position: fixed;
+  bottom: 72px;
+  right: 24px;
+  z-index: 999;
   display: flex;
+  flex-direction: column;
   gap: 8px;
   align-items: center;
-  justify-content: center;
 }
 
 /* ===== ORBITAL MODE TOGGLE (cycle: orbiting → live → aligned) ===== */
@@ -194,6 +194,12 @@
   margin: 0 0 0.6rem;
 }
 
+.calendar-today-above {
+  text-align: center;
+  margin: 0 0 0.3rem;
+  font-size: 0.9rem;
+}
+
 .calendar-weekday-buttons {
   display: flex;
   justify-content: center;
@@ -203,29 +209,81 @@
 
 .calendar-weekday-btn {
   font-family: 'Cinzel', serif;
-  font-size: 0.7rem;
+  font-size: 0.65rem;
   font-weight: 600;
   letter-spacing: 0.04em;
   text-transform: uppercase;
   color: rgba(139, 195, 170, 0.7);
-  background: rgba(139, 195, 170, 0.05);
-  border: 1px solid rgba(139, 195, 170, 0.25);
-  padding: 8px 14px;
+  background: transparent;
+  border: 2px solid rgba(139, 195, 170, 0.25);
+  border-radius: 50%;
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
 .calendar-weekday-btn:hover {
-  color: rgba(139, 195, 170, 0.95);
-  background: rgba(139, 195, 170, 0.1);
-  border-color: rgba(139, 195, 170, 0.5);
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 0 10px currentColor;
+  opacity: 1;
 }
 
 .calendar-weekday-btn.active {
-  color: var(--accent-ember);
-  border-color: var(--accent-ember);
-  background: rgba(196, 113, 58, 0.12);
-  box-shadow: 0 0 10px rgba(196, 113, 58, 0.2);
+  background: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 0 12px currentColor;
+}
+
+/* ===== PLANET WEEKDAY NAV (on planet detail pages) ===== */
+
+.planet-weekday-nav {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  margin: 0.4rem 0 1rem;
+}
+
+.planet-weekday-btn {
+  font-family: 'Cinzel', serif;
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  background: transparent;
+  border: 1.5px solid;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 0.55;
+  transition: all 0.3s ease;
+}
+
+.planet-weekday-btn:hover {
+  opacity: 1;
+  background: rgba(255, 255, 255, 0.06);
+  box-shadow: 0 0 8px currentColor;
+}
+
+.planet-weekday-btn.selected {
+  width: auto;
+  min-width: 36px;
+  height: 36px;
+  padding: 0 14px;
+  border-radius: 18px;
+  opacity: 1;
+  font-size: 0.7rem;
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 0 12px currentColor;
 }
 
 /* ===== ZODIAC SIGNS ===== */
@@ -830,9 +888,8 @@
   }
 
   .orbital-btn-row {
-    position: static;
-    transform: none;
-    margin: 8px auto 0;
+    bottom: 76px;
+    right: 16px;
     gap: 6px;
   }
 
@@ -846,7 +903,9 @@
   .medicine-wheel-toggle,
   .chakra-view-toggle,
   .star-map-toggle,
-  .vr-view-toggle {
+  .vr-view-toggle,
+  .mythic-earth-toggle,
+  .monomyth-toggle {
     width: 34px;
     height: 34px;
     font-size: 0.95rem;
@@ -856,6 +915,161 @@
     font-size: 0.7rem;
   }
 
+}
+
+/* ===== MONOMYTH TOGGLE ===== */
+
+.monomyth-toggle {
+  position: static;
+  background: none;
+  border: 1px solid rgba(232, 192, 128, 0.4);
+  color: rgba(232, 192, 128, 0.7);
+  font-size: 1.2rem;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  opacity: 0.7;
+}
+
+.monomyth-toggle:hover {
+  opacity: 1;
+  background: rgba(232, 192, 128, 0.1);
+  box-shadow: 0 0 10px rgba(232, 192, 128, 0.3);
+}
+
+.monomyth-toggle.active {
+  opacity: 1;
+  color: #e8c080;
+  border-color: rgba(232, 192, 128, 0.6);
+  background: rgba(232, 192, 128, 0.12);
+  box-shadow: 0 0 12px rgba(232, 192, 128, 0.4);
+}
+
+/* Fallen Starlight / Story of Stories toggle */
+.starlight-toggle {
+  position: static;
+  background: none;
+  border: 1px solid rgba(196, 113, 58, 0.4);
+  color: rgba(196, 113, 58, 0.7);
+  font-size: 1.2rem;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  opacity: 0.7;
+}
+
+.starlight-toggle:hover {
+  opacity: 1;
+  background: rgba(196, 113, 58, 0.1);
+  box-shadow: 0 0 10px rgba(196, 113, 58, 0.3);
+}
+
+.starlight-toggle.active {
+  opacity: 1;
+  color: #c4713a;
+  border-color: rgba(196, 113, 58, 0.6);
+  background: rgba(196, 113, 58, 0.12);
+  box-shadow: 0 0 12px rgba(196, 113, 58, 0.4);
+}
+
+.starlight-toggle.stories {
+  color: #8b9dc3;
+  border-color: rgba(139, 157, 195, 0.6);
+  background: rgba(139, 157, 195, 0.12);
+  box-shadow: 0 0 12px rgba(139, 157, 195, 0.4);
+}
+
+/* ===== MYTHIC EARTH (embedded in diagram area) ===== */
+
+.metals-diagram-center .mythic-earth-page {
+  width: 100%;
+  max-width: 90vw;
+}
+
+.metals-diagram-center .mythic-earth-map-area {
+  height: min(75vh, 700px);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* ===== MYTHIC EARTH TOGGLE ===== */
+
+.mythic-earth-toggle {
+  position: static;
+  background: none;
+  border: 1px solid rgba(74, 138, 176, 0.4);
+  color: rgba(74, 138, 176, 0.7);
+  font-size: 1.2rem;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  opacity: 0.7;
+}
+
+.mythic-earth-toggle:hover {
+  opacity: 1;
+  background: rgba(74, 138, 176, 0.1);
+  box-shadow: 0 0 10px rgba(74, 138, 176, 0.3);
+}
+
+.mythic-earth-toggle.active {
+  opacity: 1;
+  color: #4a8ab0;
+  border-color: rgba(74, 138, 176, 0.6);
+  background: rgba(74, 138, 176, 0.12);
+  box-shadow: 0 0 12px rgba(74, 138, 176, 0.4);
+}
+
+/* ===== MONOMYTH RING ===== */
+
+.monomyth-stage text {
+  transition: fill 0.3s ease;
+}
+
+.monomyth-stage:hover text {
+  fill: rgba(232, 192, 128, 0.95) !important;
+}
+
+.monomyth-stage.active text {
+  fill: #e8c080 !important;
+}
+
+/* ===== STARLIGHT RING ===== */
+
+.starlight-stage text {
+  transition: fill 0.3s ease;
+}
+
+.starlight-stage:hover text {
+  fill: rgba(196, 113, 58, 0.95) !important;
+}
+
+.starlight-stage.active text {
+  fill: #e0a060 !important;
+}
+
+/* ===== MONOMYTH WORLD SELECTOR ===== */
+
+.monomyth-world-selector {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 16px;
 }
 
 /* ===== CULTURE BLOCKS ===== */
@@ -894,6 +1108,7 @@
   font-size: 1.3rem;
   width: 40px;
   height: 40px;
+  border-radius: 50%;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -950,6 +1165,7 @@
   font-size: 1.3rem;
   width: 40px;
   height: 40px;
+  border-radius: 50%;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -962,6 +1178,13 @@
   opacity: 1;
   background: rgba(180, 140, 80, 0.1);
   box-shadow: 0 0 10px rgba(180, 140, 80, 0.3);
+}
+
+.medicine-wheel-toggle.active {
+  opacity: 1;
+  border-color: rgba(180, 140, 80, 0.8);
+  background: rgba(180, 140, 80, 0.15);
+  box-shadow: 0 0 12px rgba(180, 140, 80, 0.4);
 }
 
 .star-map-toggle {
@@ -1094,57 +1317,87 @@
   }
 }
 
-/* ===== STORM FLASH (Hyemeyohsts Storm easter egg) ===== */
+/* ===== STORM FLASH (button-sized lightning on medicine wheel toggle) ===== */
 
-.storm-flash-bg {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
+.storm-flash-btn-bg {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 52px;
+  height: 52px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
   pointer-events: none;
-  z-index: 9999;
-  animation: storm-lightning 3.5s ease-out forwards;
+  z-index: 10001;
+  animation: storm-btn-lightning 3.5s ease-out forwards;
 }
 
-.storm-flash-img-wrap {
+.storm-flash-btn-img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 40px;
+  height: 40px;
+  transform: translate(-50%, -50%);
+  object-fit: contain;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 10002;
+  opacity: 0;
+  animation: storm-btn-img-flash 3.5s ease-out forwards;
+}
+
+@keyframes storm-btn-lightning {
+  0% { background: rgba(200, 220, 255, 0.95); box-shadow: 0 0 30px 15px rgba(200, 220, 255, 0.8); }
+  2% { background: rgba(180, 200, 255, 0.1); box-shadow: 0 0 10px 5px rgba(180, 200, 255, 0.2); }
+  4% { background: rgba(190, 210, 255, 0.75); box-shadow: 0 0 25px 12px rgba(190, 210, 255, 0.6); }
+  6% { background: rgba(160, 190, 255, 0.15); box-shadow: 0 0 8px 4px rgba(160, 190, 255, 0.15); }
+  8% { background: rgba(180, 205, 255, 0.4); box-shadow: 0 0 15px 8px rgba(180, 205, 255, 0.3); }
+  12% { background: transparent; box-shadow: none; }
+  100% { background: transparent; box-shadow: none; }
+}
+
+@keyframes storm-btn-img-flash {
+  0% { opacity: 0; transform: translate(-50%, -50%) scale(0.7); }
+  4% { opacity: 0.9; transform: translate(-50%, -50%) scale(1.05); }
+  8% { opacity: 0.9; transform: translate(-50%, -50%) scale(1); }
+  75% { opacity: 0.9; transform: translate(-50%, -50%) scale(1); }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(1.02); }
+}
+
+/* ===== STORM SHIELD OVERLAY (diagram-level, grows over medicine wheel) ===== */
+
+.storm-shield-overlay {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 120%;
-  height: 120%;
+  width: 100%;
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
   pointer-events: none;
-  z-index: 10000;
+  z-index: 100;
 }
 
-.storm-flash-img {
-  width: 100%;
-  height: 100%;
+.storm-shield-img {
+  width: 80%;
+  max-width: 500px;
+  height: auto;
   object-fit: contain;
   opacity: 0;
-  animation: storm-img-flash 3.5s ease-out forwards;
+  transform: scale(0.15);
+  animation: storm-shield-grow 3.5s ease-out forwards;
 }
 
-@keyframes storm-lightning {
-  0% { background: rgba(200, 220, 255, 0.95); }
-  2% { background: rgba(180, 200, 255, 0.1); }
-  4% { background: rgba(190, 210, 255, 0.75); }
-  6% { background: rgba(160, 190, 255, 0.15); }
-  8% { background: rgba(180, 205, 255, 0.4); }
-  12% { background: rgba(0, 0, 0, 0); }
-  100% { background: rgba(0, 0, 0, 0); }
-}
-
-@keyframes storm-img-flash {
-  0% { opacity: 0; transform: scale(0.85); }
-  4% { opacity: 0.8; transform: scale(1.03); }
-  8% { opacity: 0.8; transform: scale(1); }
-  75% { opacity: 0.8; transform: scale(1); }
-  100% { opacity: 0; transform: scale(1.01); }
+@keyframes storm-shield-grow {
+  0%   { opacity: 0; transform: scale(0.15); }
+  3%   { opacity: 0.95; transform: scale(0.4); }
+  8%   { opacity: 1; transform: scale(0.85); }
+  12%  { opacity: 1; transform: scale(1); }
+  70%  { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(1.05); }
 }
 
 /* ===== STAR TWINKLE ===== */
@@ -1156,6 +1409,109 @@
 @keyframes star-glint {
   0%, 97.2%, 100% { opacity: var(--star-base-o, 0.4); }
   98%, 99.2% { opacity: 1; filter: brightness(5) drop-shadow(0 0 3px #fff); }
+}
+
+/* ===== METEOR SHOWER ANIMATION ===== */
+
+.meteor-shower-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 15;
+  overflow: hidden;
+}
+
+.meteor-shower-svg {
+  width: 100%;
+  height: 100%;
+}
+
+.meteor-streak {
+  stroke: #c4713a;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  opacity: 0;
+  filter: drop-shadow(0 0 4px #c4713a) drop-shadow(0 0 8px rgba(196, 113, 58, 0.6));
+  animation: meteor-fall 0.7s ease-in forwards;
+}
+
+/* Staggered delays for each meteor */
+.meteor-streak.m1  { animation-delay: 0s; }
+.meteor-streak.m2  { animation-delay: 0.12s; stroke: #e8c080; }
+.meteor-streak.m3  { animation-delay: 0.25s; }
+.meteor-streak.m4  { animation-delay: 0.4s; stroke: #d4a574; }
+.meteor-streak.m5  { animation-delay: 0.15s; }
+.meteor-streak.m6  { animation-delay: 0.55s; stroke: #e8c080; }
+.meteor-streak.m7  { animation-delay: 0.7s; }
+.meteor-streak.m8  { animation-delay: 0.35s; stroke: #d4a574; }
+.meteor-streak.m9  { animation-delay: 0.9s; }
+.meteor-streak.m10 { animation-delay: 0.6s; stroke: #e8c080; }
+.meteor-streak.m11 { animation-delay: 0.2s; }
+.meteor-streak.m12 { animation-delay: 0.8s; stroke: #d4a574; }
+
+@keyframes meteor-fall {
+  0% {
+    opacity: 0;
+    transform: translate(80px, -80px);
+    stroke-width: 1;
+  }
+  15% {
+    opacity: 0.9;
+    stroke-width: 3;
+  }
+  40% {
+    opacity: 1;
+    transform: translate(0, 0);
+    stroke-width: 2.5;
+  }
+  70% {
+    opacity: 0.6;
+    transform: translate(-40px, 40px);
+    stroke-width: 1.5;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-80px, 80px);
+    stroke-width: 0.5;
+  }
+}
+
+/* Central impact glow */
+.meteor-impact {
+  fill: rgba(196, 113, 58, 0.8);
+  opacity: 0;
+  animation: meteor-impact-flash 1.2s ease-out 0.5s forwards;
+}
+
+@keyframes meteor-impact-flash {
+  0% {
+    r: 0;
+    opacity: 0;
+    fill: rgba(232, 192, 128, 0.9);
+  }
+  10% {
+    r: 30;
+    opacity: 0.7;
+    fill: rgba(232, 192, 128, 0.8);
+  }
+  30% {
+    r: 80;
+    opacity: 0.4;
+    fill: rgba(196, 113, 58, 0.5);
+  }
+  60% {
+    r: 150;
+    opacity: 0.15;
+    fill: rgba(196, 113, 58, 0.2);
+  }
+  100% {
+    r: 250;
+    opacity: 0;
+    fill: rgba(196, 113, 58, 0);
+  }
 }
 
 /* ===== TAROT CARD CONTENT ===== */
@@ -1766,5 +2122,232 @@
 
   .ybr-begin-btn {
     width: 100%;
+  }
+}
+
+/* ===== MYTHIC EARTH CONTENT AREA (embedded in Chronosphaera) ===== */
+
+.mythic-earth-content-area {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* --- Category Tabs --- */
+
+.mythic-earth-categories {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.mythic-earth-cat-btn {
+  font-family: 'Cinzel', serif;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--cat-color, var(--accent-steel));
+  background: transparent;
+  border: 1px solid color-mix(in srgb, var(--cat-color, var(--accent-steel)) 40%, transparent);
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.mythic-earth-cat-btn:hover {
+  background: color-mix(in srgb, var(--cat-color, var(--accent-steel)) 10%, transparent);
+  border-color: var(--cat-color, var(--accent-steel));
+}
+
+.mythic-earth-cat-btn.active {
+  color: #fff;
+  background: color-mix(in srgb, var(--cat-color, var(--accent-steel)) 20%, transparent);
+  border-color: var(--cat-color, var(--accent-steel));
+  box-shadow: 0 0 12px color-mix(in srgb, var(--cat-color, var(--accent-steel)) 30%, transparent);
+}
+
+/* --- Site Grid --- */
+
+.mythic-earth-site-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.mythic-earth-site-card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 14px 16px;
+  background: var(--bg-medium);
+  border: 1px solid var(--border-subtle);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: left;
+}
+
+.mythic-earth-site-card:hover {
+  border-color: var(--accent-gold);
+  background: rgba(201, 169, 97, 0.06);
+  box-shadow: 0 0 12px rgba(201, 169, 97, 0.15);
+}
+
+.site-card-name {
+  font-family: 'Cinzel', serif;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--accent-gold);
+}
+
+.site-card-region {
+  font-family: 'Crimson Pro', serif;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.site-card-tradition {
+  font-family: 'Cinzel', serif;
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--accent-steel);
+  opacity: 0.7;
+}
+
+/* --- Site Detail --- */
+
+.mythic-earth-site-detail {
+  border: 1px solid var(--border-subtle);
+  background: var(--bg-medium);
+  padding: 24px;
+}
+
+.mythic-earth-site-detail h3 {
+  font-family: 'Cinzel', serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--accent-gold);
+  margin: 0 0 12px;
+}
+
+.mythic-earth-back {
+  font-family: 'Cinzel', serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--accent-steel);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  margin-bottom: 16px;
+  transition: color 0.2s;
+}
+
+.mythic-earth-back:hover {
+  color: var(--accent-gold);
+}
+
+/* --- Tags --- */
+
+.mythic-earth-site-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.mythic-earth-tag {
+  font-family: 'Cinzel', serif;
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #0a0a0f;
+  padding: 4px 10px;
+  border-radius: 2px;
+}
+
+.mythic-earth-tag.tradition {
+  background: rgba(201, 169, 97, 0.3);
+  color: var(--accent-gold);
+}
+
+.mythic-earth-tag.region {
+  background: rgba(139, 157, 195, 0.2);
+  color: var(--accent-steel);
+}
+
+/* --- Site Text --- */
+
+.mythic-earth-site-text p {
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: var(--text-primary);
+  margin-bottom: 12px;
+}
+
+/* --- Excerpt Block --- */
+
+.mythic-earth-excerpt-block {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.mythic-earth-excerpt-block h4 {
+  font-family: 'Cinzel', serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--accent-fire);
+  margin: 0 0 10px;
+}
+
+.mythic-earth-excerpt-block blockquote {
+  font-family: 'Crimson Pro', serif;
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: var(--text-secondary);
+  font-style: italic;
+  margin: 0;
+  padding: 12px 18px;
+  border-left: 3px solid var(--accent-gold);
+  background: rgba(201, 169, 97, 0.04);
+}
+
+/* --- Mythic Earth Responsive --- */
+
+@media (max-width: 900px) {
+  .mythic-earth-site-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .mythic-earth-content-area {
+    padding: 0 10px;
+  }
+
+  .mythic-earth-site-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .mythic-earth-cat-btn {
+    font-size: 0.62rem;
+    padding: 6px 12px;
+  }
+
+  .mythic-earth-site-detail {
+    padding: 16px;
+  }
+
+  .mythic-earth-site-detail h3 {
+    font-size: 1.2rem;
   }
 }

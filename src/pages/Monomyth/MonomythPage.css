@@ -36,21 +36,21 @@
 /* ===== CENTER TEXT OVERRIDES ===== */
 
 .monomyth-page .center-title-journey {
-  font-size: 1.1rem;
-  font-weight: 600;
-}
-
-.monomyth-page .center-title-fallen {
   font-size: 2.2rem;
   font-weight: 700;
 }
 
+.monomyth-page .center-title-fallen {
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
 @media (max-width: 600px) {
   .monomyth-page .center-title-journey {
-    font-size: 0.8rem;
+    font-size: 1.4rem;
   }
   .monomyth-page .center-title-fallen {
-    font-size: 1.4rem;
+    font-size: 0.8rem;
   }
 }
 

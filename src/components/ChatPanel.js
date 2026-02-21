@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import useVoice, { SpeechRecognition } from '../hooks/useVoice';
 import { useCoursework } from '../coursework/CourseworkContext';
 import { useWritings } from '../writings/WritingsContext';
+import { useAreaOverride } from '../App';
 
 function parseAtlasMessage(text) {
   const segments = [];
@@ -37,6 +38,7 @@ export default function ChatPanel() {
   const { voiceEnabled, recording, speaking, toggleVoice, startListening, stopListening, speak } = useVoice(setInput);
   const { trackElement, buildCourseSummary } = useCoursework();
   const { getConversation, saveConversation, loaded: writingsLoaded } = useWritings();
+  const { area: areaOverride } = useAreaOverride();
 
   // Load previous Atlas conversation on mount
   useEffect(() => {
@@ -56,6 +58,8 @@ export default function ChatPanel() {
   }, [messages, writingsLoaded, saveConversation]);
 
   function getArea() {
+    // Area override from page-level mode (e.g. monomyth/meteor-steel on celestial clocks)
+    if (areaOverride) return areaOverride;
     const path = location.pathname;
     if (path === '/metals') return 'celestial-clocks';
     if (path === '/' || path === '/monomyth') return 'meteor-steel';

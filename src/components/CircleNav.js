@@ -416,23 +416,6 @@ export default function CircleNav({ stages, currentStage, onSelectStage, clockwi
           );
         })}
 
-        {onToggleYBR && (
-          <button
-            className={`circle-ybr-toggle${ybrActive ? ' active' : ''}${ybrAnimStage >= 0 ? ' animating' : ''}`}
-            onClick={handleYBRClick}
-            title={ybrActive ? 'Exit Yellow Brick Road' : 'Yellow Brick Road'}
-          >
-            <svg viewBox="0 0 20 14" width="16" height="11" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinejoin="round">
-              <path d="M1,4 L7,1 L19,1 L13,4 Z" />
-              <path d="M1,4 L1,13 L13,13 L13,4" />
-              <path d="M13,4 L19,1 L19,10 L13,13" />
-              <line x1="7" y1="4" x2="7" y2="13" />
-              <line x1="1" y1="8.5" x2="13" y2="8.5" />
-              <line x1="4" y1="8.5" x2="4" y2="13" />
-              <line x1="10" y1="4" x2="10" y2="8.5" />
-            </svg>
-          </button>
-        )}
       </div>
       <button className="direction-toggle" onClick={onToggleDirection}>
         {clockwise ? '\u21BB' : '\u21BA'}

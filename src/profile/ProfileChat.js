@@ -4,7 +4,7 @@ import { useWritings } from '../writings/WritingsContext';
 import useVoice, { SpeechRecognition } from '../hooks/useVoice';
 
 export default function ProfileChat({ onComplete, isUpdate }) {
-  const { profileData, updateCredentials, completeOnboarding } = useProfile();
+  const { profileData, updateCredentials, updateNatalChart, completeOnboarding } = useProfile();
   const [chatOpen, setChatOpen] = useState(false);
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
@@ -60,12 +60,16 @@ export default function ProfileChat({ onComplete, isUpdate }) {
           messages: [{ role: 'user', content: seedMessage }],
           mode: 'profile-onboarding',
           existingCredentials: profileData?.credentials || {},
+          existingNatalChart: profileData?.natalChart || null,
         }),
       });
       const data = await res.json();
 
       if (data.credentialUpdates) {
         await updateCredentials(data.credentialUpdates);
+      }
+      if (data.natalChart) {
+        await updateNatalChart(data.natalChart);
       }
 
       const reply = data.reply || 'Welcome! Let\u2019s explore your background.';
@@ -102,12 +106,16 @@ export default function ProfileChat({ onComplete, isUpdate }) {
           messages: apiMessages,
           mode: 'profile-onboarding',
           existingCredentials: profileData?.credentials || {},
+          existingNatalChart: profileData?.natalChart || null,
         }),
       });
       const data = await res.json();
 
       if (data.credentialUpdates) {
         await updateCredentials(data.credentialUpdates);
+      }
+      if (data.natalChart) {
+        await updateNatalChart(data.natalChart);
       }
 
       const reply = data.reply || 'I see.';

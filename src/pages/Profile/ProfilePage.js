@@ -11,7 +11,7 @@ import { checkAvailability, registerHandle } from '../../multiplayer/handleServi
 export default function ProfilePage() {
   const { user } = useAuth();
   const { getCourseStates, completedCourses, allCourses } = useCoursework();
-  const { earnedRanks, highestRank, activeCredentials, hasProfile, loaded: profileLoaded, handle, refreshProfile } = useProfile();
+  const { earnedRanks, highestRank, activeCredentials, hasProfile, loaded: profileLoaded, handle, natalChart, refreshProfile } = useProfile();
   const { personalStories, loaded: writingsLoaded } = useWritings();
   const navigate = useNavigate();
   const [showChat, setShowChat] = useState(false);
@@ -146,6 +146,14 @@ export default function ProfilePage() {
             Update Credentials
           </button>
         </>
+      )}
+
+      {/* Natal Chart Section */}
+      <h2 className="profile-section-title">Natal Chart</h2>
+      {natalChart ? (
+        <NatalChartDisplay chart={natalChart} />
+      ) : (
+        <div className="profile-empty">No natal chart yet. Atlas can compute yours during a profile conversation.</div>
       )}
 
       {/* Ranks Section */}
@@ -310,6 +318,94 @@ function CourseCard({ course, status }) {
           );
         })}
       </ul>
+    </div>
+  );
+}
+
+const ZODIAC_SYMBOLS = {
+  Aries: '\u2648', Taurus: '\u2649', Gemini: '\u264A', Cancer: '\u264B',
+  Leo: '\u264C', Virgo: '\u264D', Libra: '\u264E', Scorpio: '\u264F',
+  Sagittarius: '\u2650', Capricorn: '\u2651', Aquarius: '\u2652', Pisces: '\u2653',
+};
+
+const PLANET_SYMBOLS = {
+  Sun: '\u2609', Moon: '\u263D', Mercury: '\u263F', Venus: '\u2640',
+  Mars: '\u2642', Jupiter: '\u2643', Saturn: '\u2644',
+};
+
+const PLANET_METALS = {
+  Sun: 'Gold', Moon: 'Silver', Mercury: 'Quicksilver', Venus: 'Copper',
+  Mars: 'Iron', Jupiter: 'Tin', Saturn: 'Lead',
+};
+
+function NatalChartDisplay({ chart }) {
+  const sun = chart.planets?.find(p => p.name === 'Sun');
+  const moon = chart.planets?.find(p => p.name === 'Moon');
+  const asc = chart.ascendant;
+
+  return (
+    <div className="natal-chart-display">
+      {/* Big Three */}
+      <div className="natal-big-three">
+        {sun && (
+          <div className="natal-big-three-card">
+            <div className="natal-big-three-symbol">{ZODIAC_SYMBOLS[sun.sign] || ''}</div>
+            <div className="natal-big-three-label">Sun</div>
+            <div className="natal-big-three-sign">{sun.sign}</div>
+            <div className="natal-big-three-degree">{sun.degree}\u00B0</div>
+          </div>
+        )}
+        {moon && (
+          <div className="natal-big-three-card">
+            <div className="natal-big-three-symbol">{ZODIAC_SYMBOLS[moon.sign] || ''}</div>
+            <div className="natal-big-three-label">Moon</div>
+            <div className="natal-big-three-sign">{moon.sign}</div>
+            <div className="natal-big-three-degree">{moon.degree}\u00B0</div>
+          </div>
+        )}
+        {asc ? (
+          <div className="natal-big-three-card">
+            <div className="natal-big-three-symbol">{ZODIAC_SYMBOLS[asc.sign] || ''}</div>
+            <div className="natal-big-three-label">Rising</div>
+            <div className="natal-big-three-sign">{asc.sign}</div>
+            <div className="natal-big-three-degree">{asc.degree}\u00B0</div>
+          </div>
+        ) : (
+          <div className="natal-big-three-card natal-big-three-unknown">
+            <div className="natal-big-three-symbol">?</div>
+            <div className="natal-big-three-label">Rising</div>
+            <div className="natal-big-three-sign">Unknown</div>
+            <div className="natal-big-three-degree">&mdash;</div>
+          </div>
+        )}
+      </div>
+
+      {/* Planet positions */}
+      <div className="natal-planets-grid">
+        {chart.planets?.map(p => (
+          <div key={p.name} className="natal-planet-row">
+            <span className="natal-planet-symbol">{PLANET_SYMBOLS[p.name] || ''}</span>
+            <span className="natal-planet-name">{p.name}</span>
+            <span className="natal-planet-metal">{PLANET_METALS[p.name]}</span>
+            <span className="natal-planet-sign">{ZODIAC_SYMBOLS[p.sign] || ''} {p.sign} {p.degree}\u00B0</span>
+            <span className="natal-planet-house">{p.house ? `House ${p.house}` : '\u2014'}</span>
+          </div>
+        ))}
+      </div>
+
+      {/* Chinese Zodiac */}
+      {chart.chinese && (
+        <div className="natal-chinese">
+          {chart.chinese.element} {chart.chinese.animal}
+        </div>
+      )}
+
+      {/* Time missing note */}
+      {chart.timeMissing && (
+        <div className="natal-time-note">
+          Ascendant, Midheaven, and house placements require birth time.
+        </div>
+      )}
     </div>
   );
 }

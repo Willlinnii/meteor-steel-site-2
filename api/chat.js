@@ -49,6 +49,8 @@ const mythsEpisodes = require('../src/data/mythsEpisodes.json');
 const gameBookDataModule = require('../src/games/shared/gameBookData.js');
 const gameBookData = gameBookDataModule.default || gameBookDataModule;
 const yellowBrickRoad = require('../src/data/yellowBrickRoad.json');
+// --- Mythic Earth ---
+const mythicEarthSites = require('../src/data/mythicEarthSites.json');
 
 // --- Persona tone instructions per planet ---
 const PLANET_TONES = {
@@ -543,9 +545,18 @@ function compactGameBook() {
   return '## Mythouse Games\n7 mythic board games — rules, origins, mathematical structures, and esoteric symbolism.\n\n' + lines.join('\n\n');
 }
 
+function compactMythicEarthSites() {
+  return '## Mythic Earth Sites\n' + mythicEarthSites.map(s => {
+    const parts = [`${s.name} [${s.id}] | ${s.category} | ${s.region}`];
+    if (s.tradition) parts[0] += ` | ${s.tradition}`;
+    parts.push(truncate(s.description, 120));
+    return parts.join('\n  ');
+  }).join('\n');
+}
+
 // --- Area knowledge loaders ---
 
-const VALID_AREAS = ['celestial-clocks', 'meteor-steel', 'fallen-starlight', 'story-forge', 'mythology-channel', 'games', 'story-of-stories'];
+const VALID_AREAS = ['celestial-clocks', 'meteor-steel', 'fallen-starlight', 'story-forge', 'mythology-channel', 'games', 'story-of-stories', 'mythic-earth'];
 
 function detectAreaFromMessage(messages) {
   const last = [...messages].reverse().find(m => m.role === 'user');
@@ -557,6 +568,7 @@ function detectAreaFromMessage(messages) {
   if (/story forge|narrative|screenplay|story structure|writing craft/.test(t)) return 'story-forge';
   if (/mythology channel|episode|myths tv|myth salon/.test(t)) return 'mythology-channel';
   if (/board game|senet|pachisi|mehen|snakes.?ladders|game of ur|mythouse game/.test(t)) return 'games';
+  if (/mythic earth|sacred site|globe|delphi|oracle|pyramid|giza|stonehenge|angkor|uluru|varanasi|mount olympus|troy|gilgamesh|uruk|babylon|temple|shrine|pilgrimage/.test(t)) return 'mythic-earth';
   return null;
 }
 
@@ -625,6 +637,9 @@ function getAreaKnowledge(area) {
 
     case 'story-of-stories':
       return compactStoryOfStories();
+
+    case 'mythic-earth':
+      return compactMythicEarthSites();
 
     default:
       return '';
@@ -710,6 +725,24 @@ Report the EXACT signs and degrees returned by the tool. Never round, guess, or 
 ### Step 6 — STYLE
 Read like a mythic companion, not a fortune teller or a textbook. You are reading someone's mythic signature — the metals and planets and stages that live in their birth moment. Be specific, poetic, and personal. Connect positions to the person's inner landscape using the site's archetypal language. This is one of the most powerful things you can offer someone.`;
 
+// --- Mythic Earth highlight tool (mythic-earth area only) ---
+
+const HIGHLIGHT_SITES_TOOL = {
+  name: 'highlight_sites',
+  description: 'Highlight specific sites on the Mythic Earth globe. Call this whenever the user asks about sites, regions, traditions, or categories — the globe will fly to and visually highlight the matching sites. Always call this tool when you can identify relevant sites from the user\'s query.',
+  input_schema: {
+    type: 'object',
+    properties: {
+      site_ids: {
+        type: 'array',
+        items: { type: 'string' },
+        description: 'Array of site IDs to highlight on the globe (e.g. ["delphi", "eleusis", "mt-olympus"])',
+      },
+    },
+    required: ['site_ids'],
+  },
+};
+
 // --- Condensed summaries for core prompt (broad awareness) ---
 
 function loadCoreSummary() {
@@ -731,7 +764,10 @@ Narrative architecture workshop. Monomyth stages as story structure. Theorist mo
 MYTHS: The Greatest Mysteries of Humanity — TV series episodes with thematic analysis. King Arthur episode covering wish fulfillment, healing, spiritual training, Arthurian romance, Grail quest, Caucasus origins, printing press distribution, state myth vs. spiritual quest.
 
 ## Mythouse Games (the user reaches this on /games)
-7 mythic board games: Snakes & Ladders (Moksha Patam — karma, liberation), Senet (Egyptian afterlife journey, 30 squares/30 days), Royal Game of Ur (oldest playable game, rosettes as divine protection), Mehen (spiral snake god, solar barque), Jackals & Hounds (palm tree of life, shortcuts as fate), Pachisi (cross-shaped cosmos, Mahabharata dice, Akbar's living board), and the Mythouse Game (7-ring spiral mountain, planetary metals, Platonic solid dice, chess-piece archetypes, lunar months).`;
+7 mythic board games: Snakes & Ladders (Moksha Patam — karma, liberation), Senet (Egyptian afterlife journey, 30 squares/30 days), Royal Game of Ur (oldest playable game, rosettes as divine protection), Mehen (spiral snake god, solar barque), Jackals & Hounds (palm tree of life, shortcuts as fate), Pachisi (cross-shaped cosmos, Mahabharata dice, Akbar's living board), and the Mythouse Game (7-ring spiral mountain, planetary metals, Platonic solid dice, chess-piece archetypes, lunar months).
+
+## Mythic Earth (the user reaches this on /mythic-earth)
+Interactive 3D globe with 45 sacred, mythic, and literary sites worldwide. Sacred sites (Delphi, Giza, Stonehenge, Uluru, Varanasi, Angkor Wat, Teotihuacan). Mythic locations (Mount Olympus, Troy, Mount Ararat, Pillars of Hercules). Literary locations with sacred text excerpts (Ithaca/Odyssey, Avalon/Le Morte d'Arthur, Cumae/Aeneid, Jerusalem/Bible, Mecca/Qur'an, Uruk/Gilgamesh). When on this page, you have a highlight_sites tool to navigate the globe to specific sites.`;
 }
 
 // --- System prompt construction ---
@@ -865,6 +901,9 @@ Mythosophia (/mythosophia):
 
 Mythouse Games (/games):
 - [[Label|/games]]
+
+Mythic Earth (/mythic-earth):
+- [[Label|/mythic-earth]]
 
 LINK GUIDELINES:
 - Include 1-3 links per response when relevant, woven naturally into your prose.
@@ -1254,7 +1293,19 @@ const UPDATE_PROFILE_TOOL = {
   },
 };
 
-function buildProfileOnboardingPrompt(existingCredentials) {
+const UPDATE_NATAL_CHART_TOOL = {
+  name: 'update_natal_chart',
+  description: 'Save computed natal chart to user profile. Call this after receiving compute_natal_chart result, passing the full chart object.',
+  input_schema: {
+    type: 'object',
+    properties: {
+      chartData: { type: 'object', description: 'Full natal chart result from compute_natal_chart' },
+    },
+    required: ['chartData'],
+  },
+};
+
+function buildProfileOnboardingPrompt(existingCredentials, existingNatalChart) {
   const existing = existingCredentials || {};
   const existingList = Object.entries(existing)
     .filter(([, d]) => d && d.level > 0)
@@ -1303,7 +1354,30 @@ ${existingList ? `\nEXISTING CREDENTIALS (the user already has these — acknowl
 VOICE:
 - You are Atlas — warm, curious, grounded. Not a form. Not an interview. A conversation between companions.
 - "Tell me about your path..." not "Please list your qualifications."
-- Celebrate what they share. Connect it to the mythic when natural.`;
+- Celebrate what they share. Connect it to the mythic when natural.
+
+## NATAL CHART PHASE — after credentials are complete
+
+After you've finished exploring all credential categories the user identifies with (or they indicate they're done), offer to compute their natal chart:
+
+"Would you like to share your birthday so I can generate your natal chart? This will let you ask astrological questions about yourself and explore readings across different cultural traditions."
+
+**If they accept:**
+1. Ask for: birth date, birth time (tell them it's optional — without it you can still compute planet positions, just not Ascendant/houses), and birth city.
+2. Call compute_natal_chart with proper coordinates and utcOffset.
+   - You know approximate lat/lon for most world cities. Use your best knowledge.
+   - utcOffset must account for DST on their birth date:
+     US Eastern: Std=-5, DST=-4. US Central: Std=-6, DST=-5. US Mountain: Std=-7, DST=-6. US Pacific: Std=-8, DST=-7.
+     DST rules: 2nd Sun Mar → 1st Sun Nov (2007+); 1st Sun Apr → last Sun Oct (before 2007).
+     GMT=0, UK BST=+1, CET=+1, CEST=+2, India IST=+5.5, Japan JST=+9.
+   - Use hour=-1 if birth time unknown.
+3. After receiving the chart result, call update_natal_chart with the full chart data to save it.
+4. Give a brief Big Three summary (Sun sign, Moon sign, Rising sign if available). Keep it to 2-3 sentences — save the full reading for later Atlas conversations.
+5. Then wrap up the conversation warmly.
+
+**If they decline:** "No worries — the stars will be there whenever you're ready." Then wrap up.
+
+${existingNatalChart ? `EXISTING NATAL CHART: The user already has a chart on file (Sun in ${existingNatalChart.planets?.[0]?.sign || '?'}, Moon in ${existingNatalChart.planets?.[1]?.sign || '?'}). Acknowledge this and offer to recalculate if their birth data has changed, rather than asking from scratch.` : ''}`;
 }
 
 module.exports = async function handler(req, res) {
@@ -1318,7 +1392,7 @@ module.exports = async function handler(req, res) {
     });
   }
 
-  const { messages, area, persona, mode, challengeStop, level, journeyId, stageId, gameMode, stageData, aspect, courseSummary, existingCredentials } = req.body || {};
+  const { messages, area, persona, mode, challengeStop, level, journeyId, stageId, gameMode, stageData, aspect, courseSummary, existingCredentials, existingNatalChart } = req.body || {};
 
   // --- Journey Synthesis mode (no messages needed — uses stageData directly) ---
   if (mode === 'journey-synthesis') {
@@ -1394,6 +1468,10 @@ ${stageBlock}`;
   const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
   // Natal chart tool available on all pages — people ask about their chart from anywhere
   const tools = [NATAL_CHART_TOOL];
+  // Mythic Earth highlight tool — only when on the globe page
+  if (validArea === 'mythic-earth') {
+    tools.push(HIGHLIGHT_SITES_TOOL);
+  }
 
   // --- Yellow Brick Road modes ---
   if (mode === 'ybr-challenge' || mode === 'ybr-atlas-hint') {
@@ -1662,72 +1740,81 @@ ${entriesBlock}`;
 
   // --- Profile Onboarding mode ---
   if (mode === 'profile-onboarding') {
-    const profileSystemPrompt = buildProfileOnboardingPrompt(existingCredentials);
-    const profileTools = [UPDATE_PROFILE_TOOL];
+    const profileSystemPrompt = buildProfileOnboardingPrompt(existingCredentials, existingNatalChart);
+    const profileTools = [UPDATE_PROFILE_TOOL, NATAL_CHART_TOOL, UPDATE_NATAL_CHART_TOOL];
 
     try {
-      const response = await anthropic.messages.create({
-        model: 'claude-haiku-4-5-20251001',
-        system: profileSystemPrompt,
-        messages: trimmed,
-        max_tokens: 1024,
-        tools: profileTools,
-      });
-
+      let currentMessages = [...trimmed];
       let reply = '';
       const credentialUpdates = {};
+      let natalChartUpdate = null;
 
-      // Handle tool_use responses (may have multiple tool calls)
-      const toolBlocks = response.content.filter(c => c.type === 'tool_use');
-      const textBlock = response.content.find(c => c.type === 'text');
+      // Multi-turn tool loop (max 5 turns to prevent runaway)
+      for (let turn = 0; turn < 5; turn++) {
+        const response = await anthropic.messages.create({
+          model: 'claude-haiku-4-5-20251001',
+          system: profileSystemPrompt,
+          messages: currentMessages,
+          max_tokens: 1024,
+          tools: profileTools,
+        });
 
-      if (toolBlocks.length > 0) {
-        // Collect credential updates from tool calls
+        const toolBlocks = response.content.filter(c => c.type === 'tool_use');
+        const textBlock = response.content.find(c => c.type === 'text');
+
+        if (toolBlocks.length === 0) {
+          // No tool calls — text-only response, we're done
+          reply = textBlock?.text || 'No response generated.';
+          break;
+        }
+
+        // Process each tool call
+        const toolResults = [];
         for (const tb of toolBlocks) {
           if (tb.name === 'update_profile' && tb.input) {
             credentialUpdates[tb.input.category] = {
               level: tb.input.level,
               details: tb.input.details,
             };
+            toolResults.push({
+              type: 'tool_result',
+              tool_use_id: tb.id,
+              content: JSON.stringify({ success: true, category: tb.input.category, level: tb.input.level }),
+            });
+          } else if (tb.name === 'compute_natal_chart' && tb.input) {
+            const chartResult = computeNatalChart(tb.input);
+            toolResults.push({
+              type: 'tool_result',
+              tool_use_id: tb.id,
+              content: JSON.stringify(chartResult),
+            });
+          } else if (tb.name === 'update_natal_chart' && tb.input) {
+            natalChartUpdate = tb.input.chartData;
+            toolResults.push({
+              type: 'tool_result',
+              tool_use_id: tb.id,
+              content: JSON.stringify({ success: true, message: 'Natal chart saved to profile.' }),
+            });
           }
         }
 
-        // Build tool results and do a follow-up call for the text reply
-        const toolResults = toolBlocks.map(tb => ({
-          type: 'tool_result',
-          tool_use_id: tb.id,
-          content: JSON.stringify({ success: true, category: tb.input.category, level: tb.input.level }),
-        }));
-
-        const followUp = await anthropic.messages.create({
-          model: 'claude-haiku-4-5-20251001',
-          system: profileSystemPrompt,
-          messages: [
-            ...trimmed,
-            { role: 'assistant', content: response.content },
-            { role: 'user', content: toolResults },
-          ],
-          max_tokens: 1024,
-          tools: profileTools,
-        });
-
-        reply = followUp.content?.find(c => c.type === 'text')?.text || 'Profile updated.';
-
-        // Check if follow-up also has tool calls
-        const followUpTools = followUp.content.filter(c => c.type === 'tool_use');
-        for (const tb of followUpTools) {
-          if (tb.name === 'update_profile' && tb.input) {
-            credentialUpdates[tb.input.category] = {
-              level: tb.input.level,
-              details: tb.input.details,
-            };
-          }
+        // Capture any text from this turn (some turns have text + tool_use)
+        if (textBlock?.text) {
+          reply = textBlock.text;
         }
-      } else {
-        reply = textBlock?.text || 'No response generated.';
+
+        // Feed tool results back for next turn
+        currentMessages = [
+          ...currentMessages,
+          { role: 'assistant', content: response.content },
+          { role: 'user', content: toolResults },
+        ];
       }
 
-      return res.status(200).json({ reply, credentialUpdates: Object.keys(credentialUpdates).length > 0 ? credentialUpdates : undefined });
+      const result = { reply };
+      if (Object.keys(credentialUpdates).length > 0) result.credentialUpdates = credentialUpdates;
+      if (natalChartUpdate) result.natalChart = natalChartUpdate;
+      return res.status(200).json(result);
     } catch (err) {
       console.error('Profile Onboarding API error:', err?.message, err?.status);
       return res.status(500).json({ error: `Something went wrong: ${err?.message || 'Unknown error'}` });
@@ -1778,6 +1865,26 @@ COURSE ADVISOR GUIDELINES:
         max_tokens: 4096,
       });
       reply = followUp.content?.find(c => c.type === 'text')?.text || 'Chart computed but no reading generated.';
+    } else if (response.stop_reason === 'tool_use' && toolBlock?.name === 'highlight_sites') {
+      // Validate site IDs against known sites
+      const validSiteIds = new Set(mythicEarthSites.map(s => s.id));
+      const requestedIds = toolBlock.input.site_ids || [];
+      const matchedIds = requestedIds.filter(id => validSiteIds.has(id));
+      const matchedSites = mythicEarthSites.filter(s => matchedIds.includes(s.id));
+
+      // Get follow-up text from Atlas
+      const followUp = await anthropic.messages.create({
+        model: 'claude-haiku-4-5-20251001',
+        system: systemPrompt,
+        messages: [
+          ...trimmed,
+          { role: 'assistant', content: response.content },
+          { role: 'user', content: [{ type: 'tool_result', tool_use_id: toolBlock.id, content: JSON.stringify({ highlighted: matchedIds.length, sites: matchedSites.map(s => s.name) }) }] },
+        ],
+        max_tokens: 1024,
+      });
+      reply = followUp.content?.find(c => c.type === 'text')?.text || 'Here are the sites I found.';
+      return res.status(200).json({ reply, sites: matchedSites });
     } else {
       reply = response.content?.find(c => c.type === 'text')?.text || response.content?.[0]?.text || 'No response generated.';
     }

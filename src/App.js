@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef, Suspense, lazy } from 'react';
+import React, { useState, useEffect, useCallback, useRef, useContext, createContext, Suspense, lazy } from 'react';
 import { Routes, Route, Link, Navigate, useLocation, useSearchParams } from 'react-router-dom';
 import { useAuth } from './auth/AuthContext';
 import { CourseworkProvider, useCoursework } from './coursework/CourseworkContext';
@@ -26,6 +26,14 @@ import monomyth from './data/monomyth.json';
 import synthesis from './data/synthesis.json';
 import fallenStarlightData from './data/fallenStarlight.json';
 
+// YBR header context — pages register their toggle/active state so the header can show the button
+const YBRHeaderContext = createContext({ active: false, toggle: null });
+export const useYBRHeader = () => useContext(YBRHeaderContext);
+
+// Area override context — pages can override Atlas's area detection (e.g. celestial-clocks → meteor-steel)
+const AreaOverrideContext = createContext({ area: null, register: () => {} });
+export const useAreaOverride = () => useContext(AreaOverrideContext);
+
 const SevenMetalsVRPage = lazy(() => import('./pages/SevenMetals/SevenMetalsVRPage'));
 const AdminPage = lazy(() => import('./pages/Admin/AdminPage'));
 const OuroborosJourneyPage = lazy(() => import('./pages/OuroborosJourney/OuroborosJourneyPage'));
@@ -35,6 +43,7 @@ const ProfilePage = lazy(() => import('./pages/Profile/ProfilePage'));
 const StoryOfStoriesPage = lazy(() => import('./pages/StoryOfStories/StoryOfStoriesPage'));
 const MythsPage = lazy(() => import('./pages/Myths/MythsPage'));
 const MythicEarthPage = lazy(() => import('./pages/MythicEarth/MythicEarthPage'));
+const FallenStarlightPage = lazy(() => import('./pages/FallenStarlight/FallenStarlightPage'));
 
 const STAGES = [
   { id: 'golden-age', label: 'Golden Age' },
@@ -292,7 +301,7 @@ function MeteorShower({ active }) {
   );
 }
 
-function MeteorSteelHome() { // eslint-disable-line no-unused-vars
+function MeteorSteelHome() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [currentStage, setCurrentStage] = useState('overview');
   const [clockwise, setClockwise] = useState(false);
@@ -1443,19 +1452,14 @@ function StoryForgeHome() {
 }
 
 const NAV_ITEMS = [
-  { path: '/metals/calendar', label: 'Celestial Clocks' },
+  { path: '/metals/calendar', label: 'Chronosphaera' },
+  { path: '/myths', label: 'Mythosphaera' },
   { path: '/mythology-channel', label: 'Mythology Channel' },
   { path: '/mythosophia', label: 'Mythosophia' },
   { path: '/atlas', label: 'Atlas' },
-  { path: '/', label: 'Meteor Steel' },
-  { path: '/monomyth', label: 'Monomyth' },
-  { path: '/myths', label: 'Myths' },
   { path: '/fallen-starlight', label: 'Fallen Starlight' },
   { path: '/story-of-stories', label: 'Story of Stories' },
-  { path: '/story-forge', label: 'Story Forge' },
-  { path: '/mythic-earth', label: 'Mythic Earth' },
   { path: '/games', label: 'Game Room' },
-  { path: '/profile', label: 'Profile' },
 ];
 
 const HIDDEN_NAV_ITEMS = [
@@ -1510,18 +1514,62 @@ function SiteNav() {
 function SiteHeader() {
   const { user, signOut } = useAuth();
   const { courseworkMode, toggleCourseworkMode } = useCoursework();
+  const { active: ybrActive, toggle: ybrToggle } = useYBRHeader();
+  const location = useLocation();
+  const show3D = location.pathname.startsWith('/metals') && location.pathname !== '/metals/vr';
   return (
     <header className="site-header">
       <Link to="/metals/calendar" className="site-header-logo">Mythouse</Link>
       {user && (
         <div className="site-header-user">
+          {ybrToggle && (
+            <button
+              className={`header-ybr-toggle${ybrActive ? ' active' : ''}`}
+              onClick={ybrToggle}
+              title={ybrActive ? 'Exit Yellow Brick Road' : 'Walk the Yellow Brick Road'}
+            >
+              <svg viewBox="0 0 20 14" width="16" height="11" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinejoin="round">
+                <path d="M1,4 L7,1 L19,1 L13,4 Z" />
+                <path d="M1,4 L1,13 L13,13 L13,4" />
+                <path d="M13,4 L19,1 L19,10 L13,13" />
+                <line x1="7" y1="4" x2="7" y2="13" />
+                <line x1="1" y1="8.5" x2="13" y2="8.5" />
+                <line x1="4" y1="8.5" x2="4" y2="13" />
+                <line x1="10" y1="4" x2="10" y2="8.5" />
+              </svg>
+            </button>
+          )}
+          {show3D && (
+            <Link to="/story-forge" className="header-forge-toggle" title="Story Forge">
+              <svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M10,2 L10,11" />
+                <path d="M7,5 Q10,3 13,5" />
+                <path d="M6,11 L14,11" />
+                <path d="M5,11 L5,14 Q10,18 15,14 L15,11" />
+              </svg>
+            </Link>
+          )}
+          {show3D && (
+            <Link to="/metals/vr" className="header-3d-toggle" title="View in 3D">3D</Link>
+          )}
           <button
             className={`coursework-toggle${courseworkMode ? ' active' : ''}`}
             onClick={toggleCourseworkMode}
+            title={courseworkMode ? 'Coursework On' : 'Coursework'}
           >
-            {courseworkMode ? 'Coursework On' : 'Coursework'}
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+              <line x1="8" y1="7" x2="16" y2="7" />
+              <line x1="8" y1="11" x2="14" y2="11" />
+            </svg>
           </button>
-          <Link to="/profile" className="site-header-profile">Profile</Link>
+          <Link to="/profile" className="site-header-profile" title="Profile">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+              <circle cx="12" cy="7" r="4" />
+            </svg>
+          </Link>
           <button className="site-header-signout" onClick={signOut}>Sign Out</button>
         </div>
       )}
@@ -1609,17 +1657,21 @@ function AppContent() {
   const location = useLocation();
   const isAtlas = location.pathname === '/atlas';
   const { courseworkMode } = useCoursework();
+  const [ybrHeader, setYbrHeader] = useState({ active: false, toggle: null });
+  const [areaOverride, setAreaOverride] = useState(null);
 
   return (
+    <YBRHeaderContext.Provider value={{ ...ybrHeader, register: setYbrHeader }}>
+    <AreaOverrideContext.Provider value={{ area: areaOverride, register: setAreaOverride }}>
     <div className={`app${courseworkMode ? ' cw-mode' : ''}`}>
       <SiteHeader />
       <SiteNav />
       <CourseCompletionPopup />
       <Routes>
-        <Route path="/" element={<Navigate to="/metals" replace />} />
+        <Route path="/" element={<MeteorSteelHome />} />
         <Route path="/metals/vr" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" />Loading 3D...</div>}><SevenMetalsVRPage /></Suspense>} />
         <Route path="/metals/*" element={<SevenMetalsPage />} />
-        <Route path="/fallen-starlight" element={<FallenStarlightHome />} />
+        <Route path="/fallen-starlight" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><FallenStarlightPage /></Suspense>} />
         <Route path="/story-forge" element={<StoryForgeHome />} />
         <Route path="/monomyth" element={<MonomythPage />} />
         <Route path="/mythology-channel" element={<MythologyChannelPage />} />
@@ -1639,6 +1691,8 @@ function AppContent() {
       {!isAtlas && <SiteFooter />}
       {!isAtlas && <ChatPanel />}
     </div>
+    </AreaOverrideContext.Provider>
+    </YBRHeaderContext.Provider>
   );
 }
 
