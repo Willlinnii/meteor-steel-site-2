@@ -182,6 +182,55 @@ function TextReader({ readUrl, wikisourcePage }) {
   );
 }
 
+function StreetViewEmbed({ site }) {
+  const [open, setOpen] = useState(false);
+  const mapsKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
+  const sv = typeof site.streetView === 'object' ? site.streetView : {};
+  const heading = sv.heading ?? 0;
+  const pitch = sv.pitch ?? 0;
+  const fov = sv.fov ?? 90;
+
+  if (!site.streetView) return null;
+
+  return (
+    <div className="mythic-earth-streetview">
+      <button
+        className="mythic-earth-streetview-btn"
+        onClick={() => setOpen(!open)}
+      >
+        {open ? '\u2715  Close Street View' : '\u{1F30D}  Explore in Street View'}
+      </button>
+
+      {open && (
+        <div className="mythic-earth-streetview-container">
+          {mapsKey ? (
+            <iframe
+              title={`Street View of ${site.name}`}
+              src={`https://www.google.com/maps/embed/v1/streetview?key=${mapsKey}&location=${site.lat},${site.lng}&heading=${heading}&pitch=${pitch}&fov=${fov}`}
+              className="mythic-earth-streetview-iframe"
+              allowFullScreen
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+            />
+          ) : (
+            <div className="mythic-earth-streetview-fallback">
+              <p>Add a <code>REACT_APP_GOOGLE_MAPS_KEY</code> to your <code>.env</code> for embedded Street View.</p>
+              <a
+                href={`https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${site.lat},${site.lng}&heading=${heading}&pitch=${pitch}&fov=${fov}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mythic-earth-streetview-link"
+              >
+                Open in Google Street View
+              </a>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
 function SiteDetail({ site }) {
   const cat = CATEGORY_MAP[site.category];
 
@@ -197,6 +246,9 @@ function SiteDetail({ site }) {
         )}
         <span className="mythic-earth-detail-tag region">{site.region}</span>
       </div>
+
+      <StreetViewEmbed site={site} />
+
       <div className="section-content">
         <div className="content-area">
           <div className="overview-text">
@@ -262,6 +314,10 @@ function MythicEarthGlobe({ activeFilters, onSelectSite, onReady, highlightedSit
     const viewer = viewerRef.current?.cesiumElement;
     if (!viewer) return;
     readyFired.current = true;
+
+    // Ensure touch events work on mobile by setting touch-action on the canvas
+    const canvas = viewer.canvas;
+    if (canvas) canvas.style.touchAction = 'none';
 
     if (onViewerReady) onViewerReady(viewer);
 
@@ -720,6 +776,7 @@ function MythicEarthPage({ embedded, onSiteSelect: onSiteSelectExternal, externa
   const handleSelectSite = useCallback((site) => {
     if (!embedded) setSelectedSite(site);
     if (onSiteSelectExternal) onSiteSelectExternal(site);
+    setHighlightedSiteIds([site.id]);
   }, [embedded, onSiteSelectExternal]);
 
   const handleGlobeReady = useCallback((api) => {
@@ -845,4 +902,5 @@ function MythicEarthPage({ embedded, onSiteSelect: onSiteSelectExternal, externa
   );
 }
 
+export { StreetViewEmbed };
 export default MythicEarthPage;

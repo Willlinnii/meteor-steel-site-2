@@ -7,6 +7,7 @@
   position: relative;
   width: 100%;
   height: calc(100vh - 90px);
+  touch-action: none;  /* prevent page scroll from stealing touch events on mobile */
 }
 
 .mythic-earth-map {
@@ -17,7 +18,15 @@
 .mythic-earth-cesium {
   width: 100%;
   height: 100%;
-  touch-action: none;  /* let Cesium handle touch for rotate/zoom/tap on mobile */
+  touch-action: none;
+}
+
+/* Ensure Cesium's own canvas and widget elements get touch events */
+.mythic-earth-cesium canvas,
+.mythic-earth-cesium .cesium-viewer,
+.mythic-earth-cesium .cesium-widget,
+.mythic-earth-cesium .cesium-widget canvas {
+  touch-action: none !important;
 }
 
 .mythic-earth-cesium .cesium-credit-bottomContainer {
