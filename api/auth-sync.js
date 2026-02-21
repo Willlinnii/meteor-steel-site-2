@@ -39,15 +39,21 @@ module.exports = async (req, res) => {
   try {
     const db = admin.firestore();
     const decoded = await admin.auth().verifyIdToken(token);
-    const { uid, email, name, firebase } = decoded;
+    const { uid, firebase } = decoded;
     const provider = firebase?.sign_in_provider || 'unknown';
+
+    // Fetch the latest user record to get displayName (token may be stale after sign-up)
+    const userRecord = await admin.auth().getUser(uid);
+    const email = userRecord.email || decoded.email || null;
+    const displayName = userRecord.displayName || decoded.name || null;
+
     const docRef = db.collection('site-users').doc(uid);
     const doc = await docRef.get();
 
     if (!doc.exists) {
       await docRef.set({
-        email: email || null,
-        displayName: name || null,
+        email,
+        displayName,
         provider,
         tags: ['site-login'],
         createdAt: admin.firestore.FieldValue.serverTimestamp(),
@@ -55,6 +61,7 @@ module.exports = async (req, res) => {
       });
     } else {
       await docRef.update({
+        displayName,
         lastLoginAt: admin.firestore.FieldValue.serverTimestamp(),
       });
     }
@@ -64,11 +71,14 @@ module.exports = async (req, res) => {
     const profileDoc = await profileRef.get();
     if (!profileDoc.exists) {
       await profileRef.set({
-        email: email || null,
-        displayName: name || null,
+        email,
+        displayName,
         createdAt: admin.firestore.FieldValue.serverTimestamp(),
         updatedAt: admin.firestore.FieldValue.serverTimestamp(),
       });
+    } else if (!profileDoc.data().displayName && displayName) {
+      // Backfill displayName for existing email users who signed up without one
+      await profileRef.update({ displayName, updatedAt: admin.firestore.FieldValue.serverTimestamp() });
     }
 
     return res.status(200).json({ ok: true });

@@ -23,17 +23,20 @@ export function AuthProvider({ children }) {
       if (firebaseUser) {
         const syncKey = `auth-synced-v2-${firebaseUser.uid}`;
         if (!localStorage.getItem(syncKey)) {
-          try {
-            const token = await firebaseUser.getIdToken();
-            await fetch('/api/auth-sync', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ token }),
-            });
-            localStorage.setItem(syncKey, '1');
-          } catch (err) {
-            console.error('Auth sync failed:', err);
-          }
+          // Short delay so updateProfile() in sign-up flow can complete first
+          setTimeout(async () => {
+            try {
+              const token = await firebaseUser.getIdToken(true);
+              await fetch('/api/auth-sync', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ token }),
+              });
+              localStorage.setItem(syncKey, '1');
+            } catch (err) {
+              console.error('Auth sync failed:', err);
+            }
+          }, 500);
         }
       }
     });

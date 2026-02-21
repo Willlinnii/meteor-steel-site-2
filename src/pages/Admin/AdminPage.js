@@ -163,6 +163,7 @@ const SECTIONS = [
   { id: 'mentors', label: 'Mentors' },
   { id: 'contacts', label: 'Contacts' },
   { id: 'services', label: 'Services' },
+  { id: 'ip-registry', label: 'IP Registry' },
 ];
 
 // --- Campaign Manager content (extracted for tab switching) ---
@@ -1255,6 +1256,623 @@ function ServicesSection() {
   );
 }
 
+// --- IP Registry data ---
+const IP_CATEGORIES = [
+  { id: 'creative-works', name: 'Creative Works' },
+  { id: 'game-designs', name: 'Game Designs' },
+  { id: 'data-compilations', name: 'Data Compilations' },
+  { id: 'ai-personas', name: 'AI Personas' },
+  { id: 'algorithms', name: 'Algorithms' },
+  { id: 'brand-elements', name: 'Brand Elements' },
+];
+
+const IP_REGISTRY = [
+  // Creative Works
+  { id: 'fallen-starlight', category: 'creative-works', name: 'Fallen Starlight', description: 'Original novel — mythic fantasy blending alchemy, tarot, and the monomyth', type: 'copyright', source: ['src/pages/FallenStarlight/'], status: 'unregistered', protection: 'high', year: 2024 },
+  { id: 'story-of-stories', category: 'creative-works', name: 'Story of Stories', description: 'Original novel — meta-narrative exploring the monomyth across world traditions', type: 'copyright', source: ['src/pages/StoryOfStories/'], status: 'unregistered', protection: 'high', year: 2024 },
+  { id: 'monomyth-overviews', category: 'creative-works', name: 'Monomyth Overviews', description: 'Original educational essays on hero\'s journey stages, theorists, and cycles', type: 'copyright', source: ['src/pages/Monomyth/'], status: 'unregistered', protection: 'medium', year: 2024 },
+  { id: 'sacred-site-desc', category: 'creative-works', name: 'Sacred Site Descriptions', description: 'Original written descriptions and curated data for 100+ mythic earth locations', type: 'copyright', source: ['src/data/sites/'], status: 'unregistered', protection: 'medium', year: 2024 },
+  { id: 'ancient-game-histories', category: 'creative-works', name: 'Ancient Game Histories', description: 'Original research essays on the history and mythology of ancient board games', type: 'copyright', source: ['src/pages/Games/'], status: 'unregistered', protection: 'medium', year: 2024 },
+  { id: 'mythic-calendar', category: 'creative-works', name: 'Mythic Calendar', description: 'Original mythological calendar system mapping zodiac, culture, and seasonal cycles', type: 'copyright', source: ['src/data/campaigns/mythicYear.json'], status: 'unregistered', protection: 'medium', year: 2025 },
+  { id: 'yellow-brick-road', category: 'creative-works', name: 'Yellow Brick Road', description: 'Original guided journey framework — structured mythological curriculum', type: 'copyright', source: ['src/pages/YellowBrickRoad/'], status: 'unregistered', protection: 'high', year: 2024 },
+
+  // Game Designs
+  { id: 'mythouse-board-game', category: 'game-designs', name: 'Mythouse Board Game', description: 'Original board game design — mythological journey game with alchemical mechanics', type: 'copyright', source: ['src/pages/Games/'], status: 'unregistered', protection: 'high', year: 2024 },
+  { id: 'major-arcana', category: 'game-designs', name: 'Major Arcana Card Game', description: 'Original card game — 154 unique cards based on tarot archetypes and mythology', type: 'copyright', source: ['src/pages/Games/', 'src/data/cards/'], status: 'unregistered', protection: 'high', year: 2024 },
+  { id: 'minor-arcana', category: 'game-designs', name: 'Minor Arcana Card Game', description: 'Original card game extension — elemental suits tied to alchemical traditions', type: 'copyright', source: ['src/pages/Games/', 'src/data/cards/'], status: 'unregistered', protection: 'high', year: 2024 },
+  { id: 'game-senet', category: 'game-designs', name: 'Senet (Digital)', description: 'Digital adaptation of ancient Egyptian Senet with original AI and UI', type: 'copyright', source: ['src/pages/Games/Senet/'], status: 'unregistered', protection: 'medium', year: 2024 },
+  { id: 'game-ur', category: 'game-designs', name: 'Royal Game of Ur (Digital)', description: 'Digital adaptation of Mesopotamian Ur with original AI and UI', type: 'copyright', source: ['src/pages/Games/Ur/'], status: 'unregistered', protection: 'medium', year: 2024 },
+  { id: 'game-pachisi', category: 'game-designs', name: 'Pachisi (Digital)', description: 'Digital adaptation of Vedic Pachisi with original AI and UI', type: 'copyright', source: ['src/pages/Games/Pachisi/'], status: 'unregistered', protection: 'medium', year: 2024 },
+  { id: 'game-mehen', category: 'game-designs', name: 'Mehen (Digital)', description: 'Digital adaptation of ancient Egyptian serpent game with original AI and UI', type: 'copyright', source: ['src/pages/Games/Mehen/'], status: 'unregistered', protection: 'medium', year: 2024 },
+  { id: 'game-jackals', category: 'game-designs', name: 'Jackals & Hounds (Digital)', description: 'Digital adaptation of ancient Egyptian race game with original AI and UI', type: 'copyright', source: ['src/pages/Games/JackalsAndHounds/'], status: 'unregistered', protection: 'medium', year: 2024 },
+
+  // Data Compilations
+  { id: 'seven-metals', category: 'data-compilations', name: 'Seven Metals System', description: 'Original data compilation — planetary metals, correspondences, mythology across 13 data files', type: 'copyright', source: ['src/data/metals/', 'src/pages/SevenMetals/'], status: 'unregistered', protection: 'high', year: 2024 },
+  { id: 'monomyth-extended', category: 'data-compilations', name: 'Monomyth Extended Data', description: 'Original structured data — stages, theorists, cycles, cultural examples across 8 data files', type: 'copyright', source: ['src/data/monomyth/'], status: 'unregistered', protection: 'medium', year: 2024 },
+  { id: 'constellation-systems', category: 'data-compilations', name: 'Constellation Systems', description: 'Original curated data — zodiac constellations, star lore, cultural mappings across 5 data files', type: 'copyright', source: ['src/data/constellations/'], status: 'unregistered', protection: 'medium', year: 2024 },
+  { id: 'medicine-wheels', category: 'data-compilations', name: 'Medicine Wheels', description: 'Original data compilation — directional symbolism and cultural wheel systems', type: 'copyright', source: ['src/data/wheels/'], status: 'unregistered', protection: 'medium', year: 2024 },
+
+  // AI Personas
+  { id: 'planetary-voices', category: 'ai-personas', name: 'Planetary Voice Definitions', description: 'Original AI persona system — 7 planetary archetypes with distinct voice, knowledge, and personality', type: 'trade-secret', source: ['api/chat.js', 'src/data/personas/'], status: 'unregistered', protection: 'high', year: 2024 },
+  { id: 'atlas-system-prompt', category: 'ai-personas', name: 'Atlas System Prompt', description: 'Original AI system prompt — Atlas guide persona with mythological knowledge base', type: 'trade-secret', source: ['api/chat.js'], status: 'unregistered', protection: 'high', year: 2024 },
+  { id: 'fallen-starlight-atlas', category: 'ai-personas', name: 'Fallen Starlight Atlas', description: 'Original AI persona — novel-specific Atlas with in-world knowledge and character voice', type: 'trade-secret', source: ['api/chat.js'], status: 'unregistered', protection: 'medium', year: 2024 },
+  { id: 'story-of-stories-atlas', category: 'ai-personas', name: 'Story of Stories Atlas', description: 'Original AI persona — novel-specific Atlas for meta-narrative guidance', type: 'trade-secret', source: ['api/chat.js'], status: 'unregistered', protection: 'medium', year: 2024 },
+
+  // Algorithms
+  { id: 'course-engine', category: 'algorithms', name: 'Course Engine', description: 'Original algorithm — requirement checking, progress tracking, certificate logic', type: 'trade-secret', source: ['src/coursework/courseEngine.js'], status: 'unregistered', protection: 'medium', year: 2024 },
+  { id: 'mentor-engine', category: 'algorithms', name: 'Mentor Engine', description: 'Original algorithm — multi-stage mentor application screening with AI assessment', type: 'trade-secret', source: ['api/mentor-apply.js', 'src/pages/Mentors/'], status: 'unregistered', protection: 'medium', year: 2025 },
+  { id: 'profile-engine', category: 'algorithms', name: 'Profile Engine', description: 'Original algorithm — user rank progression, subscription gating, achievement tracking', type: 'trade-secret', source: ['src/pages/Profile/ProfilePage.js'], status: 'unregistered', protection: 'medium', year: 2024 },
+  { id: 'numerology-engine', category: 'algorithms', name: 'Numerology Engine', description: 'Original algorithm — Pythagorean and Chaldean numerology calculations', type: 'trade-secret', source: ['src/pages/SevenMetals/'], status: 'unregistered', protection: 'low', year: 2024 },
+  { id: 'natal-chart', category: 'algorithms', name: 'Natal Chart Calculator', description: 'Original algorithm — astronomical position calculations for birth chart generation', type: 'trade-secret', source: ['src/pages/SevenMetals/'], status: 'unregistered', protection: 'low', year: 2024 },
+  { id: 'game-ai-core', category: 'algorithms', name: 'Game AI Core', description: 'Original algorithm — AI opponents for ancient board games with difficulty scaling', type: 'trade-secret', source: ['src/pages/Games/'], status: 'unregistered', protection: 'medium', year: 2024 },
+
+  // Brand Elements
+  { id: 'site-names', category: 'brand-elements', name: 'Site Names', description: 'Mythouse, Meteor Steel — primary brand names', type: 'trademark', source: [], status: 'unregistered', protection: 'high', year: 2024 },
+  { id: 'feature-names', category: 'brand-elements', name: 'Feature Names', description: 'Atlas, Mythic Earth, Story Forge, Mythology Channel — feature brand names', type: 'trademark', source: [], status: 'unregistered', protection: 'medium', year: 2024 },
+  { id: 'course-names', category: 'brand-elements', name: 'Course Names', description: 'Yellow Brick Road, Fallen Starlight, Story of Stories — course and content titles', type: 'trademark', source: [], status: 'unregistered', protection: 'medium', year: 2024 },
+  { id: 'rank-names', category: 'brand-elements', name: 'Rank System Names', description: 'Mythic rank progression names — Lead through Gold tier naming', type: 'trademark', source: [], status: 'unregistered', protection: 'low', year: 2024 },
+];
+
+const IP_TYPE_COLORS = {
+  copyright: { color: '#7ab87a', bg: 'rgba(122, 184, 122, 0.12)', border: 'rgba(122, 184, 122, 0.3)' },
+  trademark: { color: '#7a7ab8', bg: 'rgba(122, 122, 184, 0.12)', border: 'rgba(122, 122, 184, 0.3)' },
+  'trade-secret': { color: '#d9a55b', bg: 'rgba(217, 165, 91, 0.12)', border: 'rgba(217, 165, 91, 0.3)' },
+};
+
+const IP_STATUS_COLORS = {
+  registered: { color: '#5bd97a', bg: 'rgba(91, 217, 122, 0.12)', border: 'rgba(91, 217, 122, 0.3)' },
+  unregistered: { color: '#8a8aa0', bg: 'rgba(138, 138, 160, 0.12)', border: 'rgba(138, 138, 160, 0.3)' },
+  pending: { color: '#d9a55b', bg: 'rgba(217, 165, 91, 0.12)', border: 'rgba(217, 165, 91, 0.3)' },
+};
+
+const IP_PROTECTION_COLORS = {
+  high: { color: '#d95b5b', bg: 'rgba(217, 91, 91, 0.12)', border: 'rgba(217, 91, 91, 0.3)' },
+  medium: { color: '#d9a55b', bg: 'rgba(217, 165, 91, 0.12)', border: 'rgba(217, 165, 91, 0.3)' },
+  low: { color: '#8a8aa0', bg: 'rgba(138, 138, 160, 0.12)', border: 'rgba(138, 138, 160, 0.3)' },
+};
+
+function formatSubmissionText(items) {
+  const today = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+  const copyrightItems = items.filter(i => i.type === 'copyright');
+  const trademarkItems = items.filter(i => i.type === 'trademark');
+  const tradeSecretItems = items.filter(i => i.type === 'trade-secret');
+  const catName = (id) => IP_CATEGORIES.find(c => c.id === id)?.name || id;
+
+  let text = `INTELLECTUAL PROPERTY SUBMISSION INVENTORY\nPrepared: ${today}\nOwner: Mythouse / Meteor Steel\nTotal Items: ${items.length}\n`;
+  text += `Copyright: ${copyrightItems.length} | Trademark: ${trademarkItems.length} | Trade Secret: ${tradeSecretItems.length}\n`;
+  text += '\n' + '='.repeat(72) + '\n';
+
+  if (copyrightItems.length > 0) {
+    text += '\nSECTION 1: COPYRIGHT REGISTRATIONS\n';
+    text += '-'.repeat(72) + '\n\n';
+    copyrightItems.forEach((item, i) => {
+      text += `${i + 1}. ${item.name}\n`;
+      text += `   Title of Work:      ${item.name}\n`;
+      text += `   Author / Claimant:  Mythouse / Meteor Steel\n`;
+      text += `   Year of Creation:   ${item.year}\n`;
+      text += `   Category:           ${catName(item.category)}\n`;
+      text += `   Type of Work:       ${item.category === 'game-designs' ? 'Visual Arts / Game Design' : item.category === 'data-compilations' ? 'Compilation / Database' : 'Literary Work'}\n`;
+      text += `   Description:        ${item.description}\n`;
+      text += `   Protection Priority: ${item.protection.charAt(0).toUpperCase() + item.protection.slice(1)}\n`;
+      text += `   Registration Status: ${item.status.charAt(0).toUpperCase() + item.status.slice(1)}\n`;
+      if (item.source.length > 0) {
+        text += `   Source Files:       ${item.source.join(', ')}\n`;
+      }
+      text += '\n';
+    });
+    text += '='.repeat(72) + '\n';
+  }
+
+  if (trademarkItems.length > 0) {
+    text += '\nSECTION 2: TRADEMARK REGISTRATIONS\n';
+    text += '-'.repeat(72) + '\n\n';
+    trademarkItems.forEach((item, i) => {
+      text += `${i + 1}. ${item.name}\n`;
+      text += `   Mark:               ${item.name}\n`;
+      text += `   Owner:              Mythouse / Meteor Steel\n`;
+      text += `   Date of First Use:  ${item.year}\n`;
+      text += `   Class:              IC 041 — Education and Entertainment Services\n`;
+      text += `   Goods / Services:   ${item.description}\n`;
+      text += `   Protection Priority: ${item.protection.charAt(0).toUpperCase() + item.protection.slice(1)}\n`;
+      text += `   Registration Status: ${item.status.charAt(0).toUpperCase() + item.status.slice(1)}\n`;
+      text += '\n';
+    });
+    text += '='.repeat(72) + '\n';
+  }
+
+  if (tradeSecretItems.length > 0) {
+    text += '\nSECTION 3: TRADE SECRET DECLARATIONS\n';
+    text += '-'.repeat(72) + '\n\n';
+    tradeSecretItems.forEach((item, i) => {
+      text += `${i + 1}. ${item.name}\n`;
+      text += `   Title:              ${item.name}\n`;
+      text += `   Owner:              Mythouse / Meteor Steel\n`;
+      text += `   Year Created:       ${item.year}\n`;
+      text += `   Category:           ${catName(item.category)}\n`;
+      text += `   Description:        ${item.description}\n`;
+      text += `   Secrecy Measures:   Access-controlled source code; not publicly disclosed;\n`;
+      text += `                       server-side execution only; no client-side exposure\n`;
+      text += `   Protection Priority: ${item.protection.charAt(0).toUpperCase() + item.protection.slice(1)}\n`;
+      text += `   Registration Status: ${item.status.charAt(0).toUpperCase() + item.status.slice(1)}\n`;
+      if (item.source.length > 0) {
+        text += `   Source Files:       ${item.source.join(', ')}\n`;
+      }
+      text += '\n';
+    });
+    text += '='.repeat(72) + '\n';
+  }
+
+  text += `\nEND OF INVENTORY — ${items.length} items total\n`;
+  return text;
+}
+
+function formatFilingDrafts(items) {
+  const today = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+  const catName = (id) => IP_CATEGORIES.find(c => c.id === id)?.name || id;
+
+  const workType = (item) => {
+    if (item.category === 'game-designs') return 'Visual Arts — Game Design';
+    if (item.category === 'data-compilations') return 'Compilation / Database';
+    return 'Literary Work';
+  };
+
+  const copyrightItems = items.filter(i => i.type === 'copyright');
+  const trademarkItems = items.filter(i => i.type === 'trademark');
+  const tradeSecretItems = items.filter(i => i.type === 'trade-secret');
+
+  const drafts = [];
+
+  copyrightItems.forEach(item => {
+    const isAdaptation = item.id.startsWith('game-') && !item.id.includes('board') && !item.id.includes('arcana');
+    let text = '';
+    text += `${'='.repeat(72)}\n`;
+    text += `U.S. COPYRIGHT OFFICE — REGISTRATION APPLICATION DRAFT\n`;
+    text += `Prepared: ${today}\n`;
+    text += `${'='.repeat(72)}\n\n`;
+
+    text += `1.  TITLE OF WORK\n`;
+    text += `    ${item.name}\n\n`;
+
+    text += `2.  COMPLETION / PUBLICATION\n`;
+    text += `    Year of Completion:  ${item.year}\n`;
+    text += `    Date of Publication: ${item.year}, published via mythouse.org\n`;
+    text += `    Nation of Publication: United States\n\n`;
+
+    text += `3.  TYPE OF AUTHORSHIP\n`;
+    text += `    ${workType(item)}\n`;
+    if (item.category === 'game-designs') {
+      text += `    Authorship includes: game rules, visual layout, UI design,\n`;
+      text += `    original artwork, and computer program (source code)\n`;
+    } else if (item.category === 'data-compilations') {
+      text += `    Authorship includes: selection, coordination, and arrangement\n`;
+      text += `    of data; original textual descriptions and annotations\n`;
+    } else {
+      text += `    Authorship includes: text, selection, arrangement, and\n`;
+      text += `    original expression throughout\n`;
+    }
+    text += '\n';
+
+    text += `4.  AUTHOR\n`;
+    text += `    Name:       [Your Full Legal Name]\n`;
+    text += `    Pseudonym:  None\n`;
+    text += `    Citizenship: United States\n`;
+    text += `    Work Made for Hire: No\n\n`;
+
+    text += `5.  COPYRIGHT CLAIMANT\n`;
+    text += `    Name:    [Your Full Legal Name]\n`;
+    text += `    Address: [Your Address]\n`;
+    text += `    d/b/a Mythouse / Meteor Steel\n\n`;
+
+    text += `6.  DESCRIPTION OF WORK\n`;
+    text += `    ${item.description}\n\n`;
+    text += `    Category: ${catName(item.category)}\n`;
+    text += `    The work is an original ${workType(item).toLowerCase()} first\n`;
+    text += `    created in ${item.year} and published on the mythouse.org\n`;
+    text += `    web platform.\n\n`;
+
+    if (isAdaptation) {
+      text += `7.  PREEXISTING MATERIAL / NEW MATERIAL\n`;
+      text += `    Preexisting: Historical game concept (public domain)\n`;
+      text += `    New Material: All original code, AI opponent logic, user\n`;
+      text += `    interface design, visual assets, and digital adaptation\n\n`;
+    }
+
+    const nextNum = isAdaptation ? 8 : 7;
+    text += `${nextNum}.  DEPOSIT MATERIAL\n`;
+    if (item.source.length > 0) {
+      text += `    Source code and digital content files:\n`;
+      item.source.forEach(s => {
+        text += `      - ${s}\n`;
+      });
+    } else {
+      text += `    Digital publication accessible at mythouse.org\n`;
+    }
+    text += `\n    Deposit: Best-edition digital copy (source code printout\n`;
+    text += `    or PDF of rendered pages, per Circular 66 guidelines)\n\n`;
+
+    text += `${nextNum + 1}.  FEE & FILING\n`;
+    text += `    Filing Method: Electronic via eCO (copyright.gov)\n`;
+    text += `    Current Fee:   $65 (single author, single work)\n`;
+    text += `                   $55 (online literary work, single author)\n\n`;
+
+    text += `${'-'.repeat(72)}\n`;
+
+    drafts.push({ item, text, type: 'copyright' });
+  });
+
+  trademarkItems.forEach(item => {
+    let text = '';
+    text += `${'='.repeat(72)}\n`;
+    text += `USPTO — TRADEMARK APPLICATION DRAFT (TEAS Plus)\n`;
+    text += `Prepared: ${today}\n`;
+    text += `${'='.repeat(72)}\n\n`;
+
+    text += `1.  MARK\n`;
+    text += `    ${item.name}\n`;
+    text += `    Mark Type: Standard Character Mark\n\n`;
+
+    text += `2.  APPLICANT\n`;
+    text += `    Name:       [Your Full Legal Name]\n`;
+    text += `    Entity Type: Individual\n`;
+    text += `    Address:    [Your Address]\n`;
+    text += `    d/b/a Mythouse / Meteor Steel\n\n`;
+
+    text += `3.  FILING BASIS\n`;
+    text += `    Section 1(a) — Use in Commerce\n`;
+    text += `    The mark is currently in use in interstate commerce\n`;
+    text += `    via the mythouse.org website, accessible nationwide.\n\n`;
+
+    text += `4.  INTERNATIONAL CLASS\n`;
+    text += `    IC 041 — Education and Entertainment Services\n\n`;
+
+    text += `5.  IDENTIFICATION OF GOODS / SERVICES\n`;
+    text += `    ${item.description}\n\n`;
+    text += `    Suggested Description for USPTO:\n`;
+    text += `    "Entertainment services, namely, providing an interactive\n`;
+    text += `    website featuring educational and entertainment content in\n`;
+    text += `    the fields of mythology, storytelling, and ancient games;\n`;
+    text += `    educational services, namely, providing online courses and\n`;
+    text += `    curricula in the field of world mythology"\n\n`;
+
+    text += `6.  DATES OF USE\n`;
+    text += `    Date of First Use Anywhere:    ${item.year}\n`;
+    text += `    Date of First Use in Commerce: ${item.year}\n\n`;
+
+    text += `7.  SPECIMEN\n`;
+    text += `    Screenshot(s) of the mark as displayed on mythouse.org\n`;
+    text += `    showing the mark in connection with the identified services.\n\n`;
+
+    text += `8.  DECLARATION\n`;
+    text += `    The applicant believes they are the owner of the mark.\n`;
+    text += `    The mark is in use in commerce on or in connection with\n`;
+    text += `    the goods/services identified above.\n`;
+    text += `    No other person has the right to use the mark in commerce.\n\n`;
+
+    text += `9.  FEE & FILING\n`;
+    text += `    Filing Method: Electronic via TEAS Plus (uspto.gov)\n`;
+    text += `    Current Fee:   $250 per class (TEAS Plus)\n`;
+    text += `                   $350 per class (TEAS Standard)\n\n`;
+
+    text += `${'-'.repeat(72)}\n`;
+
+    drafts.push({ item, text, type: 'trademark' });
+  });
+
+  tradeSecretItems.forEach(item => {
+    let text = '';
+    text += `${'='.repeat(72)}\n`;
+    text += `TRADE SECRET IDENTIFICATION & PROTECTION RECORD\n`;
+    text += `Prepared: ${today}\n`;
+    text += `${'='.repeat(72)}\n\n`;
+
+    text += `1.  IDENTIFICATION\n`;
+    text += `    Name:     ${item.name}\n`;
+    text += `    Category: ${catName(item.category)}\n`;
+    text += `    Created:  ${item.year}\n\n`;
+
+    text += `2.  DESCRIPTION OF TRADE SECRET\n`;
+    text += `    ${item.description}\n\n`;
+    text += `    This constitutes a trade secret under the Defend Trade\n`;
+    text += `    Secrets Act (DTSA), 18 U.S.C. § 1836, and applicable\n`;
+    text += `    state Uniform Trade Secrets Act (UTSA) provisions.\n\n`;
+
+    text += `3.  ECONOMIC VALUE\n`;
+    text += `    The trade secret derives independent economic value from\n`;
+    text += `    not being generally known to, and not being readily\n`;
+    text += `    ascertainable through proper means by, other persons who\n`;
+    text += `    can obtain economic value from its disclosure or use.\n\n`;
+    text += `    Specifically: the ${item.category === 'ai-personas' ? 'AI persona definitions, system prompts, and personality configurations' : 'proprietary algorithms and computational methods'}\n`;
+    text += `    represent significant original development effort and\n`;
+    text += `    provide competitive advantage to the Mythouse platform.\n\n`;
+
+    text += `4.  REASONABLE MEASURES TO MAINTAIN SECRECY\n`;
+    text += `    a) Source code is stored in a private repository with\n`;
+    text += `       access limited to authorized personnel only\n`;
+    text += `    b) ${item.category === 'ai-personas' ? 'AI prompts and persona definitions are executed server-side\n       only; never transmitted to the client browser' : 'Algorithm logic executes server-side or in obfuscated\n       compiled bundles; core logic not exposed in source form'}\n`;
+    text += `    c) No public documentation or disclosure of the\n`;
+    text += `       proprietary methods or configurations\n`;
+    text += `    d) Employment/contractor agreements include NDA and\n`;
+    text += `       non-disclosure provisions (recommended)\n`;
+    text += `    e) Access logging and version control audit trails\n\n`;
+
+    text += `5.  ACCESS CONTROL\n`;
+    text += `    Persons with Access: Site owner / administrator only\n`;
+    text += `    Access Method:       Private GitHub repository; Vercel\n`;
+    text += `                         environment variables for API keys\n`;
+    if (item.source.length > 0) {
+      text += `    Source Locations:\n`;
+      item.source.forEach(s => {
+        text += `      - ${s}\n`;
+      });
+    }
+    text += '\n';
+
+    text += `6.  RECOMMENDED ACTIONS\n`;
+    text += `    [ ] Execute NDA with any contractors or collaborators\n`;
+    text += `    [ ] Add trade secret notice headers to source files\n`;
+    text += `    [ ] Document access log review schedule\n`;
+    text += `    [ ] Consider provisional patent if algorithm is novel\n`;
+    text += `    [ ] Maintain dated records of development (git history)\n\n`;
+
+    text += `${'-'.repeat(72)}\n`;
+
+    drafts.push({ item, text, type: 'trade-secret' });
+  });
+
+  return drafts;
+}
+
+function IPRegistrySection() {
+  const [typeFilter, setTypeFilter] = useState(null);
+  const [statusFilter, setStatusFilter] = useState(null);
+  const [collapsed, setCollapsed] = useState({});
+  const [viewMode, setViewMode] = useState('registry'); // 'registry' | 'inventory' | 'filings'
+  const [copied, setCopied] = useState(false);
+  const [expandedFiling, setExpandedFiling] = useState({});
+
+  const filtered = useMemo(() => {
+    return IP_REGISTRY.filter(item => {
+      if (typeFilter && item.type !== typeFilter) return false;
+      if (statusFilter && item.status !== statusFilter) return false;
+      return true;
+    });
+  }, [typeFilter, statusFilter]);
+
+  const stats = useMemo(() => {
+    const byType = { copyright: 0, trademark: 0, 'trade-secret': 0 };
+    const byProtection = { high: 0, medium: 0, low: 0 };
+    IP_REGISTRY.forEach(item => {
+      byType[item.type]++;
+      byProtection[item.protection]++;
+    });
+    return { total: IP_REGISTRY.length, byType, byProtection };
+  }, []);
+
+  const submissionText = useMemo(() => formatSubmissionText(filtered), [filtered]);
+  const filingDrafts = useMemo(() => formatFilingDrafts(filtered), [filtered]);
+
+  const handleCopy = useCallback((text) => {
+    navigator.clipboard.writeText(text || submissionText).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+  }, [submissionText]);
+
+  const allFilingsText = useMemo(() => filingDrafts.map(d => d.text).join('\n\n'), [filingDrafts]);
+
+  const toggleCategory = (catId) => {
+    setCollapsed(prev => ({ ...prev, [catId]: !prev[catId] }));
+  };
+
+  return (
+    <div className="admin-ip-registry">
+      <h2 className="admin-ip-title">IP REGISTRY</h2>
+      <p className="admin-ip-subtitle">
+        Intellectual property inventory — creative works, designs, data, and brand elements.
+      </p>
+
+      <div className="admin-ip-stats">
+        <div className="admin-ip-stat">
+          <span className="admin-ip-stat-value">{stats.total}</span>
+          <span className="admin-ip-stat-label">Total Items</span>
+        </div>
+        <div className="admin-ip-stat">
+          <span className="admin-ip-stat-value" style={{ color: IP_TYPE_COLORS.copyright.color }}>{stats.byType.copyright}</span>
+          <span className="admin-ip-stat-label">Copyright</span>
+        </div>
+        <div className="admin-ip-stat">
+          <span className="admin-ip-stat-value" style={{ color: IP_TYPE_COLORS.trademark.color }}>{stats.byType.trademark}</span>
+          <span className="admin-ip-stat-label">Trademark</span>
+        </div>
+        <div className="admin-ip-stat">
+          <span className="admin-ip-stat-value" style={{ color: IP_TYPE_COLORS['trade-secret'].color }}>{stats.byType['trade-secret']}</span>
+          <span className="admin-ip-stat-label">Trade Secret</span>
+        </div>
+        <div className="admin-ip-stat">
+          <span className="admin-ip-stat-value" style={{ color: IP_PROTECTION_COLORS.high.color }}>{stats.byProtection.high}</span>
+          <span className="admin-ip-stat-label">High Priority</span>
+        </div>
+        <div className="admin-ip-stat">
+          <span className="admin-ip-stat-value" style={{ color: IP_PROTECTION_COLORS.medium.color }}>{stats.byProtection.medium}</span>
+          <span className="admin-ip-stat-label">Medium</span>
+        </div>
+        <div className="admin-ip-stat">
+          <span className="admin-ip-stat-value" style={{ color: IP_PROTECTION_COLORS.low.color }}>{stats.byProtection.low}</span>
+          <span className="admin-ip-stat-label">Low</span>
+        </div>
+      </div>
+
+      <div className="admin-ip-actions">
+        <button
+          className={`admin-ip-submit-btn ${viewMode === 'inventory' ? 'active' : ''}`}
+          onClick={() => { setViewMode(viewMode === 'inventory' ? 'registry' : 'inventory'); setCopied(false); }}
+        >
+          {viewMode === 'inventory' ? 'Back to Registry' : 'Submission Inventory'}
+        </button>
+        <button
+          className={`admin-ip-submit-btn admin-ip-filings-btn ${viewMode === 'filings' ? 'active' : ''}`}
+          onClick={() => { setViewMode(viewMode === 'filings' ? 'registry' : 'filings'); setCopied(false); setExpandedFiling({}); }}
+        >
+          {viewMode === 'filings' ? 'Back to Registry' : 'Draft IP Filings'}
+        </button>
+      </div>
+
+      {viewMode === 'inventory' ? (
+        <div className="admin-ip-submission-view">
+          <div className="admin-ip-submission-header">
+            <h3 className="admin-ip-submission-title">IP SUBMISSION DOCUMENT</h3>
+            <button className={`admin-ip-copy-btn ${copied ? 'copied' : ''}`} onClick={() => handleCopy()}>
+              {copied ? 'Copied!' : 'Copy to Clipboard'}
+            </button>
+          </div>
+          <pre className="admin-ip-submission-text">{submissionText}</pre>
+        </div>
+      ) : viewMode === 'filings' ? (
+        <div className="admin-ip-filings-view">
+          <div className="admin-ip-submission-header">
+            <h3 className="admin-ip-submission-title">DRAFT IP FILINGS</h3>
+            <button className={`admin-ip-copy-btn ${copied ? 'copied' : ''}`} onClick={() => handleCopy(allFilingsText)}>
+              {copied ? 'Copied!' : 'Copy All Filings'}
+            </button>
+          </div>
+          <p className="admin-ip-filings-intro">
+            {filingDrafts.length} draft filing{filingDrafts.length !== 1 ? 's' : ''} generated. Click any item to expand its full application draft.
+          </p>
+
+          {['copyright', 'trademark', 'trade-secret'].map(filingType => {
+            const typeDrafts = filingDrafts.filter(d => d.type === filingType);
+            if (typeDrafts.length === 0) return null;
+            const typeLabel = filingType === 'copyright' ? 'Copyright Registrations' : filingType === 'trademark' ? 'Trademark Applications' : 'Trade Secret Declarations';
+            const tc = IP_TYPE_COLORS[filingType];
+            return (
+              <div key={filingType} className="admin-ip-filing-group">
+                <h4 className="admin-ip-filing-group-title" style={{ color: tc.color }}>
+                  {typeLabel} ({typeDrafts.length})
+                </h4>
+                {typeDrafts.map(draft => {
+                  const isExpanded = expandedFiling[draft.item.id];
+                  return (
+                    <div key={draft.item.id} className="admin-ip-filing-item">
+                      <button
+                        className={`admin-ip-filing-item-header ${isExpanded ? 'expanded' : ''}`}
+                        onClick={() => setExpandedFiling(prev => ({ ...prev, [draft.item.id]: !prev[draft.item.id] }))}
+                      >
+                        <span className="admin-ip-category-arrow">{isExpanded ? '\u25BC' : '\u25B6'}</span>
+                        <span className="admin-ip-filing-item-name">{draft.item.name}</span>
+                        <span className="admin-ip-badge" style={{ color: tc.color, background: tc.bg, borderColor: tc.border }}>
+                          {filingType === 'trade-secret' ? 'Trade Secret' : filingType.charAt(0).toUpperCase() + filingType.slice(1)}
+                        </span>
+                        <span className="admin-ip-filing-item-year">{draft.item.year}</span>
+                      </button>
+                      {isExpanded && (
+                        <div className="admin-ip-filing-item-body">
+                          <button
+                            className="admin-ip-copy-single-btn"
+                            onClick={() => { navigator.clipboard.writeText(draft.text); }}
+                          >
+                            Copy This Filing
+                          </button>
+                          <pre className="admin-ip-filing-text">{draft.text}</pre>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            );
+          })}
+        </div>
+      ) : (
+        <>
+      <div className="admin-ip-filters">
+        <span className="admin-ip-filter-label">Type:</span>
+        {['copyright', 'trademark', 'trade-secret'].map(t => (
+          <button
+            key={t}
+            className={`admin-ip-filter-btn ${typeFilter === t ? 'active' : ''}`}
+            style={typeFilter === t ? { borderColor: IP_TYPE_COLORS[t].color, color: IP_TYPE_COLORS[t].color } : {}}
+            onClick={() => setTypeFilter(typeFilter === t ? null : t)}
+          >
+            {t === 'trade-secret' ? 'Trade Secret' : t.charAt(0).toUpperCase() + t.slice(1)}
+          </button>
+        ))}
+        <span className="admin-ip-filter-label">Status:</span>
+        {['registered', 'unregistered', 'pending'].map(s => (
+          <button
+            key={s}
+            className={`admin-ip-filter-btn ${statusFilter === s ? 'active' : ''}`}
+            style={statusFilter === s ? { borderColor: IP_STATUS_COLORS[s].color, color: IP_STATUS_COLORS[s].color } : {}}
+            onClick={() => setStatusFilter(statusFilter === s ? null : s)}
+          >
+            {s.charAt(0).toUpperCase() + s.slice(1)}
+          </button>
+        ))}
+        {(typeFilter || statusFilter) && (
+          <button
+            className="admin-ip-filter-btn admin-ip-clear-btn"
+            onClick={() => { setTypeFilter(null); setStatusFilter(null); }}
+          >
+            Clear Filters
+          </button>
+        )}
+      </div>
+
+      {IP_CATEGORIES.map(cat => {
+        const items = filtered.filter(item => item.category === cat.id);
+        if (items.length === 0) return null;
+        const isCollapsed = collapsed[cat.id];
+        return (
+          <div key={cat.id} className="admin-ip-category">
+            <button className="admin-ip-category-header" onClick={() => toggleCategory(cat.id)}>
+              <span className="admin-ip-category-arrow">{isCollapsed ? '\u25B6' : '\u25BC'}</span>
+              <span className="admin-ip-category-name">{cat.name}</span>
+              <span className="admin-ip-category-count">{items.length} item{items.length !== 1 ? 's' : ''}</span>
+            </button>
+            {!isCollapsed && (
+              <div className="admin-ip-card-grid">
+                {items.map(item => {
+                  const tc = IP_TYPE_COLORS[item.type];
+                  const sc = IP_STATUS_COLORS[item.status];
+                  const pc = IP_PROTECTION_COLORS[item.protection];
+                  return (
+                    <div key={item.id} className="admin-ip-card">
+                      <div className="admin-ip-card-header">
+                        <h4 className="admin-ip-card-name">{item.name}</h4>
+                        <span className="admin-ip-card-year">{item.year}</span>
+                      </div>
+                      <p className="admin-ip-card-desc">{item.description}</p>
+                      <div className="admin-ip-card-badges">
+                        <span className="admin-ip-badge" style={{ color: tc.color, background: tc.bg, borderColor: tc.border }}>
+                          {item.type === 'trade-secret' ? 'Trade Secret' : item.type.charAt(0).toUpperCase() + item.type.slice(1)}
+                        </span>
+                        <span className="admin-ip-badge" style={{ color: sc.color, background: sc.bg, borderColor: sc.border }}>
+                          {item.status.charAt(0).toUpperCase() + item.status.slice(1)}
+                        </span>
+                        <span className="admin-ip-badge" style={{ color: pc.color, background: pc.bg, borderColor: pc.border }}>
+                          {item.protection.charAt(0).toUpperCase() + item.protection.slice(1)} Priority
+                        </span>
+                      </div>
+                      {item.source.length > 0 && (
+                        <div className="admin-ip-card-sources">
+                          {item.source.map(s => (
+                            <code key={s} className="admin-ip-source">{s}</code>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        );
+      })}
+        </>
+      )}
+    </div>
+  );
+}
+
 function AdminPage() {
   const [activeSection, setActiveSection] = useState('campaigns');
 
@@ -1282,6 +1900,7 @@ function AdminPage() {
         </Suspense>
       )}
       {activeSection === 'services' && <ServicesSection />}
+      {activeSection === 'ip-registry' && <IPRegistrySection />}
     </div>
   );
 }

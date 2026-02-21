@@ -1273,3 +1273,482 @@
   border-radius: 3px;
   font-family: monospace;
 }
+
+/* ===== IP REGISTRY ===== */
+.admin-ip-registry {
+  padding: 24px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.admin-ip-title {
+  font-family: 'Cinzel', serif;
+  color: #e8d5b5;
+  font-size: 0.95rem;
+  letter-spacing: 0.12em;
+  margin: 0 0 6px;
+}
+
+.admin-ip-subtitle {
+  color: #8a8aa0;
+  font-size: 0.82rem;
+  margin: 0 0 20px;
+}
+
+/* Summary stats bar */
+.admin-ip-stats {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  padding: 14px 20px;
+  background: rgba(16, 16, 24, 0.7);
+  border: 1px solid #2a2a3a;
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+
+.admin-ip-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.admin-ip-stat-value {
+  font-size: 1.1rem;
+  color: #e8d5b5;
+  font-weight: 600;
+}
+
+.admin-ip-stat-label {
+  font-size: 0.68rem;
+  color: #6a6a7a;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* Filter buttons */
+.admin-ip-filters {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.admin-ip-filter-label {
+  font-size: 0.75rem;
+  color: #6a6a7a;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-right: 2px;
+}
+
+.admin-ip-filter-label:not(:first-child) {
+  margin-left: 10px;
+}
+
+.admin-ip-filter-btn {
+  padding: 4px 12px;
+  border-radius: 12px;
+  border: 1px solid #2a2a3a;
+  background: #1a1a24;
+  color: #8a8aa0;
+  font-size: 0.75rem;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.admin-ip-filter-btn:hover {
+  border-color: #4a4a5a;
+  color: #d4d4d4;
+}
+
+.admin-ip-filter-btn.active {
+  background: #1e1e2e;
+}
+
+.admin-ip-clear-btn {
+  color: #d95b5b;
+  border-color: rgba(217, 91, 91, 0.3);
+}
+
+.admin-ip-clear-btn:hover {
+  border-color: #d95b5b;
+  color: #d95b5b;
+}
+
+/* Collapsible category sections */
+.admin-ip-category {
+  margin-bottom: 16px;
+}
+
+.admin-ip-category-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 14px;
+  background: #14141c;
+  border: 1px solid #2a2a3a;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: inherit;
+  color: inherit;
+  transition: border-color 0.2s;
+}
+
+.admin-ip-category-header:hover {
+  border-color: #c4713a;
+}
+
+.admin-ip-category-arrow {
+  font-size: 0.7rem;
+  color: #6a6a7a;
+  width: 14px;
+  text-align: center;
+}
+
+.admin-ip-category-name {
+  font-family: 'Cinzel', serif;
+  font-size: 0.9rem;
+  color: #e8d5b5;
+  letter-spacing: 0.06em;
+}
+
+.admin-ip-category-count {
+  font-size: 0.72rem;
+  color: #6a6a7a;
+  margin-left: auto;
+}
+
+/* 2-column card grid */
+.admin-ip-card-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  padding: 12px 0 0;
+}
+
+/* Item cards */
+.admin-ip-card {
+  background: #14141c;
+  border: 1px solid #2a2a3a;
+  border-radius: 10px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: border-color 0.2s;
+}
+
+.admin-ip-card:hover {
+  border-color: #3a3a4a;
+}
+
+.admin-ip-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.admin-ip-card-name {
+  font-family: 'Cinzel', serif;
+  font-size: 0.88rem;
+  color: #e8d5b5;
+  margin: 0;
+  font-weight: 600;
+}
+
+.admin-ip-card-year {
+  font-size: 0.72rem;
+  color: #6a6a7a;
+  flex-shrink: 0;
+}
+
+.admin-ip-card-desc {
+  font-size: 0.8rem;
+  color: #b0b0c0;
+  margin: 0;
+  line-height: 1.4;
+  flex: 1;
+}
+
+.admin-ip-card-badges {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+
+.admin-ip-badge {
+  display: inline-block;
+  font-size: 0.62rem;
+  padding: 2px 8px;
+  border-radius: 4px;
+  border: 1px solid;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+}
+
+.admin-ip-card-sources {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 2px;
+}
+
+.admin-ip-source {
+  font-size: 0.6rem;
+  color: #8a8aa0;
+  background: rgba(255, 255, 255, 0.04);
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-family: monospace;
+}
+
+.admin-ip-submit-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 20px;
+  border-radius: 8px;
+  border: 1px solid var(--accent-ember);
+  background: rgba(196, 113, 58, 0.12);
+  color: var(--accent-ember);
+  font-family: 'Cinzel', serif;
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.admin-ip-submit-btn:hover {
+  background: rgba(196, 113, 58, 0.22);
+}
+
+.admin-ip-submit-btn.active {
+  background: rgba(196, 113, 58, 0.22);
+  border-color: #e8d5b5;
+  color: #e8d5b5;
+}
+
+/* Submission document view */
+.admin-ip-submission-view {
+  background: rgba(10, 10, 16, 0.8);
+  border: 1px solid #2a2a3a;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.admin-ip-submission-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 20px;
+  background: #14141c;
+  border-bottom: 1px solid #2a2a3a;
+}
+
+.admin-ip-submission-title {
+  font-family: 'Cinzel', serif;
+  font-size: 0.85rem;
+  color: #e8d5b5;
+  letter-spacing: 0.1em;
+  margin: 0;
+}
+
+.admin-ip-copy-btn {
+  padding: 6px 16px;
+  border-radius: 6px;
+  border: 1px solid #5b8dd9;
+  background: rgba(91, 141, 217, 0.12);
+  color: #5b8dd9;
+  font-family: 'Cinzel', serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.admin-ip-copy-btn:hover {
+  background: rgba(91, 141, 217, 0.22);
+}
+
+.admin-ip-copy-btn.copied {
+  border-color: #5bd97a;
+  background: rgba(91, 217, 122, 0.12);
+  color: #5bd97a;
+}
+
+.admin-ip-submission-text {
+  margin: 0;
+  padding: 20px;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.78rem;
+  line-height: 1.55;
+  color: #c4c4c4;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-y: auto;
+  max-height: 70vh;
+}
+
+/* Actions row — two buttons side by side */
+.admin-ip-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.admin-ip-filings-btn {
+  border-color: #7a7ab8;
+  background: rgba(122, 122, 184, 0.12);
+  color: #7a7ab8;
+}
+
+.admin-ip-filings-btn:hover {
+  background: rgba(122, 122, 184, 0.22);
+}
+
+.admin-ip-filings-btn.active {
+  background: rgba(122, 122, 184, 0.22);
+  border-color: #b0b0e0;
+  color: #e8d5b5;
+}
+
+/* Filings view */
+.admin-ip-filings-view {
+  background: rgba(10, 10, 16, 0.8);
+  border: 1px solid #2a2a3a;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.admin-ip-filings-intro {
+  padding: 12px 20px 0;
+  font-size: 0.82rem;
+  color: #8a8aa0;
+  margin: 0;
+}
+
+.admin-ip-filing-group {
+  padding: 12px 20px 8px;
+}
+
+.admin-ip-filing-group-title {
+  font-family: 'Cinzel', serif;
+  font-size: 0.85rem;
+  letter-spacing: 0.06em;
+  margin: 0 0 10px;
+  font-weight: 600;
+}
+
+.admin-ip-filing-item {
+  margin-bottom: 6px;
+  border: 1px solid #2a2a3a;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: border-color 0.2s;
+}
+
+.admin-ip-filing-item:hover {
+  border-color: #3a3a4a;
+}
+
+.admin-ip-filing-item-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 14px;
+  background: #14141c;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  color: inherit;
+  transition: background 0.15s;
+}
+
+.admin-ip-filing-item-header:hover {
+  background: #1a1a28;
+}
+
+.admin-ip-filing-item-header.expanded {
+  border-bottom: 1px solid #2a2a3a;
+  background: #1a1a28;
+}
+
+.admin-ip-filing-item-name {
+  font-family: 'Cinzel', serif;
+  font-size: 0.85rem;
+  color: #e8d5b5;
+  font-weight: 600;
+  flex: 1;
+  text-align: left;
+}
+
+.admin-ip-filing-item-year {
+  font-size: 0.72rem;
+  color: #6a6a7a;
+}
+
+.admin-ip-filing-item-body {
+  position: relative;
+  background: rgba(8, 8, 12, 0.6);
+}
+
+.admin-ip-copy-single-btn {
+  position: absolute;
+  top: 10px;
+  right: 14px;
+  padding: 4px 12px;
+  border-radius: 5px;
+  border: 1px solid #5b8dd9;
+  background: rgba(91, 141, 217, 0.12);
+  color: #5b8dd9;
+  font-family: 'Cinzel', serif;
+  font-size: 0.68rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  z-index: 1;
+}
+
+.admin-ip-copy-single-btn:hover {
+  background: rgba(91, 141, 217, 0.25);
+}
+
+.admin-ip-filing-text {
+  margin: 0;
+  padding: 16px 20px;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.75rem;
+  line-height: 1.5;
+  color: #c4c4c4;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .admin-ip-card-grid {
+    grid-template-columns: 1fr;
+  }
+  .admin-ip-filters {
+    gap: 4px;
+  }
+  .admin-ip-stats {
+    gap: 12px;
+    justify-content: center;
+  }
+  .admin-ip-submission-header {
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-start;
+  }
+}

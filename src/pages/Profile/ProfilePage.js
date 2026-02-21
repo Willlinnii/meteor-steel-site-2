@@ -291,6 +291,19 @@ export default function ProfilePage() {
         )}
       </div>
 
+      {/* Admin shortcut */}
+      {user?.email === process.env.REACT_APP_ADMIN_EMAIL && (
+        <button className="profile-dragon-btn" onClick={() => navigate('/dragon')}>
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M12 2C6.5 2 4 6 4 9c0 2 .5 3 1.5 4L4 17l3-1.5c1 1.5 3 2.5 5 2.5s4-1 5-2.5l3 1.5-1.5-4c1-1 1.5-2 1.5-4 0-3-2.5-7-8-7z" />
+            <circle cx="9" cy="9" r="1" fill="currentColor" stroke="none" />
+            <circle cx="15" cy="9" r="1" fill="currentColor" stroke="none" />
+            <path d="M9 13c1 1 5 1 6 0" />
+          </svg>
+          Domain of the Dragon
+        </button>
+      )}
+
       {/* Membership Add-Ons */}
       <h2 className="profile-section-title">Membership Add-Ons</h2>
 

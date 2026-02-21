@@ -4,6 +4,7 @@ import {
   signInWithRedirect,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
+  updateProfile,
 } from 'firebase/auth';
 import { auth, googleProvider, firebaseConfigured } from './firebase';
 import './LoginPage.css';
@@ -24,6 +25,7 @@ function friendlyError(err) {
 
 export default function LoginPage() {
   const [isSignUp, setIsSignUp] = useState(false);
+  const [displayName, setDisplayName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -53,7 +55,10 @@ export default function LoginPage() {
     setBusy(true);
     try {
       if (isSignUp) {
-        await createUserWithEmailAndPassword(auth, email, password);
+        const { user } = await createUserWithEmailAndPassword(auth, email, password);
+        if (displayName.trim()) {
+          await updateProfile(user, { displayName: displayName.trim() });
+        }
       } else {
         await signInWithEmailAndPassword(auth, email, password);
       }
@@ -108,6 +113,16 @@ export default function LoginPage() {
         <div className="login-divider">or</div>
 
         <form className="login-form" onSubmit={handleEmailSubmit}>
+          {isSignUp && (
+            <input
+              className="login-input"
+              type="text"
+              placeholder="Display Name"
+              value={displayName}
+              onChange={(e) => setDisplayName(e.target.value)}
+              autoComplete="name"
+            />
+          )}
           <input
             className="login-input"
             type="email"

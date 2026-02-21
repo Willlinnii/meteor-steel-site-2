@@ -2632,6 +2632,38 @@ body {
   color: #cc6f6f;
 }
 
+.profile-dragon-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  margin: 20px 0 8px;
+  padding: 12px 20px;
+  background: linear-gradient(135deg, rgba(196, 113, 58, 0.10) 0%, rgba(217, 91, 91, 0.08) 100%);
+  border: 1px solid rgba(196, 113, 58, 0.4);
+  border-radius: 10px;
+  color: var(--accent-ember);
+  font-family: 'Cinzel', serif;
+  font-size: 0.92rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.profile-dragon-btn:hover {
+  background: linear-gradient(135deg, rgba(196, 113, 58, 0.22) 0%, rgba(217, 91, 91, 0.16) 100%);
+  border-color: var(--accent-ember);
+  color: #e8d5b5;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(196, 113, 58, 0.15);
+}
+
+.profile-dragon-btn svg {
+  flex-shrink: 0;
+}
+
 .profile-section-title {
   font-family: 'Cinzel', serif;
   color: var(--accent-gold);

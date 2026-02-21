@@ -18,7 +18,7 @@
       "sizes": "512x512"
     }
   ],
-  "start_url": ".",
+  "start_url": "/metals/calendar",
   "display": "standalone",
   "theme_color": "#12100e",
   "background_color": "#12100e"

@@ -1,6 +1,8 @@
 import React, { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import sites from '../../data/mythicEarthSites.json';
+import useGoogleMapsApi from '../../hooks/useGoogleMapsApi';
+import StreetViewPanorama from './StreetViewPanorama';
 import './SacredSites360Page.css';
 
 export default function SacredSites360Page() {
@@ -22,6 +24,7 @@ export default function SacredSites360Page() {
     : streetViewSites.filter(s => s.region === regionFilter);
 
   const mapsKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
+  const { isLoaded, error: mapsError } = useGoogleMapsApi(mapsKey);
   const sv = selectedSite
     ? (typeof selectedSite.streetView === 'object' ? selectedSite.streetView : {})
     : {};
@@ -77,16 +80,32 @@ export default function SacredSites360Page() {
               <h2 className="sacred360-viewer-title">{selectedSite.name}</h2>
               <p className="sacred360-viewer-region">{selectedSite.region}</p>
               <div className="sacred360-iframe-wrap">
-                {mapsKey ? (
-                  <iframe
+                {mapsKey && isLoaded ? (
+                  <StreetViewPanorama
                     key={selectedSite.id}
-                    title={`Street View of ${selectedSite.name}`}
-                    src={`https://www.google.com/maps/embed/v1/streetview?key=${mapsKey}&location=${selectedSite.lat},${selectedSite.lng}&heading=${heading}&pitch=${pitch}&fov=${fov}`}
-                    className="sacred360-iframe"
-                    allowFullScreen
-                    loading="lazy"
-                    referrerPolicy="no-referrer-when-downgrade"
+                    lat={selectedSite.lat}
+                    lng={selectedSite.lng}
+                    heading={heading}
+                    pitch={pitch}
+                    fov={fov}
+                    name={selectedSite.name}
                   />
+                ) : mapsKey && !isLoaded && !mapsError ? (
+                  <div className="sacred360-fallback">
+                    <p>Loading Street View…</p>
+                  </div>
+                ) : mapsError ? (
+                  <div className="sacred360-fallback">
+                    <p>Failed to load Google Maps API.</p>
+                    <a
+                      href={`https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${selectedSite.lat},${selectedSite.lng}&heading=${heading}&pitch=${pitch}&fov=${fov}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="sacred360-fallback-link"
+                    >
+                      Open in Google Street View
+                    </a>
+                  </div>
                 ) : (
                   <div className="sacred360-fallback">
                     <p>Add a <code>REACT_APP_GOOGLE_MAPS_API_KEY</code> to your <code>.env</code> for embedded Street View.</p>
