@@ -454,6 +454,7 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
   const hoveredRingRef = useRef(null);
   const [stormFlash, setStormFlash] = useState(false);
   const [meteorShower, setMeteorShower] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const prevMeteorSteelRef = useRef(false);
   const wheelOpenedRef = useRef(false); // eslint-disable-line no-unused-vars
 
@@ -2438,10 +2439,27 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
           </svg>
         </div>
       )}
-      <div className="orbital-btn-row">
+      <div className="orbital-btn-row" data-expanded={mobileMenuOpen || undefined}>
+        <button
+          className="mobile-mode-toggle"
+          onClick={() => setMobileMenuOpen(prev => !prev)}
+          title={mobileMenuOpen ? 'Collapse buttons' : 'Show mode buttons'}
+        >
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            {mobileMenuOpen ? (
+              <path d="M18 6L6 18M6 6l12 12" />
+            ) : (
+              <>
+                <circle cx="12" cy="5" r="1.5" fill="currentColor" stroke="none" />
+                <circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none" />
+                <circle cx="12" cy="19" r="1.5" fill="currentColor" stroke="none" />
+              </>
+            )}
+          </svg>
+        </button>
         <button
           className="clock-toggle"
-          onClick={() => onToggleClock && onToggleClock()}
+          onClick={() => { setMobileMenuOpen(false); onToggleClock && onToggleClock(); }}
           title={!clockMode ? 'Show 12h clock' : clockMode === '12h' ? 'Switch to 24h geocentric' : 'Hide clock'}
         >
           <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
@@ -2452,7 +2470,7 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
         </button>
         <button
           className="chakra-view-toggle"
-          onClick={() => onToggleChakraView && onToggleChakraView()}
+          onClick={() => { setMobileMenuOpen(false); onToggleChakraView && onToggleChakraView(); }}
           title={
             !chakraViewMode ? 'Show chakra body viewer (Chaldean)' :
             chakraViewMode === 'chaldean' ? 'Chaldean Order — click for Heliocentric' :
@@ -2467,7 +2485,7 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
         </button>
         <button
           className={`mythic-earth-toggle${showMythicEarth ? ' active' : ''}`}
-          onClick={() => onToggleMythicEarth && onToggleMythicEarth()}
+          onClick={() => { setMobileMenuOpen(false); onToggleMythicEarth && onToggleMythicEarth(); }}
           title={showMythicEarth ? 'Exit Mythic Earth' : 'Show Mythic Earth globe'}
         >
           <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
@@ -2480,7 +2498,7 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
 
         <button
           className={`monomyth-toggle${showMonomyth ? ' active' : ''}${showCycles ? ' cycles' : ''}${showMeteorSteel ? ' steel' : ''}`}
-          onClick={() => onToggleMonomyth && onToggleMonomyth()}
+          onClick={() => { setMobileMenuOpen(false); onToggleMonomyth && onToggleMonomyth(); }}
           title={showMeteorSteel ? 'Meteor steel — click for monomyth' : showMonomyth ? 'Monomyth — click for meteor steel' : 'Show monomyth journey ring'}
           style={showCycles && !showMeteorSteel ? { color: '#6ecf8a' } : undefined}
         >
@@ -2505,7 +2523,7 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
 
         <button
           className={`starlight-toggle${showFallenStarlight ? ' active' : ''}${showStoryOfStories ? ' stories' : ''}`}
-          onClick={() => onToggleStarlight && onToggleStarlight()}
+          onClick={() => { setMobileMenuOpen(false); onToggleStarlight && onToggleStarlight(); }}
           title={showStoryOfStories ? 'Story of Stories — click for Fallen Starlight' : showFallenStarlight ? 'Fallen Starlight — click for Story of Stories' : 'Show Fallen Starlight'}
         >
           {showStoryOfStories ? (
@@ -2544,6 +2562,7 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
           <button
             className={`medicine-wheel-toggle${showMedicineWheel ? ' active' : ''}`}
             onClick={() => {
+              setMobileMenuOpen(false);
               triggerStormFlash();
               onToggleMedicineWheel && onToggleMedicineWheel();
             }}
