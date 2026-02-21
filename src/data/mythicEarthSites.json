@@ -106,7 +106,8 @@
     "lng": 81.3119,
     "category": "sacred-site",
     "description": "Unclimbed peak sacred to four religions — Hinduism, Buddhism, Jainism, and Bon. Abode of Shiva and cosmic axis of the world.",
-    "region": "Tibet"
+    "region": "Tibet",
+    "streetView": { "heading": 180, "pitch": 20 }
   },
   {
     "id": "avalon",
@@ -131,6 +132,7 @@
     "tradition": "Greek",
     "description": "Homeland of Odysseus in Homer's Odyssey. The island he spent ten years trying to reach after the fall of Troy — symbol of the longing for return.",
     "region": "Greece",
+    "streetView": { "heading": 180, "pitch": 10 },
     "readUrl": "https://sacred-texts.com/cla/homer/ody/index.htm",
     "wikisourcePage": "The_Odyssey_(Butler)",
     "excerpt": "Tell me, O Muse, of that ingenious hero who travelled far and wide after he had sacked the famous town of Troy. Many cities did he visit, and many were the nations with whose manners and customs he was acquainted; moreover he suffered much by sea while trying to save his own life and bring his men safely home; but do what he might he could not save his men, for they perished through their own sheer folly in eating the cattle of the Sun-god Hyperion; so the god prevented them from ever reaching home. Tell me, too, about all these things, O daughter of Jove, from whatsoever source you may know them.\n\nSo now all who had escaped death in battle or by shipwreck had got safely home except Ulysses, and he, though he was longing to return to his wife and country, was detained by the goddess Calypso, who had got him into a large cave and wanted to marry him.\n\n— Homer, The Odyssey, Book I (trans. Samuel Butler)"
@@ -186,7 +188,8 @@
     "lng": -107.9614,
     "category": "sacred-site",
     "description": "Ancient Puebloan ceremonial center aligned with solar and lunar cycles. Great kivas served as portals for emergence myths connecting underworld to sky.",
-    "region": "New Mexico, USA"
+    "region": "New Mexico, USA",
+    "streetView": { "heading": 90, "pitch": 5 }
   },
   {
     "id": "mt-ararat",
@@ -195,7 +198,8 @@
     "lng": 44.2991,
     "category": "mythic-location",
     "description": "Traditional resting place of Noah's Ark after the Great Flood. The mountain where humanity began again after divine destruction.",
-    "region": "Turkey"
+    "region": "Turkey",
+    "streetView": { "heading": 0, "pitch": 20 }
   },
   {
     "id": "lascaux",
@@ -222,7 +226,8 @@
     "lng": 32.8281,
     "category": "sacred-site",
     "description": "Neolithic proto-city dating to 7500 BCE, one of the earliest large human settlements. Homes contained shrines with bull horns and goddess figurines — evidence of humanity's first mythic imagination taking architectural form.",
-    "region": "Turkey"
+    "region": "Turkey",
+    "streetView": { "heading": 0, "pitch": 5 }
   },
   {
     "id": "mt-elbrus",
@@ -510,5 +515,415 @@
     "region": "Patna, India",
     "readUrl": "https://sacred-texts.com/jai/index.htm",
     "excerpt": "All breathing, existing, living, sentient creatures should not be slain, nor treated with violence, nor abused, nor tormented, nor driven away. This is the pure, unchangeable, eternal law which the clever ones, who understand the world, have proclaimed.\n\nA wise man should not act sinfully toward animals, nor cause others to act so, nor allow others to act so. Knowing the course of the world, having learned and thoroughly understood the misery of the world, he should cease from all sinful action.\n\nHe who has overcome all attachment and hatred, who is free from all sins, who knows and sees all things — he is the Liberated One. He who is free from anger, pride, deceit, and greed, whose senses are controlled, who is free from worldly desires, and who has realized the Self — such a one is a sage.\n\n— Acharanga Sutra, Book I (adapted from Hermann Jacobi translation)"
+  },
+  {
+    "id": "parthenon",
+    "name": "The Parthenon",
+    "lat": 37.9715,
+    "lng": 23.7267,
+    "category": "sacred-site",
+    "description": "Temple dedicated to Athena on the Athenian Acropolis, masterpiece of Classical Greek architecture. For nearly 2,500 years it has stood as a symbol of democracy, civilization, and the Western pursuit of ideal form.",
+    "region": "Greece",
+    "streetView": { "heading": 150, "pitch": 15 }
+  },
+  {
+    "id": "hagia-sophia",
+    "name": "Hagia Sophia",
+    "lat": 41.0086,
+    "lng": 28.9802,
+    "category": "sacred-site",
+    "description": "For nearly a thousand years the largest cathedral in the world, then an Ottoman mosque, now a mosque again. Its massive dome seemed to float on light, inspiring awe across civilizations and faiths.",
+    "region": "Turkey",
+    "streetView": { "heading": 270, "pitch": 15 }
+  },
+  {
+    "id": "vatican-st-peters",
+    "name": "St. Peter's Basilica",
+    "lat": 41.9022,
+    "lng": 12.4539,
+    "category": "sacred-site",
+    "description": "The largest church in the world, built over the tomb of the apostle Peter. Michelangelo's dome crowns the spiritual center of Roman Catholicism and 1.3 billion faithful.",
+    "region": "Italy",
+    "streetView": { "heading": 90, "pitch": 20 }
+  },
+  {
+    "id": "chartres",
+    "name": "Chartres Cathedral",
+    "lat": 48.4477,
+    "lng": 1.4878,
+    "category": "sacred-site",
+    "description": "Gothic masterpiece renowned for its stained glass and labyrinth. Pilgrims have walked its sacred geometry since the 12th century, seeking transformation through light and stone.",
+    "region": "France",
+    "streetView": { "heading": 180, "pitch": 15 }
+  },
+  {
+    "id": "mont-saint-michel",
+    "name": "Mont-Saint-Michel",
+    "lat": 48.6361,
+    "lng": -1.5115,
+    "category": "sacred-site",
+    "description": "Island abbey rising from tidal flats off the Normandy coast. A place of pilgrimage since the 8th century, where the archangel Michael appeared to the bishop of Avranches in a dream.",
+    "region": "France",
+    "streetView": { "heading": 90, "pitch": 20 }
+  },
+  {
+    "id": "meteora",
+    "name": "Meteora Monasteries",
+    "lat": 39.7217,
+    "lng": 21.6306,
+    "category": "sacred-site",
+    "description": "Orthodox monasteries perched atop immense natural sandstone pillars in central Greece. Monks first ascended these 'columns of the sky' in the 14th century, seeking God in radical solitude above the world.",
+    "region": "Greece",
+    "streetView": { "heading": 0, "pitch": 25 }
+  },
+  {
+    "id": "santiago-compostela",
+    "name": "Santiago de Compostela",
+    "lat": 42.8805,
+    "lng": -8.5446,
+    "category": "sacred-site",
+    "description": "Destination of the Camino de Santiago, the great medieval pilgrimage route. The cathedral houses the reputed relics of the apostle James, drawing hundreds of thousands of pilgrims each year.",
+    "region": "Spain",
+    "streetView": { "heading": 0, "pitch": 10 }
+  },
+  {
+    "id": "avebury",
+    "name": "Avebury Stone Circle",
+    "lat": 51.4288,
+    "lng": -1.8544,
+    "category": "sacred-site",
+    "description": "The largest stone circle in the world, older and far larger than Stonehenge. The village of Avebury sits within the circle, where Neolithic people gathered for rituals we can only imagine.",
+    "region": "England",
+    "streetView": { "heading": 90, "pitch": 5 }
+  },
+  {
+    "id": "carnac",
+    "name": "Carnac Stones",
+    "lat": 47.5949,
+    "lng": -3.0738,
+    "category": "sacred-site",
+    "description": "Over 3,000 megalithic standing stones arranged in rows stretching for miles across the Breton landscape. Erected between 4500 and 3300 BCE, their purpose remains one of prehistory's great mysteries.",
+    "region": "France",
+    "streetView": { "heading": 270, "pitch": 5 }
+  },
+  {
+    "id": "petra",
+    "name": "Petra",
+    "lat": 30.3285,
+    "lng": 35.4444,
+    "category": "sacred-site",
+    "description": "The Rose-Red City carved into desert cliffs by the Nabataeans. Its Treasury, tombs, and temples blend Hellenistic architecture with Arabian sacred traditions in one of the ancient world's most stunning sites.",
+    "region": "Jordan",
+    "streetView": { "heading": 180, "pitch": 15 }
+  },
+  {
+    "id": "baalbek",
+    "name": "Baalbek",
+    "lat": 34.0069,
+    "lng": 36.2039,
+    "category": "sacred-site",
+    "description": "Colossal Roman temple complex built atop far older foundations. The Temple of Jupiter contains the largest hewn stones in the ancient world — megalithic blocks weighing over 800 tons each.",
+    "region": "Lebanon",
+    "streetView": { "heading": 90, "pitch": 10 }
+  },
+  {
+    "id": "western-wall",
+    "name": "Western Wall",
+    "lat": 31.7767,
+    "lng": 35.2345,
+    "category": "sacred-site",
+    "description": "Last remnant of the Second Temple's retaining wall, the holiest site where Jews are permitted to pray. For two millennia, the faithful have pressed their prayers into its ancient stones.",
+    "region": "Israel / Palestine",
+    "streetView": { "heading": 90, "pitch": 10 }
+  },
+  {
+    "id": "church-holy-sepulchre",
+    "name": "Church of the Holy Sepulchre",
+    "lat": 31.7785,
+    "lng": 35.2296,
+    "category": "sacred-site",
+    "description": "Built over the sites of Christ's crucifixion and burial, this church has been the holiest site in Christendom since the 4th century. Six denominations share custody of its sacred spaces.",
+    "region": "Israel / Palestine",
+    "streetView": { "heading": 180, "pitch": 10 }
+  },
+  {
+    "id": "dome-of-the-rock",
+    "name": "Dome of the Rock",
+    "lat": 31.7781,
+    "lng": 35.2354,
+    "category": "sacred-site",
+    "description": "Golden-domed shrine on the Temple Mount, built over the Foundation Stone where Abraham offered Isaac and Muhammad ascended to heaven. Sacred to Judaism, Christianity, and Islam alike.",
+    "region": "Israel / Palestine",
+    "streetView": { "heading": 0, "pitch": 15 }
+  },
+  {
+    "id": "borobudur",
+    "name": "Borobudur",
+    "lat": -7.6079,
+    "lng": 110.2038,
+    "category": "sacred-site",
+    "description": "The world's largest Buddhist temple, a massive stone mandala rising from the Javanese jungle. Its nine platforms and 72 bell-shaped stupas trace the pilgrim's path from desire through form to formlessness.",
+    "region": "Indonesia",
+    "streetView": { "heading": 0, "pitch": 15 }
+  },
+  {
+    "id": "prambanan",
+    "name": "Prambanan",
+    "lat": -7.7520,
+    "lng": 110.4914,
+    "category": "sacred-site",
+    "description": "Largest Hindu temple complex in Indonesia, dedicated to the Trimurti — Brahma, Vishnu, and Shiva. Its towering spires and relief carvings of the Ramayana rival anything in India itself.",
+    "region": "Indonesia",
+    "streetView": { "heading": 90, "pitch": 15 }
+  },
+  {
+    "id": "bagan",
+    "name": "Bagan",
+    "lat": 21.1717,
+    "lng": 94.8585,
+    "category": "sacred-site",
+    "description": "Ancient city of over 2,000 Buddhist temples, pagodas, and monasteries spread across the plains of Myanmar. Between the 9th and 13th centuries, kings built a forest of sacred spires visible to the horizon.",
+    "region": "Myanmar",
+    "streetView": { "heading": 90, "pitch": 10 }
+  },
+  {
+    "id": "boudhanath",
+    "name": "Boudhanath Stupa",
+    "lat": 27.7215,
+    "lng": 85.3620,
+    "category": "sacred-site",
+    "description": "One of the largest spherical stupas in the world, its all-seeing Buddha eyes gaze in the four cardinal directions. The spiritual heart of Tibetan Buddhism in Nepal.",
+    "region": "Nepal",
+    "streetView": { "heading": 180, "pitch": 15 }
+  },
+  {
+    "id": "hampi",
+    "name": "Hampi",
+    "lat": 15.3350,
+    "lng": 76.4600,
+    "category": "sacred-site",
+    "description": "Ruins of Vijayanagara, once one of the largest cities in the world. Its temples, carved chariots, and sacred bazaars sprawl across a surreal boulder-strewn landscape along the Tungabhadra River.",
+    "region": "India",
+    "streetView": { "heading": 0, "pitch": 10 }
+  },
+  {
+    "id": "ellora",
+    "name": "Ellora Caves",
+    "lat": 20.0258,
+    "lng": 75.1780,
+    "category": "sacred-site",
+    "description": "34 rock-cut caves spanning Buddhist, Hindu, and Jain traditions, carved between the 6th and 11th centuries. The Kailasa temple was hewn from a single basalt cliff — more stone removed than the Great Pyramid.",
+    "region": "India",
+    "streetView": { "heading": 0, "pitch": 10 }
+  },
+  {
+    "id": "ajanta",
+    "name": "Ajanta Caves",
+    "lat": 20.5519,
+    "lng": 75.7033,
+    "category": "sacred-site",
+    "description": "30 Buddhist cave temples cut into a horseshoe-shaped cliff, abandoned and lost to the jungle for a thousand years. Their murals, rediscovered in 1819, are among the greatest surviving masterpieces of ancient art.",
+    "region": "India",
+    "streetView": { "heading": 90, "pitch": 5 }
+  },
+  {
+    "id": "karnak",
+    "name": "Karnak Temple",
+    "lat": 25.7188,
+    "lng": 32.6573,
+    "category": "sacred-site",
+    "description": "Vast temple complex dedicated to Amun-Ra, built and expanded over 2,000 years by thirty pharaohs. Its Hypostyle Hall of 134 massive columns is the largest religious building ever constructed.",
+    "region": "Egypt",
+    "streetView": { "heading": 90, "pitch": 10 }
+  },
+  {
+    "id": "abu-simbel",
+    "name": "Abu Simbel",
+    "lat": 22.3369,
+    "lng": 31.6256,
+    "category": "sacred-site",
+    "description": "Twin rock temples carved by Ramesses II, guarded by four colossal seated pharaohs. Twice a year, sunlight penetrates 200 feet to illuminate the gods in the innermost sanctuary.",
+    "region": "Egypt",
+    "streetView": { "heading": 270, "pitch": 15 }
+  },
+  {
+    "id": "valley-of-kings",
+    "name": "Valley of the Kings",
+    "lat": 25.7402,
+    "lng": 32.6014,
+    "category": "sacred-site",
+    "description": "Royal necropolis on the Nile's west bank where pharaohs of the New Kingdom were buried in hidden rock-cut tombs. Tutankhamun, Ramesses the Great, and Hatshepsut all rest beneath these desert cliffs.",
+    "region": "Egypt",
+    "streetView": { "heading": 180, "pitch": 10 }
+  },
+  {
+    "id": "lalibela",
+    "name": "Lalibela",
+    "lat": 12.0319,
+    "lng": 39.0472,
+    "category": "sacred-site",
+    "description": "Eleven medieval rock-hewn churches carved downward into volcanic rock in the Ethiopian highlands. King Lalibela built a New Jerusalem here, and its churches remain active sites of Ethiopian Orthodox worship.",
+    "region": "Ethiopia",
+    "streetView": { "heading": 0, "pitch": 10 }
+  },
+  {
+    "id": "machu-picchu",
+    "name": "Machu Picchu",
+    "lat": -13.1631,
+    "lng": -72.5450,
+    "category": "sacred-site",
+    "description": "Inca citadel set high in the Andes above the Urubamba River valley. Its temples, terraces, and Intihuatana stone align with astronomical events, marking it as a place where earth touched sky.",
+    "region": "Peru",
+    "streetView": { "heading": 0, "pitch": 15 }
+  },
+  {
+    "id": "chichen-itza",
+    "name": "Chichen Itza",
+    "lat": 20.6843,
+    "lng": -88.5678,
+    "category": "sacred-site",
+    "description": "Great Maya city dominated by the pyramid of Kukulkan, where a feathered serpent of shadow descends the staircase at each equinox. Its observatory, ball court, and cenote of sacrifice made it a cosmic center.",
+    "region": "Mexico",
+    "streetView": { "heading": 0, "pitch": 15 }
+  },
+  {
+    "id": "tulum",
+    "name": "Tulum",
+    "lat": 20.2145,
+    "lng": -87.4291,
+    "category": "sacred-site",
+    "description": "Walled Maya city perched on Caribbean sea cliffs, one of the last cities built and inhabited by the Maya. Its Castillo temple watched over trade routes and the rising sun.",
+    "region": "Mexico",
+    "streetView": { "heading": 90, "pitch": 10 }
+  },
+  {
+    "id": "tikal",
+    "name": "Tikal",
+    "lat": 17.2220,
+    "lng": -89.6237,
+    "category": "sacred-site",
+    "description": "One of the largest Maya cities, its pyramids rise above the Guatemalan rainforest canopy. For over a thousand years, Tikal was a superpower of the Classic Maya world.",
+    "region": "Guatemala",
+    "streetView": { "heading": 180, "pitch": 20 }
+  },
+  {
+    "id": "easter-island",
+    "name": "Rapa Nui (Easter Island)",
+    "lat": -27.1127,
+    "lng": -109.3497,
+    "category": "sacred-site",
+    "description": "Remote Pacific island where the Rapa Nui people carved and erected nearly 900 monumental moai statues. These stone ancestors watched over the living, their backs to the sea, facing inland to protect the people.",
+    "region": "Chile",
+    "streetView": { "heading": 270, "pitch": 5 }
+  },
+  {
+    "id": "sigiriya",
+    "name": "Sigiriya",
+    "lat": 7.9570,
+    "lng": 80.7603,
+    "category": "sacred-site",
+    "description": "Ancient rock fortress and palace rising 200 meters above the Sri Lankan jungle. A 5th-century king built his citadel atop this volcanic plug, entering through the jaws of a colossal stone lion.",
+    "region": "Sri Lanka",
+    "streetView": { "heading": 0, "pitch": 25 }
+  },
+  {
+    "id": "persepolis",
+    "name": "Persepolis",
+    "lat": 29.9352,
+    "lng": 52.8914,
+    "category": "sacred-site",
+    "description": "Ceremonial capital of the Achaemenid Empire, where Darius and Xerxes held court. Delegations from every corner of the known world climbed its great staircase to honor the King of Kings at the New Year.",
+    "region": "Iran",
+    "streetView": { "heading": 0, "pitch": 10 }
+  },
+  {
+    "id": "gobekli-tepe",
+    "name": "Gobekli Tepe",
+    "lat": 37.2231,
+    "lng": 38.9225,
+    "category": "sacred-site",
+    "description": "The oldest known temple complex in the world, built around 9500 BCE — 7,000 years before Stonehenge. Hunter-gatherers carved massive T-shaped pillars with animal reliefs, suggesting that worship preceded civilization.",
+    "region": "Turkey",
+    "streetView": { "heading": 90, "pitch": 10 }
+  },
+  {
+    "id": "ephesus",
+    "name": "Ephesus",
+    "lat": 37.9394,
+    "lng": 27.3417,
+    "category": "sacred-site",
+    "description": "Ancient Greek city and site of the Temple of Artemis, one of the Seven Wonders. Later a center of early Christianity where Paul preached and the Gospel of John may have been written.",
+    "region": "Turkey",
+    "streetView": { "heading": 180, "pitch": 10 }
+  },
+  {
+    "id": "meiji-shrine",
+    "name": "Meiji Shrine",
+    "lat": 35.6764,
+    "lng": 139.6993,
+    "category": "sacred-site",
+    "description": "Shinto shrine in the heart of Tokyo dedicated to Emperor Meiji and Empress Shoken. A 70-hectare forest of 120,000 donated trees surrounds its torii gate, creating a sanctuary of stillness in the world's largest city.",
+    "region": "Japan",
+    "streetView": { "heading": 0, "pitch": 5 }
+  },
+  {
+    "id": "ise-grand-shrine",
+    "name": "Ise Grand Shrine",
+    "lat": 34.4554,
+    "lng": 136.7254,
+    "category": "sacred-site",
+    "description": "The most sacred Shinto shrine in Japan, dedicated to the sun goddess Amaterasu. Rebuilt every 20 years in an unbroken tradition stretching back to the 7th century, embodying Shinto's embrace of impermanence and renewal.",
+    "region": "Japan",
+    "streetView": { "heading": 0, "pitch": 5 }
+  },
+  {
+    "id": "potala-palace",
+    "name": "Potala Palace",
+    "lat": 29.6578,
+    "lng": 91.1170,
+    "category": "sacred-site",
+    "description": "Towering palace-fortress in Lhasa, winter residence of the Dalai Lamas for centuries. Its white and red walls contain over a thousand rooms of chapels, tombs, and sacred art spanning Tibetan Buddhist civilization.",
+    "region": "Tibet",
+    "streetView": { "heading": 0, "pitch": 15 }
+  },
+  {
+    "id": "temple-of-heaven",
+    "name": "Temple of Heaven",
+    "lat": 39.8822,
+    "lng": 116.4066,
+    "category": "sacred-site",
+    "description": "Imperial altar complex in Beijing where Ming and Qing emperors performed annual rituals to pray for good harvests. Its circular Hall of Prayer embodies the ancient Chinese belief in a round heaven and square earth.",
+    "region": "China",
+    "streetView": { "heading": 0, "pitch": 15 }
+  },
+  {
+    "id": "great-zimbabwe",
+    "name": "Great Zimbabwe",
+    "lat": -20.2712,
+    "lng": 30.9338,
+    "category": "sacred-site",
+    "description": "Medieval stone city and capital of the Kingdom of Zimbabwe, built without mortar between the 11th and 15th centuries. Its Great Enclosure is the largest ancient structure south of the Sahara.",
+    "region": "Zimbabwe",
+    "streetView": { "heading": 90, "pitch": 5 }
+  },
+  {
+    "id": "serpent-mound",
+    "name": "Serpent Mound",
+    "lat": 39.0253,
+    "lng": -83.4303,
+    "category": "sacred-site",
+    "description": "A 1,348-foot effigy mound in the shape of an uncoiling serpent, the largest effigy mound in the world. Built by ancient Native Americans along a cryptoexplosion structure, aligned to solstice sunset.",
+    "region": "Ohio, USA",
+    "streetView": { "heading": 90, "pitch": 10 }
+  },
+  {
+    "id": "cahokia",
+    "name": "Cahokia Mounds",
+    "lat": 38.6553,
+    "lng": -90.0625,
+    "category": "sacred-site",
+    "description": "Pre-Columbian city larger than London in 1250 CE, center of Mississippian civilization. Monks Mound, the largest earthwork in the Americas, anchored a metropolis of 20,000 people aligned to the stars.",
+    "region": "Illinois, USA",
+    "streetView": { "heading": 0, "pitch": 10 }
   }
 ]
