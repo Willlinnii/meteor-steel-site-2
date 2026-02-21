@@ -6,7 +6,8 @@
     "lng": 22.5010,
     "category": "sacred-site",
     "description": "Ancient Greek sanctuary sacred to Apollo, home of the Pythia oracle who spoke prophecy from volcanic fumes at the navel of the world.",
-    "region": "Greece"
+    "region": "Greece",
+    "streetView": { "heading": 220, "pitch": 10 }
   },
   {
     "id": "giza",
@@ -15,7 +16,8 @@
     "lng": 31.1342,
     "category": "sacred-site",
     "description": "Tomb of Pharaoh Khufu, last surviving Wonder of the Ancient World. Gateway between the living and the dead in Egyptian cosmology.",
-    "region": "Egypt"
+    "region": "Egypt",
+    "streetView": { "heading": 180, "pitch": 20 }
   },
   {
     "id": "uluru",
@@ -24,7 +26,8 @@
     "lng": 131.0369,
     "category": "sacred-site",
     "description": "Sacred sandstone monolith central to Anangu Dreamtime. Songlines converge here, marking it as a place of ancestral creation.",
-    "region": "Australia"
+    "region": "Australia",
+    "streetView": { "heading": 0, "pitch": 10 }
   },
   {
     "id": "varanasi",
@@ -33,7 +36,8 @@
     "lng": 83.0064,
     "category": "sacred-site",
     "description": "City of Light on the Ganges, one of the oldest continuously inhabited cities. Sacred to Shiva, where cremation grants liberation from the cycle of rebirth.",
-    "region": "India"
+    "region": "India",
+    "streetView": { "heading": 90, "pitch": 0 }
   },
   {
     "id": "eleusis",
@@ -42,7 +46,8 @@
     "lng": 23.5413,
     "category": "sacred-site",
     "description": "Site of the Eleusinian Mysteries, the most famous secret rites of ancient Greece. Initiates experienced the myth of Persephone's descent and return.",
-    "region": "Greece"
+    "region": "Greece",
+    "streetView": { "heading": 0, "pitch": 5 }
   },
   {
     "id": "mt-olympus",
@@ -51,7 +56,8 @@
     "lng": 22.3583,
     "category": "mythic-location",
     "description": "Highest mountain in Greece, mythological home of the twelve Olympian gods ruled by Zeus.",
-    "region": "Greece"
+    "region": "Greece",
+    "streetView": { "heading": 180, "pitch": 15 }
   },
   {
     "id": "mt-sinai",
@@ -60,7 +66,8 @@
     "lng": 33.9753,
     "category": "sacred-site",
     "description": "Mountain where Moses received the Ten Commandments from God. Sacred axis mundi connecting heaven and earth in Abrahamic tradition.",
-    "region": "Egypt"
+    "region": "Egypt",
+    "streetView": { "heading": 270, "pitch": 20 }
   },
   {
     "id": "newgrange",
@@ -69,7 +76,8 @@
     "lng": -6.4755,
     "category": "sacred-site",
     "description": "Neolithic passage tomb older than Stonehenge and the pyramids. At winter solstice, sunlight penetrates the passage to illuminate the inner chamber.",
-    "region": "Ireland"
+    "region": "Ireland",
+    "streetView": { "heading": 90, "pitch": 5 }
   },
   {
     "id": "troy",
@@ -78,7 +86,8 @@
     "lng": 26.2389,
     "category": "mythic-location",
     "description": "Archaeological site of ancient Troy, setting of Homer's Iliad. Where Achilles, Hector, and the Trojan Horse shaped Western storytelling.",
-    "region": "Turkey"
+    "region": "Turkey",
+    "streetView": { "heading": 90, "pitch": 5 }
   },
   {
     "id": "teotihuacan",
@@ -87,7 +96,8 @@
     "lng": -98.8438,
     "category": "sacred-site",
     "description": "City of the Gods in central Mexico. The Pyramid of the Sun and Moon aligned with cosmic forces, where the fifth sun was born through divine sacrifice.",
-    "region": "Mexico"
+    "region": "Mexico",
+    "streetView": { "heading": 0, "pitch": 15 }
   },
   {
     "id": "mt-kailash",
@@ -107,6 +117,7 @@
     "tradition": "European",
     "description": "Hill identified with the legendary Isle of Avalon, where King Arthur was taken after his final battle. The Tor rises from the Somerset levels like an otherworldly island.",
     "region": "England",
+    "streetView": { "heading": 0, "pitch": 20 },
     "readUrl": "https://sacred-texts.com/neu/arthur/index.htm",
     "wikisourcePage": "Le_Morte_d'Arthur",
     "excerpt": "And when they were at the water side, even fast by the bank hoved a little barge with many fair ladies in it, and among them all was a queen, and all they had black hoods, and all they wept and shrieked when they saw King Arthur.\n\n\"Now put me into the barge,\" said the king. And so he did softly; and there received him three queens with great mourning; and so they set them down, and in one of their laps King Arthur laid his head.\n\nAnd then that queen said: \"Ah, dear brother, why have ye tarried so long from me? Alas, this wound on your head hath caught over-much cold.\" And so then they rowed from the land, and Sir Bedivere beheld all those ladies go from him. Then Sir Bedivere cried: \"Ah my lord Arthur, what shall become of me, now ye go from me and leave me here alone among mine enemies?\"\n\n\"Comfort thyself,\" said the king, \"and do as well as thou mayest, for in me is no trust for to trust in; for I will into the vale of Avilion to heal me of my grievous wound: and if thou hear never more of me, pray for my soul.\"\n\n— Sir Thomas Malory, Le Morte d'Arthur, Book XXI"
@@ -131,7 +142,8 @@
     "lng": 103.8670,
     "category": "sacred-site",
     "description": "Largest religious monument in the world, originally Hindu, later Buddhist. A stone mandala representing Mount Meru, cosmic center of the universe.",
-    "region": "Cambodia"
+    "region": "Cambodia",
+    "streetView": { "heading": 90, "pitch": 10 }
   },
   {
     "id": "delphi-sibyl",
@@ -142,6 +154,7 @@
     "tradition": "Roman",
     "description": "Entrance to the Underworld in Virgil's Aeneid. The Cumaean Sibyl guided Aeneas into Hades to meet his father's shade and learn Rome's destiny.",
     "region": "Italy",
+    "streetView": { "heading": 90, "pitch": 5 },
     "readUrl": "https://sacred-texts.com/cla/virgil/aen/index.htm",
     "wikisourcePage": "The_Works_of_Virgil_(Dryden)/Aeneid",
     "excerpt": "There was a deep cave hewn from the flank of Cumae's rock, vast and gaping wide, guarded by the dark lake and the gloom of forests. No birds could wing their way safely overhead, so foul the breath that poured from those black jaws up to the vault of heaven.\n\nThe Sibyl cried: \"Now is the time to ask your destinies! The god! Behold, the god!\" And as she spoke before the doors, her face, her color changed; her hair streamed wild; her breast heaved and her heart swelled with frenzy; she seemed taller, her voice no longer mortal, for the god breathed upon her, ever nearer.\n\n\"Trojan Aeneas, the descent to Avernus is easy. Night and day the door of dark Dis stands open. But to retrace your steps and escape to the upper air — that is the task, that is the labor.\"\n\n— Virgil, The Aeneid, Book VI (trans. John Dryden)"
@@ -153,7 +166,8 @@
     "lng": -1.8262,
     "category": "sacred-site",
     "description": "Prehistoric stone circle aligned to the solstices. Geoffrey of Monmouth attributed its creation to Merlin's magic, transported from Ireland by giants.",
-    "region": "England"
+    "region": "England",
+    "streetView": { "heading": 0, "pitch": 5 }
   },
   {
     "id": "mt-fuji",
@@ -162,7 +176,8 @@
     "lng": 138.7274,
     "category": "sacred-site",
     "description": "Sacred volcanic peak in Shinto tradition, dwelling place of the goddess Konohanasakuya-hime. Symbol of immortality and transcendence in Japanese culture.",
-    "region": "Japan"
+    "region": "Japan",
+    "streetView": { "heading": 180, "pitch": 20 }
   },
   {
     "id": "chaco-canyon",
@@ -225,7 +240,8 @@
     "lng": -5.4955,
     "category": "mythic-location",
     "description": "The Strait of Gibraltar, marked by the Rock of Gibraltar and Jebel Musa. Hercules split a mountain during his tenth labor, creating the gateway between the known world and the Atlantic unknown. Plato placed Atlantis just beyond.",
-    "region": "Gibraltar / Morocco"
+    "region": "Gibraltar / Morocco",
+    "streetView": { "heading": 180, "pitch": 10 }
   },
   {
     "id": "talmud-sura",
@@ -248,6 +264,7 @@
     "tradition": "Abrahamic",
     "description": "The city where Christ's passion, crucifixion, and resurrection took place. The Gospels and Epistles emerged from the early Christian communities rooted in this holy city.",
     "region": "Israel / Palestine",
+    "streetView": { "heading": 0, "pitch": 10 },
     "readUrl": "https://sacred-texts.com/bib/kjv/index.htm",
     "wikisourcePage": "Bible_(King_James)",
     "excerpt": "In the beginning was the Word, and the Word was with God, and the Word was God. The same was in the beginning with God. All things were made by him; and without him was not any thing made that was made. In him was life; and the life was the light of men. And the light shineth in darkness; and the darkness comprehended it not.\n\nThere was a man sent from God, whose name was John. The same came for a witness, to bear witness of the Light, that all men through him might believe. He was not that Light, but was sent to bear witness of that Light. That was the true Light, which lighteth every man that cometh into the world.\n\nHe was in the world, and the world was made by him, and the world knew him not. He came unto his own, and his own received him not. But as many as received him, to them gave he power to become the sons of God, even to them that believe on his name.\n\nAnd the Word was made flesh, and dwelt among us, and we beheld his glory, the glory as of the only begotten of the Father, full of grace and truth.\n\n— Gospel of John 1:1–14 (KJV)"
@@ -477,6 +494,7 @@
     "tradition": "Sikh",
     "description": "The Golden Temple houses the Guru Granth Sahib, the living guru of Sikhism. Compiled by Guru Arjan in 1604, it contains hymns from Sikh gurus, Hindu saints, and Sufi poets — a scripture of radical inclusion.",
     "region": "Punjab, India",
+    "streetView": { "heading": 0, "pitch": 10 },
     "readUrl": "https://sacred-texts.com/skh/granth/index.htm",
     "wikisourcePage": "The_Sikh_Religion",
     "excerpt": "There is One God. His Name is Truth. He is the Creator. He is without fear. He is without hate. He is timeless and without form. He is beyond death — the enlightened, self-existent.\n\nBy the Guru's grace He is known.\n\nHe was True in the beginning. He was True when the ages commenced. He is True now. And Nanak says He shall be True forever.\n\nBy thinking, He cannot be reduced to thought, even by thinking hundreds of thousands of times. By remaining silent, inner silence is not obtained, even by remaining lovingly absorbed deep within. The hunger of the hungry is not appeased, even by piling up loads of worldly goods. Hundreds of thousands of clever tricks, but not even one of them will go along with you in the end.\n\nSo how can you become truthful? And how can the veil of illusion be torn away? O Nanak, it is written that you shall obey the Hukam of His Command, and walk in the Way of His Will.\n\n— Japji Sahib, Mul Mantar and Pauri 1 (Guru Nanak)"

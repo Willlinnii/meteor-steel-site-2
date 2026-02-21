@@ -312,12 +312,12 @@
 @media (max-width: 600px) {
   .mythic-earth-search-wrapper {
     width: calc(100% - 24px);
-    top: 10px;
+    bottom: 90px;
   }
 
   .mythic-earth-atlas-panel {
     width: calc(100% - 24px);
-    bottom: 110px;
+    bottom: 140px;
     max-height: 40vh;
   }
 

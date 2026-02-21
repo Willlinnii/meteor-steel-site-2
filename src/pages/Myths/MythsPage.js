@@ -13,6 +13,52 @@ import './MythsPage.css';
 
 const MythicEarthPage = lazy(() => import('../MythicEarth/MythicEarthPage'));
 
+/* Inline Street View embed — mirrors the one in MythicEarthPage */
+function StreetViewEmbed({ site }) {
+  const [open, setOpen] = useState(false);
+  const mapsKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
+  const sv = typeof site.streetView === 'object' ? site.streetView : {};
+  const heading = sv.heading ?? 0;
+  const pitch = sv.pitch ?? 0;
+  const fov = sv.fov ?? 90;
+
+  if (!site.streetView) return null;
+
+  return (
+    <div className="mythic-earth-streetview">
+      <button className="mythic-earth-streetview-btn" onClick={() => setOpen(!open)}>
+        {open ? '\u2715  Close Street View' : '\u{1F30D}  Explore in Street View'}
+      </button>
+      {open && (
+        <div className="mythic-earth-streetview-container">
+          {mapsKey ? (
+            <iframe
+              title={`Street View of ${site.name}`}
+              src={`https://www.google.com/maps/embed/v1/streetview?key=${mapsKey}&location=${site.lat},${site.lng}&heading=${heading}&pitch=${pitch}&fov=${fov}`}
+              className="mythic-earth-streetview-iframe"
+              allowFullScreen
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+            />
+          ) : (
+            <div className="mythic-earth-streetview-fallback">
+              <p>Add a <code>REACT_APP_GOOGLE_MAPS_KEY</code> to your <code>.env</code> for embedded Street View.</p>
+              <a
+                href={`https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${site.lat},${site.lng}&heading=${heading}&pitch=${pitch}&fov=${fov}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mythic-earth-streetview-link"
+              >
+                Open in Google Street View
+              </a>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
 const MYTHIC_EARTH_CATEGORIES = [
   { id: 'sacred-site', label: 'Sacred Sites', color: '#c9a961' },
   { id: 'mythic-location', label: 'Mythic Locations', color: '#c4713a' },
@@ -1226,6 +1272,7 @@ function MythsPage() {
                   )}
                   <span className="mythic-earth-tag region">{selectedMythicSite.region}</span>
                 </div>
+                <StreetViewEmbed site={selectedMythicSite} />
                 <div className="mythic-earth-site-text">
                   {selectedMythicSite.description.split('\n\n').map((p, i) => <p key={i}>{p}</p>)}
                 </div>
