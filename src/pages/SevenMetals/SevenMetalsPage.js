@@ -468,29 +468,36 @@ export default function SevenMetalsPage() {
   const [showCalendar, setShowCalendar] = useState(() => location.pathname.endsWith('/calendar'));
   const [selectedMonth, setSelectedMonth] = useState(() => location.pathname.endsWith('/calendar') ? MONTHS[new Date().getMonth()] : null);
   const [activeMonthTab, setActiveMonthTab] = useState('stone');
-  const [showMedicineWheel, setShowMedicineWheel] = useState(() => location.pathname.endsWith('/medicine-wheel'));
   const [selectedWheelItem, setSelectedWheelItem] = useState(null);
   const [activeWheelTab, setActiveWheelTab] = useState(null);
   const [videoUrl, setVideoUrl] = useState(null);
-  const [chakraViewMode, setChakraViewMode] = useState(null);
   const [personaChatOpen, setPersonaChatOpen] = useState(null);
   const [personaChatHistory, setPersonaChatHistory] = useState({});
-  const [showMonomyth, setShowMonomyth] = useState(false);
   const [selectedMonomythStage, setSelectedMonomythStage] = useState(null);
   const [monomythTab, setMonomythTab] = useState('overview');
   const [monomythModel, setMonomythModel] = useState(null);
   const [monomythWorld, setMonomythWorld] = useState(null);
-  const [showCycles, setShowCycles] = useState(false);
-  const [showMeteorSteel, setShowMeteorSteel] = useState(false);
   const [meteorSteelTab, setMeteorSteelTab] = useState('technology');
-  const [showMythicEarth, setShowMythicEarth] = useState(false);
-  const [showFallenStarlight, setShowFallenStarlight] = useState(false);
-  const [showStoryOfStories, setShowStoryOfStories] = useState(false);
   const [selectedStarlightStage, setSelectedStarlightStage] = useState(null);
   const [starlightSectionId, setStarlightSectionId] = useState(null);
   const [selectedConstellation, setSelectedConstellation] = useState(null);
   const [selectedMythicSite, setSelectedMythicSite] = useState(null);
   const [mythicEarthCategory, setMythicEarthCategory] = useState('sacred-site');
+  // Single mode enum replaces 8 separate boolean/enum state variables
+  const [mode, setMode] = useState(() => {
+    if (location.pathname.endsWith('/medicine-wheel')) return 'medicine-wheel';
+    return 'default';
+  });
+  // Derived flags — same names for minimal render-logic changes
+  const showMonomyth = mode === 'monomyth' || mode === 'meteor-steel';
+  const showMeteorSteel = mode === 'meteor-steel';
+  const showCycles = showMonomyth;
+  const showMedicineWheel = mode === 'medicine-wheel';
+  const showMythicEarth = mode === 'mythic-earth';
+  const showFallenStarlight = mode === 'fallen-starlight' || mode === 'story-of-stories';
+  const showStoryOfStories = mode === 'story-of-stories';
+  const chakraViewMode = mode.startsWith('chakra-') ? mode.replace('chakra-', '') : null;
+
   const ybr = useYellowBrickRoad();
   const { forgeMode } = useStoryForge();
 
@@ -540,12 +547,38 @@ export default function SevenMetalsPage() {
       const secs = Math.round((Date.now() - cur.start) / 1000);
       if (secs > 0) trackTime(`metals.${cur.view}.time`, secs);
     };
-  }, [selectedPlanet, activeTab, selectedSign, selectedCardinal, selectedMonth, showMedicineWheel, trackTime]);
+  }, [selectedPlanet, activeTab, selectedSign, selectedCardinal, selectedMonth, mode, trackTime]);
+
+  // Helper: reset all selection state when switching modes
+  const clearAllSelections = useCallback(() => {
+    setSelectedPlanet(null);
+    setSelectedSign(null);
+    setSelectedCardinal(null);
+    setSelectedEarth(null);
+    setSelectedMonth(null);
+    setSelectedMonomythStage(null);
+    setSelectedStarlightStage(null);
+    setStarlightSectionId(null);
+    setSelectedConstellation(null);
+    setSelectedWheelItem(null);
+    setSelectedMythicSite(null);
+    setMonomythModel(null);
+    setMonomythWorld(null);
+    setActiveTab('overview');
+    setMonomythTab('overview');
+    setActiveWheelTab(null);
+    setVideoUrl(null);
+    setPersonaChatOpen(null);
+  }, []);
 
   // Sync view state with URL on back/forward navigation
   useEffect(() => {
     const path = location.pathname;
-    setShowMedicineWheel(path.endsWith('/medicine-wheel'));
+    if (path.endsWith('/medicine-wheel') && mode !== 'medicine-wheel') {
+      setMode('medicine-wheel');
+    } else if (!path.endsWith('/medicine-wheel') && mode === 'medicine-wheel') {
+      setMode('default');
+    }
     const cal = path.endsWith('/calendar');
     setShowCalendar(cal);
     if (!cal) { setClockMode(null); }
@@ -569,77 +602,52 @@ export default function SevenMetalsPage() {
   }, [ybr, navigate]);
 
   const handleToggleMonomyth = useCallback(() => {
-    if (!showMonomyth) {
-      // First click: enter monomyth mode (ring + cycles)
-      setShowMonomyth(true);
-      setShowCycles(true);
-      setShowMeteorSteel(false);
+    if (mode !== 'monomyth' && mode !== 'meteor-steel') {
+      // Enter monomyth mode
+      clearAllSelections();
+      setMode('monomyth');
       setClockMode('24h');
       setShowCalendar(true);
-      setSelectedMonomythStage(null);
-      setMonomythTab('overview');
-      setMonomythModel(null);
-      setMonomythWorld(null);
-      // Exit other modes
-      if (chakraViewMode) setChakraViewMode(null);
-      if (showMedicineWheel) { setShowMedicineWheel(false); setSelectedWheelItem(null); }
-      if (showMythicEarth) setShowMythicEarth(false);
-      if (showFallenStarlight) { setShowFallenStarlight(false); setShowStoryOfStories(false); setSelectedStarlightStage(null); }
-      // Clear all selections
-      setSelectedPlanet(null); setActiveTab('overview');
-      setSelectedSign(null); setSelectedCardinal(null); setSelectedEarth(null); setSelectedMonth(null);
-      setSelectedConstellation(null);
-      setVideoUrl(null); setPersonaChatOpen(null);
-    } else if (!showMeteorSteel) {
-      // Toggle to meteor steel — reset to starting state
-      setShowMeteorSteel(true);
+      if (mode === 'medicine-wheel') navigate('/metals');
+    } else if (mode === 'monomyth') {
+      // Toggle to meteor steel
+      setMode('meteor-steel');
       setSelectedMonomythStage(null);
       setMonomythModel(null);
       setMonomythWorld(null);
       setMeteorSteelTab('technology');
       setVideoUrl(null); setPersonaChatOpen(null);
     } else {
-      // Toggle back to monomyth — reset to starting state
-      setShowMeteorSteel(false);
+      // Toggle back to monomyth
+      setMode('monomyth');
       setSelectedMonomythStage(null);
       setMonomythModel(null);
       setMonomythWorld(null);
       setMonomythTab('overview');
       setVideoUrl(null); setPersonaChatOpen(null);
     }
-  }, [showMonomyth, showMeteorSteel, chakraViewMode, showMedicineWheel, showMythicEarth, showFallenStarlight]);
+  }, [mode, clearAllSelections, navigate]);
 
   const handleToggleStarlight = useCallback(() => {
-    if (!showFallenStarlight) {
-      // First click: enter Fallen Starlight mode
-      setShowFallenStarlight(true);
-      setShowStoryOfStories(false);
-      setSelectedStarlightStage(null);
-      setStarlightSectionId(null);
+    if (mode !== 'fallen-starlight' && mode !== 'story-of-stories') {
+      // Enter Fallen Starlight mode
+      clearAllSelections();
+      setMode('fallen-starlight');
       setClockMode('24h');
       setShowCalendar(true);
-      // Exit other modes
-      if (showMonomyth) { setShowMonomyth(false); setShowCycles(false); setShowMeteorSteel(false); setSelectedMonomythStage(null); setMonomythModel(null); }
-      if (showMedicineWheel) { setShowMedicineWheel(false); setSelectedWheelItem(null); }
-      if (chakraViewMode) setChakraViewMode(null);
-      if (showMythicEarth) setShowMythicEarth(false);
-      // Clear all selections
-      setSelectedPlanet(null); setActiveTab('overview');
-      setSelectedSign(null); setSelectedCardinal(null); setSelectedEarth(null); setSelectedMonth(null);
-      setSelectedConstellation(null);
-      setVideoUrl(null); setPersonaChatOpen(null);
-    } else if (!showStoryOfStories) {
-      // Second click: switch to Story of Stories
-      setShowStoryOfStories(true);
+      if (mode === 'medicine-wheel') navigate('/metals');
+    } else if (mode === 'fallen-starlight') {
+      // Switch to Story of Stories
+      setMode('story-of-stories');
       setSelectedStarlightStage(null);
       setStarlightSectionId(null);
     } else {
-      // Third click: back to Fallen Starlight
-      setShowStoryOfStories(false);
+      // Back to Fallen Starlight
+      setMode('fallen-starlight');
       setSelectedStarlightStage(null);
       setStarlightSectionId(null);
     }
-  }, [showFallenStarlight, showStoryOfStories, showMonomyth, showMedicineWheel, chakraViewMode, showMythicEarth]);
+  }, [mode, clearAllSelections, navigate]);
 
   const handleSelectMonomythModel = useCallback((theoristKey) => {
     const modelId = THEORIST_TO_MODEL[theoristKey];
@@ -682,15 +690,13 @@ export default function SevenMetalsPage() {
   // Register area override for Atlas context
   const { register: registerArea } = useAreaOverride();
   useEffect(() => {
-    if (showMeteorSteel) {
+    if (mode === 'monomyth' || mode === 'meteor-steel') {
       registerArea('meteor-steel');
-    } else if (showMonomyth) {
-      registerArea('meteor-steel'); // monomyth content lives in meteor-steel area knowledge
     } else {
       registerArea(null); // default: celestial-clocks (from pathname)
     }
     return () => registerArea(null);
-  }, [showMonomyth, showMeteorSteel, registerArea]);
+  }, [mode, registerArea]);
 
   const tooltipData = useMemo(() => {
     const planets = {};
@@ -871,71 +877,40 @@ export default function SevenMetalsPage() {
           onSelectMonth={(m) => { if (m) trackElement(`metals.calendar.month.${m}`); setSelectedMonth(m); setActiveMonthTab('stone'); if (m) { setSelectedSign(null); setSelectedCardinal(null); setSelectedEarth(null); } }}
           clockMode={clockMode}
           onToggleClock={() => {
-            // Clock cycles 12h → 24h → 12h (never exits — use other buttons to leave)
             const next = clockMode === '12h' ? '24h' : '12h';
+            clearAllSelections();
+            setMode('default');
             setClockMode(next);
             setShowCalendar(true);
             setSelectedMonth(MONTHS[new Date().getMonth()]);
             setActiveMonthTab('stone');
-            // Clear all selections
-            setSelectedPlanet(null); setActiveTab('overview');
-            setSelectedSign(null); setSelectedCardinal(null); setSelectedEarth(null);
-            setSelectedConstellation(null);
-            setVideoUrl(null); setPersonaChatOpen(null);
-            // Exit other modes
-            if (showMedicineWheel) { setShowMedicineWheel(false); setSelectedWheelItem(null); }
-            if (chakraViewMode) { setChakraViewMode(null); }
-            if (showMonomyth) { setShowMonomyth(false); setShowCycles(false); setShowMeteorSteel(false); setSelectedMonomythStage(null); setMonomythModel(null); }
-            if (showMythicEarth) setShowMythicEarth(false);
-            if (showFallenStarlight) { setShowFallenStarlight(false); setShowStoryOfStories(false); setSelectedStarlightStage(null); }
+            if (mode === 'medicine-wheel') navigate('/metals');
           }}
           showMedicineWheel={showMedicineWheel}
           onToggleMedicineWheel={() => {
-            // Medicine wheel enters (no toggle off — use other buttons to leave)
-            if (!showMedicineWheel) {
-              setShowMedicineWheel(true);
-              setSelectedWheelItem(null);
+            clearAllSelections();
+            if (mode !== 'medicine-wheel') {
+              setMode('medicine-wheel');
               trackElement('metals.medicine-wheel.opened');
               setShowCalendar(false);
+              setClockMode(null);
               navigate('/metals/medicine-wheel');
             }
-            // Clear all selections
-            setSelectedPlanet(null); setActiveTab('overview');
-            setSelectedSign(null); setSelectedCardinal(null); setSelectedEarth(null); setSelectedMonth(null);
-            setSelectedConstellation(null);
-            setVideoUrl(null); setPersonaChatOpen(null);
-            // Exit other modes
-            if (chakraViewMode) { setChakraViewMode(null); }
-            if (clockMode) { setClockMode(null); }
-            if (showMonomyth) { setShowMonomyth(false); setShowCycles(false); setShowMeteorSteel(false); setSelectedMonomythStage(null); setMonomythModel(null); }
-            if (showMythicEarth) setShowMythicEarth(false);
-            if (showFallenStarlight) { setShowFallenStarlight(false); setShowStoryOfStories(false); setSelectedStarlightStage(null); }
           }}
           selectedWheelItem={selectedWheelItem}
           onSelectWheelItem={(item) => { if (item) trackElement(`metals.medicine-wheel.${item}`); setSelectedWheelItem(item); setActiveWheelTab(null); if (item) { setSelectedSign(null); setSelectedCardinal(null); setSelectedEarth(null); setSelectedMonth(null); } }}
           chakraViewMode={chakraViewMode}
           onToggleChakraView={() => {
-            // Body cycles chaldean → heliocentric → weekdays → chaldean (never exits)
-            setChakraViewMode(prev => {
-              if (!prev) return 'chaldean';
-              if (prev === 'chaldean') return 'heliocentric';
-              if (prev === 'heliocentric') return 'weekdays';
-              return 'chaldean';
-            });
-            // Always open to Sun with body tab
+            const nextChakra = mode === 'chakra-chaldean' ? 'heliocentric'
+              : mode === 'chakra-heliocentric' ? 'weekdays'
+              : 'chaldean';
+            clearAllSelections();
+            setMode(`chakra-${nextChakra}`);
             setSelectedPlanet('Sun');
             setActiveTab('body');
-            // Clear all other selections
-            setSelectedSign(null); setSelectedCardinal(null); setSelectedEarth(null); setSelectedMonth(null);
             setShowCalendar(false);
-            setSelectedConstellation(null);
-            setVideoUrl(null); setPersonaChatOpen(null);
-            // Exit other modes
-            if (showMedicineWheel) { setShowMedicineWheel(false); setSelectedWheelItem(null); navigate('/metals'); }
-            if (clockMode) { setClockMode(null); }
-            if (showMonomyth) { setShowMonomyth(false); setShowCycles(false); setShowMeteorSteel(false); setSelectedMonomythStage(null); setMonomythModel(null); }
-            if (showMythicEarth) setShowMythicEarth(false);
-            if (showFallenStarlight) { setShowFallenStarlight(false); setShowStoryOfStories(false); setSelectedStarlightStage(null); }
+            setClockMode(null);
+            if (mode === 'medicine-wheel') navigate('/metals');
           }}
           videoUrl={videoUrl}
           onCloseVideo={() => setVideoUrl(null)}
@@ -947,22 +922,17 @@ export default function SevenMetalsPage() {
           ybrAutoStart={ybrAutoStart}
           showMythicEarth={showMythicEarth}
           onToggleMythicEarth={() => {
-            setShowMythicEarth(prev => !prev);
-            // Reset mythic earth content state
-            setSelectedMythicSite(null);
-            setMythicEarthCategory('sacred-site');
-            // Clear all selections
-            setSelectedPlanet(null); setActiveTab('overview');
-            setSelectedSign(null); setSelectedCardinal(null); setSelectedEarth(null); setSelectedMonth(null);
+            clearAllSelections();
+            if (mode !== 'mythic-earth') {
+              setMode('mythic-earth');
+              setMythicEarthCategory('sacred-site');
+            } else {
+              setMode('default');
+              setSelectedPlanet('Sun');
+            }
             setShowCalendar(false);
-            setSelectedConstellation(null);
-            setVideoUrl(null); setPersonaChatOpen(null);
-            // Exit other modes
-            if (showMedicineWheel) { setShowMedicineWheel(false); setSelectedWheelItem(null); navigate('/metals'); }
-            if (chakraViewMode) { setChakraViewMode(null); }
-            if (clockMode) { setClockMode(null); }
-            if (showMonomyth) { setShowMonomyth(false); setShowCycles(false); setShowMeteorSteel(false); setSelectedMonomythStage(null); setMonomythModel(null); }
-            if (showFallenStarlight) { setShowFallenStarlight(false); setShowStoryOfStories(false); setSelectedStarlightStage(null); }
+            setClockMode(null);
+            if (mode === 'medicine-wheel') navigate('/metals');
           }}
           showMonomyth={showMonomyth}
           showMeteorSteel={showMeteorSteel}
