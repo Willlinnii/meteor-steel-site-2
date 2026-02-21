@@ -554,6 +554,7 @@ export default function SevenMetalsPage() {
     setMonomythWorld(null);
     setActiveTab('overview');
     setMonomythTab('overview');
+    setMeteorSteelTab('technology');
     setActiveWheelTab(null);
     setVideoUrl(null);
     setPersonaChatOpen(null);

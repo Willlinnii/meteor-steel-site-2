@@ -500,10 +500,14 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
         const cy = (t0.clientY + t1.clientY) / 2;
         const p = pinchRef.current;
         const newScale = Math.min(Math.max(p.startScale * (dist / p.startDist), 1), 4);
+        // Clamp pan so diagram stays mostly in view (allow up to 40% of size off-screen)
+        const maxPan = 280 * (newScale - 1) * 0.4;
+        const rawX = p.startX + (cx - p.startCx);
+        const rawY = p.startY + (cy - p.startCy);
         setPinchTransform({
           scale: newScale,
-          x: p.startX + (cx - p.startCx),
-          y: p.startY + (cy - p.startCy),
+          x: Math.min(Math.max(rawX, -maxPan), maxPan),
+          y: Math.min(Math.max(rawY, -maxPan), maxPan),
         });
       }
     };
@@ -511,7 +515,7 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
     const onTouchEnd = (e) => {
       if (e.touches.length < 2) {
         pinchRef.current = null;
-        setPinchTransform(prev => prev.scale < 1.08 ? { scale: 1, x: 0, y: 0 } : prev);
+        setPinchTransform(prev => prev.scale < 1.2 ? { scale: 1, x: 0, y: 0 } : prev);
       }
     };
 
