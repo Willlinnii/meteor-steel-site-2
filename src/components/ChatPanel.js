@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import useVoice, { SpeechRecognition } from '../hooks/useVoice';
 import { useCoursework } from '../coursework/CourseworkContext';
 import { useWritings } from '../writings/WritingsContext';
+import { useProfile } from '../profile/ProfileContext';
 import { useAreaOverride } from '../App';
 import { apiFetch } from '../lib/chatApi';
 
@@ -39,7 +40,9 @@ export default function ChatPanel() {
   const { voiceEnabled, recording, speaking, toggleVoice, startListening, stopListening, speak } = useVoice(setInput);
   const { trackElement, buildCourseSummary } = useCoursework();
   const { getConversation, saveConversation, loaded: writingsLoaded } = useWritings();
+  const { profileData, loaded: profileLoaded, completeOnboarding } = useProfile();
   const { area: areaOverride } = useAreaOverride();
+  const onboardingTriggered = useRef(false);
 
   // Load previous Atlas conversation on mount
   useEffect(() => {
@@ -48,6 +51,24 @@ export default function ChatPanel() {
       if (prev.length > 0) setMessages(prev);
     }
   }, [writingsLoaded]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Auto-open with welcome message for first-time users
+  useEffect(() => {
+    if (!writingsLoaded || !profileLoaded || onboardingTriggered.current) return;
+    if (profileData?.onboardingComplete) return;
+    if (messages.length > 0) return;
+
+    onboardingTriggered.current = true;
+    setOpen(true);
+    setMessages([{
+      role: 'assistant',
+      content:
+        'Welcome to the Mythouse. Here, you can explore the mythic dimension — the layer of meaning that runs beneath every culture, every story, every star.\n\n' +
+        'Watch documentaries and original series from the [[Mythology Channel|/mythology-channel]]. Explore and interact with the mythic cosmos on the [[Chronosphaera|/metals/calendar]], or trace the hero\'s journey through the [[Monomyth|/]]. Generate stories in the [[Story Forge|/story-forge]] and reflect on your own mythic path. Play ancient [[games|/games]], browse the [[Library|/library]], or enter immersive realities through [[VR / XR|/xr]]. All is possible, and present, within the Mythouse.\n\n' +
+        'I am Atlas — your guide through this landscape. What would you like to explore?',
+    }]);
+    completeOnboarding();
+  }, [writingsLoaded, profileLoaded, profileData?.onboardingComplete, messages.length, completeOnboarding]);
 
   // Save conversation when messages change (debounced via context flush)
   const prevMsgsRef = useRef(messages);

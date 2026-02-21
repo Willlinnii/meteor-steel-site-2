@@ -56,3 +56,29 @@ export function canRequestConsulting(existingRequests, consultantUid) {
     r => r.consultantUid === consultantUid && r.status === 'pending'
   );
 }
+
+/**
+ * Categorizes consulting requests into role-based groups.
+ * Returns { incomingPending, outgoingPending, accepted }
+ */
+export function categorizeConsultingRequests(requests, uid) {
+  const result = {
+    incomingPending: [],
+    outgoingPending: [],
+    accepted: [],
+  };
+
+  if (!requests || !uid) return result;
+
+  for (const r of requests) {
+    if (r.consultantUid === uid && r.status === 'pending') {
+      result.incomingPending.push(r);
+    } else if (r.requesterUid === uid && r.status === 'pending') {
+      result.outgoingPending.push(r);
+    } else if (r.status === 'accepted') {
+      result.accepted.push(r);
+    }
+  }
+
+  return result;
+}

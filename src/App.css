@@ -3954,13 +3954,7 @@ body {
 .mentor-directory-page {
   max-width: 900px;
   margin: 0 auto;
-  padding: 32px 20px 60px;
-}
-
-.mentor-directory-intro {
-  color: var(--text-secondary);
-  font-size: 1.05em;
-  margin-bottom: 20px;
+  padding: 84px 20px 60px;
 }
 
 .mentor-directory-filters {

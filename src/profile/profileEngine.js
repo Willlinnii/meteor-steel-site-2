@@ -103,6 +103,14 @@ export const CREDENTIAL_CATEGORIES = {
       { level: 3, name: 'World Walker', description: 'Has visited the Seven Wonders or equivalent mythic pilgrimage' },
     ],
   },
+  guildMember: {
+    id: 'guildMember',
+    label: 'Guild Member',
+    icon: '\uD83C\uDFDB\uFE0F',
+    levels: [
+      { level: 1, name: 'Guild Member', description: 'Active mentor in the Mythouse Guild' },
+    ],
+  },
 };
 
 // --- RANK FUNCTIONS ---

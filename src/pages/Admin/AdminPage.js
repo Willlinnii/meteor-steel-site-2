@@ -159,6 +159,7 @@ function CampaignListView({ campaigns, onSelect, getStatusForCampaign }) {
 const SECTIONS = [
   { id: 'campaigns', label: 'Campaign Manager' },
   { id: 'coursework', label: 'Coursework' },
+  { id: 'subscribers', label: 'Subscribers' },
   { id: 'mentors', label: 'Mentors' },
   { id: 'contacts', label: 'Contacts' },
   { id: 'services', label: 'Services' },
@@ -847,6 +848,193 @@ function MentorManagerSection() {
   );
 }
 
+// --- Subscribers Section ---
+const SUBSCRIPTION_ITEMS = [
+  { id: 'ybr', name: 'Yellow Brick Road' },
+  { id: 'forge', name: 'Story Forge' },
+  { id: 'coursework', name: 'Coursework' },
+  { id: 'xr', name: 'VR / XR' },
+];
+
+const PURCHASE_ITEMS = [
+  { id: 'fallen-starlight', name: 'Fallen Starlight' },
+  { id: 'story-of-stories', name: 'Story of Stories' },
+  { id: 'starlight-bundle', name: 'Starlight Bundle' },
+];
+
+function SubscribersSection() {
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [filter, setFilter] = useState('any');
+
+  const loadSubscribers = useCallback(async () => {
+    if (!firebaseConfigured || !db) return;
+    setLoading(true);
+    try {
+      const usersSnap = await getDocs(collection(db, 'users'));
+      const results = [];
+
+      for (const userDoc of usersSnap.docs) {
+        const uid = userDoc.id;
+        const userData = userDoc.data();
+
+        let profileData = {};
+        try {
+          const metaSnap = await getDocs(collection(db, 'users', uid, 'meta'));
+          metaSnap.forEach(doc => {
+            if (doc.id === 'profile') profileData = doc.data();
+          });
+        } catch { /* no profile */ }
+
+        const subs = profileData.subscriptions || {};
+        const purchases = profileData.purchases || {};
+        const activeSubs = SUBSCRIPTION_ITEMS.filter(s => subs[s.id]);
+        const activePurchases = PURCHASE_ITEMS.filter(p => purchases[p.id]);
+
+        results.push({
+          uid,
+          email: userData.email || uid,
+          displayName: userData.displayName || '',
+          subscriptions: activeSubs,
+          purchases: activePurchases,
+          hasAnything: activeSubs.length > 0 || activePurchases.length > 0,
+          subCount: activeSubs.length,
+          purchaseCount: activePurchases.length,
+        });
+      }
+
+      results.sort((a, b) => (b.subCount + b.purchaseCount) - (a.subCount + a.purchaseCount));
+      setUsers(results);
+    } catch (err) {
+      console.error('Failed to load subscribers:', err);
+    }
+    setLoading(false);
+  }, []);
+
+  const filtered = useMemo(() => {
+    if (filter === 'any') return users.filter(u => u.hasAnything);
+    if (filter === 'all') return users;
+    if (filter === 'none') return users.filter(u => !u.hasAnything);
+    // Filter by specific subscription or purchase id
+    return users.filter(u =>
+      u.subscriptions.some(s => s.id === filter) || u.purchases.some(p => p.id === filter)
+    );
+  }, [users, filter]);
+
+  // Summary counts
+  const subCounts = useMemo(() => {
+    const counts = {};
+    SUBSCRIPTION_ITEMS.forEach(s => { counts[s.id] = 0; });
+    PURCHASE_ITEMS.forEach(p => { counts[p.id] = 0; });
+    users.forEach(u => {
+      u.subscriptions.forEach(s => { counts[s.id]++; });
+      u.purchases.forEach(p => { counts[p.id]++; });
+    });
+    return counts;
+  }, [users]);
+
+  const totalWithAnything = users.filter(u => u.hasAnything).length;
+
+  return (
+    <div className="admin-coursework">
+      <h2 className="admin-coursework-title">SUBSCRIBERS &amp; PURCHASES</h2>
+
+      <button
+        className="admin-coursework-load-btn"
+        onClick={loadSubscribers}
+        disabled={loading}
+      >
+        {loading ? 'Loading...' : users.length > 0 ? 'Refresh' : 'Load Subscriber Data'}
+      </button>
+
+      {users.length > 0 && (
+        <>
+          <div className="admin-subscribers-summary">
+            <div className="admin-subscribers-summary-header">
+              <span>{users.length} total users</span>
+              <span className="admin-subscribers-highlight">{totalWithAnything} with active subscriptions or purchases</span>
+            </div>
+
+            <div className="admin-subscribers-counts">
+              <div className="admin-subscribers-counts-group">
+                <span className="admin-subscribers-group-label">Subscriptions</span>
+                {SUBSCRIPTION_ITEMS.map(s => (
+                  <button
+                    key={s.id}
+                    className={`admin-subscribers-count-btn ${filter === s.id ? 'active' : ''}`}
+                    onClick={() => setFilter(f => f === s.id ? 'any' : s.id)}
+                  >
+                    <span className="admin-subscribers-count-name">{s.name}</span>
+                    <span className="admin-subscribers-count-num">{subCounts[s.id]}</span>
+                  </button>
+                ))}
+              </div>
+              <div className="admin-subscribers-counts-group">
+                <span className="admin-subscribers-group-label">Purchases</span>
+                {PURCHASE_ITEMS.map(p => (
+                  <button
+                    key={p.id}
+                    className={`admin-subscribers-count-btn purchase ${filter === p.id ? 'active' : ''}`}
+                    onClick={() => setFilter(f => f === p.id ? 'any' : p.id)}
+                  >
+                    <span className="admin-subscribers-count-name">{p.name}</span>
+                    <span className="admin-subscribers-count-num">{subCounts[p.id]}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="admin-subscribers-filter-row">
+              <label className="admin-subscribers-filter-label">Show:</label>
+              <select
+                className="admin-coursework-select"
+                value={filter}
+                onChange={e => setFilter(e.target.value)}
+              >
+                <option value="any">Users with subscriptions/purchases</option>
+                <option value="all">All users</option>
+                <option value="none">Users with nothing active</option>
+                {SUBSCRIPTION_ITEMS.map(s => (
+                  <option key={s.id} value={s.id}>{s.name} subscribers</option>
+                ))}
+                {PURCHASE_ITEMS.map(p => (
+                  <option key={p.id} value={p.id}>{p.name} owners</option>
+                ))}
+              </select>
+              <span className="admin-subscribers-result-count">{filtered.length} users</span>
+            </div>
+          </div>
+
+          <div className="admin-subscribers-list">
+            {filtered.map(u => (
+              <div key={u.uid} className="admin-subscribers-row">
+                <div className="admin-subscribers-user">
+                  <span className="admin-subscribers-email">{u.displayName || u.email}</span>
+                  {u.displayName && <span className="admin-subscribers-uid">{u.email}</span>}
+                </div>
+                <div className="admin-subscribers-badges">
+                  {u.subscriptions.map(s => (
+                    <span key={s.id} className="admin-subscribers-badge sub">{s.name}</span>
+                  ))}
+                  {u.purchases.map(p => (
+                    <span key={p.id} className="admin-subscribers-badge purchase">{p.name}</span>
+                  ))}
+                  {!u.hasAnything && (
+                    <span className="admin-subscribers-badge none">No active items</span>
+                  )}
+                </div>
+              </div>
+            ))}
+            {filtered.length === 0 && (
+              <div className="admin-no-posts">No users match this filter.</div>
+            )}
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
 // --- Services data ---
 const SERVICES = [
   {
@@ -948,6 +1136,60 @@ const SERVICES = [
     status: 'Active',
     envVars: [],
   },
+  {
+    name: 'Hostinger',
+    url: 'https://hostinger.com',
+    category: 'Domain / DNS',
+    usedFor: 'Domain registration & DNS management',
+    paid: 'Paid',
+    status: 'Active',
+    envVars: [],
+  },
+  {
+    name: 'YouTube',
+    url: 'https://youtube.com',
+    category: 'Video',
+    usedFor: 'Mythology Channel playlists, embedded video content',
+    paid: 'Free',
+    status: 'Active',
+    envVars: [],
+  },
+  {
+    name: 'SoundCloud',
+    url: 'https://soundcloud.com',
+    category: 'Audio',
+    usedFor: 'Embedded music on Fallen Starlight page',
+    paid: 'Free',
+    status: 'Active',
+    envVars: [],
+  },
+  {
+    name: 'Open Library',
+    url: 'https://openlibrary.org',
+    category: 'Book Data',
+    usedFor: 'Book search, covers, and metadata for Library',
+    paid: 'Free',
+    status: 'Active',
+    envVars: [],
+  },
+  {
+    name: 'WorldTimeAPI',
+    url: 'https://worldtimeapi.org',
+    category: 'Utilities',
+    usedFor: 'Timezone detection for orbital diagrams',
+    paid: 'Free',
+    status: 'Active',
+    envVars: [],
+  },
+  {
+    name: 'IPWho',
+    url: 'https://ipwho.is',
+    category: 'Utilities',
+    usedFor: 'IP geolocation for natal chart defaults',
+    paid: 'Free',
+    status: 'Active',
+    envVars: [],
+  },
 ];
 
 const SERVICE_STATUS_COLORS = {
@@ -1032,6 +1274,7 @@ function AdminPage() {
 
       {activeSection === 'campaigns' && <CampaignManagerSection />}
       {activeSection === 'coursework' && <CourseworkManagerSection />}
+      {activeSection === 'subscribers' && <SubscribersSection />}
       {activeSection === 'mentors' && <MentorManagerSection />}
       {activeSection === 'contacts' && (
         <Suspense fallback={<div className="contacts-loading">Loading Contacts...</div>}>

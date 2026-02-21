@@ -117,7 +117,7 @@ const PURCHASES = [
 export default function ProfilePage() {
   const { user, signOut } = useAuth();
   const { getCourseStates, completedCourses, allCourses } = useCoursework();
-  const { earnedRanks, highestRank, activeCredentials, hasProfile, loaded: profileLoaded, handle, natalChart, updateNatalChart, subscriptions, updateSubscription, purchases, updatePurchase, updatePurchases, refreshProfile, mentorData, qualifiedMentorTypes, mentorEligible, mentorCoursesComplete, effectiveMentorStatus, pairingCategories, updateMentorBio, updateMentorCapacity, publishToDirectory, unpublishFromDirectory, respondToPairing, endPairing, photoURL, consultingData, consultingRequests, updateProfilePhoto, respondToConsulting } = useProfile();
+  const { earnedRanks, highestRank, activeCredentials, hasProfile, loaded: profileLoaded, handle, natalChart, updateNatalChart, subscriptions, updateSubscription, purchases, updatePurchase, updatePurchases, refreshProfile, mentorData, qualifiedMentorTypes, mentorEligible, mentorCoursesComplete, effectiveMentorStatus, pairingCategories, updateMentorBio, updateMentorCapacity, publishToDirectory, unpublishFromDirectory, respondToPairing, endPairing, photoURL, consultingData, consultingCategories, updateProfilePhoto, respondToConsulting, apiKeys, apiKeysLoaded, saveApiKey, removeApiKey, hasAnthropicKey, hasOpenaiKey } = useProfile();
   const { personalStories, loaded: writingsLoaded } = useWritings();
   const navigate = useNavigate();
   const location = useLocation();
@@ -127,6 +127,11 @@ export default function ProfilePage() {
   const [photoUploading, setPhotoUploading] = useState(false);
   const [expandedCard, setExpandedCard] = useState(null); // 'ybr' | 'forge' | etc.
   const [consultingRespondingId, setConsultingRespondingId] = useState(null);
+
+  // BYOK API key input state
+  const [anthropicKeyInput, setAnthropicKeyInput] = useState('');
+  const [openaiKeyInput, setOpenaiKeyInput] = useState('');
+  const [keySaving, setKeySaving] = useState(null); // 'anthropicKey' | 'openaiKey' | null
 
   const handlePhotoUpload = async (e) => {
     const file = e.target.files?.[0];
@@ -420,7 +425,7 @@ export default function ProfilePage() {
           respondToPairing={respondToPairing}
           endPairing={endPairing}
           consultingData={consultingData}
-          consultingRequests={consultingRequests}
+          consultingCategories={consultingCategories}
           onConsultingAccept={handleConsultingAccept}
           onConsultingDecline={handleConsultingDecline}
           consultingRespondingId={consultingRespondingId}
@@ -543,6 +548,104 @@ export default function ProfilePage() {
         </div>
       )}
 
+      {/* AI Settings (BYOK) */}
+      <h2 className="profile-section-title">AI Settings</h2>
+      <div className="profile-ai-settings">
+        <p className="profile-ai-settings-desc">
+          Add your own API keys to use premium AI models with no rate limits. Keys are stored securely and only accessible by you.
+        </p>
+
+        {/* Anthropic Key */}
+        <div className="profile-api-key-row">
+          <div className="profile-api-key-label">Anthropic</div>
+          {hasAnthropicKey ? (
+            <div className="profile-api-key-saved">
+              <span className="profile-api-key-masked">
+                {apiKeys.anthropicKey.slice(0, 7)}{'•'.repeat(8)}{apiKeys.anthropicKey.slice(-4)}
+              </span>
+              <button
+                className="profile-api-key-remove-btn"
+                disabled={keySaving === 'anthropicKey'}
+                onClick={async () => {
+                  setKeySaving('anthropicKey');
+                  await removeApiKey('anthropicKey');
+                  setKeySaving(null);
+                }}
+              >
+                Remove
+              </button>
+            </div>
+          ) : (
+            <div className="profile-api-key-input-row">
+              <input
+                className="profile-api-key-input"
+                type="password"
+                placeholder="sk-ant-api03-..."
+                value={anthropicKeyInput}
+                onChange={e => setAnthropicKeyInput(e.target.value)}
+              />
+              <button
+                className="profile-api-key-save-btn"
+                disabled={!anthropicKeyInput.startsWith('sk-ant-') || keySaving === 'anthropicKey'}
+                onClick={async () => {
+                  setKeySaving('anthropicKey');
+                  await saveApiKey('anthropicKey', anthropicKeyInput);
+                  setAnthropicKeyInput('');
+                  setKeySaving(null);
+                }}
+              >
+                {keySaving === 'anthropicKey' ? 'Saving...' : 'Save'}
+              </button>
+            </div>
+          )}
+        </div>
+
+        {/* OpenAI Key */}
+        <div className="profile-api-key-row">
+          <div className="profile-api-key-label">OpenAI</div>
+          {hasOpenaiKey ? (
+            <div className="profile-api-key-saved">
+              <span className="profile-api-key-masked">
+                {apiKeys.openaiKey.slice(0, 5)}{'•'.repeat(8)}{apiKeys.openaiKey.slice(-4)}
+              </span>
+              <button
+                className="profile-api-key-remove-btn"
+                disabled={keySaving === 'openaiKey'}
+                onClick={async () => {
+                  setKeySaving('openaiKey');
+                  await removeApiKey('openaiKey');
+                  setKeySaving(null);
+                }}
+              >
+                Remove
+              </button>
+            </div>
+          ) : (
+            <div className="profile-api-key-input-row">
+              <input
+                className="profile-api-key-input"
+                type="password"
+                placeholder="sk-..."
+                value={openaiKeyInput}
+                onChange={e => setOpenaiKeyInput(e.target.value)}
+              />
+              <button
+                className="profile-api-key-save-btn"
+                disabled={!openaiKeyInput.startsWith('sk-') || keySaving === 'openaiKey'}
+                onClick={async () => {
+                  setKeySaving('openaiKey');
+                  await saveApiKey('openaiKey', openaiKeyInput);
+                  setOpenaiKeyInput('');
+                  setKeySaving(null);
+                }}
+              >
+                {keySaving === 'openaiKey' ? 'Saving...' : 'Save'}
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
+
       {/* Sign Out */}
       <div className="profile-signout-section">
         <button className="profile-signout-btn" onClick={signOut}>
@@ -553,7 +656,7 @@ export default function ProfilePage() {
   );
 }
 
-function MentorSection({ effectiveMentorStatus, mentorEligible, qualifiedMentorTypes, mentorData, mentorCoursesComplete, completedCourses, allCourses, showMentorChat, setShowMentorChat, showConsultingChat, setShowConsultingChat, pairingCategories, updateMentorBio, updateMentorCapacity, publishToDirectory, unpublishFromDirectory, respondToPairing, endPairing, consultingData, consultingRequests, onConsultingAccept, onConsultingDecline, consultingRespondingId }) {
+function MentorSection({ effectiveMentorStatus, mentorEligible, qualifiedMentorTypes, mentorData, mentorCoursesComplete, completedCourses, allCourses, showMentorChat, setShowMentorChat, showConsultingChat, setShowConsultingChat, pairingCategories, updateMentorBio, updateMentorCapacity, publishToDirectory, unpublishFromDirectory, respondToPairing, endPairing, consultingData, consultingCategories, onConsultingAccept, onConsultingDecline, consultingRespondingId }) {
   const display = getMentorDisplay(mentorData);
   const courseChecklist = getMentorCourseChecklist(completedCourses);
   const navigate = useNavigate();
@@ -785,10 +888,10 @@ function MentorSection({ effectiveMentorStatus, mentorEligible, qualifiedMentorT
           </div>
 
           {/* Consulting Requests (incoming) */}
-          {consultingRequests.filter(r => r.consultantUid === (mentorData && true) && r.status === 'pending').length > 0 && (
+          {consultingCategories.incomingPending.length > 0 && (
             <div className="mentor-pending-section" style={{ marginTop: 16 }}>
               <h3 className="profile-subsection-title">Consulting Requests</h3>
-              {consultingRequests.filter(r => r.status === 'pending').map(r => (
+              {consultingCategories.incomingPending.map(r => (
                 <div key={r.id} className="consulting-request-card">
                   <div className="mentor-request-card-header">
                     <span className="mentor-request-card-handle">@{r.requesterHandle || 'anonymous'}</span>

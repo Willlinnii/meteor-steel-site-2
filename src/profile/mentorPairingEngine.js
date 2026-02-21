@@ -1,6 +1,8 @@
 // Mentor pairing engine: constants and pure functions for mentor-student pairing.
 // Mirrors mentorEngine.js pattern — no side effects, no Firebase imports.
 
+import { DEFAULT_MENTOR_CAPACITY, MAX_MENTOR_BIO_LENGTH, MAX_MENTOR_CAPACITY } from './mentorEngine';
+
 // --- PAIRING STATUS ---
 
 export const PAIRING_STATUS = {
@@ -10,11 +12,8 @@ export const PAIRING_STATUS = {
   ENDED: 'ended',
 };
 
-// --- CONSTANTS ---
-
-export const DEFAULT_MENTOR_CAPACITY = 5;
-export const MAX_MENTOR_BIO_LENGTH = 500;
-export const MAX_MENTOR_CAPACITY = 20;
+// --- CONSTANTS (re-exported from mentorEngine for backwards compat) ---
+export { DEFAULT_MENTOR_CAPACITY, MAX_MENTOR_BIO_LENGTH, MAX_MENTOR_CAPACITY };
 
 // --- FUNCTIONS ---
 

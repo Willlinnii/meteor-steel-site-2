@@ -1,11 +1,12 @@
 import React, { createContext, useContext, useState, useEffect, useCallback, useRef, useMemo } from 'react';
-import { doc, getDoc, setDoc, serverTimestamp, collection, query, where, onSnapshot } from 'firebase/firestore';
+import { doc, getDoc, setDoc, deleteField, serverTimestamp, collection, query, where, onSnapshot } from 'firebase/firestore';
 import { db, firebaseConfigured } from '../auth/firebase';
 import { useAuth } from '../auth/AuthContext';
 import { useCoursework } from '../coursework/CourseworkContext';
 import { getEarnedRanks, getHighestRank, getActiveCredentials } from './profileEngine';
 import { getQualifiedMentorTypes, isEligibleForMentor, getEffectiveMentorStatus, isMentorCourseComplete } from './mentorEngine';
 import { categorizePairings } from './mentorPairingEngine';
+import { categorizeConsultingRequests } from './consultingEngine';
 
 const ProfileContext = createContext(null);
 
@@ -22,6 +23,12 @@ export function ProfileProvider({ children }) {
   const [loaded, setLoaded] = useState(false);
   const profileDataRef = useRef(profileData);
   useEffect(() => { profileDataRef.current = profileData; }, [profileData]);
+
+  // BYOK API keys (separate secrets doc with owner-only access)
+  const [apiKeys, setApiKeys] = useState({});
+  const [apiKeysLoaded, setApiKeysLoaded] = useState(false);
+  const apiKeysRef = useRef(apiKeys);
+  useEffect(() => { apiKeysRef.current = apiKeys; }, [apiKeys]);
 
   // Load profile from Firestore
   useEffect(() => {
@@ -65,21 +72,56 @@ export function ProfileProvider({ children }) {
     }
   }, [loaded, user, profileData?.purchases]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  // Load BYOK keys from secrets doc (separate from profile — owner-only read)
+  useEffect(() => {
+    if (!user || !firebaseConfigured || !db) {
+      setApiKeys({});
+      setApiKeysLoaded(false);
+      return;
+    }
+
+    let cancelled = false;
+
+    async function loadSecrets() {
+      try {
+        const ref = doc(db, 'users', user.uid, 'meta', 'secrets');
+        const snap = await getDoc(ref);
+        if (!cancelled) {
+          setApiKeys(snap.exists() ? snap.data() : {});
+          setApiKeysLoaded(true);
+        }
+      } catch (err) {
+        console.error('Failed to load API keys:', err);
+        if (!cancelled) setApiKeysLoaded(true);
+      }
+    }
+
+    loadSecrets();
+    return () => { cancelled = true; };
+  }, [user]);
+
   // Compute ranks from completedCourses
   const earnedRanks = getEarnedRanks(completedCourses);
   const highestRank = getHighestRank(completedCourses);
 
-  // Compute active credentials from profileData
-  const activeCredentials = getActiveCredentials(profileData?.credentials);
-
-  const hasProfile = !!(profileData && profileData.credentials && Object.keys(profileData.credentials).length > 0);
-
-  // Mentor derived values
+  // Mentor derived values (computed before credentials so guildMember can be injected)
   const mentorData = profileData?.mentor || null;
   const qualifiedMentorTypes = getQualifiedMentorTypes(profileData?.credentials);
   const mentorEligible = isEligibleForMentor(profileData?.credentials);
   const mentorCoursesComplete = isMentorCourseComplete(completedCourses);
   const effectiveMentorStatus = getEffectiveMentorStatus(mentorData, completedCourses);
+
+  // Compute active credentials from profileData, injecting guildMember if active mentor
+  const credentialsWithGuild = useMemo(() => {
+    const base = profileData?.credentials || {};
+    if (effectiveMentorStatus === 'active') {
+      return { ...base, guildMember: { level: 1 } };
+    }
+    return base;
+  }, [profileData?.credentials, effectiveMentorStatus]);
+  const activeCredentials = getActiveCredentials(credentialsWithGuild);
+
+  const hasProfile = !!(profileData && profileData.credentials && Object.keys(profileData.credentials).length > 0);
 
   // Photo URL derived from profile
   const photoURL = profileData?.photoURL || null;
@@ -190,6 +232,12 @@ export function ProfileProvider({ children }) {
   const pairingCategories = useMemo(
     () => categorizePairings(mentorPairings, user?.uid),
     [mentorPairings, user?.uid]
+  );
+
+  // Categorize consulting requests into role-based groups
+  const consultingCategories = useMemo(
+    () => categorizeConsultingRequests(consultingRequests, user?.uid),
+    [consultingRequests, user?.uid]
   );
 
   // --- Mentor pairing API methods ---
@@ -375,6 +423,34 @@ export function ProfileProvider({ children }) {
       await setDoc(ref, { photoURL: url, updatedAt: serverTimestamp() }, { merge: true });
     } catch (err) {
       console.error('Failed to update profile photo:', err);
+    }
+  }, [user]);
+
+  // Save a BYOK API key (field = 'anthropicKey' | 'openaiKey')
+  const saveApiKey = useCallback(async (field, value) => {
+    if (!user || !firebaseConfigured || !db) return;
+    const prev = apiKeysRef.current;
+    setApiKeys(k => ({ ...k, [field]: value, updatedAt: new Date() }));
+    try {
+      const ref = doc(db, 'users', user.uid, 'meta', 'secrets');
+      await setDoc(ref, { [field]: value, updatedAt: serverTimestamp() }, { merge: true });
+    } catch (err) {
+      console.error('Failed to save API key:', err);
+      setApiKeys(prev);
+    }
+  }, [user]);
+
+  // Remove a BYOK API key
+  const removeApiKey = useCallback(async (field) => {
+    if (!user || !firebaseConfigured || !db) return;
+    const prev = apiKeysRef.current;
+    setApiKeys(k => { const next = { ...k }; delete next[field]; return next; });
+    try {
+      const ref = doc(db, 'users', user.uid, 'meta', 'secrets');
+      await setDoc(ref, { [field]: deleteField(), updatedAt: serverTimestamp() }, { merge: true });
+    } catch (err) {
+      console.error('Failed to remove API key:', err);
+      setApiKeys(prev);
     }
   }, [user]);
 
@@ -591,6 +667,10 @@ export function ProfileProvider({ children }) {
     }
   }, [user]);
 
+  // BYOK derived values
+  const hasAnthropicKey = !!apiKeys.anthropicKey;
+  const hasOpenaiKey = !!apiKeys.openaiKey;
+
   // Handle from profile data
   const handle = profileData?.handle || null;
 
@@ -647,10 +727,17 @@ export function ProfileProvider({ children }) {
     photoURL,
     consultingData,
     consultingRequests,
+    consultingCategories,
     updateProfilePhoto,
     submitConsultingProfile,
     requestConsulting,
     respondToConsulting,
+    apiKeys,
+    apiKeysLoaded,
+    saveApiKey,
+    removeApiKey,
+    hasAnthropicKey,
+    hasOpenaiKey,
   };
 
   return (

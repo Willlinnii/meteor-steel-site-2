@@ -1,5 +1,6 @@
-const { getAnthropicClient } = require('./lib/llm');
+const { getAnthropicClient, getUserKeys } = require('./lib/llm');
 const admin = require('firebase-admin');
+const { getUidFromRequest } = require('./lib/auth');
 
 // Model config — centralized for easy swapping and future BYOK support
 const MODELS = {
@@ -43,6 +44,15 @@ module.exports = async (req, res) => {
     return res.status(400).json({ error: 'uid and application are required.' });
   }
 
+  // Verify Bearer token matches the uid in the request body
+  const tokenUid = await getUidFromRequest(req);
+  if (!tokenUid) {
+    return res.status(401).json({ error: 'Authentication required.' });
+  }
+  if (tokenUid !== uid) {
+    return res.status(403).json({ error: 'Token does not match request uid.' });
+  }
+
   // Verify the uid matches by checking the profile doc exists and has a matching mentor application
   try {
     const verifyDb = admin.firestore();
@@ -58,7 +68,9 @@ module.exports = async (req, res) => {
     return res.status(500).json({ error: 'Could not verify user.' });
   }
 
-  const anthropic = getAnthropicClient();
+  // BYOK: retrieve user's own API key if stored
+  const userKeys = await getUserKeys(tokenUid);
+  const anthropic = getAnthropicClient(userKeys.anthropicKey);
 
   // Build screening prompt
   const credentialSummary = credentials

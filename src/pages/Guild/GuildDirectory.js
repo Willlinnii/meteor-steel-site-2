@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { collection, query, where, orderBy, getDocs } from 'firebase/firestore';
+import { collection, query, where, orderBy, getDocs, limit, startAfter } from 'firebase/firestore';
 import { db, firebaseConfigured } from '../../auth/firebase';
 import { useProfile } from '../../profile/ProfileContext';
 import { useAuth } from '../../auth/AuthContext';
@@ -19,6 +19,8 @@ const CRED_LEVEL_NAMES = {
   1: 'Initiate', 2: 'Adept', 3: 'Master', 4: 'Grand Master', 5: 'Archon',
 };
 
+const PAGE_SIZE = 50;
+
 export default function GuildDirectory() {
   const { user } = useAuth();
   const { mentorPairings, requestMentor, consultingRequests, requestConsulting } = useProfile();
@@ -31,6 +33,8 @@ export default function GuildDirectory() {
   const [requestMessage, setRequestMessage] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState(null);
+  const [lastDoc, setLastDoc] = useState(null);
+  const [hasMore, setHasMore] = useState(false);
 
   // Fetch active mentors
   useEffect(() => {
@@ -43,11 +47,14 @@ export default function GuildDirectory() {
           dirRef,
           where('active', '==', true),
           orderBy('availableSlots', 'desc'),
+          limit(PAGE_SIZE),
         );
         const snap = await getDocs(q);
         const results = [];
         snap.forEach(d => results.push({ id: d.id, ...d.data() }));
         setMentors(results);
+        setLastDoc(snap.docs[snap.docs.length - 1] || null);
+        setHasMore(snap.size === PAGE_SIZE);
       } catch (err) {
         console.error('Failed to fetch mentor directory:', err);
       }
@@ -56,6 +63,28 @@ export default function GuildDirectory() {
 
     fetchMentors();
   }, []);
+
+  const loadMore = useCallback(async () => {
+    if (!lastDoc || !hasMore) return;
+    try {
+      const dirRef = collection(db, 'mentor-directory');
+      const q = query(
+        dirRef,
+        where('active', '==', true),
+        orderBy('availableSlots', 'desc'),
+        startAfter(lastDoc),
+        limit(PAGE_SIZE),
+      );
+      const snap = await getDocs(q);
+      const results = [];
+      snap.forEach(d => results.push({ id: d.id, ...d.data() }));
+      setMentors(prev => [...prev, ...results]);
+      setLastDoc(snap.docs[snap.docs.length - 1] || null);
+      setHasMore(snap.size === PAGE_SIZE);
+    } catch (err) {
+      console.error('Failed to load more mentors:', err);
+    }
+  }, [lastDoc, hasMore]);
 
   const filteredMentors = activeFilter === 'all'
     ? mentors
@@ -239,6 +268,9 @@ export default function GuildDirectory() {
             );
           })}
         </div>
+      )}
+      {hasMore && (
+        <button className="guild-load-more" onClick={loadMore}>Load More</button>
       )}
     </div>
   );

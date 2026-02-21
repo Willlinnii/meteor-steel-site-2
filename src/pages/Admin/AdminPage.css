@@ -931,6 +931,219 @@
   transition: width 0.3s ease;
 }
 
+/* ===== SUBSCRIBERS SECTION ===== */
+.admin-subscribers-summary {
+  background: rgba(16, 16, 24, 0.7);
+  border: 1px solid #2a2a3a;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.admin-subscribers-summary-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.82rem;
+  color: #8a8aa0;
+  margin-bottom: 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.admin-subscribers-highlight {
+  color: #e8d5b5;
+  font-weight: 600;
+}
+
+.admin-subscribers-counts {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+
+.admin-subscribers-counts-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+  min-width: 200px;
+}
+
+.admin-subscribers-group-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.7rem;
+  color: #8a8aa0;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.admin-subscribers-count-btn {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid #2a2a3a;
+  background: rgba(91, 217, 122, 0.04);
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: inherit;
+  color: inherit;
+}
+
+.admin-subscribers-count-btn:hover {
+  border-color: #5bd97a;
+  background: rgba(91, 217, 122, 0.08);
+}
+
+.admin-subscribers-count-btn.active {
+  border-color: #5bd97a;
+  background: rgba(91, 217, 122, 0.14);
+}
+
+.admin-subscribers-count-btn.purchase {
+  background: rgba(122, 122, 184, 0.04);
+}
+
+.admin-subscribers-count-btn.purchase:hover {
+  border-color: #7a7ab8;
+  background: rgba(122, 122, 184, 0.08);
+}
+
+.admin-subscribers-count-btn.purchase.active {
+  border-color: #7a7ab8;
+  background: rgba(122, 122, 184, 0.14);
+}
+
+.admin-subscribers-count-name {
+  font-size: 0.8rem;
+  color: #c4c4c4;
+}
+
+.admin-subscribers-count-num {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #e8d5b5;
+  min-width: 20px;
+  text-align: right;
+}
+
+.admin-subscribers-filter-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.admin-subscribers-filter-label {
+  font-size: 0.78rem;
+  color: #8a8aa0;
+}
+
+.admin-subscribers-result-count {
+  font-size: 0.78rem;
+  color: #6a6a7a;
+  margin-left: auto;
+}
+
+.admin-subscribers-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.admin-subscribers-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 12px;
+  background: rgba(20, 20, 28, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  border-radius: 6px;
+  transition: border-color 0.15s;
+}
+
+.admin-subscribers-row:hover {
+  border-color: #2a2a3a;
+}
+
+.admin-subscribers-user {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.admin-subscribers-email {
+  font-size: 0.82rem;
+  color: #d4d4d4;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.admin-subscribers-uid {
+  font-size: 0.7rem;
+  color: #6a6a7a;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.admin-subscribers-badges {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  flex-shrink: 0;
+}
+
+.admin-subscribers-badge {
+  font-size: 0.65rem;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.admin-subscribers-badge.sub {
+  color: #5bd97a;
+  background: rgba(91, 217, 122, 0.12);
+  border: 1px solid rgba(91, 217, 122, 0.25);
+}
+
+.admin-subscribers-badge.purchase {
+  color: #7a7ab8;
+  background: rgba(122, 122, 184, 0.12);
+  border: 1px solid rgba(122, 122, 184, 0.25);
+}
+
+.admin-subscribers-badge.none {
+  color: #6a6a7a;
+  background: rgba(106, 106, 122, 0.08);
+  border: 1px solid rgba(106, 106, 122, 0.15);
+}
+
+@media (max-width: 600px) {
+  .admin-subscribers-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+  .admin-subscribers-badges {
+    justify-content: flex-start;
+  }
+  .admin-subscribers-counts {
+    flex-direction: column;
+    gap: 12px;
+  }
+}
+
 /* ===== SERVICES DASHBOARD ===== */
 .admin-services {
   padding: 24px;

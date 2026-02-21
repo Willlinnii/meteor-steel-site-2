@@ -1,4 +1,5 @@
-const { getOpenAIClient } = require('./lib/llm');
+const { getOpenAIClient, getUserKeys } = require('./lib/llm');
+const { getUidFromRequest } = require('./lib/auth');
 
 // Model config — centralized for easy swapping and future BYOK support
 const MODELS = {
@@ -50,9 +51,17 @@ module.exports = async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const ip = req.headers['x-forwarded-for'] || req.socket?.remoteAddress || 'unknown';
-  if (!checkRateLimit(ip)) {
-    return res.status(429).json({ error: 'Too many requests. Please wait a moment.' });
+  // Identify user and retrieve BYOK keys
+  const uid = await getUidFromRequest(req);
+  const userKeys = uid ? await getUserKeys(uid) : {};
+  const isByok = !!userKeys.openaiKey;
+
+  // Skip rate limiting for BYOK users
+  if (!isByok) {
+    const ip = req.headers['x-forwarded-for'] || req.socket?.remoteAddress || 'unknown';
+    if (!checkRateLimit(ip)) {
+      return res.status(429).json({ error: 'Too many requests. Please wait a moment.' });
+    }
   }
 
   const { template, stageContent, targetStage } = req.body || {};
@@ -65,7 +74,7 @@ module.exports = async function handler(req, res) {
     `=== ${s.stageId} (${s.label}) ===\n${s.entries.join('\n')}`
   ).join('\n\n');
 
-  const openai = getOpenAIClient();
+  const openai = getOpenAIClient(userKeys.openaiKey);
 
   try {
     const completion = await openai.chat.completions.create({
@@ -82,6 +91,9 @@ module.exports = async function handler(req, res) {
     return res.status(200).json({ story });
   } catch (err) {
     console.error('Forge API error:', err?.message, err?.status);
+    if (err.status === 401 && isByok) {
+      return res.status(401).json({ error: 'Your OpenAI API key is invalid or expired. Please update it in your profile settings.', keyError: true });
+    }
     return res.status(500).json({ error: `Something went wrong: ${err?.message || 'Unknown error'}` });
   }
 };

@@ -1,4 +1,4 @@
-const { getAnthropicClient } = require('./lib/llm');
+const { getAnthropicClient, getUserKeys } = require('./lib/llm');
 const { getUidFromRequest } = require('./lib/auth');
 const { computeNatalChart } = require('./lib/natalChart');
 
@@ -1481,11 +1481,19 @@ module.exports = async function handler(req, res) {
 
   // Identify user by Firebase auth (preferred) or fall back to IP
   const uid = await getUidFromRequest(req);
-  const rateLimitKey = uid || req.headers['x-forwarded-for'] || req.socket?.remoteAddress || 'unknown';
-  if (!checkRateLimit(rateLimitKey)) {
-    return res.status(429).json({
-      error: 'Too many requests. Please wait a moment before asking another question.',
-    });
+
+  // BYOK: retrieve user's own API keys (if stored)
+  const userKeys = uid ? await getUserKeys(uid) : {};
+  const isByok = !!userKeys.anthropicKey;
+
+  // Skip rate limiting for BYOK users (they're paying for their own tokens)
+  if (!isByok) {
+    const rateLimitKey = uid || req.headers['x-forwarded-for'] || req.socket?.remoteAddress || 'unknown';
+    if (!checkRateLimit(rateLimitKey)) {
+      return res.status(429).json({
+        error: 'Too many requests. Please wait a moment before asking another question.',
+      });
+    }
   }
 
   const { messages, area, persona, mode, challengeStop, level, journeyId, stageId, gameMode, stageData, aspect, courseSummary, existingCredentials, existingNatalChart, qualifiedMentorTypes, uploadedDocument, tarotPhase, tarotCards, tarotIntention, culture } = req.body || {};
@@ -1521,7 +1529,7 @@ module.exports = async function handler(req, res) {
       : buildTarotIntentionPrompt(cultureLabel);
     const maxTokens = isInterpretation ? 2048 : 512;
 
-    const anthropic = getAnthropicClient();
+    const anthropic = getAnthropicClient(userKeys.anthropicKey);
     try {
       const response = await anthropic.messages.create({
         model: MODELS.fast,
@@ -1575,7 +1583,7 @@ PERSONAL EXPERIENCES BY STAGE:
 ${stageBlock}`;
     }
 
-    const anthropic = getAnthropicClient();
+    const anthropic = getAnthropicClient(userKeys.anthropicKey);
     try {
       const response = await anthropic.messages.create({
         model: MODELS.quality,
@@ -1617,7 +1625,7 @@ ${stageBlock}`;
     trimmed.shift();
   }
 
-  const anthropic = getAnthropicClient();
+  const anthropic = getAnthropicClient(userKeys.anthropicKey);
   // Natal chart tool available on all pages — people ask about their chart from anywhere
   const tools = [NATAL_CHART_TOOL];
   // Mythic Earth highlight tool — only when on the globe page
@@ -1874,7 +1882,7 @@ Synthesize these entries into a unified personal narrative for this single stage
 ENTRIES FOR THIS STAGE:
 ${entriesBlock}`;
 
-    const anthropic = getAnthropicClient();
+    const anthropic = getAnthropicClient(userKeys.anthropicKey);
     try {
       const response = await anthropic.messages.create({
         model: MODELS.quality,
@@ -2269,6 +2277,9 @@ Only suggest this when genuinely relevant — do not push mentorship or the Guil
   } catch (err) {
     console.error('Anthropic API error:', err?.message, err?.status);
     if (err.status === 401) {
+      if (isByok) {
+        return res.status(401).json({ error: 'Your Anthropic API key is invalid or expired. Please update it in your profile settings.', keyError: true });
+      }
       return res.status(500).json({ error: 'API configuration error.' });
     }
     return res.status(500).json({ error: `Something went wrong: ${err?.message || 'Unknown error'}` });

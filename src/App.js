@@ -1335,7 +1335,7 @@ const NAV_ITEMS = [
 ];
 
 const HIDDEN_NAV_ITEMS = [
-  { path: '/mentors', label: 'Mentors' },
+  { path: '/mentors', label: 'Guild Directory' },
   { path: '/guild', label: 'Guild' },
 ];
 
@@ -1350,7 +1350,7 @@ function SiteNav() {
   ];
 
   // Label-only overrides: show in the toggle text but not in the dropdown
-  const LABEL_OVERRIDES = { '/profile': 'Profile', '/xr': 'VR / XR', '/mentors': 'Mentors', '/guild': 'Guild', '/dragon': 'Dragon' };
+  const LABEL_OVERRIDES = { '/profile': 'Profile', '/xr': 'VR / XR', '/mentors': 'Guild Directory', '/guild': 'Guild', '/dragon': 'Dragon' };
   const current = visibleItems.find(n => !n.external && n.path === location.pathname)
     || (LABEL_OVERRIDES[location.pathname] ? { label: LABEL_OVERRIDES[location.pathname] } : null)
     || NAV_ITEMS[0];

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { collection, query, where, getDocs, orderBy } from 'firebase/firestore';
+import { collection, query, where, getDocs, orderBy, limit, startAfter } from 'firebase/firestore';
 import { db, firebaseConfigured } from '../../auth/firebase';
 import { useProfile } from '../../profile/ProfileContext';
 import { useAuth } from '../../auth/AuthContext';
@@ -14,6 +14,8 @@ const FILTER_TABS = [
   { id: 'adventurer', label: 'Adventurer' },
 ];
 
+const PAGE_SIZE = 50;
+
 export default function MentorDirectoryPage() {
   const { user } = useAuth();
   const { mentorPairings, requestMentor } = useProfile();
@@ -24,6 +26,8 @@ export default function MentorDirectoryPage() {
   const [requestMessage, setRequestMessage] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState(null);
+  const [lastDoc, setLastDoc] = useState(null);
+  const [hasMore, setHasMore] = useState(false);
 
   // Fetch active mentors from directory
   useEffect(() => {
@@ -36,11 +40,14 @@ export default function MentorDirectoryPage() {
           dirRef,
           where('active', '==', true),
           orderBy('availableSlots', 'desc'),
+          limit(PAGE_SIZE),
         );
         const snap = await getDocs(q);
         const results = [];
         snap.forEach(d => results.push({ id: d.id, ...d.data() }));
         setMentors(results);
+        setLastDoc(snap.docs[snap.docs.length - 1] || null);
+        setHasMore(snap.size === PAGE_SIZE);
       } catch (err) {
         console.error('Failed to fetch mentor directory:', err);
       }
@@ -49,6 +56,28 @@ export default function MentorDirectoryPage() {
 
     fetchMentors();
   }, []);
+
+  const loadMore = useCallback(async () => {
+    if (!lastDoc || !hasMore) return;
+    try {
+      const dirRef = collection(db, 'mentor-directory');
+      const q = query(
+        dirRef,
+        where('active', '==', true),
+        orderBy('availableSlots', 'desc'),
+        startAfter(lastDoc),
+        limit(PAGE_SIZE),
+      );
+      const snap = await getDocs(q);
+      const results = [];
+      snap.forEach(d => results.push({ id: d.id, ...d.data() }));
+      setMentors(prev => [...prev, ...results]);
+      setLastDoc(snap.docs[snap.docs.length - 1] || null);
+      setHasMore(snap.size === PAGE_SIZE);
+    } catch (err) {
+      console.error('Failed to load more mentors:', err);
+    }
+  }, [lastDoc, hasMore]);
 
   const filteredMentors = activeFilter === 'all'
     ? mentors
@@ -71,7 +100,6 @@ export default function MentorDirectoryPage() {
   if (loading) {
     return (
       <div className="mentor-directory-page">
-        <h1 className="profile-section-title">Mentor Directory</h1>
         <div className="profile-empty">Loading mentors...</div>
       </div>
     );
@@ -79,11 +107,6 @@ export default function MentorDirectoryPage() {
 
   return (
     <div className="mentor-directory-page">
-      <h1 className="profile-section-title">Mentor Directory</h1>
-      <p className="mentor-directory-intro">
-        Find a mentor to guide your journey through mythology, storytelling, healing, media, or adventure.
-      </p>
-
       {/* Filter tabs */}
       <div className="mentor-directory-filters">
         {FILTER_TABS.map(tab => (
@@ -184,6 +207,9 @@ export default function MentorDirectoryPage() {
             );
           })}
         </div>
+      )}
+      {hasMore && (
+        <button className="guild-load-more" onClick={loadMore}>Load More</button>
       )}
     </div>
   );
