@@ -160,67 +160,14 @@ body {
     padding-right: 60px;
   }
 
-  /* Mobile FAB menu */
+  /* Keep header buttons in top-right on mobile, just tighten spacing */
   .site-header-user {
-    position: fixed;
-    top: auto;
-    bottom: 20px;
-    right: 16px;
-    flex-direction: column-reverse;
-    align-items: flex-end;
-    gap: 0;
-    z-index: 1001;
+    gap: 4px;
   }
 
+  /* Hide the mobile FAB trigger — not needed, buttons stay in header */
   .mobile-menu-trigger {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    border: 1px solid var(--accent-ember);
-    background: var(--bg-medium);
-    color: var(--accent-ember);
-    font-size: 1.2rem;
-    cursor: pointer;
-    box-shadow: 0 0 16px rgba(196, 113, 58, 0.3), 0 0 32px rgba(196, 113, 58, 0.1);
-    transition: all 0.25s ease;
-    z-index: 2;
-  }
-
-  .mobile-menu-trigger:hover {
-    box-shadow: 0 0 24px rgba(196, 113, 58, 0.5);
-  }
-
-  /* Hide all toggle buttons when collapsed */
-  .site-header-user > :not(.mobile-menu-trigger) {
-    display: none;
-  }
-
-  /* Show buttons when expanded */
-  .site-header-user.mobile-expanded > :not(.mobile-menu-trigger) {
-    display: flex;
-  }
-
-  .site-header-user.mobile-expanded {
-    gap: 8px;
-    padding-bottom: 0;
-  }
-
-  /* Fan buttons upward above the trigger */
-  .site-header-user.mobile-expanded .header-ybr-toggle,
-  .site-header-user.mobile-expanded .header-forge-toggle,
-  .site-header-user.mobile-expanded .coursework-toggle,
-  .site-header-user.mobile-expanded .header-book-toggle,
-  .site-header-user.mobile-expanded .header-xr-toggle,
-  .site-header-user.mobile-expanded .site-header-profile {
-    animation: fab-pop-in 0.2s ease-out both;
-  }
-
-  @keyframes fab-pop-in {
-    from { opacity: 0; transform: scale(0.5) translateY(8px); }
-    to   { opacity: 1; transform: scale(1) translateY(0); }
+    display: none !important;
   }
 }
 

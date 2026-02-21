@@ -1726,7 +1726,7 @@ function SiteHeader() {
       {user && (
         <div className={`site-header-user${mobileMenuOpen ? ' mobile-expanded' : ''}`}>
           <button className="mobile-menu-trigger" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
-            {mobileMenuOpen ? '\u2715' : '\u2731'}
+            {mobileMenuOpen ? '\u2715' : '\u22EF'}
           </button>
           <button
             className={`header-ybr-toggle${ybrMode ? ' active' : ''}`}

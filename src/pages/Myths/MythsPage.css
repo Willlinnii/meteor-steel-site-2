@@ -787,6 +787,11 @@
   }
 }
 
+/* Hidden on desktop */
+.myths-mobile-mode-toggle {
+  display: none;
+}
+
 @media (max-width: 600px) {
   .myths-float-toggles {
     bottom: 60px;   /* 16px chat-bottom + 36px chat-height + 8px gap */
@@ -796,6 +801,40 @@
   .myths-float-btn {
     width: 36px;
     height: 36px;
+  }
+
+  /* Mobile collapse: hide mode buttons, show toggle */
+  .myths-mobile-mode-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: rgba(15, 15, 30, 0.85);
+    border: 1px solid rgba(201, 169, 97, 0.5);
+    color: rgba(201, 169, 97, 0.8);
+    cursor: pointer;
+    backdrop-filter: blur(4px);
+    transition: border-color 0.2s, color 0.2s;
+    order: 99; /* push to bottom of column */
+  }
+  .myths-mobile-mode-toggle:hover {
+    border-color: rgba(201, 169, 97, 0.9);
+    color: rgba(201, 169, 97, 1);
+  }
+
+  .myths-float-toggles > .myths-float-btn:not(.myths-mobile-mode-toggle) {
+    display: none;
+  }
+  .myths-float-toggles[data-expanded] > .myths-float-btn:not(.myths-mobile-mode-toggle) {
+    display: flex;
+    animation: myths-btn-fan 120ms ease-out both;
+  }
+
+  @keyframes myths-btn-fan {
+    from { opacity: 0; transform: translateY(8px) scale(0.85); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
   }
 
   .mythic-earth-content-area {

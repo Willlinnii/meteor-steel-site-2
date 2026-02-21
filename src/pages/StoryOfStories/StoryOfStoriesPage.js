@@ -1,7 +1,16 @@
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 import CircleNav from '../../components/CircleNav';
 import data from '../../data/storyOfStoriesData';
+import { INNER_RING_SETS, getInnerRingModel } from '../../data/monomythConstants';
 import './StoryOfStoriesPage.css';
+
+const RING_TABS = [
+  { id: 'cycles', label: 'Cycles' },
+  { id: 'theorists', label: 'Theorists' },
+  { id: 'experts', label: 'Experts' },
+  { id: 'myths', label: 'Myths' },
+  { id: 'films', label: 'Films' },
+];
 
 const BOOK_STAGES = [
   { id: 'golden-surface', label: 'Golden Age' },
@@ -74,6 +83,8 @@ function StoryOfStoriesPage() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [showMeteors, setShowMeteors] = useState(false);
   const [playIntroAnim, setPlayIntroAnim] = useState(0);
+  const [activeRingTab, setActiveRingTab] = useState(null);
+  const [selectedModel, setSelectedModel] = useState(null);
   const audioRef = useRef(null);
 
   const handleSelectStage = useCallback((stage) => {
@@ -112,6 +123,17 @@ function StoryOfStoriesPage() {
     }
   }, [activeSection]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  const handleSelectRingItem = useCallback((tab, itemId) => {
+    const model = getInnerRingModel(tab, itemId);
+    if (!model) return;
+    setSelectedModel(prev => prev?.id === model.id ? null : model);
+  }, []);
+
+  const selectorRing = activeRingTab ? (INNER_RING_SETS[activeRingTab] || []).map(item => ({
+    ...item,
+    active: selectedModel?.id === item.id || selectedModel?.id === `myth-${item.id}` || selectedModel?.id === `film-${item.id}`,
+  })) : [];
+
   const currentLabel = currentStage !== 'overview' && currentStage !== 'bio'
     ? BOOK_STAGES.find(s => s.id === currentStage)?.label
     : null;
@@ -140,9 +162,25 @@ function StoryOfStoriesPage() {
         centerLine3="Stories"
         showAuthor={true}
         playIntroAnim={playIntroAnim}
+        modelOverlay={selectedModel}
+        onCloseModel={() => setSelectedModel(null)}
+        selectorRing={selectorRing}
+        onSelectRingItem={activeRingTab ? (id) => handleSelectRingItem(activeRingTab, id) : undefined}
       />
 
       <div className="sos-subtitle">{data.subtitle}</div>
+
+      <div className="ring-selector-controls">
+        {RING_TABS.map(t => (
+          <button
+            key={t.id}
+            className={`ring-selector-btn${activeRingTab === t.id ? ' active' : ''}`}
+            onClick={() => { setActiveRingTab(activeRingTab === t.id ? null : t.id); setSelectedModel(null); }}
+          >
+            {t.label}
+          </button>
+        ))}
+      </div>
 
       {currentLabel && (
         <h2 className="stage-heading">{currentLabel}</h2>

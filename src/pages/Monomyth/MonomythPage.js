@@ -18,12 +18,13 @@ import psychlesData from '../../data/monomythPsychles.json';
 import depthData from '../../data/monomythDepth.json';
 import filmsData from '../../data/monomythFilms.json';
 import worldData from '../../data/normalOtherWorld.json';
-import { MONOMYTH_STAGES, THEORIST_TO_MODEL, CYCLE_TO_MODEL, getModelById, getCycleById } from '../../data/monomythConstants';
+import { MONOMYTH_STAGES, THEORIST_TO_MODEL, CYCLE_TO_MODEL, getModelById, getCycleById, INNER_RING_SETS, getInnerRingModel } from '../../data/monomythConstants';
 
 const TABS = [
   { id: 'overview', label: 'Overview' },
   { id: 'cycles', label: 'Cycles' },
   { id: 'theorists', label: 'Theorists' },
+  { id: 'experts', label: 'Experts' },
   { id: 'history', label: 'History' },
   { id: 'myths', label: 'Myths' },
   { id: 'films', label: 'Films' },
@@ -101,6 +102,34 @@ function TheoristsTab({ stageId, activeGroup, onSelectModel, selectedModelId }) 
           )}
         </div>
       ); })}
+    </div>
+  );
+}
+
+function ExpertsTab({ stageId, onSelectModel, selectedModelId }) {
+  const stageData = theoristsData[stageId];
+  if (!stageData) return <p className="metals-empty">No expert data available.</p>;
+
+  const group = stageData.screenplay;
+  if (!group) return <p className="metals-empty">No screenplay experts for this stage.</p>;
+
+  return (
+    <div className="tab-content">
+      {Object.entries(group).map(([key, t]) => {
+        const hasModel = !!THEORIST_TO_MODEL[key];
+        const isActive = hasModel && selectedModelId === THEORIST_TO_MODEL[key];
+        return (
+          <div
+            key={key}
+            className={`mono-card${hasModel ? ' mono-card-clickable' : ''}${isActive ? ' mono-card-model-active' : ''}`}
+            onClick={hasModel ? () => onSelectModel(key) : undefined}
+          >
+            <h4 className="mono-card-name">{t.name}{hasModel && <span className="mono-model-icon">{isActive ? ' \u25C9' : ' \u25CE'}</span>}</h4>
+            <h5 className="mono-card-concept">{t.concept}</h5>
+            <p>{t.description}</p>
+          </div>
+        );
+      })}
     </div>
   );
 }
@@ -531,6 +560,20 @@ export default function MonomythPage() {
     setSelectedModel(prev => prev?.id === cycle.id ? null : cycle);
   }, [trackElement, currentStage]);
 
+  const handleSelectRingItem = useCallback((tab, itemId) => {
+    const model = getInnerRingModel(tab, itemId);
+    if (!model) return;
+    trackElement(`monomyth.ring.${tab}.${itemId}`);
+    setSelectedModel(prev => prev?.id === model.id ? null : model);
+  }, [trackElement]);
+
+  const ringKey = activeTab === 'theorists' ? activeGroup : activeTab;
+  console.log('[RING DEBUG]', { activeTab, activeGroup, ringKey, setLength: (INNER_RING_SETS[ringKey] || []).length, items: (INNER_RING_SETS[ringKey] || []).map(i => i.id) });
+  const selectorRing = (INNER_RING_SETS[ringKey] || []).map(item => ({
+    ...item,
+    active: selectedModel?.id === item.id || selectedModel?.id === `myth-${item.id}` || selectedModel?.id === `film-${item.id}`,
+  }));
+
   // Deep link from Atlas navigation
   useEffect(() => {
     const stageParam = searchParams.get('stage');
@@ -620,7 +663,15 @@ export default function MonomythPage() {
         ybrAutoStart={ybrAutoStart}
         playIntroAnim={introAnim}
         getStageClass={courseworkMode ? (id) => isElementCompleted(`monomyth.stage.${id}`) ? 'cw-completed' : 'cw-incomplete' : undefined}
+        selectorRing={selectorRing}
+        onSelectRingItem={(id) => handleSelectRingItem(activeTab, id)}
       />
+
+      {selectorRing.length > 0 && (
+        <div style={{ textAlign: 'center', color: '#c9a961', fontSize: '0.7rem', opacity: 0.7, margin: '-8px 0 4px' }}>
+          {selectorRing.map(item => item.label).join(' · ')}
+        </div>
+      )}
 
       {isStage && stageLabel && (
         <h2 className="stage-heading">{stageLabel}</h2>
@@ -746,6 +797,7 @@ export default function MonomythPage() {
                 {activeTab === 'overview' && <OverviewTab stageId={currentStage} />}
                 {activeTab === 'cycles' && <CyclesTab stageId={currentStage} onSelectCycle={handleSelectCycle} selectedModelId={selectedModel?.id} />}
                 {activeTab === 'theorists' && <TheoristsTab stageId={currentStage} activeGroup={activeGroup} onSelectModel={handleSelectModel} selectedModelId={selectedModel?.id} />}
+                {activeTab === 'experts' && <ExpertsTab stageId={currentStage} onSelectModel={handleSelectModel} selectedModelId={selectedModel?.id} />}
                 {activeTab === 'history' && <HistoryTab stageId={currentStage} />}
                 {activeTab === 'myths' && <MythsTab stageId={currentStage} />}
                 {activeTab === 'films' && <FilmsTab stageId={currentStage} />}

@@ -1159,6 +1159,7 @@ function MythsPage() {
   const [treasuresEpisode, setTreasuresEpisode] = useState('overview');
   const [selectedMythicSite, setSelectedMythicSite] = useState(null);
   const [mythicEarthCategory, setMythicEarthCategory] = useState('sacred-site');
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const handleViewSwitch = useCallback((view) => {
     setActiveView(view);
@@ -1281,7 +1282,24 @@ function MythsPage() {
       ) : null}
 
       {/* Floating toggle buttons */}
-      <div className="myths-float-toggles">
+      <div className="myths-float-toggles" data-expanded={mobileMenuOpen || undefined}>
+        <button
+          className="myths-float-btn myths-mobile-mode-toggle"
+          onClick={() => setMobileMenuOpen(prev => !prev)}
+          title={mobileMenuOpen ? 'Collapse buttons' : 'Show mode buttons'}
+        >
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            {mobileMenuOpen ? (
+              <path d="M18 6L6 18M6 6l12 12" />
+            ) : (
+              <>
+                <circle cx="12" cy="5" r="1.5" fill="currentColor" stroke="none" />
+                <circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none" />
+                <circle cx="12" cy="19" r="1.5" fill="currentColor" stroke="none" />
+              </>
+            )}
+          </svg>
+        </button>
         <button
           className={`myths-float-btn${activeView === 'earth' ? ' active' : ''}`}
           onClick={() => handleViewSwitch('earth')}
@@ -1313,7 +1331,6 @@ function MythsPage() {
           title="Tarot Decks"
         >
           <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-            {/* Fool card: figure with staff stepping off edge */}
             <circle cx="12" cy="5" r="2.5" />
             <path d="M12 7.5v6" />
             <path d="M9 10l3 1.5 3-1.5" />

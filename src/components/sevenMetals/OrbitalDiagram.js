@@ -2596,7 +2596,7 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
         </button>
         <button
           className="clock-toggle"
-          onClick={() => { setMobileMenuOpen(false); onToggleClock && onToggleClock(); }}
+          onClick={() => { onToggleClock && onToggleClock(); }}
           title={!clockMode ? 'Show 12h clock' : clockMode === '12h' ? 'Switch to 24h geocentric' : 'Hide clock'}
         >
           <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
@@ -2607,7 +2607,7 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
         </button>
         <button
           className="chakra-view-toggle"
-          onClick={() => { setMobileMenuOpen(false); onToggleChakraView && onToggleChakraView(); }}
+          onClick={() => { onToggleChakraView && onToggleChakraView(); }}
           title={
             !chakraViewMode ? 'Show chakra body viewer (Chaldean)' :
             chakraViewMode === 'chaldean' ? 'Chaldean Order — click for Heliocentric' :
@@ -2622,7 +2622,7 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
         </button>
         <button
           className={`monomyth-toggle${showMonomyth ? ' active' : ''}${showCycles ? ' cycles' : ''}${showMeteorSteel ? ' steel' : ''}`}
-          onClick={() => { setMobileMenuOpen(false); onToggleMonomyth && onToggleMonomyth(); }}
+          onClick={() => { onToggleMonomyth && onToggleMonomyth(); }}
           title={showMeteorSteel ? 'Meteor steel — click for monomyth' : showMonomyth ? 'Monomyth — click for meteor steel' : 'Show monomyth journey ring'}
           style={showCycles && !showMeteorSteel ? { color: '#6ecf8a' } : undefined}
         >
@@ -2648,7 +2648,6 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
         <button
           className={`starlight-toggle${showFallenStarlight ? ' active' : ''}${showStoryOfStories ? ' stories' : ''}${!hasFallenStarlight && !hasStoryOfStories ? ' disabled' : ''}`}
           onClick={() => {
-            setMobileMenuOpen(false);
             if (!showFallenStarlight && !showStoryOfStories) {
               // Entering starlight mode — gate on fallen-starlight
               if (!hasFallenStarlight) { setStarlightGateId('fallen-starlight'); return; }
@@ -2697,7 +2696,6 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
           <button
             className={`medicine-wheel-toggle${showMedicineWheel ? ' active' : ''}`}
             onClick={() => {
-              setMobileMenuOpen(false);
               triggerStormFlash();
               onToggleMedicineWheel && onToggleMedicineWheel();
             }}

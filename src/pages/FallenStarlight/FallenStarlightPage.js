@@ -6,6 +6,15 @@ import fallenStarlightData from '../../data/fallenStarlight.json';
 import { useCoursework } from '../../coursework/CourseworkContext';
 import { useWritings } from '../../writings/WritingsContext';
 import { useStoryForge } from '../../App';
+import { INNER_RING_SETS, getInnerRingModel } from '../../data/monomythConstants';
+
+const RING_TABS = [
+  { id: 'cycles', label: 'Cycles' },
+  { id: 'theorists', label: 'Theorists' },
+  { id: 'experts', label: 'Experts' },
+  { id: 'myths', label: 'Myths' },
+  { id: 'films', label: 'Films' },
+];
 
 const STAGES = [
   { id: 'golden-age', label: 'Golden Age' },
@@ -83,6 +92,8 @@ export default function FallenStarlightPage() {
   const [showMeteors, setShowMeteors] = useState(false);
   const [devEntries, setDevEntries] = useState({});
   const [audioPlaying, setAudioPlaying] = useState(false);
+  const [activeRingTab, setActiveRingTab] = useState(null);
+  const [selectedModel, setSelectedModel] = useState(null);
   const { trackElement, trackTime, isElementCompleted, courseworkMode } = useCoursework();
   const { notesData, saveNotes, loaded: writingsLoaded } = useWritings();
   const { forgeMode } = useStoryForge();
@@ -137,6 +148,18 @@ export default function FallenStarlightPage() {
     }
   }, [trackElement]);
 
+  const handleSelectRingItem = useCallback((tab, itemId) => {
+    const model = getInnerRingModel(tab, itemId);
+    if (!model) return;
+    trackElement(`fallen-starlight.ring.${tab}.${itemId}`);
+    setSelectedModel(prev => prev?.id === model.id ? null : model);
+  }, [trackElement]);
+
+  const selectorRing = activeRingTab ? (INNER_RING_SETS[activeRingTab] || []).map(item => ({
+    ...item,
+    active: selectedModel?.id === item.id || selectedModel?.id === `myth-${item.id}` || selectedModel?.id === `film-${item.id}`,
+  })) : [];
+
   useEffect(() => {
     const stageParam = searchParams.get('stage');
     if (stageParam && STAGES.find(s => s.id === stageParam)) {
@@ -169,7 +192,23 @@ export default function FallenStarlightPage() {
         clockwise={clockwise}
         onToggleDirection={() => setClockwise(!clockwise)}
         getStageClass={courseworkMode ? (id) => isElementCompleted(`fallen-starlight.chapter.${id}`) ? 'cw-completed' : 'cw-incomplete' : undefined}
+        modelOverlay={selectedModel}
+        onCloseModel={() => setSelectedModel(null)}
+        selectorRing={selectorRing}
+        onSelectRingItem={activeRingTab ? (id) => handleSelectRingItem(activeRingTab, id) : undefined}
       />
+
+      <div className="ring-selector-controls">
+        {RING_TABS.map(t => (
+          <button
+            key={t.id}
+            className={`ring-selector-btn${activeRingTab === t.id ? ' active' : ''}`}
+            onClick={() => { setActiveRingTab(activeRingTab === t.id ? null : t.id); setSelectedModel(null); }}
+          >
+            {t.label}
+          </button>
+        ))}
+      </div>
 
       {currentLabel && (
         <h2 className="stage-heading">{currentLabel}</h2>

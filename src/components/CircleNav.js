@@ -39,7 +39,7 @@ function ensureYTApi() {
   });
 }
 
-export default function CircleNav({ stages, currentStage, onSelectStage, clockwise, onToggleDirection, centerLine1, centerLine2, centerLine3, showAuthor = true, videoUrl, onCloseVideo, onAuthorPlay, worldZones, activeWorld, onSelectWorld, modelOverlay, onCloseModel, ybrActive, ybrCurrentStopIndex, ybrStages, onToggleYBR, ybrAutoStart, playIntroAnim, getStageClass, rings, ringCircles }) {
+export default function CircleNav({ stages, currentStage, onSelectStage, clockwise, onToggleDirection, centerLine1, centerLine2, centerLine3, showAuthor = true, videoUrl, onCloseVideo, onAuthorPlay, worldZones, activeWorld, onSelectWorld, modelOverlay, onCloseModel, ybrActive, ybrCurrentStopIndex, ybrStages, onToggleYBR, ybrAutoStart, playIntroAnim, getStageClass, rings, ringCircles, selectorRing, onSelectRingItem }) {
   const radius = 42;
   const computed = getStageAngles(stages || [], clockwise);
   const playerRef = useRef(null);
@@ -156,6 +156,7 @@ export default function CircleNav({ stages, currentStage, onSelectStage, clockwi
 
   return (
     <div className="circle-nav-wrapper">
+      <div style={{ position: 'relative' }}>
       <div className="circle-nav">
         <svg viewBox="0 0 100 100" className="circle-rings">
           {(ringCircles || [47, 38]).map((r, i) => (
@@ -267,6 +268,28 @@ export default function CircleNav({ stages, currentStage, onSelectStage, clockwi
               </g>
             );
           })()}
+          {selectorRing && selectorRing.length > 0 && (() => {
+            const sr = 18;
+            const n = selectorRing.length;
+            return (
+              <g className="selector-ring-svg" style={{ pointerEvents: 'none' }}>
+                <circle cx="50" cy="50" r={sr} fill="none" stroke="rgba(139,157,195,0.25)" strokeWidth="0.4" strokeDasharray="1.5 1" />
+                {selectorRing.map((item, i) => {
+                  const angle = -90 + (360 / n) * i;
+                  const rad = (angle * Math.PI) / 180;
+                  const px = 50 + sr * Math.cos(rad);
+                  const py = 50 + sr * Math.sin(rad);
+                  const dotR = item.active ? 3.2 : 2.2;
+                  return (
+                    <g key={item.id}>
+                      {item.active && <circle cx={px} cy={py} r={dotR + 1.5} fill="none" stroke={item.color} strokeWidth="0.3" opacity="0.4" />}
+                      <circle cx={px} cy={py} r={dotR} fill={item.color} opacity={item.active ? 1 : 0.8} />
+                    </g>
+                  );
+                })}
+              </g>
+            );
+          })()}
         </svg>
 
         {listId ? (
@@ -367,6 +390,8 @@ export default function CircleNav({ stages, currentStage, onSelectStage, clockwi
           });
         })()}
 
+        {/* selector ring items removed from here — rendered as overlay sibling below */}
+
         {rings ? rings.map((ring, ri) => {
           const ringComputed = getStageAngles(ring.stages, clockwise);
           return ringComputed.map(s => {
@@ -416,6 +441,40 @@ export default function CircleNav({ stages, currentStage, onSelectStage, clockwi
           );
         })}
 
+      </div>
+      {selectorRing && selectorRing.length > 0 && (
+        <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 100, pointerEvents: 'none' }}>
+          {selectorRing.map((item, i) => {
+            const sr = 21;
+            const n = selectorRing.length;
+            const angle = -90 + (360 / n) * i;
+            const rad = (angle * Math.PI) / 180;
+            const x = 50 + sr * Math.cos(rad);
+            const y = 50 + sr * Math.sin(rad);
+            return (
+              <div
+                key={`sel-${item.id}`}
+                style={{
+                  position: 'absolute',
+                  left: `${x}%`,
+                  top: `${y}%`,
+                  transform: 'translate(-50%, -50%)',
+                  width: '24px',
+                  height: '24px',
+                  borderRadius: '50%',
+                  background: item.color,
+                  border: '2px solid #fff',
+                  cursor: 'pointer',
+                  pointerEvents: 'auto',
+                  boxShadow: `0 0 12px ${item.color}, 0 0 4px #fff`,
+                }}
+                title={item.label}
+                onClick={() => onSelectRingItem && onSelectRingItem(item.id)}
+              />
+            );
+          })}
+        </div>
+      )}
       </div>
       {onToggleDirection && (
         <button className="direction-toggle" onClick={onToggleDirection}>
