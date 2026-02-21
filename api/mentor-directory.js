@@ -1,4 +1,5 @@
 const admin = require('firebase-admin');
+const { getMentorTypeInfo } = require('./lib/mentorTypes');
 
 let initialized = false;
 
@@ -25,6 +26,9 @@ function ensureInit() {
 const DEFAULT_CAPACITY = 5;
 const MAX_CAPACITY = 20;
 const MAX_BIO_LENGTH = 500;
+
+// Valid consulting types (mirrors consultingEngine.js CONSULTING_TYPES)
+const VALID_CONSULTING_TYPES = new Set(['character', 'narrative', 'coaching', 'media', 'adventure']);
 
 module.exports = async (req, res) => {
   if (req.method !== 'POST') {
@@ -130,15 +134,7 @@ module.exports = async (req, res) => {
 
     if (action === 'publish') {
       const mentorType = profile.mentor?.type;
-      const mentorTypeMap = {
-        scholar: { title: 'Mentor Mythologist', icon: '\uD83C\uDF93' },
-        storyteller: { title: 'Mentor Storyteller', icon: '\uD83D\uDCDD' },
-        healer: { title: 'Mentor Healer', icon: '\uD83E\uDE7A' },
-        mediaVoice: { title: 'Mentor Media Voice', icon: '\uD83C\uDF99' },
-        adventurer: { title: 'Mentor Adventurer', icon: '\uD83C\uDF0D' },
-      };
-
-      const typeInfo = mentorTypeMap[mentorType] || { title: 'Mentor', icon: '\uD83C\uDF93' };
+      const typeInfo = getMentorTypeInfo(mentorType);
 
       // Get credential info
       const creds = profile.credentials || {};
@@ -159,9 +155,9 @@ module.exports = async (req, res) => {
         .get();
       const activeStudents = pairingsSnap.size;
 
-      // Consulting fields from profile
+      // Consulting fields from profile (validate types against known enum)
       const consulting = profile.consulting || {};
-      const consultingTypes = consulting.consultingTypes || [];
+      const consultingTypes = (consulting.consultingTypes || []).filter(t => VALID_CONSULTING_TYPES.has(t));
       const consultingProjectCount = (consulting.projects || []).length;
       const consultingAvailable = consultingProjectCount >= 3;
 

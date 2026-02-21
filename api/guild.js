@@ -1,4 +1,5 @@
 const admin = require('firebase-admin');
+const { getMentorTypeInfo } = require('./lib/mentorTypes');
 
 let initialized = false;
 
@@ -26,6 +27,13 @@ const ADMIN_EMAIL = process.env.REACT_APP_ADMIN_EMAIL || 'willlinnii@gmail.com';
 const MAX_TITLE_LENGTH = 200;
 const MAX_BODY_LENGTH = 10000;
 const MAX_IMAGES = 4;
+
+// Required courses before a mentor is considered "active" (mirrors mentorEngine.js)
+const REQUIRED_MENTOR_COURSES = [
+  'monomyth-explorer',
+  'celestial-clocks-explorer',
+  'atlas-conversationalist',
+];
 
 module.exports = async (req, res) => {
   if (req.method !== 'POST') {
@@ -63,12 +71,19 @@ module.exports = async (req, res) => {
   const now = admin.firestore.FieldValue.serverTimestamp();
   const isAdmin = email === ADMIN_EMAIL;
 
-  // Helper: verify user is an active mentor
+  // Helper: verify user is an active mentor (approved + required courses complete)
   async function verifyMentor() {
     const profileSnap = await db.doc(`users/${uid}/meta/profile`).get();
     if (!profileSnap.exists) return null;
     const profile = profileSnap.data();
     if (profile.mentor?.status !== 'approved') return null;
+
+    // Check required mentor courses from certificates
+    const certSnap = await db.doc(`users/${uid}/meta/certificates`).get();
+    const completed = certSnap.exists ? certSnap.data()?.completed || {} : {};
+    const coursesComplete = REQUIRED_MENTOR_COURSES.every(id => !!completed[id]);
+    if (!coursesComplete) return null;
+
     return profile;
   }
 
@@ -95,14 +110,7 @@ module.exports = async (req, res) => {
       }
       const images = Array.isArray(imageUrls) ? imageUrls.slice(0, MAX_IMAGES) : [];
 
-      const mentorTypeMap = {
-        scholar: { title: 'Mentor Mythologist', icon: '\uD83C\uDF93' },
-        storyteller: { title: 'Mentor Storyteller', icon: '\uD83D\uDCDD' },
-        healer: { title: 'Mentor Healer', icon: '\uD83E\uDE7A' },
-        mediaVoice: { title: 'Mentor Media Voice', icon: '\uD83C\uDF99' },
-        adventurer: { title: 'Mentor Adventurer', icon: '\uD83C\uDF0D' },
-      };
-      const typeInfo = mentorTypeMap[profile.mentor?.type] || { title: 'Mentor', icon: '\uD83C\uDF93' };
+      const typeInfo = getMentorTypeInfo(profile.mentor?.type);
 
       const postData = {
         authorUid: uid,
@@ -148,14 +156,7 @@ module.exports = async (req, res) => {
         return res.status(404).json({ error: 'Post not found.' });
       }
 
-      const mentorTypeMap = {
-        scholar: { title: 'Mentor Mythologist', icon: '\uD83C\uDF93' },
-        storyteller: { title: 'Mentor Storyteller', icon: '\uD83D\uDCDD' },
-        healer: { title: 'Mentor Healer', icon: '\uD83E\uDE7A' },
-        mediaVoice: { title: 'Mentor Media Voice', icon: '\uD83C\uDF99' },
-        adventurer: { title: 'Mentor Adventurer', icon: '\uD83C\uDF0D' },
-      };
-      const typeInfo = mentorTypeMap[profile.mentor?.type] || { title: 'Mentor', icon: '\uD83C\uDF93' };
+      const typeInfo = getMentorTypeInfo(profile.mentor?.type);
 
       const replyData = {
         authorUid: uid,

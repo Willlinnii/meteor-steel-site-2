@@ -197,42 +197,44 @@ module.exports = async (req, res) => {
         return res.status(400).json({ error: 'pairingId is required.' });
       }
 
-      const pairingRef = db.doc(`mentor-pairings/${pairingId}`);
-      const pairingSnap = await pairingRef.get();
-      if (!pairingSnap.exists) {
-        return res.status(404).json({ error: 'Pairing not found.' });
-      }
+      // Use transaction for race condition safety (mirrors accept logic)
+      const result = await db.runTransaction(async (tx) => {
+        const pairingRef = db.doc(`mentor-pairings/${pairingId}`);
+        const pairingSnap = await tx.get(pairingRef);
+        if (!pairingSnap.exists) {
+          throw new Error('PAIRING_NOT_FOUND');
+        }
 
-      const pairing = pairingSnap.data();
-      if (pairing.mentorUid !== uid && pairing.studentUid !== uid) {
-        return res.status(403).json({ error: 'Only the mentor or student can end this pairing.' });
-      }
-      if (pairing.status !== 'accepted') {
-        return res.status(400).json({ error: 'Only accepted pairings can be ended.' });
-      }
+        const pairing = pairingSnap.data();
+        if (pairing.mentorUid !== uid && pairing.studentUid !== uid) {
+          throw new Error('END_FORBIDDEN');
+        }
+        if (pairing.status !== 'accepted') {
+          throw new Error('NOT_ACCEPTED');
+        }
 
-      const batch = db.batch();
+        tx.update(pairingRef, {
+          status: 'ended',
+          endedAt: now,
+        });
 
-      batch.update(pairingRef, {
-        status: 'ended',
-        endedAt: now,
+        // Update directory counts for the mentor
+        const dirRef = db.doc(`mentor-directory/${pairing.mentorUid}`);
+        const dirSnap = await tx.get(dirRef);
+        if (dirSnap.exists) {
+          const dirData = dirSnap.data();
+          const newActive = Math.max(0, (dirData.activeStudents || 1) - 1);
+          tx.update(dirRef, {
+            activeStudents: newActive,
+            availableSlots: Math.max(0, (dirData.capacity || 5) - newActive),
+            updatedAt: now,
+          });
+        }
+
+        return { status: 'ended' };
       });
 
-      // Update directory counts for the mentor
-      const dirRef = db.doc(`mentor-directory/${pairing.mentorUid}`);
-      const dirSnap = await dirRef.get();
-      if (dirSnap.exists) {
-        const dirData = dirSnap.data();
-        const newActive = Math.max(0, (dirData.activeStudents || 1) - 1);
-        batch.update(dirRef, {
-          activeStudents: newActive,
-          availableSlots: Math.max(0, (dirData.capacity || 5) - newActive),
-          updatedAt: now,
-        });
-      }
-
-      await batch.commit();
-      return res.status(200).json({ success: true, status: 'ended' });
+      return res.status(200).json({ success: true, ...result });
     }
   } catch (err) {
     const errorMap = {
@@ -241,6 +243,8 @@ module.exports = async (req, res) => {
       NOT_PENDING: [400, 'Pairing is not pending.'],
       DIRECTORY_NOT_FOUND: [404, 'Mentor directory entry not found.'],
       AT_CAPACITY: [400, 'Mentor is at capacity.'],
+      END_FORBIDDEN: [403, 'Only the mentor or student can end this pairing.'],
+      NOT_ACCEPTED: [400, 'Only accepted pairings can be ended.'],
     };
 
     const mapped = errorMap[err.message];

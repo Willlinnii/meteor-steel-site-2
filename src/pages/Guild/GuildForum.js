@@ -76,20 +76,39 @@ export default function GuildForum() {
     fetchPosts();
   }, []);
 
-  // Load user's votes
+  // Load user's votes scoped to visible posts (avoids unbounded query)
   useEffect(() => {
-    if (!user || !firebaseConfigured || !db) return;
+    if (!user || !firebaseConfigured || !db || posts.length === 0) {
+      setUserVotes({});
+      return;
+    }
+
+    const postIds = posts.map(p => p.id);
+    // Firestore 'in' supports up to 30 values; split if needed
+    const chunks = [];
+    for (let i = 0; i < postIds.length; i += 30) {
+      chunks.push(postIds.slice(i, i + 30));
+    }
 
     const votesRef = collection(db, 'guild-votes');
-    const q = query(votesRef, where('voterUid', '==', user.uid));
-    const unsub = onSnapshot(q, (snap) => {
-      const votes = {};
-      snap.forEach(d => { votes[d.data().targetId] = d.data().value; });
-      setUserVotes(votes);
+    const unsubs = chunks.map(chunk => {
+      const q = query(votesRef, where('voterUid', '==', user.uid), where('postId', 'in', chunk));
+      return onSnapshot(q, (snap) => {
+        setUserVotes(prev => {
+          const updated = { ...prev };
+          snap.forEach(d => { updated[d.data().targetId] = d.data().value; });
+          snap.docChanges().forEach(change => {
+            if (change.type === 'removed') {
+              delete updated[change.doc.data().targetId];
+            }
+          });
+          return updated;
+        });
+      });
     });
 
-    return unsub;
-  }, [user]);
+    return () => unsubs.forEach(u => u());
+  }, [user, posts]);
 
   const loadMore = useCallback(async () => {
     if (!lastDoc || !hasMore) return;
@@ -340,12 +359,16 @@ function PostCard({ post, expanded, onToggle, userVotes, onVote, onDelete, curre
   );
 }
 
+const REPLIES_PER_PAGE = 50;
+
 function ExpandedPost({ post, userVotes, onVote, currentUid }) {
   const [replies, setReplies] = useState([]);
   const [loading, setLoading] = useState(true);
   const [replyText, setReplyText] = useState('');
   const [replyingTo, setReplyingTo] = useState(null); // null = top-level reply, or replyId
   const [submitting, setSubmitting] = useState(false);
+  const [lastReplyDoc, setLastReplyDoc] = useState(null);
+  const [hasMoreReplies, setHasMoreReplies] = useState(false);
   const { user } = useAuth();
 
   useEffect(() => {
@@ -354,11 +377,13 @@ function ExpandedPost({ post, userVotes, onVote, currentUid }) {
     async function fetchReplies() {
       try {
         const repliesRef = collection(db, `guild-posts/${post.id}/replies`);
-        const q = query(repliesRef, where('deleted', '==', false), orderBy('createdAt', 'asc'));
+        const q = query(repliesRef, where('deleted', '==', false), orderBy('createdAt', 'asc'), limit(REPLIES_PER_PAGE));
         const snap = await getDocs(q);
         const results = [];
         snap.forEach(d => results.push({ id: d.id, ...d.data() }));
         setReplies(results);
+        setLastReplyDoc(snap.docs[snap.docs.length - 1] || null);
+        setHasMoreReplies(snap.size === REPLIES_PER_PAGE);
       } catch (err) {
         console.error('Failed to fetch replies:', err);
       }
@@ -367,6 +392,22 @@ function ExpandedPost({ post, userVotes, onVote, currentUid }) {
 
     fetchReplies();
   }, [post.id]);
+
+  const loadMoreReplies = useCallback(async () => {
+    if (!lastReplyDoc || !hasMoreReplies) return;
+    try {
+      const repliesRef = collection(db, `guild-posts/${post.id}/replies`);
+      const q = query(repliesRef, where('deleted', '==', false), orderBy('createdAt', 'asc'), startAfter(lastReplyDoc), limit(REPLIES_PER_PAGE));
+      const snap = await getDocs(q);
+      const results = [];
+      snap.forEach(d => results.push({ id: d.id, ...d.data() }));
+      setReplies(prev => [...prev, ...results]);
+      setLastReplyDoc(snap.docs[snap.docs.length - 1] || null);
+      setHasMoreReplies(snap.size === REPLIES_PER_PAGE);
+    } catch (err) {
+      console.error('Failed to load more replies:', err);
+    }
+  }, [lastReplyDoc, hasMoreReplies, post.id]);
 
   const handleSubmitReply = async () => {
     if (!replyText.trim() || submitting) return;
@@ -386,13 +427,14 @@ function ExpandedPost({ post, userVotes, onVote, currentUid }) {
       if (resp.ok) {
         setReplyText('');
         setReplyingTo(null);
-        // Refresh replies
+        // Refresh replies (load all currently visible + new one)
         const repliesRef = collection(db, `guild-posts/${post.id}/replies`);
-        const q = query(repliesRef, where('deleted', '==', false), orderBy('createdAt', 'asc'));
+        const q = query(repliesRef, where('deleted', '==', false), orderBy('createdAt', 'asc'), limit(replies.length + 1));
         const snap = await getDocs(q);
         const results = [];
         snap.forEach(d => results.push({ id: d.id, ...d.data() }));
         setReplies(results);
+        setLastReplyDoc(snap.docs[snap.docs.length - 1] || null);
       }
     } catch (err) {
       console.error('Failed to submit reply:', err);
@@ -439,6 +481,9 @@ function ExpandedPost({ post, userVotes, onVote, currentUid }) {
               currentUid={currentUid}
             />
           ))
+        )}
+        {hasMoreReplies && (
+          <button className="guild-load-more" onClick={loadMoreReplies}>Load More Replies</button>
         )}
 
         {/* Reply form */}

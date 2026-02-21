@@ -23,10 +23,11 @@ export const CONSULTING_STATUS = {
 // --- FUNCTIONS ---
 
 /**
- * Returns true if the mentor is eligible for consulting (active/approved status).
+ * Returns true if the mentor is eligible for consulting.
+ * Accepts effectiveMentorStatus (computed from mentorData + course completion).
  */
-export function isConsultingEligible(mentorData) {
-  return mentorData?.status === 'approved';
+export function isConsultingEligible(effectiveMentorStatus) {
+  return effectiveMentorStatus === 'active';
 }
 
 /**
