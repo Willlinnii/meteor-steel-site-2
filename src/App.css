@@ -831,6 +831,49 @@ body {
   background: rgba(224, 112, 32, 0.15);
 }
 
+.section-tab.forge-icon-tab,
+.section-tab.ybr-icon-tab {
+  padding: 6px 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.section-tab.forge-icon-tab {
+  color: var(--accent-ember);
+  border-color: rgba(196, 113, 58, 0.4);
+}
+
+.section-tab.forge-icon-tab:hover {
+  background: rgba(196, 113, 58, 0.12);
+  border-color: rgba(196, 113, 58, 0.7);
+}
+
+.section-tab.forge-icon-tab.active {
+  color: var(--accent-ember);
+  border-color: var(--accent-ember);
+  background: rgba(196, 113, 58, 0.15);
+  box-shadow: 0 0 8px rgba(196, 113, 58, 0.2);
+}
+
+.section-tab.ybr-icon-tab {
+  color: rgba(218, 165, 32, 0.7);
+  border-color: rgba(218, 165, 32, 0.4);
+}
+
+.section-tab.ybr-icon-tab:hover {
+  color: rgba(218, 165, 32, 0.95);
+  background: rgba(218, 165, 32, 0.1);
+  border-color: rgba(218, 165, 32, 0.7);
+}
+
+.section-tab.ybr-icon-tab.active {
+  color: rgba(218, 165, 32, 1);
+  border-color: rgba(218, 165, 32, 0.8);
+  background: rgba(218, 165, 32, 0.15);
+  box-shadow: 0 0 8px rgba(218, 165, 32, 0.25);
+}
+
 .figure-name-link {
   cursor: pointer;
   color: inherit;
@@ -2259,17 +2302,17 @@ body {
   border-color: var(--accent-ember);
 }
 
-/* Coursework visual indicator: completed elements glow gold */
-.cw-completed {
+/* Coursework visual indicator: completed circle-stage labels turn green */
+.circle-stage.cw-completed .circle-stage-label {
+  color: #4caf50;
+}
+
+/* Non-circle-stage completed elements get a subtle gold border */
+.cw-completed:not(.circle-stage) {
   position: relative;
 }
 
-/* Preserve absolute positioning for circle-stage nodes */
-.circle-stage.cw-completed {
-  position: absolute;
-}
-
-.cw-completed::after {
+.cw-completed:not(.circle-stage)::after {
   content: '';
   position: absolute;
   inset: -2px;
@@ -3128,7 +3171,7 @@ body {
     padding: 24px 20px;
     margin: 0 16px;
   }
-  .cw-completed::after {
+  .cw-completed:not(.circle-stage)::after {
     inset: -1px;
     border-width: 1px;
     box-shadow: 0 0 5px rgba(201, 169, 97, 0.15);
