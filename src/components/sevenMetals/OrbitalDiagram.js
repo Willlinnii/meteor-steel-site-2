@@ -7,6 +7,7 @@ import starsNorth from '../../data/starsNorth.json';
 import starsSouth from '../../data/starsSouth.json';
 import constellationsData from '../../data/constellations.json';
 import zodiacCultureData from '../../data/sevenMetalsZodiac.json';
+import constellationCultures from '../../data/constellationCultures.json';
 
 const BODY_MAP = {
   Moon: Body.Moon,
@@ -429,12 +430,17 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
     if (type === 'constellation') {
       const c = constellationMap[key];
       if (!c) return null;
+      const cultureKey = activeCulture ? activeCulture.toLowerCase() : null;
+      const cultureName = cultureKey && constellationCultures[key]?.[cultureKey];
       return (
-        <div className="orbital-tooltip-title">{c.name}</div>
+        <>
+          <div className="orbital-tooltip-title">{cultureName || c.name}</div>
+          {cultureName && cultureName !== c.name && <div className="orbital-tooltip-row">{c.name}</div>}
+        </>
       );
     }
     return null;
-  }, [tooltip, tooltipData, constellationMap]);
+  }, [tooltip, tooltipData, constellationMap, activeCulture]);
 
   const [aligned, setAligned] = useState(false);
   const [livePositions, setLivePositions] = useState(false);
@@ -841,6 +847,7 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
   }, [onSelectConstellation]);
 
   return (
+    <>
     <div
       className={`orbital-diagram-wrapper${pinchTransform.scale > 1 ? ' pinch-zoomed' : ''}`}
       ref={wrapperRef}
@@ -961,19 +968,19 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
                   onClick={() => onSelectWheelItem && onSelectWheelItem(isNumSelected ? null : numKey)}
                   style={{ cursor: 'pointer' }}
                 >
-                  <circle cx={nx} cy={ny} r="10"
+                  <circle cx={nx} cy={ny} r="16"
                     fill={isNumActive ? 'rgba(218, 165, 32, 0.15)' : 'rgba(180, 140, 80, 0.06)'}
                     stroke={isNumActive ? 'rgba(218, 165, 32, 0.5)' : 'rgba(180, 140, 80, 0.2)'}
-                    strokeWidth="0.6" />
+                    strokeWidth="0.8" />
                   {isNumActive && (
-                    <circle cx={nx} cy={ny} r="12" fill="none" stroke="rgba(218, 165, 32, 0.5)" strokeWidth="0.6">
-                      <animate attributeName="r" values="10;14;10" dur="2s" repeatCount="indefinite" />
+                    <circle cx={nx} cy={ny} r="18" fill="none" stroke="rgba(218, 165, 32, 0.5)" strokeWidth="0.6">
+                      <animate attributeName="r" values="16;22;16" dur="2s" repeatCount="indefinite" />
                       <animate attributeName="opacity" values="0.5;0.2;0.5" dur="2s" repeatCount="indefinite" />
                     </circle>
                   )}
                   <text x={nx} y={ny} textAnchor="middle" dominantBaseline="central"
                     fill={isNumActive ? '#f0c040' : 'rgba(220, 190, 120, 0.7)'}
-                    fontSize="11" fontFamily="Cinzel, serif" fontWeight={isNumActive ? '700' : '500'}
+                    fontSize="16" fontFamily="Cinzel, serif" fontWeight={isNumActive ? '700' : '600'}
                     style={{ transition: 'fill 0.3s' }}>
                     {num}
                   </text>
@@ -2509,6 +2516,35 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
           </svg>
         </div>
       )}
+      {videoListId && (
+        <div className="orbital-video-container">
+          <div ref={videoPlayerDivRef} className="orbital-video-player" />
+          <button className="orbital-video-close" onClick={onCloseVideo} title="Close video">{'\u2715'}</button>
+          <div className="orbital-video-controls">
+            <button className="orbital-video-btn" onClick={handleVideoPrev} title="Previous">{'\u25C0'}</button>
+            <button className="orbital-video-btn" onClick={handleVideoNext} title="Next">{'\u25B6'}</button>
+          </div>
+        </div>
+      )}
+      {tooltip && wrapperRef.current && (() => {
+        const rect = wrapperRef.current.getBoundingClientRect();
+        const relX = tooltip.x - rect.left;
+        const relY = tooltip.y - rect.top;
+        const nearTop = relY < 80;
+        return (
+          <div
+            className="orbital-tooltip"
+            style={{
+              left: relX,
+              top: nearTop ? relY + 16 : relY - 12,
+              transform: nearTop ? 'translateX(-50%)' : 'translateX(-50%) translateY(-100%)',
+            }}
+          >
+            {renderTooltipContent()}
+          </div>
+        );
+      })()}
+      </div>
       <div className="orbital-btn-row" data-expanded={mobileMenuOpen || undefined}>
         <button
           className="mobile-mode-toggle"
@@ -2637,34 +2673,6 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
           )}
         </span>
       </div>
-      {videoListId && (
-        <div className="orbital-video-container">
-          <div ref={videoPlayerDivRef} className="orbital-video-player" />
-          <button className="orbital-video-close" onClick={onCloseVideo} title="Close video">{'\u2715'}</button>
-          <div className="orbital-video-controls">
-            <button className="orbital-video-btn" onClick={handleVideoPrev} title="Previous">{'\u25C0'}</button>
-            <button className="orbital-video-btn" onClick={handleVideoNext} title="Next">{'\u25B6'}</button>
-          </div>
-        </div>
-      )}
-      {tooltip && wrapperRef.current && (() => {
-        const rect = wrapperRef.current.getBoundingClientRect();
-        const relX = tooltip.x - rect.left;
-        const relY = tooltip.y - rect.top;
-        const nearTop = relY < 80;
-        return (
-          <div
-            className="orbital-tooltip"
-            style={{
-              left: relX,
-              top: nearTop ? relY + 16 : relY - 12,
-              transform: nearTop ? 'translateX(-50%)' : 'translateX(-50%) translateY(-100%)',
-            }}
-          >
-            {renderTooltipContent()}
-          </div>
-        );
-      })()}
-    </div>
+    </>
   );
 }

@@ -1,0 +1,230 @@
+{
+  "Ori": {
+    "greek": "Ὠρίων",
+    "roman": "Orion",
+    "norse": "Friggjarokk",
+    "babylonian": "SIPA.ZI.AN.NA",
+    "vedic": "Mṛgaśirā",
+    "islamic": "al-Jabbār",
+    "medieval": "Orion"
+  },
+  "UMa": {
+    "greek": "Ἄρκτος Μεγάλη",
+    "roman": "Ursa Major",
+    "norse": "Karlvagn",
+    "babylonian": "MAR.GÍD.DA",
+    "vedic": "Saptarṣi",
+    "islamic": "al-Dubb al-Akbar",
+    "medieval": "Plaustrum"
+  },
+  "UMi": {
+    "greek": "Ἄρκτος Μικρά",
+    "roman": "Ursa Minor",
+    "norse": "Kvennavagn",
+    "babylonian": "MAR.GÍD.DA.AN.NA",
+    "vedic": "Laghu Saptarṣi",
+    "islamic": "al-Dubb al-Aṣghar",
+    "medieval": "Cynosura"
+  },
+  "Cas": {
+    "greek": "Κασσιόπεια",
+    "roman": "Cassiopeia",
+    "babylonian": "LU.LIM",
+    "islamic": "Dhāt al-Kursī",
+    "medieval": "Cassiopeia"
+  },
+  "Cyg": {
+    "greek": "Κύκνος",
+    "roman": "Cycnus",
+    "babylonian": "UD.KA.DU8.A",
+    "islamic": "al-Dajāja",
+    "medieval": "Cycnus"
+  },
+  "Lyr": {
+    "greek": "Λύρα",
+    "roman": "Lyra",
+    "babylonian": "ÙZ",
+    "islamic": "al-Shulyāq",
+    "medieval": "Lyra"
+  },
+  "Aql": {
+    "greek": "Ἀετός",
+    "roman": "Aquila",
+    "babylonian": "A.MUSHEN",
+    "islamic": "al-ʿUqāb",
+    "medieval": "Aquila"
+  },
+  "Per": {
+    "greek": "Περσεύς",
+    "roman": "Perseus",
+    "babylonian": "SHU.GI",
+    "islamic": "Barsāʾūs",
+    "medieval": "Perseus"
+  },
+  "And": {
+    "greek": "Ἀνδρομέδα",
+    "roman": "Andromeda",
+    "babylonian": "LU.LIM",
+    "islamic": "al-Marʾāh al-Musalsalah",
+    "medieval": "Andromeda"
+  },
+  "Peg": {
+    "greek": "Πήγασος",
+    "roman": "Equus",
+    "babylonian": "IKÛ",
+    "islamic": "al-Faras al-Aʿẓam",
+    "medieval": "Pegasus"
+  },
+  "CMa": {
+    "greek": "Κύων Μέγας",
+    "roman": "Canis Major",
+    "babylonian": "KAK.SI.SÁ",
+    "vedic": "Mṛgavyādha",
+    "islamic": "al-Kalb al-Akbar",
+    "medieval": "Canis Major"
+  },
+  "CMi": {
+    "greek": "Κύων Μικρός",
+    "roman": "Canis Minor",
+    "babylonian": "DAR.LUGAL",
+    "islamic": "al-Kalb al-Aṣghar",
+    "medieval": "Canis Minor"
+  },
+  "Dra": {
+    "greek": "Δράκων",
+    "roman": "Draco",
+    "babylonian": "MUŠ",
+    "islamic": "al-Tinnīn",
+    "medieval": "Draco"
+  },
+  "Cen": {
+    "greek": "Κένταυρος",
+    "roman": "Centaurus",
+    "babylonian": "EN.TE.NA.BAR.HUM",
+    "islamic": "al-Qīnṭūrus",
+    "medieval": "Centaurus"
+  },
+  "Crv": {
+    "greek": "Κόραξ",
+    "roman": "Corvus",
+    "babylonian": "UGA.MUSHEN",
+    "islamic": "al-Ghurāb",
+    "medieval": "Corvus"
+  },
+  "Crt": {
+    "greek": "Κρατήρ",
+    "roman": "Crater",
+    "islamic": "al-Bāṭiyah",
+    "medieval": "Crater"
+  },
+  "Her": {
+    "greek": "Ἐνγόνασιν",
+    "roman": "Hercules",
+    "babylonian": "SAL.PA",
+    "islamic": "al-Jāthī",
+    "medieval": "Hercules"
+  },
+  "Boo": {
+    "greek": "Βοώτης",
+    "roman": "Boötes",
+    "babylonian": "SHUDUN",
+    "islamic": "al-ʿAwwāʾ",
+    "medieval": "Arctophylax"
+  },
+  "Ari": {
+    "greek": "Κριός",
+    "roman": "Aries",
+    "babylonian": "LU.HUN.GA",
+    "vedic": "Meṣa",
+    "islamic": "al-Ḥamal",
+    "medieval": "Aries"
+  },
+  "Tau": {
+    "greek": "Ταῦρος",
+    "roman": "Taurus",
+    "babylonian": "GU4.AN.NA",
+    "vedic": "Vṛṣabha",
+    "islamic": "al-Thawr",
+    "medieval": "Taurus"
+  },
+  "Gem": {
+    "greek": "Δίδυμοι",
+    "roman": "Gemini",
+    "babylonian": "MAŠ.TAB.BA",
+    "vedic": "Mithuna",
+    "islamic": "al-Tawʾamān",
+    "medieval": "Gemini"
+  },
+  "Cnc": {
+    "greek": "Καρκίνος",
+    "roman": "Cancer",
+    "babylonian": "AL.LUL",
+    "vedic": "Karkaṭa",
+    "islamic": "al-Saraṭān",
+    "medieval": "Cancer"
+  },
+  "Leo": {
+    "greek": "Λέων",
+    "roman": "Leo",
+    "babylonian": "UR.GU.LA",
+    "vedic": "Siṃha",
+    "islamic": "al-Asad",
+    "medieval": "Leo"
+  },
+  "Vir": {
+    "greek": "Παρθένος",
+    "roman": "Virgo",
+    "babylonian": "AB.SÍN",
+    "vedic": "Kanyā",
+    "islamic": "al-Sunbulah",
+    "medieval": "Virgo"
+  },
+  "Lib": {
+    "greek": "Ζυγός",
+    "roman": "Libra",
+    "babylonian": "ZI.BA.AN.NA",
+    "vedic": "Tulā",
+    "islamic": "al-Mīzān",
+    "medieval": "Libra"
+  },
+  "Sco": {
+    "greek": "Σκορπίος",
+    "roman": "Scorpius",
+    "babylonian": "GÍR.TAB",
+    "vedic": "Vṛścika",
+    "islamic": "al-ʿAqrab",
+    "medieval": "Scorpius"
+  },
+  "Sgr": {
+    "greek": "Τοξότης",
+    "roman": "Sagittarius",
+    "babylonian": "PA.BIL.SAG",
+    "vedic": "Dhanu",
+    "islamic": "al-Qaws",
+    "medieval": "Sagittarius"
+  },
+  "Cap": {
+    "greek": "Αἰγόκερως",
+    "roman": "Capricornus",
+    "babylonian": "SUḪUR.MAŠ",
+    "vedic": "Makara",
+    "islamic": "al-Jadī",
+    "medieval": "Capricornus"
+  },
+  "Aqr": {
+    "greek": "Ὑδροχόος",
+    "roman": "Aquarius",
+    "babylonian": "GU.LA",
+    "vedic": "Kumbha",
+    "islamic": "al-Dalw",
+    "medieval": "Aquarius"
+  },
+  "Psc": {
+    "greek": "Ἰχθύες",
+    "roman": "Pisces",
+    "babylonian": "KUN.MEŠ",
+    "vedic": "Mīna",
+    "islamic": "al-Ḥūt",
+    "medieval": "Pisces"
+  }
+}

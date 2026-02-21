@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect, useRef, useCallback, lazy, Suspense } from 'react';
+import React, { useState, useMemo, useEffect, useRef, useCallback } from 'react';
 import OrbitalDiagram from '../../components/sevenMetals/OrbitalDiagram';
 import MetalDetailPanel from '../../components/sevenMetals/MetalDetailPanel';
 import CultureSelector from '../../components/sevenMetals/CultureSelector';
@@ -32,20 +32,12 @@ import { MONOMYTH_STAGES, THEORIST_TO_MODEL, CYCLE_TO_MODEL, getModelById, getCy
 import worldData from '../../data/normalOtherWorld.json';
 import { useCoursework } from '../../coursework/CourseworkContext';
 import { useWritings } from '../../writings/WritingsContext';
-import mythicEarthSites from '../../data/mythicEarthSites.json';
 import constellationContent from '../../data/constellationContent.json';
+import constellationCultures from '../../data/constellationCultures.json';
 import fallenStarlightData from '../../data/fallenStarlight.json';
 import storyOfStoriesData from '../../data/storyOfStoriesData';
 import DevelopmentPanel from '../../components/DevelopmentPanel';
 import { useYBRHeader, useAreaOverride, useStoryForge } from '../../App';
-
-const MythicEarthPage = lazy(() => import('../MythicEarth/MythicEarthPage'));
-
-const MYTHIC_EARTH_CATEGORIES = [
-  { id: 'sacred-site', label: 'Sacred Sites', color: '#c9a961' },
-  { id: 'mythic-location', label: 'Mythic Locations', color: '#c4713a' },
-  { id: 'literary-location', label: 'Literary Locations', color: '#8b9dc3' },
-];
 
 const METEOR_STEEL_STAGES = [
   { id: 'golden-age', label: 'Golden Age' },
@@ -481,8 +473,6 @@ export default function SevenMetalsPage() {
   const [selectedStarlightStage, setSelectedStarlightStage] = useState(null);
   const [starlightSectionId, setStarlightSectionId] = useState(null);
   const [selectedConstellation, setSelectedConstellation] = useState(null);
-  const [selectedMythicSite, setSelectedMythicSite] = useState(null);
-  const [mythicEarthCategory, setMythicEarthCategory] = useState('sacred-site');
   // Single mode enum replaces 8 separate boolean/enum state variables
   const [mode, setMode] = useState(() => {
     if (location.pathname.endsWith('/medicine-wheel')) return 'medicine-wheel';
@@ -493,7 +483,6 @@ export default function SevenMetalsPage() {
   const showMeteorSteel = mode === 'meteor-steel';
   const showCycles = showMonomyth;
   const showMedicineWheel = mode === 'medicine-wheel';
-  const showMythicEarth = mode === 'mythic-earth';
   const showFallenStarlight = mode === 'fallen-starlight' || mode === 'story-of-stories';
   const showStoryOfStories = mode === 'story-of-stories';
   const chakraViewMode = mode.startsWith('chakra-') ? mode.replace('chakra-', '') : null;
@@ -561,7 +550,6 @@ export default function SevenMetalsPage() {
     setStarlightSectionId(null);
     setSelectedConstellation(null);
     setSelectedWheelItem(null);
-    setSelectedMythicSite(null);
     setMonomythModel(null);
     setMonomythWorld(null);
     setActiveTab('overview');
@@ -920,20 +908,6 @@ export default function SevenMetalsPage() {
           ybrJourneySequence={ybr.journeySequence}
           onToggleYBR={handleYBRToggle}
           ybrAutoStart={ybrAutoStart}
-          showMythicEarth={showMythicEarth}
-          onToggleMythicEarth={() => {
-            clearAllSelections();
-            if (mode !== 'mythic-earth') {
-              setMode('mythic-earth');
-              setMythicEarthCategory('sacred-site');
-            } else {
-              setMode('default');
-              setSelectedPlanet('Sun');
-            }
-            setShowCalendar(false);
-            setClockMode(null);
-            if (mode === 'medicine-wheel') navigate('/metals');
-          }}
           showMonomyth={showMonomyth}
           showMeteorSteel={showMeteorSteel}
           monomythStages={showMeteorSteel ? METEOR_STEEL_STAGES : MONOMYTH_STAGES}
@@ -988,18 +962,9 @@ export default function SevenMetalsPage() {
             setSelectedStarlightStage(null);
           }}
         />
-        {showMythicEarth && (
-          <Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}>
-            <MythicEarthPage
-              embedded
-              onSiteSelect={setSelectedMythicSite}
-              externalSite={selectedMythicSite}
-            />
-          </Suspense>
-        )}
       </div>
 
-      <div key={`${mode}|${selectedPlanet}|${selectedSign}|${selectedCardinal}|${selectedEarth}|${selectedMonth}|${selectedMonomythStage}|${selectedStarlightStage}|${selectedConstellation}|${selectedWheelItem}|${selectedMythicSite?.id}`} className="metals-content-fade">
+      <div key={`${mode}|${selectedPlanet}|${selectedSign}|${selectedCardinal}|${selectedEarth}|${selectedMonth}|${selectedMonomythStage}|${selectedStarlightStage}|${selectedConstellation}|${selectedWheelItem}`} className="metals-content-fade">
       {ybr.active ? (
         <YellowBrickRoadPanel
           currentStopIndex={ybr.currentStopIndex}
@@ -1014,65 +979,6 @@ export default function SevenMetalsPage() {
           onExit={() => { ybr.exitGame(); navigate('/metals'); }}
           isStopComplete={ybr.isStopComplete}
         />
-      ) : showMythicEarth ? (
-        <div className="mythic-earth-content-area">
-          <div className="mythic-earth-categories">
-            {MYTHIC_EARTH_CATEGORIES.map(cat => (
-              <button
-                key={cat.id}
-                className={`mythic-earth-cat-btn${mythicEarthCategory === cat.id ? ' active' : ''}`}
-                style={{ '--cat-color': cat.color }}
-                onClick={() => { setMythicEarthCategory(cat.id); setSelectedMythicSite(null); }}
-              >
-                {cat.label}
-              </button>
-            ))}
-          </div>
-
-          {selectedMythicSite ? (
-            <div className="mythic-earth-site-detail">
-              <button className="mythic-earth-back" onClick={() => setSelectedMythicSite(null)}>
-                {'\u2190'} Back to {MYTHIC_EARTH_CATEGORIES.find(c => c.id === mythicEarthCategory)?.label}
-              </button>
-              <h3>{selectedMythicSite.name}</h3>
-              <div className="mythic-earth-site-tags">
-                <span
-                  className="mythic-earth-tag"
-                  style={{ background: MYTHIC_EARTH_CATEGORIES.find(c => c.id === selectedMythicSite.category)?.color }}
-                >
-                  {MYTHIC_EARTH_CATEGORIES.find(c => c.id === selectedMythicSite.category)?.label}
-                </span>
-                {selectedMythicSite.tradition && (
-                  <span className="mythic-earth-tag tradition">{selectedMythicSite.tradition}</span>
-                )}
-                <span className="mythic-earth-tag region">{selectedMythicSite.region}</span>
-              </div>
-              <div className="mythic-earth-site-text">
-                {selectedMythicSite.description.split('\n\n').map((p, i) => <p key={i}>{p}</p>)}
-              </div>
-              {selectedMythicSite.excerpt && (
-                <div className="mythic-earth-excerpt-block">
-                  <h4>From the Text</h4>
-                  <blockquote>{selectedMythicSite.excerpt}</blockquote>
-                </div>
-              )}
-            </div>
-          ) : (
-            <div className="mythic-earth-site-grid">
-              {mythicEarthSites.filter(s => s.category === mythicEarthCategory).map(site => (
-                <button
-                  key={site.id}
-                  className="mythic-earth-site-card"
-                  onClick={() => setSelectedMythicSite(site)}
-                >
-                  <span className="site-card-name">{site.name}</span>
-                  <span className="site-card-region">{site.region}</span>
-                  {site.tradition && <span className="site-card-tradition">{site.tradition}</span>}
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
       ) : showFallenStarlight ? (
         showStoryOfStories ? (
           // STORY OF STORIES MODE
@@ -1750,15 +1656,20 @@ export default function SevenMetalsPage() {
             </div>
           </div>
         </>
-      ) : selectedConstellation && constellationContent[selectedConstellation] ? (
+      ) : selectedConstellation && constellationContent[selectedConstellation] ? (() => {
+        const cKey = activeCulture ? activeCulture.toLowerCase() : null;
+        const cultureConst = cKey && constellationCultures[selectedConstellation]?.[cKey];
+        const defaultName = constellationContent[selectedConstellation].name;
+        return (
         <>
           <h2 className="metals-heading">
-            {constellationContent[selectedConstellation].name}
-            <span className="metals-sub">Constellation</span>
+            {cultureConst || defaultName}
+            <span className="metals-sub">{cultureConst && cultureConst !== defaultName ? defaultName : 'Constellation'}</span>
           </h2>
           <div className="container">
             <div id="content-container">
               <div className="metal-detail-panel">
+                <CultureSelector activeCulture={activeCulture} onSelectCulture={setActiveCulture} />
                 <div className="metal-content-scroll">
                   <div className="tab-content">
                     <div className="overview-grid">
@@ -1775,7 +1686,8 @@ export default function SevenMetalsPage() {
             </div>
           </div>
         </>
-      ) : (
+        );
+      })() : (
         <>
           {currentData && (
             <>
