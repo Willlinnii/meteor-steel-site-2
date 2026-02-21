@@ -631,8 +631,14 @@ function StoryForgeHome() {
   const [interviewStoryId, setInterviewStoryId] = useState(null);
   const [synthesisLoading, setSynthesisLoading] = useState(false);
   const [synthesisText, setSynthesisText] = useState(null);
+  // Draft mode state
+  const [draftMessages, setDraftMessages] = useState({});
+  const [draftInput, setDraftInput] = useState('');
+  const [draftLoading, setDraftLoading] = useState(false);
+  const [forgeDrafts, setForgeDrafts] = useState({});
+  const draftChatEndRef = useRef(null);
   const { trackElement, trackTime, isElementCompleted, courseworkMode } = useCoursework();
-  const { forgeData, saveForge, getAllWritings, personalStories, addStory, addStoryEntry, updateStoryEdited, updateStoryName, saveConversation, loaded: writingsLoaded } = useWritings();
+  const { forgeData, saveForge, saveForgeConversation, saveForgeDraft, getAllWritings, personalStories, addStory, addStoryEntry, updateStoryEdited, updateStoryName, saveConversation, loaded: writingsLoaded } = useWritings();
 
   // Load forge data from persisted writings on mount
   useEffect(() => {
@@ -644,6 +650,8 @@ function StoryForgeHome() {
       if (forgeData.stories && Object.keys(forgeData.stories).length > 0) {
         setGeneratedStory(prev => ({ ...forgeData.stories, ...prev }));
       }
+      if (forgeData.conversations) setDraftMessages(prev => ({ ...forgeData.conversations, ...prev }));
+      if (forgeData.drafts) setForgeDrafts(prev => ({ ...forgeData.drafts, ...prev }));
     }
   }, [writingsLoaded]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -720,10 +728,10 @@ function StoryForgeHome() {
         return { stageId: s.id, label: s.label, entries };
       }).filter(s => s.entries.length > 0);
 
-      const res = await apiFetch('/api/forge', {
+      const res = await apiFetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ template: templateLabel, stageContent, targetStage: targetStage || null }),
+        body: JSON.stringify({ mode: 'forge', template: templateLabel, stageContent, targetStage: targetStage || null }),
       });
       const data = await res.json();
       if (data.story) {

@@ -1,4 +1,4 @@
-const { getAnthropicClient, getUserKeys } = require('./lib/llm');
+const { getAnthropicClient, getOpenAIClient, getUserKeys } = require('./lib/llm');
 const { getUidFromRequest } = require('./lib/auth');
 const { computeNatalChart } = require('./lib/natalChart');
 
@@ -6,6 +6,7 @@ const { computeNatalChart } = require('./lib/natalChart');
 const MODELS = {
   fast: process.env.LLM_FAST_MODEL || 'claude-haiku-4-5-20251001',
   quality: process.env.LLM_QUALITY_MODEL || 'claude-sonnet-4-20250514',
+  narrative: process.env.LLM_NARRATIVE_MODEL || 'gpt-4o-mini',
 };
 
 // Import JSON data directly so Vercel's bundler includes them
@@ -1496,7 +1497,228 @@ module.exports = async function handler(req, res) {
     }
   }
 
-  const { messages, area, persona, mode, challengeStop, level, journeyId, stageId, gameMode, stageData, aspect, courseSummary, existingCredentials, existingNatalChart, qualifiedMentorTypes, uploadedDocument, tarotPhase, tarotCards, tarotIntention, culture } = req.body || {};
+  const { messages, area, persona, mode, challengeStop, level, journeyId, stageId, gameMode, stageData, aspect, courseSummary, existingCredentials, existingNatalChart, qualifiedMentorTypes, uploadedDocument, tarotPhase, tarotCards, tarotIntention, culture, template, stageContent, targetStage, stageEntries, adjacentDrafts, requestDraft, drafts } = req.body || {};
+
+  // --- Story Forge mode (narrative generation via OpenAI) ---
+  if (mode === 'forge') {
+    if (!template || !Array.isArray(stageContent) || stageContent.length === 0) {
+      return res.status(400).json({ error: 'Template and stageContent are required.' });
+    }
+
+    const userContent = stageContent.map(s =>
+      `=== ${s.stageId} (${s.label}) ===\n${s.entries.join('\n')}`
+    ).join('\n\n');
+
+    const stageInstruction = targetStage
+      ? `Generate ONLY the chapter for the stage marked "${targetStage}". Weave the user's notes for this stage into polished narrative prose. Reference material from other stages for continuity but focus on this chapter. Still use the === stage-id === format around it.`
+      : `Weave ALL the user's material into a cohesive narrative with one chapter per monomyth stage. Transform their raw notes into polished prose while preserving their voice, images, and meaning.`;
+
+    const forgeSystemPrompt = `You are a master storyteller and narrative architect. You weave raw material — notes, reflections, and creative fragments — into cohesive narrative.
+
+The user is writing a ${template}. Their material follows the 8-stage monomyth cycle:
+1. Golden Age (golden-age)
+2. Calling Star (falling-star)
+3. Crater Crossing (impact-crater)
+4. Trials of Forge (forge)
+5. Quench (quenching)
+6. Integration (integration)
+7. Draw (drawing)
+8. Age of Steel (new-age)
+
+${stageInstruction}
+
+Format: Precede each chapter with a line === stage-id === (using the parenthetical id above, e.g. === golden-age ===). Keep each chapter 200-400 words. Be literary but accessible. Match the tone to the template type.`;
+
+    const openai = getOpenAIClient(userKeys.openaiKey);
+
+    try {
+      const completion = await openai.chat.completions.create({
+        model: MODELS.narrative,
+        messages: [
+          { role: 'system', content: forgeSystemPrompt },
+          { role: 'user', content: userContent },
+        ],
+        max_tokens: 4000,
+        temperature: 0.8,
+      });
+
+      const story = completion.choices[0]?.message?.content || '';
+      return res.status(200).json({ story });
+    } catch (err) {
+      console.error('Forge API error:', err?.message, err?.status);
+      if (err.status === 401 && !!userKeys.openaiKey) {
+        return res.status(401).json({ error: 'Your OpenAI API key is invalid or expired. Please update it in your profile settings.', keyError: true });
+      }
+      return res.status(500).json({ error: `Something went wrong: ${err?.message || 'Unknown error'}` });
+    }
+  }
+
+  // --- Conversational Forge Draft mode ---
+  if (mode === 'forge-draft') {
+    if (!stageId || !Array.isArray(messages) || messages.length === 0) {
+      return res.status(400).json({ error: 'stageId and messages are required.' });
+    }
+
+    // Extract ATLAS paragraph from monomyth data for this stage
+    const stageText = monomyth[stageId] || '';
+    let atlasExcerpt = '';
+    const atlasMatch = stageText.match(/(?:ATLAS:\s*)([\s\S]*?)(?=\n\n[A-Z]+:|$)/);
+    if (atlasMatch) atlasExcerpt = atlasMatch[1].trim().slice(0, 600);
+
+    // Format raw entries for context
+    const rawMaterial = (stageEntries || [])
+      .map(e => `[${e.mode}] ${e.text}`)
+      .join('\n');
+
+    // Adjacent drafts for continuity (trimmed)
+    const adjPrev = adjacentDrafts?.previous ? adjacentDrafts.previous.slice(0, 500) : '';
+    const adjNext = adjacentDrafts?.next ? adjacentDrafts.next.slice(0, 500) : '';
+    const adjContext = [
+      adjPrev && `PREVIOUS STAGE DRAFT:\n${adjPrev}`,
+      adjNext && `NEXT STAGE DRAFT:\n${adjNext}`,
+    ].filter(Boolean).join('\n\n');
+
+    const draftSystemPrompt = `You are Atlas, a story collaborator working with the writer on their ${template || 'Personal Myth'}. You are helping them develop the "${stageId}" stage of their monomyth narrative.
+
+YOUR ROLE: Ask questions, notice what's vivid, suggest ways to deepen. Be conversational (3-5 sentences). Never rewrite the user's material without being asked. You are an editor, not a ghostwriter.
+
+STAGE CONTEXT:
+${atlasExcerpt}
+
+THE WRITER'S RAW MATERIAL FOR THIS STAGE:
+${rawMaterial || '(No entries yet — help them get started.)'}
+
+${adjContext ? `NEIGHBORING DRAFTS (for continuity):\n${adjContext}` : ''}
+
+TOOLS:
+- You have a "suggest_mythic_parallel" tool. Use it AT MOST once per exchange, and ONLY when you notice a genuinely striking parallel between the writer's material and a mythic tradition. Do not force it.
+- You have a "produce_draft" tool. Use it when the user explicitly asks for a draft, or when requestDraft is true. The draft should be 200-400 words of polished prose that preserves the writer's voice.
+
+${requestDraft ? 'The user has requested a polished draft. Use the produce_draft tool.' : ''}`;
+
+    // Trim messages: last 20, 4000 chars each, merge consecutive same-role, ensure first is user
+    const raw = messages.slice(-20).map((m) => ({
+      role: m.role === 'assistant' ? 'assistant' : 'user',
+      content: String(m.content || '').slice(0, 4000),
+    }));
+    const trimmed = [];
+    for (const msg of raw) {
+      if (trimmed.length > 0 && trimmed[trimmed.length - 1].role === msg.role) {
+        trimmed[trimmed.length - 1].content += '\n' + msg.content;
+      } else {
+        trimmed.push({ ...msg });
+      }
+    }
+    if (trimmed.length > 0 && trimmed[0].role !== 'user') {
+      trimmed.shift();
+    }
+
+    const anthropic = getAnthropicClient(userKeys.anthropicKey);
+    const draftModel = isByok ? MODELS.quality : MODELS.fast;
+
+    try {
+      const response = await anthropic.messages.create({
+        model: draftModel,
+        max_tokens: 2000,
+        system: draftSystemPrompt,
+        messages: trimmed,
+        tools: [
+          {
+            name: 'suggest_mythic_parallel',
+            description: 'Surface a striking parallel between the writer\'s material and a mythic tradition. Use sparingly — at most once per exchange.',
+            input_schema: {
+              type: 'object',
+              properties: {
+                parallel: { type: 'string', description: 'The mythic parallel observed' },
+                source: { type: 'string', description: 'The mythic tradition or source (e.g., "Greek — Orpheus", "Hindu — Arjuna")' },
+                suggestion: { type: 'string', description: 'A brief suggestion for how this parallel could enrich the writing' },
+              },
+              required: ['parallel', 'source', 'suggestion'],
+            },
+          },
+          {
+            name: 'produce_draft',
+            description: 'Produce a polished 200-400 word draft passage for this stage. Use when the user asks for a draft.',
+            input_schema: {
+              type: 'object',
+              properties: {
+                draft: { type: 'string', description: 'The polished draft passage (200-400 words)' },
+              },
+              required: ['draft'],
+            },
+          },
+        ],
+      });
+
+      // Parse response: extract text, tool uses
+      let reply = '';
+      let draft = null;
+      let mythicParallel = null;
+
+      for (const block of response.content) {
+        if (block.type === 'text') {
+          reply += block.text;
+        } else if (block.type === 'tool_use') {
+          if (block.name === 'suggest_mythic_parallel') {
+            mythicParallel = block.input;
+          } else if (block.name === 'produce_draft') {
+            draft = block.input.draft;
+          }
+        }
+      }
+
+      return res.status(200).json({ reply, draft, mythicParallel });
+    } catch (err) {
+      console.error('Forge draft API error:', err?.message, err?.status);
+      if (err.status === 401 && isByok) {
+        return res.status(401).json({ error: 'Your Anthropic API key is invalid or expired. Please update it in your profile settings.', keyError: true });
+      }
+      return res.status(500).json({ error: `Something went wrong: ${err?.message || 'Unknown error'}` });
+    }
+  }
+
+  // --- Conversational Forge Assemble mode ---
+  if (mode === 'forge-assemble') {
+    if (!drafts || typeof drafts !== 'object' || Object.keys(drafts).length === 0) {
+      return res.status(400).json({ error: 'Drafts object is required.' });
+    }
+
+    const stageOrder = ['golden-age', 'falling-star', 'impact-crater', 'forge', 'quenching', 'integration', 'drawing', 'new-age'];
+    const draftContent = stageOrder
+      .filter(id => drafts[id])
+      .map(id => `=== ${id} ===\n${drafts[id]}`)
+      .join('\n\n');
+
+    const assemblePrompt = `You are a master narrative editor. The writer has drafted individual passages for stages of their ${template || 'Personal Myth'} monomyth. Weave these stage drafts into a continuous narrative.
+
+INSTRUCTIONS:
+- Preserve the writer's voice, imagery, and meaning
+- Smooth transitions between stages
+- Maintain the === stage-id === delimiters before each section
+- Keep each section close to its original length — do not substantially expand or cut
+- Be literary but accessible. Match the tone to the template type.`;
+
+    const anthropic = getAnthropicClient(userKeys.anthropicKey);
+    const assembleModel = isByok ? MODELS.quality : MODELS.fast;
+
+    try {
+      const response = await anthropic.messages.create({
+        model: assembleModel,
+        max_tokens: 4000,
+        system: assemblePrompt,
+        messages: [{ role: 'user', content: draftContent }],
+      });
+
+      const story = response.content.map(b => b.text || '').join('');
+      return res.status(200).json({ story });
+    } catch (err) {
+      console.error('Forge assemble API error:', err?.message, err?.status);
+      if (err.status === 401 && isByok) {
+        return res.status(401).json({ error: 'Your Anthropic API key is invalid or expired. Please update it in your profile settings.', keyError: true });
+      }
+      return res.status(500).json({ error: `Something went wrong: ${err?.message || 'Unknown error'}` });
+    }
+  }
 
   // --- Tarot Reading mode ---
   if (mode === 'tarot-reading') {
