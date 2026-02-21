@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { usePageTracking } from '../../coursework/CourseworkContext';
 import './YellowBrickRoadPage.css';
 
 const JOURNEYS = [
@@ -19,6 +20,43 @@ const JOURNEYS = [
         <line x1="20" y1="32" x2="20" y2="38" />
         <line x1="2" y1="20" x2="8" y2="20" />
         <line x1="32" y1="20" x2="38" y2="20" />
+      </svg>
+    ),
+  },
+  {
+    id: 'planetary',
+    label: 'Planetary Journey',
+    description: 'Ascend through the seven planetary spheres. Each planet tests you three times — Moon, Mercury, Venus, Sun, Mars, Jupiter, Saturn.',
+    path: '/metals/yellow-brick-road',
+    storyPath: '/journey/planetary',
+    stages: '7 stops, 3 levels each',
+    icon: (
+      <svg viewBox="0 0 40 40" width="36" height="36" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="20" cy="20" r="14" opacity="0.3" />
+        <circle cx="20" cy="6" r="2.5" fill="currentColor" opacity="0.7" />
+        <circle cx="32" cy="11" r="2.5" fill="currentColor" opacity="0.7" />
+        <circle cx="34" cy="24" r="2.5" fill="currentColor" opacity="0.7" />
+        <circle cx="26" cy="34" r="2.5" fill="currentColor" opacity="0.7" />
+        <circle cx="14" cy="34" r="2.5" fill="currentColor" opacity="0.7" />
+        <circle cx="6" cy="24" r="2.5" fill="currentColor" opacity="0.7" />
+        <circle cx="8" cy="11" r="2.5" fill="currentColor" opacity="0.7" />
+      </svg>
+    ),
+  },
+  {
+    id: 'zodiac',
+    label: 'Zodiac Journey',
+    description: 'Traverse the twelve signs of the zodiac. Each sign tests you three times — Aries through Pisces.',
+    path: '/metals/yellow-brick-road',
+    storyPath: '/journey/zodiac',
+    stages: '12 stops, 3 levels each',
+    icon: (
+      <svg viewBox="0 0 40 40" width="36" height="36" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="20" cy="20" r="15" opacity="0.3" />
+        {[...Array(12)].map((_, i) => {
+          const a = (i * 30 - 90) * Math.PI / 180;
+          return <circle key={i} cx={20 + 15 * Math.cos(a)} cy={20 + 15 * Math.sin(a)} r="1.8" fill="currentColor" opacity="0.6" />;
+        })}
       </svg>
     ),
   },
@@ -77,6 +115,8 @@ const JOURNEYS = [
 ];
 
 export default function YellowBrickRoadPage() {
+  usePageTracking('ybr');
+
   return (
     <div className="ybr-page">
       <div className="ybr-header">

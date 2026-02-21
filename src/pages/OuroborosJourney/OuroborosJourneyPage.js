@@ -1,45 +1,17 @@
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import useWheelJourney from '../../hooks/useWheelJourney';
+import useMultiLevelJourney from '../../hooks/useMultiLevelJourney';
 import useVoice, { SpeechRecognition } from '../../hooks/useVoice';
 import useYellowBrickRoad from '../../components/sevenMetals/useYellowBrickRoad';
 import challengeData from '../../data/yellowBrickRoad.json';
+import JOURNEY_DEFS from '../../data/journeyDefs';
 import { useCoursework } from '../../coursework/CourseworkContext';
 import { useWritings } from '../../writings/WritingsContext';
 import './OuroborosJourneyPage.css';
 import { apiFetch } from '../../lib/chatApi';
 
 const { challenges } = challengeData;
-
-/* ── Stage definitions ── */
-
-const MONOMYTH_STAGES = [
-  { id: 'golden-age', label: 'Surface' },
-  { id: 'falling-star', label: 'Calling' },
-  { id: 'impact-crater', label: 'Crossing' },
-  { id: 'forge', label: 'Initiating' },
-  { id: 'quenching', label: 'Nadir' },
-  { id: 'integration', label: 'Return' },
-  { id: 'drawing', label: 'Arrival' },
-  { id: 'new-age', label: 'Renewal' },
-];
-
-const METEOR_STEEL_STAGES = [
-  { id: 'golden-age', label: 'Golden Age' },
-  { id: 'falling-star', label: 'Calling Star' },
-  { id: 'impact-crater', label: 'Crater Crossing' },
-  { id: 'forge', label: 'Trials of Forge' },
-  { id: 'quenching', label: 'Quench' },
-  { id: 'integration', label: 'Integration' },
-  { id: 'drawing', label: 'Draw' },
-  { id: 'new-age', label: 'Age of Steel' },
-];
-
-const STAGES_MAP = {
-  monomyth: MONOMYTH_STAGES,
-  'meteor-steel': METEOR_STEEL_STAGES,
-  fused: METEOR_STEEL_STAGES,
-};
 
 /* ── Game modes ── */
 
@@ -81,45 +53,6 @@ const PERSONAL_PROMPTS = {
   'integration': "How did you bring your changed self back into your world?",
   'drawing': "When did you arrive as who you truly are \u2014 a moment of full emergence?",
   'new-age': "How has your journey changed not just you, but your world?",
-};
-
-const JOURNEY_CONFIG = {
-  monomyth: {
-    title: 'The Monomyth Journey',
-    intro: [
-      "Atlas invites you to walk the Ouroboros path of the Monomyth.",
-      "Eight stages around the dragon's coil. At each one, Atlas will test your knowledge of the hero's journey.",
-      "The dragon's body is your road. Its head marks your place.",
-    ],
-    completion: "You have walked the full circle of the Monomyth \u2014 from Surface through Renewal. The hero's journey is complete. The ouroboros turns.",
-  },
-  'meteor-steel': {
-    title: 'The Meteor Steel Journey',
-    intro: [
-      "Atlas invites you to walk the Ouroboros path of Meteor Steel.",
-      "Eight stages around the dragon's coil \u2014 from Golden Age to Age of Steel.",
-      "At each stop, tell Atlas what happens at that stage of the transformation.",
-    ],
-    completion: "You have walked the full wheel of Meteor Steel \u2014 from Golden Age through Age of Steel. The meteorite fell. The forge burned. The blade was drawn. The ouroboros turns.",
-  },
-  fused: {
-    title: 'The Fused Journey',
-    intro: [
-      "Atlas invites you to walk the Fused Ouroboros \u2014 monomyth and meteor steel in one wheel.",
-      "Eight stages around the dragon's coil. At each one, you face two phases: first the hero's journey, then the forge.",
-      "The dragon's body is your road. Its head marks your place.",
-    ],
-    completion: "You have walked the full fused wheel \u2014 monomyth and meteor steel intertwined, from Golden Age through Age of Steel. The hero fell, was forged, and rose. The ouroboros turns.",
-  },
-  cosmic: {
-    title: 'The Cosmic Journey',
-    intro: [
-      "Atlas invites you to walk the Cosmic Ouroboros.",
-      "Twenty-six encounters \u2014 ascending through the planetary spheres, traversing the zodiac, and descending back to Earth.",
-      "Each celestial entity will test you three times. The dragon coils through all of them.",
-    ],
-    completion: "You have walked the Yellow Brick Road \u2014 ascending through the planetary spheres, traversing the zodiac, and descending back to Earth. The road was never about reaching a destination.",
-  },
 };
 
 /* ── Geometry helpers ── */
@@ -190,10 +123,10 @@ function useCosmicAdapter() {
 
 /* ── Stage prompt helper ── */
 
-function getStagePrompt(gameMode, stop, isCosmic, cosmicChallenge, isFused, fusedPhase) {
-  if (isCosmic && cosmicChallenge) return cosmicChallenge.prompt;
+function getStagePrompt(gameMode, stop, isMultiLevel, cosmicChallenge, isFusedJourney, fusedPhase) {
+  if (isMultiLevel && cosmicChallenge) return cosmicChallenge.prompt;
 
-  if (isFused) {
+  if (isFusedJourney) {
     if (fusedPhase === 0) {
       // Monomyth phase
       if (gameMode === 'story') {
@@ -242,24 +175,23 @@ const SMOKE_PARTICLES = [
 
 export default function OuroborosJourneyPage() {
   const { journeyId } = useParams();
-  const isCosmic = journeyId === 'cosmic';
-  const isFused = journeyId === 'fused';
+  const def = JOURNEY_DEFS[journeyId] || JOURNEY_DEFS.monomyth;
+  const isMultiLevel = def.challengeMode === 'cosmic';
+  const isFusedJourney = !!def.isFused;
 
-  const stagesForWheel = STAGES_MAP[journeyId] || MONOMYTH_STAGES;
+  // All 3 hooks called unconditionally (React rules); only one is used
+  const wheel = useWheelJourney(journeyId || 'unused', def.stages || []);
+  const multiLevel = useMultiLevelJourney(journeyId || 'unused', def.stages || [], def.levelsPerStop || 3);
+  const cosmicAdapter = useCosmicAdapter();
 
-  // Both hooks called unconditionally (React rules); only one is used
-  const wheel = useWheelJourney(journeyId || 'unused', stagesForWheel);
-  const cosmic = useCosmicAdapter();
-
-  const journey = isCosmic ? cosmic : wheel;
-  const stages = isCosmic ? cosmic.stages : stagesForWheel;
+  const journey = journeyId === 'cosmic' ? cosmicAdapter : isMultiLevel ? multiLevel : wheel;
+  const stages = journeyId === 'cosmic' ? cosmicAdapter.stages : (def.stages || []);
   const totalStages = stages.length;
-  const config = JOURNEY_CONFIG[journeyId] || JOURNEY_CONFIG.monomyth;
 
   const { trackElement, trackTime } = useCoursework();
   const { addJourneySynthesis } = useWritings();
 
-  /* ── Game mode state (non-cosmic only) ── */
+  /* ── Game mode state (non-autoStart only) ── */
   const [gameMode, setGameMode] = useState(null); // null | 'riddle' | 'story' | 'personal'
   const [fusedPhase, setFusedPhase] = useState(0); // 0=monomyth, 1=steel (fused journey only)
 
@@ -284,9 +216,9 @@ export default function OuroborosJourneyPage() {
     };
   }, [idx, journeyId, trackTime]);
 
-  // Cosmic auto-starts; non-cosmic waits for mode selection
+  // Auto-start journeys start immediately; others wait for mode selection
   useEffect(() => {
-    if (isCosmic) journey.startGame();
+    if (def.autoStart) journey.startGame();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleSelectMode = (modeId) => {
@@ -315,19 +247,19 @@ export default function OuroborosJourneyPage() {
   /* ── Derived state ── */
   const stop = (idx >= 0 && idx < totalStages) ? stages[idx] : null;
 
-  const cosmicProg = isCosmic && stop
-    ? (journey.stopProgress[stop.id] || { passed: [false, false, false] })
+  const cosmicProg = isMultiLevel && stop
+    ? (journey.stopProgress[stop.id] || { passed: Array(def.levelsPerStop).fill(false) })
     : null;
   const cosmicLevel = cosmicProg
-    ? (cosmicProg.passed[0] ? (cosmicProg.passed[1] ? 3 : 2) : 1)
+    ? Math.min(cosmicProg.passed.filter(Boolean).length + 1, def.levelsPerStop)
     : 1;
   const stopDone = stop && (
-    isCosmic
-      ? (cosmicProg?.passed?.every(Boolean) || false)
+    isMultiLevel
+      ? journey.isStopComplete(stop.id)
       : !!journey.stopProgress[stop.id]?.passed
   );
 
-  const cosmicChallenge = isCosmic && stop
+  const cosmicChallenge = isMultiLevel && stop
     ? getCosmicChallenge(stop.entity, stop.phase, cosmicLevel)
     : null;
 
@@ -336,8 +268,8 @@ export default function OuroborosJourneyPage() {
   const rotation = getDragonRotation(idx, totalStages);
 
   // Determine the intro text based on mode
-  const fusedModeKey = isFused && gameMode ? `fused-${gameMode}` : null;
-  const introText = (fusedModeKey && MODE_INTROS[fusedModeKey]) || (!isCosmic && gameMode && MODE_INTROS[gameMode]) || config.intro;
+  const fusedModeKey = isFusedJourney && gameMode ? `fused-${gameMode}` : null;
+  const introText = (fusedModeKey && MODE_INTROS[fusedModeKey]) || (!def.autoStart && gameMode && MODE_INTROS[gameMode]) || def.intro;
 
   /* ── Smoke puff state ── */
   const [smokePuff, setSmokePuff] = useState(false);
@@ -346,7 +278,7 @@ export default function OuroborosJourneyPage() {
   // Dragon head position: ~55° CW from tail (behind the head, on the body side)
   const noseAngle = getStageAngle(Math.max(idx, 0), totalStages) + 55;
   const noseRad = (noseAngle - 90) * Math.PI / 180;
-  const noseR = isCosmic ? 32 : 31;
+  const noseR = def.dotRadius;
   const noseX = 50 + noseR * Math.cos(noseRad);
   const noseY = 50 + noseR * Math.sin(noseRad);
 
@@ -356,15 +288,15 @@ export default function OuroborosJourneyPage() {
   useEffect(() => {
     if (!voiceEnabled || idx < 0 || idx >= totalStages || stopDone) return;
     const idxChanged = prevIdxRef.current !== idx;
-    const phaseChanged = isFused && prevFusedPhaseRef.current !== fusedPhase;
+    const phaseChanged = isFusedJourney && prevFusedPhaseRef.current !== fusedPhase;
     if (!idxChanged && !phaseChanged) return;
     prevIdxRef.current = idx;
     prevFusedPhaseRef.current = fusedPhase;
     if (stop && messages.length === 0) {
-      const prompt = getStagePrompt(gameMode, stop, isCosmic, cosmicChallenge, isFused, fusedPhase);
+      const prompt = getStagePrompt(gameMode, stop, isMultiLevel, cosmicChallenge, isFusedJourney, fusedPhase);
       speak(prompt);
     }
-  }, [voiceEnabled, speak, idx, totalStages, stopDone, stop, messages.length, gameMode, isCosmic, cosmicChallenge, isFused, fusedPhase]);
+  }, [voiceEnabled, speak, idx, totalStages, stopDone, stop, messages.length, gameMode, isMultiLevel, cosmicChallenge, isFusedJourney, fusedPhase]);
 
   // Track journey completion
   const completionTracked = useRef(false);
@@ -377,7 +309,7 @@ export default function OuroborosJourneyPage() {
 
   /* ── Synthesis trigger ── */
   useEffect(() => {
-    if (!isComplete || isCosmic || !gameMode || gameMode === 'riddle') return;
+    if (!isComplete || isMultiLevel || !gameMode || gameMode === 'riddle') return;
     if (synthesizedStory || synthesizing) return;
 
     const stageData = stages.map(s => {
@@ -402,7 +334,7 @@ export default function OuroborosJourneyPage() {
       })
       .catch(() => { setSynthesizedStory('Something went wrong while weaving your story.'); })
       .finally(() => { setSynthesizing(false); });
-  }, [isComplete, isCosmic, gameMode, synthesizedStory, synthesizing, stages, journey.stopProgress, journeyId, addJourneySynthesis]);
+  }, [isComplete, isMultiLevel, gameMode, synthesizedStory, synthesizing, stages, journey.stopProgress, journeyId, addJourneySynthesis]);
 
   /* ── Handlers ── */
 
@@ -415,11 +347,11 @@ export default function OuroborosJourneyPage() {
     setLoading(true);
 
     try {
-      const body = isCosmic
+      const body = isMultiLevel
         ? { messages: next, mode: 'ybr-challenge', challengeStop: stop.id, level: cosmicLevel, area: 'celestial-clocks' }
         : {
             messages: next, mode: 'wheel-journey', journeyId, stageId: stop.id, gameMode: gameMode || 'riddle',
-            ...(isFused ? { aspect: fusedPhase === 0 ? 'monomyth' : 'steel' } : {}),
+            ...(isFusedJourney ? { aspect: fusedPhase === 0 ? 'monomyth' : 'steel' } : {}),
           };
 
       const res = await apiFetch('/api/chat', {
@@ -437,7 +369,7 @@ export default function OuroborosJourneyPage() {
       speak(replyText);
 
       if (data.passed != null) {
-        if (isFused && data.passed) {
+        if (isFusedJourney && data.passed) {
           // Fused two-phase handling
           if (fusedPhase === 0) {
             trackElement(`journeys.${journeyId}.stage.${stop.id}.monomyth.passed`);
@@ -454,10 +386,10 @@ export default function OuroborosJourneyPage() {
             smokePuffTimer.current = setTimeout(() => setSmokePuff(false), 2200);
             setMessages([]);
           }
-        } else if (isCosmic) {
+        } else if (isMultiLevel) {
           journey.recordResult(stop.id, cosmicLevel, data.passed, updated);
           if (data.passed) {
-            trackElement(`journeys.cosmic.${stop.id}.level.${cosmicLevel}.passed`);
+            trackElement(`journeys.${journeyId}.${stop.id}.level.${cosmicLevel}.passed`);
             setSmokePuff(true);
             clearTimeout(smokePuffTimer.current);
             smokePuffTimer.current = setTimeout(() => setSmokePuff(false), 2200);
@@ -479,7 +411,7 @@ export default function OuroborosJourneyPage() {
     } finally {
       setLoading(false);
     }
-  }, [inputText, loading, messages, stop, isCosmic, isFused, fusedPhase, journeyId, journey, cosmicLevel, gameMode, speak, trackElement]);
+  }, [inputText, loading, messages, stop, isMultiLevel, isFusedJourney, fusedPhase, journeyId, journey, cosmicLevel, gameMode, speak, trackElement]);
 
   const handleKeyDown = (e) => {
     if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); }
@@ -491,14 +423,14 @@ export default function OuroborosJourneyPage() {
 
   /* ── Render ── */
 
-  // Mode selector for non-cosmic journeys (before game starts)
-  const showModeSelect = !isCosmic && !gameMode;
+  // Mode selector for non-autoStart journeys (before game starts)
+  const showModeSelect = !def.autoStart && !gameMode;
 
   return (
     <div className="ouroboros-page">
       {/* Header */}
       <div className="ouroboros-header">
-        <h1 className="ouroboros-title">{config.title}</h1>
+        <h1 className="ouroboros-title">{def.title}</h1>
         <div className="ouroboros-header-controls">
           <button
             className={`ouro-voice-toggle${voiceEnabled ? ' active' : ''}`}
@@ -511,18 +443,18 @@ export default function OuroborosJourneyPage() {
         </div>
       </div>
 
-      <div className={`ouroboros-arena${isCosmic ? ' cosmic' : ''}`}>
+      <div className={`ouroboros-arena${def.cssClass ? ` ${def.cssClass}` : ''}`}>
         {/* Stage nodes — positioned ON the dragon's body */}
         {stages.map((stage, i) => {
           const angle = getStageAngle(i, totalStages);
           const rad = (angle - 90) * Math.PI / 180;
           // ~31% radius places dots on the dragon body centerline
-          const r = isCosmic ? 32 : 31;
+          const r = def.dotRadius;
           const x = 50 + r * Math.cos(rad);
           const y = 50 + r * Math.sin(rad);
 
           let state = 'future';
-          if (isCosmic) {
+          if (isMultiLevel) {
             if (journey.isStopComplete(stage.id)) state = 'completed';
             else if (i === idx) state = 'current';
           } else {
@@ -607,7 +539,7 @@ export default function OuroborosJourneyPage() {
 
           {!showModeSelect && isComplete && (
             <>
-              {(!isCosmic && gameMode && gameMode !== 'riddle') ? (
+              {(!isMultiLevel && gameMode && gameMode !== 'riddle') ? (
                 <div className="ouro-screen ouro-done">
                   <h3>Journey Complete</h3>
                   {synthesizing && (
@@ -624,14 +556,14 @@ export default function OuroborosJourneyPage() {
                     </div>
                   )}
                   {!synthesizing && !synthesizedStory && (
-                    <p>{config.completion}</p>
+                    <p>{def.completion}</p>
                   )}
                   <button className="ouro-btn" onClick={handleExit}>Return</button>
                 </div>
               ) : (
                 <div className="ouro-screen ouro-done">
                   <h3>Journey Complete</h3>
-                  <p>{config.completion}</p>
+                  <p>{def.completion}</p>
                   <p className="ouro-tally">{journey.completedStops} of {journey.totalStops} completed</p>
                   <button className="ouro-btn" onClick={handleExit}>Return</button>
                 </div>
@@ -644,8 +576,8 @@ export default function OuroborosJourneyPage() {
               <div className="ouro-stage-bar">
                 <span className="ouro-count">{idx + 1}/{totalStages}</span>
                 <span className="ouro-name">{stop.label}</span>
-                {isCosmic && <span className="ouro-lvl">Lvl {cosmicLevel}/3</span>}
-                {isFused && <span className="ouro-lvl">{fusedPhase === 0 ? 'Monomyth' : 'Meteor Steel'}</span>}
+                {isMultiLevel && <span className="ouro-lvl">Lvl {cosmicLevel}/{def.levelsPerStop}</span>}
+                {isFusedJourney && <span className="ouro-lvl">{fusedPhase === 0 ? 'Monomyth' : 'Meteor Steel'}</span>}
               </div>
 
               {stopDone ? (
@@ -660,7 +592,7 @@ export default function OuroborosJourneyPage() {
                   <div className="ouro-messages">
                     {messages.length === 0 && (
                       <p className="ouro-prompt">
-                        {getStagePrompt(gameMode, stop, isCosmic, cosmicChallenge, isFused, fusedPhase)}
+                        {getStagePrompt(gameMode, stop, isMultiLevel, cosmicChallenge, isFusedJourney, fusedPhase)}
                       </p>
                     )}
                     {messages.map((m, i) => (

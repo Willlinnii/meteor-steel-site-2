@@ -226,18 +226,20 @@ export const COURSES = [
   {
     id: 'ouroboros-walker',
     name: 'Ouroboros Walker',
-    description: 'Complete at least one Ouroboros Journey — monomyth, meteor steel, fused, or cosmic.',
+    description: 'Complete at least one Ouroboros Journey — monomyth, meteor steel, fused, cosmic, planetary, or zodiac.',
     active: true,
     requirements: [
       {
         id: 'complete-journey',
         type: 'group_pct',
-        percent: 25,
+        percent: 16,
         elements: [
           'journeys.monomyth.completed',
           'journeys.meteor-steel.completed',
           'journeys.fused.completed',
           'journeys.cosmic.completed',
+          'journeys.planetary.completed',
+          'journeys.zodiac.completed',
         ],
         description: 'Complete at least one Ouroboros Journey',
       },
