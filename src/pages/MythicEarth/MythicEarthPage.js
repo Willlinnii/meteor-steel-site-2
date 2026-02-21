@@ -214,7 +214,7 @@ function StreetViewEmbed({ site }) {
             />
           ) : (
             <div className="mythic-earth-streetview-fallback">
-              <p>Add a <code>REACT_APP_GOOGLE_MAPS_KEY</code> to your <code>.env</code> for embedded Street View.</p>
+              <p>Add a <code>REACT_APP_GOOGLE_MAPS_API_KEY</code> to your <code>.env</code> for embedded Street View.</p>
               <a
                 href={`https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${site.lat},${site.lng}&heading=${heading}&pitch=${pitch}&fov=${fov}`}
                 target="_blank"
