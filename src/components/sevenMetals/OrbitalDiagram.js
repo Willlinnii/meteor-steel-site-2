@@ -251,7 +251,7 @@ function ensureYTApi() {
   });
 }
 
-export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPlanet, hoveredPlanet, selectedSign, onSelectSign, selectedCardinal, onSelectCardinal, selectedEarth, onSelectEarth, showCalendar, onToggleCalendar, selectedMonth, onSelectMonth, showMedicineWheel, onToggleMedicineWheel, selectedWheelItem, onSelectWheelItem, chakraViewMode, onToggleChakraView, videoUrl, onCloseVideo, ybrActive, ybrCurrentStopIndex, ybrStopProgress, ybrJourneySequence, onToggleYBR, ybrAutoStart, clockMode, onToggleClock, showMythicEarth, onToggleMythicEarth, showMonomyth, showMeteorSteel, monomythStages, selectedMonomythStage, onSelectMonomythStage, onToggleMonomyth, monomythModel, showCycles, onSelectCycleSegment, activeCulture, showFallenStarlight, showStoryOfStories, onToggleStarlight, starlightStages, selectedStarlightStage, onSelectStarlightStage, selectedConstellation, onSelectConstellation }) {
+export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPlanet, hoveredPlanet, selectedSign, onSelectSign, selectedCardinal, onSelectCardinal, selectedEarth, onSelectEarth, showCalendar, onToggleCalendar, selectedMonth, onSelectMonth, showMedicineWheel, onToggleMedicineWheel, selectedWheelItem, onSelectWheelItem, chakraViewMode, onToggleChakraView, videoUrl, onCloseVideo, ybrActive, ybrCurrentStopIndex, ybrStopProgress, ybrJourneySequence, onToggleYBR, ybrAutoStart, clockMode, onToggleClock, showMonomyth, showMeteorSteel, monomythStages, selectedMonomythStage, onSelectMonomythStage, onToggleMonomyth, monomythModel, showCycles, onSelectCycleSegment, activeCulture, showFallenStarlight, showStoryOfStories, onToggleStarlight, starlightStages, selectedStarlightStage, onSelectStarlightStage, selectedConstellation, onSelectConstellation }) {
   const wrapperRef = useRef(null);
   const [tooltip, setTooltip] = useState(null);
 
@@ -776,7 +776,7 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
 
   return (
     <div className="orbital-diagram-wrapper" ref={wrapperRef}>
-      {!showMythicEarth && <svg viewBox={(showMonomyth || showFallenStarlight) ? '-50 -50 800 800' : '0 0 700 700'} className="orbital-svg" role="img" aria-label={showMedicineWheel ? "Medicine wheel diagram" : showMonomyth ? "Celestial clock with monomyth ring" : showFallenStarlight ? "Celestial clock with starlight ring" : heliocentric ? "Heliocentric orbital diagram" : "Geocentric orbital diagram with zodiac"}>
+      <svg viewBox={(showMonomyth || showFallenStarlight) ? '-50 -50 800 800' : '0 0 700 700'} className="orbital-svg" role="img" aria-label={showMedicineWheel ? "Medicine wheel diagram" : showMonomyth ? "Celestial clock with monomyth ring" : showFallenStarlight ? "Celestial clock with starlight ring" : heliocentric ? "Heliocentric orbital diagram" : "Geocentric orbital diagram with zodiac"}>
         {showMedicineWheel ? (
           <g className="medicine-wheel" onMouseMove={handleWheelMove} onMouseLeave={() => { hoveredRingRef.current = null; setHoveredRing(null); }}>
             {/* Quadrant background sectors */}
@@ -1989,7 +1989,7 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
             })}
 
             {/* Mode label — above the month ring */}
-            <text x={CX} y={585} textAnchor="middle" fill="rgba(155,89,182,0.6)" fontSize="11" fontFamily="Cinzel, serif" fontWeight="500" letterSpacing="1">
+            <text x={CX} y={585} textAnchor="middle" fill="rgba(201,169,97,0.9)" fontSize="18" fontFamily="Cinzel, serif" fontWeight="600" letterSpacing="2">
               {CHAKRA_MODE_LABELS[chakraViewMode]}
             </text>
           </g>
@@ -2414,7 +2414,7 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
           );
         })()}
         </>)}
-      </svg>}
+      </svg>
       {stormFlash && (
         <div className="storm-shield-overlay">
           <img src="/storm-shield.png" alt="" className="storm-shield-img" />
@@ -2483,19 +2483,6 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
             <path d="M12 8 C9 8 7 10 7 12 L7 16 L9.5 16 L9.5 23 L14.5 23 L14.5 16 L17 16 L17 12 C17 10 15 8 12 8Z" />
           </svg>
         </button>
-        <button
-          className={`mythic-earth-toggle${showMythicEarth ? ' active' : ''}`}
-          onClick={() => { setMobileMenuOpen(false); onToggleMythicEarth && onToggleMythicEarth(); }}
-          title={showMythicEarth ? 'Exit Mythic Earth' : 'Show Mythic Earth globe'}
-        >
-          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-            <circle cx="12" cy="12" r="10" />
-            <ellipse cx="12" cy="12" rx="4.5" ry="10" />
-            <path d="M2.5 9 L21.5 9" />
-            <path d="M2.5 15 L21.5 15" />
-          </svg>
-        </button>
-
         <button
           className={`monomyth-toggle${showMonomyth ? ' active' : ''}${showCycles ? ' cycles' : ''}${showMeteorSteel ? ' steel' : ''}`}
           onClick={() => { setMobileMenuOpen(false); onToggleMonomyth && onToggleMonomyth(); }}
