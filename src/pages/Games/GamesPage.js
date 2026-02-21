@@ -106,6 +106,13 @@ const XR_EXPERIENCES = [
     path: '/mythic-earth',
     features: 'Phone AR · Gyroscope · Fullscreen',
   },
+  {
+    id: 'sacred-sites-360',
+    label: 'Sacred Sites 360',
+    description: 'Browse the world\'s sacred sites in immersive 360 Street View panoramas. Pick a site and look around from ground level.',
+    path: '/sacred-sites-360',
+    features: '360 Panorama · Street View',
+  },
 ];
 
 const CARD_DECKS = [

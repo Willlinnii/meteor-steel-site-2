@@ -38,6 +38,27 @@ const EXPERIENCES = [
       </svg>
     ),
   },
+  {
+    id: 'sacred-sites-360',
+    label: 'Sacred Sites 360',
+    description: 'Browse the world\'s sacred sites in immersive 360 Street View panoramas. Pick a site and look around from ground level.',
+    path: '/sacred-sites-360',
+    features: '360 Panorama \u00B7 Street View',
+    icon: (
+      <svg viewBox="0 0 40 40" width="36" height="36" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="20" cy="20" r="16" opacity="0.25" />
+        <path d="M20 4 L20 8" opacity="0.5" />
+        <path d="M20 32 L20 36" opacity="0.5" />
+        <path d="M4 20 L8 20" opacity="0.5" />
+        <path d="M32 20 L36 20" opacity="0.5" />
+        <circle cx="20" cy="20" r="6" opacity="0.5" />
+        <circle cx="20" cy="20" r="2" fill="currentColor" opacity="0.6" />
+        <path d="M20 14 L20 10" />
+        <path d="M25 17 L28 14" />
+        <path d="M25 23 L28 26" />
+      </svg>
+    ),
+  },
 ];
 
 export default function XRPage() {

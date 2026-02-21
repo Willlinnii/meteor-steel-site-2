@@ -1,0 +1,228 @@
+.sacred360-page {
+  min-height: 100vh;
+  padding: 2rem 1.5rem 4rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.sacred360-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.sacred360-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--text-primary, #e8e0d0);
+  margin: 0 0 0.4rem;
+}
+
+.sacred360-subtitle {
+  color: var(--text-secondary, #a09880);
+  font-size: 0.95rem;
+  margin: 0 0 0.8rem;
+}
+
+.sacred360-back {
+  display: inline-block;
+  font-size: 0.82rem;
+  color: var(--accent-gold, #c9a961);
+  text-decoration: none;
+  opacity: 0.8;
+}
+.sacred360-back:hover {
+  opacity: 1;
+  text-decoration: underline;
+}
+
+/* Layout */
+.sacred360-layout {
+  display: flex;
+  gap: 1.5rem;
+  align-items: flex-start;
+}
+
+/* Site picker */
+.sacred360-picker {
+  flex: 0 0 260px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.sacred360-regions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.sacred360-region-btn {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 4px;
+  color: var(--text-secondary, #a09880);
+  font-size: 0.72rem;
+  padding: 0.25rem 0.5rem;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.sacred360-region-btn:hover {
+  border-color: var(--accent-gold, #c9a961);
+  color: var(--text-primary, #e8e0d0);
+}
+.sacred360-region-btn.active {
+  background: var(--accent-gold, #c9a961);
+  color: #0a0a0f;
+  border-color: var(--accent-gold, #c9a961);
+}
+
+.sacred360-site-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  max-height: 70vh;
+  overflow-y: auto;
+  padding-right: 0.25rem;
+}
+
+.sacred360-site-card {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 6px;
+  padding: 0.6rem 0.75rem;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.sacred360-site-card:hover {
+  background: rgba(255,255,255,0.06);
+  border-color: rgba(255,255,255,0.12);
+}
+.sacred360-site-card.active {
+  background: rgba(201,169,97,0.12);
+  border-color: var(--accent-gold, #c9a961);
+}
+
+.sacred360-site-name {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-primary, #e8e0d0);
+}
+.sacred360-site-region {
+  font-size: 0.72rem;
+  color: var(--text-secondary, #a09880);
+  margin-top: 0.15rem;
+}
+
+/* Viewer */
+.sacred360-viewer {
+  flex: 1;
+  min-width: 0;
+}
+
+.sacred360-viewer-title {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--text-primary, #e8e0d0);
+  margin: 0 0 0.2rem;
+}
+
+.sacred360-viewer-region {
+  font-size: 0.82rem;
+  color: var(--text-secondary, #a09880);
+  margin: 0 0 0.75rem;
+}
+
+.sacred360-iframe-wrap {
+  position: relative;
+  width: 100%;
+  padding-bottom: 56.25%; /* 16:9 */
+  border-radius: 8px;
+  overflow: hidden;
+  background: rgba(0,0,0,0.3);
+  margin-bottom: 1rem;
+}
+
+.sacred360-iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+.sacred360-fallback {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  text-align: center;
+  color: var(--text-secondary, #a09880);
+  font-size: 0.85rem;
+}
+.sacred360-fallback code {
+  background: rgba(255,255,255,0.08);
+  padding: 0.15rem 0.35rem;
+  border-radius: 3px;
+  font-size: 0.8rem;
+}
+.sacred360-fallback-link {
+  margin-top: 0.75rem;
+  color: var(--accent-gold, #c9a961);
+  text-decoration: none;
+}
+.sacred360-fallback-link:hover {
+  text-decoration: underline;
+}
+
+.sacred360-viewer-desc {
+  font-size: 0.88rem;
+  color: var(--text-secondary, #a09880);
+  line-height: 1.55;
+  margin: 0;
+}
+
+.sacred360-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+  color: var(--text-secondary, #a09880);
+  font-size: 0.95rem;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .sacred360-page {
+    padding: 1.25rem 1rem 3rem;
+  }
+
+  .sacred360-layout {
+    flex-direction: column;
+  }
+
+  .sacred360-picker {
+    flex: none;
+    width: 100%;
+  }
+
+  .sacred360-site-list {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    max-height: none;
+    gap: 0.5rem;
+    padding-bottom: 0.5rem;
+  }
+
+  .sacred360-site-card {
+    flex: 0 0 auto;
+    min-width: 140px;
+  }
+}

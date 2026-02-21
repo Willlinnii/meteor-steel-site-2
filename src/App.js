@@ -60,6 +60,7 @@ const XRPage = lazy(() => import('./pages/XR/XRPage'));
 const FallenStarlightPage = lazy(() => import('./pages/FallenStarlight/FallenStarlightPage'));
 const MentorDirectoryPage = lazy(() => import('./pages/MentorDirectory/MentorDirectoryPage'));
 const GuildPage = lazy(() => import('./pages/Guild/GuildPage'));
+const SacredSites360Page = lazy(() => import('./pages/SacredSites360/SacredSites360Page'));
 
 const STAGES = [
   { id: 'golden-age', label: 'Golden Age' },
@@ -1940,6 +1941,7 @@ function AppContent() {
         <Route path="/story-forge" element={<StoryForgeHome />} />
         <Route path="/yellow-brick-road" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><YellowBrickRoadPage /></Suspense>} />
         <Route path="/xr" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><XRPage /></Suspense>} />
+        <Route path="/sacred-sites-360" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><SacredSites360Page /></Suspense>} />
         <Route path="/monomyth" element={<MonomythPage />} />
         <Route path="/mythology-channel" element={<MythologyChannelPage />} />
         <Route path="/games/*" element={<GamesPage />} />
