@@ -999,6 +999,7 @@ export default function SevenMetalsPage() {
         )}
       </div>
 
+      <div key={`${mode}|${selectedPlanet}|${selectedSign}|${selectedCardinal}|${selectedEarth}|${selectedMonth}|${selectedMonomythStage}|${selectedStarlightStage}|${selectedConstellation}|${selectedWheelItem}|${selectedMythicSite?.id}`} className="metals-content-fade">
       {ybr.active ? (
         <YellowBrickRoadPanel
           currentStopIndex={ybr.currentStopIndex}
@@ -1826,6 +1827,7 @@ export default function SevenMetalsPage() {
           </div>
         </>
       )}
+      </div>
     </div>
   );
 }
