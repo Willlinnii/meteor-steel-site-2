@@ -161,6 +161,7 @@ const SECTIONS = [
   { id: 'coursework', label: 'Coursework' },
   { id: 'mentors', label: 'Mentors' },
   { id: 'contacts', label: 'Contacts' },
+  { id: 'services', label: 'Services' },
 ];
 
 // --- Campaign Manager content (extracted for tab switching) ---
@@ -846,6 +847,172 @@ function MentorManagerSection() {
   );
 }
 
+// --- Services data ---
+const SERVICES = [
+  {
+    name: 'Firebase',
+    url: 'https://firebase.google.com',
+    category: 'Database / Auth / Storage',
+    usedFor: 'User auth, Firestore DB, file storage',
+    paid: 'Free tier',
+    status: 'Active',
+    envVars: ['REACT_APP_FIREBASE_API_KEY', 'REACT_APP_FIREBASE_AUTH_DOMAIN', 'REACT_APP_FIREBASE_PROJECT_ID'],
+  },
+  {
+    name: 'Anthropic Claude',
+    url: 'https://console.anthropic.com',
+    category: 'AI / LLM',
+    usedFor: 'Atlas chat, mentor review',
+    paid: 'Paid',
+    status: 'Active',
+    envVars: ['ANTHROPIC_API_KEY'],
+  },
+  {
+    name: 'OpenAI',
+    url: 'https://platform.openai.com',
+    category: 'AI / LLM',
+    usedFor: 'Persona voices',
+    paid: 'Paid',
+    status: 'Active',
+    envVars: ['OPENAI_API_KEY'],
+  },
+  {
+    name: 'Vercel',
+    url: 'https://vercel.com',
+    category: 'Hosting',
+    usedFor: 'Frontend + serverless API hosting',
+    paid: 'Free tier',
+    status: 'Active',
+    envVars: [],
+  },
+  {
+    name: 'Google OAuth',
+    url: 'https://console.cloud.google.com',
+    category: 'Authentication',
+    usedFor: 'Google sign-in',
+    paid: 'Free',
+    status: 'Active',
+    envVars: ['REACT_APP_FIREBASE_AUTH_DOMAIN'],
+  },
+  {
+    name: 'Google Maps',
+    url: 'https://console.cloud.google.com/apis',
+    category: 'Mapping',
+    usedFor: 'Location features',
+    paid: 'Free tier',
+    status: 'Configured',
+    envVars: ['REACT_APP_GOOGLE_MAPS_KEY'],
+  },
+  {
+    name: 'Cesium.js',
+    url: 'https://cesium.com',
+    category: '3D Mapping',
+    usedFor: 'Mythic Earth globe',
+    paid: 'Free (OSS)',
+    status: 'Active',
+    envVars: ['REACT_APP_CESIUM_TOKEN'],
+  },
+  {
+    name: 'Three.js',
+    url: 'https://threejs.org',
+    category: '3D Graphics',
+    usedFor: 'Orbital diagrams, VR scenes',
+    paid: 'Free (OSS)',
+    status: 'Active',
+    envVars: [],
+  },
+  {
+    name: 'ArcGIS',
+    url: 'https://arcgis.com',
+    category: 'Satellite Imagery',
+    usedFor: 'Globe imagery tiles',
+    paid: 'Free tier',
+    status: 'Active',
+    envVars: [],
+  },
+  {
+    name: 'Astronomy Engine',
+    url: 'https://github.com/cosinekitty/astronomy',
+    category: 'Calculations',
+    usedFor: 'Planetary positions, moon phases',
+    paid: 'Free (OSS)',
+    status: 'Active',
+    envVars: [],
+  },
+  {
+    name: 'Wikisource',
+    url: 'https://wikisource.org',
+    category: 'Text API',
+    usedFor: 'Sacred/classic text access',
+    paid: 'Free',
+    status: 'Active',
+    envVars: [],
+  },
+];
+
+const SERVICE_STATUS_COLORS = {
+  Active: '#5bd97a',
+  Configured: '#5b8dd9',
+  Unused: '#6a6a7a',
+};
+
+const SERVICE_PAID_COLORS = {
+  Paid: '#d95b5b',
+  'Free tier': '#5bd97a',
+  Free: '#5bd97a',
+  'Free (OSS)': '#7a7ab8',
+};
+
+function ServicesSection() {
+  return (
+    <div className="admin-services">
+      <h2 className="admin-services-title">SERVICES &amp; INTEGRATIONS</h2>
+      <p className="admin-services-subtitle">
+        External subscriptions, APIs, and third-party tools used by the site.
+      </p>
+      <div className="admin-services-grid">
+        {SERVICES.map(svc => (
+          <div key={svc.name} className="admin-service-card">
+            <div className="admin-service-header">
+              <a
+                href={svc.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="admin-service-name"
+              >
+                {svc.name}
+              </a>
+              <span
+                className="admin-service-status"
+                style={{ color: SERVICE_STATUS_COLORS[svc.status] || '#6a6a7a', borderColor: SERVICE_STATUS_COLORS[svc.status] || '#6a6a7a' }}
+              >
+                {svc.status}
+              </span>
+            </div>
+            <span className="admin-service-category">{svc.category}</span>
+            <p className="admin-service-usage">{svc.usedFor}</p>
+            <div className="admin-service-footer">
+              <span
+                className="admin-service-paid"
+                style={{ color: SERVICE_PAID_COLORS[svc.paid] || '#8a8aa0', borderColor: SERVICE_PAID_COLORS[svc.paid] || '#8a8aa0' }}
+              >
+                {svc.paid}
+              </span>
+              {svc.envVars.length > 0 && (
+                <div className="admin-service-envvars">
+                  {svc.envVars.map(v => (
+                    <code key={v} className="admin-service-env">{v}</code>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function AdminPage() {
   const [activeSection, setActiveSection] = useState('campaigns');
 
@@ -871,6 +1038,7 @@ function AdminPage() {
           <ContactsPage />
         </Suspense>
       )}
+      {activeSection === 'services' && <ServicesSection />}
     </div>
   );
 }

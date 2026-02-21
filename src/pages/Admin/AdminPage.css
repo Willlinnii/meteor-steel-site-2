@@ -930,3 +930,133 @@
   border-radius: 2px;
   transition: width 0.3s ease;
 }
+
+/* ===== SERVICES DASHBOARD ===== */
+.admin-services {
+  padding: 24px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.admin-services-title {
+  font-family: 'Cinzel', serif;
+  color: #e8d5b5;
+  font-size: 0.95rem;
+  letter-spacing: 0.12em;
+  margin: 0 0 6px;
+}
+
+.admin-services-subtitle {
+  color: #8a8aa0;
+  font-size: 0.82rem;
+  margin: 0 0 24px;
+}
+
+.admin-services-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+
+@media (max-width: 900px) {
+  .admin-services-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 560px) {
+  .admin-services-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.admin-service-card {
+  background: #14141c;
+  border: 1px solid #2a2a3a;
+  border-radius: 10px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: border-color 0.2s;
+}
+
+.admin-service-card:hover {
+  border-color: #c4713a;
+}
+
+.admin-service-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.admin-service-name {
+  font-family: 'Cinzel', serif;
+  font-size: 0.95rem;
+  color: #e8d5b5;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.2s;
+}
+
+.admin-service-name:hover {
+  color: #c4713a;
+}
+
+.admin-service-status {
+  font-size: 0.65rem;
+  padding: 2px 8px;
+  border-radius: 4px;
+  border: 1px solid;
+  letter-spacing: 0.04em;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.admin-service-category {
+  font-size: 0.72rem;
+  color: #7a7ab8;
+  letter-spacing: 0.04em;
+}
+
+.admin-service-usage {
+  font-size: 0.82rem;
+  color: #c4c4c4;
+  margin: 0;
+  line-height: 1.4;
+  flex: 1;
+}
+
+.admin-service-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.admin-service-paid {
+  font-size: 0.65rem;
+  padding: 2px 8px;
+  border-radius: 4px;
+  border: 1px solid;
+  letter-spacing: 0.04em;
+  font-weight: 600;
+  align-self: flex-start;
+}
+
+.admin-service-envvars {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.admin-service-env {
+  font-size: 0.62rem;
+  color: #8a8aa0;
+  background: rgba(255, 255, 255, 0.04);
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-family: monospace;
+}
