@@ -1,6 +1,6 @@
-const { getAnthropicClient, getOpenAIClient, getUserKeys } = require('./lib/llm');
-const { getUidFromRequest } = require('./lib/auth');
-const { computeNatalChart } = require('./lib/natalChart');
+const { getAnthropicClient, getOpenAIClient, getUserKeys } = require('./_lib/llm');
+const { getUidFromRequest } = require('./_lib/auth');
+const { computeNatalChart } = require('./_lib/natalChart');
 
 // Model config — centralized for easy swapping and future BYOK support
 const MODELS = {

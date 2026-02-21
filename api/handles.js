@@ -1,5 +1,5 @@
 const admin = require('firebase-admin');
-const { ensureFirebaseAdmin } = require('./lib/auth');
+const { ensureFirebaseAdmin } = require('./_lib/auth');
 
 const HANDLE_RE = /^[a-zA-Z0-9_-]{3,20}$/;
 

@@ -1,7 +1,7 @@
 const admin = require('firebase-admin');
-const { getMentorTypeInfo } = require('./lib/mentorTypes');
-const { getAnthropicClient, getUserKeys } = require('./lib/llm');
-const { ensureFirebaseAdmin, getUidFromRequest } = require('./lib/auth');
+const { getMentorTypeInfo } = require('./_lib/mentorTypes');
+const { getAnthropicClient, getUserKeys } = require('./_lib/llm');
+const { ensureFirebaseAdmin, getUidFromRequest } = require('./_lib/auth');
 
 // Model config
 const MODELS = {

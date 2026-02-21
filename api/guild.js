@@ -1,5 +1,5 @@
 const admin = require('firebase-admin');
-const { getMentorTypeInfo } = require('./lib/mentorTypes');
+const { getMentorTypeInfo } = require('./_lib/mentorTypes');
 
 let initialized = false;
 

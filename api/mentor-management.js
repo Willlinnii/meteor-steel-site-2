@@ -1,6 +1,6 @@
 const admin = require('firebase-admin');
-const { ensureFirebaseAdmin } = require('./lib/auth');
-const { getMentorTypeInfo } = require('./lib/mentorTypes');
+const { ensureFirebaseAdmin } = require('./_lib/auth');
+const { getMentorTypeInfo } = require('./_lib/mentorTypes');
 
 const DEFAULT_CAPACITY = 5;
 const MAX_CAPACITY = 20;

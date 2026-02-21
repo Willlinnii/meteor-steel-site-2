@@ -1,4 +1,4 @@
-const { computeNatalChart } = require('./lib/natalChart');
+const { computeNatalChart } = require('./_lib/natalChart');
 
 module.exports = async function handler(req, res) {
   if (req.method !== 'POST') {
