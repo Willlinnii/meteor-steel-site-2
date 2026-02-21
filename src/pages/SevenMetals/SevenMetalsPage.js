@@ -585,8 +585,10 @@ export default function SevenMetalsPage() {
       if (showMedicineWheel) { setShowMedicineWheel(false); setSelectedWheelItem(null); }
       if (showMythicEarth) setShowMythicEarth(false);
       if (showFallenStarlight) { setShowFallenStarlight(false); setShowStoryOfStories(false); setSelectedStarlightStage(null); }
-      // Clear other selections
-      setSelectedSign(null); setSelectedCardinal(null); setSelectedEarth(null);
+      // Clear all selections
+      setSelectedPlanet(null); setActiveTab('overview');
+      setSelectedSign(null); setSelectedCardinal(null); setSelectedEarth(null); setSelectedMonth(null);
+      setSelectedConstellation(null);
       setVideoUrl(null); setPersonaChatOpen(null);
     } else if (!showMeteorSteel) {
       // Toggle to meteor steel — reset to starting state
@@ -621,8 +623,10 @@ export default function SevenMetalsPage() {
       if (showMedicineWheel) { setShowMedicineWheel(false); setSelectedWheelItem(null); }
       if (chakraViewMode) setChakraViewMode(null);
       if (showMythicEarth) setShowMythicEarth(false);
-      setSelectedSign(null); setSelectedCardinal(null); setSelectedEarth(null);
-      setSelectedMonth(null);
+      // Clear all selections
+      setSelectedPlanet(null); setActiveTab('overview');
+      setSelectedSign(null); setSelectedCardinal(null); setSelectedEarth(null); setSelectedMonth(null);
+      setSelectedConstellation(null);
       setVideoUrl(null); setPersonaChatOpen(null);
     } else if (!showStoryOfStories) {
       // Second click: switch to Story of Stories
@@ -873,8 +877,11 @@ export default function SevenMetalsPage() {
             setShowCalendar(true);
             setSelectedMonth(MONTHS[new Date().getMonth()]);
             setActiveMonthTab('stone');
+            // Clear all selections
+            setSelectedPlanet(null); setActiveTab('overview');
             setSelectedSign(null); setSelectedCardinal(null); setSelectedEarth(null);
-            setSelectedPlanet(null);
+            setSelectedConstellation(null);
+            setVideoUrl(null); setPersonaChatOpen(null);
             // Exit other modes
             if (showMedicineWheel) { setShowMedicineWheel(false); setSelectedWheelItem(null); }
             if (chakraViewMode) { setChakraViewMode(null); }
@@ -889,10 +896,14 @@ export default function SevenMetalsPage() {
               setShowMedicineWheel(true);
               setSelectedWheelItem(null);
               trackElement('metals.medicine-wheel.opened');
-              setSelectedSign(null); setSelectedCardinal(null); setSelectedEarth(null); setSelectedMonth(null);
               setShowCalendar(false);
               navigate('/metals/medicine-wheel');
             }
+            // Clear all selections
+            setSelectedPlanet(null); setActiveTab('overview');
+            setSelectedSign(null); setSelectedCardinal(null); setSelectedEarth(null); setSelectedMonth(null);
+            setSelectedConstellation(null);
+            setVideoUrl(null); setPersonaChatOpen(null);
             // Exit other modes
             if (chakraViewMode) { setChakraViewMode(null); }
             if (clockMode) { setClockMode(null); }
@@ -911,6 +922,14 @@ export default function SevenMetalsPage() {
               if (prev === 'heliocentric') return 'weekdays';
               return 'chaldean';
             });
+            // Always open to Sun with body tab
+            setSelectedPlanet('Sun');
+            setActiveTab('body');
+            // Clear all other selections
+            setSelectedSign(null); setSelectedCardinal(null); setSelectedEarth(null); setSelectedMonth(null);
+            setShowCalendar(false);
+            setSelectedConstellation(null);
+            setVideoUrl(null); setPersonaChatOpen(null);
             // Exit other modes
             if (showMedicineWheel) { setShowMedicineWheel(false); setSelectedWheelItem(null); navigate('/metals'); }
             if (clockMode) { setClockMode(null); }
@@ -932,14 +951,18 @@ export default function SevenMetalsPage() {
             // Reset mythic earth content state
             setSelectedMythicSite(null);
             setMythicEarthCategory('sacred-site');
+            // Clear all selections
+            setSelectedPlanet(null); setActiveTab('overview');
+            setSelectedSign(null); setSelectedCardinal(null); setSelectedEarth(null); setSelectedMonth(null);
+            setShowCalendar(false);
+            setSelectedConstellation(null);
+            setVideoUrl(null); setPersonaChatOpen(null);
             // Exit other modes
             if (showMedicineWheel) { setShowMedicineWheel(false); setSelectedWheelItem(null); navigate('/metals'); }
             if (chakraViewMode) { setChakraViewMode(null); }
-            if (clockMode) { setClockMode(null); setShowCalendar(false); setSelectedMonth(null); }
+            if (clockMode) { setClockMode(null); }
             if (showMonomyth) { setShowMonomyth(false); setShowCycles(false); setShowMeteorSteel(false); setSelectedMonomythStage(null); setMonomythModel(null); }
             if (showFallenStarlight) { setShowFallenStarlight(false); setShowStoryOfStories(false); setSelectedStarlightStage(null); }
-            setSelectedSign(null); setSelectedCardinal(null); setSelectedEarth(null);
-            setVideoUrl(null); setPersonaChatOpen(null);
           }}
           showMonomyth={showMonomyth}
           showMeteorSteel={showMeteorSteel}
@@ -1319,6 +1342,8 @@ export default function SevenMetalsPage() {
                     setPersonaChatMessages={setCurrentPersonaMessages}
                     onClosePersonaChat={() => setPersonaChatOpen(null)}
                     getTabClass={courseworkMode ? (tab) => isElementCompleted(`metals.tab.${tab}.${selectedPlanet}`) ? 'cw-completed' : 'cw-incomplete' : undefined}
+                    onToggleYBR={handleYBRToggle}
+                    ybrActive={ybr.active}
                   />
                   {activeTab === 'overview' && (
                     <div className="planet-culture-wrapper">
@@ -1454,6 +1479,8 @@ export default function SevenMetalsPage() {
                     setPersonaChatMessages={setCurrentPersonaMessages}
                     onClosePersonaChat={() => setPersonaChatOpen(null)}
                     getTabClass={courseworkMode ? (tab) => isElementCompleted(`metals.tab.${tab}.${selectedPlanet}`) ? 'cw-completed' : 'cw-incomplete' : undefined}
+                    onToggleYBR={handleYBRToggle}
+                    ybrActive={ybr.active}
                   />
                   {activeTab === 'overview' && (
                     <div className="planet-culture-wrapper">
@@ -1812,6 +1839,8 @@ export default function SevenMetalsPage() {
                     setPersonaChatMessages={setCurrentPersonaMessages}
                     onClosePersonaChat={() => setPersonaChatOpen(null)}
                     getTabClass={courseworkMode ? (tab) => isElementCompleted(`metals.tab.${tab}.${selectedPlanet}`) ? 'cw-completed' : 'cw-incomplete' : undefined}
+                    onToggleYBR={handleYBRToggle}
+                    ybrActive={ybr.active}
                   />
                   {activeTab === 'overview' && (
                     <div className="planet-culture-wrapper">
