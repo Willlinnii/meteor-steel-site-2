@@ -33,6 +33,10 @@ export const useYBRHeader = () => useContext(YBRHeaderContext);
 const StoryForgeContext = createContext({ forgeMode: false });
 export const useStoryForge = () => useContext(StoryForgeContext);
 
+// YBR mode context — global toggle for Yellow Brick Road icons throughout the site
+const YBRModeContext = createContext({ ybrMode: false });
+export const useYBRMode = () => useContext(YBRModeContext);
+
 // Area override context — pages can override Atlas's area detection (e.g. celestial-clocks → meteor-steel)
 const AreaOverrideContext = createContext({ area: null, register: () => {} });
 export const useAreaOverride = () => useContext(AreaOverrideContext);
@@ -1286,8 +1290,6 @@ const NAV_ITEMS = [
   { path: '/mythology-channel', label: 'Mythology Channel' },
   { path: '/mythosophia', label: 'Mythosophia' },
   { path: '/atlas', label: 'Atlas' },
-  { path: '/fallen-starlight', label: 'Fallen Starlight' },
-  { path: '/story-of-stories', label: 'Story of Stories' },
   { path: '/games', label: 'Game Room' },
 ];
 
@@ -1345,6 +1347,7 @@ function SiteHeader() {
   const { courseworkMode, toggleCourseworkMode } = useCoursework();
   const { active: ybrActive, toggle: ybrToggle } = useYBRHeader();
   const { forgeMode, setForgeMode } = useStoryForge();
+  const { ybrMode, setYbrMode } = useYBRMode();
   const location = useLocation();
   const navigate = useNavigate();
   const show3D = location.pathname.startsWith('/metals') && location.pathname !== '/metals/vr';
@@ -1353,23 +1356,29 @@ function SiteHeader() {
       <Link to="/metals/calendar" className="site-header-logo">Mythouse</Link>
       {user && (
         <div className="site-header-user">
-          {ybrToggle && (
-            <button
-              className={`header-ybr-toggle${ybrActive ? ' active' : ''}`}
-              onClick={ybrToggle}
-              title={ybrActive ? 'Exit Yellow Brick Road' : 'Walk the Yellow Brick Road'}
-            >
-              <svg viewBox="0 0 20 14" width="16" height="11" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinejoin="round">
-                <path d="M1,4 L7,1 L19,1 L13,4 Z" />
-                <path d="M1,4 L1,13 L13,13 L13,4" />
-                <path d="M13,4 L19,1 L19,10 L13,13" />
-                <line x1="7" y1="4" x2="7" y2="13" />
-                <line x1="1" y1="8.5" x2="13" y2="8.5" />
-                <line x1="4" y1="8.5" x2="4" y2="13" />
-                <line x1="10" y1="4" x2="10" y2="8.5" />
-              </svg>
-            </button>
-          )}
+          <button
+            className={`header-ybr-toggle${ybrMode ? ' active' : ''}`}
+            onClick={() => {
+              if (!ybrMode) {
+                setYbrMode(true);
+              } else if (!location.pathname.startsWith('/journey')) {
+                navigate('/journey/monomyth');
+              } else {
+                setYbrMode(false);
+              }
+            }}
+            title={ybrMode ? (location.pathname.startsWith('/journey') ? 'Turn off Yellow Brick Road' : 'Open Yellow Brick Road') : 'Turn on Yellow Brick Road'}
+          >
+            <svg viewBox="0 0 20 14" width="16" height="11" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinejoin="round">
+              <path d="M1,4 L7,1 L19,1 L13,4 Z" />
+              <path d="M1,4 L1,13 L13,13 L13,4" />
+              <path d="M13,4 L19,1 L19,10 L13,13" />
+              <line x1="7" y1="4" x2="7" y2="13" />
+              <line x1="1" y1="8.5" x2="13" y2="8.5" />
+              <line x1="4" y1="8.5" x2="4" y2="13" />
+              <line x1="10" y1="4" x2="10" y2="8.5" />
+            </svg>
+          </button>
           <button
             className={`header-forge-toggle${forgeMode ? ' active' : ''}`}
             onClick={() => {
@@ -1501,9 +1510,11 @@ function AppContent() {
   const [ybrHeader, setYbrHeader] = useState({ active: false, toggle: null });
   const [areaOverride, setAreaOverride] = useState(null);
   const [forgeMode, setForgeMode] = useState(false);
+  const [ybrMode, setYbrMode] = useState(false);
 
   return (
     <StoryForgeContext.Provider value={{ forgeMode, setForgeMode }}>
+    <YBRModeContext.Provider value={{ ybrMode, setYbrMode }}>
     <YBRHeaderContext.Provider value={{ ...ybrHeader, register: setYbrHeader }}>
     <AreaOverrideContext.Provider value={{ area: areaOverride, register: setAreaOverride }}>
     <div className={`app${courseworkMode ? ' cw-mode' : ''}`}>
@@ -1536,6 +1547,7 @@ function AppContent() {
     </div>
     </AreaOverrideContext.Provider>
     </YBRHeaderContext.Provider>
+    </YBRModeContext.Provider>
     </StoryForgeContext.Provider>
   );
 }
