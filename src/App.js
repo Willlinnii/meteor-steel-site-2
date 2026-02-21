@@ -1350,7 +1350,7 @@ function SiteNav() {
   ];
 
   // Label-only overrides: show in the toggle text but not in the dropdown
-  const LABEL_OVERRIDES = { '/profile': 'Profile', '/xr': 'VR / XR', '/mentors': 'Mentors', '/guild': 'Guild' };
+  const LABEL_OVERRIDES = { '/profile': 'Profile', '/xr': 'VR / XR', '/mentors': 'Mentors', '/guild': 'Guild', '/dragon': 'Dragon' };
   const current = visibleItems.find(n => !n.external && n.path === location.pathname)
     || (LABEL_OVERRIDES[location.pathname] ? { label: LABEL_OVERRIDES[location.pathname] } : null)
     || NAV_ITEMS[0];
@@ -1472,6 +1472,7 @@ function SiteHeader() {
   const location = useLocation();
   const navigate = useNavigate();
   const [gatePopup, setGatePopup] = useState(null); // { type: 'subscription'|'purchase', id }
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const show3D = location.pathname.startsWith('/metals') && location.pathname !== '/metals/vr';
   return (
     <>
@@ -1479,7 +1480,10 @@ function SiteHeader() {
       <Link to="/metals/calendar" className="site-header-logo">Mythouse</Link>
       {xrMode && <div id="xr-controls-slot" className="xr-controls-slot" />}
       {user && (
-        <div className="site-header-user">
+        <div className={`site-header-user${mobileMenuOpen ? ' mobile-expanded' : ''}`}>
+          <button className="mobile-menu-trigger" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+            {mobileMenuOpen ? '\u2715' : '\u2731'}
+          </button>
           <button
             className={`header-ybr-toggle${ybrMode ? ' active' : ''}`}
             onClick={() => {

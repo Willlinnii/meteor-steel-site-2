@@ -146,6 +146,10 @@ body {
   gap: 8px;
 }
 
+/* Hidden on desktop — only used on mobile */
+.mobile-menu-trigger {
+  display: none;
+}
 
 @media (max-width: 600px) {
   .site-header {
@@ -155,9 +159,68 @@ body {
     font-size: 0.85rem;
     padding-right: 60px;
   }
+
+  /* Mobile FAB menu */
   .site-header-user {
-    top: 6px;
-    right: 12px;
+    position: fixed;
+    top: auto;
+    bottom: 20px;
+    right: 16px;
+    flex-direction: column-reverse;
+    align-items: flex-end;
+    gap: 0;
+    z-index: 1001;
+  }
+
+  .mobile-menu-trigger {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid var(--accent-ember);
+    background: var(--bg-medium);
+    color: var(--accent-ember);
+    font-size: 1.2rem;
+    cursor: pointer;
+    box-shadow: 0 0 16px rgba(196, 113, 58, 0.3), 0 0 32px rgba(196, 113, 58, 0.1);
+    transition: all 0.25s ease;
+    z-index: 2;
+  }
+
+  .mobile-menu-trigger:hover {
+    box-shadow: 0 0 24px rgba(196, 113, 58, 0.5);
+  }
+
+  /* Hide all toggle buttons when collapsed */
+  .site-header-user > :not(.mobile-menu-trigger) {
+    display: none;
+  }
+
+  /* Show buttons when expanded */
+  .site-header-user.mobile-expanded > :not(.mobile-menu-trigger) {
+    display: flex;
+  }
+
+  .site-header-user.mobile-expanded {
+    gap: 8px;
+    padding-bottom: 0;
+  }
+
+  /* Fan buttons upward above the trigger */
+  .site-header-user.mobile-expanded .header-ybr-toggle,
+  .site-header-user.mobile-expanded .header-forge-toggle,
+  .site-header-user.mobile-expanded .coursework-toggle,
+  .site-header-user.mobile-expanded .header-book-toggle,
+  .site-header-user.mobile-expanded .header-xr-toggle,
+  .site-header-user.mobile-expanded .site-header-profile {
+    animation: fab-pop-in 0.2s ease-out both;
+  }
+
+  @keyframes fab-pop-in {
+    from { opacity: 0; transform: scale(0.5) translateY(8px); }
+    to   { opacity: 1; transform: scale(1) translateY(0); }
   }
 }
 
@@ -2814,6 +2877,100 @@ body {
   text-align: center;
   padding: 20px;
   opacity: 0.6;
+}
+
+/* ===== PROFILE: AI SETTINGS (BYOK) ===== */
+.profile-ai-settings {
+  padding: 0 4px;
+}
+.profile-ai-settings-desc {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  margin: 0 0 16px;
+  line-height: 1.5;
+}
+.profile-api-key-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border-subtle);
+}
+.profile-api-key-row:last-child {
+  border-bottom: none;
+}
+.profile-api-key-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.85rem;
+  color: var(--text-primary);
+  min-width: 80px;
+  letter-spacing: 0.03em;
+}
+.profile-api-key-saved {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+}
+.profile-api-key-masked {
+  font-family: monospace;
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  letter-spacing: 0.02em;
+}
+.profile-api-key-remove-btn {
+  font-size: 0.78rem;
+  color: var(--accent-ember);
+  background: none;
+  border: 1px solid var(--accent-ember);
+  border-radius: 5px;
+  padding: 3px 10px;
+  cursor: pointer;
+  opacity: 0.8;
+  transition: opacity 0.2s;
+}
+.profile-api-key-remove-btn:hover {
+  opacity: 1;
+}
+.profile-api-key-remove-btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+.profile-api-key-input-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+}
+.profile-api-key-input {
+  background: rgba(26, 26, 36, 0.7);
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  color: var(--text-primary);
+  padding: 6px 12px;
+  font-size: 0.85rem;
+  font-family: monospace;
+  flex: 1;
+  min-width: 0;
+}
+.profile-api-key-input:focus {
+  outline: none;
+  border-color: var(--accent-gold);
+}
+.profile-api-key-save-btn {
+  background: var(--accent-gold);
+  color: var(--bg-dark);
+  border: none;
+  border-radius: 6px;
+  padding: 6px 14px;
+  font-size: 0.82rem;
+  cursor: pointer;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.profile-api-key-save-btn:disabled {
+  opacity: 0.4;
+  cursor: default;
 }
 
 /* ===== PROFILE: SIGN OUT ===== */
