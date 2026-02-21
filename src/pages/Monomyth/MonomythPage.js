@@ -7,7 +7,7 @@ import useWheelJourney from '../../hooks/useWheelJourney';
 import WheelJourneyPanel from '../../components/WheelJourneyPanel';
 import { useCoursework } from '../../coursework/CourseworkContext';
 import { useWritings } from '../../writings/WritingsContext';
-import { useYBRHeader } from '../../App';
+import { useYBRHeader, useStoryForge } from '../../App';
 import './MonomythPage.css';
 
 import monomythProse from '../../data/monomyth.json';
@@ -18,8 +18,6 @@ import psychlesData from '../../data/monomythPsychles.json';
 import depthData from '../../data/monomythDepth.json';
 import filmsData from '../../data/monomythFilms.json';
 import worldData from '../../data/normalOtherWorld.json';
-import monomythModels from '../../data/monomythModels.json';
-import monomythCycles from '../../data/monomythCycles.json';
 import { MONOMYTH_STAGES, THEORIST_TO_MODEL, CYCLE_TO_MODEL, getModelById, getCycleById } from '../../data/monomythConstants';
 
 const TABS = [
@@ -431,6 +429,7 @@ export default function MonomythPage() {
   const [introAnim, setIntroAnim] = useState(false);
 
   const journey = useWheelJourney('monomyth', MONOMYTH_STAGES);
+  const { forgeMode } = useStoryForge();
   const { trackElement, trackTime, isElementCompleted, courseworkMode } = useCoursework();
   const { notesData, saveNotes, loaded: writingsLoaded } = useWritings();
 
@@ -663,7 +662,7 @@ export default function MonomythPage() {
           ) : isStage ? (
             <div className="metal-detail-panel">
               <div className="metal-tabs">
-                {TABS.map(t => {
+                {(forgeMode ? TABS : TABS.filter(t => t.id !== 'development')).map(t => {
                   const eid = `monomyth.${t.id}.${currentStage}`;
                   const cwClass = courseworkMode ? (isElementCompleted(eid) ? ' cw-completed' : ' cw-incomplete') : '';
                   return (

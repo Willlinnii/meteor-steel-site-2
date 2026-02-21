@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import TextBlock from '../sevenMetals/TextBlock';
 import DevelopmentPanel from '../DevelopmentPanel';
 import { THEORIST_TO_MODEL, CYCLE_TO_MODEL, MONOMYTH_STAGES } from '../../data/monomythConstants';
+import { useStoryForge } from '../../App';
 
 import monomythProse from '../../data/monomyth.json';
 import stageOverviews from '../../data/stageOverviews.json';
@@ -203,11 +204,13 @@ export default function StageContent({
   setDevEntries,
 }) {
   const [activeGroup, setActiveGroup] = useState('mythological');
+  const { forgeMode } = useStoryForge();
+  const visibleTabs = forgeMode ? TABS : TABS.filter(t => t.id !== 'development');
 
   return (
     <div className="metal-detail-panel">
       <div className="metal-tabs">
-        {TABS.map(t => {
+        {visibleTabs.map(t => {
           const cwClass = getTabClass ? (' ' + getTabClass(t.id)) : '';
           return (
             <button

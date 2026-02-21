@@ -1,4 +1,5 @@
 import React from 'react';
+import { useStoryForge } from '../../App';
 
 const TABS = [
   { id: 'overview',  label: 'Overview' },
@@ -13,9 +14,11 @@ const TABS = [
 ];
 
 export default function MetalContentTabs({ activeTab, onSelectTab, playlistUrl, videoActive, onToggleVideo, onTogglePersonaChat, personaChatActive, getTabClass }) {
+  const { forgeMode } = useStoryForge();
+  const visibleTabs = forgeMode ? TABS : TABS.filter(t => t.id !== 'development');
   return (
     <div className="metal-tabs">
-      {TABS.map(t => (
+      {visibleTabs.map(t => (
         <button
           key={t.id}
           className={`metal-tab${activeTab === t.id ? ' active' : ''} ${getTabClass ? getTabClass(t.id) : ''}`}

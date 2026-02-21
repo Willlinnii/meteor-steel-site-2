@@ -455,7 +455,7 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
   const [stormFlash, setStormFlash] = useState(false);
   const [meteorShower, setMeteorShower] = useState(false);
   const prevMeteorSteelRef = useRef(false);
-  const wheelOpenedRef = useRef(false);
+  const wheelOpenedRef = useRef(false); // eslint-disable-line no-unused-vars
 
   const playThunder = useCallback(() => {
     try {

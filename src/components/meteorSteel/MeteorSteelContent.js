@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import DevelopmentPanel from '../DevelopmentPanel';
+import { useStoryForge } from '../../App';
 import steelProcess from '../../data/steelProcess.json';
 import figures from '../../data/figures.json';
 import saviors from '../../data/saviors.json';
@@ -78,6 +79,8 @@ const STAGE_LABELS = {
 };
 
 export default function MeteorSteelContent({ stageId, activeTab, onSelectTab, devEntries, setDevEntries }) {
+  const { forgeMode } = useStoryForge();
+  const visibleTabs = forgeMode ? SECTION_TABS : SECTION_TABS.filter(t => t.id !== 'development');
   return (
     <div className="metal-detail-panel">
       {stageOverviews[stageId] && (
@@ -86,7 +89,7 @@ export default function MeteorSteelContent({ stageId, activeTab, onSelectTab, de
         </div>
       )}
       <div className="metal-tabs">
-        {SECTION_TABS.map(t => (
+        {visibleTabs.map(t => (
           <button key={t.id}
             className={`metal-tab${activeTab === t.id ? ' active' : ''}`}
             onClick={() => onSelectTab(t.id)}>{t.label}</button>

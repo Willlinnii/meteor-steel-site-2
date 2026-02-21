@@ -37,7 +37,7 @@ import constellationContent from '../../data/constellationContent.json';
 import fallenStarlightData from '../../data/fallenStarlight.json';
 import storyOfStoriesData from '../../data/storyOfStoriesData';
 import DevelopmentPanel from '../../components/DevelopmentPanel';
-import { useYBRHeader, useAreaOverride } from '../../App';
+import { useYBRHeader, useAreaOverride, useStoryForge } from '../../App';
 
 const MythicEarthPage = lazy(() => import('../MythicEarth/MythicEarthPage'));
 
@@ -127,7 +127,7 @@ const ZODIAC_PLAYLISTS = {
   Aquarius: 'https://www.youtube.com/playlist?list=PLX31T_KS3jtpqswOrq5U08V7qhPeVoMKu',
 };
 
-const CARDINAL_PLAYLISTS = {
+const CARDINAL_PLAYLISTS = { // eslint-disable-line no-unused-vars
   'summer-solstice': 'https://www.youtube.com/playlist?list=PLX31T_KS3jtrt6bHMWVETza07R8lJL2of',
   'autumnal-equinox': 'https://www.youtube.com/playlist?list=PLX31T_KS3jtqQZM-wycPZdEoc2BD2Q2iu',
 };
@@ -221,7 +221,7 @@ function ZodiacContent({ sign, activeCulture }) {
   );
 }
 
-function CardinalContent({ cardinalId, activeCulture }) {
+function CardinalContent({ cardinalId, activeCulture }) { // eslint-disable-line no-unused-vars
   const c = cardinalsData[cardinalId];
   if (!c) return <p className="metals-empty">No data for this cardinal point.</p>;
 
@@ -492,6 +492,7 @@ export default function SevenMetalsPage() {
   const [selectedMythicSite, setSelectedMythicSite] = useState(null);
   const [mythicEarthCategory, setMythicEarthCategory] = useState('sacred-site');
   const ybr = useYellowBrickRoad();
+  const { forgeMode } = useStoryForge();
 
   const [ybrAutoStart, setYbrAutoStart] = useState(false);
   const { trackElement, trackTime, isElementCompleted, courseworkMode } = useCoursework();
@@ -1189,13 +1190,17 @@ export default function SevenMetalsPage() {
                         )}
                       </div>
                     </div>
-                    <h5 style={{ marginTop: '20px' }}>Development</h5>
-                    <DevelopmentPanel
-                      stageLabel={fallenStarlightData.titles[selectedStarlightStage] || selectedStarlightStage}
-                      stageKey={`starlight-${selectedStarlightStage}`}
-                      entries={devEntries}
-                      setEntries={setDevEntries}
-                    />
+                    {forgeMode && (
+                      <>
+                        <h5 style={{ marginTop: '20px' }}>Development</h5>
+                        <DevelopmentPanel
+                          stageLabel={fallenStarlightData.titles[selectedStarlightStage] || selectedStarlightStage}
+                          stageKey={`starlight-${selectedStarlightStage}`}
+                          entries={devEntries}
+                          setEntries={setDevEntries}
+                        />
+                      </>
+                    )}
                   </div>
                 </div>
               </div>

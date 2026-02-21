@@ -5,6 +5,7 @@ import DevelopmentPanel from '../../components/DevelopmentPanel';
 import fallenStarlightData from '../../data/fallenStarlight.json';
 import { useCoursework } from '../../coursework/CourseworkContext';
 import { useWritings } from '../../writings/WritingsContext';
+import { useStoryForge } from '../../App';
 
 const STAGES = [
   { id: 'golden-age', label: 'Golden Age' },
@@ -84,6 +85,7 @@ export default function FallenStarlightPage() {
   const [audioPlaying, setAudioPlaying] = useState(false);
   const { trackElement, trackTime, isElementCompleted, courseworkMode } = useCoursework();
   const { notesData, saveNotes, loaded: writingsLoaded } = useWritings();
+  const { forgeMode } = useStoryForge();
 
   useEffect(() => {
     if (writingsLoaded && notesData.entries) {
@@ -206,17 +208,21 @@ export default function FallenStarlightPage() {
                   ))}
                 </div>
               </div>
-              <h3 className="chapter-title" style={{ marginTop: '30px' }}>Development</h3>
-              <div className="section-content">
-                <div className="content-area">
-                  <DevelopmentPanel
-                    stageLabel={chapterTitle || currentStage}
-                    stageKey={`starlight-${currentStage}`}
-                    entries={devEntries}
-                    setEntries={setDevEntries}
-                  />
-                </div>
-              </div>
+              {forgeMode && (
+                <>
+                  <h3 className="chapter-title" style={{ marginTop: '30px' }}>Development</h3>
+                  <div className="section-content">
+                    <div className="content-area">
+                      <DevelopmentPanel
+                        stageLabel={chapterTitle || currentStage}
+                        stageKey={`starlight-${currentStage}`}
+                        entries={devEntries}
+                        setEntries={setDevEntries}
+                      />
+                    </div>
+                  </div>
+                </>
+              )}
             </>
           )}
         </div>

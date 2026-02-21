@@ -6,6 +6,7 @@ import TextBlock from './TextBlock';
 import DevelopmentPanel from '../DevelopmentPanel';
 import TarotCardContent from './TarotCardContent';
 import PersonaChatPanel from '../PersonaChatPanel';
+import { useStoryForge } from '../../App';
 
 const HINDU_GEMS = {
   Sun: 'Ruby', Moon: 'Pearl', Mars: 'Red Coral', Mercury: 'Emerald',
@@ -377,6 +378,7 @@ function SynthesisTab({ data }) {
 }
 
 export default function MetalDetailPanel({ data, activeTab, onSelectTab, activeCulture, onSelectCulture, devEntries, setDevEntries, playlistUrl, videoActive, onToggleVideo, onTogglePersonaChat, personaChatActive, personaChatMessages, setPersonaChatMessages, onClosePersonaChat, getTabClass }) {
+  const { forgeMode } = useStoryForge();
   const showCultureSelector = activeTab === 'deities';
 
   return (
@@ -394,7 +396,7 @@ export default function MetalDetailPanel({ data, activeTab, onSelectTab, activeC
         {activeTab === 'hebrew' && <HebrewTab data={data} />}
         {activeTab === 'tarot' && <TarotCardContent correspondenceType="planet" correspondenceValue={data.core.planet} showMinorArcana={false} />}
         {activeTab === 'synthesis' && <SynthesisTab data={data} />}
-        {activeTab === 'development' && (
+        {activeTab === 'development' && forgeMode && (
           <DevelopmentPanel
             stageLabel={`${data.core.planet} — ${data.core.metal}`}
             stageKey={`metals-${data.core.planet}`}

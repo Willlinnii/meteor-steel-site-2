@@ -4,25 +4,25 @@ import data from '../../data/storyOfStoriesData';
 import './StoryOfStoriesPage.css';
 
 const BOOK_STAGES = [
-  { id: 'golden-surface', label: 'Golden Surface' },
+  { id: 'golden-surface', label: 'Golden Age' },
   { id: 'calling-star', label: 'Calling Star' },
   { id: 'crater-crossing', label: 'Crater Crossing', flipLabel: true },
   { id: 'trials-forge', label: 'Trials of Forge' },
-  { id: 'quenching', label: 'Quenching' },
-  { id: 'return-reflection', label: 'Return Reflection' },
+  { id: 'quenching', label: 'Quench' },
+  { id: 'return-reflection', label: 'Integrate & Reflect' },
   { id: 'drawing-dawn', label: 'Drawing Dawn', flipLabel: true },
-  { id: 'new-age', label: 'New Age' },
+  { id: 'new-age', label: 'Age of Integration' },
 ];
 
 const CHAPTER_NAMES = {
-  'golden-surface': 'Chapter 1: Golden Surface \u2014 The Setup',
+  'golden-surface': 'Chapter 1: Golden Age \u2014 The Setup',
   'calling-star': 'Chapter 2: Calling Star \u2014 From Stasis to Rupture',
   'crater-crossing': 'Chapter 3: Crater Crossing \u2014 Threshold',
   'trials-forge': 'Chapter 4: Tests of the Forge \u2014 The Road of Initiation',
-  'quenching': 'Chapter 5: Quenching at the Nadir \u2014 The Nadir',
-  'return-reflection': 'Chapter 6: Return Reflection \u2014 The Return',
+  'quenching': 'Chapter 5: Quench \u2014 The Nadir',
+  'return-reflection': 'Chapter 6: Integrate & Reflect \u2014 The Return',
   'drawing-dawn': 'Chapter 7: Drawing Dawn \u2014 The Return Threshold',
-  'new-age': 'Chapter 8: New Age of Renewal \u2014 Renewal',
+  'new-age': 'Chapter 8: Age of Integration \u2014 Renewal',
 };
 
 function MeteorShower({ active }) {
