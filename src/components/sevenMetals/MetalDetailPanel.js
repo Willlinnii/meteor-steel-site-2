@@ -377,13 +377,13 @@ function SynthesisTab({ data }) {
   );
 }
 
-export default function MetalDetailPanel({ data, activeTab, onSelectTab, activeCulture, onSelectCulture, devEntries, setDevEntries, playlistUrl, videoActive, onToggleVideo, onTogglePersonaChat, personaChatActive, personaChatMessages, setPersonaChatMessages, onClosePersonaChat, getTabClass }) {
+export default function MetalDetailPanel({ data, activeTab, onSelectTab, activeCulture, onSelectCulture, devEntries, setDevEntries, playlistUrl, videoActive, onToggleVideo, onTogglePersonaChat, personaChatActive, personaChatMessages, setPersonaChatMessages, onClosePersonaChat, getTabClass, onToggleYBR, ybrActive }) {
   const { forgeMode } = useStoryForge();
   const showCultureSelector = activeTab === 'deities';
 
   return (
     <div className="metal-detail-panel">
-      <MetalContentTabs activeTab={activeTab} onSelectTab={onSelectTab} playlistUrl={playlistUrl} videoActive={videoActive} onToggleVideo={onToggleVideo} onTogglePersonaChat={onTogglePersonaChat} personaChatActive={personaChatActive} getTabClass={getTabClass} />
+      <MetalContentTabs activeTab={activeTab} onSelectTab={onSelectTab} playlistUrl={playlistUrl} videoActive={videoActive} onToggleVideo={onToggleVideo} onTogglePersonaChat={onTogglePersonaChat} personaChatActive={personaChatActive} getTabClass={getTabClass} onToggleYBR={onToggleYBR} ybrActive={ybrActive} />
       {showCultureSelector && (
         <CultureSelector activeCulture={activeCulture} onSelectCulture={onSelectCulture} />
       )}

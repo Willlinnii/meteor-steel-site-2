@@ -417,9 +417,11 @@ export default function CircleNav({ stages, currentStage, onSelectStage, clockwi
         })}
 
       </div>
-      <button className="direction-toggle" onClick={onToggleDirection}>
-        {clockwise ? '\u21BB' : '\u21BA'}
-      </button>
+      {onToggleDirection && (
+        <button className="direction-toggle" onClick={onToggleDirection}>
+          {clockwise ? '\u21BB' : '\u21BA'}
+        </button>
+      )}
     </div>
   );
 }

@@ -1,5 +1,7 @@
 import React, { useState, useMemo, useRef, useEffect, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Body, GeoVector, Ecliptic, MoonPhase, EclipticLongitude, SearchRiseSet, Observer } from 'astronomy-engine';
+import { useProfile } from '../../profile/ProfileContext';
 import PlanetNode from './PlanetNode';
 import wheelData from '../../data/medicineWheels.json';
 import psychlesData from '../../data/monomythPsychles.json';
@@ -255,6 +257,10 @@ function ensureYTApi() {
 export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPlanet, hoveredPlanet, selectedSign, onSelectSign, selectedCardinal, onSelectCardinal, selectedEarth, onSelectEarth, showCalendar, onToggleCalendar, selectedMonth, onSelectMonth, showMedicineWheel, onToggleMedicineWheel, selectedWheelItem, onSelectWheelItem, chakraViewMode, onToggleChakraView, videoUrl, onCloseVideo, ybrActive, ybrCurrentStopIndex, ybrStopProgress, ybrJourneySequence, onToggleYBR, ybrAutoStart, clockMode, onToggleClock, showMonomyth, showMeteorSteel, monomythStages, selectedMonomythStage, onSelectMonomythStage, onToggleMonomyth, monomythModel, showCycles, onSelectCycleSegment, activeCulture, showFallenStarlight, showStoryOfStories, onToggleStarlight, starlightStages, selectedStarlightStage, onSelectStarlightStage, selectedConstellation, onSelectConstellation }) {
   const wrapperRef = useRef(null);
   const [tooltip, setTooltip] = useState(null);
+  const { hasPurchase } = useProfile();
+  const navigate = useNavigate();
+  const [showStarlightGate, setShowStarlightGate] = useState(false);
+  const starlightPurchased = hasPurchase('starlight');
 
   // --- Analog clock state & effects ---
   const showClock = !!clockMode;
@@ -910,7 +916,7 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
             {/* Position labels and hit targets */}
             {wheelData.wheels.map((wheel, wi) => {
               const ring = WHEEL_RINGS[wi];
-              const fontSize = [11, 9, 9.5, 10, 9, 9, 8.5][wi] || 8.5;
+              const fontSize = [10, 11, 12, 13, 11, 11, 11][wi] || 10;
               return (
                 <g key={wheel.id}>
                   {wheel.positions.filter(p => !p.isCenter).map(pos => {
@@ -927,6 +933,20 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
                     const displayLabel = pos.shortLabel || pos.label;
                     const rot = pos.isCenter ? 0 : tangentRotation(pos.angle);
 
+                    // Split long labels into two stacked lines
+                    const words = displayLabel.split(' ');
+                    const needsSplit = words.length >= 2 && displayLabel.length > 10;
+                    const splitMid = Math.ceil(words.length / 2);
+                    const lines = needsSplit
+                      ? [words.slice(0, splitMid).join(' '), words.slice(splitMid).join(' ')]
+                      : [displayLabel];
+                    const lineSpacing = fontSize * 1.15;
+
+                    // Nudge multi-line labels inward so they center in the ring
+                    const effectiveR = needsSplit ? ring.textR - 4 : ring.textR;
+                    const tx = CX + effectiveR * Math.cos(rad);
+                    const ty = CY + effectiveR * Math.sin(rad);
+
                     return (
                       <g key={itemKey}
                         className={`mw-position${isActive ? ' active' : ''}`}
@@ -940,15 +960,20 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
                             <animate attributeName="opacity" values="0.6;0.2;0.6" dur="2s" repeatCount="indefinite" />
                           </circle>
                         )}
-                        <text x={px} y={py}
+                        <text x={tx} y={ty}
                           textAnchor="middle" dominantBaseline="central"
-                          fill={isActive ? '#f0c040' : 'rgba(220, 190, 120, 0.8)'}
+                          fill={isActive ? '#f0c040' : 'rgb(225, 195, 120)'}
                           fontSize={fontSize} fontFamily="Cinzel, serif"
-                          fontWeight={isActive ? '700' : '500'}
-                          transform={rot ? `rotate(${rot}, ${px}, ${py})` : undefined}
+                          fontWeight={isActive ? '700' : '600'}
+                          transform={rot ? `rotate(${rot}, ${tx}, ${ty})` : undefined}
                           style={{ transition: 'fill 0.3s' }}
                         >
-                          {displayLabel}
+                          {lines.length === 1 ? displayLabel : (
+                            <>
+                              <tspan x={tx} dy={-lineSpacing / 2}>{lines[0]}</tspan>
+                              <tspan x={tx} dy={lineSpacing}>{lines[1]}</tspan>
+                            </>
+                          )}
                         </text>
                       </g>
                     );
@@ -983,7 +1008,7 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
                     </circle>
                   )}
                   <text x={nx} y={ny} textAnchor="middle" dominantBaseline="central"
-                    fill={isNumActive ? '#f0c040' : 'rgba(220, 190, 120, 0.7)'}
+                    fill={isNumActive ? '#f0c040' : 'rgb(225, 195, 120)'}
                     fontSize="16" fontFamily="Cinzel, serif" fontWeight={isNumActive ? '700' : '600'}
                     style={{ transition: 'fill 0.3s' }}>
                     {num}
@@ -2619,9 +2644,13 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
         </button>
 
         <button
-          className={`starlight-toggle${showFallenStarlight ? ' active' : ''}${showStoryOfStories ? ' stories' : ''}`}
-          onClick={() => { setMobileMenuOpen(false); onToggleStarlight && onToggleStarlight(); }}
-          title={showStoryOfStories ? 'Story of Stories — click for Fallen Starlight' : showFallenStarlight ? 'Fallen Starlight — click for Story of Stories' : 'Show Fallen Starlight'}
+          className={`starlight-toggle${showFallenStarlight ? ' active' : ''}${showStoryOfStories ? ' stories' : ''}${!starlightPurchased ? ' disabled' : ''}`}
+          onClick={() => {
+            setMobileMenuOpen(false);
+            if (!starlightPurchased) { setShowStarlightGate(true); return; }
+            onToggleStarlight && onToggleStarlight();
+          }}
+          title={!starlightPurchased ? 'Unlock Fallen Starlight' : showStoryOfStories ? 'Story of Stories — click for Fallen Starlight' : showFallenStarlight ? 'Fallen Starlight — click for Story of Stories' : 'Show Fallen Starlight'}
         >
           {showStoryOfStories ? (
             /* Open book with golden circle on cover */
@@ -2677,6 +2706,22 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
           )}
         </span>
       </div>
+      {showStarlightGate && (
+        <div className="subscription-gate-overlay" onClick={() => setShowStarlightGate(false)}>
+          <div className="subscription-gate-popup" onClick={e => e.stopPropagation()}>
+            <h3 className="subscription-gate-title">Fallen Starlight</h3>
+            <p className="subscription-gate-desc">Unlock Fallen Starlight and Story of Stories on the Chronosphaera.</p>
+            <div className="subscription-gate-actions">
+              <button className="subscription-gate-primary" onClick={() => { navigate('/profile#purchases'); setShowStarlightGate(false); }}>
+                Manage Membership
+              </button>
+              <button className="subscription-gate-secondary" onClick={() => setShowStarlightGate(false)}>
+                Not now
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }

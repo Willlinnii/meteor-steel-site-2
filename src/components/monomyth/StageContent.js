@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import TextBlock from '../sevenMetals/TextBlock';
 import DevelopmentPanel from '../DevelopmentPanel';
 import { THEORIST_TO_MODEL, CYCLE_TO_MODEL, MONOMYTH_STAGES } from '../../data/monomythConstants';
-import { useStoryForge } from '../../App';
+import { useStoryForge, useYBRMode } from '../../App';
 
 import monomythProse from '../../data/monomyth.json';
 import stageOverviews from '../../data/stageOverviews.json';
@@ -19,7 +19,6 @@ const TABS = [
   { id: 'history', label: 'History' },
   { id: 'myths', label: 'Myths' },
   { id: 'films', label: 'Films' },
-  { id: 'development', label: 'Development' },
 ];
 
 const THEORIST_GROUPS = [
@@ -202,15 +201,17 @@ export default function StageContent({
   getTabClass,
   devEntries,
   setDevEntries,
+  onToggleYBR,
+  ybrActive,
 }) {
   const [activeGroup, setActiveGroup] = useState('mythological');
   const { forgeMode } = useStoryForge();
-  const visibleTabs = forgeMode ? TABS : TABS.filter(t => t.id !== 'development');
+  const { ybrMode } = useYBRMode();
 
   return (
     <div className="metal-detail-panel">
       <div className="metal-tabs">
-        {visibleTabs.map(t => {
+        {TABS.map(t => {
           const cwClass = getTabClass ? (' ' + getTabClass(t.id)) : '';
           return (
             <button
@@ -222,6 +223,37 @@ export default function StageContent({
             </button>
           );
         })}
+        {forgeMode && (
+          <button
+            className={`metal-tab forge-icon-tab${activeTab === 'development' ? ' active' : ''}`}
+            title="Story Forge"
+            onClick={() => onSelectTab('development')}
+          >
+            <svg viewBox="0 0 20 20" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M10,2 L10,11" />
+              <path d="M7,5 Q10,3 13,5" />
+              <path d="M6,11 L14,11" />
+              <path d="M5,11 L5,14 Q10,18 15,14 L15,11" />
+            </svg>
+          </button>
+        )}
+        {ybrMode && onToggleYBR && (
+          <button
+            className={`metal-tab ybr-icon-tab${ybrActive ? ' active' : ''}`}
+            title={ybrActive ? 'Exit Yellow Brick Road' : 'Walk the Yellow Brick Road'}
+            onClick={onToggleYBR}
+          >
+            <svg viewBox="0 0 20 14" width="14" height="10" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinejoin="round">
+              <path d="M1,4 L7,1 L19,1 L13,4 Z" />
+              <path d="M1,4 L1,13 L13,13 L13,4" />
+              <path d="M13,4 L19,1 L19,10 L13,13" />
+              <line x1="7" y1="4" x2="7" y2="13" />
+              <line x1="1" y1="8.5" x2="13" y2="8.5" />
+              <line x1="4" y1="8.5" x2="4" y2="13" />
+              <line x1="10" y1="4" x2="10" y2="8.5" />
+            </svg>
+          </button>
+        )}
       </div>
 
       {activeTab === 'theorists' && (

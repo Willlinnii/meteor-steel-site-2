@@ -1,0 +1,153 @@
+/* ===== XR EXPERIENCES PAGE ===== */
+
+.xr-page {
+  min-height: 100vh;
+  padding: 70px 20px 60px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.xr-header {
+  text-align: center;
+  margin-bottom: 36px;
+}
+
+.xr-header-icon {
+  color: rgba(218, 165, 32, 0.7);
+  margin-bottom: 12px;
+}
+
+.xr-title {
+  font-family: 'Cinzel', serif;
+  color: rgba(218, 165, 32, 0.9);
+  font-size: 1.8rem;
+  letter-spacing: 0.06em;
+  margin: 0 0 8px;
+}
+
+.xr-subtitle {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* ===== EXPERIENCE GRID ===== */
+
+.xr-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 18px;
+}
+
+.xr-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: rgba(26, 26, 36, 0.7);
+  border: 1px solid rgba(218, 165, 32, 0.25);
+  border-radius: 10px;
+  transition: all 0.25s ease;
+  overflow: hidden;
+}
+
+.xr-card:hover {
+  border-color: rgba(218, 165, 32, 0.5);
+  background: rgba(218, 165, 32, 0.04);
+}
+
+.xr-card-main {
+  display: flex;
+  gap: 16px;
+  padding: 20px 18px 14px;
+  align-items: flex-start;
+  flex: 1;
+}
+
+.xr-card-icon {
+  color: rgba(218, 165, 32, 0.6);
+  flex-shrink: 0;
+  padding-top: 2px;
+  transition: color 0.25s ease;
+}
+
+.xr-card:hover .xr-card-icon {
+  color: rgba(218, 165, 32, 0.9);
+}
+
+.xr-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+}
+
+.xr-card-title {
+  font-family: 'Cinzel', serif;
+  color: var(--text-primary);
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+}
+
+.xr-card-features {
+  font-family: 'Cinzel', serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: rgba(218, 165, 32, 0.7);
+}
+
+.xr-card-desc {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  line-height: 1.5;
+  margin-top: 4px;
+}
+
+/* ===== ENTER BUTTON ===== */
+
+.xr-card-enter {
+  align-self: flex-end;
+  margin: 0 16px 14px 0;
+  padding: 6px 14px;
+  font-family: 'Cinzel', serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: rgba(218, 165, 32, 0.6);
+  background: rgba(218, 165, 32, 0.04);
+  border: 1px solid rgba(218, 165, 32, 0.2);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.xr-card-enter:hover {
+  border-color: rgba(218, 165, 32, 0.5);
+  background: rgba(218, 165, 32, 0.1);
+  color: rgba(218, 165, 32, 0.95);
+  box-shadow: 0 0 12px rgba(218, 165, 32, 0.1);
+}
+
+/* ===== RESPONSIVE ===== */
+
+@media (max-width: 600px) {
+  .xr-page {
+    padding: 50px 12px 40px;
+  }
+
+  .xr-title {
+    font-size: 1.4rem;
+  }
+
+  .xr-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .xr-card-main {
+    padding: 16px 14px 12px;
+  }
+}

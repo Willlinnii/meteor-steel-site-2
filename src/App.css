@@ -2209,6 +2209,85 @@ body {
   box-shadow: 0 0 8px rgba(201, 169, 97, 0.15);
 }
 
+/* XR controls slot — sits in header gap between logo and icon group */
+.xr-controls-slot {
+  position: fixed;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 101;
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  animation: xrSlotFadeIn 0.25s ease;
+}
+
+@keyframes xrSlotFadeIn {
+  from { opacity: 0; transform: translateX(-50%) translateY(-4px); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+@media (max-width: 600px) {
+  .xr-controls-slot {
+    top: 6px;
+    gap: 4px;
+  }
+}
+
+/* Book (Fallen Starlight) toggle in site header */
+.header-book-toggle {
+  color: var(--text-secondary);
+  background: none;
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  padding: 4px 6px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
+}
+
+.header-book-toggle:hover {
+  color: var(--accent-ember);
+  border-color: var(--accent-ember);
+}
+
+.header-book-toggle.active {
+  color: var(--accent-ember);
+  border-color: var(--accent-ember);
+  background: rgba(196, 113, 58, 0.12);
+  box-shadow: 0 0 8px rgba(196, 113, 58, 0.15);
+}
+
+/* XR toggle in site header */
+.header-xr-toggle {
+  color: var(--text-secondary);
+  background: none;
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  padding: 4px 6px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.header-xr-toggle:hover {
+  color: var(--accent-gold);
+  border-color: var(--accent-gold);
+}
+
+.header-xr-toggle.active {
+  color: var(--accent-gold);
+  border-color: var(--accent-gold);
+  background: rgba(201, 169, 97, 0.12);
+  box-shadow: 0 0 8px rgba(201, 169, 97, 0.15);
+}
+
 /* YBR toggle in site header */
 .header-ybr-toggle {
   background: none;
@@ -2569,6 +2648,15 @@ body {
   border-bottom: 1px solid var(--border-subtle);
 }
 
+.profile-subsection-title {
+  font-family: 'Cinzel', serif;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+  margin: 16px 0 8px;
+  text-transform: uppercase;
+}
+
 /* Course cards */
 .profile-course-list {
   display: flex;
@@ -2867,6 +2955,215 @@ body {
   flex-shrink: 0;
 }
 
+/* ===== PROFILE: SUBSCRIPTION CARDS ===== */
+.profile-subscription-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.profile-subscription-card {
+  display: flex;
+  flex-direction: column;
+  background: rgba(26, 26, 36, 0.7);
+  border: 1px solid var(--border-subtle);
+  border-radius: 10px;
+  padding: 0;
+  transition: all 0.25s ease;
+  cursor: pointer;
+}
+
+.profile-subscription-card.active {
+  border-color: rgba(201, 169, 97, 0.4);
+  background: rgba(201, 169, 97, 0.06);
+}
+
+.profile-subscription-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+}
+
+.profile-subscription-icon {
+  flex-shrink: 0;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+}
+
+.profile-subscription-card.active .profile-subscription-icon {
+  color: var(--accent-gold);
+}
+
+.profile-subscription-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.profile-subscription-name {
+  font-family: 'Cinzel', serif;
+  color: var(--text-primary);
+  font-size: 0.88rem;
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+.profile-subscription-card.active .profile-subscription-name {
+  color: var(--accent-gold);
+}
+
+.profile-subscription-desc {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+.profile-subscription-details {
+  font-size: 0.82rem;
+  line-height: 1.65;
+  color: var(--text-secondary);
+  padding: 0 16px 14px;
+  border-top: 1px solid var(--border-subtle);
+  margin: 0 16px;
+  padding-top: 12px;
+  animation: sub-details-in 0.2s ease-out;
+}
+
+@keyframes sub-details-in {
+  from { opacity: 0; max-height: 0; }
+  to   { opacity: 1; max-height: 200px; }
+}
+
+/* Toggle switch */
+.profile-subscription-toggle {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 24px;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.profile-subscription-toggle input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.profile-subscription-slider {
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 24px;
+  border: 1px solid var(--border-subtle);
+  transition: all 0.25s ease;
+}
+
+.profile-subscription-slider::before {
+  content: '';
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  left: 2px;
+  bottom: 2px;
+  background: var(--text-secondary);
+  border-radius: 50%;
+  transition: all 0.25s ease;
+}
+
+.profile-subscription-toggle input:checked + .profile-subscription-slider {
+  background: rgba(201, 169, 97, 0.2);
+  border-color: var(--accent-gold);
+}
+
+.profile-subscription-toggle input:checked + .profile-subscription-slider::before {
+  transform: translateX(20px);
+  background: var(--accent-gold);
+}
+
+/* ===== SUBSCRIPTION GATE POPUP ===== */
+.subscription-gate-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 300;
+  animation: cw-fade-in 0.3s ease;
+}
+
+.subscription-gate-popup {
+  background: var(--bg-medium);
+  border: 2px solid var(--accent-gold);
+  border-radius: 16px;
+  padding: 32px 36px;
+  text-align: center;
+  max-width: 400px;
+  width: 90%;
+  box-shadow: 0 0 60px rgba(201, 169, 97, 0.2);
+  animation: cw-panel-in 0.4s ease;
+}
+
+.subscription-gate-title {
+  font-family: 'Cinzel', serif;
+  color: var(--accent-gold);
+  font-size: 1.2rem;
+  margin: 0 0 12px;
+  letter-spacing: 0.04em;
+}
+
+.subscription-gate-desc {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin: 0 0 24px;
+}
+
+.subscription-gate-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.subscription-gate-primary {
+  font-family: 'Cinzel', serif;
+  font-size: 0.85rem;
+  padding: 10px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  background: rgba(201, 169, 97, 0.15);
+  border: 1px solid var(--accent-gold);
+  color: var(--accent-gold);
+  letter-spacing: 0.04em;
+  transition: all 0.2s ease;
+}
+
+.subscription-gate-primary:hover {
+  background: rgba(201, 169, 97, 0.25);
+  box-shadow: 0 0 12px rgba(201, 169, 97, 0.2);
+}
+
+.subscription-gate-secondary {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 0.82rem;
+  cursor: pointer;
+  padding: 6px;
+  transition: color 0.2s ease;
+}
+
+.subscription-gate-secondary:hover {
+  color: var(--text-primary);
+}
+
 /* ===== PROFILE: ONBOARDING PROMPT ===== */
 .profile-onboarding-prompt {
   border: 2px dashed rgba(201, 169, 97, 0.3);
@@ -3156,10 +3453,12 @@ body {
     padding: 12px;
     gap: 10px;
   }
-  .coursework-toggle {
+  .coursework-toggle,
+  .header-book-toggle {
     padding: 3px 5px;
   }
   .coursework-toggle svg,
+  .header-book-toggle svg,
   .site-header-profile svg {
     width: 15px;
     height: 15px;

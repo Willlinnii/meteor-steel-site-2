@@ -55,5 +55,11 @@ service cloud.firestore {
       // Only admin can write (via Admin SDK on server)
       allow write: if false;
     }
+
+    // Mentor applications — admin read-only, server-written
+    match /mentor-applications/{appId} {
+      allow read: if request.auth != null && request.auth.token.email == 'willlinnii@gmail.com';
+      allow write: if false;
+    }
   }
 }

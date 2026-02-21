@@ -1,9 +1,411 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useMemo, useRef, useEffect, lazy, Suspense } from 'react';
 import CircleNav from '../../components/CircleNav';
 import { ring1, ring2, ring3, allEpisodes, subtitle as seriesSubtitle, description as seriesDescription, rokuUrl } from '../../data/mythsSeriesData';
 import treasuresData from '../../data/treasuresData';
+import mythicEarthSites from '../../data/mythicEarthSites.json';
+import {
+  CULTURES, ARCANA_POSITIONS,
+  getArcanaForCulture, getArcanaPosition, getCrossReference,
+  buildMinorArcana, getSuitsForCulture,
+} from '../../games/mythouse/mythouseCardData';
 import '../Treasures/TreasuresPage.css';
 import './MythsPage.css';
+
+const MythicEarthPage = lazy(() => import('../MythicEarth/MythicEarthPage'));
+
+const MYTHIC_EARTH_CATEGORIES = [
+  { id: 'sacred-site', label: 'Sacred Sites', color: '#c9a961' },
+  { id: 'mythic-location', label: 'Mythic Locations', color: '#c4713a' },
+  { id: 'literary-location', label: 'Literary Locations', color: '#8b9dc3' },
+];
+
+/* ── Text Reader (mirrors MythicEarthPage's internal TextReader) ── */
+function TextReader({ readUrl, wikisourcePage }) {
+  const [chapters, setChapters] = useState(null);
+  const [loadingIndex, setLoadingIndex] = useState(false);
+  const [activeChapter, setActiveChapter] = useState(null);
+  const [chapterText, setChapterText] = useState('');
+  const [loadingChapter, setLoadingChapter] = useState(false);
+  const [error, setError] = useState(null);
+  const [readerOpen, setReaderOpen] = useState(false);
+  const textRef = useRef(null);
+
+  const openReader = useCallback(async () => {
+    setReaderOpen(true);
+    if (chapters) return;
+    setLoadingIndex(true);
+    setError(null);
+    try {
+      const res = await fetch(`/api/sacred-text?mode=index&page=${encodeURIComponent(wikisourcePage)}`);
+      const data = await res.json();
+      if (data.chapters && data.chapters.length > 0) {
+        setChapters(data.chapters);
+      } else {
+        setError('No chapters found for this text.');
+      }
+    } catch {
+      setError('Failed to load table of contents.');
+    }
+    setLoadingIndex(false);
+  }, [wikisourcePage, chapters]);
+
+  const loadChapter = useCallback(async (chapter) => {
+    setActiveChapter(chapter);
+    setLoadingChapter(true);
+    setChapterText('');
+    setError(null);
+    try {
+      const sectionParam = chapter.section != null ? `&section=${chapter.section}` : '';
+      const res = await fetch(`/api/sacred-text?mode=chapter&page=${encodeURIComponent(chapter.page)}${sectionParam}`);
+      const data = await res.json();
+      if (data.text) {
+        setChapterText(data.text);
+        if (textRef.current) textRef.current.scrollTop = 0;
+      } else {
+        setError('Failed to load chapter text.');
+      }
+    } catch {
+      setError('Failed to load chapter text.');
+    }
+    setLoadingChapter(false);
+  }, []);
+
+  if (!readerOpen) {
+    return (
+      <div className="mythic-earth-reader-toggle">
+        <button className="mythic-earth-reader-btn" onClick={openReader}>
+          Open Reader
+        </button>
+        <a href={readUrl} target="_blank" rel="noopener noreferrer" className="mythic-earth-reader-external">
+          Read on Wikisource
+        </a>
+      </div>
+    );
+  }
+
+  return (
+    <div className="mythic-earth-reader">
+      <div className="mythic-earth-reader-header">
+        <h3 className="mythic-earth-reader-title">Reader</h3>
+        <button className="mythic-earth-reader-close" onClick={() => { setReaderOpen(false); setActiveChapter(null); setChapterText(''); }}>
+          Close Reader
+        </button>
+      </div>
+
+      {loadingIndex && (
+        <div className="mythic-earth-reader-loading">Loading table of contents...</div>
+      )}
+
+      {error && !loadingIndex && !loadingChapter && (
+        <div className="mythic-earth-reader-error">
+          {error}
+          <a href={readUrl} target="_blank" rel="noopener noreferrer"> Read on Sacred Texts instead.</a>
+        </div>
+      )}
+
+      {chapters && (
+        <div className="mythic-earth-reader-body">
+          <div className="mythic-earth-reader-chapters">
+            <div className="mythic-earth-reader-chapter-list">
+              {chapters.map((ch, i) => (
+                <button
+                  key={i}
+                  className={`mythic-earth-reader-chapter-btn${activeChapter?.url === ch.url ? ' active' : ''}`}
+                  onClick={() => loadChapter(ch)}
+                  title={ch.label}
+                >
+                  {ch.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="mythic-earth-reader-text" ref={textRef}>
+            {loadingChapter ? (
+              <div className="mythic-earth-reader-loading">Loading...</div>
+            ) : chapterText ? (
+              <div className="mythic-earth-reader-content">
+                <h4 className="mythic-earth-reader-chapter-heading">{activeChapter?.label}</h4>
+                {chapterText.split('\n\n').map((p, i) => {
+                  const trimmed = p.trim();
+                  if (!trimmed) return null;
+                  if (trimmed === '---') return <hr key={i} className="mythic-earth-reader-divider" />;
+                  const headingMatch = trimmed.match(/^===\s*(.+?)\s*===$/);
+                  if (headingMatch) {
+                    return <h5 key={i} className="mythic-earth-reader-section-heading">{headingMatch[1]}</h5>;
+                  }
+                  return <p key={i} dangerouslySetInnerHTML={{
+                    __html: trimmed
+                      .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+                      .replace(/_(.+?)_/g, '<em>$1</em>')
+                  }} />;
+                })}
+              </div>
+            ) : (
+              <div className="mythic-earth-reader-placeholder">
+                Select a chapter to begin reading.
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ── Motif Index (Stith Thompson) ── */
+const TMI_CATEGORIES = [
+  { id: 'A', label: 'Mythological Motifs' },
+  { id: 'B', label: 'Animals' },
+  { id: 'C', label: 'Tabu' },
+  { id: 'D', label: 'Magic' },
+  { id: 'E', label: 'The Dead' },
+  { id: 'F', label: 'Marvels' },
+  { id: 'G', label: 'Ogres' },
+  { id: 'H', label: 'Tests' },
+  { id: 'J', label: 'The Wise and the Foolish' },
+  { id: 'K', label: 'Deceptions' },
+  { id: 'L', label: 'Reversal of Fortune' },
+  { id: 'M', label: 'Ordaining the Future' },
+  { id: 'N', label: 'Chance and Fate' },
+  { id: 'P', label: 'Society' },
+  { id: 'Q', label: 'Rewards and Punishments' },
+  { id: 'R', label: 'Captives and Fugitives' },
+  { id: 'S', label: 'Unnatural Cruelty' },
+  { id: 'T', label: 'Sex' },
+  { id: 'U', label: 'The Nature of Life' },
+  { id: 'V', label: 'Religion' },
+  { id: 'W', label: 'Traits of Character' },
+  { id: 'X', label: 'Humor' },
+  { id: 'Z', label: 'Miscellaneous Groups of Motifs' },
+];
+
+function MotifItem({ entry, isExpanded, onToggle }) {
+  return (
+    <div className={`motif-item${isExpanded ? ' expanded' : ''}`}>
+      <button className="motif-item-row" onClick={onToggle}>
+        <span className="motif-code">{entry.m}</span>
+        <span className="motif-desc">{entry.d}</span>
+        {(entry.r || entry.l) && <span className="motif-has-refs">{'\u25B8'}</span>}
+      </button>
+      {isExpanded && (
+        <div className="motif-detail">
+          {entry.a && (
+            <div className="motif-detail-addl">{entry.a}</div>
+          )}
+          {entry.l && entry.l.length > 0 && (
+            <div className="motif-detail-locations">
+              <span className="motif-detail-label">Locations:</span>
+              <span className="motif-detail-loc-list">{entry.l.join(' \u00B7 ')}</span>
+            </div>
+          )}
+          {entry.r && (
+            <div className="motif-detail-refs">
+              <span className="motif-detail-label">References:</span>
+              <span className="motif-detail-ref-text">{entry.r}</span>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function MotifIndex() {
+  const [catData, setCatData] = useState({});   // { A: [...], B: [...] }
+  const [loading, setLoading] = useState(false);
+  const [activeCat, setActiveCat] = useState('A');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [expandedMotif, setExpandedMotif] = useState(null);
+  const listRef = useRef(null);
+
+  // Load a category's data on demand
+  const loadCategory = useCallback((letter) => {
+    if (catData[letter]) return; // already loaded
+    setLoading(true);
+    fetch(`/data/tmi/${letter}.json`)
+      .then(r => r.json())
+      .then(data => {
+        setCatData(prev => ({ ...prev, [letter]: data }));
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
+  }, [catData]);
+
+  // Load active category on mount and when it changes
+  useEffect(() => {
+    loadCategory(activeCat);
+  }, [activeCat, loadCategory]);
+
+  const motifs = catData[activeCat] || [];
+
+  // Search across all loaded categories
+  const isSearching = searchQuery.length >= 2;
+  const displayMotifs = isSearching
+    ? Object.values(catData).flat().filter(entry =>
+        entry.m.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        entry.d.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (entry.l && entry.l.some(loc => loc.toLowerCase().includes(searchQuery.toLowerCase())))
+      ).slice(0, 200)
+    : motifs;
+
+  // Group motifs by major section
+  const sections = [];
+  if (!isSearching && displayMotifs.length > 0) {
+    let currentSection = null;
+    for (const entry of displayMotifs) {
+      const numPart = entry.m.replace(/^[A-Z]/, '').replace(/\.$/, '');
+      const isTopLevel = !numPart.includes('.');
+      const num = parseInt(numPart, 10);
+      if (isTopLevel && !isNaN(num) && num % 100 === 0 && num >= 100) {
+        currentSection = { header: entry.m, title: entry.d, motifs: [] };
+        sections.push(currentSection);
+      } else if (isTopLevel && !isNaN(num) && num < 100 && sections.length === 0) {
+        if (!currentSection) {
+          currentSection = { header: displayMotifs[0].m, title: displayMotifs[0].d, motifs: [] };
+          sections.push(currentSection);
+        }
+        if (entry.m !== currentSection.header) {
+          currentSection.motifs.push(entry);
+        }
+      } else {
+        if (!currentSection) {
+          currentSection = { header: '', title: activeCat, motifs: [] };
+          sections.push(currentSection);
+        }
+        currentSection.motifs.push(entry);
+      }
+    }
+  }
+
+  const handleCatClick = useCallback((catId) => {
+    setActiveCat(catId);
+    setExpandedMotif(null);
+    setSearchQuery('');
+    if (listRef.current) listRef.current.scrollTop = 0;
+  }, []);
+
+  // Load all categories for search
+  const handleSearchFocus = useCallback(() => {
+    for (const cat of TMI_CATEGORIES) {
+      if (!catData[cat.id]) loadCategory(cat.id);
+    }
+  }, [catData, loadCategory]);
+
+  const catInfo = TMI_CATEGORIES.find(c => c.id === activeCat);
+  const loadedCount = Object.keys(catData).length;
+
+  return (
+    <div className="motif-index">
+      <div className="motif-index-header">
+        <h2 className="motif-index-title">Motif-Index of Folk-Literature</h2>
+        <p className="motif-index-subtitle">Stith Thompson's classification of narrative elements in folk-literature</p>
+      </div>
+
+      {/* Search */}
+      <div className="motif-search-bar">
+        <input
+          type="text"
+          className="motif-search-input"
+          placeholder="Search 46,000+ motifs..."
+          value={searchQuery}
+          onChange={e => { setSearchQuery(e.target.value); setExpandedMotif(null); }}
+          onFocus={handleSearchFocus}
+        />
+        {searchQuery && (
+          <button className="motif-search-clear" onClick={() => setSearchQuery('')}>{'\u2715'}</button>
+        )}
+      </div>
+
+      {/* Category Grid */}
+      {!isSearching && (
+        <div className="motif-cat-grid">
+          {TMI_CATEGORIES.map(cat => (
+            <button
+              key={cat.id}
+              className={`motif-cat-btn${activeCat === cat.id ? ' active' : ''}${catData[cat.id] ? ' loaded' : ''}`}
+              onClick={() => handleCatClick(cat.id)}
+            >
+              <span className="motif-cat-letter">{cat.id}</span>
+              <span className="motif-cat-label">{cat.label}</span>
+            </button>
+          ))}
+        </div>
+      )}
+
+      {/* Active category info */}
+      {!isSearching && catInfo && (
+        <div className="motif-cat-info">
+          <span className="motif-cat-info-label">{catInfo.id}. {catInfo.label}</span>
+          {motifs.length > 0 && <span className="motif-cat-info-count">{motifs.length.toLocaleString()} motifs</span>}
+        </div>
+      )}
+
+      {isSearching && (
+        <div className="motif-cat-info">
+          <span className="motif-cat-info-label">Search results</span>
+          <span className="motif-cat-info-count">
+            {displayMotifs.length >= 200 ? '200+' : displayMotifs.length} matches
+            {loadedCount < 23 && ` (${loadedCount}/23 categories loaded)`}
+          </span>
+        </div>
+      )}
+
+      {/* Loading */}
+      {loading && (
+        <div className="motif-loading">
+          <span className="mythic-earth-loading-spinner" />
+          <span>Loading motifs...</span>
+        </div>
+      )}
+
+      {/* Motif list */}
+      {!loading && motifs.length > 0 && (
+        <div className="motif-list" ref={listRef}>
+          {isSearching ? (
+            displayMotifs.length === 0 ? (
+              <div className="motif-empty">No motifs match "{searchQuery}"</div>
+            ) : (
+              <div className="motif-section">
+                {displayMotifs.map(entry => (
+                  <MotifItem
+                    key={entry.m}
+                    entry={entry}
+                    isExpanded={expandedMotif === entry.m}
+                    onToggle={() => setExpandedMotif(expandedMotif === entry.m ? null : entry.m)}
+                  />
+                ))}
+              </div>
+            )
+          ) : sections.length > 0 ? (
+            sections.map((section, si) => (
+              <div key={si} className="motif-section">
+                <div className="motif-section-header">
+                  <span className="motif-section-code">{section.header}</span>
+                  <span className="motif-section-title">{section.title}</span>
+                </div>
+                {section.motifs.map(entry => (
+                  <MotifItem
+                    key={entry.m}
+                    entry={entry}
+                    isExpanded={expandedMotif === entry.m}
+                    onToggle={() => setExpandedMotif(expandedMotif === entry.m ? null : entry.m)}
+                  />
+                ))}
+              </div>
+            ))
+          ) : (
+            <div className="motif-empty">No motifs in this category.</div>
+          )}
+        </div>
+      )}
+
+      <div className="motif-attribution">
+        Thompson, Stith. <em>Motif-Index of Folk-Literature</em>. Indiana University Press, 1955-1958. Data: <a href="https://github.com/fbkarsdorp/tmi" target="_blank" rel="noopener noreferrer">fbkarsdorp/tmi</a> (Apache-2.0).
+      </div>
+    </div>
+  );
+}
 
 /* ── Series (triple-ring) constants ── */
 const RING_1_STAGES = ring1.map(ep => ({ id: ep.id, label: ep.label }));
@@ -60,7 +462,6 @@ function TreasuresContent({ currentEpisode, onSelectEpisode, viewToggle }) {
         currentStage={currentEpisode}
         onSelectStage={onSelectEpisode}
         clockwise={false}
-        onToggleDirection={() => {}}
         centerLine1="Lost"
         centerLine2="Treasures"
         centerLine3=""
@@ -358,9 +759,272 @@ function deriveLabel(entry, index) {
   return label;
 }
 
+/* ── Tarot constants ── */
+const TYPE_LABELS = { element: 'Element', planet: 'Planet', zodiac: 'Zodiac' };
+const TYPE_SYMBOLS = {
+  element: { Air: '\u2601', Water: '\u2248', Fire: '\u2632' },
+  planet: { Mercury: '\u263F', Moon: '\u263D', Venus: '\u2640', Jupiter: '\u2643', Mars: '\u2642', Sun: '\u2609', Saturn: '\u2644' },
+  zodiac: { Aries: '\u2648', Taurus: '\u2649', Gemini: '\u264A', Cancer: '\u264B', Leo: '\u264C', Virgo: '\u264D', Libra: '\u264E', Scorpio: '\u264F', Sagittarius: '\u2650', Capricorn: '\u2651', Aquarius: '\u2652', Pisces: '\u2653' },
+};
+
+/* ── Tarot Decks content ── */
+function TarotContent() {
+  const [activeCulture, setActiveCulture] = useState('tarot');
+  const [expandedCard, setExpandedCard] = useState(null);
+  const [arcanaView, setArcanaView] = useState('major');
+  const [minorSuitFilter, setMinorSuitFilter] = useState(null);
+
+  const arcanaCards = useMemo(() => {
+    if (activeCulture === 'tarot') return [];
+    return getArcanaForCulture(activeCulture);
+  }, [activeCulture]);
+
+  const minorCards = useMemo(() => buildMinorArcana(activeCulture), [activeCulture]);
+  const cultureSuits = useMemo(() => getSuitsForCulture(activeCulture), [activeCulture]);
+
+  const filteredMinor = useMemo(() => {
+    if (!minorSuitFilter) return minorCards;
+    return minorCards.filter(c => c.suit === minorSuitFilter);
+  }, [minorCards, minorSuitFilter]);
+
+  const crossRef = useMemo(() => {
+    if (!expandedCard) return [];
+    return getCrossReference(expandedCard.number);
+  }, [expandedCard]);
+
+  const position = useMemo(() => {
+    if (!expandedCard) return null;
+    return getArcanaPosition(expandedCard.number);
+  }, [expandedCard]);
+
+  const isTarotView = activeCulture === 'tarot';
+
+  return (
+    <div className="tarot-section">
+      <div className="tarot-section-header">
+        <h2 className="tarot-section-title">Tarot Decks</h2>
+        <p className="tarot-section-subtitle">
+          22 Major Arcana and 56 Minor Arcana across 7 mythic cultures.
+          Each position maps to the same archetype — tap any card to see its cross-cultural variants.
+        </p>
+      </div>
+
+      {/* Culture tabs */}
+      <div className="mc-deck-tabs">
+        <button
+          className={`mc-tab${activeCulture === 'tarot' ? ' active' : ''}`}
+          style={{ '--tab-color': 'var(--accent-gold)' }}
+          onClick={() => { setActiveCulture('tarot'); setExpandedCard(null); setMinorSuitFilter(null); }}
+        >
+          Tarot
+          <span className="mc-tab-count">78</span>
+        </button>
+        {CULTURES.map(c => (
+          <button
+            key={c.key}
+            className={`mc-tab${activeCulture === c.key ? ' active' : ''}`}
+            onClick={() => { setActiveCulture(c.key); setExpandedCard(null); setMinorSuitFilter(null); }}
+          >
+            {c.label}
+            <span className="mc-tab-count">78</span>
+          </button>
+        ))}
+      </div>
+
+      {/* Major / Minor toggle */}
+      <div className="mc-sub-toggle">
+        <button
+          className={`mc-sub-tab${arcanaView === 'major' ? ' active' : ''}`}
+          onClick={() => setArcanaView('major')}
+        >
+          Major Arcana
+          <span className="mc-tab-count">22</span>
+        </button>
+        <button
+          className={`mc-sub-tab${arcanaView === 'minor' ? ' active' : ''}`}
+          onClick={() => setArcanaView('minor')}
+        >
+          Minor Arcana
+          <span className="mc-tab-count">56</span>
+        </button>
+      </div>
+
+      {/* MAJOR ARCANA */}
+      {arcanaView === 'major' && (
+        <>
+          {isTarotView && (
+            <div className="mc-card-grid">
+              {ARCANA_POSITIONS.map(pos => {
+                const sym = (TYPE_SYMBOLS[pos.type] || {})[pos.correspondence] || '';
+                return (
+                  <button
+                    key={pos.number}
+                    className="mc-card mc-arcana-card mc-tarot-card"
+                    onClick={() => setExpandedCard({ number: pos.number, name: pos.tarot, culture: 'tarot' })}
+                  >
+                    <span className="mc-card-number">#{pos.number}</span>
+                    <span className="mc-tarot-symbol">{sym}</span>
+                    <span className="mc-card-name">{pos.tarot}</span>
+                    <span className={`mc-card-correspondence mc-corr-${pos.type}`}>
+                      {pos.correspondence}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          )}
+
+          {!isTarotView && (
+            <div className="mc-card-grid">
+              {arcanaCards.map(card => {
+                const pos = getArcanaPosition(card.number);
+                return (
+                  <button
+                    key={`${card.culture}-${card.number}`}
+                    className="mc-card mc-arcana-card"
+                    onClick={() => setExpandedCard(card)}
+                  >
+                    <span className="mc-card-number">#{card.number}</span>
+                    <span className="mc-card-name">{card.name}</span>
+                    <span className="mc-card-brief">
+                      {card.description.substring(0, 100)}{card.description.length > 100 ? '...' : ''}
+                    </span>
+                    {pos && (
+                      <span className={`mc-card-correspondence mc-corr-${pos.type}`}>
+                        {pos.correspondence}
+                      </span>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+          )}
+        </>
+      )}
+
+      {/* MINOR ARCANA */}
+      {arcanaView === 'minor' && (
+        <>
+          <div className="mc-deck-tabs mc-suit-tabs">
+            <button
+              className={`mc-tab${minorSuitFilter === null ? ' active' : ''}`}
+              onClick={() => setMinorSuitFilter(null)}
+            >
+              All Suits
+            </button>
+            {cultureSuits.map(s => (
+              <button
+                key={s.key}
+                className={`mc-tab${minorSuitFilter === s.key ? ' active' : ''}`}
+                style={{ '--tab-color': s.color }}
+                onClick={() => setMinorSuitFilter(s.key)}
+              >
+                <span style={{ color: s.color }}>{s.symbol}</span> {s.name}
+              </button>
+            ))}
+          </div>
+
+          {minorSuitFilter && (() => {
+            const suit = cultureSuits.find(s => s.key === minorSuitFilter);
+            return suit?.desc ? (
+              <p className="mc-suit-desc">
+                <span className="mc-suit-element" style={{ color: suit.color }}>{suit.element}</span>
+                {' \u2014 '}{suit.desc}
+              </p>
+            ) : null;
+          })()}
+
+          <div className="mc-card-grid mc-minor-grid">
+            {filteredMinor.map(card => (
+              <div
+                key={card.id}
+                className={`mc-minor-card${card.isCourt ? ' mc-court' : ''}`}
+              >
+                <span className="mc-minor-rank-top">{card.isCourt ? card.rankLabel.charAt(0) : card.rankLabel}</span>
+                <span className="mc-minor-suit" style={{ color: card.suitColor }}>
+                  {card.suitSymbol}
+                </span>
+                <span className="mc-minor-name">{card.rankLabel}</span>
+                <span className="mc-minor-suit-label" style={{ color: card.suitColor }}>
+                  {card.suitName}
+                </span>
+                <span className="mc-minor-value">{card.value} pt{card.value !== 1 ? 's' : ''}</span>
+              </div>
+            ))}
+          </div>
+        </>
+      )}
+
+      {/* Detail overlay */}
+      {expandedCard && (
+        <div className="mc-detail-overlay" onClick={() => setExpandedCard(null)}>
+          <div className="mc-detail-panel" onClick={e => e.stopPropagation()}>
+            <div className="mc-detail-header">
+              <span className="mc-card-number" style={{ fontSize: '1rem' }}>
+                #{expandedCard.number}
+              </span>
+              <h3 className="mc-detail-name">{expandedCard.name}</h3>
+              {expandedCard.culture !== 'tarot' && (
+                <span className="mc-detail-culture">
+                  {CULTURES.find(c => c.key === expandedCard.culture)?.label}
+                </span>
+              )}
+              <button className="mc-detail-close" onClick={() => setExpandedCard(null)}>
+                &times;
+              </button>
+            </div>
+
+            <div className="mc-detail-body">
+              {position && (
+                <div style={{ marginBottom: 12 }}>
+                  <span className={`mc-card-correspondence mc-corr-${position.type}`}>
+                    {TYPE_LABELS[position.type]}: {position.correspondence}
+                  </span>
+                </div>
+              )}
+
+              {expandedCard.culture !== 'tarot' && position && (
+                <p style={{ color: 'var(--text-secondary)', fontSize: '0.78rem', fontStyle: 'italic', margin: '0 0 8px' }}>
+                  Tarot: {position.tarot}
+                </p>
+              )}
+
+              {expandedCard.description && (
+                <p className="mc-section-text">{expandedCard.description}</p>
+              )}
+
+              <div className="mc-crossref">
+                <h4 className="mc-section-heading">
+                  {expandedCard.culture === 'tarot' ? 'Across 7 Cultures' : 'Same Position Across Cultures'}
+                </h4>
+                {crossRef.map(ref => {
+                  const cultureLabel = CULTURES.find(c => c.key === ref.culture)?.label;
+                  const isCurrent = expandedCard.culture !== 'tarot' && ref.culture === expandedCard.culture;
+                  return (
+                    <button
+                      key={ref.culture}
+                      className={`mc-crossref-item${isCurrent ? ' active' : ''}`}
+                      onClick={() => {
+                        setActiveCulture(ref.culture);
+                        setExpandedCard(ref);
+                      }}
+                    >
+                      <span className="mc-crossref-culture">{cultureLabel}</span>
+                      <span className="mc-crossref-name">{ref.name}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 /* ── Series content ── */
 function SeriesContent({ currentEpisode, onSelectEpisode, viewToggle }) {
-  const [clockwise, setClockwise] = useState(false);
   const [activeEntry, setActiveEntry] = useState(null);
   const [videoUrl, setVideoUrl] = useState(null);
 
@@ -384,8 +1048,7 @@ function SeriesContent({ currentEpisode, onSelectEpisode, viewToggle }) {
           ringCircles={RING_CIRCLES}
           currentStage={currentEpisode}
           onSelectStage={onSelectEpisode}
-          clockwise={clockwise}
-          onToggleDirection={() => setClockwise(!clockwise)}
+          clockwise={false}
           centerLine1="Myths"
           centerLine2=""
           centerLine3="Mysteries"
@@ -491,9 +1154,11 @@ function SeriesContent({ currentEpisode, onSelectEpisode, viewToggle }) {
 
 /* ── Combined Myths Page ── */
 function MythsPage() {
-  const [activeView, setActiveView] = useState('series');
+  const [activeView, setActiveView] = useState('earth');
   const [seriesEpisode, setSeriesEpisode] = useState('overview');
   const [treasuresEpisode, setTreasuresEpisode] = useState('overview');
+  const [selectedMythicSite, setSelectedMythicSite] = useState(null);
+  const [mythicEarthCategory, setMythicEarthCategory] = useState('sacred-site');
 
   const handleViewSwitch = useCallback((view) => {
     setActiveView(view);
@@ -518,19 +1183,155 @@ function MythsPage() {
 
   return (
     <div className={`myths-page${activeView === 'treasures' ? ' myths-page--treasures' : ''}`}>
-      {activeView === 'series' ? (
+      {activeView === 'earth' ? (
+        <>
+          <Suspense fallback={<div className="mythic-earth-loading"><span className="mythic-earth-loading-spinner" /></div>}>
+            <MythicEarthPage
+              embedded
+              onSiteSelect={setSelectedMythicSite}
+              externalSite={selectedMythicSite}
+            />
+          </Suspense>
+
+          <div className="mythic-earth-content-area">
+            <div className="mythic-earth-categories">
+              {MYTHIC_EARTH_CATEGORIES.map(cat => (
+                <button
+                  key={cat.id}
+                  className={`mythic-earth-cat-btn${mythicEarthCategory === cat.id ? ' active' : ''}`}
+                  style={{ '--cat-color': cat.color }}
+                  onClick={() => { setMythicEarthCategory(cat.id); setSelectedMythicSite(null); }}
+                >
+                  {cat.label}
+                </button>
+              ))}
+            </div>
+
+            {selectedMythicSite ? (
+              <div className="mythic-earth-site-detail">
+                <button className="mythic-earth-back" onClick={() => setSelectedMythicSite(null)}>
+                  {'\u2190'} Back to {MYTHIC_EARTH_CATEGORIES.find(c => c.id === mythicEarthCategory)?.label}
+                </button>
+                <h3>{selectedMythicSite.name}</h3>
+                <div className="mythic-earth-site-tags">
+                  <span
+                    className="mythic-earth-tag"
+                    style={{ background: MYTHIC_EARTH_CATEGORIES.find(c => c.id === selectedMythicSite.category)?.color }}
+                  >
+                    {MYTHIC_EARTH_CATEGORIES.find(c => c.id === selectedMythicSite.category)?.label}
+                  </span>
+                  {selectedMythicSite.tradition && (
+                    <span className="mythic-earth-tag tradition">{selectedMythicSite.tradition}</span>
+                  )}
+                  <span className="mythic-earth-tag region">{selectedMythicSite.region}</span>
+                </div>
+                <div className="mythic-earth-site-text">
+                  {selectedMythicSite.description.split('\n\n').map((p, i) => <p key={i}>{p}</p>)}
+                </div>
+                {selectedMythicSite.excerpt && (
+                  <div className="mythic-earth-excerpt-block">
+                    <h4>From the Text</h4>
+                    <blockquote>{selectedMythicSite.excerpt}</blockquote>
+                  </div>
+                )}
+
+                {selectedMythicSite.wikisourcePage ? (
+                  <TextReader readUrl={selectedMythicSite.readUrl} wikisourcePage={selectedMythicSite.wikisourcePage} />
+                ) : selectedMythicSite.readUrl ? (
+                  <div className="mythic-earth-reader-toggle">
+                    <a href={selectedMythicSite.readUrl} target="_blank" rel="noopener noreferrer" className="mythic-earth-reader-btn">
+                      Read Full Text
+                    </a>
+                  </div>
+                ) : null}
+              </div>
+            ) : (
+              <div className="mythic-earth-site-grid">
+                {mythicEarthSites.filter(s => s.category === mythicEarthCategory).map(site => (
+                  <button
+                    key={site.id}
+                    className="mythic-earth-site-card"
+                    onClick={() => setSelectedMythicSite(site)}
+                  >
+                    <span className="site-card-name">{site.name}</span>
+                    <span className="site-card-region">{site.region}</span>
+                    {site.tradition && <span className="site-card-tradition">{site.tradition}</span>}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        </>
+      ) : activeView === 'series' ? (
         <SeriesContent
           currentEpisode={seriesEpisode}
           onSelectEpisode={setSeriesEpisode}
           viewToggle={viewToggle}
         />
-      ) : (
+      ) : activeView === 'treasures' ? (
         <TreasuresContent
           currentEpisode={treasuresEpisode}
           onSelectEpisode={setTreasuresEpisode}
           viewToggle={viewToggle}
         />
-      )}
+      ) : activeView === 'motifs' ? (
+        <MotifIndex />
+      ) : activeView === 'tarot' ? (
+        <TarotContent />
+      ) : null}
+
+      {/* Floating toggle buttons */}
+      <div className="myths-float-toggles">
+        <button
+          className={`myths-float-btn${activeView === 'earth' ? ' active' : ''}`}
+          onClick={() => handleViewSwitch('earth')}
+          title="Mythic Earth"
+        >
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="12" cy="12" r="10" />
+            <ellipse cx="12" cy="12" rx="4.5" ry="10" />
+            <path d="M2.5 9 L21.5 9" />
+            <path d="M2.5 15 L21.5 15" />
+          </svg>
+        </button>
+        <button
+          className={`myths-float-btn${activeView === 'motifs' ? ' active' : ''}`}
+          onClick={() => handleViewSwitch('motifs')}
+          title="Motif Index"
+        >
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M3 3h18v18H3z" />
+            <path d="M7 7h4" />
+            <path d="M7 11h10" />
+            <path d="M7 15h10" />
+            <path d="M7 19h6" />
+          </svg>
+        </button>
+        <button
+          className={`myths-float-btn${activeView === 'tarot' ? ' active' : ''}`}
+          onClick={() => handleViewSwitch('tarot')}
+          title="Tarot Decks"
+        >
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+            {/* Fool card: figure with staff stepping off edge */}
+            <circle cx="12" cy="5" r="2.5" />
+            <path d="M12 7.5v6" />
+            <path d="M9 10l3 1.5 3-1.5" />
+            <path d="M10 13.5l2 4 2-4" />
+            <path d="M8 9l-2-3" strokeWidth="1.4" />
+            <path d="M5 20h6" />
+            <path d="M11 20l2-2.5" />
+            <circle cx="17" cy="3.5" r="1.5" fill="currentColor" opacity="0.3" />
+          </svg>
+        </button>
+        <button
+          className={`myths-float-btn${activeView === 'series' || activeView === 'treasures' ? ' active' : ''}`}
+          onClick={() => handleViewSwitch(activeView === 'treasures' ? 'treasures' : 'series')}
+          title="Myths Content"
+        >
+          <span className="myths-float-m">M</span>
+        </button>
+      </div>
     </div>
   );
 }

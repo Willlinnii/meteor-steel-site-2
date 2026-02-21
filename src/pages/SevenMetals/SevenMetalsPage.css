@@ -1089,6 +1089,19 @@
   box-shadow: 0 0 12px rgba(139, 157, 195, 0.4);
 }
 
+.starlight-toggle.disabled {
+  opacity: 0.35;
+  color: rgba(150, 150, 150, 0.6);
+  border-color: rgba(150, 150, 150, 0.3);
+  cursor: default;
+}
+
+.starlight-toggle.disabled:hover {
+  opacity: 0.5;
+  background: rgba(150, 150, 150, 0.05);
+  box-shadow: none;
+}
+
 /* ===== MYTHIC EARTH (embedded in diagram area) ===== */
 
 .metals-diagram-center .mythic-earth-page {

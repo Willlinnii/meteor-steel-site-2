@@ -1,5 +1,5 @@
-import React, { useState, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useCallback, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../auth/AuthContext';
 import { useCoursework } from '../../coursework/CourseworkContext';
 import { useWritings } from '../../writings/WritingsContext';
@@ -8,13 +8,98 @@ import { RANKS, rankProgress } from '../../profile/profileEngine';
 import ProfileChat from '../../profile/ProfileChat';
 import { checkAvailability, registerHandle } from '../../multiplayer/handleService';
 
+const SUBSCRIPTIONS = [
+  {
+    id: 'ybr', name: 'Yellow Brick Road',
+    icon: (
+      <svg viewBox="0 0 20 14" width="20" height="14" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinejoin="round">
+        <path d="M1,4 L7,1 L19,1 L13,4 Z" />
+        <path d="M1,4 L1,13 L13,13 L13,4" />
+        <path d="M13,4 L19,1 L19,10 L13,13" />
+        <line x1="7" y1="4" x2="7" y2="13" />
+        <line x1="1" y1="8.5" x2="13" y2="8.5" />
+        <line x1="4" y1="8.5" x2="4" y2="13" />
+        <line x1="10" y1="4" x2="10" y2="8.5" />
+      </svg>
+    ),
+    description: 'Interactive journey through the monomyth stages with Atlas as your guide.',
+    details: 'The Yellow Brick Road is a guided, stage-by-stage journey through the monomyth. Atlas walks alongside you as you encounter mythic figures at each threshold \u2014 gods, tricksters, mentors, and shadow guardians drawn from world mythology. Answer their challenges through conversation to advance along the path.',
+  },
+  {
+    id: 'forge', name: 'Story Forge',
+    icon: (
+      <svg viewBox="0 0 20 20" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M10,2 L10,11" />
+        <path d="M7,5 Q10,3 13,5" />
+        <path d="M6,11 L14,11" />
+        <path d="M5,11 L5,14 Q10,18 15,14 L15,11" />
+      </svg>
+    ),
+    description: 'Write your own story using mythic structure with AI collaboration.',
+    details: 'The Story Forge lets you craft your own personal myth using the eight stages of the monomyth as a framework. Write freely at each stage while an AI collaborator helps you develop themes, deepen character arcs, and weave in mythic resonance. Your stories are saved to your profile and can be revisited anytime.',
+  },
+  {
+    id: 'coursework', name: 'Coursework',
+    icon: (
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M2 12 L12 6 L22 12 L12 18 Z" />
+        <path d="M6 14 L6 19 C6 19 9 22 12 22 C15 22 18 19 18 19 L18 14" />
+        <line x1="22" y1="12" x2="22" y2="18" />
+      </svg>
+    ),
+    description: 'Track your progress through courses, earn ranks and certificates.',
+    details: 'Coursework tracks your exploration across the site and awards progress toward structured courses. Visit pages, interact with content, and complete activities to fill requirements. Finish courses to earn ranks and certificates displayed on your profile.',
+  },
+  {
+    id: 'xr', name: 'VR / XR',
+    icon: (
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="1" y="7" width="22" height="11" rx="3" />
+        <circle cx="8" cy="12.5" r="2.5" />
+        <circle cx="16" cy="12.5" r="2.5" />
+        <path d="M10.5 12.5 Q12 15 13.5 12.5" />
+      </svg>
+    ),
+    description: 'Immersive 3D and extended reality views of the celestial wheels.',
+    details: 'Enter the Chronosphaera in full 3D. Orbit through the planetary wheels, walk among constellations, and view the celestial machinery from within. Supports WebXR headsets for a fully immersive experience, or explore in 3D right in your browser.',
+  },
+];
+
+const PURCHASES = [
+  {
+    id: 'starlight', name: 'Fallen Starlight',
+    icon: (
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+        <path d="M12 6 L10.8 9.2 L7.5 9.2 L10.1 11.3 L9.1 14.5 L12 12.5 L14.9 14.5 L13.9 11.3 L16.5 9.2 L13.2 9.2 Z" fill="currentColor" stroke="none" />
+      </svg>
+    ),
+    description: 'Unlock Fallen Starlight and Story of Stories on the Chronosphaera.',
+    details: 'Fallen Starlight overlays a mythic narrative layer onto the Chronosphaera \u2014 tracing the descent of celestial fire through the seven planetary metals. Toggle between Fallen Starlight and Story of Stories to explore the cosmic drama from two perspectives: the fall of light into matter, and the stories that emerged from it.',
+  },
+];
+
 export default function ProfilePage() {
   const { user } = useAuth();
   const { getCourseStates, completedCourses, allCourses } = useCoursework();
-  const { earnedRanks, highestRank, activeCredentials, hasProfile, loaded: profileLoaded, handle, natalChart, refreshProfile } = useProfile();
+  const { earnedRanks, highestRank, activeCredentials, hasProfile, loaded: profileLoaded, handle, natalChart, subscriptions, updateSubscription, purchases, updatePurchase, refreshProfile } = useProfile();
   const { personalStories, loaded: writingsLoaded } = useWritings();
   const navigate = useNavigate();
+  const location = useLocation();
   const [showChat, setShowChat] = useState(false);
+  const [expandedCard, setExpandedCard] = useState(null); // 'ybr' | 'forge' | etc.
+
+  // Scroll to #subscriptions or #purchases when navigated with hash
+  useEffect(() => {
+    if (location.hash === '#subscriptions' || location.hash === '#purchases') {
+      const id = location.hash.slice(1);
+      const timer = setTimeout(() => {
+        document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
+      return () => clearTimeout(timer);
+    }
+  }, [location.hash]);
   const [handleInput, setHandleInput] = useState('');
   const [handleStatus, setHandleStatus] = useState(null); // null | 'checking' | 'available' | 'taken' | 'error'
   const [handleSaving, setHandleSaving] = useState(false);
@@ -116,6 +201,79 @@ export default function ProfilePage() {
             {handleStatus === 'save-error' && <div className="profile-handle-status error">Failed to save handle — check console</div>}
           </div>
         )}
+      </div>
+
+      {/* Membership Add-Ons */}
+      <h2 className="profile-section-title">Membership Add-Ons</h2>
+
+      {/* Subscriptions Sub-Section */}
+      <div id="subscriptions">
+        <h3 className="profile-subsection-title">Subscriptions</h3>
+        <div className="profile-subscription-list">
+          {SUBSCRIPTIONS.map(sub => {
+            const enabled = !!subscriptions[sub.id];
+            const expanded = expandedCard === sub.id;
+            return (
+              <div key={sub.id} className={`profile-subscription-card${enabled ? ' active' : ''}${expanded ? ' expanded' : ''}`}>
+                <div className="profile-subscription-row" onClick={() => setExpandedCard(expanded ? null : sub.id)}>
+                  <span className="profile-subscription-icon">{sub.icon}</span>
+                  <div className="profile-subscription-info">
+                    <div className="profile-subscription-name">{sub.name}</div>
+                    <div className="profile-subscription-desc">{sub.description}</div>
+                  </div>
+                  <label className="profile-subscription-toggle" onClick={e => e.stopPropagation()}>
+                    <input
+                      type="checkbox"
+                      checked={enabled}
+                      onChange={() => updateSubscription(sub.id, !enabled)}
+                    />
+                    <span className="profile-subscription-slider" />
+                  </label>
+                </div>
+                {expanded && (
+                  <div className="profile-subscription-details">
+                    {sub.details}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Purchases Sub-Section */}
+      <div id="purchases">
+        <h3 className="profile-subsection-title">Purchases</h3>
+        <div className="profile-subscription-list">
+          {PURCHASES.map(p => {
+            const enabled = !!purchases[p.id];
+            const expanded = expandedCard === p.id;
+            return (
+              <div key={p.id} className={`profile-subscription-card${enabled ? ' active' : ''}${expanded ? ' expanded' : ''}`}>
+                <div className="profile-subscription-row" onClick={() => setExpandedCard(expanded ? null : p.id)}>
+                  <span className="profile-subscription-icon">{p.icon}</span>
+                  <div className="profile-subscription-info">
+                    <div className="profile-subscription-name">{p.name}</div>
+                    <div className="profile-subscription-desc">{p.description}</div>
+                  </div>
+                  <label className="profile-subscription-toggle" onClick={e => e.stopPropagation()}>
+                    <input
+                      type="checkbox"
+                      checked={enabled}
+                      onChange={() => updatePurchase(p.id, !enabled)}
+                    />
+                    <span className="profile-subscription-slider" />
+                  </label>
+                </div>
+                {expanded && (
+                  <div className="profile-subscription-details">
+                    {p.details}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
       </div>
 
       {/* Credentials Section */}

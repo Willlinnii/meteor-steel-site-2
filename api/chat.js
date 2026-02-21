@@ -1436,7 +1436,7 @@ module.exports = async function handler(req, res) {
     });
   }
 
-  const { messages, area, persona, mode, challengeStop, level, journeyId, stageId, gameMode, stageData, aspect, courseSummary, existingCredentials, existingNatalChart } = req.body || {};
+  const { messages, area, persona, mode, challengeStop, level, journeyId, stageId, gameMode, stageData, aspect, courseSummary, existingCredentials, existingNatalChart, qualifiedMentorTypes, uploadedDocument } = req.body || {};
 
   // --- Journey Synthesis mode (no messages needed — uses stageData directly) ---
   if (mode === 'journey-synthesis') {
@@ -1861,6 +1861,109 @@ ${entriesBlock}`;
       return res.status(200).json(result);
     } catch (err) {
       console.error('Profile Onboarding API error:', err?.message, err?.status);
+      return res.status(500).json({ error: `Something went wrong: ${err?.message || 'Unknown error'}` });
+    }
+  }
+
+  // --- Mentor Application mode ---
+  if (mode === 'mentor-application') {
+    const mentorTypes = qualifiedMentorTypes || [];
+    const typeList = mentorTypes.map(t => `${t.title} (${t.credentialCategory}, Level ${t.credentialLevel})`).join(', ');
+
+    const SAVE_MENTOR_APPLICATION_TOOL = {
+      name: 'save_mentor_application',
+      description: 'Save the mentor application after gathering all information. Call this once the applicant has confirmed their mentor type and provided their personal statement.',
+      input_schema: {
+        type: 'object',
+        properties: {
+          type: { type: 'string', enum: ['scholar', 'storyteller', 'healer', 'mediaVoice', 'adventurer'], description: 'Credential category for the mentor role' },
+          summary: { type: 'string', description: 'The applicant\'s personal statement about why they want to mentor and what they bring' },
+        },
+        required: ['type', 'summary'],
+      },
+    };
+
+    const mentorSystemPrompt = `You are Atlas, the mythic companion of the Mythouse. You are guiding a member through their application to become a mentor.
+
+THE APPLICANT QUALIFIES FOR THESE MENTOR ROLES:
+${typeList || 'None (this should not happen — the applicant was pre-qualified)'}
+
+MENTOR TYPES AND THEIR MEANING:
+- Mentor Mythologist (scholar): Guide students through mythic scholarship, depth psychology, and academic inquiry.
+- Mentor Storyteller (storyteller): Help emerging writers and oral storytellers develop their craft through mythic structure.
+- Mentor Healer (healer): Support practitioners in integrating mythic wisdom into therapeutic and coaching work.
+- Mentor Media Voice (mediaVoice): Guide content creators in bringing mythic narratives to podcasts, video, and media.
+- Mentor Adventurer (adventurer): Lead experiential mythology — mythic travel, fieldwork, and embodied exploration.
+
+CONVERSATION FLOW (4-6 exchanges):
+1. Welcome them and confirm which mentor type they'd like to apply for. If they qualify for multiple, help them choose.
+2. Explain the commitment: mentors dedicate 2-4 hours per month guiding students, participating in community discussions, and sharing their expertise.
+3. Ask them to share a brief personal statement — why they want to mentor, what unique perspective they bring, and what they hope students will gain.
+4. Note that they can upload a supporting document (resume, portfolio, publication list) if they wish. The upload is optional but helpful.
+5. Once you have their type choice and statement, call save_mentor_application to submit.
+
+${uploadedDocument ? `UPLOADED DOCUMENT: The applicant has uploaded "${uploadedDocument.name}". Acknowledge this.` : ''}
+
+VOICE:
+- Warm, encouraging, but honest about the responsibility.
+- This is a meaningful step — treat it with gravity and warmth.
+- Keep exchanges conc — don't be bureaucratic.
+
+IMPORTANT:
+- Call save_mentor_application as soon as you have the type and a substantive statement (at least 2-3 sentences).
+- Do NOT ask for the same information twice.
+- After calling the tool, give a warm confirmation that their application has been submitted and Atlas will review it.`;
+
+    try {
+      let currentMessages = [...trimmed];
+      let reply = '';
+      let mentorApplication = null;
+
+      for (let turn = 0; turn < 5; turn++) {
+        const response = await anthropic.messages.create({
+          model: 'claude-haiku-4-5-20251001',
+          system: mentorSystemPrompt,
+          messages: currentMessages,
+          max_tokens: 1024,
+          tools: [SAVE_MENTOR_APPLICATION_TOOL],
+        });
+
+        const toolBlocks = response.content.filter(c => c.type === 'tool_use');
+        const textBlock = response.content.find(c => c.type === 'text');
+
+        if (toolBlocks.length === 0) {
+          reply = textBlock?.text || 'No response generated.';
+          break;
+        }
+
+        const toolResults = [];
+        for (const tb of toolBlocks) {
+          if (tb.name === 'save_mentor_application' && tb.input) {
+            mentorApplication = { type: tb.input.type, summary: tb.input.summary };
+            toolResults.push({
+              type: 'tool_result',
+              tool_use_id: tb.id,
+              content: JSON.stringify({ success: true, type: tb.input.type }),
+            });
+          }
+        }
+
+        if (textBlock?.text) {
+          reply = textBlock.text;
+        }
+
+        currentMessages = [
+          ...currentMessages,
+          { role: 'assistant', content: response.content },
+          { role: 'user', content: toolResults },
+        ];
+      }
+
+      const result = { reply };
+      if (mentorApplication) result.mentorApplication = mentorApplication;
+      return res.status(200).json(result);
+    } catch (err) {
+      console.error('Mentor Application API error:', err?.message, err?.status);
       return res.status(500).json({ error: `Something went wrong: ${err?.message || 'Unknown error'}` });
     }
   }

@@ -98,6 +98,23 @@ const YELLOW_BRICK_ROADS = [
   },
 ];
 
+const XR_EXPERIENCES = [
+  {
+    id: 'celestial-3d',
+    label: 'Celestial Wheels 3D',
+    description: 'Step inside the planetary spheres. Orbit the Sun, stand at the center, or see live positions. VR headset and phone AR support.',
+    path: '/metals/vr',
+    features: 'VR · Phone AR · Fullscreen',
+  },
+  {
+    id: 'mythic-earth-xr',
+    label: 'Mythic Earth Globe',
+    description: 'Sacred sites, mythic locations, and literary landmarks on an interactive 3D globe. In AR the earth floats over your camera feed.',
+    path: '/mythic-earth',
+    features: 'Phone AR · Gyroscope · Fullscreen',
+  },
+];
+
 const GAME_COMPONENTS = {
   'snakes-and-ladders': SnakesAndLaddersGame,
   'senet': SenetGame,
@@ -256,6 +273,29 @@ export default function GamesPage() {
         </>
       )}
 
+      <h2 className="games-section-title">Board Games</h2>
+      <div className="games-grid">
+        {GAMES.map(game => {
+          const gameMatches = getMatchesForGame(game.id);
+          const hasActiveMatch = gameMatches.length > 0;
+          return (
+            <Link
+              key={game.id}
+              className={`game-card${game.featured ? ' featured' : ''}${hasActiveMatch ? ' has-match' : ''}${courseworkMode ? (isElementCompleted(`games.${game.id}.clicked`) ? ' cw-completed' : ' cw-incomplete') : ''}`}
+              to={game.externalPath || `/games/${game.id}`}
+              onClick={() => trackElement(`games.${game.id}.clicked`)}
+            >
+              <span className="game-card-title">{game.label}</span>
+              <span className="game-card-origin">{game.origin}</span>
+              <span className="game-card-desc">{game.description}</span>
+              {hasActiveMatch && (
+                <span className="game-card-match-badge">{gameMatches.length} active</span>
+              )}
+            </Link>
+          );
+        })}
+      </div>
+
       <h2 className="games-section-title">Yellow Brick Roads</h2>
       <div className="games-grid">
         {YELLOW_BRICK_ROADS.map(game => (
@@ -279,27 +319,15 @@ export default function GamesPage() {
         ))}
       </div>
 
-      <h2 className="games-section-title">Board Games</h2>
+      <h2 className="games-section-title">VR / XR Experiences</h2>
       <div className="games-grid">
-        {GAMES.map(game => {
-          const gameMatches = getMatchesForGame(game.id);
-          const hasActiveMatch = gameMatches.length > 0;
-          return (
-            <Link
-              key={game.id}
-              className={`game-card${game.featured ? ' featured' : ''}${hasActiveMatch ? ' has-match' : ''}${courseworkMode ? (isElementCompleted(`games.${game.id}.clicked`) ? ' cw-completed' : ' cw-incomplete') : ''}`}
-              to={game.externalPath || `/games/${game.id}`}
-              onClick={() => trackElement(`games.${game.id}.clicked`)}
-            >
-              <span className="game-card-title">{game.label}</span>
-              <span className="game-card-origin">{game.origin}</span>
-              <span className="game-card-desc">{game.description}</span>
-              {hasActiveMatch && (
-                <span className="game-card-match-badge">{gameMatches.length} active</span>
-              )}
-            </Link>
-          );
-        })}
+        {XR_EXPERIENCES.map(exp => (
+          <Link key={exp.id} className="game-card featured" to={exp.path}>
+            <span className="game-card-title">{exp.label}</span>
+            <span className="game-card-origin">{exp.features}</span>
+            <span className="game-card-desc">{exp.description}</span>
+          </Link>
+        ))}
       </div>
     </div>
   );

@@ -11,7 +11,7 @@ import {
 } from 'cesium';
 import 'cesium/Build/Cesium/Widgets/widgets.css';
 import sites from '../../data/mythicEarthSites.json';
-import { useAreaOverride } from '../../App';
+import { useAreaOverride, useXRMode } from '../../App';
 import './MythicEarthPage.css';
 
 /* ArcGIS World Imagery — high-res satellite tiles, free for display */
@@ -566,6 +566,7 @@ function MythicEarthSearch({ onSelectSite, globeApi, onHighlight }) {
 }
 
 function MythicEarthPage({ embedded, onSiteSelect: onSiteSelectExternal, externalSite }) {
+  const { xrMode } = useXRMode();
   const [activeFilters, setActiveFilters] = useState(
     () => new Set(CATEGORIES.map(c => c.id))
   );
@@ -741,11 +742,17 @@ function MythicEarthPage({ embedded, onSiteSelect: onSiteSelectExternal, externa
     }
   }, [selectedSite]);
 
-  const [headerSlot, setHeaderSlot] = useState(null);
+  const [xrSlot, setXrSlot] = useState(null);
   useEffect(() => {
-    const el = document.getElementById('mythic-earth-header-slot');
-    if (el) setHeaderSlot(el);
-  }, []);
+    if (xrMode) {
+      // Wait a tick for the slot div to appear in the DOM
+      const raf = requestAnimationFrame(() => {
+        setXrSlot(document.getElementById('xr-controls-slot'));
+      });
+      return () => cancelAnimationFrame(raf);
+    }
+    setXrSlot(null);
+  }, [xrMode]);
 
   return (
     <>
@@ -808,7 +815,7 @@ function MythicEarthPage({ embedded, onSiteSelect: onSiteSelectExternal, externa
         )}
       </div>
 
-      {headerSlot && createPortal(
+      {xrSlot && createPortal(
         <>
           <button className="mythic-earth-ctrl-btn" onClick={toggleFullscreen} title={isFullscreen ? 'Exit fullscreen' : 'Fullscreen'}>
             {isFullscreen ? 'Exit FS' : 'Fullscreen'}
@@ -831,7 +838,7 @@ function MythicEarthPage({ embedded, onSiteSelect: onSiteSelectExternal, externa
             </button>
           )}
         </>,
-        headerSlot
+        xrSlot
       )}
     </>
   );

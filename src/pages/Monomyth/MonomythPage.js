@@ -7,7 +7,7 @@ import useWheelJourney from '../../hooks/useWheelJourney';
 import WheelJourneyPanel from '../../components/WheelJourneyPanel';
 import { useCoursework } from '../../coursework/CourseworkContext';
 import { useWritings } from '../../writings/WritingsContext';
-import { useYBRHeader, useStoryForge } from '../../App';
+import { useYBRHeader, useStoryForge, useYBRMode } from '../../App';
 import './MonomythPage.css';
 
 import monomythProse from '../../data/monomyth.json';
@@ -27,7 +27,6 @@ const TABS = [
   { id: 'history', label: 'History' },
   { id: 'myths', label: 'Myths' },
   { id: 'films', label: 'Films' },
-  { id: 'development', label: 'Development' },
 ];
 
 const THEORIST_GROUPS = [
@@ -430,6 +429,7 @@ export default function MonomythPage() {
 
   const journey = useWheelJourney('monomyth', MONOMYTH_STAGES);
   const { forgeMode } = useStoryForge();
+  const { ybrMode } = useYBRMode();
   const { trackElement, trackTime, isElementCompleted, courseworkMode } = useCoursework();
   const { notesData, saveNotes, loaded: writingsLoaded } = useWritings();
 
@@ -662,7 +662,7 @@ export default function MonomythPage() {
           ) : isStage ? (
             <div className="metal-detail-panel">
               <div className="metal-tabs">
-                {(forgeMode ? TABS : TABS.filter(t => t.id !== 'development')).map(t => {
+                {TABS.map(t => {
                   const eid = `monomyth.${t.id}.${currentStage}`;
                   const cwClass = courseworkMode ? (isElementCompleted(eid) ? ' cw-completed' : ' cw-incomplete') : '';
                   return (
@@ -675,6 +675,37 @@ export default function MonomythPage() {
                     </button>
                   );
                 })}
+                {forgeMode && (
+                  <button
+                    className={`metal-tab forge-icon-tab${activeTab === 'development' ? ' active' : ''}`}
+                    title="Story Forge"
+                    onClick={() => { trackElement(`monomyth.development.${currentStage}`); setActiveTab('development'); }}
+                  >
+                    <svg viewBox="0 0 20 20" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M10,2 L10,11" />
+                      <path d="M7,5 Q10,3 13,5" />
+                      <path d="M6,11 L14,11" />
+                      <path d="M5,11 L5,14 Q10,18 15,14 L15,11" />
+                    </svg>
+                  </button>
+                )}
+                {ybrMode && (
+                  <button
+                    className={`metal-tab ybr-icon-tab${journey.active ? ' active' : ''}`}
+                    title={journey.active ? 'Exit Yellow Brick Road' : 'Walk the Yellow Brick Road'}
+                    onClick={handleYBRToggle}
+                  >
+                    <svg viewBox="0 0 20 14" width="14" height="10" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinejoin="round">
+                      <path d="M1,4 L7,1 L19,1 L13,4 Z" />
+                      <path d="M1,4 L1,13 L13,13 L13,4" />
+                      <path d="M13,4 L19,1 L19,10 L13,13" />
+                      <line x1="7" y1="4" x2="7" y2="13" />
+                      <line x1="1" y1="8.5" x2="13" y2="8.5" />
+                      <line x1="4" y1="8.5" x2="4" y2="13" />
+                      <line x1="10" y1="4" x2="10" y2="8.5" />
+                    </svg>
+                  </button>
+                )}
                 {(() => {
                   const stage = MONOMYTH_STAGES.find(s => s.id === currentStage);
                   if (!stage?.playlist) return null;
@@ -718,7 +749,7 @@ export default function MonomythPage() {
                 {activeTab === 'history' && <HistoryTab stageId={currentStage} />}
                 {activeTab === 'myths' && <MythsTab stageId={currentStage} />}
                 {activeTab === 'films' && <FilmsTab stageId={currentStage} />}
-                {activeTab === 'development' && (
+                {activeTab === 'development' && forgeMode && (
                   <DevelopmentPanel
                     stageLabel={stageLabel}
                     stageKey={`monomyth-${currentStage}`}

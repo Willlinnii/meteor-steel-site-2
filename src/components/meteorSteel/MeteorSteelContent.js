@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import DevelopmentPanel from '../DevelopmentPanel';
-import { useStoryForge } from '../../App';
+import { useStoryForge, useYBRMode } from '../../App';
 import steelProcess from '../../data/steelProcess.json';
 import figures from '../../data/figures.json';
 import saviors from '../../data/saviors.json';
@@ -18,7 +18,6 @@ const SECTION_TABS = [
   { id: 'ufo', label: 'UFO' },
   { id: 'monomyth', label: 'Monomyth' },
   { id: 'synthesis', label: 'Synthesis' },
-  { id: 'development', label: 'Development' },
 ];
 
 function TextContent({ text }) {
@@ -78,9 +77,9 @@ const STAGE_LABELS = {
   'drawing': 'Draw', 'new-age': 'Age of Steel',
 };
 
-export default function MeteorSteelContent({ stageId, activeTab, onSelectTab, devEntries, setDevEntries }) {
+export default function MeteorSteelContent({ stageId, activeTab, onSelectTab, devEntries, setDevEntries, onToggleYBR, ybrActive }) {
   const { forgeMode } = useStoryForge();
-  const visibleTabs = forgeMode ? SECTION_TABS : SECTION_TABS.filter(t => t.id !== 'development');
+  const { ybrMode } = useYBRMode();
   return (
     <div className="metal-detail-panel">
       {stageOverviews[stageId] && (
@@ -89,11 +88,42 @@ export default function MeteorSteelContent({ stageId, activeTab, onSelectTab, de
         </div>
       )}
       <div className="metal-tabs">
-        {visibleTabs.map(t => (
+        {SECTION_TABS.map(t => (
           <button key={t.id}
             className={`metal-tab${activeTab === t.id ? ' active' : ''}`}
             onClick={() => onSelectTab(t.id)}>{t.label}</button>
         ))}
+        {forgeMode && (
+          <button
+            className={`metal-tab forge-icon-tab${activeTab === 'development' ? ' active' : ''}`}
+            title="Story Forge"
+            onClick={() => onSelectTab('development')}
+          >
+            <svg viewBox="0 0 20 20" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M10,2 L10,11" />
+              <path d="M7,5 Q10,3 13,5" />
+              <path d="M6,11 L14,11" />
+              <path d="M5,11 L5,14 Q10,18 15,14 L15,11" />
+            </svg>
+          </button>
+        )}
+        {ybrMode && onToggleYBR && (
+          <button
+            className={`metal-tab ybr-icon-tab${ybrActive ? ' active' : ''}`}
+            title={ybrActive ? 'Exit Yellow Brick Road' : 'Walk the Yellow Brick Road'}
+            onClick={onToggleYBR}
+          >
+            <svg viewBox="0 0 20 14" width="14" height="10" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinejoin="round">
+              <path d="M1,4 L7,1 L19,1 L13,4 Z" />
+              <path d="M1,4 L1,13 L13,13 L13,4" />
+              <path d="M13,4 L19,1 L19,10 L13,13" />
+              <line x1="7" y1="4" x2="7" y2="13" />
+              <line x1="1" y1="8.5" x2="13" y2="8.5" />
+              <line x1="4" y1="8.5" x2="4" y2="13" />
+              <line x1="10" y1="4" x2="10" y2="8.5" />
+            </svg>
+          </button>
+        )}
       </div>
       <div className="metal-content-scroll">
         <div className="tab-content">
@@ -104,7 +134,7 @@ export default function MeteorSteelContent({ stageId, activeTab, onSelectTab, de
           {activeTab === 'ufo' && <TextContent text={ufo[stageId]} />}
           {activeTab === 'monomyth' && <TextContent text={monomythProse[stageId]} />}
           {activeTab === 'synthesis' && <TextContent text={synthesis[stageId]} />}
-          {activeTab === 'development' && <DevelopmentPanel stageLabel={STAGE_LABELS[stageId] || stageId} stageKey={stageId} entries={devEntries || {}} setEntries={setDevEntries || (() => {})} />}
+          {activeTab === 'development' && forgeMode && <DevelopmentPanel stageLabel={STAGE_LABELS[stageId] || stageId} stageKey={stageId} entries={devEntries || {}} setEntries={setDevEntries || (() => {})} />}
         </div>
       </div>
     </div>

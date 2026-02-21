@@ -1,0 +1,177 @@
+/* ===== YELLOW BRICK ROAD PAGE ===== */
+
+.ybr-page {
+  min-height: 100vh;
+  padding: 70px 20px 60px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.ybr-header {
+  text-align: center;
+  margin-bottom: 36px;
+}
+
+.ybr-header-icon {
+  color: rgba(218, 165, 32, 0.7);
+  margin-bottom: 12px;
+}
+
+.ybr-title {
+  font-family: 'Cinzel', serif;
+  color: rgba(218, 165, 32, 0.9);
+  font-size: 1.8rem;
+  letter-spacing: 0.06em;
+  margin: 0 0 8px;
+}
+
+.ybr-subtitle {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* ===== JOURNEY GRID ===== */
+
+.ybr-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 18px;
+}
+
+.ybr-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: rgba(26, 26, 36, 0.7);
+  border: 1px solid rgba(218, 165, 32, 0.25);
+  border-radius: 10px;
+  transition: all 0.25s ease;
+  overflow: hidden;
+}
+
+.ybr-card:hover {
+  border-color: rgba(218, 165, 32, 0.5);
+  background: rgba(218, 165, 32, 0.04);
+}
+
+.ybr-card-main {
+  display: flex;
+  gap: 16px;
+  padding: 20px 18px 14px;
+  text-decoration: none;
+  color: inherit;
+  align-items: flex-start;
+  flex: 1;
+}
+
+.ybr-card-icon {
+  color: rgba(218, 165, 32, 0.6);
+  flex-shrink: 0;
+  padding-top: 2px;
+  transition: color 0.25s ease;
+}
+
+.ybr-card:hover .ybr-card-icon {
+  color: rgba(218, 165, 32, 0.9);
+}
+
+.ybr-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+}
+
+.ybr-card-title {
+  font-family: 'Cinzel', serif;
+  color: var(--text-primary);
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+}
+
+.ybr-card-stages {
+  font-family: 'Cinzel', serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: rgba(218, 165, 32, 0.7);
+}
+
+.ybr-card-desc {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  line-height: 1.5;
+  margin-top: 4px;
+}
+
+/* ===== ENTER THE STORY (OUROBOROS) ===== */
+
+.ybr-card-story {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  align-self: flex-end;
+  margin: 0 16px 14px 0;
+  padding: 5px 12px 5px 6px;
+  text-decoration: none;
+  border: 1px solid rgba(218, 165, 32, 0.2);
+  border-radius: 6px;
+  transition: all 0.25s ease;
+  background: rgba(218, 165, 32, 0.04);
+}
+
+.ybr-card-story:hover {
+  border-color: rgba(218, 165, 32, 0.5);
+  background: rgba(218, 165, 32, 0.1);
+  box-shadow: 0 0 12px rgba(218, 165, 32, 0.1);
+}
+
+.ybr-card-story-img {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+  opacity: 0.65;
+  transition: opacity 0.25s ease;
+}
+
+.ybr-card-story:hover .ybr-card-story-img {
+  opacity: 0.95;
+}
+
+.ybr-card-story-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: rgba(218, 165, 32, 0.6);
+  transition: color 0.25s ease;
+}
+
+.ybr-card-story:hover .ybr-card-story-label {
+  color: rgba(218, 165, 32, 0.95);
+}
+
+/* ===== RESPONSIVE ===== */
+
+@media (max-width: 600px) {
+  .ybr-page {
+    padding: 50px 12px 40px;
+  }
+
+  .ybr-title {
+    font-size: 1.4rem;
+  }
+
+  .ybr-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ybr-card-main {
+    padding: 16px 14px 12px;
+  }
+}

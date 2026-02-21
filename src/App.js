@@ -3,7 +3,7 @@ import { Routes, Route, Link, Navigate, useLocation, useNavigate, useSearchParam
 import { useAuth } from './auth/AuthContext';
 import { CourseworkProvider, useCoursework } from './coursework/CourseworkContext';
 import { WritingsProvider, useWritings } from './writings/WritingsContext';
-import { ProfileProvider } from './profile/ProfileContext';
+import { ProfileProvider, useProfile } from './profile/ProfileContext';
 import { MultiplayerProvider } from './multiplayer/MultiplayerContext';
 import LoginPage from './auth/LoginPage';
 import './App.css';
@@ -41,6 +41,10 @@ export const useYBRMode = () => useContext(YBRModeContext);
 const AreaOverrideContext = createContext({ area: null, register: () => {} });
 export const useAreaOverride = () => useContext(AreaOverrideContext);
 
+// XR mode context — global toggle for VR/AR features
+const XRModeContext = createContext({ xrMode: false });
+export const useXRMode = () => useContext(XRModeContext);
+
 const SevenMetalsVRPage = lazy(() => import('./pages/SevenMetals/SevenMetalsVRPage'));
 const AdminPage = lazy(() => import('./pages/Admin/AdminPage'));
 const OuroborosJourneyPage = lazy(() => import('./pages/OuroborosJourney/OuroborosJourneyPage'));
@@ -50,6 +54,8 @@ const ProfilePage = lazy(() => import('./pages/Profile/ProfilePage'));
 const StoryOfStoriesPage = lazy(() => import('./pages/StoryOfStories/StoryOfStoriesPage'));
 const MythsPage = lazy(() => import('./pages/Myths/MythsPage'));
 const MythicEarthPage = lazy(() => import('./pages/MythicEarth/MythicEarthPage'));
+const YellowBrickRoadPage = lazy(() => import('./pages/YellowBrickRoad/YellowBrickRoadPage'));
+const XRPage = lazy(() => import('./pages/XR/XRPage'));
 const FallenStarlightPage = lazy(() => import('./pages/FallenStarlight/FallenStarlightPage'));
 
 const STAGES = [
@@ -82,7 +88,6 @@ const SECTION_TABS = [
   { id: 'ufo', label: 'UFO' },
   { id: 'monomyth', label: 'Monomyth' },
   { id: 'synthesis', label: 'Synthesis' },
-  { id: 'development', label: 'Development' },
 ];
 
 function FigureCards({ figuresList, stage, onPlayFigure }) {
@@ -220,10 +225,10 @@ function SectionContent({ sectionId, stage, entries, setEntries, onPlayFigure })
   }
 }
 
-function StageView({ stage, devEntries, setDevEntries, onPlayVideo, videoActive, onPlayFigure }) {
+function StageView({ stage, devEntries, setDevEntries, onPlayVideo, videoActive, onPlayFigure, onToggleYBR, ybrActive }) {
   const [activeSection, setActiveSection] = useState('technology');
   const { forgeMode } = useStoryForge();
-  const visibleTabs = forgeMode ? SECTION_TABS : SECTION_TABS.filter(t => t.id !== 'development');
+  const { ybrMode } = useYBRMode();
   const stageData = STAGES.find(s => s.id === stage);
   const playlistUrl = stageData?.playlist;
 
@@ -234,7 +239,7 @@ function StageView({ stage, devEntries, setDevEntries, onPlayVideo, videoActive,
       </div>
 
       <div className="section-tabs">
-        {visibleTabs.map(tab => (
+        {SECTION_TABS.map(tab => (
           <button
             key={tab.id}
             className={`section-tab ${activeSection === tab.id ? 'active' : ''}`}
@@ -243,6 +248,37 @@ function StageView({ stage, devEntries, setDevEntries, onPlayVideo, videoActive,
             {tab.label}
           </button>
         ))}
+        {forgeMode && (
+          <button
+            className={`section-tab forge-icon-tab${activeSection === 'development' ? ' active' : ''}`}
+            title="Story Forge"
+            onClick={() => setActiveSection('development')}
+          >
+            <svg viewBox="0 0 20 20" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M10,2 L10,11" />
+              <path d="M7,5 Q10,3 13,5" />
+              <path d="M6,11 L14,11" />
+              <path d="M5,11 L5,14 Q10,18 15,14 L15,11" />
+            </svg>
+          </button>
+        )}
+        {ybrMode && onToggleYBR && (
+          <button
+            className={`section-tab ybr-icon-tab${ybrActive ? ' active' : ''}`}
+            title={ybrActive ? 'Exit Yellow Brick Road' : 'Walk the Yellow Brick Road'}
+            onClick={onToggleYBR}
+          >
+            <svg viewBox="0 0 20 14" width="14" height="10" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinejoin="round">
+              <path d="M1,4 L7,1 L19,1 L13,4 Z" />
+              <path d="M1,4 L1,13 L13,13 L13,4" />
+              <path d="M13,4 L19,1 L19,10 L13,13" />
+              <line x1="7" y1="4" x2="7" y2="13" />
+              <line x1="1" y1="8.5" x2="13" y2="8.5" />
+              <line x1="4" y1="8.5" x2="4" y2="13" />
+              <line x1="10" y1="4" x2="10" y2="8.5" />
+            </svg>
+          </button>
+        )}
         {playlistUrl && (
           <button
             className={`section-tab playlist-tab${videoActive ? ' active' : ''}`}
@@ -496,6 +532,8 @@ function MeteorSteelHome() {
               onPlayVideo={handlePlayVideo}
               videoActive={!!videoUrl}
               onPlayFigure={handlePlayVideo}
+              onToggleYBR={handleYBRToggle}
+              ybrActive={journey.active}
             />
           )}
         </div>
@@ -1306,7 +1344,11 @@ function SiteNav() {
     ...HIDDEN_NAV_ITEMS.filter(h => location.pathname === h.path),
   ];
 
-  const current = visibleItems.find(n => !n.external && n.path === location.pathname) || NAV_ITEMS[0];
+  // Label-only overrides: show in the toggle text but not in the dropdown
+  const LABEL_OVERRIDES = { '/profile': 'Profile', '/xr': 'VR / XR' };
+  const current = visibleItems.find(n => !n.external && n.path === location.pathname)
+    || (LABEL_OVERRIDES[location.pathname] ? { label: LABEL_OVERRIDES[location.pathname] } : null)
+    || NAV_ITEMS[0];
 
   return (
     <nav className="site-nav">
@@ -1342,32 +1384,71 @@ function SiteNav() {
   );
 }
 
+const SUBSCRIPTIONS_META = {
+  ybr: { id: 'ybr', name: 'Yellow Brick Road', description: 'Interactive journey through the monomyth stages with Atlas as your guide.' },
+  forge: { id: 'forge', name: 'Story Forge', description: 'Write your own story using mythic structure with AI collaboration.' },
+  coursework: { id: 'coursework', name: 'Coursework', description: 'Track your progress through courses, earn ranks and certificates.' },
+  xr: { id: 'xr', name: 'VR / XR', description: 'Immersive 3D and extended reality views of the celestial wheels.' },
+};
+
+const PURCHASES_META = {
+  starlight: { id: 'starlight', name: 'Fallen Starlight', description: 'Unlock Fallen Starlight and Story of Stories on the Chronosphaera.' },
+};
+
+function SubscriptionGate({ gateInfo, onClose }) {
+  const navigate = useNavigate();
+  const isPurchase = gateInfo?.type === 'purchase';
+  const meta = isPurchase ? PURCHASES_META[gateInfo?.id] : SUBSCRIPTIONS_META[gateInfo?.id];
+  if (!meta) return null;
+  return (
+    <div className="subscription-gate-overlay" onClick={onClose}>
+      <div className="subscription-gate-popup" onClick={e => e.stopPropagation()}>
+        <h3 className="subscription-gate-title">{meta.name}</h3>
+        <p className="subscription-gate-desc">{meta.description}</p>
+        <div className="subscription-gate-actions">
+          <button className="subscription-gate-primary" onClick={() => { navigate(isPurchase ? '/profile#purchases' : '/profile#subscriptions'); onClose(); }}>
+            Manage Membership
+          </button>
+          <button className="subscription-gate-secondary" onClick={onClose}>
+            Not now
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function SiteHeader() {
   const { user, signOut } = useAuth();
   const { courseworkMode, toggleCourseworkMode } = useCoursework();
-  const { active: ybrActive, toggle: ybrToggle } = useYBRHeader();
   const { forgeMode, setForgeMode } = useStoryForge();
   const { ybrMode, setYbrMode } = useYBRMode();
+  const { xrMode, setXrMode } = useXRMode();
+  const { hasSubscription, hasPurchase } = useProfile();
   const location = useLocation();
   const navigate = useNavigate();
+  const [gatePopup, setGatePopup] = useState(null); // { type: 'subscription'|'purchase', id }
   const show3D = location.pathname.startsWith('/metals') && location.pathname !== '/metals/vr';
   return (
+    <>
     <header className="site-header">
       <Link to="/metals/calendar" className="site-header-logo">Mythouse</Link>
+      {xrMode && <div id="xr-controls-slot" className="xr-controls-slot" />}
       {user && (
         <div className="site-header-user">
           <button
             className={`header-ybr-toggle${ybrMode ? ' active' : ''}`}
             onClick={() => {
+              if (!ybrMode && !hasSubscription('ybr')) { setGatePopup({ type: 'subscription', id: 'ybr' }); return; }
               if (!ybrMode) {
                 setYbrMode(true);
-              } else if (!location.pathname.startsWith('/journey')) {
-                navigate('/journey/monomyth');
+              } else if (location.pathname !== '/yellow-brick-road') {
+                navigate('/yellow-brick-road');
               } else {
                 setYbrMode(false);
               }
             }}
-            title={ybrMode ? (location.pathname.startsWith('/journey') ? 'Turn off Yellow Brick Road' : 'Open Yellow Brick Road') : 'Turn on Yellow Brick Road'}
+            title={ybrMode ? (location.pathname === '/yellow-brick-road' ? 'Turn off Yellow Brick Road' : 'Open Yellow Brick Road') : 'Turn on Yellow Brick Road'}
           >
             <svg viewBox="0 0 20 14" width="16" height="11" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinejoin="round">
               <path d="M1,4 L7,1 L19,1 L13,4 Z" />
@@ -1382,6 +1463,7 @@ function SiteHeader() {
           <button
             className={`header-forge-toggle${forgeMode ? ' active' : ''}`}
             onClick={() => {
+              if (!forgeMode && !hasSubscription('forge')) { setGatePopup({ type: 'subscription', id: 'forge' }); return; }
               if (!forgeMode) {
                 setForgeMode(true);
               } else if (location.pathname !== '/story-forge') {
@@ -1399,19 +1481,53 @@ function SiteHeader() {
               <path d="M5,11 L5,14 Q10,18 15,14 L15,11" />
             </svg>
           </button>
-          {show3D && (
-            <Link to="/metals/vr" className="header-3d-toggle" title="View in 3D">3D</Link>
-          )}
           <button
             className={`coursework-toggle${courseworkMode ? ' active' : ''}`}
-            onClick={toggleCourseworkMode}
+            onClick={() => {
+              if (!courseworkMode && !hasSubscription('coursework')) { setGatePopup({ type: 'subscription', id: 'coursework' }); return; }
+              toggleCourseworkMode();
+            }}
             title={courseworkMode ? 'Coursework On' : 'Coursework'}
           >
             <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M2 12 L12 6 L22 12 L12 18 Z" />
+              <path d="M6 14 L6 19 C6 19 9 22 12 22 C15 22 18 19 18 19 L18 14" />
+              <line x1="22" y1="12" x2="22" y2="18" />
+            </svg>
+          </button>
+          <button
+            className={`header-book-toggle${hasPurchase('starlight') ? ' active' : ''}`}
+            onClick={() => {
+              if (!hasPurchase('starlight')) { setGatePopup({ type: 'purchase', id: 'starlight' }); return; }
+              navigate('/metals/calendar');
+            }}
+            title={hasPurchase('starlight') ? 'Fallen Starlight' : 'Unlock Fallen Starlight'}
+          >
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
               <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
               <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
-              <line x1="8" y1="7" x2="16" y2="7" />
-              <line x1="8" y1="11" x2="14" y2="11" />
+              <path d="M12 6 L10.8 9.2 L7.5 9.2 L10.1 11.3 L9.1 14.5 L12 12.5 L14.9 14.5 L13.9 11.3 L16.5 9.2 L13.2 9.2 Z" fill="currentColor" stroke="none" />
+            </svg>
+          </button>
+          <button
+            className={`header-xr-toggle${xrMode ? ' active' : ''}`}
+            onClick={() => {
+              if (!xrMode && !hasSubscription('xr')) { setGatePopup({ type: 'subscription', id: 'xr' }); return; }
+              if (!xrMode) {
+                setXrMode(true);
+              } else if (location.pathname !== '/xr') {
+                navigate('/xr');
+              } else {
+                setXrMode(false);
+              }
+            }}
+            title={xrMode ? (location.pathname === '/xr' ? 'Turn off XR Mode' : 'Open XR Experiences') : 'VR / XR'}
+          >
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+              <rect x="1" y="7" width="22" height="11" rx="3" />
+              <circle cx="8" cy="12.5" r="2.5" />
+              <circle cx="16" cy="12.5" r="2.5" />
+              <path d="M10.5 12.5 Q12 15 13.5 12.5" />
             </svg>
           </button>
           <Link to="/profile" className="site-header-profile" title="Profile">
@@ -1424,6 +1540,8 @@ function SiteHeader() {
         </div>
       )}
     </header>
+    {gatePopup && <SubscriptionGate gateInfo={gatePopup} onClose={() => setGatePopup(null)} />}
+  </>
   );
 }
 
@@ -1511,10 +1629,12 @@ function AppContent() {
   const [areaOverride, setAreaOverride] = useState(null);
   const [forgeMode, setForgeMode] = useState(false);
   const [ybrMode, setYbrMode] = useState(false);
+  const [xrMode, setXrMode] = useState(false);
 
   return (
     <StoryForgeContext.Provider value={{ forgeMode, setForgeMode }}>
     <YBRModeContext.Provider value={{ ybrMode, setYbrMode }}>
+    <XRModeContext.Provider value={{ xrMode, setXrMode }}>
     <YBRHeaderContext.Provider value={{ ...ybrHeader, register: setYbrHeader }}>
     <AreaOverrideContext.Provider value={{ area: areaOverride, register: setAreaOverride }}>
     <div className={`app${courseworkMode ? ' cw-mode' : ''}`}>
@@ -1527,6 +1647,8 @@ function AppContent() {
         <Route path="/metals/*" element={<SevenMetalsPage />} />
         <Route path="/fallen-starlight" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><FallenStarlightPage /></Suspense>} />
         <Route path="/story-forge" element={<StoryForgeHome />} />
+        <Route path="/yellow-brick-road" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><YellowBrickRoadPage /></Suspense>} />
+        <Route path="/xr" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><XRPage /></Suspense>} />
         <Route path="/monomyth" element={<MonomythPage />} />
         <Route path="/mythology-channel" element={<MythologyChannelPage />} />
         <Route path="/games/*" element={<GamesPage />} />
@@ -1547,6 +1669,7 @@ function AppContent() {
     </div>
     </AreaOverrideContext.Provider>
     </YBRHeaderContext.Provider>
+    </XRModeContext.Provider>
     </YBRModeContext.Provider>
     </StoryForgeContext.Provider>
   );
