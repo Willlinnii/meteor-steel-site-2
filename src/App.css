@@ -3806,6 +3806,163 @@ body {
   }
 }
 
+/* ===== PROFILE: NUMEROLOGY ===== */
+.numerology-display {
+  margin-bottom: 20px;
+}
+
+.numerology-name-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.numerology-current-name {
+  font-family: 'Cinzel', serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--accent-gold);
+}
+
+.numerology-change-btn,
+.numerology-cancel-btn {
+  font-family: 'Cinzel', serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--accent-gold);
+  background: rgba(201, 169, 97, 0.08);
+  border: 1px solid rgba(201, 169, 97, 0.3);
+  border-radius: 5px;
+  padding: 4px 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.numerology-change-btn:hover,
+.numerology-cancel-btn:hover {
+  background: rgba(201, 169, 97, 0.16);
+  border-color: rgba(201, 169, 97, 0.5);
+}
+
+.numerology-hint {
+  font-family: 'Crimson Pro', serif;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  font-style: italic;
+  opacity: 0.7;
+  margin-bottom: 10px;
+}
+
+.numerology-input-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.numerology-input-field {
+  flex: 1;
+  background: var(--bg-dark);
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  padding: 8px 12px;
+  color: var(--text-primary);
+  font-family: 'Crimson Pro', serif;
+  font-size: 0.9rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.numerology-input-field:focus {
+  border-color: rgba(201, 169, 97, 0.4);
+}
+
+.numerology-calc-btn {
+  font-family: 'Cinzel', serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--accent-gold);
+  background: rgba(201, 169, 97, 0.1);
+  border: 1px solid rgba(201, 169, 97, 0.35);
+  border-radius: 6px;
+  padding: 8px 18px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.numerology-calc-btn:hover:not(:disabled) {
+  background: rgba(201, 169, 97, 0.2);
+  border-color: rgba(201, 169, 97, 0.5);
+}
+
+.numerology-calc-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.numerology-cards {
+  display: flex;
+  gap: 12px;
+}
+
+.numerology-card {
+  flex: 1;
+  background: rgba(201, 169, 97, 0.06);
+  border: 1px solid rgba(201, 169, 97, 0.25);
+  border-radius: 10px;
+  padding: 16px 10px;
+  text-align: center;
+}
+
+.numerology-card-number {
+  font-family: 'Cinzel', serif;
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--accent-gold);
+  margin-bottom: 6px;
+}
+
+.numerology-card-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  margin-bottom: 2px;
+}
+
+.numerology-card-subtitle {
+  font-family: 'Crimson Pro', serif;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  opacity: 0.7;
+  margin-bottom: 8px;
+}
+
+.numerology-card-meaning {
+  font-family: 'Crimson Pro', serif;
+  font-size: 0.78rem;
+  color: var(--text-primary);
+  line-height: 1.35;
+}
+
+.numerology-empty {
+  text-align: center;
+}
+
+@media (max-width: 480px) {
+  .numerology-cards {
+    flex-direction: column;
+  }
+  .numerology-input-row {
+    flex-direction: column;
+  }
+}
+
 /* ===== PROFILE: EMBEDDED CHAT ===== */
 .profile-chat {
   border: 1px solid var(--border-subtle);
@@ -4875,4 +5032,285 @@ body {
   border-radius: 8px;
   padding: 12px;
   margin-bottom: 8px;
+}
+
+/* ===== SELECTOR RING (inner circle items) ===== */
+
+.selector-ring-item {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  pointer-events: auto;
+  cursor: pointer;
+  padding: 6px 4px;
+}
+
+.selector-ring-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.55rem;
+  font-weight: 700;
+  white-space: nowrap;
+  display: block;
+  text-align: center;
+  opacity: 0.85;
+  transition: all 0.3s ease;
+  letter-spacing: 0.04em;
+  text-shadow: 0 0 4px rgba(0,0,0,0.8), 0 0 8px rgba(0,0,0,0.5);
+}
+
+.selector-ring-item:hover .selector-ring-label {
+  opacity: 1;
+  text-shadow: 0 0 6px currentColor, 0 0 3px rgba(0,0,0,0.9);
+}
+
+.selector-ring-item.active .selector-ring-label {
+  opacity: 1;
+  font-size: 0.6rem;
+  text-shadow: 0 0 10px currentColor, 0 0 20px currentColor, 0 0 3px rgba(0,0,0,0.9);
+}
+
+.selector-ring-dot {
+  transition: opacity 0.3s ease;
+}
+
+/* ===== RING SELECTOR CONTROLS ===== */
+
+.ring-selector-controls {
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+  margin: 8px 0 12px;
+  flex-wrap: wrap;
+}
+
+.ring-selector-btn {
+  font-family: 'Cinzel', serif;
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  padding: 3px 8px;
+  border: 1px solid var(--border-subtle);
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  opacity: 0.5;
+}
+
+.ring-selector-btn:hover {
+  border-color: var(--accent-gold);
+  color: var(--text-secondary);
+  opacity: 0.8;
+}
+
+.ring-selector-btn.active {
+  border-color: var(--accent-gold);
+  color: var(--accent-gold);
+  background: rgba(201, 169, 97, 0.08);
+  opacity: 1;
+}
+
+@media (max-width: 600px) {
+  .selector-ring-label { font-size: 0.45rem; }
+  .selector-ring-item.active .selector-ring-label { font-size: 0.5rem; }
+  .ring-selector-btn { font-size: 0.55rem; padding: 2px 6px; }
+}
+
+/* ===== CONVERSATIONAL FORGE DRAFT ===== */
+
+.forge-draft-overview {
+  text-align: center;
+  padding: 20px 0;
+}
+
+.forge-draft-chat {
+  max-height: 450px;
+  overflow-y: auto;
+  padding: 16px 0;
+  margin-bottom: 8px;
+}
+
+.forge-draft-chat .chat-msg {
+  margin-bottom: 14px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.forge-draft-chat .chat-msg.user {
+  background: rgba(196, 113, 58, 0.12);
+  margin-left: 32px;
+  border-bottom-right-radius: 2px;
+}
+
+.forge-draft-chat .chat-msg.assistant {
+  background: var(--bg-light);
+  margin-right: 32px;
+  border-bottom-left-radius: 2px;
+}
+
+.forge-draft-empty {
+  color: var(--text-secondary);
+  font-style: italic;
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.chat-input-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  padding: 8px 0;
+}
+
+.chat-input-row .chat-input {
+  flex: 1;
+  background: var(--bg-medium);
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  padding: 10px 14px;
+  color: var(--text-primary);
+  font-family: 'Crimson Pro', serif;
+  font-size: 0.95rem;
+  resize: none;
+  outline: none;
+  line-height: 1.4;
+}
+
+.chat-input-row .chat-input:focus {
+  border-color: var(--accent-ember);
+}
+
+.chat-input-row .chat-send {
+  background: none;
+  border: 1px solid var(--accent-ember);
+  color: var(--accent-ember);
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: 'Cinzel', serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.chat-input-row .chat-send:hover:not(:disabled) {
+  background: rgba(196, 113, 58, 0.15);
+}
+
+.chat-input-row .chat-send:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+/* Mythic resonance aside */
+.forge-mythic-aside {
+  margin-top: 10px;
+  padding: 10px 14px;
+  border-left: 3px solid var(--accent-gold);
+  background: rgba(201, 169, 97, 0.06);
+  border-radius: 0 6px 6px 0;
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+}
+
+.forge-mythic-aside strong {
+  color: var(--accent-gold);
+  font-family: 'Cinzel', serif;
+  font-size: 0.8rem;
+  letter-spacing: 0.03em;
+}
+
+.forge-mythic-suggestion {
+  margin-top: 4px;
+  font-style: italic;
+  color: var(--text-secondary);
+  opacity: 0.85;
+}
+
+/* Collapsible raw material */
+.forge-raw-material {
+  margin-bottom: 16px;
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.forge-raw-material summary {
+  cursor: pointer;
+  padding: 10px 14px;
+  font-family: 'Cinzel', serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: var(--text-secondary);
+  background: rgba(139, 157, 195, 0.05);
+}
+
+.forge-raw-material summary:hover {
+  color: var(--text-primary);
+}
+
+.forge-raw-group {
+  padding: 8px 14px;
+}
+
+.forge-raw-mode {
+  font-family: 'Cinzel', serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--accent-steel);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.forge-raw-group p {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  margin: 4px 0;
+}
+
+/* Current draft display card */
+.forge-current-draft {
+  margin-top: 20px;
+  padding: 20px;
+  background: rgba(201, 169, 97, 0.04);
+  border: 1px solid rgba(201, 169, 97, 0.15);
+  border-radius: 10px;
+}
+
+.forge-current-draft h4 {
+  font-family: 'Cinzel', serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--accent-gold);
+  letter-spacing: 0.06em;
+  margin-bottom: 12px;
+}
+
+.forge-current-draft p {
+  font-size: 0.95rem;
+  line-height: 1.7;
+  margin-bottom: 8px;
+}
+
+.forge-draft-timestamp {
+  display: block;
+  margin-top: 8px;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  opacity: 0.6;
+}
+
+/* Partial progress dot (has conversation but no draft) */
+.forge-progress-dot.partial {
+  border-color: var(--accent-gold);
+  color: var(--accent-gold);
+  opacity: 0.6;
+  background: rgba(201, 169, 97, 0.08);
 }

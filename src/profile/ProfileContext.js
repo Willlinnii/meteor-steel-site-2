@@ -548,6 +548,20 @@ export function ProfileProvider({ children }) {
     }
   }, [user]);
 
+  // Update numerology name
+  const updateNumerologyName = useCallback(async (name) => {
+    if (!user || !firebaseConfigured || !db) return;
+
+    setProfileData(prev => ({ ...prev, numerologyName: name }));
+
+    try {
+      const ref = doc(db, 'users', user.uid, 'meta', 'profile');
+      await setDoc(ref, { numerologyName: name, updatedAt: serverTimestamp() }, { merge: true });
+    } catch (err) {
+      console.error('Failed to update numerology name:', err);
+    }
+  }, [user]);
+
   // Mark onboarding complete
   const completeOnboarding = useCallback(async () => {
     if (!user || !firebaseConfigured || !db) return;
@@ -687,6 +701,7 @@ export function ProfileProvider({ children }) {
   }, [user]);
 
   const natalChart = profileData?.natalChart || null;
+  const numerologyName = profileData?.numerologyName || null;
 
   const value = {
     profileData,
@@ -697,6 +712,7 @@ export function ProfileProvider({ children }) {
     loaded,
     handle,
     natalChart,
+    numerologyName,
     subscriptions,
     hasSubscription,
     updateSubscription,
@@ -706,6 +722,8 @@ export function ProfileProvider({ children }) {
     updatePurchases,
     updateCredentials,
     updateNatalChart,
+    numerologyName,
+    updateNumerologyName,
     completeOnboarding,
     refreshProfile,
     mentorData,

@@ -12,6 +12,7 @@ import { MENTOR_STATUS, MENTOR_TYPES, getMentorDisplay, getMentorCourseChecklist
 import { validatePhoto, uploadProfilePhoto } from '../../profile/photoUpload';
 import { checkAvailability, registerHandle } from '../../multiplayer/handleService';
 import { apiFetch } from '../../lib/chatApi';
+import { computeNumerology, NUMBER_MEANINGS, NUMBER_TYPES } from '../../profile/numerologyEngine';
 
 const SUBSCRIPTIONS = [
   {
@@ -117,7 +118,7 @@ const PURCHASES = [
 export default function ProfilePage() {
   const { user, signOut } = useAuth();
   const { getCourseStates, completedCourses, allCourses } = useCoursework();
-  const { earnedRanks, highestRank, activeCredentials, hasProfile, loaded: profileLoaded, handle, natalChart, updateNatalChart, subscriptions, updateSubscription, purchases, updatePurchase, updatePurchases, refreshProfile, mentorData, qualifiedMentorTypes, mentorEligible, mentorCoursesComplete, effectiveMentorStatus, pairingCategories, updateMentorBio, updateMentorCapacity, publishToDirectory, unpublishFromDirectory, respondToPairing, endPairing, photoURL, consultingData, consultingCategories, updateProfilePhoto, respondToConsulting, apiKeys, apiKeysLoaded, saveApiKey, removeApiKey, hasAnthropicKey, hasOpenaiKey } = useProfile();
+  const { earnedRanks, highestRank, activeCredentials, hasProfile, loaded: profileLoaded, handle, natalChart, updateNatalChart, numerologyName, updateNumerologyName, subscriptions, updateSubscription, purchases, updatePurchase, updatePurchases, refreshProfile, mentorData, qualifiedMentorTypes, mentorEligible, mentorCoursesComplete, effectiveMentorStatus, pairingCategories, updateMentorBio, updateMentorCapacity, publishToDirectory, unpublishFromDirectory, respondToPairing, endPairing, photoURL, consultingData, consultingCategories, updateProfilePhoto, respondToConsulting, apiKeys, apiKeysLoaded, saveApiKey, removeApiKey, hasAnthropicKey, hasOpenaiKey } = useProfile();
   const { personalStories, loaded: writingsLoaded } = useWritings();
   const navigate = useNavigate();
   const location = useLocation();
@@ -436,6 +437,14 @@ export default function ProfilePage() {
       <h2 className="profile-section-title">Natal Chart</h2>
       {natalChart && <NatalChartDisplay chart={natalChart} />}
       <NatalChartInput existingChart={natalChart} onSave={updateNatalChart} />
+
+      {/* Numerology Section */}
+      <h2 className="profile-section-title">Numerology</h2>
+      <NumerologyDisplay
+        savedName={numerologyName}
+        displayName={user?.displayName}
+        onSave={updateNumerologyName}
+      />
 
       {/* Ranks Section */}
       <h2 className="profile-section-title">Ranks</h2>
@@ -1081,6 +1090,82 @@ const PLANET_METALS = {
   Sun: 'Gold', Moon: 'Silver', Mercury: 'Quicksilver', Venus: 'Copper',
   Mars: 'Iron', Jupiter: 'Tin', Saturn: 'Lead',
 };
+
+function NumerologyDisplay({ savedName, displayName, onSave }) {
+  const [editing, setEditing] = useState(false);
+  const [nameInput, setNameInput] = useState('');
+
+  const activeName = savedName || displayName || '';
+  const result = activeName ? computeNumerology(activeName) : null;
+
+  const handleCalculate = () => {
+    const trimmed = nameInput.trim();
+    if (!trimmed) return;
+    onSave(trimmed);
+    setEditing(false);
+    setNameInput('');
+  };
+
+  return (
+    <div className="numerology-display">
+      {result ? (
+        <>
+          <div className="numerology-name-row">
+            <span className="numerology-current-name">{activeName}</span>
+            {!editing && (
+              <button className="numerology-change-btn" onClick={() => { setEditing(true); setNameInput(activeName); }}>
+                {savedName ? 'Change Name' : 'Enter Full Name'}
+              </button>
+            )}
+          </div>
+          {!savedName && !editing && (
+            <div className="numerology-hint">Use your full desired name for accuracy.</div>
+          )}
+          {editing && (
+            <div className="numerology-input-row">
+              <input
+                className="numerology-input-field"
+                type="text"
+                value={nameInput}
+                onChange={e => setNameInput(e.target.value)}
+                onKeyDown={e => e.key === 'Enter' && handleCalculate()}
+                placeholder="Full name..."
+                autoFocus
+              />
+              <button className="numerology-calc-btn" onClick={handleCalculate} disabled={!nameInput.trim()}>Calculate</button>
+              <button className="numerology-cancel-btn" onClick={() => setEditing(false)}>Cancel</button>
+            </div>
+          )}
+          <div className="numerology-cards">
+            {['expression', 'soulUrge', 'personality'].map(key => (
+              <div key={key} className="numerology-card">
+                <div className="numerology-card-number">{result[key]}</div>
+                <div className="numerology-card-label">{NUMBER_TYPES[key].label}</div>
+                <div className="numerology-card-subtitle">{NUMBER_TYPES[key].subtitle}</div>
+                <div className="numerology-card-meaning">{NUMBER_MEANINGS[result[key]]}</div>
+              </div>
+            ))}
+          </div>
+        </>
+      ) : (
+        <div className="numerology-empty">
+          <div className="numerology-hint">Enter your name to reveal your numerological profile.</div>
+          <div className="numerology-input-row">
+            <input
+              className="numerology-input-field"
+              type="text"
+              value={nameInput}
+              onChange={e => setNameInput(e.target.value)}
+              onKeyDown={e => e.key === 'Enter' && handleCalculate()}
+              placeholder="Full name..."
+            />
+            <button className="numerology-calc-btn" onClick={handleCalculate} disabled={!nameInput.trim()}>Calculate</button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
 
 function NatalChartDisplay({ chart }) {
   const sun = chart.planets?.find(p => p.name === 'Sun');
