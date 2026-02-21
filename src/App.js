@@ -715,6 +715,104 @@ function StoryForgeHome() {
     if (currentIdx > 0) handleSelectStage(FORGE_STAGES[currentIdx - 1].id);
   };
 
+  // --- Draft mode handlers ---
+  const handleDraftSend = async (isRequestDraft = false) => {
+    const text = isRequestDraft ? 'Please produce a polished draft for this stage.' : draftInput.trim();
+    if (!text || draftLoading) return;
+    setDraftInput('');
+    setDraftLoading(true);
+
+    const stageMessages = draftMessages[currentStage] || [];
+    const userMsg = { role: 'user', content: text };
+    const updated = [...stageMessages, userMsg];
+    setDraftMessages(prev => ({ ...prev, [currentStage]: updated }));
+
+    // Gather raw entries for this stage
+    const modes = ['noting', 'reflecting', 'creating'];
+    const stageEntries = modes
+      .map(m => ({ mode: m, text: (forgeEntries[`forge-${currentStage}-${m}`] || []).map(e => e.text).join('\n') }))
+      .filter(e => e.text);
+
+    // Adjacent drafts for continuity
+    const prevIdx = currentIdx - 1;
+    const nextIdx = currentIdx + 1;
+    const adjacentDrafts = {};
+    if (prevIdx >= 0 && forgeDrafts[FORGE_STAGES[prevIdx].id]?.text) {
+      adjacentDrafts.previous = forgeDrafts[FORGE_STAGES[prevIdx].id].text;
+    }
+    if (nextIdx < FORGE_STAGES.length && forgeDrafts[FORGE_STAGES[nextIdx].id]?.text) {
+      adjacentDrafts.next = forgeDrafts[FORGE_STAGES[nextIdx].id].text;
+    }
+
+    try {
+      const templateLabel = TEMPLATE_OPTIONS.find(t => t.id === template)?.label || template;
+      const res = await apiFetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          mode: 'forge-draft',
+          messages: updated,
+          stageId: currentStage,
+          template: templateLabel,
+          stageEntries,
+          adjacentDrafts,
+          requestDraft: isRequestDraft,
+        }),
+      });
+      const data = await res.json();
+      if (data.reply || data.draft || data.mythicParallel) {
+        const assistantMsg = { role: 'assistant', content: data.reply || '' };
+        if (data.mythicParallel) assistantMsg.mythicParallel = data.mythicParallel;
+        const newMsgs = [...updated, assistantMsg];
+        setDraftMessages(prev => ({ ...prev, [currentStage]: newMsgs }));
+        saveForgeConversation(currentStage, newMsgs);
+
+        if (data.draft) {
+          setForgeDrafts(prev => ({ ...prev, [currentStage]: { text: data.draft, updatedAt: Date.now() } }));
+          saveForgeDraft(currentStage, data.draft);
+        }
+      }
+    } catch (err) {
+      console.error('Draft send error:', err);
+      const errorMsg = { role: 'assistant', content: 'Network error. Please try again.' };
+      const newMsgs = [...updated, errorMsg];
+      setDraftMessages(prev => ({ ...prev, [currentStage]: newMsgs }));
+    }
+    setDraftLoading(false);
+    setTimeout(() => draftChatEndRef.current?.scrollIntoView({ behavior: 'smooth' }), 100);
+  };
+
+  const handleAssembleNarrative = async () => {
+    setGenerating(true);
+    trackElement(`story-forge.draft.assemble.${template}`);
+    try {
+      const templateLabel = TEMPLATE_OPTIONS.find(t => t.id === template)?.label || template;
+      const draftTexts = {};
+      Object.entries(forgeDrafts).forEach(([id, d]) => {
+        if (d?.text) draftTexts[id] = d.text;
+      });
+
+      const res = await apiFetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ mode: 'forge-assemble', drafts: draftTexts, template: templateLabel }),
+      });
+      const data = await res.json();
+      if (data.story) {
+        const parts = data.story.split(/===\s*([\w-]+)\s*===/);
+        const chapters = { ...generatedStory };
+        for (let i = 1; i < parts.length; i += 2) {
+          chapters[parts[i].trim()] = parts[i + 1].trim();
+        }
+        setGeneratedStory(chapters);
+        setViewMode('read');
+      }
+    } catch (err) {
+      console.error('Assemble narrative error:', err);
+    }
+    setGenerating(false);
+  };
+
   const handleGenerate = async (targetStage) => {
     setGenerating(true);
     trackElement(`story-forge.generate.${template}${targetStage ? `.${targetStage}` : ''}`);
@@ -1167,10 +1265,45 @@ function StoryForgeHome() {
             <div className="forge-hub">
               <div className="forge-view-toggle">
                 <button className={`dev-mode-btn ${viewMode === 'write' ? 'active' : ''}`} onClick={() => setViewMode('write')}>Write</button>
+                <button className={`dev-mode-btn ${viewMode === 'draft' ? 'active' : ''}`} onClick={() => setViewMode('draft')}>Draft</button>
                 <button className={`dev-mode-btn ${viewMode === 'read' ? 'active' : ''}`} onClick={() => setViewMode('read')}>Read</button>
                 <button className={`dev-mode-btn ${viewMode === 'library' ? 'active' : ''}`} onClick={() => setViewMode('library')}>Library</button>
               </div>
 
+              {viewMode === 'draft' ? (
+                <div className="forge-draft-overview">
+                  <h4 className="forge-progress-title">Draft Progress — {TEMPLATE_OPTIONS.find(t => t.id === template)?.label}</h4>
+                  <div className="forge-progress-stages">
+                    {FORGE_STAGES.map(s => {
+                      const hasDraft = forgeDrafts[s.id]?.text;
+                      const hasConvo = (draftMessages[s.id] || []).length > 0;
+                      return (
+                        <button
+                          key={s.id}
+                          className={`forge-progress-dot ${hasDraft ? 'filled' : hasConvo ? 'partial' : ''}`}
+                          onClick={() => handleSelectStage(s.id)}
+                          title={`${s.label}${hasDraft ? ' (drafted)' : hasConvo ? ' (in progress)' : ''}`}
+                        >
+                          {s.label}
+                        </button>
+                      );
+                    })}
+                  </div>
+                  <p className="forge-progress-count">
+                    {Object.values(forgeDrafts).filter(d => d?.text).length} of 8 stages drafted
+                  </p>
+                  <div className="forge-actions">
+                    <button
+                      className="forge-generate-btn"
+                      onClick={handleAssembleNarrative}
+                      disabled={Object.values(forgeDrafts).filter(d => d?.text).length < 2 || generating}
+                    >
+                      {generating ? 'Assembling...' : 'Assemble Full Narrative'}
+                    </button>
+                  </div>
+                </div>
+              ) : (
+              <>
               <div className="forge-progress">
                 <h4 className="forge-progress-title">Progress — {TEMPLATE_OPTIONS.find(t => t.id === template)?.label}</h4>
                 <div className="forge-progress-stages">
@@ -1203,6 +1336,8 @@ function StoryForgeHome() {
                   Change Template
                 </button>
               </div>
+              </>
+              )}
 
               {Object.keys(generatedStory).length > 0 && viewMode === 'read' && (
                 <div className="forge-story-overview">
@@ -1267,6 +1402,107 @@ function StoryForgeHome() {
                   />
                 </div>
               </div>
+              <div className="forge-stage-nav">
+                {currentIdx > 0 && (
+                  <button className="forge-nav-btn" onClick={goPrev}>
+                    ← {FORGE_STAGES[currentIdx - 1].label}
+                  </button>
+                )}
+                <button className="forge-nav-btn forge-nav-overview" onClick={() => setCurrentStage('overview')}>
+                  Hub
+                </button>
+                {currentIdx < FORGE_STAGES.length - 1 && (
+                  <button className="forge-nav-btn" onClick={goNext}>
+                    {FORGE_STAGES[currentIdx + 1].label} →
+                  </button>
+                )}
+              </div>
+            </>
+          ) : viewMode === 'draft' ? (
+            /* Stage — Draft Mode */
+            <>
+              {/* Collapsible raw material */}
+              {(() => {
+                const modes = ['noting', 'reflecting', 'creating'];
+                const hasRaw = modes.some(m => (forgeEntries[`forge-${currentStage}-${m}`] || []).length > 0);
+                return hasRaw ? (
+                  <details className="forge-raw-material">
+                    <summary>Your raw material for this stage</summary>
+                    {modes.map(m => {
+                      const entries = forgeEntries[`forge-${currentStage}-${m}`] || [];
+                      return entries.length > 0 ? (
+                        <div key={m} className="forge-raw-group">
+                          <span className="forge-raw-mode">[{m}]</span>
+                          {entries.map((e, i) => <p key={i}>{e.text}</p>)}
+                        </div>
+                      ) : null;
+                    })}
+                  </details>
+                ) : null;
+              })()}
+
+              {/* Chat thread */}
+              <div className="forge-draft-chat">
+                {(draftMessages[currentStage] || []).length === 0 ? (
+                  <div className="forge-draft-empty">
+                    Start a conversation with Atlas about this stage. Share your thoughts, ideas, or ask for guidance.
+                  </div>
+                ) : (
+                  (draftMessages[currentStage] || []).map((msg, i) => (
+                    <div key={i} className={`chat-msg ${msg.role}`}>
+                      <strong>{msg.role === 'user' ? 'You' : 'Atlas'}:</strong>{' '}
+                      {msg.content}
+                      {msg.mythicParallel && (
+                        <div className="forge-mythic-aside">
+                          <strong>{msg.mythicParallel.source}</strong>: {msg.mythicParallel.parallel}
+                          <p className="forge-mythic-suggestion">{msg.mythicParallel.suggestion}</p>
+                        </div>
+                      )}
+                    </div>
+                  ))
+                )}
+                {draftLoading && <div className="chat-msg assistant"><em>Atlas is thinking...</em></div>}
+                <div ref={draftChatEndRef} />
+              </div>
+
+              {/* Input area */}
+              <div className="chat-input-row">
+                <textarea
+                  className="chat-input"
+                  value={draftInput}
+                  onChange={e => setDraftInput(e.target.value)}
+                  onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleDraftSend(); } }}
+                  placeholder="Share your thoughts on this stage..."
+                  rows={2}
+                  disabled={draftLoading}
+                />
+                <button className="chat-send" onClick={() => handleDraftSend()} disabled={draftLoading || !draftInput.trim()}>Send</button>
+              </div>
+
+              {/* Draft this stage button */}
+              <div className="forge-actions" style={{ marginTop: '12px' }}>
+                <button
+                  className="forge-generate-btn"
+                  onClick={() => handleDraftSend(true)}
+                  disabled={draftLoading}
+                >
+                  {forgeDrafts[currentStage]?.text ? 'Redraft This Stage' : 'Draft This Stage'}
+                </button>
+              </div>
+
+              {/* Current draft display */}
+              {forgeDrafts[currentStage]?.text && (
+                <div className="forge-current-draft">
+                  <h4>Current Draft</h4>
+                  {forgeDrafts[currentStage].text.split('\n\n').map((p, i) => (
+                    <p key={i}>{p}</p>
+                  ))}
+                  <span className="forge-draft-timestamp">
+                    {new Date(forgeDrafts[currentStage].updatedAt).toLocaleString()}
+                  </span>
+                </div>
+              )}
+
               <div className="forge-stage-nav">
                 {currentIdx > 0 && (
                   <button className="forge-nav-btn" onClick={goPrev}>

@@ -19,7 +19,7 @@ export function WritingsProvider({ children }) {
   const { user } = useAuth();
 
   // Data state for each doc
-  const [forgeData, setForgeData] = useState({ template: null, entries: {}, stories: {} });
+  const [forgeData, setForgeData] = useState({ template: null, entries: {}, stories: {}, conversations: {}, drafts: {} });
   const [journeySyntheses, setJourneySyntheses] = useState({});
   const [conversationsData, setConversationsData] = useState({ atlas: [], personas: {}, profile: [] });
   const [notesData, setNotesData] = useState({ entries: {} });
@@ -46,7 +46,7 @@ export function WritingsProvider({ children }) {
   // Load all writing docs from Firestore on login
   useEffect(() => {
     if (!user || !firebaseConfigured || !db) {
-      setForgeData({ template: null, entries: {}, stories: {} });
+      setForgeData({ template: null, entries: {}, stories: {}, conversations: {}, drafts: {} });
       setJourneySyntheses({});
       setConversationsData({ atlas: [], personas: {}, profile: [] });
       setNotesData({ entries: {} });
@@ -72,6 +72,8 @@ export function WritingsProvider({ children }) {
               template: results.forge.template || null,
               entries: results.forge.entries || {},
               stories: results.forge.stories || {},
+              conversations: results.forge.conversations || {},
+              drafts: results.forge.drafts || {},
             });
           }
           if (results.journeys) {
@@ -167,7 +169,23 @@ export function WritingsProvider({ children }) {
 
   // --- Forge ---
   const saveForge = useCallback((entries, stories, template) => {
-    setForgeData({ template, entries, stories });
+    setForgeData(prev => ({ ...prev, template, entries, stories }));
+    dirtyRef.current.add('forge');
+  }, []);
+
+  const saveForgeConversation = useCallback((stageId, messages) => {
+    setForgeData(prev => ({
+      ...prev,
+      conversations: { ...prev.conversations, [stageId]: messages },
+    }));
+    dirtyRef.current.add('forge');
+  }, []);
+
+  const saveForgeDraft = useCallback((stageId, text) => {
+    setForgeData(prev => ({
+      ...prev,
+      drafts: { ...prev.drafts, [stageId]: { text, updatedAt: Date.now() } },
+    }));
     dirtyRef.current.add('forge');
   }, []);
 
@@ -405,6 +423,8 @@ export function WritingsProvider({ children }) {
   const value = {
     forgeData,
     saveForge,
+    saveForgeConversation,
+    saveForgeDraft,
     journeySyntheses,
     addJourneySynthesis,
     getConversation,
