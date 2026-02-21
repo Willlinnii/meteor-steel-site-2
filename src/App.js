@@ -7,6 +7,7 @@ import { ProfileProvider, useProfile } from './profile/ProfileContext';
 import { MultiplayerProvider } from './multiplayer/MultiplayerContext';
 import LoginPage from './auth/LoginPage';
 import './App.css';
+import { apiFetch } from './lib/chatApi';
 import ChatPanel from './components/ChatPanel';
 import CircleNav from './components/CircleNav';
 import DevelopmentPanel from './components/DevelopmentPanel';
@@ -57,6 +58,8 @@ const MythicEarthPage = lazy(() => import('./pages/MythicEarth/MythicEarthPage')
 const YellowBrickRoadPage = lazy(() => import('./pages/YellowBrickRoad/YellowBrickRoadPage'));
 const XRPage = lazy(() => import('./pages/XR/XRPage'));
 const FallenStarlightPage = lazy(() => import('./pages/FallenStarlight/FallenStarlightPage'));
+const MentorDirectoryPage = lazy(() => import('./pages/MentorDirectory/MentorDirectoryPage'));
+const GuildPage = lazy(() => import('./pages/Guild/GuildPage'));
 
 const STAGES = [
   { id: 'golden-age', label: 'Golden Age' },
@@ -717,7 +720,7 @@ function StoryForgeHome() {
         return { stageId: s.id, label: s.label, entries };
       }).filter(s => s.entries.length > 0);
 
-      const res = await fetch('/api/forge', {
+      const res = await apiFetch('/api/forge', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ template: templateLabel, stageContent, targetStage: targetStage || null }),
@@ -805,7 +808,7 @@ function StoryForgeHome() {
       setInterviewInput('');
       setInterviewLoading(true);
       try {
-        const res = await fetch('/api/chat', {
+        const res = await apiFetch('/api/chat', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ messages: updated, mode: 'story-interview', storyId: interviewStoryId }),
@@ -856,7 +859,7 @@ function StoryForgeHome() {
                 return st ? st.entries.map(e => ({ storyName: s.name, stage: stage.label, text: e.text })) : [];
               })
             );
-        const res = await fetch('/api/chat', {
+        const res = await apiFetch('/api/chat', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ mode: 'story-synthesis', stageId: stageId || 'full', stageData: allEntries }),
@@ -1332,6 +1335,8 @@ const NAV_ITEMS = [
 ];
 
 const HIDDEN_NAV_ITEMS = [
+  { path: '/mentors', label: 'Mentors' },
+  { path: '/guild', label: 'Guild' },
 ];
 
 function SiteNav() {
@@ -1345,7 +1350,7 @@ function SiteNav() {
   ];
 
   // Label-only overrides: show in the toggle text but not in the dropdown
-  const LABEL_OVERRIDES = { '/profile': 'Profile', '/xr': 'VR / XR' };
+  const LABEL_OVERRIDES = { '/profile': 'Profile', '/xr': 'VR / XR', '/mentors': 'Mentors', '/guild': 'Guild' };
   const current = visibleItems.find(n => !n.external && n.path === location.pathname)
     || (LABEL_OVERRIDES[location.pathname] ? { label: LABEL_OVERRIDES[location.pathname] } : null)
     || NAV_ITEMS[0];
@@ -1386,13 +1391,44 @@ function SiteNav() {
 
 const SUBSCRIPTIONS_META = {
   ybr: { id: 'ybr', name: 'Yellow Brick Road', description: 'Interactive journey through the monomyth stages with Atlas as your guide.' },
-  forge: { id: 'forge', name: 'Story Forge', description: 'Write your own story using mythic structure with AI collaboration.' },
+  forge: {
+    id: 'forge',
+    name: 'Story Forge',
+    description: 'The Story Forge is a mythic story generator powered by the full architecture of the Mythouse \u2014 seven metals, monomyth stages, planetary archetypes, zodiac cycles, and the medicine wheel \u2014 woven together by Atlas, your AI mythologist.',
+    features: [
+      'Create an original story built on deep mythic structure',
+      'Journal your personal hero\u2019s journey as you walk it',
+      'Collaborate with Atlas to shape narrative, character, and theme',
+    ],
+    cta: 'Visit the Subscriptions area of your Profile page to learn more and activate.',
+  },
   coursework: { id: 'coursework', name: 'Coursework', description: 'Track your progress through courses, earn ranks and certificates.' },
   xr: { id: 'xr', name: 'VR / XR', description: 'Immersive 3D and extended reality views of the celestial wheels.' },
 };
 
 const PURCHASES_META = {
-  starlight: { id: 'starlight', name: 'Fallen Starlight', description: 'Unlock Fallen Starlight and Story of Stories on the Chronosphaera.' },
+  'fallen-starlight': {
+    id: 'fallen-starlight',
+    name: 'Fallen Starlight',
+    description: 'The original revelation \u2014 tracing the descent of celestial fire through the seven planetary metals on the Chronosphaera.',
+    features: [
+      'Overlay the Fallen Starlight narrative ring on the Chronosphaera',
+      'Eight stages of the descent of light into matter',
+      'Integrated reading experience within the celestial clock',
+    ],
+    cta: 'Visit the Purchases area of your Profile page to learn more and activate.',
+  },
+  'story-of-stories': {
+    id: 'story-of-stories',
+    name: 'Story of Stories',
+    description: 'The meta-narrative \u2014 the stories that emerged from the fall of light into matter, told through the Chronosphaera.',
+    features: [
+      'Overlay the Story of Stories narrative ring on the Chronosphaera',
+      'The mythic tradition behind the seven metals',
+      'A companion layer to Fallen Starlight',
+    ],
+    cta: 'Visit the Purchases area of your Profile page to learn more and activate.',
+  },
 };
 
 function SubscriptionGate({ gateInfo, onClose }) {
@@ -1405,9 +1441,17 @@ function SubscriptionGate({ gateInfo, onClose }) {
       <div className="subscription-gate-popup" onClick={e => e.stopPropagation()}>
         <h3 className="subscription-gate-title">{meta.name}</h3>
         <p className="subscription-gate-desc">{meta.description}</p>
+        {meta.features && (
+          <ul className="subscription-gate-features">
+            {meta.features.map((f, i) => <li key={i}>{f}</li>)}
+          </ul>
+        )}
+        {meta.cta && (
+          <p className="subscription-gate-cta">{meta.cta}</p>
+        )}
         <div className="subscription-gate-actions">
           <button className="subscription-gate-primary" onClick={() => { navigate(isPurchase ? '/profile#purchases' : '/profile#subscriptions'); onClose(); }}>
-            Manage Membership
+            Go to Subscriptions
           </button>
           <button className="subscription-gate-secondary" onClick={onClose}>
             Not now
@@ -1419,7 +1463,7 @@ function SubscriptionGate({ gateInfo, onClose }) {
 }
 
 function SiteHeader() {
-  const { user, signOut } = useAuth();
+  const { user } = useAuth();
   const { courseworkMode, toggleCourseworkMode } = useCoursework();
   const { forgeMode, setForgeMode } = useStoryForge();
   const { ybrMode, setYbrMode } = useYBRMode();
@@ -1496,12 +1540,12 @@ function SiteHeader() {
             </svg>
           </button>
           <button
-            className={`header-book-toggle${hasPurchase('starlight') ? ' active' : ''}`}
+            className={`header-book-toggle${(hasPurchase('fallen-starlight') || hasPurchase('story-of-stories')) ? ' active' : ''}`}
             onClick={() => {
-              if (!hasPurchase('starlight')) { setGatePopup({ type: 'purchase', id: 'starlight' }); return; }
+              if (!hasPurchase('fallen-starlight') && !hasPurchase('story-of-stories')) { setGatePopup({ type: 'purchase', id: 'fallen-starlight' }); return; }
               navigate('/metals/calendar');
             }}
-            title={hasPurchase('starlight') ? 'Fallen Starlight' : 'Unlock Fallen Starlight'}
+            title={(hasPurchase('fallen-starlight') || hasPurchase('story-of-stories')) ? 'Fallen Starlight' : 'Unlock Fallen Starlight'}
           >
             <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
               <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
@@ -1536,7 +1580,6 @@ function SiteHeader() {
               <circle cx="12" cy="7" r="4" />
             </svg>
           </Link>
-          <button className="site-header-signout" onClick={signOut}>Sign Out</button>
         </div>
       )}
     </header>
@@ -1662,6 +1705,8 @@ function AppContent() {
         <Route path="/treasures" element={<Navigate to="/myths" replace />} />
         <Route path="/myths" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><MythsPage /></Suspense>} />
         <Route path="/mythic-earth" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><MythicEarthPage /></Suspense>} />
+        <Route path="/mentors" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><MentorDirectoryPage /></Suspense>} />
+        <Route path="/guild" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><GuildPage /></Suspense>} />
         <Route path="/dragon/*" element={<RequireAdmin><Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" />Loading Admin...</div>}><AdminPage /></Suspense></RequireAdmin>} />
       </Routes>
       {!isAtlas && <SiteFooter />}

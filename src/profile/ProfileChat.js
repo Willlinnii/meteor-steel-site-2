@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useProfile } from './ProfileContext';
 import { useWritings } from '../writings/WritingsContext';
 import useVoice, { SpeechRecognition } from '../hooks/useVoice';
+import { apiFetch } from '../lib/chatApi';
 
 export default function ProfileChat({ onComplete, isUpdate }) {
   const { profileData, updateCredentials, updateNatalChart, completeOnboarding } = useProfile();
@@ -53,7 +54,7 @@ export default function ProfileChat({ onComplete, isUpdate }) {
       : 'I would like to set up my professional profile.';
 
     try {
-      const res = await fetch('/api/chat', {
+      const res = await apiFetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -99,7 +100,7 @@ export default function ProfileChat({ onComplete, isUpdate }) {
       // Build API messages (exclude hidden flag, just role+content)
       const apiMessages = newMessages.map(m => ({ role: m.role, content: m.content }));
 
-      const res = await fetch('/api/chat', {
+      const res = await apiFetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

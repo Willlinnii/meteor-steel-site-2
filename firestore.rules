@@ -61,5 +61,46 @@ service cloud.firestore {
       allow read: if request.auth != null && request.auth.token.email == 'willlinnii@gmail.com';
       allow write: if false;
     }
+
+    // Mentor directory — readable by all auth users, server-written only
+    match /mentor-directory/{mentorId} {
+      allow read: if request.auth != null;
+      allow write: if false;
+    }
+
+    // Mentor pairings — readable by mentor, student, or admin; server-written only
+    match /mentor-pairings/{pairingId} {
+      allow read: if request.auth != null
+        && (request.auth.uid == resource.data.mentorUid
+            || request.auth.uid == resource.data.studentUid
+            || request.auth.token.email == 'willlinnii@gmail.com');
+      allow write: if false;
+    }
+
+    // Guild forum posts — readable by any auth user, server-written only
+    match /guild-posts/{postId} {
+      allow read: if request.auth != null;
+      allow write: if false;
+
+      match /replies/{replyId} {
+        allow read: if request.auth != null;
+        allow write: if false;
+      }
+    }
+
+    // Guild votes — readable by any auth user, server-written only
+    match /guild-votes/{voteId} {
+      allow read: if request.auth != null;
+      allow write: if false;
+    }
+
+    // Consulting requests — readable by consultant, requester, or admin; server-written only
+    match /consulting-requests/{requestId} {
+      allow read: if request.auth != null
+        && (request.auth.uid == resource.data.consultantUid
+            || request.auth.uid == resource.data.requesterUid
+            || request.auth.token.email == 'willlinnii@gmail.com');
+      allow write: if false;
+    }
   }
 }

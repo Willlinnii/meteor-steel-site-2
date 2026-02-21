@@ -1,5 +1,12 @@
-const Anthropic = require('@anthropic-ai/sdk');
+const { getAnthropicClient } = require('./lib/llm');
+const { getUidFromRequest } = require('./lib/auth');
 const { computeNatalChart } = require('./lib/natalChart');
+
+// Model config — centralized for easy swapping and future BYOK support
+const MODELS = {
+  fast: process.env.LLM_FAST_MODEL || 'claude-haiku-4-5-20251001',
+  quality: process.env.LLM_QUALITY_MODEL || 'claude-sonnet-4-20250514',
+};
 
 // Import JSON data directly so Vercel's bundler includes them
 // --- Meteor Steel Archive ---
@@ -232,16 +239,16 @@ RULES:
 - You can embed navigation links using [[Label|/path]] format.`;
 }
 
-// In-memory rate limiting (resets when the serverless function cold-starts)
+// In-memory rate limiting by user (resets when the serverless function cold-starts)
 const rateMap = new Map();
 const RATE_LIMIT = 10;
 const RATE_WINDOW_MS = 60 * 1000;
 
-function checkRateLimit(ip) {
+function checkRateLimit(key) {
   const now = Date.now();
-  const entry = rateMap.get(ip);
+  const entry = rateMap.get(key);
   if (!entry || now - entry.windowStart > RATE_WINDOW_MS) {
-    rateMap.set(ip, { windowStart: now, count: 1 });
+    rateMap.set(key, { windowStart: now, count: 1 });
     return true;
   }
   if (entry.count >= RATE_LIMIT) {
@@ -1424,19 +1431,120 @@ After you've finished exploring all credential categories the user identifies wi
 ${existingNatalChart ? `EXISTING NATAL CHART: The user already has a chart on file (Sun in ${existingNatalChart.planets?.[0]?.sign || '?'}, Moon in ${existingNatalChart.planets?.[1]?.sign || '?'}). Acknowledge this and offer to recalculate if their birth data has changed, rather than asking from scratch.` : ''}`;
 }
 
+// --- Tarot Reading prompt builders ---
+
+function buildTarotIntentionPrompt(cultureLabel) {
+  return `You are Atlas, the mythic companion of the Mythouse. A traveler has come to you for a three-card tarot reading from the ${cultureLabel} deck.
+
+YOUR TASK: Help the traveler set their intention for this reading. Ask warmly what this reading is about — what question, situation, or feeling they'd like to explore.
+
+RULES:
+- Keep responses to 2-4 sentences. Be warm, present, and inviting.
+- After the traveler shares their intention (typically after 1-2 exchanges, at most 3), confirm what you've heard and emit the tag <tarot-ready></tarot-ready> at the very end of your message.
+- Do NOT interpret cards, reference specific cards, or discuss positions. This phase is purely about listening and setting intention.
+- Speak in Atlas's warm, mythic voice — grounded but not theatrical.`;
+}
+
+function buildTarotInterpretationPrompt(cultureLabel, cards, intention) {
+  const cardDescriptions = cards.map(c => {
+    const corrLabel = c.type ? `${c.type}: ${c.correspondence}` : '';
+    return `- **${c.position.toUpperCase()}**: #${c.number} ${c.name}${c.description ? ` — ${c.description}` : ''}${corrLabel ? ` [${corrLabel}]` : ''}`;
+  }).join('\n');
+
+  return `You are Atlas, the mythic companion of the Mythouse. A traveler has drawn three cards from the ${cultureLabel} deck and asks for your interpretation.
+
+THE TRAVELER'S INTENTION:
+"${intention}"
+
+THE THREE CARDS DRAWN:
+${cardDescriptions}
+
+YOUR TASK: Interpret this reading.
+1. Read each card in its position (Past, Present, Future) — what does it illuminate about the traveler's question?
+2. Weave in cultural mythology from the ${cultureLabel} tradition where the card names and stories are drawn.
+3. Connect correspondences — planets to metals, zodiac signs to elements, elements to seasons. Let the web of meaning enrich the reading.
+4. Find the narrative arc across all three cards — what story do they tell together?
+5. Close with a grounding reflection — something the traveler can carry with them.
+
+RULES:
+- 300-500 words. Rich but not overwhelming.
+- Warm, mythic Atlas voice. Speak as a guide, not a fortune-teller.
+- NO predictions or fortune-telling. Offer perspective, reflection, possibility.
+- Honor the specific cards drawn and the traveler's stated intention.
+- You may use the traveler's own words when reflecting their intention back.`;
+}
+
 module.exports = async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const ip = req.headers['x-forwarded-for'] || req.socket?.remoteAddress || 'unknown';
-  if (!checkRateLimit(ip)) {
+  // Identify user by Firebase auth (preferred) or fall back to IP
+  const uid = await getUidFromRequest(req);
+  const rateLimitKey = uid || req.headers['x-forwarded-for'] || req.socket?.remoteAddress || 'unknown';
+  if (!checkRateLimit(rateLimitKey)) {
     return res.status(429).json({
       error: 'Too many requests. Please wait a moment before asking another question.',
     });
   }
 
-  const { messages, area, persona, mode, challengeStop, level, journeyId, stageId, gameMode, stageData, aspect, courseSummary, existingCredentials, existingNatalChart, qualifiedMentorTypes, uploadedDocument } = req.body || {};
+  const { messages, area, persona, mode, challengeStop, level, journeyId, stageId, gameMode, stageData, aspect, courseSummary, existingCredentials, existingNatalChart, qualifiedMentorTypes, uploadedDocument, tarotPhase, tarotCards, tarotIntention, culture } = req.body || {};
+
+  // --- Tarot Reading mode ---
+  if (mode === 'tarot-reading') {
+    if (!Array.isArray(messages) || messages.length === 0) {
+      return res.status(400).json({ error: 'Messages array is required.' });
+    }
+    const raw = messages.slice(-20).map((m) => ({
+      role: m.role === 'assistant' ? 'assistant' : 'user',
+      content: String(m.content || '').slice(0, 4000),
+    }));
+    const tarotTrimmed = [];
+    for (const msg of raw) {
+      if (tarotTrimmed.length > 0 && tarotTrimmed[tarotTrimmed.length - 1].role === msg.role) {
+        tarotTrimmed[tarotTrimmed.length - 1].content += '\n' + msg.content;
+      } else {
+        tarotTrimmed.push({ ...msg });
+      }
+    }
+    if (tarotTrimmed.length > 0 && tarotTrimmed[0].role !== 'user') {
+      tarotTrimmed.shift();
+    }
+
+    // Determine culture label
+    const CULTURE_LABELS = { tarot: 'Tarot', roman: 'Roman', greek: 'Greek', norse: 'Norse', babylonian: 'Babylonian', vedic: 'Vedic', islamic: 'Islamic', christian: 'Medieval Christianity' };
+    const cultureLabel = CULTURE_LABELS[culture] || culture || 'Tarot';
+
+    const isInterpretation = tarotPhase === 'interpretation';
+    const systemPrompt = isInterpretation
+      ? buildTarotInterpretationPrompt(cultureLabel, tarotCards || [], tarotIntention || '')
+      : buildTarotIntentionPrompt(cultureLabel);
+    const maxTokens = isInterpretation ? 2048 : 512;
+
+    const anthropic = getAnthropicClient();
+    try {
+      const response = await anthropic.messages.create({
+        model: MODELS.fast,
+        system: systemPrompt,
+        messages: tarotTrimmed,
+        max_tokens: maxTokens,
+      });
+
+      let reply = response.content?.find(c => c.type === 'text')?.text || 'No response generated.';
+
+      // For intention phase: check for readyToDraw tag
+      if (!isInterpretation) {
+        const hasReadyTag = /<tarot-ready><\/tarot-ready>/.test(reply);
+        reply = reply.replace(/<tarot-ready><\/tarot-ready>/g, '').trim();
+        return res.status(200).json({ reply, readyToDraw: hasReadyTag || undefined });
+      }
+
+      return res.status(200).json({ reply });
+    } catch (err) {
+      console.error('Tarot Reading API error:', err?.message, err?.status);
+      return res.status(500).json({ error: `Something went wrong: ${err?.message || 'Unknown error'}` });
+    }
+  }
 
   // --- Journey Synthesis mode (no messages needed — uses stageData directly) ---
   if (mode === 'journey-synthesis') {
@@ -1467,10 +1575,10 @@ PERSONAL EXPERIENCES BY STAGE:
 ${stageBlock}`;
     }
 
-    const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+    const anthropic = getAnthropicClient();
     try {
       const response = await anthropic.messages.create({
-        model: 'claude-sonnet-4-20250514',
+        model: MODELS.quality,
         system: systemPrompt,
         messages: [{ role: 'user', content: 'Please weave my journey into a complete narrative.' }],
         max_tokens: 4096,
@@ -1509,7 +1617,7 @@ ${stageBlock}`;
     trimmed.shift();
   }
 
-  const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+  const anthropic = getAnthropicClient();
   // Natal chart tool available on all pages — people ask about their chart from anywhere
   const tools = [NATAL_CHART_TOOL];
   // Mythic Earth highlight tool — only when on the globe page
@@ -1544,7 +1652,7 @@ ${stageBlock}`;
 
     try {
       const response = await anthropic.messages.create({
-        model: 'claude-haiku-4-5-20251001',
+        model: MODELS.fast,
         system: systemPrompt,
         messages: trimmed,
         max_tokens: 1024,
@@ -1589,7 +1697,7 @@ ${stageBlock}`;
 
     try {
       const response = await anthropic.messages.create({
-        model: 'claude-haiku-4-5-20251001',
+        model: MODELS.fast,
         system: systemPrompt,
         messages: trimmed,
         max_tokens: 1024,
@@ -1668,7 +1776,7 @@ Keep responses conversational and relatively brief (3-5 sentences). Ask one ques
 
     try {
       const response = await anthropic.messages.create({
-        model: 'claude-haiku-4-5-20251001',
+        model: MODELS.fast,
         system: storyInterviewPrompt,
         messages: trimmed,
         max_tokens: 1024,
@@ -1699,7 +1807,7 @@ Keep responses conversational and relatively brief (3-5 sentences). Ask one ques
         }));
 
         const followUp = await anthropic.messages.create({
-          model: 'claude-haiku-4-5-20251001',
+          model: MODELS.fast,
           system: storyInterviewPrompt,
           messages: [
             ...trimmed,
@@ -1766,10 +1874,10 @@ Synthesize these entries into a unified personal narrative for this single stage
 ENTRIES FOR THIS STAGE:
 ${entriesBlock}`;
 
-    const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+    const anthropic = getAnthropicClient();
     try {
       const response = await anthropic.messages.create({
-        model: 'claude-sonnet-4-20250514',
+        model: MODELS.quality,
         system: synthPrompt,
         messages: [{ role: 'user', content: 'Please synthesize my stories.' }],
         max_tokens: 4096,
@@ -1796,7 +1904,7 @@ ${entriesBlock}`;
       // Multi-turn tool loop (max 5 turns to prevent runaway)
       for (let turn = 0; turn < 5; turn++) {
         const response = await anthropic.messages.create({
-          model: 'claude-haiku-4-5-20251001',
+          model: MODELS.fast,
           system: profileSystemPrompt,
           messages: currentMessages,
           max_tokens: 1024,
@@ -1907,7 +2015,7 @@ ${uploadedDocument ? `UPLOADED DOCUMENT: The applicant has uploaded "${uploadedD
 VOICE:
 - Warm, encouraging, but honest about the responsibility.
 - This is a meaningful step — treat it with gravity and warmth.
-- Keep exchanges conc — don't be bureaucratic.
+- Keep exchanges concise — don't be bureaucratic.
 
 IMPORTANT:
 - Call save_mentor_application as soon as you have the type and a substantive statement (at least 2-3 sentences).
@@ -1921,7 +2029,7 @@ IMPORTANT:
 
       for (let turn = 0; turn < 5; turn++) {
         const response = await anthropic.messages.create({
-          model: 'claude-haiku-4-5-20251001',
+          model: MODELS.fast,
           system: mentorSystemPrompt,
           messages: currentMessages,
           max_tokens: 1024,
@@ -1968,6 +2076,118 @@ IMPORTANT:
     }
   }
 
+  // --- Consulting Setup mode ---
+  if (mode === 'consulting-setup') {
+    const SAVE_CONSULTING_PROFILE_TOOL = {
+      name: 'save_consulting_profile',
+      description: 'Save the consulting profile after gathering project information. Call this once the mentor has described at least 3 projects.',
+      input_schema: {
+        type: 'object',
+        properties: {
+          projects: {
+            type: 'array',
+            items: {
+              type: 'object',
+              properties: {
+                title: { type: 'string', description: 'Project title or name' },
+                description: { type: 'string', description: 'Brief description of the project' },
+                clientType: { type: 'string', description: 'Type of client served' },
+                outcome: { type: 'string', description: 'Outcome or result' },
+              },
+              required: ['title', 'description'],
+            },
+            description: 'At least 3 consulting projects',
+          },
+          specialties: {
+            type: 'array',
+            items: { type: 'string' },
+            description: 'Areas of consulting specialty',
+          },
+          consultingTypes: {
+            type: 'array',
+            items: { type: 'string', enum: ['character', 'narrative', 'coaching', 'media', 'adventure'] },
+            description: 'Types of consulting offered',
+          },
+        },
+        required: ['projects', 'specialties', 'consultingTypes'],
+      },
+    };
+
+    const consultingSystemPrompt = `You are Atlas, the mythic companion of the Mythouse. You are helping an active mentor set up their consulting profile.
+
+CONVERSATION FLOW (4-6 exchanges):
+1. Welcome them and explain that consulting profiles showcase their professional experience to potential clients.
+2. Ask about their consulting experience. They need to describe at least 3 projects — for each, get the project title, a brief description, the type of client, and the outcome.
+3. Ask about their specialties and what types of consulting they offer (character consulting, narrative consulting, mythic coaching, media consulting, adventure consulting).
+4. Once you have at least 3 projects with descriptions and their consulting types, call save_consulting_profile.
+
+VOICE:
+- Professional but warm. This is about their expertise — treat it with respect.
+- Keep exchanges concise and focused.
+
+IMPORTANT:
+- You need at least 3 projects before calling the tool.
+- Extract consulting types that match their described experience.
+- After calling the tool, confirm that their consulting profile is now set up.`;
+
+    try {
+      let currentMessages = [...trimmed];
+      let reply = '';
+      let consultingProfile = null;
+
+      for (let turn = 0; turn < 5; turn++) {
+        const response = await anthropic.messages.create({
+          model: MODELS.fast,
+          system: consultingSystemPrompt,
+          messages: currentMessages,
+          max_tokens: 1024,
+          tools: [SAVE_CONSULTING_PROFILE_TOOL],
+        });
+
+        const toolBlocks = response.content.filter(c => c.type === 'tool_use');
+        const textBlock = response.content.find(c => c.type === 'text');
+
+        if (toolBlocks.length === 0) {
+          reply = textBlock?.text || 'No response generated.';
+          break;
+        }
+
+        const toolResults = [];
+        for (const tb of toolBlocks) {
+          if (tb.name === 'save_consulting_profile' && tb.input) {
+            consultingProfile = {
+              projects: tb.input.projects || [],
+              specialties: tb.input.specialties || [],
+              consultingTypes: tb.input.consultingTypes || [],
+            };
+            toolResults.push({
+              type: 'tool_result',
+              tool_use_id: tb.id,
+              content: JSON.stringify({ success: true, projectCount: consultingProfile.projects.length }),
+            });
+          }
+        }
+
+        if (textBlock?.text) {
+          reply = textBlock.text;
+        }
+
+        currentMessages = [
+          ...currentMessages,
+          { role: 'assistant', content: response.content },
+          { role: 'user', content: toolResults },
+        ];
+      }
+
+      const result = { reply };
+      if (consultingProfile) result.consultingProfile = consultingProfile;
+      return res.status(200).json(result);
+    } catch (err) {
+      console.error('Consulting Setup API error:', err?.message, err?.status);
+      return res.status(500).json({ error: `Something went wrong: ${err?.message || 'Unknown error'}` });
+    }
+  }
+
   // Determine system prompt: persona-specific or standard area-based
   const personaPrompt = persona ? getPersonaPrompt(persona) : null;
   let systemPrompt = personaPrompt || getSystemPrompt(validArea);
@@ -1987,9 +2207,18 @@ COURSE ADVISOR GUIDELINES:
 - If they have no courses active, do not mention coursework at all.`;
   }
 
+  // Mentor program awareness
+  systemPrompt += `\n\nMENTOR PROGRAM:
+The Mythouse has a mentor program. If a student expresses interest in deeper study,
+guidance, or mentorship in mythology, storytelling, healing, media, or adventure,
+you may suggest they visit the Mentor Directory: [[Find a Mentor|/mentors]].
+If they are an active mentor, remind them they can access the Guild at [[Enter the Guild|/guild]]
+for discussions with fellow mentors and to set up consulting.
+Only suggest this when genuinely relevant — do not push mentorship or the Guild unsolicited.`;
+
   try {
     const response = await anthropic.messages.create({
-      model: 'claude-haiku-4-5-20251001',
+      model: MODELS.fast,
       system: systemPrompt,
       messages: trimmed,
       max_tokens: 1024,
@@ -2002,7 +2231,7 @@ COURSE ADVISOR GUIDELINES:
     if (response.stop_reason === 'tool_use' && toolBlock?.name === 'compute_natal_chart') {
       const chart = computeNatalChart(toolBlock.input);
       const followUp = await anthropic.messages.create({
-        model: 'claude-haiku-4-5-20251001',
+        model: MODELS.fast,
         system: systemPrompt,
         messages: [
           ...trimmed,
@@ -2021,7 +2250,7 @@ COURSE ADVISOR GUIDELINES:
 
       // Get follow-up text from Atlas
       const followUp = await anthropic.messages.create({
-        model: 'claude-haiku-4-5-20251001',
+        model: MODELS.fast,
         system: systemPrompt,
         messages: [
           ...trimmed,

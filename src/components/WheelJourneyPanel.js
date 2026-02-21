@@ -1,4 +1,5 @@
 import React, { useState, useCallback } from 'react';
+import { apiFetch } from '../lib/chatApi';
 
 function IntroScreen({ onBegin, introText, journeyId }) {
   return (
@@ -98,7 +99,7 @@ export default function WheelJourneyPanel({
     setLoading(true);
 
     try {
-      const res = await fetch('/api/chat', {
+      const res = await apiFetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

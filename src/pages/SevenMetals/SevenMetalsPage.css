@@ -765,10 +765,25 @@
   text-transform: capitalize !important;
 }
 
-/* ===== ARCHETYPE ===== */
+/* ===== SIN / ARCHETYPE ===== */
 
 .archetype-name {
   font-size: 1.4rem !important;
+}
+
+.sin-virtue-pair {
+  color: var(--accent-ember);
+  font-size: 0.9rem;
+  font-style: italic;
+  margin: -4px 0 12px;
+}
+
+.sin-chakra-context {
+  background: rgba(201, 169, 97, 0.06);
+  border-left: 3px solid rgba(201, 169, 97, 0.3);
+  padding: 10px 14px;
+  border-radius: 0 6px 6px 0;
+  margin-bottom: 16px;
 }
 
 /* ===== MODERN ===== */

@@ -259,8 +259,9 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
   const [tooltip, setTooltip] = useState(null);
   const { hasPurchase } = useProfile();
   const navigate = useNavigate();
-  const [showStarlightGate, setShowStarlightGate] = useState(false);
-  const starlightPurchased = hasPurchase('starlight');
+  const [starlightGateId, setStarlightGateId] = useState(null); // null, 'fallen-starlight', or 'story-of-stories'
+  const hasFallenStarlight = hasPurchase('fallen-starlight');
+  const hasStoryOfStories = hasPurchase('story-of-stories');
 
   // --- Analog clock state & effects ---
   const showClock = !!clockMode;
@@ -540,9 +541,10 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
     transformOrigin: 'center center',
   } : undefined;
 
-  const playThunder = useCallback(() => {
+  const playThunder = useCallback(async () => {
     try {
       const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      if (ctx.state === 'suspended') await ctx.resume();
       const duration = 5.0;
       const sampleRate = ctx.sampleRate;
       const len = sampleRate * duration;
@@ -2644,13 +2646,20 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
         </button>
 
         <button
-          className={`starlight-toggle${showFallenStarlight ? ' active' : ''}${showStoryOfStories ? ' stories' : ''}${!starlightPurchased ? ' disabled' : ''}`}
+          className={`starlight-toggle${showFallenStarlight ? ' active' : ''}${showStoryOfStories ? ' stories' : ''}${!hasFallenStarlight && !hasStoryOfStories ? ' disabled' : ''}`}
           onClick={() => {
             setMobileMenuOpen(false);
-            if (!starlightPurchased) { setShowStarlightGate(true); return; }
+            if (!showFallenStarlight && !showStoryOfStories) {
+              // Entering starlight mode — gate on fallen-starlight
+              if (!hasFallenStarlight) { setStarlightGateId('fallen-starlight'); return; }
+            } else if (showFallenStarlight) {
+              // In Fallen Starlight — switching to Story of Stories
+              if (!hasStoryOfStories) { setStarlightGateId('story-of-stories'); return; }
+            }
+            // In Story of Stories — going back to Fallen Starlight (already purchased), or purchases satisfied
             onToggleStarlight && onToggleStarlight();
           }}
-          title={!starlightPurchased ? 'Unlock Fallen Starlight' : showStoryOfStories ? 'Story of Stories — click for Fallen Starlight' : showFallenStarlight ? 'Fallen Starlight — click for Story of Stories' : 'Show Fallen Starlight'}
+          title={!hasFallenStarlight && !hasStoryOfStories ? 'Unlock Fallen Starlight' : showStoryOfStories ? 'Story of Stories \u2014 click for Fallen Starlight' : showFallenStarlight ? 'Fallen Starlight \u2014 click for Story of Stories' : 'Show Fallen Starlight'}
         >
           {showStoryOfStories ? (
             /* Open book with golden circle on cover */
@@ -2706,16 +2715,18 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
           )}
         </span>
       </div>
-      {showStarlightGate && (
-        <div className="subscription-gate-overlay" onClick={() => setShowStarlightGate(false)}>
+      {starlightGateId && (
+        <div className="subscription-gate-overlay" onClick={() => setStarlightGateId(null)}>
           <div className="subscription-gate-popup" onClick={e => e.stopPropagation()}>
-            <h3 className="subscription-gate-title">Fallen Starlight</h3>
-            <p className="subscription-gate-desc">Unlock Fallen Starlight and Story of Stories on the Chronosphaera.</p>
+            <h3 className="subscription-gate-title">{starlightGateId === 'story-of-stories' ? 'Story of Stories' : 'Fallen Starlight'}</h3>
+            <p className="subscription-gate-desc">{starlightGateId === 'story-of-stories'
+              ? 'The meta-narrative \u2014 the stories that emerged from the fall of light into matter, told through the Chronosphaera.'
+              : 'The original revelation \u2014 tracing the descent of celestial fire through the seven planetary metals on the Chronosphaera.'}</p>
             <div className="subscription-gate-actions">
-              <button className="subscription-gate-primary" onClick={() => { navigate('/profile#purchases'); setShowStarlightGate(false); }}>
+              <button className="subscription-gate-primary" onClick={() => { navigate('/profile#purchases'); setStarlightGateId(null); }}>
                 Manage Membership
               </button>
-              <button className="subscription-gate-secondary" onClick={() => setShowStarlightGate(false)}>
+              <button className="subscription-gate-secondary" onClick={() => setStarlightGateId(null)}>
                 Not now
               </button>
             </div>

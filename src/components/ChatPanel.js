@@ -4,6 +4,7 @@ import useVoice, { SpeechRecognition } from '../hooks/useVoice';
 import { useCoursework } from '../coursework/CourseworkContext';
 import { useWritings } from '../writings/WritingsContext';
 import { useAreaOverride } from '../App';
+import { apiFetch } from '../lib/chatApi';
 
 function parseAtlasMessage(text) {
   const segments = [];
@@ -125,7 +126,7 @@ export default function ChatPanel() {
 
     try {
       const courseSummary = buildCourseSummary(location.pathname);
-      const res = await fetch('/api/chat', {
+      const res = await apiFetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ messages: updated, area, courseSummary }),

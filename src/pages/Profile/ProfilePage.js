@@ -6,7 +6,12 @@ import { useWritings } from '../../writings/WritingsContext';
 import { useProfile } from '../../profile/ProfileContext';
 import { RANKS, rankProgress } from '../../profile/profileEngine';
 import ProfileChat from '../../profile/ProfileChat';
+import MentorApplicationChat from '../../profile/MentorApplicationChat';
+import ConsultingSetupChat from '../../profile/ConsultingSetupChat';
+import { MENTOR_STATUS, MENTOR_TYPES, getMentorDisplay, getMentorCourseChecklist, DEFAULT_MENTOR_CAPACITY, MAX_MENTOR_BIO_LENGTH, MAX_MENTOR_CAPACITY } from '../../profile/mentorEngine';
+import { validatePhoto, uploadProfilePhoto } from '../../profile/photoUpload';
 import { checkAvailability, registerHandle } from '../../multiplayer/handleService';
+import { apiFetch } from '../../lib/chatApi';
 
 const SUBSCRIPTIONS = [
   {
@@ -67,7 +72,7 @@ const SUBSCRIPTIONS = [
 
 const PURCHASES = [
   {
-    id: 'starlight', name: 'Fallen Starlight',
+    id: 'fallen-starlight', name: 'Fallen Starlight',
     icon: (
       <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
         <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
@@ -75,20 +80,80 @@ const PURCHASES = [
         <path d="M12 6 L10.8 9.2 L7.5 9.2 L10.1 11.3 L9.1 14.5 L12 12.5 L14.9 14.5 L13.9 11.3 L16.5 9.2 L13.2 9.2 Z" fill="currentColor" stroke="none" />
       </svg>
     ),
-    description: 'Unlock Fallen Starlight and Story of Stories on the Chronosphaera.',
-    details: 'Fallen Starlight overlays a mythic narrative layer onto the Chronosphaera \u2014 tracing the descent of celestial fire through the seven planetary metals. Toggle between Fallen Starlight and Story of Stories to explore the cosmic drama from two perspectives: the fall of light into matter, and the stories that emerged from it.',
+    description: 'The original revelation \u2014 tracing the descent of celestial fire through the seven planetary metals.',
+    details: 'Fallen Starlight overlays a mythic narrative layer onto the Chronosphaera \u2014 eight stages of the descent of light into matter, each aligned with a planetary metal and its archetypal story. Activate to explore the cosmic drama from within the celestial clock.',
+  },
+  {
+    id: 'story-of-stories', name: 'Story of Stories',
+    icon: (
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+        <circle cx="12" cy="10" r="4" stroke="currentColor" strokeWidth="1.8" fill="none" />
+      </svg>
+    ),
+    description: 'The meta-narrative \u2014 the stories that emerged from the fall of light into matter.',
+    details: 'Story of Stories is a companion layer to Fallen Starlight \u2014 the mythic tradition behind the seven metals, told through the Chronosphaera. It traces the stories that emerged as celestial fire descended into the material world.',
+  },
+  {
+    id: 'starlight-bundle', name: 'Starlight Bundle',
+    isBundle: true,
+    bundleItems: ['fallen-starlight', 'story-of-stories'],
+    icon: (
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M2 19.5A2.5 2.5 0 0 1 4.5 17H13" />
+        <path d="M4.5 4H13v16H4.5A2.5 2.5 0 0 1 2 17.5v-11A2.5 2.5 0 0 1 4.5 4z" />
+        <path d="M11 19.5A2.5 2.5 0 0 1 13.5 17H22" />
+        <path d="M13.5 2H22v20H13.5A2.5 2.5 0 0 1 11 19.5v-15A2.5 2.5 0 0 1 13.5 2z" />
+        <path d="M8 8 L7.4 9.6 L5.8 9.6 L7.1 10.6 L6.6 12.2 L8 11.2 L9.4 12.2 L8.9 10.6 L10.2 9.6 L8.6 9.6 Z" fill="currentColor" stroke="none" />
+        <circle cx="17.5" cy="10" r="2.5" stroke="currentColor" strokeWidth="1.4" fill="none" />
+      </svg>
+    ),
+    description: 'Both books together at a discounted price.',
+    details: 'Get both Fallen Starlight and Story of Stories together. Explore the full cosmic drama on the Chronosphaera \u2014 the fall of light into matter, and the stories that emerged from it.',
   },
 ];
 
 export default function ProfilePage() {
-  const { user } = useAuth();
+  const { user, signOut } = useAuth();
   const { getCourseStates, completedCourses, allCourses } = useCoursework();
-  const { earnedRanks, highestRank, activeCredentials, hasProfile, loaded: profileLoaded, handle, natalChart, subscriptions, updateSubscription, purchases, updatePurchase, refreshProfile } = useProfile();
+  const { earnedRanks, highestRank, activeCredentials, hasProfile, loaded: profileLoaded, handle, natalChart, updateNatalChart, subscriptions, updateSubscription, purchases, updatePurchase, updatePurchases, refreshProfile, mentorData, qualifiedMentorTypes, mentorEligible, mentorCoursesComplete, effectiveMentorStatus, pairingCategories, updateMentorBio, updateMentorCapacity, publishToDirectory, unpublishFromDirectory, respondToPairing, endPairing, photoURL, consultingData, consultingRequests, updateProfilePhoto, respondToConsulting } = useProfile();
   const { personalStories, loaded: writingsLoaded } = useWritings();
   const navigate = useNavigate();
   const location = useLocation();
   const [showChat, setShowChat] = useState(false);
+  const [showMentorChat, setShowMentorChat] = useState(false);
+  const [showConsultingChat, setShowConsultingChat] = useState(false);
+  const [photoUploading, setPhotoUploading] = useState(false);
   const [expandedCard, setExpandedCard] = useState(null); // 'ybr' | 'forge' | etc.
+  const [consultingRespondingId, setConsultingRespondingId] = useState(null);
+
+  const handlePhotoUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file || photoUploading) return;
+    const validation = validatePhoto(file);
+    if (!validation.valid) return;
+    setPhotoUploading(true);
+    try {
+      const url = await uploadProfilePhoto(user.uid, file);
+      await updateProfilePhoto(url);
+    } catch (err) {
+      console.error('Photo upload failed:', err);
+    }
+    setPhotoUploading(false);
+  };
+
+  const handleConsultingAccept = async (requestId) => {
+    setConsultingRespondingId(requestId);
+    try { await respondToConsulting(requestId, true); } catch {}
+    setConsultingRespondingId(null);
+  };
+
+  const handleConsultingDecline = async (requestId) => {
+    setConsultingRespondingId(requestId);
+    try { await respondToConsulting(requestId, false); } catch {}
+    setConsultingRespondingId(null);
+  };
 
   // Scroll to #subscriptions or #purchases when navigated with hash
   useEffect(() => {
@@ -152,7 +217,24 @@ export default function ProfilePage() {
     <div className="profile-page">
       {/* Profile Header — with highest rank */}
       <div className="profile-header">
-        <div className="profile-avatar">{initial}</div>
+        <div className="profile-avatar" onClick={() => document.getElementById('photo-upload-input')?.click()} style={{ cursor: 'pointer', position: 'relative' }}>
+          {photoURL ? (
+            <img src={photoURL} alt="" className="profile-avatar-img" />
+          ) : (
+            initial
+          )}
+          {photoUploading && <span className="profile-avatar-loading" />}
+          <div className="profile-avatar-upload-overlay">
+            {photoUploading ? '' : '\uD83D\uDCF7'}
+          </div>
+          <input
+            id="photo-upload-input"
+            type="file"
+            accept="image/jpeg,image/png,image/webp"
+            onChange={handlePhotoUpload}
+            style={{ display: 'none' }}
+          />
+        </div>
         <div className="profile-name">{displayName}</div>
         {highestRank && (
           <div className="profile-rank-title">
@@ -248,19 +330,29 @@ export default function ProfilePage() {
           {PURCHASES.map(p => {
             const enabled = !!purchases[p.id];
             const expanded = expandedCard === p.id;
+            const isBundle = !!p.isBundle;
             return (
-              <div key={p.id} className={`profile-subscription-card${enabled ? ' active' : ''}${expanded ? ' expanded' : ''}`}>
+              <div key={p.id} className={`profile-subscription-card${enabled ? ' active' : ''}${expanded ? ' expanded' : ''}${isBundle ? ' profile-purchase-bundle' : ''}`}>
                 <div className="profile-subscription-row" onClick={() => setExpandedCard(expanded ? null : p.id)}>
                   <span className="profile-subscription-icon">{p.icon}</span>
                   <div className="profile-subscription-info">
-                    <div className="profile-subscription-name">{p.name}</div>
+                    <div className="profile-subscription-name">{p.name}{isBundle && <span className="profile-bundle-badge">Bundle</span>}</div>
                     <div className="profile-subscription-desc">{p.description}</div>
                   </div>
                   <label className="profile-subscription-toggle" onClick={e => e.stopPropagation()}>
                     <input
                       type="checkbox"
                       checked={enabled}
-                      onChange={() => updatePurchase(p.id, !enabled)}
+                      onChange={() => {
+                        const newVal = !enabled;
+                        if (isBundle && p.bundleItems) {
+                          const updates = { [p.id]: newVal };
+                          p.bundleItems.forEach(itemId => { updates[itemId] = newVal; });
+                          updatePurchases(updates);
+                        } else {
+                          updatePurchase(p.id, newVal);
+                        }
+                      }}
                     />
                     <span className="profile-subscription-slider" />
                   </label>
@@ -306,13 +398,39 @@ export default function ProfilePage() {
         </>
       )}
 
+      {/* Mentor Section */}
+      {profileLoaded && (
+        <MentorSection
+          effectiveMentorStatus={effectiveMentorStatus}
+          mentorEligible={mentorEligible}
+          qualifiedMentorTypes={qualifiedMentorTypes}
+          mentorData={mentorData}
+          mentorCoursesComplete={mentorCoursesComplete}
+          completedCourses={completedCourses}
+          allCourses={allCourses}
+          showMentorChat={showMentorChat}
+          setShowMentorChat={setShowMentorChat}
+          showConsultingChat={showConsultingChat}
+          setShowConsultingChat={setShowConsultingChat}
+          pairingCategories={pairingCategories}
+          updateMentorBio={updateMentorBio}
+          updateMentorCapacity={updateMentorCapacity}
+          publishToDirectory={publishToDirectory}
+          unpublishFromDirectory={unpublishFromDirectory}
+          respondToPairing={respondToPairing}
+          endPairing={endPairing}
+          consultingData={consultingData}
+          consultingRequests={consultingRequests}
+          onConsultingAccept={handleConsultingAccept}
+          onConsultingDecline={handleConsultingDecline}
+          consultingRespondingId={consultingRespondingId}
+        />
+      )}
+
       {/* Natal Chart Section */}
       <h2 className="profile-section-title">Natal Chart</h2>
-      {natalChart ? (
-        <NatalChartDisplay chart={natalChart} />
-      ) : (
-        <div className="profile-empty">No natal chart yet. Atlas can compute yours during a profile conversation.</div>
-      )}
+      {natalChart && <NatalChartDisplay chart={natalChart} />}
+      <NatalChartInput existingChart={natalChart} onSave={updateNatalChart} />
 
       {/* Ranks Section */}
       <h2 className="profile-section-title">Ranks</h2>
@@ -424,7 +542,372 @@ export default function ProfilePage() {
           ))}
         </div>
       )}
+
+      {/* Sign Out */}
+      <div className="profile-signout-section">
+        <button className="profile-signout-btn" onClick={signOut}>
+          Sign Out
+        </button>
+      </div>
     </div>
+  );
+}
+
+function MentorSection({ effectiveMentorStatus, mentorEligible, qualifiedMentorTypes, mentorData, mentorCoursesComplete, completedCourses, allCourses, showMentorChat, setShowMentorChat, showConsultingChat, setShowConsultingChat, pairingCategories, updateMentorBio, updateMentorCapacity, publishToDirectory, unpublishFromDirectory, respondToPairing, endPairing, consultingData, consultingRequests, onConsultingAccept, onConsultingDecline, consultingRespondingId }) {
+  const display = getMentorDisplay(mentorData);
+  const courseChecklist = getMentorCourseChecklist(completedCourses);
+  const navigate = useNavigate();
+
+  // Bio editor state
+  const [bioText, setBioText] = useState(mentorData?.bio || '');
+  const [bioSaving, setBioSaving] = useState(false);
+  const [capValue, setCapValue] = useState(mentorData?.capacity || DEFAULT_MENTOR_CAPACITY);
+  const [capSaving, setCapSaving] = useState(false);
+  const [dirToggling, setDirToggling] = useState(false);
+  const [respondingId, setRespondingId] = useState(null);
+
+  // Sync bio/capacity from mentorData when it changes
+  useEffect(() => {
+    setBioText(mentorData?.bio || '');
+    setCapValue(mentorData?.capacity || DEFAULT_MENTOR_CAPACITY);
+  }, [mentorData?.bio, mentorData?.capacity]);
+
+  const handleBioSave = async () => {
+    setBioSaving(true);
+    try { await updateMentorBio(bioText); } catch {}
+    setBioSaving(false);
+  };
+
+  const handleCapSave = async () => {
+    setCapSaving(true);
+    try { await updateMentorCapacity(capValue); } catch {}
+    setCapSaving(false);
+  };
+
+  const handleDirectoryToggle = async () => {
+    setDirToggling(true);
+    try {
+      if (mentorData?.directoryListed) {
+        await unpublishFromDirectory();
+      } else {
+        await publishToDirectory();
+      }
+    } catch {}
+    setDirToggling(false);
+  };
+
+  const handleAccept = async (pairingId) => {
+    setRespondingId(pairingId);
+    try { await respondToPairing(pairingId, true); } catch {}
+    setRespondingId(null);
+  };
+
+  const handleDecline = async (pairingId) => {
+    setRespondingId(pairingId);
+    try { await respondToPairing(pairingId, false); } catch {}
+    setRespondingId(null);
+  };
+
+  const handleEnd = async (pairingId) => {
+    setRespondingId(pairingId);
+    try { await endPairing(pairingId); } catch {}
+    setRespondingId(null);
+  };
+
+  return (
+    <>
+      <h2 className="profile-section-title">Mentorship</h2>
+
+      {effectiveMentorStatus === MENTOR_STATUS.NOT_QUALIFIED && !mentorEligible && (
+        <div className="profile-empty">
+          Mentor roles require Level 2+ credentials. Continue building your profile to unlock mentorship opportunities.
+        </div>
+      )}
+
+      {effectiveMentorStatus === MENTOR_STATUS.NOT_QUALIFIED && mentorEligible && !mentorData && (
+        <>
+          <div className="mentor-eligible">
+            <p>You qualify for the following mentor roles:</p>
+            <div className="mentor-type-list">
+              {qualifiedMentorTypes.map(mt => (
+                <div key={mt.id} className="mentor-type-card">
+                  <span className="mentor-badge-icon">{mt.icon}</span>
+                  <div>
+                    <div className="mentor-badge-title">{mt.title}</div>
+                    <div className="profile-credential-details">
+                      Based on {mt.credentialName} (Level {mt.credentialLevel})
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+          {showMentorChat ? (
+            <MentorApplicationChat
+              onComplete={() => setShowMentorChat(false)}
+              qualifiedMentorTypes={qualifiedMentorTypes}
+            />
+          ) : (
+            <button className="profile-setup-btn" onClick={() => setShowMentorChat(true)}>
+              Apply to Become a Mentor
+            </button>
+          )}
+        </>
+      )}
+
+      {effectiveMentorStatus === MENTOR_STATUS.APPLIED && display && (
+        <div className="mentor-status-card pending">
+          <span className="mentor-badge-icon">{display.icon}</span>
+          <div>
+            <div className="mentor-badge-title">{display.title}</div>
+            <div className="profile-credential-details">Application submitted. Atlas is reviewing your application.</div>
+          </div>
+        </div>
+      )}
+
+      {effectiveMentorStatus === MENTOR_STATUS.PENDING_ADMIN && display && (
+        <div className="mentor-status-card pending">
+          <span className="mentor-badge-icon">{display.icon}</span>
+          <div>
+            <div className="mentor-badge-title">{display.title}</div>
+            <div className="profile-credential-details">Passed initial screening. Awaiting final review by administration.</div>
+          </div>
+        </div>
+      )}
+
+      {effectiveMentorStatus === MENTOR_STATUS.APPROVED && display && !mentorCoursesComplete && (
+        <div className="mentor-status-card approved">
+          <span className="mentor-badge-icon">{display.icon}</span>
+          <div>
+            <div className="mentor-badge-title">{display.title} — Approved</div>
+            <div className="profile-credential-details">Complete these courses to activate your mentor status:</div>
+            <ul className="mentor-course-checklist">
+              {courseChecklist.map(item => {
+                const course = allCourses.find(c => c.id === item.id);
+                return (
+                  <li key={item.id} className={item.complete ? 'done' : ''}>
+                    {item.complete ? '\u2713' : '\u25CB'} {course?.name || item.id}
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        </div>
+      )}
+
+      {effectiveMentorStatus === MENTOR_STATUS.ACTIVE && display && (
+        <>
+          <div className="mentor-status-card active">
+            <span className="mentor-badge-icon">{display.icon}</span>
+            <div>
+              <div className="mentor-badge-title">{display.title}</div>
+              <div className="profile-credential-details">Active mentor</div>
+            </div>
+          </div>
+
+          {/* Bio editor */}
+          <div className="mentor-bio-editor">
+            <label className="mentor-bio-label">Public Bio</label>
+            <textarea
+              className="mentor-bio-textarea"
+              value={bioText}
+              onChange={e => setBioText(e.target.value)}
+              maxLength={MAX_MENTOR_BIO_LENGTH}
+              rows={4}
+              placeholder="Write a short bio for students to see..."
+            />
+            <div className="mentor-bio-footer">
+              <span className="mentor-bio-charcount">{bioText.length}/{MAX_MENTOR_BIO_LENGTH}</span>
+              <button className="mentor-bio-save-btn" onClick={handleBioSave} disabled={bioSaving || bioText === (mentorData?.bio || '')}>
+                {bioSaving ? 'Saving...' : 'Save Bio'}
+              </button>
+            </div>
+          </div>
+
+          {/* Capacity setter */}
+          <div className="mentor-capacity-control">
+            <label className="mentor-capacity-label">Max Students</label>
+            <div className="mentor-capacity-row">
+              <input
+                type="number"
+                className="mentor-capacity-input"
+                value={capValue}
+                min={1}
+                max={MAX_MENTOR_CAPACITY}
+                onChange={e => setCapValue(Math.max(1, Math.min(MAX_MENTOR_CAPACITY, parseInt(e.target.value, 10) || 1)))}
+              />
+              <button className="mentor-capacity-save-btn" onClick={handleCapSave} disabled={capSaving || capValue === (mentorData?.capacity || DEFAULT_MENTOR_CAPACITY)}>
+                {capSaving ? 'Saving...' : 'Save'}
+              </button>
+            </div>
+          </div>
+
+          {/* Directory toggle */}
+          <div className="mentor-directory-toggle">
+            <label className="profile-subscription-toggle" onClick={e => e.stopPropagation()}>
+              <input
+                type="checkbox"
+                checked={!!mentorData?.directoryListed}
+                onChange={handleDirectoryToggle}
+                disabled={dirToggling}
+              />
+              <span className="profile-subscription-slider" />
+            </label>
+            <span className="mentor-directory-toggle-label">
+              {dirToggling ? 'Updating...' : 'List in Mentor Directory'}
+            </span>
+          </div>
+
+          {/* Enter the Guild button */}
+          <button className="profile-setup-btn" onClick={() => navigate('/guild')} style={{ marginTop: 12 }}>
+            Enter the Guild
+          </button>
+
+          {/* Consulting Setup */}
+          <div className="guild-consulting-section" style={{ marginTop: 16 }}>
+            <h3 className="profile-subsection-title">Consulting</h3>
+            {showConsultingChat ? (
+              <ConsultingSetupChat onComplete={() => setShowConsultingChat(false)} />
+            ) : consultingData ? (
+              <div className="consulting-profile-summary">
+                <div className="profile-credential-details">
+                  {(consultingData.projects || []).length} project{(consultingData.projects || []).length !== 1 ? 's' : ''} registered
+                  {(consultingData.consultingTypes || []).length > 0 && (
+                    <span> in {consultingData.consultingTypes.map(t => t).join(', ')}</span>
+                  )}
+                </div>
+              </div>
+            ) : (
+              <button className="profile-setup-btn" onClick={() => setShowConsultingChat(true)}>
+                Set Up Consulting Profile
+              </button>
+            )}
+          </div>
+
+          {/* Consulting Requests (incoming) */}
+          {consultingRequests.filter(r => r.consultantUid === (mentorData && true) && r.status === 'pending').length > 0 && (
+            <div className="mentor-pending-section" style={{ marginTop: 16 }}>
+              <h3 className="profile-subsection-title">Consulting Requests</h3>
+              {consultingRequests.filter(r => r.status === 'pending').map(r => (
+                <div key={r.id} className="consulting-request-card">
+                  <div className="mentor-request-card-header">
+                    <span className="mentor-request-card-handle">@{r.requesterHandle || 'anonymous'}</span>
+                    {r.consultingType && <span className="profile-credential-details"> ({r.consultingType})</span>}
+                  </div>
+                  {r.message && <div className="mentor-request-card-message">{r.message}</div>}
+                  <div className="mentor-request-card-actions">
+                    <button className="mentor-accept-btn" onClick={() => onConsultingAccept(r.id)} disabled={consultingRespondingId === r.id}>
+                      {consultingRespondingId === r.id ? '...' : 'Accept'}
+                    </button>
+                    <button className="mentor-decline-btn" onClick={() => onConsultingDecline(r.id)} disabled={consultingRespondingId === r.id}>
+                      {consultingRespondingId === r.id ? '...' : 'Decline'}
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Pending Requests */}
+          {pairingCategories.pendingRequests.length > 0 && (
+            <div className="mentor-pending-section">
+              <h3 className="profile-subsection-title">Pending Student Requests</h3>
+              {pairingCategories.pendingRequests.map(p => (
+                <div key={p.id} className="mentor-request-card">
+                  <div className="mentor-request-card-header">
+                    <span className="mentor-request-card-handle">@{p.studentHandle || 'anonymous'}</span>
+                  </div>
+                  {p.requestMessage && (
+                    <div className="mentor-request-card-message">{p.requestMessage}</div>
+                  )}
+                  <div className="mentor-request-card-actions">
+                    <button className="mentor-accept-btn" onClick={() => handleAccept(p.id)} disabled={respondingId === p.id}>
+                      {respondingId === p.id ? '...' : 'Accept'}
+                    </button>
+                    <button className="mentor-decline-btn" onClick={() => handleDecline(p.id)} disabled={respondingId === p.id}>
+                      {respondingId === p.id ? '...' : 'Decline'}
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Active Students */}
+          {pairingCategories.activeStudents.length > 0 && (
+            <div className="mentor-students-section">
+              <h3 className="profile-subsection-title">Active Students</h3>
+              {pairingCategories.activeStudents.map(p => (
+                <div key={p.id} className="mentor-student-card">
+                  <span className="mentor-student-card-handle">@{p.studentHandle || 'anonymous'}</span>
+                  <button className="mentor-end-btn" onClick={() => handleEnd(p.id)} disabled={respondingId === p.id}>
+                    {respondingId === p.id ? '...' : 'End Mentorship'}
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+        </>
+      )}
+
+      {effectiveMentorStatus === MENTOR_STATUS.REJECTED && display && (
+        <>
+          <div className="mentor-status-card rejected">
+            <span className="mentor-badge-icon">{display.icon}</span>
+            <div>
+              <div className="mentor-badge-title">{display.title}</div>
+              <div className="profile-credential-details">
+                {mentorData?.rejectionReason || 'Your application was not approved at this time.'}
+              </div>
+            </div>
+          </div>
+          {mentorEligible && !showMentorChat && (
+            <button className="profile-update-btn" onClick={() => setShowMentorChat(true)}>
+              Re-Apply
+            </button>
+          )}
+          {showMentorChat && (
+            <MentorApplicationChat
+              onComplete={() => setShowMentorChat(false)}
+              qualifiedMentorTypes={qualifiedMentorTypes}
+            />
+          )}
+        </>
+      )}
+
+      {/* My Mentors — for all users */}
+      <div className="my-mentors-section">
+        {pairingCategories.myMentors.length > 0 && (
+          <>
+            <h3 className="profile-subsection-title">My Mentors</h3>
+            {pairingCategories.myMentors.map(p => (
+              <div key={p.id} className="my-mentors-card">
+                <span className="my-mentors-card-icon">{MENTOR_TYPES[p.mentorType]?.icon || ''}</span>
+                <span className="my-mentors-card-handle">@{p.mentorHandle || 'anonymous'}</span>
+                <span className="my-mentors-card-type">{MENTOR_TYPES[p.mentorType]?.title || p.mentorType}</span>
+                <button className="mentor-end-btn" onClick={() => handleEnd(p.id)} disabled={respondingId === p.id}>
+                  {respondingId === p.id ? '...' : 'End'}
+                </button>
+              </div>
+            ))}
+          </>
+        )}
+        {pairingCategories.pendingApplications.length > 0 && (
+          <>
+            <h3 className="profile-subsection-title">Pending Mentor Requests</h3>
+            {pairingCategories.pendingApplications.map(p => (
+              <div key={p.id} className="my-mentors-card pending">
+                <span className="my-mentors-card-handle">@{p.mentorHandle || 'anonymous'}</span>
+                <span className="my-mentors-card-status">Pending</span>
+              </div>
+            ))}
+          </>
+        )}
+        <button className="profile-update-btn" onClick={() => navigate('/mentors')} style={{ marginTop: 12 }}>
+          Browse Mentor Directory
+        </button>
+      </div>
+    </>
   );
 }
 
@@ -562,6 +1045,440 @@ function NatalChartDisplay({ chart }) {
       {chart.timeMissing && (
         <div className="natal-time-note">
           Ascendant, Midheaven, and house placements require birth time.
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ---- City lookup table for natal chart input ---- */
+const CITY_COORDS = {
+  // --- US cities ---
+  'new york': { lat: 40.7128, lon: -74.006, tz: 'America/New_York' },
+  'nyc': { lat: 40.7128, lon: -74.006, tz: 'America/New_York' },
+  'los angeles': { lat: 34.0522, lon: -118.2437, tz: 'America/Los_Angeles' },
+  'la': { lat: 34.0522, lon: -118.2437, tz: 'America/Los_Angeles' },
+  'chicago': { lat: 41.8781, lon: -87.6298, tz: 'America/Chicago' },
+  'houston': { lat: 29.7604, lon: -95.3698, tz: 'America/Chicago' },
+  'phoenix': { lat: 33.4484, lon: -112.074, tz: 'America/Phoenix' },
+  'philadelphia': { lat: 39.9526, lon: -75.1652, tz: 'America/New_York' },
+  'san antonio': { lat: 29.4241, lon: -98.4936, tz: 'America/Chicago' },
+  'san diego': { lat: 32.7157, lon: -117.1611, tz: 'America/Los_Angeles' },
+  'dallas': { lat: 32.7767, lon: -96.797, tz: 'America/Chicago' },
+  'san jose': { lat: 37.3382, lon: -121.8863, tz: 'America/Los_Angeles' },
+  'san francisco': { lat: 37.7749, lon: -122.4194, tz: 'America/Los_Angeles' },
+  'seattle': { lat: 47.6062, lon: -122.3321, tz: 'America/Los_Angeles' },
+  'denver': { lat: 39.7392, lon: -104.9903, tz: 'America/Denver' },
+  'boston': { lat: 42.3601, lon: -71.0589, tz: 'America/New_York' },
+  'atlanta': { lat: 33.749, lon: -84.388, tz: 'America/New_York' },
+  'miami': { lat: 25.7617, lon: -80.1918, tz: 'America/New_York' },
+  'minneapolis': { lat: 44.9778, lon: -93.265, tz: 'America/Chicago' },
+  'portland': { lat: 45.5152, lon: -122.6784, tz: 'America/Los_Angeles' },
+  'detroit': { lat: 42.3314, lon: -83.0458, tz: 'America/New_York' },
+  'nashville': { lat: 36.1627, lon: -86.7816, tz: 'America/Chicago' },
+  'austin': { lat: 30.2672, lon: -97.7431, tz: 'America/Chicago' },
+  'birmingham': { lat: 33.5186, lon: -86.8104, tz: 'America/Chicago' },
+  'memphis': { lat: 35.1495, lon: -90.049, tz: 'America/Chicago' },
+  'louisville': { lat: 38.2527, lon: -85.7585, tz: 'America/New_York' },
+  'baltimore': { lat: 39.2904, lon: -76.6122, tz: 'America/New_York' },
+  'milwaukee': { lat: 43.0389, lon: -87.9065, tz: 'America/Chicago' },
+  'albuquerque': { lat: 35.0844, lon: -106.6504, tz: 'America/Denver' },
+  'tucson': { lat: 32.2226, lon: -110.9747, tz: 'America/Phoenix' },
+  'fresno': { lat: 36.7378, lon: -119.7871, tz: 'America/Los_Angeles' },
+  'sacramento': { lat: 38.5816, lon: -121.4944, tz: 'America/Los_Angeles' },
+  'mesa': { lat: 33.4152, lon: -111.8315, tz: 'America/Phoenix' },
+  'kansas city': { lat: 39.0997, lon: -94.5786, tz: 'America/Chicago' },
+  'omaha': { lat: 41.2565, lon: -95.9345, tz: 'America/Chicago' },
+  'cleveland': { lat: 41.4993, lon: -81.6944, tz: 'America/New_York' },
+  'columbus': { lat: 39.9612, lon: -82.9988, tz: 'America/New_York' },
+  'cincinnati': { lat: 39.1031, lon: -84.512, tz: 'America/New_York' },
+  'indianapolis': { lat: 39.7684, lon: -86.1581, tz: 'America/New_York' },
+  'charlotte': { lat: 35.2271, lon: -80.8431, tz: 'America/New_York' },
+  'raleigh': { lat: 35.7796, lon: -78.6382, tz: 'America/New_York' },
+  'virginia beach': { lat: 36.8529, lon: -75.978, tz: 'America/New_York' },
+  'richmond': { lat: 37.5407, lon: -77.436, tz: 'America/New_York' },
+  'pittsburgh': { lat: 40.4406, lon: -79.9959, tz: 'America/New_York' },
+  'tampa': { lat: 27.9506, lon: -82.4572, tz: 'America/New_York' },
+  'orlando': { lat: 28.5383, lon: -81.3792, tz: 'America/New_York' },
+  'jacksonville': { lat: 30.3322, lon: -81.6557, tz: 'America/New_York' },
+  'st louis': { lat: 38.627, lon: -90.1994, tz: 'America/Chicago' },
+  'saint louis': { lat: 38.627, lon: -90.1994, tz: 'America/Chicago' },
+  'new orleans': { lat: 29.9511, lon: -90.0715, tz: 'America/Chicago' },
+  'las vegas': { lat: 36.1699, lon: -115.1398, tz: 'America/Los_Angeles' },
+  'oklahoma city': { lat: 35.4676, lon: -97.5164, tz: 'America/Chicago' },
+  'tulsa': { lat: 36.154, lon: -95.9928, tz: 'America/Chicago' },
+  'salt lake city': { lat: 40.7608, lon: -111.891, tz: 'America/Denver' },
+  'washington': { lat: 38.9072, lon: -77.0369, tz: 'America/New_York' },
+  'washington dc': { lat: 38.9072, lon: -77.0369, tz: 'America/New_York' },
+  'dc': { lat: 38.9072, lon: -77.0369, tz: 'America/New_York' },
+  'fort worth': { lat: 32.7555, lon: -97.3308, tz: 'America/Chicago' },
+  'el paso': { lat: 31.7619, lon: -106.485, tz: 'America/Denver' },
+  'boise': { lat: 43.615, lon: -116.2023, tz: 'America/Boise' },
+  'little rock': { lat: 34.7465, lon: -92.2896, tz: 'America/Chicago' },
+  'jackson': { lat: 32.2988, lon: -90.1848, tz: 'America/Chicago' },
+  'montgomery': { lat: 32.3668, lon: -86.3, tz: 'America/Chicago' },
+  'mobile': { lat: 30.6954, lon: -88.0399, tz: 'America/Chicago' },
+  'huntsville': { lat: 34.7304, lon: -86.5861, tz: 'America/Chicago' },
+  'savannah': { lat: 32.0809, lon: -81.0912, tz: 'America/New_York' },
+  'charleston': { lat: 32.7765, lon: -79.9311, tz: 'America/New_York' },
+  'columbia': { lat: 34.0007, lon: -81.0348, tz: 'America/New_York' },
+  'knoxville': { lat: 35.9606, lon: -83.9207, tz: 'America/New_York' },
+  'chattanooga': { lat: 35.0456, lon: -85.3097, tz: 'America/New_York' },
+  'lexington': { lat: 38.0406, lon: -84.5037, tz: 'America/New_York' },
+  'des moines': { lat: 41.5868, lon: -93.625, tz: 'America/Chicago' },
+  'madison': { lat: 43.0731, lon: -89.4012, tz: 'America/Chicago' },
+  'green bay': { lat: 44.5133, lon: -88.0133, tz: 'America/Chicago' },
+  'grand rapids': { lat: 42.9634, lon: -85.6681, tz: 'America/New_York' },
+  'buffalo': { lat: 42.8864, lon: -78.8784, tz: 'America/New_York' },
+  'rochester': { lat: 43.1566, lon: -77.6088, tz: 'America/New_York' },
+  'hartford': { lat: 41.7658, lon: -72.6734, tz: 'America/New_York' },
+  'providence': { lat: 41.824, lon: -71.4128, tz: 'America/New_York' },
+  'wichita': { lat: 37.6872, lon: -97.3301, tz: 'America/Chicago' },
+  'spokane': { lat: 47.6588, lon: -117.426, tz: 'America/Los_Angeles' },
+  'tacoma': { lat: 47.2529, lon: -122.4443, tz: 'America/Los_Angeles' },
+  'reno': { lat: 39.5296, lon: -119.8138, tz: 'America/Los_Angeles' },
+  'colorado springs': { lat: 38.8339, lon: -104.8214, tz: 'America/Denver' },
+  'tucson': { lat: 32.2226, lon: -110.9747, tz: 'America/Phoenix' },
+  'bakersfield': { lat: 35.3733, lon: -119.0187, tz: 'America/Los_Angeles' },
+  'oakland': { lat: 37.8044, lon: -122.2712, tz: 'America/Los_Angeles' },
+  'long beach': { lat: 33.77, lon: -118.1937, tz: 'America/Los_Angeles' },
+  'honolulu': { lat: 21.3069, lon: -157.8583, tz: 'Pacific/Honolulu' },
+  'anchorage': { lat: 61.2181, lon: -149.9003, tz: 'America/Anchorage' },
+  // --- Canada ---
+  'toronto': { lat: 43.6532, lon: -79.3832, tz: 'America/Toronto' },
+  'vancouver': { lat: 49.2827, lon: -123.1207, tz: 'America/Vancouver' },
+  'montreal': { lat: 45.5017, lon: -73.5673, tz: 'America/Toronto' },
+  'calgary': { lat: 51.0447, lon: -114.0719, tz: 'America/Edmonton' },
+  'edmonton': { lat: 53.5461, lon: -113.4938, tz: 'America/Edmonton' },
+  'ottawa': { lat: 45.4215, lon: -75.6972, tz: 'America/Toronto' },
+  'winnipeg': { lat: 49.8951, lon: -97.1384, tz: 'America/Winnipeg' },
+  'halifax': { lat: 44.6488, lon: -63.5752, tz: 'America/Halifax' },
+  // --- Mexico & Central America ---
+  'mexico city': { lat: 19.4326, lon: -99.1332, tz: 'America/Mexico_City' },
+  'guadalajara': { lat: 20.6597, lon: -103.3496, tz: 'America/Mexico_City' },
+  'monterrey': { lat: 25.6866, lon: -100.3161, tz: 'America/Mexico_City' },
+  'san juan': { lat: 18.4655, lon: -66.1057, tz: 'America/Puerto_Rico' },
+  // --- South America ---
+  'sao paulo': { lat: -23.5505, lon: -46.6333, tz: 'America/Sao_Paulo' },
+  'rio de janeiro': { lat: -22.9068, lon: -43.1729, tz: 'America/Sao_Paulo' },
+  'buenos aires': { lat: -34.6037, lon: -58.3816, tz: 'America/Argentina/Buenos_Aires' },
+  'bogota': { lat: 4.711, lon: -74.0721, tz: 'America/Bogota' },
+  'lima': { lat: -12.0464, lon: -77.0428, tz: 'America/Lima' },
+  'santiago': { lat: -33.4489, lon: -70.6693, tz: 'America/Santiago' },
+  'caracas': { lat: 10.4806, lon: -66.9036, tz: 'America/Caracas' },
+  // --- Europe ---
+  'london': { lat: 51.5074, lon: -0.1278, tz: 'Europe/London' },
+  'paris': { lat: 48.8566, lon: 2.3522, tz: 'Europe/Paris' },
+  'berlin': { lat: 52.52, lon: 13.405, tz: 'Europe/Berlin' },
+  'rome': { lat: 41.9028, lon: 12.4964, tz: 'Europe/Rome' },
+  'madrid': { lat: 40.4168, lon: -3.7038, tz: 'Europe/Madrid' },
+  'amsterdam': { lat: 52.3676, lon: 4.9041, tz: 'Europe/Amsterdam' },
+  'vienna': { lat: 48.2082, lon: 16.3738, tz: 'Europe/Vienna' },
+  'dublin': { lat: 53.3498, lon: -6.2603, tz: 'Europe/Dublin' },
+  'lisbon': { lat: 38.7223, lon: -9.1393, tz: 'Europe/Lisbon' },
+  'athens': { lat: 37.9838, lon: 23.7275, tz: 'Europe/Athens' },
+  'moscow': { lat: 55.7558, lon: 37.6173, tz: 'Europe/Moscow' },
+  'istanbul': { lat: 41.0082, lon: 28.9784, tz: 'Europe/Istanbul' },
+  'barcelona': { lat: 41.3874, lon: 2.1686, tz: 'Europe/Madrid' },
+  'munich': { lat: 48.1351, lon: 11.582, tz: 'Europe/Berlin' },
+  'hamburg': { lat: 53.5511, lon: 9.9937, tz: 'Europe/Berlin' },
+  'milan': { lat: 45.4642, lon: 9.19, tz: 'Europe/Rome' },
+  'naples': { lat: 40.8518, lon: 14.2681, tz: 'Europe/Rome' },
+  'prague': { lat: 50.0755, lon: 14.4378, tz: 'Europe/Prague' },
+  'warsaw': { lat: 52.2297, lon: 21.0122, tz: 'Europe/Warsaw' },
+  'budapest': { lat: 47.4979, lon: 19.0402, tz: 'Europe/Budapest' },
+  'bucharest': { lat: 44.4268, lon: 26.1025, tz: 'Europe/Bucharest' },
+  'stockholm': { lat: 59.3293, lon: 18.0686, tz: 'Europe/Stockholm' },
+  'oslo': { lat: 59.9139, lon: 10.7522, tz: 'Europe/Oslo' },
+  'copenhagen': { lat: 55.6761, lon: 12.5683, tz: 'Europe/Copenhagen' },
+  'helsinki': { lat: 60.1699, lon: 24.9384, tz: 'Europe/Helsinki' },
+  'brussels': { lat: 50.8503, lon: 4.3517, tz: 'Europe/Brussels' },
+  'zurich': { lat: 47.3769, lon: 8.5417, tz: 'Europe/Zurich' },
+  'geneva': { lat: 46.2044, lon: 6.1432, tz: 'Europe/Zurich' },
+  'edinburgh': { lat: 55.9533, lon: -3.1883, tz: 'Europe/London' },
+  'manchester': { lat: 53.4808, lon: -2.2426, tz: 'Europe/London' },
+  'birmingham uk': { lat: 52.4862, lon: -1.8904, tz: 'Europe/London' },
+  'kiev': { lat: 50.4501, lon: 30.5234, tz: 'Europe/Kiev' },
+  'kyiv': { lat: 50.4501, lon: 30.5234, tz: 'Europe/Kiev' },
+  // --- Asia ---
+  'tokyo': { lat: 35.6762, lon: 139.6503, tz: 'Asia/Tokyo' },
+  'beijing': { lat: 39.9042, lon: 116.4074, tz: 'Asia/Shanghai' },
+  'shanghai': { lat: 31.2304, lon: 121.4737, tz: 'Asia/Shanghai' },
+  'mumbai': { lat: 19.076, lon: 72.8777, tz: 'Asia/Kolkata' },
+  'delhi': { lat: 28.7041, lon: 77.1025, tz: 'Asia/Kolkata' },
+  'new delhi': { lat: 28.6139, lon: 77.209, tz: 'Asia/Kolkata' },
+  'bangalore': { lat: 12.9716, lon: 77.5946, tz: 'Asia/Kolkata' },
+  'kolkata': { lat: 22.5726, lon: 88.3639, tz: 'Asia/Kolkata' },
+  'chennai': { lat: 13.0827, lon: 80.2707, tz: 'Asia/Kolkata' },
+  'singapore': { lat: 1.3521, lon: 103.8198, tz: 'Asia/Singapore' },
+  'bangkok': { lat: 13.7563, lon: 100.5018, tz: 'Asia/Bangkok' },
+  'seoul': { lat: 37.5665, lon: 126.978, tz: 'Asia/Seoul' },
+  'hong kong': { lat: 22.3193, lon: 114.1694, tz: 'Asia/Hong_Kong' },
+  'dubai': { lat: 25.2048, lon: 55.2708, tz: 'Asia/Dubai' },
+  'tel aviv': { lat: 32.0853, lon: 34.7818, tz: 'Asia/Jerusalem' },
+  'jerusalem': { lat: 31.7683, lon: 35.2137, tz: 'Asia/Jerusalem' },
+  'osaka': { lat: 34.6937, lon: 135.5023, tz: 'Asia/Tokyo' },
+  'taipei': { lat: 25.033, lon: 121.5654, tz: 'Asia/Taipei' },
+  'manila': { lat: 14.5995, lon: 120.9842, tz: 'Asia/Manila' },
+  'jakarta': { lat: -6.2088, lon: 106.8456, tz: 'Asia/Jakarta' },
+  'kuala lumpur': { lat: 3.139, lon: 101.6869, tz: 'Asia/Kuala_Lumpur' },
+  'hanoi': { lat: 21.0278, lon: 105.8342, tz: 'Asia/Ho_Chi_Minh' },
+  'ho chi minh city': { lat: 10.8231, lon: 106.6297, tz: 'Asia/Ho_Chi_Minh' },
+  'karachi': { lat: 24.8607, lon: 67.0011, tz: 'Asia/Karachi' },
+  'tehran': { lat: 35.6892, lon: 51.389, tz: 'Asia/Tehran' },
+  'riyadh': { lat: 24.7136, lon: 46.6753, tz: 'Asia/Riyadh' },
+  // --- Australia & NZ ---
+  'sydney': { lat: -33.8688, lon: 151.2093, tz: 'Australia/Sydney' },
+  'melbourne': { lat: -37.8136, lon: 144.9631, tz: 'Australia/Melbourne' },
+  'brisbane': { lat: -27.4698, lon: 153.0251, tz: 'Australia/Brisbane' },
+  'perth': { lat: -31.9505, lon: 115.8605, tz: 'Australia/Perth' },
+  'auckland': { lat: -36.8485, lon: 174.7633, tz: 'Pacific/Auckland' },
+  // --- Africa ---
+  'cairo': { lat: 30.0444, lon: 31.2357, tz: 'Africa/Cairo' },
+  'johannesburg': { lat: -26.2041, lon: 28.0473, tz: 'Africa/Johannesburg' },
+  'cape town': { lat: -33.9249, lon: 18.4241, tz: 'Africa/Johannesburg' },
+  'lagos': { lat: 6.5244, lon: 3.3792, tz: 'Africa/Lagos' },
+  'nairobi': { lat: -1.2921, lon: 36.8219, tz: 'Africa/Nairobi' },
+  'accra': { lat: 5.6037, lon: -0.187, tz: 'Africa/Accra' },
+  'casablanca': { lat: 33.5731, lon: -7.5898, tz: 'Africa/Casablanca' },
+  'addis ababa': { lat: 9.025, lon: 38.7469, tz: 'Africa/Addis_Ababa' },
+};
+
+const TZ_OFFSETS = {
+  'America/New_York': { standard: -5, dst: -4 },
+  'America/Chicago': { standard: -6, dst: -5 },
+  'America/Denver': { standard: -7, dst: -6 },
+  'America/Los_Angeles': { standard: -8, dst: -7 },
+  'America/Phoenix': { standard: -7, dst: -7 },
+  'America/Anchorage': { standard: -9, dst: -8 },
+  'Pacific/Honolulu': { standard: -10, dst: -10 },
+  'America/Toronto': { standard: -5, dst: -4 },
+  'America/Vancouver': { standard: -8, dst: -7 },
+  'America/Mexico_City': { standard: -6, dst: -5 },
+  'America/Sao_Paulo': { standard: -3, dst: -3 },
+  'America/Argentina/Buenos_Aires': { standard: -3, dst: -3 },
+  'Europe/London': { standard: 0, dst: 1 },
+  'Europe/Paris': { standard: 1, dst: 2 },
+  'Europe/Berlin': { standard: 1, dst: 2 },
+  'Europe/Rome': { standard: 1, dst: 2 },
+  'Europe/Madrid': { standard: 1, dst: 2 },
+  'Europe/Amsterdam': { standard: 1, dst: 2 },
+  'Europe/Vienna': { standard: 1, dst: 2 },
+  'Europe/Dublin': { standard: 0, dst: 1 },
+  'Europe/Lisbon': { standard: 0, dst: 1 },
+  'Europe/Athens': { standard: 2, dst: 3 },
+  'Europe/Moscow': { standard: 3, dst: 3 },
+  'Europe/Istanbul': { standard: 3, dst: 3 },
+  'Asia/Tokyo': { standard: 9, dst: 9 },
+  'Asia/Shanghai': { standard: 8, dst: 8 },
+  'Asia/Kolkata': { standard: 5.5, dst: 5.5 },
+  'Asia/Singapore': { standard: 8, dst: 8 },
+  'Asia/Bangkok': { standard: 7, dst: 7 },
+  'Asia/Seoul': { standard: 9, dst: 9 },
+  'Asia/Hong_Kong': { standard: 8, dst: 8 },
+  'Asia/Dubai': { standard: 4, dst: 4 },
+  'Asia/Jerusalem': { standard: 2, dst: 3 },
+  'Australia/Sydney': { standard: 11, dst: 10 },
+  'Australia/Melbourne': { standard: 11, dst: 10 },
+  'America/Boise': { standard: -7, dst: -6 },
+  'America/Edmonton': { standard: -7, dst: -6 },
+  'America/Winnipeg': { standard: -6, dst: -5 },
+  'America/Halifax': { standard: -4, dst: -3 },
+  'America/Puerto_Rico': { standard: -4, dst: -4 },
+  'America/Bogota': { standard: -5, dst: -5 },
+  'America/Lima': { standard: -5, dst: -5 },
+  'America/Santiago': { standard: -4, dst: -3 },
+  'America/Caracas': { standard: -4, dst: -4 },
+  'Europe/Prague': { standard: 1, dst: 2 },
+  'Europe/Warsaw': { standard: 1, dst: 2 },
+  'Europe/Budapest': { standard: 1, dst: 2 },
+  'Europe/Bucharest': { standard: 2, dst: 3 },
+  'Europe/Stockholm': { standard: 1, dst: 2 },
+  'Europe/Oslo': { standard: 1, dst: 2 },
+  'Europe/Copenhagen': { standard: 1, dst: 2 },
+  'Europe/Helsinki': { standard: 2, dst: 3 },
+  'Europe/Brussels': { standard: 1, dst: 2 },
+  'Europe/Zurich': { standard: 1, dst: 2 },
+  'Europe/Kiev': { standard: 2, dst: 3 },
+  'Asia/Taipei': { standard: 8, dst: 8 },
+  'Asia/Manila': { standard: 8, dst: 8 },
+  'Asia/Jakarta': { standard: 7, dst: 7 },
+  'Asia/Kuala_Lumpur': { standard: 8, dst: 8 },
+  'Asia/Ho_Chi_Minh': { standard: 7, dst: 7 },
+  'Asia/Karachi': { standard: 5, dst: 5 },
+  'Asia/Tehran': { standard: 3.5, dst: 4.5 },
+  'Asia/Riyadh': { standard: 3, dst: 3 },
+  'Australia/Brisbane': { standard: 10, dst: 10 },
+  'Australia/Perth': { standard: 8, dst: 8 },
+  'Pacific/Auckland': { standard: 13, dst: 12 },
+  'Africa/Cairo': { standard: 2, dst: 2 },
+  'Africa/Johannesburg': { standard: 2, dst: 2 },
+  'Africa/Lagos': { standard: 1, dst: 1 },
+  'Africa/Nairobi': { standard: 3, dst: 3 },
+  'Africa/Accra': { standard: 0, dst: 0 },
+  'Africa/Casablanca': { standard: 1, dst: 0 },
+  'Africa/Addis_Ababa': { standard: 3, dst: 3 },
+};
+
+function lookupCity(name) {
+  const key = name.trim().toLowerCase();
+  return CITY_COORDS[key] || null;
+}
+
+function isDST(year, month, day, tz) {
+  if (tz.startsWith('America/') && tz !== 'America/Phoenix' && tz !== 'America/Argentina/Buenos_Aires' && tz !== 'America/Sao_Paulo') {
+    const marchSecondSun = (() => { const d = new Date(year, 2, 1); const dow = d.getDay(); return dow === 0 ? 8 : 8 + (7 - dow); })();
+    const novFirstSun = (() => { const d = new Date(year, 10, 1); const dow = d.getDay(); return dow === 0 ? 1 : 1 + (7 - dow); })();
+    if (month > 3 && month < 11) return true;
+    if (month === 3 && day >= marchSecondSun) return true;
+    if (month === 11 && day < novFirstSun) return true;
+    return false;
+  }
+  if (tz.startsWith('Europe/') && tz !== 'Europe/Moscow' && tz !== 'Europe/Istanbul') {
+    const marchLastSun = (() => { const d = new Date(year, 2, 31); return 31 - d.getDay(); })();
+    const octLastSun = (() => { const d = new Date(year, 9, 31); return 31 - d.getDay(); })();
+    if (month > 3 && month < 10) return true;
+    if (month === 3 && day >= marchLastSun) return true;
+    if (month === 10 && day < octLastSun) return true;
+    return false;
+  }
+  if (tz.startsWith('Australia/')) {
+    const octFirstSun = (() => { const d = new Date(year, 9, 1); const dow = d.getDay(); return dow === 0 ? 1 : 1 + (7 - dow); })();
+    const aprFirstSun = (() => { const d = new Date(year, 3, 1); const dow = d.getDay(); return dow === 0 ? 1 : 1 + (7 - dow); })();
+    if (month > 10 || month < 4) return true;
+    if (month === 10 && day >= octFirstSun) return true;
+    if (month === 4 && day < aprFirstSun) return true;
+    return false;
+  }
+  return false;
+}
+
+function getUTCOffset(tz, year, month, day) {
+  const tzData = TZ_OFFSETS[tz];
+  if (!tzData) return 0;
+  const dst = isDST(year, month, day, tz);
+  return dst ? tzData.dst : tzData.standard;
+}
+
+function NatalChartInput({ existingChart, onSave }) {
+  const [expanded, setExpanded] = useState(!existingChart);
+  const [birthDate, setBirthDate] = useState('');
+  const [birthTime, setBirthTime] = useState('');
+  const [cityInput, setCityInput] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [cityMatch, setCityMatch] = useState(null);
+
+  const handleCityChange = useCallback((value) => {
+    setCityInput(value);
+    const match = lookupCity(value);
+    setCityMatch(match);
+  }, []);
+
+  const handleCompute = async () => {
+    setError('');
+    if (!birthDate) { setError('Please enter your birth date.'); return; }
+    if (!cityInput.trim()) { setError('Please enter your birth city.'); return; }
+
+    const city = lookupCity(cityInput);
+    if (!city) { setError('City not found. Try a major city name (e.g., "New York", "London", "Tokyo").'); return; }
+
+    const [yearStr, monthStr, dayStr] = birthDate.split('-');
+    const year = parseInt(yearStr, 10);
+    const month = parseInt(monthStr, 10);
+    const day = parseInt(dayStr, 10);
+
+    let hour = -1;
+    let minute = 0;
+    if (birthTime) {
+      const [hStr, mStr] = birthTime.split(':');
+      hour = parseInt(hStr, 10);
+      minute = parseInt(mStr, 10);
+    }
+
+    const utcOffset = getUTCOffset(city.tz, year, month, day);
+
+    setLoading(true);
+    try {
+      const res = await apiFetch('/api/natal-chart', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          year, month, day, hour, minute,
+          latitude: city.lat,
+          longitude: city.lon,
+          city: cityInput.trim(),
+          utcOffset,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) { setError(data.error || 'Failed to compute chart.'); setLoading(false); return; }
+      await onSave(data.chart);
+      setExpanded(false);
+    } catch (err) {
+      setError('Network error. Please try again.');
+    }
+    setLoading(false);
+  };
+
+  return (
+    <div className="natal-input-section">
+      <button className="natal-input-toggle" onClick={() => setExpanded(!expanded)}>
+        {expanded ? 'Cancel' : existingChart ? 'Update Birth Info' : 'Enter Birth Info'}
+      </button>
+      {expanded && (
+        <div className="natal-input-form">
+          <div className="natal-input-row">
+            <label className="natal-input-label">
+              Birth Date
+              <input
+                type="date"
+                className="natal-input-field"
+                value={birthDate}
+                onChange={e => setBirthDate(e.target.value)}
+              />
+            </label>
+          </div>
+          <div className="natal-input-row">
+            <label className="natal-input-label">
+              Birth Time <span className="natal-input-optional">(optional)</span>
+              <input
+                type="time"
+                className="natal-input-field"
+                value={birthTime}
+                onChange={e => setBirthTime(e.target.value)}
+              />
+              <span className="natal-input-hint">For Rising sign and house placements</span>
+            </label>
+          </div>
+          <div className="natal-input-row">
+            <label className="natal-input-label">
+              Birth City
+              <input
+                type="text"
+                className="natal-input-field"
+                placeholder="e.g. New York, London, Tokyo..."
+                value={cityInput}
+                onChange={e => handleCityChange(e.target.value)}
+              />
+              {cityInput.trim() && cityMatch && (
+                <span className="natal-input-hint natal-city-found">
+                  {cityMatch.lat.toFixed(2)}, {cityMatch.lon.toFixed(2)}
+                </span>
+              )}
+              {cityInput.trim() && !cityMatch && (
+                <span className="natal-input-hint natal-city-not-found">City not recognized</span>
+              )}
+            </label>
+          </div>
+          {error && <div className="natal-input-error">{error}</div>}
+          <button
+            className="natal-input-compute"
+            onClick={handleCompute}
+            disabled={loading}
+          >
+            {loading ? 'Computing...' : 'Compute Chart'}
+          </button>
         </div>
       )}
     </div>

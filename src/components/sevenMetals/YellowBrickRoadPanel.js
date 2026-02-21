@@ -1,5 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import challengeData from '../../data/yellowBrickRoad.json';
+import { apiFetch } from '../../lib/chatApi';
 
 const { challenges } = challengeData;
 
@@ -131,7 +132,7 @@ export default function YellowBrickRoadPanel({
     setLoading(true);
 
     try {
-      const res = await fetch('/api/chat', {
+      const res = await apiFetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -169,7 +170,7 @@ export default function YellowBrickRoadPanel({
     setAtlasLoading(true);
 
     try {
-      const res = await fetch('/api/chat', {
+      const res = await apiFetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

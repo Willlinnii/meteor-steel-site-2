@@ -99,6 +99,9 @@ function SinsTab({ data }) {
   const artists = data?.artists;
   const t = data?.theology;
   const s = data?.stories;
+  const sinName = data?.core?.sin;
+  const virtueName = data?.core?.virtue;
+  const chakra = PLANET_CHAKRA_DETAILS[data?.core?.planet];
   if (!a && !m && !artists && !t && !s) return <p className="metals-empty">No sin/virtue data available.</p>;
 
   const artistFields = [
@@ -111,21 +114,24 @@ function SinsTab({ data }) {
 
   return (
     <div className="tab-content">
+      {sinName && <h4 className="archetype-name">{sinName}</h4>}
+      {virtueName && <p className="sin-virtue-pair">Virtue: {virtueName}</p>}
+      {chakra && (
+        <div className="archetype-section sin-chakra-context">
+          <h5>{chakra.label} Chakra ({chakra.sanskrit})</h5>
+          <p>{chakra.description}</p>
+        </div>
+      )}
       {a && (
         <>
-          <h4 className="archetype-name">{a.archetype}</h4>
-          {a.shadow && (
-            <div className="archetype-section">
-              <h5>Shadow</h5>
-              <p>{a.shadow}</p>
-            </div>
-          )}
-          {a.light && (
-            <div className="archetype-section">
-              <h5>Light</h5>
-              <p>{a.light}</p>
-            </div>
-          )}
+          <div className="archetype-section">
+            <h5>Shadow &mdash; {a.archetype}</h5>
+            <p>{a.shadow}</p>
+          </div>
+          <div className="archetype-section">
+            <h5>Light</h5>
+            <p>{a.light}</p>
+          </div>
         </>
       )}
       {m?.modernLife && (
@@ -250,39 +256,44 @@ const PLANET_CHAKRA_DETAILS = {
     location: 'Base of spine',
     theme: 'Survival, safety, grounding, belonging',
     element: 'Earth',
-    description: 'This chakra concerns the fundamental experience of being safe to exist in the world. It relates to stability, home, resources, tribe, and the sense of being anchored in the body and reality. When balanced, it shows up as groundedness, presence, and a quiet sense of security; when strained, it can appear as anxiety, fear, instability, or disconnection from the body and the material world.',
+    sin: 'Sloth',
+    description: 'The Root Chakra, grounding us to the earth and our basic survival instincts, when affected by Sloth, linked to Saturn, the god of time and discipline, reflects a lack of motivation and discipline. Saturn\'s slow, enduring energy, when negative, can lead to inertia, preventing the establishment of a stable foundation for physical and spiritual growth.',
   },
-  Jupiter: {
+  Venus: {
     label: 'Sacral',
-    sanskrit: 'Svadhisthana',
+    sanskrit: 'Svadhishthana',
     location: 'Lower abdomen / pelvis',
     theme: 'Emotion, pleasure, sexuality, creativity',
     element: 'Water',
-    description: 'This chakra reflects the realm of feeling, desire, and creative life force. It governs emotional flow, sensuality, intimacy, and the ability to enjoy life and create. When balanced, emotions move fluidly and creativity feels alive; when imbalanced, it can appear as numbness, shame, repression, emotional overwhelm, or compulsive seeking of pleasure.',
+    sin: 'Lust',
+    description: 'The Sacral Chakra, related to creativity and emotional life, when distorted by Lust, associated with Venus, the goddess of love and beauty, highlights the misuse of creative and sexual energies. Venus\' allure underscores the temptation to succumb to physical desires, which can disrupt emotional balance and creative expression.',
   },
-  Mars: {
+  Jupiter: {
     label: 'Solar Plexus',
     sanskrit: 'Manipura',
     location: 'Upper abdomen',
     theme: 'Power, will, identity, confidence',
     element: 'Fire',
-    description: 'This chakra represents personal agency and the capacity to act in the world. It relates to confidence, motivation, self-definition, and boundaries. In balance it supports healthy self-esteem and purposeful action; when strained, it may show up as shame, passivity, lack of direction, or the opposite extreme of control, anger, and domination.',
+    sin: 'Gluttony',
+    description: 'The Solar Plexus Chakra, associated with personal power and self-worth, when imbalanced by Gluttony, connected to Jupiter, the king of gods, emphasizes excess and indulgence. Jupiter\'s expansive influence can lead to an overemphasis on power and consumption, overshadowing self-discipline and inner strength.',
   },
-  Venus: {
+  Mercury: {
     label: 'Heart',
     sanskrit: 'Anahata',
     location: 'Center of chest',
     theme: 'Love, compassion, connection',
     element: 'Air',
-    description: 'The heart chakra acts as the bridge between the lower and upper chakras, integrating survival and identity with meaning and connection. It relates to empathy, compassion, forgiveness, and relational openness. In balance it allows both giving and receiving love; in imbalance it may manifest as isolation, grief, resentment, or over-giving without boundaries.',
+    sin: 'Greed',
+    description: 'The Heart Chakra, the center of love and empathy, when influenced by Greed, linked to Mercury, the messenger and god of commerce, suggests how a desire for material wealth and accumulation can harden the heart. Mercury\'s association with trade and wealth highlights the risk of valuing possessions over connections, undermining the openness and generosity of the Anahata.',
   },
-  Mercury: {
+  Mars: {
     label: 'Throat',
     sanskrit: 'Vishuddha',
     location: 'Throat',
     theme: 'Expression, truth, communication',
     element: 'Ether / Space',
-    description: 'This chakra governs authentic expression and the capacity to speak and hear truth. It includes communication, honesty, listening, and the ability to give voice to one\'s inner life. When balanced, expression feels clear and natural; when imbalanced, it can appear as fear of speaking, dishonesty, suppression, or the feeling of not being heard.',
+    sin: 'Wrath',
+    description: 'The Throat Chakra governs communication, and when impacted by Wrath, associated with Mars, the god of war, it emphasizes how anger can disrupt our ability to communicate effectively. Mars\' aggressive energy can lead to destructive speech and hinder compassionate listening, reflecting the need for control over our words and emotions.',
   },
   Moon: {
     label: 'Third Eye',
@@ -290,7 +301,8 @@ const PLANET_CHAKRA_DETAILS = {
     location: 'Between eyebrows',
     theme: 'Insight, intuition, imagination',
     element: 'Mind / Light',
-    description: 'This chakra relates to perception, inner vision, and reflective awareness. It includes intuition, imagination, clarity, and the ability to see patterns within oneself and the world. When balanced, it supports insight and self-reflection; when strained, it can appear as confusion, denial, or excessive fantasy disconnected from reality.',
+    sin: 'Envy',
+    description: 'The Third Eye Chakra, connected to intuition and insight, when influenced by Envy, associated with the Moon, reflects how jealousy clouds our perception and distorts reality. The Moon, with its phases and changes, symbolizes the fluctuating nature of desire and envy, affecting our ability to see clearly and understand deeper truths.',
   },
   Sun: {
     label: 'Crown',
@@ -298,7 +310,8 @@ const PLANET_CHAKRA_DETAILS = {
     location: 'Top of head',
     theme: 'Unity, transcendence, meaning',
     element: 'Consciousness',
-    description: 'The crown chakra represents the experience of connection to the larger whole\u2014spirituality, meaning, awe, and humility before life. When balanced, it supports a sense of belonging within existence and openness to mystery; when imbalanced, it may manifest as nihilism, spiritual disconnection, or spiritual bypassing and escape from embodied life.',
+    sin: 'Pride',
+    description: 'The Crown Chakra, linked to the Sun, symbolizes our connection to the divine and universal consciousness. The Sun, representing vitality, ego, and self, when associated with Pride, highlights how an inflated sense of self-importance can sever spiritual connections. Pride, as the most severe sin according to Christian tradition, aligns with the Crown Chakra\'s role as the spiritual pinnacle, reminding us that detachment from ego is essential for true enlightenment.',
   },
 };
 

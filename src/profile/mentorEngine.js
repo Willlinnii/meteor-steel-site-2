@@ -45,6 +45,11 @@ export const MENTOR_TYPES = {
   },
 };
 
+// --- MENTOR BIO / CAPACITY DEFAULTS ---
+export const DEFAULT_MENTOR_CAPACITY = 5;
+export const MAX_MENTOR_BIO_LENGTH = 500;
+export const MAX_MENTOR_CAPACITY = 20;
+
 // --- MENTOR STATUS ---
 
 export const MENTOR_STATUS = {

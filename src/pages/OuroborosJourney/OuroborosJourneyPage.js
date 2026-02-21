@@ -7,6 +7,7 @@ import challengeData from '../../data/yellowBrickRoad.json';
 import { useCoursework } from '../../coursework/CourseworkContext';
 import { useWritings } from '../../writings/WritingsContext';
 import './OuroborosJourneyPage.css';
+import { apiFetch } from '../../lib/chatApi';
 
 const { challenges } = challengeData;
 
@@ -388,7 +389,7 @@ export default function OuroborosJourneyPage() {
     });
 
     setSynthesizing(true);
-    fetch('/api/chat', {
+    apiFetch('/api/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ mode: 'journey-synthesis', journeyId, gameMode, stageData }),
@@ -421,7 +422,7 @@ export default function OuroborosJourneyPage() {
             ...(isFused ? { aspect: fusedPhase === 0 ? 'monomyth' : 'steel' } : {}),
           };
 
-      const res = await fetch('/api/chat', {
+      const res = await apiFetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body),

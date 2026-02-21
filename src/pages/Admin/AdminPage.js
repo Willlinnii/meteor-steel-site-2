@@ -1,6 +1,7 @@
 import React, { useState, useMemo, useEffect, useCallback, lazy, Suspense } from 'react';
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, getDocs, query, orderBy } from 'firebase/firestore';
 import { db, firebaseConfigured } from '../../auth/firebase';
+import { useAuth } from '../../auth/AuthContext';
 import { COURSES, checkRequirement, requirementProgress } from '../../coursework/courseEngine';
 
 import campaignData from '../../data/campaigns/mythicYear.json';
@@ -158,6 +159,7 @@ function CampaignListView({ campaigns, onSelect, getStatusForCampaign }) {
 const SECTIONS = [
   { id: 'campaigns', label: 'Campaign Manager' },
   { id: 'coursework', label: 'Coursework' },
+  { id: 'mentors', label: 'Mentors' },
   { id: 'contacts', label: 'Contacts' },
 ];
 
@@ -673,6 +675,177 @@ function CourseworkManagerSection() {
   );
 }
 
+// --- Mentor Manager Section ---
+function MentorManagerSection() {
+  const { user } = useAuth();
+  const [applications, setApplications] = useState([]);
+  const [loadingApps, setLoadingApps] = useState(false);
+  const [expandedApp, setExpandedApp] = useState(null);
+  const [rejectReason, setRejectReason] = useState('');
+  const [actionLoading, setActionLoading] = useState(null);
+
+  const loadApplications = useCallback(async () => {
+    if (!firebaseConfigured || !db) return;
+    setLoadingApps(true);
+    try {
+      const q = query(collection(db, 'mentor-applications'), orderBy('createdAt', 'desc'));
+      const snap = await getDocs(q);
+      const apps = [];
+      snap.forEach(doc => apps.push({ id: doc.id, ...doc.data() }));
+      setApplications(apps);
+    } catch (err) {
+      console.error('Failed to load mentor applications:', err);
+    }
+    setLoadingApps(false);
+  }, []);
+
+  const handleAction = async (appId, action) => {
+    setActionLoading(appId);
+    try {
+      const token = await user.getIdToken();
+      const body = { applicationId: appId, action };
+      if (action === 'reject' && rejectReason.trim()) {
+        body.rejectionReason = rejectReason.trim();
+      }
+      const res = await fetch('/api/mentor-admin', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify(body),
+      });
+      const data = await res.json();
+      if (data.success) {
+        // Refresh the list
+        await loadApplications();
+        setRejectReason('');
+      }
+    } catch (err) {
+      console.error('Mentor admin action failed:', err);
+    }
+    setActionLoading(null);
+  };
+
+  // Sort: pending first, then by date
+  const sorted = useMemo(() => {
+    return [...applications].sort((a, b) => {
+      if (a.status === 'pending-admin' && b.status !== 'pending-admin') return -1;
+      if (b.status === 'pending-admin' && a.status !== 'pending-admin') return 1;
+      return (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0);
+    });
+  }, [applications]);
+
+  const STATUS_COLORS = {
+    'pending-admin': '#d9a55b',
+    'approved': '#5bd97a',
+    'rejected': '#d95b5b',
+  };
+
+  return (
+    <div className="admin-coursework">
+      <h2 className="admin-coursework-title">MENTOR APPLICATIONS</h2>
+
+      <button
+        className="admin-coursework-load-btn"
+        onClick={loadApplications}
+        disabled={loadingApps}
+      >
+        {loadingApps ? 'Loading...' : 'Load Applications'}
+      </button>
+
+      {sorted.length > 0 && (
+        <div className="admin-coursework-stats">
+          <div className="admin-coursework-stat-row">
+            <span>Total applications:</span>
+            <strong>{sorted.length}</strong>
+          </div>
+          <div className="admin-coursework-stat-row">
+            <span>Pending:</span>
+            <strong>{sorted.filter(a => a.status === 'pending-admin').length}</strong>
+          </div>
+        </div>
+      )}
+
+      <div className="admin-coursework-users">
+        {sorted.map(app => {
+          const expanded = expandedApp === app.id;
+          return (
+            <div key={app.id} className="admin-coursework-user-row" style={{ flexDirection: 'column', alignItems: 'stretch', cursor: 'pointer' }} onClick={() => setExpandedApp(expanded ? null : app.id)}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <span className="admin-coursework-user-email">{app.displayName || app.email || app.uid}</span>
+                <span className="admin-badge" style={{ borderColor: STATUS_COLORS[app.status], color: STATUS_COLORS[app.status] }}>
+                  {app.status}
+                </span>
+                <span className="admin-badge">{app.mentorType}</span>
+                <span className="admin-coursework-req-count">L{app.credentialLevel}</span>
+              </div>
+
+              {expanded && (
+                <div style={{ marginTop: '12px', paddingLeft: '8px' }}>
+                  <div className="admin-coursework-req-desc" style={{ marginBottom: '8px' }}>
+                    <strong>Credential:</strong> {app.credentialDetails || 'No details'}
+                  </div>
+                  <div className="admin-coursework-req-desc" style={{ marginBottom: '8px' }}>
+                    <strong>Statement:</strong> {app.applicationSummary}
+                  </div>
+                  {app.atlasScreening && (
+                    <div className="admin-coursework-req-desc" style={{ marginBottom: '8px' }}>
+                      <strong>Atlas Assessment:</strong> {app.atlasScreening.passed ? 'Passed' : 'Failed'} — {app.atlasScreening.notes}
+                    </div>
+                  )}
+                  {app.documentUrl && (
+                    <div style={{ marginBottom: '8px' }}>
+                      <a href={app.documentUrl} target="_blank" rel="noopener noreferrer" className="admin-badge" style={{ borderColor: '#5b8dd9', color: '#5b8dd9' }}>
+                        View Document: {app.documentName || 'Download'}
+                      </a>
+                    </div>
+                  )}
+                  {app.rejectionReason && (
+                    <div className="admin-coursework-req-desc" style={{ marginBottom: '8px' }}>
+                      <strong>Rejection Reason:</strong> {app.rejectionReason}
+                    </div>
+                  )}
+
+                  {app.status === 'pending-admin' && (
+                    <div style={{ display: 'flex', gap: '8px', marginTop: '12px', alignItems: 'center', flexWrap: 'wrap' }}>
+                      <button
+                        className="admin-coursework-load-btn"
+                        style={{ background: '#1a3a1a', borderColor: '#5bd97a', color: '#5bd97a' }}
+                        onClick={(e) => { e.stopPropagation(); handleAction(app.id, 'approve'); }}
+                        disabled={actionLoading === app.id}
+                      >
+                        Approve
+                      </button>
+                      <input
+                        type="text"
+                        placeholder="Rejection reason..."
+                        value={rejectReason}
+                        onChange={e => setRejectReason(e.target.value)}
+                        onClick={e => e.stopPropagation()}
+                        className="admin-coursework-select"
+                        style={{ flex: 1, minWidth: '200px' }}
+                      />
+                      <button
+                        className="admin-coursework-load-btn"
+                        style={{ background: '#3a1a1a', borderColor: '#d95b5b', color: '#d95b5b' }}
+                        onClick={(e) => { e.stopPropagation(); handleAction(app.id, 'reject'); }}
+                        disabled={actionLoading === app.id}
+                      >
+                        Reject
+                      </button>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 function AdminPage() {
   const [activeSection, setActiveSection] = useState('campaigns');
 
@@ -692,6 +865,7 @@ function AdminPage() {
 
       {activeSection === 'campaigns' && <CampaignManagerSection />}
       {activeSection === 'coursework' && <CourseworkManagerSection />}
+      {activeSection === 'mentors' && <MentorManagerSection />}
       {activeSection === 'contacts' && (
         <Suspense fallback={<div className="contacts-loading">Loading Contacts...</div>}>
           <ContactsPage />

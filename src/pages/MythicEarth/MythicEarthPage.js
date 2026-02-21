@@ -14,6 +14,7 @@ import sites from '../../data/mythicEarthSites.json';
 import { useAreaOverride, useXRMode } from '../../App';
 import './MythicEarthPage.css';
 
+import { apiFetch } from '../../lib/chatApi';
 /* ArcGIS World Imagery — high-res satellite tiles, free for display */
 const baseLayer = CesiumImageryLayer.fromProviderAsync(
   ArcGisMapServerImageryProvider.fromUrl(
@@ -440,7 +441,7 @@ function MythicEarthSearch({ onSelectSite, globeApi, onHighlight }) {
     const newHistory = [...chatHistory, userMsg].slice(-10); // keep last 5 exchanges (10 messages)
 
     try {
-      const res = await fetch('/api/chat', {
+      const res = await apiFetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

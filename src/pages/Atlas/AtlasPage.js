@@ -4,6 +4,7 @@ import useVoice, { SpeechRecognition } from '../../hooks/useVoice';
 import { useCoursework } from '../../coursework/CourseworkContext';
 import { useWritings } from '../../writings/WritingsContext';
 import './AtlasPage.css';
+import { apiFetch } from '../../lib/chatApi';
 
 function parseAtlasMessage(text) {
   const segments = [];
@@ -157,7 +158,7 @@ export default function AtlasPage() {
     }
 
     try {
-      const res = await fetch('/api/chat', {
+      const res = await apiFetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body),

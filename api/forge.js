@@ -1,4 +1,9 @@
-const OpenAI = require('openai');
+const { getOpenAIClient } = require('./lib/llm');
+
+// Model config — centralized for easy swapping and future BYOK support
+const MODELS = {
+  narrative: process.env.LLM_NARRATIVE_MODEL || 'gpt-4o-mini',
+};
 
 const rateMap = new Map();
 const RATE_LIMIT = 10;
@@ -60,11 +65,11 @@ module.exports = async function handler(req, res) {
     `=== ${s.stageId} (${s.label}) ===\n${s.entries.join('\n')}`
   ).join('\n\n');
 
-  const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+  const openai = getOpenAIClient();
 
   try {
     const completion = await openai.chat.completions.create({
-      model: 'gpt-4o-mini',
+      model: MODELS.narrative,
       messages: [
         { role: 'system', content: buildSystemPrompt(template, targetStage) },
         { role: 'user', content: userContent },

@@ -146,22 +146,6 @@ body {
   gap: 8px;
 }
 
-.site-header-signout {
-  font-family: 'Crimson Pro', serif;
-  font-size: 0.85rem;
-  color: var(--text-secondary);
-  background: none;
-  border: 1px solid var(--border-subtle);
-  border-radius: 6px;
-  padding: 4px 12px;
-  cursor: pointer;
-  transition: color 0.2s, border-color 0.2s;
-}
-
-.site-header-signout:hover {
-  color: var(--accent-ember);
-  border-color: var(--accent-ember);
-}
 
 @media (max-width: 600px) {
   .site-header {
@@ -2832,6 +2816,32 @@ body {
   opacity: 0.6;
 }
 
+/* ===== PROFILE: SIGN OUT ===== */
+.profile-signout-section {
+  text-align: center;
+  padding: 32px 0 16px;
+  margin-top: 16px;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.profile-signout-btn {
+  font-family: 'Cinzel', serif;
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  background: none;
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  padding: 8px 24px;
+  cursor: pointer;
+  letter-spacing: 0.04em;
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.profile-signout-btn:hover {
+  color: var(--accent-ember);
+  border-color: var(--accent-ember);
+}
+
 /* ===== PROFILE: RANK TITLE (under name in header) ===== */
 .profile-rank-title {
   font-family: 'Cinzel', serif;
@@ -2979,6 +2989,29 @@ body {
   background: rgba(201, 169, 97, 0.06);
 }
 
+.profile-purchase-bundle {
+  border-style: dashed;
+}
+
+.profile-purchase-bundle.active {
+  border-style: dashed;
+}
+
+.profile-bundle-badge {
+  display: inline-block;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.62rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: rgba(201, 169, 97, 0.15);
+  color: var(--accent-gold);
+  padding: 1px 6px;
+  border-radius: 4px;
+  margin-left: 8px;
+  vertical-align: middle;
+}
+
 .profile-subscription-row {
   display: flex;
   align-items: center;
@@ -3122,8 +3155,40 @@ body {
 .subscription-gate-desc {
   color: var(--text-secondary);
   font-size: 0.9rem;
+  line-height: 1.6;
+  margin: 0 0 16px;
+}
+
+.subscription-gate-features {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 14px;
+  text-align: left;
+}
+
+.subscription-gate-features li {
+  font-size: 0.85rem;
+  color: var(--text-primary);
   line-height: 1.5;
-  margin: 0 0 24px;
+  padding: 5px 0 5px 20px;
+  position: relative;
+}
+
+.subscription-gate-features li::before {
+  content: '\2726';
+  position: absolute;
+  left: 0;
+  color: var(--accent-ember);
+  font-size: 0.7rem;
+  top: 7px;
+}
+
+.subscription-gate-cta {
+  font-size: 0.78rem;
+  color: var(--accent-steel);
+  font-style: italic;
+  line-height: 1.5;
+  margin: 0 0 20px;
 }
 
 .subscription-gate-actions {
@@ -3206,6 +3271,101 @@ body {
   margin: 12px auto 0;
   font-size: 0.75rem;
   padding: 7px 18px;
+}
+
+/* ===== PROFILE: MENTORSHIP ===== */
+.mentor-eligible {
+  margin-bottom: 16px;
+}
+.mentor-eligible p {
+  color: rgba(201, 169, 97, 0.7);
+  margin-bottom: 10px;
+  font-size: 0.88rem;
+}
+.mentor-type-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.mentor-type-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(201, 169, 97, 0.06);
+  border: 1px solid rgba(201, 169, 97, 0.2);
+  border-radius: 10px;
+  padding: 12px 14px;
+}
+.mentor-badge-icon {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+.mentor-badge-title {
+  color: #c9a961;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+.mentor-status-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  background: rgba(201, 169, 97, 0.06);
+  border: 1px solid rgba(201, 169, 97, 0.2);
+  border-radius: 10px;
+  padding: 14px 16px;
+  margin-bottom: 12px;
+}
+.mentor-status-card.pending {
+  border-color: rgba(217, 165, 91, 0.4);
+}
+.mentor-status-card.approved {
+  border-color: rgba(91, 217, 122, 0.4);
+}
+.mentor-status-card.active {
+  border-color: rgba(91, 217, 122, 0.6);
+  background: rgba(91, 217, 122, 0.08);
+}
+.mentor-status-card.rejected {
+  border-color: rgba(217, 91, 91, 0.4);
+}
+.mentor-course-checklist {
+  list-style: none;
+  padding: 0;
+  margin: 8px 0 0;
+}
+.mentor-course-checklist li {
+  color: rgba(201, 169, 97, 0.6);
+  font-size: 0.85rem;
+  padding: 3px 0;
+}
+.mentor-course-checklist li.done {
+  color: rgba(91, 217, 122, 0.8);
+}
+.mentor-upload-area {
+  margin: 10px 0;
+  text-align: center;
+}
+.mentor-upload-btn {
+  background: rgba(201, 169, 97, 0.1);
+  border: 1px dashed rgba(201, 169, 97, 0.3);
+  border-radius: 8px;
+  color: rgba(201, 169, 97, 0.7);
+  padding: 10px 18px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: border-color 0.2s;
+}
+.mentor-upload-btn:hover {
+  border-color: rgba(201, 169, 97, 0.5);
+}
+.mentor-upload-success {
+  color: rgba(91, 217, 122, 0.8);
+  font-size: 0.85rem;
+}
+.mentor-upload-error {
+  color: rgba(217, 91, 91, 0.8);
+  font-size: 0.85rem;
+  margin-top: 4px;
 }
 
 /* ===== PROFILE: NATAL CHART ===== */
@@ -3327,6 +3487,142 @@ body {
   font-size: 0.75rem;
   color: var(--text-secondary);
   opacity: 0.7;
+}
+
+/* Natal Chart Input Form */
+.natal-input-section {
+  margin-top: 12px;
+}
+
+.natal-input-toggle {
+  font-family: 'Cinzel', serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--accent-gold);
+  background: rgba(201, 169, 97, 0.08);
+  border: 1px solid rgba(201, 169, 97, 0.3);
+  border-radius: 6px;
+  padding: 8px 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: block;
+  margin: 0 auto;
+}
+
+.natal-input-toggle:hover {
+  background: rgba(201, 169, 97, 0.16);
+  border-color: rgba(201, 169, 97, 0.5);
+}
+
+.natal-input-form {
+  margin-top: 14px;
+  background: rgba(26, 26, 36, 0.6);
+  border: 1px solid var(--border-subtle);
+  border-radius: 10px;
+  padding: 18px 16px;
+  animation: sub-details-in 0.25s ease-out;
+}
+
+.natal-input-row {
+  margin-bottom: 14px;
+}
+
+.natal-input-row:last-of-type {
+  margin-bottom: 10px;
+}
+
+.natal-input-label {
+  display: block;
+  font-family: 'Cinzel', serif;
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  letter-spacing: 0.03em;
+  margin-bottom: 6px;
+}
+
+.natal-input-field {
+  display: block;
+  width: 100%;
+  margin-top: 6px;
+  background: var(--bg-dark);
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  padding: 8px 12px;
+  color: var(--text-primary);
+  font-family: 'Crimson Pro', serif;
+  font-size: 0.9rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.natal-input-field:focus {
+  border-color: rgba(201, 169, 97, 0.4);
+}
+
+.natal-input-field::-webkit-calendar-picker-indicator {
+  filter: invert(0.7);
+}
+
+.natal-input-optional {
+  font-family: 'Crimson Pro', serif;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  opacity: 0.6;
+  font-weight: 300;
+}
+
+.natal-input-hint {
+  display: block;
+  font-family: 'Crimson Pro', serif;
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+  opacity: 0.6;
+  margin-top: 4px;
+}
+
+.natal-city-found {
+  color: rgba(91, 217, 122, 0.7);
+  opacity: 1;
+}
+
+.natal-city-not-found {
+  color: rgba(229, 115, 115, 0.7);
+  opacity: 1;
+}
+
+.natal-input-error {
+  color: #e57373;
+  font-size: 0.8rem;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.natal-input-compute {
+  display: block;
+  width: 100%;
+  font-family: 'Cinzel', serif;
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--accent-gold);
+  background: rgba(201, 169, 97, 0.1);
+  border: 1px solid rgba(201, 169, 97, 0.35);
+  border-radius: 6px;
+  padding: 10px 24px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top: 6px;
+}
+
+.natal-input-compute:hover:not(:disabled) {
+  background: rgba(201, 169, 97, 0.2);
+  border-color: rgba(201, 169, 97, 0.5);
+}
+
+.natal-input-compute:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 @media (max-width: 480px) {
@@ -3479,4 +3775,938 @@ body {
     0%, 100% { box-shadow: 0 0 4px rgba(201, 169, 97, 0.1); border-color: rgba(201, 169, 97, 0.35); }
     50% { box-shadow: 0 0 8px rgba(201, 169, 97, 0.25); border-color: rgba(201, 169, 97, 0.6); }
   }
+}
+
+/* ===== Mentor Directory & Pairing Styles ===== */
+
+.mentor-directory-page {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 32px 20px 60px;
+}
+
+.mentor-directory-intro {
+  color: var(--text-secondary);
+  font-size: 1.05em;
+  margin-bottom: 20px;
+}
+
+.mentor-directory-filters {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+
+.mentor-filter-tab {
+  background: var(--bg-medium);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  padding: 6px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-family: 'Crimson Pro', serif;
+  font-size: 0.95em;
+  transition: all 0.2s;
+}
+
+.mentor-filter-tab:hover { border-color: var(--accent-steel); color: var(--text-primary); }
+.mentor-filter-tab.active { background: var(--accent-steel); color: var(--bg-dark); border-color: var(--accent-steel); }
+
+.mentor-directory-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 16px;
+}
+
+.mentor-card {
+  background: var(--bg-medium);
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
+  padding: 20px;
+  transition: border-color 0.2s;
+}
+
+.mentor-card:hover { border-color: var(--accent-steel); }
+
+.mentor-card-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.mentor-card-icon { font-size: 1.8em; }
+.mentor-card-title { font-family: 'Cinzel', serif; font-size: 1em; color: var(--text-primary); }
+.mentor-card-handle { color: var(--accent-steel); font-size: 0.9em; }
+.mentor-card-credential { margin-left: auto; font-size: 0.85em; color: var(--accent-gold); white-space: nowrap; }
+
+.mentor-card-bio {
+  color: var(--text-secondary);
+  font-size: 0.95em;
+  line-height: 1.5;
+  margin-bottom: 12px;
+}
+
+.mentor-card-slots {
+  font-size: 0.85em;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+}
+
+.mentor-card-actions { margin-top: 8px; }
+
+.mentor-card-request-btn {
+  background: var(--accent-steel);
+  color: var(--bg-dark);
+  border: none;
+  padding: 8px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: 'Crimson Pro', serif;
+  font-size: 0.95em;
+  transition: opacity 0.2s;
+}
+
+.mentor-card-request-btn:hover:not(:disabled) { opacity: 0.85; }
+.mentor-card-request-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.mentor-card-cancel-btn {
+  background: none;
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: 'Crimson Pro', serif;
+  font-size: 0.95em;
+}
+
+.mentor-card-paired-label {
+  color: var(--accent-gold);
+  font-size: 0.9em;
+  font-style: italic;
+}
+
+.mentor-card-request-form { margin-top: 8px; }
+
+.mentor-request-textarea {
+  width: 100%;
+  background: var(--bg-dark);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-primary);
+  border-radius: 8px;
+  padding: 10px;
+  font-family: 'Crimson Pro', serif;
+  font-size: 0.95em;
+  resize: vertical;
+  margin-bottom: 8px;
+}
+
+.mentor-request-form-actions { display: flex; gap: 8px; }
+.mentor-request-error { color: #e57373; font-size: 0.85em; margin-top: 6px; }
+
+/* Bio editor (profile page) */
+.mentor-bio-editor {
+  margin-top: 16px;
+  padding: 16px;
+  background: var(--bg-medium);
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
+}
+
+.mentor-bio-label, .mentor-capacity-label {
+  display: block;
+  font-family: 'Cinzel', serif;
+  font-size: 0.9em;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+
+.mentor-bio-textarea {
+  width: 100%;
+  background: var(--bg-dark);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-primary);
+  border-radius: 8px;
+  padding: 10px;
+  font-family: 'Crimson Pro', serif;
+  font-size: 0.95em;
+  resize: vertical;
+}
+
+.mentor-bio-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 8px;
+}
+
+.mentor-bio-charcount { font-size: 0.8em; color: var(--text-secondary); }
+
+.mentor-bio-save-btn, .mentor-capacity-save-btn {
+  background: var(--accent-steel);
+  color: var(--bg-dark);
+  border: none;
+  padding: 6px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: 'Crimson Pro', serif;
+  font-size: 0.9em;
+}
+
+.mentor-bio-save-btn:disabled, .mentor-capacity-save-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* Capacity control */
+.mentor-capacity-control {
+  margin-top: 16px;
+  padding: 16px;
+  background: var(--bg-medium);
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
+}
+
+.mentor-capacity-row { display: flex; align-items: center; gap: 12px; }
+
+.mentor-capacity-input {
+  width: 80px;
+  background: var(--bg-dark);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-primary);
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-family: 'Crimson Pro', serif;
+  font-size: 1em;
+  text-align: center;
+}
+
+/* Directory toggle */
+.mentor-directory-toggle {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 16px;
+  padding: 12px 16px;
+  background: var(--bg-medium);
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
+}
+
+.mentor-directory-toggle-label { font-size: 0.95em; color: var(--text-primary); }
+
+/* Request / Student cards (profile page) */
+.mentor-pending-section, .mentor-students-section { margin-top: 20px; }
+
+.mentor-request-card {
+  background: var(--bg-medium);
+  border: 1px solid var(--border-subtle);
+  border-radius: 10px;
+  padding: 14px;
+  margin-bottom: 10px;
+}
+
+.mentor-request-card-header { margin-bottom: 6px; }
+.mentor-request-card-handle { color: var(--accent-steel); font-size: 0.95em; }
+.mentor-request-card-message { color: var(--text-secondary); font-size: 0.9em; margin-bottom: 10px; font-style: italic; }
+
+.mentor-request-card-actions { display: flex; gap: 8px; }
+
+.mentor-accept-btn {
+  background: rgba(76, 175, 80, 0.2);
+  border: 1px solid rgba(76, 175, 80, 0.4);
+  color: #81c784;
+  padding: 6px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: 'Crimson Pro', serif;
+}
+
+.mentor-decline-btn {
+  background: rgba(229, 115, 115, 0.1);
+  border: 1px solid rgba(229, 115, 115, 0.3);
+  color: #e57373;
+  padding: 6px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: 'Crimson Pro', serif;
+}
+
+.mentor-student-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--bg-medium);
+  border: 1px solid var(--border-subtle);
+  border-radius: 10px;
+  padding: 12px 14px;
+  margin-bottom: 8px;
+}
+
+.mentor-student-card-handle { color: var(--accent-steel); font-size: 0.95em; }
+
+.mentor-end-btn {
+  background: none;
+  border: 1px solid rgba(229, 115, 115, 0.3);
+  color: #e57373;
+  padding: 4px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: 'Crimson Pro', serif;
+  font-size: 0.85em;
+}
+
+.mentor-end-btn:disabled, .mentor-accept-btn:disabled, .mentor-decline-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* My Mentors section */
+.my-mentors-section { margin-top: 20px; }
+
+.my-mentors-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--bg-medium);
+  border: 1px solid var(--border-subtle);
+  border-radius: 10px;
+  padding: 12px 14px;
+  margin-bottom: 8px;
+}
+
+.my-mentors-card.pending { opacity: 0.7; }
+.my-mentors-card-handle { color: var(--accent-steel); font-size: 0.95em; }
+.my-mentors-card-type { color: var(--text-secondary); font-size: 0.85em; margin-left: auto; }
+.my-mentors-card-status { color: var(--accent-gold); font-size: 0.85em; margin-left: auto; font-style: italic; }
+
+/* ========================= */
+/* Profile Photo Upload      */
+/* ========================= */
+
+.profile-avatar img,
+.profile-avatar-img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.profile-avatar-upload-overlay {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 28px;
+  height: 28px;
+  background: var(--bg-medium);
+  border: 2px solid var(--border-subtle);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.profile-avatar:hover .profile-avatar-upload-overlay {
+  opacity: 1;
+}
+
+.profile-avatar-loading {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: rgba(10, 10, 15, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.profile-avatar-loading::after {
+  content: '';
+  width: 24px;
+  height: 24px;
+  border: 2px solid var(--accent-steel);
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+/* ========================= */
+/* Guild Page                */
+/* ========================= */
+
+.guild-page {
+  padding: 20px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.guild-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--border-subtle);
+  padding-bottom: 8px;
+}
+
+.guild-tab {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-family: 'Cinzel', serif;
+  font-size: 0.95em;
+  padding: 8px 16px;
+  cursor: pointer;
+  border-radius: 6px 6px 0 0;
+  transition: color 0.2s, background 0.2s;
+}
+.guild-tab:hover { color: var(--accent-steel); }
+.guild-tab.active {
+  color: var(--accent-gold);
+  border-bottom: 2px solid var(--accent-gold);
+}
+
+.guild-members-only {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--text-secondary);
+  font-family: 'Crimson Pro', serif;
+}
+.guild-members-only p { margin: 8px 0; }
+
+/* ========================= */
+/* Guild Forum               */
+/* ========================= */
+
+.guild-forum { margin-top: 8px; }
+
+.guild-new-post-btn {
+  background: var(--accent-steel);
+  color: var(--bg-dark);
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-family: 'Cinzel', serif;
+  font-size: 0.9em;
+  cursor: pointer;
+  margin-bottom: 16px;
+  transition: background 0.2s;
+}
+.guild-new-post-btn:hover { background: var(--accent-gold); }
+
+.guild-post-form {
+  background: var(--bg-medium);
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 20px;
+}
+
+.guild-post-form-title {
+  width: 100%;
+  background: var(--bg-dark);
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  padding: 10px;
+  color: inherit;
+  font-family: 'Cinzel', serif;
+  font-size: 1em;
+  margin-bottom: 8px;
+  box-sizing: border-box;
+}
+
+.guild-post-form-body {
+  width: 100%;
+  background: var(--bg-dark);
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  padding: 10px;
+  color: inherit;
+  font-family: 'Crimson Pro', serif;
+  font-size: 0.95em;
+  resize: vertical;
+  min-height: 100px;
+  box-sizing: border-box;
+}
+
+.guild-post-form-images {
+  display: flex;
+  gap: 8px;
+  margin: 8px 0;
+  flex-wrap: wrap;
+}
+
+.guild-post-form-image-thumb {
+  position: relative;
+  width: 80px;
+  height: 80px;
+}
+.guild-post-form-image-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 6px;
+}
+.guild-post-form-image-thumb button {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  background: rgba(0,0,0,0.6);
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  font-size: 12px;
+  line-height: 20px;
+  text-align: center;
+}
+
+.guild-post-form-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+  align-items: center;
+}
+
+.guild-post-form-image-btn {
+  background: none;
+  border: 1px solid var(--border-subtle);
+  color: var(--accent-steel);
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.85em;
+}
+
+.guild-post-form-submit {
+  background: var(--accent-steel);
+  color: var(--bg-dark);
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-family: 'Cinzel', serif;
+  cursor: pointer;
+}
+.guild-post-form-submit:disabled { opacity: 0.5; cursor: default; }
+
+.guild-post-form-cancel {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-size: 0.9em;
+}
+
+/* Post cards */
+
+.guild-posts-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.guild-post-card {
+  display: flex;
+  gap: 12px;
+  background: var(--bg-medium);
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  padding: 14px;
+  position: relative;
+  flex-wrap: wrap;
+}
+.guild-post-card.pinned {
+  border-color: var(--accent-gold);
+}
+
+.guild-post-votes {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  min-width: 36px;
+}
+
+.guild-vote-btn {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-size: 14px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  transition: color 0.2s;
+}
+.guild-vote-btn:hover { color: var(--accent-steel); }
+.guild-vote-btn.active.up { color: var(--accent-gold); }
+.guild-vote-btn.active.down { color: var(--accent-ember); }
+
+.guild-vote-score {
+  font-size: 0.9em;
+  font-weight: 600;
+  color: var(--accent-steel);
+}
+
+.guild-post-content {
+  flex: 1;
+  cursor: pointer;
+  min-width: 0;
+}
+
+.guild-post-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8em;
+  color: var(--text-secondary);
+  margin-bottom: 4px;
+}
+
+.guild-post-author-icon { font-size: 1.1em; }
+.guild-post-author-handle { color: var(--accent-steel); }
+
+.guild-post-pin-badge {
+  background: var(--accent-gold);
+  color: var(--bg-dark);
+  font-size: 0.7em;
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-weight: 600;
+}
+
+.guild-time-ago { color: var(--text-secondary); font-size: 0.85em; }
+
+.guild-post-title {
+  font-family: 'Cinzel', serif;
+  font-size: 1.05em;
+  color: var(--accent-gold);
+  margin-bottom: 4px;
+}
+
+.guild-post-preview {
+  font-family: 'Crimson Pro', serif;
+  font-size: 0.9em;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+.guild-post-footer {
+  margin-top: 6px;
+  font-size: 0.8em;
+  color: var(--text-secondary);
+}
+
+.guild-post-reply-count { color: var(--accent-steel); }
+
+.guild-post-delete-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-size: 0.8em;
+  opacity: 0.5;
+}
+.guild-post-delete-btn:hover { opacity: 1; color: var(--accent-ember); }
+
+/* Expanded Post */
+
+.guild-post-expanded {
+  width: 100%;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.guild-post-body {
+  font-family: 'Crimson Pro', serif;
+  font-size: 0.95em;
+  line-height: 1.6;
+  margin-bottom: 12px;
+}
+.guild-post-body a { color: var(--accent-steel); }
+
+.guild-post-images {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+.guild-post-image {
+  max-width: 300px;
+  max-height: 200px;
+  border-radius: 6px;
+  object-fit: cover;
+}
+
+/* Replies */
+
+.guild-replies-section { margin-top: 16px; }
+
+.guild-replies-title {
+  font-family: 'Cinzel', serif;
+  font-size: 0.9em;
+  color: var(--accent-steel);
+  margin-bottom: 12px;
+}
+
+.guild-reply {
+  padding: 8px 0;
+  border-top: 1px solid rgba(139, 157, 195, 0.1);
+}
+.guild-reply-nested { border-left: 2px solid var(--border-subtle); padding-left: 8px; }
+
+.guild-reply-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8em;
+  color: var(--text-secondary);
+  margin-bottom: 4px;
+}
+.guild-reply-author-icon { font-size: 1em; }
+.guild-reply-author-handle { color: var(--accent-steel); }
+
+.guild-reply-body {
+  font-family: 'Crimson Pro', serif;
+  font-size: 0.9em;
+  line-height: 1.5;
+  margin-bottom: 4px;
+}
+.guild-reply-body a { color: var(--accent-steel); }
+
+.guild-reply-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8em;
+}
+
+.guild-reply-btn {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-size: 0.85em;
+}
+.guild-reply-btn:hover { color: var(--accent-steel); }
+
+.guild-reply-form {
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.guild-reply-form-context {
+  font-size: 0.85em;
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+}
+.guild-reply-form-context button {
+  background: none;
+  border: none;
+  color: var(--accent-steel);
+  cursor: pointer;
+  margin-left: 8px;
+}
+
+.guild-reply-textarea {
+  width: 100%;
+  background: var(--bg-dark);
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  padding: 8px;
+  color: inherit;
+  font-family: 'Crimson Pro', serif;
+  font-size: 0.9em;
+  resize: vertical;
+  box-sizing: border-box;
+}
+
+.guild-reply-submit {
+  background: var(--accent-steel);
+  color: var(--bg-dark);
+  border: none;
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-family: 'Cinzel', serif;
+  font-size: 0.85em;
+  cursor: pointer;
+  margin-top: 6px;
+}
+.guild-reply-submit:disabled { opacity: 0.5; cursor: default; }
+
+.guild-load-more {
+  display: block;
+  margin: 16px auto;
+  background: none;
+  border: 1px solid var(--border-subtle);
+  color: var(--accent-steel);
+  padding: 8px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: 'Cinzel', serif;
+}
+.guild-load-more:hover { border-color: var(--accent-steel); }
+
+/* ========================= */
+/* Guild Directory           */
+/* ========================= */
+
+.guild-directory { margin-top: 8px; }
+
+.guild-directory-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.guild-directory-card {
+  background: var(--bg-medium);
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  overflow: hidden;
+  transition: border-color 0.2s;
+}
+.guild-directory-card:hover { border-color: var(--accent-steel); }
+.guild-directory-card.expanded { border-color: var(--accent-gold); }
+
+.guild-directory-card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px;
+  cursor: pointer;
+}
+
+.guild-photo {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: var(--bg-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+.guild-photo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.guild-photo-initial {
+  font-family: 'Cinzel', serif;
+  font-size: 1.3em;
+  color: var(--accent-steel);
+}
+
+.guild-directory-card-info { flex: 1; min-width: 0; }
+
+.guild-directory-card-name {
+  font-family: 'Cinzel', serif;
+  font-size: 0.95em;
+  color: var(--accent-gold);
+}
+.guild-directory-card-handle {
+  font-size: 0.85em;
+  color: var(--accent-steel);
+  font-family: 'Crimson Pro', serif;
+}
+
+.guild-badges-row {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
+
+.guild-badge {
+  font-size: 0.7em;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: rgba(139, 157, 195, 0.15);
+  color: var(--accent-steel);
+  font-family: 'Crimson Pro', serif;
+}
+.guild-badge.consulting {
+  background: rgba(201, 169, 97, 0.2);
+  color: var(--accent-gold);
+}
+.guild-badge.consulting-type {
+  background: rgba(196, 113, 58, 0.15);
+  color: var(--accent-ember);
+}
+
+.guild-directory-card-bio-snippet {
+  font-family: 'Crimson Pro', serif;
+  font-size: 0.85em;
+  color: var(--text-secondary);
+  margin-top: 4px;
+}
+
+.guild-directory-card-slots {
+  font-size: 0.8em;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+.guild-directory-card-expanded {
+  padding: 0 14px 14px;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.guild-directory-card-bio-full {
+  font-family: 'Crimson Pro', serif;
+  font-size: 0.9em;
+  line-height: 1.5;
+  margin: 12px 0;
+}
+
+.guild-consulting-section {
+  font-family: 'Crimson Pro', serif;
+  font-size: 0.9em;
+  color: var(--text-secondary);
+  margin: 8px 0;
+}
+
+.guild-directory-card-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+
+.guild-consulting-btn {
+  background: var(--accent-gold);
+  color: var(--bg-dark);
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-family: 'Cinzel', serif;
+  font-size: 0.85em;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.guild-consulting-btn:hover { background: var(--accent-ember); }
+.guild-consulting-btn:disabled { opacity: 0.5; cursor: default; }
+
+/* ========================= */
+/* Consulting Setup Chat     */
+/* ========================= */
+
+.consulting-setup-chat {
+  margin-top: 12px;
+}
+
+.consulting-profile-summary {
+  padding: 8px 0;
+}
+
+.consulting-request-card {
+  background: var(--bg-medium);
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 8px;
 }

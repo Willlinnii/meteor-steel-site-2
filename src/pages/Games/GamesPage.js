@@ -59,13 +59,6 @@ const GAMES = [
     description: 'Ascend 7 rings of a spiral mountain. Collect gems, face ordeals.',
     featured: true,
   },
-  {
-    id: 'mythic-cards',
-    label: 'Mythic Cards',
-    origin: 'Mythouse Original',
-    description: 'Browse 52 playing cards and 8 full tarot decks (78 cards each) across 7 cultures.',
-    direct: true,
-  },
 ];
 
 const YELLOW_BRICK_ROADS = [
@@ -115,6 +108,19 @@ const XR_EXPERIENCES = [
   },
 ];
 
+const CARD_DECKS = [
+  { id: 'cards-world', label: 'World of Tarot', count: '670 cards', featured: true },
+  { id: 'cards-tarot', label: 'Tarot', count: '78 cards', initialSection: 'arcana', initialCulture: 'tarot' },
+  { id: 'cards-playing', label: 'Playing Cards', count: '52 cards', initialSection: 'playing', initialCulture: null },
+  { id: 'cards-roman', label: 'Roman', count: '78 cards', initialSection: 'arcana', initialCulture: 'roman' },
+  { id: 'cards-greek', label: 'Greek', count: '78 cards', initialSection: 'arcana', initialCulture: 'greek' },
+  { id: 'cards-norse', label: 'Norse', count: '78 cards', initialSection: 'arcana', initialCulture: 'norse' },
+  { id: 'cards-babylonian', label: 'Babylonian', count: '78 cards', initialSection: 'arcana', initialCulture: 'babylonian' },
+  { id: 'cards-vedic', label: 'Vedic', count: '78 cards', initialSection: 'arcana', initialCulture: 'vedic' },
+  { id: 'cards-islamic', label: 'Islamic', count: '78 cards', initialSection: 'arcana', initialCulture: 'islamic' },
+  { id: 'cards-christian', label: 'Medieval Christianity', count: '78 cards', initialSection: 'arcana', initialCulture: 'christian' },
+];
+
 const GAME_COMPONENTS = {
   'snakes-and-ladders': SnakesAndLaddersGame,
   'senet': SenetGame,
@@ -139,6 +145,7 @@ export default function GamesPage() {
   const matchId = mode === 'online' ? (parts[2] || null) : null;
 
   const activeGame = gameId ? GAMES.find(g => g.id === gameId) : null;
+  const activeCardDeck = gameId ? CARD_DECKS.find(d => d.id === gameId) : null;
 
   // Track page visit
   useEffect(() => {
@@ -160,11 +167,15 @@ export default function GamesPage() {
     navigate('/games');
   };
 
-  // Direct-launch entries (no mode selector)
-  if (activeGame && activeGame.id === 'mythic-cards') {
+  // Card deck entries (direct-launch with initial state)
+  if (activeCardDeck) {
     return (
       <div className="games-page">
-        <MythouseCards onExit={handleExit} />
+        <MythouseCards
+          onExit={handleExit}
+          initialSection={activeCardDeck.initialSection}
+          initialCulture={activeCardDeck.initialCulture}
+        />
       </div>
     );
   }
@@ -294,6 +305,27 @@ export default function GamesPage() {
             </Link>
           );
         })}
+      </div>
+
+      <h2 className="games-section-title">Cards</h2>
+      <div className="games-grid">
+        {CARD_DECKS.map(deck => (
+          <Link
+            key={deck.id}
+            className={`game-card${deck.featured ? ' featured' : ''}`}
+            to={`/games/${deck.id}`}
+          >
+            <span className="game-card-title">{deck.label}</span>
+            <span className="game-card-origin">{deck.count}</span>
+            <span className="game-card-desc">
+              {deck.featured
+                ? 'Browse all 52 playing cards and 8 full tarot decks across 7 cultures.'
+                : deck.initialSection === 'playing'
+                  ? 'The standard 52-card deck with all four suits.'
+                  : '78-card deck — 22 major and 56 minor arcana.'}
+            </span>
+          </Link>
+        ))}
       </div>
 
       <h2 className="games-section-title">Yellow Brick Roads</h2>

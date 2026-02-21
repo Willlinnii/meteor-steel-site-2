@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { apiFetch } from '../lib/chatApi';
 
 const DEV_MODES = [
   { id: 'noting', label: 'Noting' },
@@ -39,7 +40,7 @@ export default function DevelopmentPanel({ stageLabel, stageKey, entries, setEnt
         ? 'The user is reflecting on personal meaning.'
         : 'The user is creating new ideas or connections.';
 
-      const res = await fetch('/api/chat', {
+      const res = await apiFetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
