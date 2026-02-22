@@ -479,7 +479,7 @@ export default function ChronosphaeraPage() {
   const [selectedCardinal, setSelectedCardinal] = useState(null);
   const [selectedEarth, setSelectedEarth] = useState(null);
   const [devEntries, setDevEntries] = useState({});
-  const [clockMode, setClockMode] = useState(() => location.pathname.endsWith('/calendar') ? '12h' : null);
+  const [clockMode, setClockMode] = useState('12h');
   const [showCalendar, setShowCalendar] = useState(() => location.pathname.endsWith('/calendar'));
   const [selectedMonth, setSelectedMonth] = useState(() => location.pathname.endsWith('/calendar') ? MONTHS[new Date().getMonth()] : null);
   const [activeMonthTab, setActiveMonthTab] = useState('stone');
@@ -636,7 +636,7 @@ export default function ChronosphaeraPage() {
       }
     } else if (sub === '/story-of-stories' && mode !== 'story-of-stories') {
       if (hasPurchase('story-of-stories')) {
-        setMode('story-of-stories'); setClockMode('24h'); setShowCalendar(true);
+        setMode('story-of-stories'); setClockMode('12h'); setShowCalendar(true);
       } else {
         navigate('/chronosphaera', { replace: true });
       }
@@ -698,12 +698,16 @@ export default function ChronosphaeraPage() {
     } else if (mode === 'fallen-starlight') {
       // Switch to Story of Stories
       setMode('story-of-stories');
+      setClockMode('12h');
+      setShowCalendar(true);
       setSelectedStarlightStage(null);
       setStarlightSectionId(null);
       navigate('/chronosphaera/story-of-stories');
     } else {
       // Back to Fallen Starlight
       setMode('fallen-starlight');
+      setClockMode('24h');
+      setShowCalendar(true);
       setSelectedStarlightStage(null);
       setStarlightSectionId(null);
       navigate('/chronosphaera/fallen-starlight');

@@ -76,6 +76,10 @@
   transition: opacity 0.2s;
 }
 
+.planet-smooth {
+  transition: transform 0.8s ease-in-out;
+}
+
 .planet-node:hover circle {
   fill-opacity: 1 !important;
 }
@@ -106,9 +110,39 @@
   align-items: center;
 }
 
-/* Mobile toggle — hidden on desktop */
+/* Mode toggle — visible on all sizes */
 .mobile-mode-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: none;
+  border: 1px solid rgba(201, 169, 97, 0.5);
+  color: rgba(201, 169, 97, 0.8);
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+  order: 99;
+}
+.mobile-mode-toggle:hover {
+  border-color: rgba(201, 169, 97, 0.9);
+  color: rgba(201, 169, 97, 1);
+}
+
+/* Collapse/expand: hide buttons when not expanded */
+.orbital-btn-row > button:not(.mobile-mode-toggle),
+.orbital-btn-row > span {
   display: none;
+}
+.orbital-btn-row[data-expanded] > button:not(.mobile-mode-toggle),
+.orbital-btn-row[data-expanded] > span {
+  display: flex;
+  animation: btn-fan 120ms ease-out both;
+}
+@keyframes btn-fan {
+  from { opacity: 0; transform: translateY(8px) scale(0.85); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 /* ===== ORBITAL MODE TOGGLE (cycle: orbiting → live → aligned) ===== */
@@ -1012,45 +1046,14 @@
   }
 
   .orbital-btn-row {
-    bottom: 76px;
+    bottom: 56px;
     right: 16px;
-    gap: 6px;
+    gap: 4px;
   }
 
-  /* Mobile collapse: hide mode buttons, show toggle */
   .mobile-mode-toggle {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 38px;
-    height: 38px;
-    border-radius: 50%;
-    background: rgba(15, 15, 30, 0.85);
-    border: 1px solid rgba(201, 169, 97, 0.5);
-    color: rgba(201, 169, 97, 0.8);
-    cursor: pointer;
-    backdrop-filter: blur(4px);
-    transition: border-color 0.2s, color 0.2s;
-    order: 99; /* push to bottom of column */
-  }
-  .mobile-mode-toggle:hover {
-    border-color: rgba(201, 169, 97, 0.9);
-    color: rgba(201, 169, 97, 1);
-  }
-
-  .orbital-btn-row > button:not(.mobile-mode-toggle),
-  .orbital-btn-row > span {
-    display: none;
-  }
-  .orbital-btn-row[data-expanded] > button:not(.mobile-mode-toggle),
-  .orbital-btn-row[data-expanded] > span {
-    display: flex;
-    animation: mobile-btn-fan 120ms ease-out both;
-  }
-
-  @keyframes mobile-btn-fan {
-    from { opacity: 0; transform: translateY(8px) scale(0.85); }
-    to { opacity: 1; transform: translateY(0) scale(1); }
+    width: 36px;
+    height: 36px;
   }
 
   .persona-tab {

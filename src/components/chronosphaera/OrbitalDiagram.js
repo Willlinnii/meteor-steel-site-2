@@ -469,7 +469,8 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
   const hoveredRingRef = useRef(null);
   const [stormFlash, setStormFlash] = useState(false);
   const [meteorShower, setMeteorShower] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const isMobile = typeof window !== 'undefined' && window.innerWidth <= 600;
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(!isMobile);
   const prevMeteorSteelRef = useRef(false);
   const wheelOpenedRef = useRef(false); // eslint-disable-line no-unused-vars
 
@@ -2345,7 +2346,7 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
                 smooth={aligned || livePositions}
               />
               {liveAngles && (
-                <g style={{ transform: `translate(${px}px, ${py}px)`, transition: 'transform 0.8s ease-in-out' }}>
+                <g className="planet-smooth" transform={`translate(${px}, ${py})`}>
                   <text
                     x={0}
                     y={-18}

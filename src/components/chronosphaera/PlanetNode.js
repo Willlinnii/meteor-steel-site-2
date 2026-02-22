@@ -174,11 +174,12 @@ export default function PlanetNode({ planet, metal, cx, cy, selected, hovered, o
 
   return (
     <g
-      className="planet-node"
+      className={`planet-node${smooth ? ' planet-smooth' : ''}`}
       onClick={onClick}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
-      style={{ cursor: 'pointer', transform: `translate(${cx}px, ${cy}px)`, transition: smooth ? 'transform 0.8s ease-in-out' : 'none' }}
+      transform={`translate(${cx}, ${cy})`}
+      style={{ cursor: 'pointer' }}
     >
       {/* Larger invisible hit target for easier clicking/tapping */}
       <circle cx={0} cy={0} r={24} fill="transparent" />

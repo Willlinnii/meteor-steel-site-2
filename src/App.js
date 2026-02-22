@@ -1574,14 +1574,13 @@ function StoryForgeHome() {
 }
 
 const NAV_ITEMS = [
-  { path: '/home', label: 'Home' },
+  { path: '/', label: 'Creation Story' },
   { path: '/chronosphaera', label: 'Chronosphaera' },
   { path: '/myths', label: 'Mythosphaera' },
   { path: '/mythology-channel', label: 'Mythology Channel' },
   { path: '/mythosophia', label: 'Mythosophia' },
   { path: '/atlas', label: 'Atlas' },
   { path: '/games', label: 'Game Room' },
-  { path: '/discover/starlight', label: 'Creation Story' },
 ];
 
 const HIDDEN_NAV_ITEMS = [
@@ -1596,13 +1595,17 @@ function SiteNav() {
   // Include hidden nav items only when we're currently on that page
   const visibleItems = [
     ...NAV_ITEMS,
-    ...HIDDEN_NAV_ITEMS.filter(h => location.pathname === h.path),
+    ...HIDDEN_NAV_ITEMS.filter(h => location.pathname === h.path || location.pathname.startsWith(h.path + '/')),
   ];
 
   // Label-only overrides: show in the toggle text but not in the dropdown
-  const LABEL_OVERRIDES = { '/profile': 'Profile', '/xr': 'VR / XR', '/mentors': 'Guild Directory', '/guild': 'Guild', '/dragon': 'Dragon' };
-  const current = visibleItems.find(n => !n.external && n.path === location.pathname)
-    || (LABEL_OVERRIDES[location.pathname] ? { label: LABEL_OVERRIDES[location.pathname] } : null)
+  const LABEL_OVERRIDES = { '/profile': 'Profile', '/xr': 'VR / XR', '/mentors': 'Guild Directory', '/guild': 'Guild', '/dragon': 'Dragon', '/fallen-starlight': 'Fallen Starlight', '/story-of-stories': 'Story of Stories', '/monomyth': 'Monomyth', '/story-forge': 'Story Forge', '/yellow-brick-road': 'Yellow Brick Road', '/library': 'Library', '/home': 'Home', '/sacred-sites-360': 'Sacred Sites 360', '/mythic-earth': 'Mythic Earth' };
+  const pathMatch = (navPath) => navPath === '/' ? location.pathname === '/' : location.pathname === navPath || location.pathname.startsWith(navPath + '/');
+  const overrideLabel = LABEL_OVERRIDES[location.pathname]
+    || (location.pathname.startsWith('/journey/') && 'Journey')
+    || (location.pathname.startsWith('/dragon') && 'Dragon');
+  const current = visibleItems.find(n => !n.external && pathMatch(n.path))
+    || (overrideLabel ? { label: overrideLabel } : null)
     || NAV_ITEMS[0];
 
   return (
@@ -1626,9 +1629,9 @@ function SiteNav() {
           ) : (
             <Link
               key={item.path}
-              className={`site-nav-option${item.path === location.pathname ? ' active' : ''}`}
+              className={`site-nav-option${pathMatch(item.path) ? ' active' : ''}`}
               to={item.path}
-              onClick={() => setOpen(false)}
+              onClick={() => { setOpen(false); window.scrollTo(0, 0); }}
             >
               {item.label}
             </Link>
