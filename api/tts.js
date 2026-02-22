@@ -1,10 +1,10 @@
 /**
- * Text-to-Speech endpoint using Replicate's Chatterbox model.
+ * Text-to-Speech endpoint using Replicate's Chatterbox Turbo model.
  * Accepts text + optional voiceId, returns audio URL.
  * Voice reference samples live in /public/voices/<voiceId>.mp3
  *
- * Chatterbox limit is 300 chars per call, so longer text is split
- * into chunks and generated sequentially, returning multiple audio URLs.
+ * Chatterbox Turbo: ~2s latency, 6x faster than standard model.
+ * Limit is 300 chars per call, so longer text is split into chunks.
  */
 
 // Voice ID → reference sample URL (relative to site root)
@@ -14,14 +14,10 @@ const VOICE_SAMPLES = {
   // ouroboros: '/voices/ouroboros.mp3',
   // sun: '/voices/sun.mp3',
   // moon: '/voices/moon.mp3',
-  // mercury: '/voices/mercury.mp3',
-  // venus: '/voices/venus.mp3',
-  // mars: '/voices/mars.mp3',
-  // jupiter: '/voices/jupiter.mp3',
-  // saturn: '/voices/saturn.mp3',
 };
 
 const MAX_CHARS = 290; // Stay under 300 limit with margin
+const CHATTERBOX_TURBO = '95c87b883ff3e842a1643044dff67f9d204f70a80228f24ff64bffe4a4b917d4';
 
 /** Split text into chunks at sentence boundaries, respecting max length. */
 function chunkText(text, max) {
@@ -33,14 +29,13 @@ function chunkText(text, max) {
       chunks.push(remaining);
       break;
     }
-    // Find last sentence boundary within limit
     let cut = remaining.lastIndexOf('. ', max);
     if (cut === -1 || cut < max * 0.3) cut = remaining.lastIndexOf('! ', max);
     if (cut === -1 || cut < max * 0.3) cut = remaining.lastIndexOf('? ', max);
     if (cut === -1 || cut < max * 0.3) cut = remaining.lastIndexOf(', ', max);
     if (cut === -1 || cut < max * 0.3) cut = remaining.lastIndexOf(' ', max);
     if (cut === -1) cut = max;
-    else cut += 1; // Include the punctuation
+    else cut += 1;
 
     chunks.push(remaining.slice(0, cut).trim());
     remaining = remaining.slice(cut).trim();
@@ -49,7 +44,7 @@ function chunkText(text, max) {
   return chunks;
 }
 
-/** Run a single Chatterbox prediction and return the audio URL. */
+/** Run a single Chatterbox Turbo prediction and return the audio URL. */
 async function generateChunk(text, voiceSampleUrl, apiToken) {
   const createRes = await fetch('https://api.replicate.com/v1/predictions', {
     method: 'POST',
@@ -59,12 +54,10 @@ async function generateChunk(text, voiceSampleUrl, apiToken) {
       'Prefer': 'wait',
     },
     body: JSON.stringify({
-      version: '9cfba4c265e685f840612be835424f8c33bdee685d7466ece7684b0d9d4c0b1c',
+      version: CHATTERBOX_TURBO,
       input: {
         text: text,
         reference_audio: voiceSampleUrl,
-        exaggeration: 0.4,
-        cfg_weight: 0.5,
       },
     }),
   });
@@ -131,18 +124,15 @@ module.exports = async function handler(req, res) {
   try {
     const chunks = chunkText(capped, MAX_CHARS);
 
-    // For a single chunk, return a single URL
     if (chunks.length === 1) {
       const audioUrl = await generateChunk(chunks[0], voiceSampleUrl, apiToken);
       return res.status(200).json({ audioUrl });
     }
 
-    // For multiple chunks, generate all and return array
-    const audioUrls = [];
-    for (const chunk of chunks) {
-      const url = await generateChunk(chunk, voiceSampleUrl, apiToken);
-      audioUrls.push(url);
-    }
+    // For multiple chunks, generate in parallel for speed
+    const audioUrls = await Promise.all(
+      chunks.map(chunk => generateChunk(chunk, voiceSampleUrl, apiToken))
+    );
 
     return res.status(200).json({ audioUrls });
 

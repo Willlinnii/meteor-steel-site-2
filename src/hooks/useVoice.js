@@ -19,7 +19,7 @@ function playAudioQueue(urls, audioRef, onEnd) {
   playNext();
 }
 
-// --- AI Voice via Replicate Chatterbox ---
+// --- AI Voice via Replicate Chatterbox Turbo ---
 async function speakAI(text, voiceId, audioRef, onEnd) {
   try {
     const res = await apiFetch('/api/tts', {
@@ -29,7 +29,6 @@ async function speakAI(text, voiceId, audioRef, onEnd) {
     });
 
     if (!res.ok) {
-      console.warn('TTS API error, falling back to browser voice');
       speakBrowser(text, onEnd);
       return;
     }
@@ -41,10 +40,7 @@ async function speakAI(text, voiceId, audioRef, onEnd) {
       const audio = new Audio(data.audioUrl);
       audioRef.current = audio;
       audio.onended = () => onEnd?.();
-      audio.onerror = () => {
-        console.warn('Audio playback error, falling back to browser voice');
-        speakBrowser(text, onEnd);
-      };
+      audio.onerror = () => speakBrowser(text, onEnd);
       audio.play().catch(() => speakBrowser(text, onEnd));
       return;
     }
@@ -55,15 +51,13 @@ async function speakAI(text, voiceId, audioRef, onEnd) {
       return;
     }
 
-    // No audio returned
     speakBrowser(text, onEnd);
-  } catch (err) {
-    console.warn('TTS fetch error, falling back to browser voice:', err);
+  } catch {
     speakBrowser(text, onEnd);
   }
 }
 
-// --- Browser fallback (original speakText) ---
+// --- Browser fallback ---
 function speakBrowser(text, onEnd) {
   if (!window.speechSynthesis) { onEnd?.(); return; }
   window.speechSynthesis.cancel();
