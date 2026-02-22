@@ -53,10 +53,13 @@ const GAMES = [
     origin: 'India',
     description: 'Cross-shaped board with cowrie shell dice. Castle squares grant safety.',
   },
+];
+
+const MYTHOUSE_ORIGINALS = [
   {
     id: 'mythouse',
     label: 'Mythouse Game',
-    origin: 'Mythouse Original',
+    origin: 'Board Game',
     description: 'Ascend 7 rings of a spiral mountain. Collect gems, face ordeals.',
     featured: true,
   },
@@ -155,7 +158,7 @@ export default function GamesPage() {
   const mode = parts[1] || null;
   const matchId = mode === 'online' ? (parts[2] || null) : null;
 
-  const activeGame = gameId ? GAMES.find(g => g.id === gameId) : null;
+  const activeGame = gameId ? (GAMES.find(g => g.id === gameId) || MYTHOUSE_ORIGINALS.find(g => g.id === gameId)) : null;
   const activeCardDeck = gameId ? CARD_DECKS.find(d => d.id === gameId) : null;
 
   // Track page visit
@@ -275,7 +278,7 @@ export default function GamesPage() {
           <h2 className="games-section-title">My Matches</h2>
           <div className="games-my-matches">
             {activeMatches.map(match => {
-              const gameInfo = GAMES.find(g => g.id === match.gameType);
+              const gameInfo = GAMES.find(g => g.id === match.gameType) || MYTHOUSE_ORIGINALS.find(g => g.id === match.gameType);
               const opponentIdx = match.players?.[0]?.uid === user?.uid ? 1 : 0;
               const opponent = match.players?.[opponentIdx];
               const myTurn = match.players?.[match.currentPlayer]?.uid === user?.uid;
@@ -294,6 +297,29 @@ export default function GamesPage() {
           </div>
         </>
       )}
+
+      <h2 className="games-section-title">Mythouse Originals</h2>
+      <div className="games-grid">
+        {MYTHOUSE_ORIGINALS.map(game => {
+          const gameMatches = getMatchesForGame(game.id);
+          const hasActiveMatch = gameMatches.length > 0;
+          return (
+            <Link
+              key={game.id}
+              className={`game-card${game.featured ? ' featured' : ''}${hasActiveMatch ? ' has-match' : ''}${courseworkMode ? (isElementCompleted(`games.${game.id}.clicked`) ? ' cw-completed' : ' cw-incomplete') : ''}`}
+              to={`/games/${game.id}`}
+              onClick={() => trackElement(`games.${game.id}.clicked`)}
+            >
+              <span className="game-card-title">{game.label}</span>
+              <span className="game-card-origin">{game.origin}</span>
+              <span className="game-card-desc">{game.description}</span>
+              {hasActiveMatch && (
+                <span className="game-card-match-badge">{gameMatches.length} active</span>
+              )}
+            </Link>
+          );
+        })}
+      </div>
 
       <h2 className="games-section-title">Board Games</h2>
       <div className="games-grid">

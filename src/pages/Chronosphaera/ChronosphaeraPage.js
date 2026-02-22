@@ -37,6 +37,7 @@ import constellationCultures from '../../data/constellationCultures.json';
 import fallenStarlightData from '../../data/fallenStarlight.json';
 import storyOfStoriesData from '../../data/storyOfStoriesData';
 import DevelopmentPanel from '../../components/DevelopmentPanel';
+import ChapterAudioPlayer, { CHAPTER_AUDIO } from '../../components/ChapterAudioPlayer';
 import { useYBRHeader, useAreaOverride, useStoryForge } from '../../App';
 import { useProfile } from '../../profile/ProfileContext';
 
@@ -1165,6 +1166,13 @@ export default function ChronosphaeraPage() {
                       <div className="tab-content">
                         {fallenStarlightData.titles[selectedStarlightStage] && (
                           <h4>{fallenStarlightData.titles[selectedStarlightStage]}</h4>
+                        )}
+                        {CHAPTER_AUDIO[selectedStarlightStage] && (
+                          <ChapterAudioPlayer
+                            tracks={CHAPTER_AUDIO[selectedStarlightStage]}
+                            stageId={selectedStarlightStage}
+                            trackElement={trackElement}
+                          />
                         )}
                         {fallenStarlightData.chapters[selectedStarlightStage] ? (
                           fallenStarlightData.chapters[selectedStarlightStage].split('\n').map((line, i) => (

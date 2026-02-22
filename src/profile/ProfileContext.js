@@ -614,6 +614,22 @@ export function ProfileProvider({ children }) {
     }
   }, [user]);
 
+  // Batch update multiple subscriptions at once (avoids race conditions)
+  const updateSubscriptions = useCallback(async (updates) => {
+    if (!user || !firebaseConfigured || !db) return;
+
+    const merged = { ...(profileDataRef.current?.subscriptions || {}), ...updates };
+
+    setProfileData(prev => ({ ...prev, subscriptions: merged }));
+
+    try {
+      const ref = doc(db, 'users', user.uid, 'meta', 'profile');
+      await setDoc(ref, { subscriptions: merged, updatedAt: serverTimestamp() }, { merge: true });
+    } catch (err) {
+      console.error('Failed to update subscriptions:', err);
+    }
+  }, [user]);
+
   // Purchases
   const purchases = profileData?.purchases || {};
 
@@ -752,6 +768,7 @@ export function ProfileProvider({ children }) {
     subscriptions,
     hasSubscription,
     updateSubscription,
+    updateSubscriptions,
     purchases,
     hasPurchase,
     updatePurchase,

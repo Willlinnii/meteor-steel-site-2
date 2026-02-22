@@ -1,9 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import TextBlock from '../chronosphaera/TextBlock';
 import DevelopmentPanel from '../DevelopmentPanel';
+import StageTest from '../StageTest';
+import useTest from '../../hooks/useTest';
+import { getSectionQuestions } from '../../coursework/tests';
 import CrossStageModal from '../CrossStageModal';
 import { THEORIST_TO_MODEL, CYCLE_TO_MODEL, MONOMYTH_STAGES } from '../../data/monomythConstants';
 import { useStoryForge, useYBRMode } from '../../App';
+import { useCoursework } from '../../coursework/CourseworkContext';
 
 import monomythProse from '../../data/monomyth.json';
 import stageOverviews from '../../data/stageOverviews.json';
@@ -288,6 +292,23 @@ export default function StageContent({
   const [crossStageData, setCrossStageData] = useState(null);
   const { forgeMode } = useStoryForge();
   const { ybrMode } = useYBRMode();
+  const { trackElement, isElementCompleted, courseworkMode, toggleCourseworkMode } = useCoursework();
+
+  // Test state
+  const stageQuestions = getSectionQuestions('monomyth-explorer', stageId);
+  const testCompleted = isElementCompleted(`monomyth.test.${stageId}`);
+  const test = useTest({ questions: stageQuestions, alreadyCompleted: testCompleted });
+  const stageLabel = MONOMYTH_STAGES.find(s => s.id === stageId)?.label;
+
+  // Track test completion
+  useEffect(() => {
+    if (test.isFinished && !testCompleted && stageQuestions.length > 0) {
+      trackElement(`monomyth.test.${stageId}`);
+    }
+  }, [test.isFinished, testCompleted, stageId, stageQuestions.length, trackElement]);
+
+  // Reset test when stage changes
+  useEffect(() => { test.reset(); }, [stageId]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleItemClick = (type, key, group) => {
     const data = buildCrossStage(type, key, group);
@@ -309,6 +330,24 @@ export default function StageContent({
             </button>
           );
         })}
+        <button
+          className={`metal-tab cw-icon-tab${courseworkMode ? (activeTab === 'test' ? ' active' : '') : ''}`}
+          title={courseworkMode ? 'Stage Test' : 'Coursework'}
+          onClick={() => {
+            if (courseworkMode) {
+              trackElement(`monomyth.test.view.${stageId}`);
+              onSelectTab('test');
+            } else {
+              toggleCourseworkMode();
+            }
+          }}
+        >
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M2,12 L12,6 L22,12 L12,18 Z" />
+            <path d="M6,14 L6,19 C6,19 9,22 12,22 C15,22 18,19 18,19 L18,14" />
+            <line x1="22" y1="12" x2="22" y2="18" />
+          </svg>
+        </button>
         {forgeMode && (
           <button
             className={`metal-tab forge-icon-tab${activeTab === 'development' ? ' active' : ''}`}
@@ -363,7 +402,22 @@ export default function StageContent({
         {activeTab === 'history' && <HistoryTab stageId={stageId} />}
         {activeTab === 'myths' && <MythsTab stageId={stageId} onItemClick={handleItemClick} />}
         {activeTab === 'films' && <FilmsTab stageId={stageId} onItemClick={handleItemClick} />}
-        {activeTab === 'development' && <DevelopmentPanel stageLabel={MONOMYTH_STAGES.find(s => s.id === stageId)?.label || stageId} stageKey={`monomyth-${stageId}`} entries={devEntries || {}} setEntries={setDevEntries || (() => {})} />}
+        {activeTab === 'development' && <DevelopmentPanel stageLabel={stageLabel || stageId} stageKey={`monomyth-${stageId}`} entries={devEntries || {}} setEntries={setDevEntries || (() => {})} />}
+        {activeTab === 'test' && courseworkMode && (
+          <StageTest
+            questions={stageQuestions}
+            currentIndex={test.currentIndex}
+            currentQuestion={test.currentQuestion}
+            totalQuestions={test.totalQuestions}
+            selected={test.selected}
+            feedback={test.feedback}
+            isFinished={test.isFinished}
+            onToggleOption={test.toggleOption}
+            onSubmit={test.submit}
+            onAdvance={test.advance}
+            stageLabel={stageLabel}
+          />
+        )}
       </div>
 
       {crossStageData && (

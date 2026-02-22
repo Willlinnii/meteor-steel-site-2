@@ -62,6 +62,8 @@ const FallenStarlightPage = lazy(() => import('./pages/FallenStarlight/FallenSta
 const MentorDirectoryPage = lazy(() => import('./pages/MentorDirectory/MentorDirectoryPage'));
 const GuildPage = lazy(() => import('./pages/Guild/GuildPage'));
 const SacredSites360Page = lazy(() => import('./pages/SacredSites360/SacredSites360Page'));
+const DiscoverPage = lazy(() => import('./pages/Discover/DiscoverPage'));
+const DiscoverStarlightPage = lazy(() => import('./pages/DiscoverStarlight/DiscoverStarlightPage'));
 
 const STAGES = [
   { id: 'golden-age', label: 'Golden Age' },
@@ -1572,12 +1574,14 @@ function StoryForgeHome() {
 }
 
 const NAV_ITEMS = [
+  { path: '/home', label: 'Home' },
   { path: '/chronosphaera', label: 'Chronosphaera' },
   { path: '/myths', label: 'Mythosphaera' },
   { path: '/mythology-channel', label: 'Mythology Channel' },
   { path: '/mythosophia', label: 'Mythosophia' },
   { path: '/atlas', label: 'Atlas' },
   { path: '/games', label: 'Game Room' },
+  { path: '/discover/starlight', label: 'Creation Story' },
 ];
 
 const HIDDEN_NAV_ITEMS = [
@@ -1649,7 +1653,18 @@ const SUBSCRIPTIONS_META = {
     cta: 'Visit the Subscriptions area of your Profile page to learn more and activate.',
   },
   coursework: { id: 'coursework', name: 'Coursework', description: 'Track your progress through courses, earn ranks and certificates.' },
-  xr: { id: 'xr', name: 'VR / XR', description: 'Immersive 3D and extended reality views of the celestial wheels.' },
+  'master-key': {
+    id: 'master-key',
+    name: 'Mythouse Master Key',
+    description: 'Everything Mythouse has to offer — all journeys, courses, stories, and the forge.',
+    features: [
+      'All Yellow Brick Road journeys',
+      'Story Forge — write your own myths with AI',
+      'Coursework — track progress across 7 courses, earn ranks',
+      'Starlight Bundle — Fallen Starlight + Story of Stories',
+    ],
+    cta: 'Visit your Profile to activate the Master Key.',
+  },
 };
 
 const PURCHASES_META = {
@@ -1690,6 +1705,24 @@ const PURCHASES_META = {
 
 const STORE_SUBSCRIPTIONS = [
   {
+    id: 'master-key', name: 'Mythouse Master Key',
+    isBundle: true,
+    bundleSubscriptions: ['ybr', 'forge', 'coursework'],
+    bundlePurchases: ['starlight-bundle', 'fallen-starlight', 'story-of-stories'],
+    icon: (
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="8" cy="15" r="5" />
+        <path d="M8 10V2" />
+        <path d="M11 5L8 2L5 5" />
+        <path d="M13 15h8" />
+        <path d="M18 12v6" />
+        <path d="M21 12v6" />
+      </svg>
+    ),
+    description: 'Everything Mythouse has to offer — all journeys, courses, stories, and the forge.',
+    details: 'The Master Key unlocks the full Mythouse experience: all Yellow Brick Road journeys, the Story Forge, full Coursework tracking (Monomyth Explorer, Celestial Clocks Explorer, Meteor Steel Initiate, Atlas Conversationalist, Mythic Gamer, Starlight Reader, Ouroboros Walker), and the complete Starlight Bundle (Fallen Starlight + Story of Stories).',
+  },
+  {
     id: 'ybr', name: 'Yellow Brick Road',
     icon: (
       <svg viewBox="0 0 20 14" width="20" height="14" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinejoin="round">
@@ -1729,19 +1762,6 @@ const STORE_SUBSCRIPTIONS = [
     ),
     description: 'Track your progress through courses, earn ranks and certificates.',
     details: 'Coursework tracks your exploration across the site and awards progress toward structured courses. Visit pages, interact with content, and complete activities to fill requirements. Finish courses to earn ranks and certificates displayed on your profile.',
-  },
-  {
-    id: 'xr', name: 'VR / XR',
-    icon: (
-      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-        <rect x="1" y="7" width="22" height="11" rx="3" />
-        <circle cx="8" cy="12.5" r="2.5" />
-        <circle cx="16" cy="12.5" r="2.5" />
-        <path d="M10.5 12.5 Q12 15 13.5 12.5" />
-      </svg>
-    ),
-    description: 'Immersive 3D and extended reality views of the celestial wheels.',
-    details: 'Enter the Chronosphaera in full 3D. Orbit through the planetary wheels, walk among constellations, and view the celestial machinery from within. Supports WebXR headsets for a fully immersive experience, or explore in 3D right in your browser.',
   },
 ];
 
@@ -1799,11 +1819,14 @@ const STORE_PURCHASES = [
   },
 ];
 
+const MASTER_KEY_INCLUDES = ['ybr', 'forge', 'coursework', 'fallen-starlight', 'story-of-stories'];
+
 function SubscriptionGate({ gateInfo, onClose }) {
   const navigate = useNavigate();
   const isPurchase = gateInfo?.type === 'purchase';
   const meta = isPurchase ? PURCHASES_META[gateInfo?.id] : SUBSCRIPTIONS_META[gateInfo?.id];
   if (!meta) return null;
+  const includedInMasterKey = MASTER_KEY_INCLUDES.includes(gateInfo?.id);
   return (
     <div className="subscription-gate-overlay" onClick={onClose}>
       <div className="subscription-gate-popup" onClick={e => e.stopPropagation()}>
@@ -1813,6 +1836,9 @@ function SubscriptionGate({ gateInfo, onClose }) {
           <ul className="subscription-gate-features">
             {meta.features.map((f, i) => <li key={i}>{f}</li>)}
           </ul>
+        )}
+        {includedInMasterKey && (
+          <p className="subscription-gate-master-key">Also included in the Mythouse Master Key.</p>
         )}
         {meta.cta && (
           <p className="subscription-gate-cta">{meta.cta}</p>
@@ -1830,7 +1856,7 @@ function SubscriptionGate({ gateInfo, onClose }) {
   );
 }
 
-function StoreModal({ onClose, subscriptions, purchases, updateSubscription, updatePurchase, updatePurchases }) {
+function StoreModal({ onClose, subscriptions, purchases, updateSubscription, updateSubscriptions, updatePurchase, updatePurchases }) {
   const [expanded, setExpanded] = useState(null);
 
   useEffect(() => {
@@ -1842,7 +1868,20 @@ function StoreModal({ onClose, subscriptions, purchases, updateSubscription, upd
   const isSubActive = (id) => !!subscriptions[id];
   const isPurchaseActive = (id) => !!purchases[id];
 
-  const handleActivateSub = (item) => { updateSubscription(item.id, true); };
+  const handleActivateSub = (item) => {
+    if (item.isBundle && item.bundleSubscriptions) {
+      const subUpdates = { [item.id]: true };
+      item.bundleSubscriptions.forEach(id => { subUpdates[id] = true; });
+      updateSubscriptions(subUpdates);
+      if (item.bundlePurchases) {
+        const purUpdates = {};
+        item.bundlePurchases.forEach(id => { purUpdates[id] = true; });
+        updatePurchases(purUpdates);
+      }
+    } else {
+      updateSubscription(item.id, true);
+    }
+  };
   const handleActivatePurchase = (item) => {
     if (item.isBundle && item.bundleItems) {
       const updates = { [item.id]: true };
@@ -1915,7 +1954,7 @@ function SiteHeader() {
   const { forgeMode, setForgeMode } = useStoryForge();
   const { ybrMode, setYbrMode } = useYBRMode();
   const { xrMode, setXrMode } = useXRMode();
-  const { hasSubscription, hasPurchase, subscriptions, purchases, updateSubscription, updatePurchase, updatePurchases } = useProfile();
+  const { hasSubscription, hasPurchase, subscriptions, purchases, updateSubscription, updateSubscriptions, updatePurchase, updatePurchases } = useProfile();
   const location = useLocation();
   const navigate = useNavigate();
   const [gatePopup, setGatePopup] = useState(null); // { type: 'subscription'|'purchase', id }
@@ -2009,7 +2048,6 @@ function SiteHeader() {
           <button
             className={`header-xr-toggle${xrMode ? ' active' : ''}`}
             onClick={() => {
-              if (!xrMode && !hasSubscription('xr')) { setGatePopup({ type: 'subscription', id: 'xr' }); return; }
               if (!xrMode) {
                 setXrMode(true);
               } else if (location.pathname !== '/xr') {
@@ -2057,6 +2095,7 @@ function SiteHeader() {
         subscriptions={subscriptions}
         purchases={purchases}
         updateSubscription={updateSubscription}
+        updateSubscriptions={updateSubscriptions}
         updatePurchase={updatePurchase}
         updatePurchases={updatePurchases}
       />
@@ -2268,7 +2307,8 @@ function AppContent() {
       <CourseCompletionPopup />
       <MentorContractPopup />
       <Routes>
-        <Route path="/" element={<MeteorSteelHome />} />
+        <Route path="/" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><DiscoverStarlightPage /></Suspense>} />
+        <Route path="/home" element={<MeteorSteelHome />} />
         <Route path="/chronosphaera/vr" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" />Loading 3D...</div>}><ChronosphaeraVRPage /></Suspense>} />
         <Route path="/chronosphaera/*" element={<ChronosphaeraPage />} />
         {/* Redirects from old /metals paths */}
@@ -2294,6 +2334,8 @@ function AppContent() {
         <Route path="/mythic-earth" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><MythicEarthPage /></Suspense>} />
         <Route path="/mentors" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><MentorDirectoryPage /></Suspense>} />
         <Route path="/guild" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><GuildPage /></Suspense>} />
+        <Route path="/discover" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><DiscoverPage /></Suspense>} />
+        <Route path="/discover/starlight" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><DiscoverStarlightPage /></Suspense>} />
         <Route path="/dragon/*" element={<RequireAdmin><Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" />Loading Admin...</div>}><AdminPage /></Suspense></RequireAdmin>} />
       </Routes>
       {!isAtlas && <SiteFooter />}

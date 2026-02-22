@@ -1,0 +1,414 @@
+/* ─── Discover Page ─── */
+
+/* Scroll-reveal base */
+.discover-section {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+.discover-section.discover-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ─── Section 0: The Gate ─── */
+.discover-gate {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem;
+  position: relative;
+}
+.discover-gate-line {
+  width: 120px;
+  height: 1px;
+  background: var(--accent-gold);
+  margin-bottom: 2.5rem;
+  animation: discover-line-expand 1.8s ease forwards;
+  transform: scaleX(0);
+}
+.discover-gate-title {
+  font-family: 'Cinzel', serif;
+  font-size: 3.2rem;
+  font-weight: 600;
+  color: var(--accent-gold);
+  letter-spacing: 0.35em;
+  margin-bottom: 2rem;
+  animation: discover-fade-up 1.2s ease 0.6s both;
+}
+.discover-gate-narration {
+  font-family: 'Crimson Pro', serif;
+  font-size: 1.35rem;
+  font-weight: 300;
+  color: var(--text-secondary);
+  font-style: italic;
+  max-width: 520px;
+  line-height: 1.7;
+  animation: discover-fade-up 1.2s ease 1.2s both;
+}
+.discover-scroll-hint {
+  position: absolute;
+  bottom: 2.5rem;
+  animation: discover-scroll-hint 2s ease-in-out infinite;
+  color: var(--accent-gold);
+  opacity: 0.5;
+  font-size: 1.5rem;
+}
+
+/* ─── Section 1: The Calling ─── */
+.discover-calling {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 6rem 2rem;
+  border-left: 3px solid var(--accent-ember);
+  padding-left: 2.5rem;
+}
+.discover-calling-heading {
+  font-family: 'Cinzel', serif;
+  font-size: 1.6rem;
+  color: var(--accent-gold);
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+}
+.discover-calling p {
+  font-family: 'Crimson Pro', serif;
+  font-size: 1.2rem;
+  font-weight: 300;
+  color: var(--text-primary);
+  line-height: 1.8;
+  margin-bottom: 1.2rem;
+}
+.discover-calling em {
+  color: var(--text-secondary);
+}
+
+/* ─── Section 2: The Seekers ─── */
+.discover-seekers {
+  padding: 6rem 2rem;
+  text-align: center;
+}
+.discover-seekers-heading {
+  font-family: 'Cinzel', serif;
+  font-size: 1.6rem;
+  color: var(--accent-gold);
+  margin-bottom: 3rem;
+  font-weight: 600;
+}
+.discover-constellation {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 3rem;
+}
+.discover-constellation svg {
+  max-width: 100%;
+  height: auto;
+}
+.discover-node-circle {
+  fill: none;
+  stroke: var(--accent-steel);
+  stroke-width: 1.5;
+  animation: discover-node-pulse 3s ease-in-out infinite;
+}
+.discover-node-circle:nth-child(2n) {
+  animation-delay: 0.5s;
+}
+.discover-node-label {
+  font-family: 'Crimson Pro', serif;
+  font-size: 12px;
+  fill: var(--text-primary);
+  text-anchor: middle;
+}
+.discover-node-center {
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  fill: var(--accent-gold);
+  text-anchor: middle;
+  letter-spacing: 0.15em;
+}
+.discover-constellation-line {
+  stroke: var(--border-subtle);
+  stroke-width: 1;
+}
+.discover-resonance-list {
+  max-width: 700px;
+  margin: 0 auto;
+  list-style: none;
+  text-align: left;
+}
+.discover-resonance-item {
+  font-family: 'Crimson Pro', serif;
+  font-size: 1.1rem;
+  font-weight: 300;
+  color: var(--text-secondary);
+  font-style: italic;
+  padding: 0.6rem 0;
+  border-bottom: 1px solid var(--border-subtle);
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.discover-visible .discover-resonance-item {
+  opacity: 1;
+  transform: translateY(0);
+}
+.discover-visible .discover-resonance-item:nth-child(1) { transition-delay: 0.1s; }
+.discover-visible .discover-resonance-item:nth-child(2) { transition-delay: 0.2s; }
+.discover-visible .discover-resonance-item:nth-child(3) { transition-delay: 0.3s; }
+.discover-visible .discover-resonance-item:nth-child(4) { transition-delay: 0.4s; }
+.discover-visible .discover-resonance-item:nth-child(5) { transition-delay: 0.5s; }
+.discover-visible .discover-resonance-item:nth-child(6) { transition-delay: 0.6s; }
+
+/* ─── Section 3: The Descent (Chambers) ─── */
+.discover-descent {
+  padding: 6rem 2rem;
+  max-width: 900px;
+  margin: 0 auto;
+  position: relative;
+}
+.discover-descent-heading {
+  font-family: 'Cinzel', serif;
+  font-size: 1.6rem;
+  color: var(--accent-gold);
+  text-align: center;
+  margin-bottom: 3rem;
+  font-weight: 600;
+}
+/* Vertical gold line */
+.discover-descent-line {
+  position: absolute;
+  left: 50%;
+  top: 6rem;
+  bottom: 0;
+  width: 1px;
+  background: linear-gradient(to bottom, var(--accent-gold), transparent);
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+.discover-chamber {
+  display: flex;
+  align-items: flex-start;
+  gap: 2rem;
+  margin-bottom: 3rem;
+  position: relative;
+  z-index: 1;
+}
+.discover-chamber:nth-child(odd) {
+  flex-direction: row;
+}
+.discover-chamber:nth-child(even) {
+  flex-direction: row-reverse;
+}
+.discover-chamber-spacer {
+  flex: 1;
+}
+.discover-chamber-card {
+  flex: 1;
+  background: var(--bg-medium);
+  border-radius: 6px;
+  padding: 1.5rem;
+  border-top: 3px solid var(--accent-steel);
+}
+.discover-chamber-card h3 {
+  font-family: 'Cinzel', serif;
+  font-size: 1.15rem;
+  color: var(--text-primary);
+  margin-bottom: 0.6rem;
+  font-weight: 600;
+}
+.discover-chamber-card p {
+  font-family: 'Crimson Pro', serif;
+  font-size: 1.05rem;
+  font-weight: 300;
+  font-style: italic;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 0.8rem;
+}
+.discover-chamber-link {
+  font-family: 'Cinzel', serif;
+  font-size: 0.8rem;
+  color: var(--accent-gold);
+  text-decoration: none;
+  letter-spacing: 0.1em;
+  transition: color 0.2s;
+}
+.discover-chamber-link:hover {
+  color: var(--accent-ember);
+}
+
+/* ─── Section 4: The Maker ─── */
+.discover-maker {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 6rem 2rem;
+  text-align: center;
+}
+.discover-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2.5rem;
+  color: var(--accent-gold);
+  opacity: 0.5;
+}
+.discover-divider-line {
+  width: 60px;
+  height: 1px;
+  background: var(--accent-gold);
+}
+.discover-divider-diamond {
+  width: 8px;
+  height: 8px;
+  border: 1px solid var(--accent-gold);
+  transform: rotate(45deg);
+}
+.discover-maker-heading {
+  font-family: 'Cinzel', serif;
+  font-size: 1.4rem;
+  color: var(--accent-gold);
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+}
+.discover-maker p {
+  font-family: 'Crimson Pro', serif;
+  font-size: 1.15rem;
+  font-weight: 300;
+  color: var(--text-primary);
+  line-height: 1.8;
+  margin-bottom: 1.2rem;
+}
+.discover-maker em {
+  color: var(--text-secondary);
+}
+
+/* ─── Section 5: The Return ─── */
+.discover-return {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem;
+}
+.discover-return-line {
+  width: 120px;
+  height: 1px;
+  background: var(--accent-gold);
+  margin-bottom: 2.5rem;
+}
+.discover-return-title {
+  font-family: 'Cinzel', serif;
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--accent-gold);
+  letter-spacing: 0.25em;
+  margin-bottom: 2rem;
+}
+.discover-cta {
+  display: inline-block;
+  font-family: 'Cinzel', serif;
+  font-size: 1rem;
+  color: var(--accent-gold);
+  border: 1px solid var(--accent-gold);
+  padding: 0.85rem 2.5rem;
+  text-decoration: none;
+  letter-spacing: 0.15em;
+  transition: background 0.3s, color 0.3s;
+  border-radius: 2px;
+}
+.discover-cta:hover {
+  background: var(--accent-gold);
+  color: var(--bg-dark);
+}
+.discover-return-closing {
+  font-family: 'Crimson Pro', serif;
+  font-size: 1.2rem;
+  font-weight: 300;
+  font-style: italic;
+  color: var(--text-secondary);
+  margin-top: 2.5rem;
+  max-width: 400px;
+}
+
+/* ─── Animations ─── */
+@keyframes discover-line-expand {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+@keyframes discover-fade-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes discover-node-pulse {
+  0%, 100% { opacity: 0.6; }
+  50%      { opacity: 1; }
+}
+@keyframes discover-scroll-hint {
+  0%, 100% { transform: translateY(0); opacity: 0.5; }
+  50%      { transform: translateY(8px); opacity: 0.8; }
+}
+
+/* ─── Responsive ─── */
+@media (max-width: 900px) {
+  .discover-chamber {
+    flex-direction: column !important;
+    gap: 0;
+  }
+  .discover-chamber-spacer {
+    display: none;
+  }
+  .discover-descent-line {
+    left: 1.5rem;
+  }
+  .discover-descent {
+    padding-left: 3rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .discover-gate-title {
+    font-size: 2rem;
+    letter-spacing: 0.2em;
+  }
+  .discover-gate-narration {
+    font-size: 1.1rem;
+  }
+  .discover-calling {
+    padding-left: 1.5rem;
+    border-left-width: 2px;
+  }
+  .discover-constellation svg {
+    display: none;
+  }
+  .discover-constellation-mobile {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    align-items: center;
+  }
+  .discover-constellation-mobile-node {
+    font-family: 'Crimson Pro', serif;
+    font-size: 1rem;
+    color: var(--text-primary);
+    padding: 0.5rem 1.2rem;
+    border: 1px solid var(--border-subtle);
+    border-radius: 20px;
+    text-align: center;
+  }
+  .discover-return-title {
+    font-size: 1.4rem;
+    letter-spacing: 0.15em;
+  }
+}
+
+/* Desktop: hide mobile constellation */
+@media (min-width: 601px) {
+  .discover-constellation-mobile {
+    display: none;
+  }
+}

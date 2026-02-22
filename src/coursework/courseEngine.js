@@ -22,7 +22,7 @@
 //     atlas.messages.voice.saturn (voice-based)
 
 const ALL_STAGES = ['golden-age', 'falling-star', 'impact-crater', 'forge', 'quenching', 'integration', 'drawing', 'new-age'];
-const MONOMYTH_TABS = ['overview', 'cycles', 'theorists', 'history', 'myths', 'films', 'development', 'test'];
+const MONOMYTH_TABS = ['overview', 'cycles', 'theorists', 'history', 'myths', 'films'];
 const PLANETS = ['Sun', 'Moon', 'Mercury', 'Venus', 'Mars', 'Jupiter', 'Saturn'];
 const ZODIAC_SIGNS = ['Aries', 'Taurus', 'Gemini', 'Cancer', 'Leo', 'Virgo', 'Libra', 'Scorpio', 'Sagittarius', 'Capricorn', 'Aquarius', 'Pisces'];
 const CARDINAL_POINTS = ['vernal-equinox', 'summer-solstice', 'autumnal-equinox', 'winter-solstice'];
@@ -38,7 +38,7 @@ export const COURSES = [
   {
     id: 'monomyth-explorer',
     name: 'Monomyth Explorer',
-    description: 'Explore every major element of the Monomyth page — all tabs across all stages.',
+    description: 'Master the Monomyth — explore every tab, pass all stage quizzes, and walk the Yellow Brick Road.',
     active: true,
     page: '/monomyth',
     tests: {
@@ -51,7 +51,20 @@ export const COURSES = [
         id: 'all-tabs-all-stages',
         type: 'group_all',
         elements: MONOMYTH_TABS.flatMap(t => ALL_STAGES.map(s => `monomyth.${t}.${s}`)),
-        description: 'Visit every tab for every stage on the Monomyth page',
+        description: 'Visit every content tab for every stage (Overview, Cycles, Theorists, History, Myths, Films)',
+      },
+      {
+        id: 'complete-all-quizzes',
+        type: 'group_all',
+        elements: ALL_STAGES.map(s => `monomyth.test.${s}`),
+        description: 'Complete the quiz for every stage',
+      },
+      {
+        id: 'complete-journey',
+        type: 'group_pct',
+        percent: 50,
+        elements: ['journeys.monomyth.completed', 'journeys.fused.completed'],
+        description: 'Complete a Monomyth or Fused Ouroboros Journey',
       },
     ],
   },

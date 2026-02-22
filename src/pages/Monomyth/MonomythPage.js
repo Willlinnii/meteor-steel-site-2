@@ -776,7 +776,11 @@ export default function MonomythPage() {
                     }
                   }}
                 >
-                  <span style={{color:'#c9a961',fontWeight:'bold',fontSize:'0.7rem'}}>TEST</span>
+                  <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M2,12 L12,6 L22,12 L12,18 Z" />
+                    <path d="M6,14 L6,19 C6,19 9,22 12,22 C15,22 18,19 18,19 L18,14" />
+                    <line x1="22" y1="12" x2="22" y2="18" />
+                  </svg>
                 </button>
                 <button
                   className={`metal-tab forge-icon-tab${forgeMode ? (activeTab === 'development' ? ' active' : '') : ''}`}

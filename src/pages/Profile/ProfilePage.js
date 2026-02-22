@@ -16,6 +16,24 @@ import { computeNumerology, NUMBER_MEANINGS, NUMBER_TYPES } from '../../profile/
 
 const SUBSCRIPTIONS = [
   {
+    id: 'master-key', name: 'Mythouse Master Key',
+    isBundle: true,
+    bundleSubscriptions: ['ybr', 'forge', 'coursework'],
+    bundlePurchases: ['starlight-bundle', 'fallen-starlight', 'story-of-stories'],
+    icon: (
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="8" cy="15" r="5" />
+        <path d="M8 10V2" />
+        <path d="M11 5L8 2L5 5" />
+        <path d="M13 15h8" />
+        <path d="M18 12v6" />
+        <path d="M21 12v6" />
+      </svg>
+    ),
+    description: 'Everything Mythouse has to offer — all journeys, courses, stories, and the forge.',
+    details: 'The Master Key unlocks the full Mythouse experience: all Yellow Brick Road journeys, the Story Forge, full Coursework tracking (Monomyth Explorer, Celestial Clocks Explorer, Meteor Steel Initiate, Atlas Conversationalist, Mythic Gamer, Starlight Reader, Ouroboros Walker), and the complete Starlight Bundle (Fallen Starlight + Story of Stories).',
+  },
+  {
     id: 'ybr', name: 'Yellow Brick Road',
     icon: (
       <svg viewBox="0 0 20 14" width="20" height="14" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinejoin="round">
@@ -55,19 +73,6 @@ const SUBSCRIPTIONS = [
     ),
     description: 'Track your progress through courses, earn ranks and certificates.',
     details: 'Coursework tracks your exploration across the site and awards progress toward structured courses. Visit pages, interact with content, and complete activities to fill requirements. Finish courses to earn ranks and certificates displayed on your profile.',
-  },
-  {
-    id: 'xr', name: 'VR / XR',
-    icon: (
-      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-        <rect x="1" y="7" width="22" height="11" rx="3" />
-        <circle cx="8" cy="12.5" r="2.5" />
-        <circle cx="16" cy="12.5" r="2.5" />
-        <path d="M10.5 12.5 Q12 15 13.5 12.5" />
-      </svg>
-    ),
-    description: 'Immersive 3D and extended reality views of the celestial wheels.',
-    details: 'Enter the Chronosphaera in full 3D. Orbit through the planetary wheels, walk among constellations, and view the celestial machinery from within. Supports WebXR headsets for a fully immersive experience, or explore in 3D right in your browser.',
   },
 ];
 
@@ -128,7 +133,7 @@ const PURCHASES = [
 export default function ProfilePage() {
   const { user, signOut } = useAuth();
   const { getCourseStates, completedCourses, allCourses } = useCoursework();
-  const { earnedRanks, highestRank, activeCredentials, hasProfile, loaded: profileLoaded, handle, natalChart, updateNatalChart, numerologyName, updateNumerologyName, luckyNumber, updateLuckyNumber, subscriptions, updateSubscription, purchases, updatePurchase, updatePurchases, refreshProfile, mentorData, qualifiedMentorTypes, mentorEligible, mentorCoursesComplete, effectiveMentorStatus, pairingCategories, updateMentorBio, updateMentorCapacity, publishToDirectory, unpublishFromDirectory, respondToPairing, endPairing, photoURL, consultingData, consultingCategories, updateProfilePhoto, respondToConsulting, apiKeys, apiKeysLoaded, saveApiKey, removeApiKey, hasAnthropicKey, hasOpenaiKey } = useProfile();
+  const { earnedRanks, highestRank, activeCredentials, hasProfile, loaded: profileLoaded, handle, natalChart, updateNatalChart, numerologyName, updateNumerologyName, luckyNumber, updateLuckyNumber, subscriptions, updateSubscription, updateSubscriptions, purchases, updatePurchase, updatePurchases, refreshProfile, mentorData, qualifiedMentorTypes, mentorEligible, mentorCoursesComplete, effectiveMentorStatus, pairingCategories, updateMentorBio, updateMentorCapacity, publishToDirectory, unpublishFromDirectory, respondToPairing, endPairing, photoURL, consultingData, consultingCategories, updateProfilePhoto, respondToConsulting, apiKeys, apiKeysLoaded, saveApiKey, removeApiKey, hasAnthropicKey, hasOpenaiKey } = useProfile();
   const { personalStories, loaded: writingsLoaded } = useWritings();
   const navigate = useNavigate();
   const location = useLocation();
@@ -324,19 +329,34 @@ export default function ProfilePage() {
           {SUBSCRIPTIONS.map(sub => {
             const enabled = !!subscriptions[sub.id];
             const expanded = expandedCard === sub.id;
+            const isBundle = !!sub.isBundle;
             return (
-              <div key={sub.id} className={`profile-subscription-card${enabled ? ' active' : ''}${expanded ? ' expanded' : ''}`}>
+              <div key={sub.id} className={`profile-subscription-card${enabled ? ' active' : ''}${expanded ? ' expanded' : ''}${isBundle ? ' profile-purchase-bundle' : ''}`}>
                 <div className="profile-subscription-row" onClick={() => setExpandedCard(expanded ? null : sub.id)}>
                   <span className="profile-subscription-icon">{sub.icon}</span>
                   <div className="profile-subscription-info">
-                    <div className="profile-subscription-name">{sub.name}</div>
+                    <div className="profile-subscription-name">{sub.name}{isBundle && <span className="profile-bundle-badge">Bundle</span>}</div>
                     <div className="profile-subscription-desc">{sub.description}</div>
                   </div>
                   <label className="profile-subscription-toggle" onClick={e => e.stopPropagation()}>
                     <input
                       type="checkbox"
                       checked={enabled}
-                      onChange={() => updateSubscription(sub.id, !enabled)}
+                      onChange={() => {
+                        const newVal = !enabled;
+                        if (isBundle && sub.bundleSubscriptions) {
+                          const subUpdates = { [sub.id]: newVal };
+                          sub.bundleSubscriptions.forEach(id => { subUpdates[id] = newVal; });
+                          updateSubscriptions(subUpdates);
+                          if (sub.bundlePurchases) {
+                            const purUpdates = {};
+                            sub.bundlePurchases.forEach(id => { purUpdates[id] = newVal; });
+                            updatePurchases(purUpdates);
+                          }
+                        } else {
+                          updateSubscription(sub.id, newVal);
+                        }
+                      }}
                     />
                     <span className="profile-subscription-slider" />
                   </label>

@@ -414,12 +414,31 @@
   box-shadow: 0 0 10px rgba(196, 113, 58, 0.15);
 }
 
+.metal-tab.cw-icon-tab,
 .metal-tab.forge-icon-tab,
 .metal-tab.ybr-icon-tab {
   padding: 6px 10px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+}
+
+.metal-tab.cw-icon-tab {
+  color: var(--accent-steel);
+  border-color: var(--border-subtle);
+}
+
+.metal-tab.cw-icon-tab:hover {
+  color: var(--accent-gold);
+  background: rgba(201, 169, 97, 0.1);
+  border-color: rgba(201, 169, 97, 0.5);
+}
+
+.metal-tab.cw-icon-tab.active {
+  color: var(--accent-gold);
+  border-color: var(--accent-gold);
+  background: rgba(201, 169, 97, 0.15);
+  box-shadow: 0 0 8px rgba(201, 169, 97, 0.2);
 }
 
 .metal-tab.forge-icon-tab {

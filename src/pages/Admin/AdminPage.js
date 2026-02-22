@@ -2977,6 +2977,15 @@ function AdminPage() {
             {s.label}
           </button>
         ))}
+        <a
+          href="/discover"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="admin-section-tab"
+          style={{ textDecoration: 'none' }}
+        >
+          Discover Page &#8599;
+        </a>
       </div>
 
       {activeSection === 'system-health' && <SystemHealthSection />}

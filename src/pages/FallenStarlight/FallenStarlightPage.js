@@ -8,6 +8,7 @@ import { useCoursework } from '../../coursework/CourseworkContext';
 import { useWritings } from '../../writings/WritingsContext';
 import { useStoryForge } from '../../App';
 import { INNER_RING_SETS, getInnerRingModel } from '../../data/monomythConstants';
+import ChapterAudioPlayer, { CHAPTER_AUDIO } from '../../components/ChapterAudioPlayer';
 
 const RING_TABS = [
   { id: 'cycles', label: 'Cycles' },
@@ -243,6 +244,13 @@ export default function FallenStarlightPage() {
             <>
               {chapterTitle && (
                 <h3 className="chapter-title">{chapterTitle}</h3>
+              )}
+              {CHAPTER_AUDIO[currentStage] && (
+                <ChapterAudioPlayer
+                  tracks={CHAPTER_AUDIO[currentStage]}
+                  stageId={currentStage}
+                  trackElement={trackElement}
+                />
               )}
               <div className="chapter-scroll">
                 <div className="chapter-content">

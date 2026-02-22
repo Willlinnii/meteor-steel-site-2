@@ -2174,6 +2174,125 @@ body {
   }
 }
 
+/* ===== CHAPTER AUDIO PLAYER ===== */
+
+.chapter-audio-player {
+  margin-bottom: 16px;
+  padding: 14px 18px;
+  border: 1px solid var(--border-subtle);
+  border-radius: 10px;
+  background: var(--bg-medium);
+}
+
+.chapter-audio-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.chapter-audio-play {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--accent-gold);
+  background: transparent;
+  color: var(--accent-gold);
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+
+.chapter-audio-play:hover {
+  background: rgba(201, 169, 97, 0.1);
+  box-shadow: 0 0 12px rgba(201, 169, 97, 0.3);
+}
+
+.chapter-audio-progress {
+  flex: 1;
+  height: 6px;
+  background: var(--bg-dark);
+  border-radius: 3px;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.chapter-audio-bar {
+  height: 100%;
+  background: var(--accent-gold);
+  border-radius: 3px;
+  transition: width 0.1s linear;
+}
+
+.chapter-audio-time {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-family: monospace;
+  white-space: nowrap;
+  min-width: 80px;
+  text-align: right;
+}
+
+.chapter-audio-title {
+  margin-top: 6px;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  text-align: center;
+  font-style: italic;
+}
+
+.chapter-audio-tracklist {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.chapter-audio-track-btn {
+  background: transparent;
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  color: var(--text-secondary);
+  font-size: 0.78rem;
+  padding: 4px 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.chapter-audio-track-btn:hover {
+  border-color: var(--accent-gold);
+  color: var(--accent-gold);
+}
+
+.chapter-audio-track-btn.active {
+  border-color: var(--accent-gold);
+  color: var(--accent-gold);
+  background: rgba(201, 169, 97, 0.08);
+}
+
+@media (max-width: 600px) {
+  .chapter-audio-player {
+    padding: 10px 12px;
+  }
+
+  .chapter-audio-time {
+    font-size: 0.7rem;
+    min-width: 65px;
+  }
+
+  .chapter-audio-tracklist {
+    gap: 4px;
+  }
+
+  .chapter-audio-track-btn {
+    font-size: 0.72rem;
+    padding: 3px 8px;
+  }
+}
+
 /* ===== COURSEWORK MODE ===== */
 
 /* Header toggle button */

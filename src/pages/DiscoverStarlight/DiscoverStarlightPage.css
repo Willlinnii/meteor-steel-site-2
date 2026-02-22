@@ -1,0 +1,372 @@
+/* ─── Discover Starlight Edition ─── */
+
+/* Scroll-reveal base */
+.starlight-section {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.9s ease, transform 0.9s ease;
+}
+.starlight-section.starlight-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ─── Section 0: The Manuscript ─── */
+.starlight-manuscript {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem;
+  position: relative;
+}
+.starlight-manuscript-line {
+  width: 1px;
+  height: 80px;
+  background: linear-gradient(to bottom, transparent, var(--accent-steel));
+  margin-bottom: 2.5rem;
+  animation: starlight-line-drop 2s ease forwards;
+  opacity: 0;
+}
+.starlight-manuscript-title {
+  font-family: 'Cinzel', serif;
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: var(--accent-steel);
+  letter-spacing: 0.3em;
+  margin-bottom: 0.6rem;
+  animation: starlight-fade-up 1.2s ease 0.8s both;
+}
+.starlight-manuscript-subtitle {
+  font-family: 'Cinzel', serif;
+  font-size: 2.6rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: 0.15em;
+  margin-bottom: 2.2rem;
+  animation: starlight-fade-up 1.2s ease 1.1s both;
+}
+.starlight-manuscript-narration {
+  font-family: 'Crimson Pro', serif;
+  font-size: 1.35rem;
+  font-weight: 300;
+  color: var(--text-secondary);
+  font-style: italic;
+  max-width: 500px;
+  line-height: 1.8;
+  animation: starlight-fade-up 1.2s ease 1.6s both;
+}
+.starlight-scroll-hint {
+  position: absolute;
+  bottom: 2.5rem;
+  animation: starlight-scroll-pulse 2s ease-in-out infinite;
+  color: var(--accent-steel);
+  opacity: 0.4;
+  font-size: 1.5rem;
+}
+
+/* ─── Section 1: The Real Mythouse ─── */
+.starlight-house {
+  max-width: 660px;
+  margin: 0 auto;
+  padding: 7rem 2rem 5rem;
+  text-align: center;
+}
+.starlight-house-heading {
+  font-family: 'Cinzel', serif;
+  font-size: 1.4rem;
+  color: var(--accent-ember);
+  margin-bottom: 1.8rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+}
+.starlight-house p {
+  font-family: 'Crimson Pro', serif;
+  font-size: 1.15rem;
+  font-weight: 300;
+  color: var(--text-primary);
+  line-height: 1.85;
+  margin-bottom: 1.3rem;
+}
+.starlight-house em {
+  color: var(--text-secondary);
+}
+
+/* ─── Section 2: The Wall ─── */
+.starlight-wall {
+  max-width: 660px;
+  margin: 0 auto;
+  padding: 5rem 2rem;
+  border-left: 3px solid var(--accent-ember);
+  padding-left: 2.5rem;
+}
+.starlight-wall-heading {
+  font-family: 'Cinzel', serif;
+  font-size: 1.4rem;
+  color: var(--accent-steel);
+  margin-bottom: 1.8rem;
+  font-weight: 600;
+}
+.starlight-wall p {
+  font-family: 'Crimson Pro', serif;
+  font-size: 1.15rem;
+  font-weight: 300;
+  color: var(--text-primary);
+  line-height: 1.85;
+  margin-bottom: 1.3rem;
+}
+.starlight-wall em {
+  color: var(--text-secondary);
+}
+
+/* ─── Section 3: The Stolen Pages ─── */
+.starlight-stolen {
+  max-width: 660px;
+  margin: 0 auto;
+  padding: 5rem 2rem;
+  text-align: center;
+}
+.starlight-stolen-heading {
+  font-family: 'Cinzel', serif;
+  font-size: 1.4rem;
+  color: var(--accent-gold);
+  margin-bottom: 1.8rem;
+  font-weight: 600;
+}
+.starlight-stolen p {
+  font-family: 'Crimson Pro', serif;
+  font-size: 1.15rem;
+  font-weight: 300;
+  color: var(--text-primary);
+  line-height: 1.85;
+  margin-bottom: 1.3rem;
+}
+.starlight-stolen em {
+  color: var(--text-secondary);
+}
+
+/* ─── Section 4: The Birth ─── */
+.starlight-birth {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 5rem 2rem;
+  position: relative;
+}
+.starlight-birth-heading {
+  font-family: 'Cinzel', serif;
+  font-size: 1.4rem;
+  color: var(--accent-steel);
+  margin-bottom: 1.8rem;
+  font-weight: 600;
+  text-align: center;
+}
+.starlight-birth-atlas {
+  font-family: 'Crimson Pro', serif;
+  font-size: 1.25rem;
+  font-weight: 300;
+  font-style: italic;
+  color: var(--accent-steel);
+  line-height: 1.85;
+  text-align: center;
+  margin-bottom: 2rem;
+  padding: 1.5rem 2rem;
+  border: 1px solid var(--border-subtle);
+  border-radius: 4px;
+  background: rgba(139, 157, 195, 0.04);
+}
+.starlight-birth p {
+  font-family: 'Crimson Pro', serif;
+  font-size: 1.15rem;
+  font-weight: 300;
+  color: var(--text-primary);
+  line-height: 1.85;
+  margin-bottom: 1.3rem;
+}
+.starlight-birth em {
+  color: var(--text-secondary);
+}
+
+/* ─── Section 5: The Convergence ─── */
+.starlight-convergence {
+  max-width: 660px;
+  margin: 0 auto;
+  padding: 5rem 2rem;
+}
+.starlight-convergence-heading {
+  font-family: 'Cinzel', serif;
+  font-size: 1.4rem;
+  color: var(--accent-ember);
+  margin-bottom: 1.8rem;
+  font-weight: 600;
+  text-align: center;
+}
+.starlight-convergence p {
+  font-family: 'Crimson Pro', serif;
+  font-size: 1.15rem;
+  font-weight: 300;
+  color: var(--text-primary);
+  line-height: 1.85;
+  margin-bottom: 1.3rem;
+}
+.starlight-convergence em {
+  color: var(--text-secondary);
+}
+.starlight-threads {
+  list-style: none;
+  margin: 2rem 0;
+  padding: 0;
+}
+.starlight-thread {
+  font-family: 'Crimson Pro', serif;
+  font-size: 1.05rem;
+  font-weight: 300;
+  color: var(--text-secondary);
+  padding: 0.65rem 0;
+  padding-left: 1.2rem;
+  border-left: 2px solid var(--border-subtle);
+  margin-bottom: 0.4rem;
+  opacity: 0;
+  transform: translateX(-10px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.starlight-visible .starlight-thread {
+  opacity: 1;
+  transform: translateX(0);
+}
+.starlight-visible .starlight-thread:nth-child(1) { transition-delay: 0.1s; }
+.starlight-visible .starlight-thread:nth-child(2) { transition-delay: 0.25s; }
+.starlight-visible .starlight-thread:nth-child(3) { transition-delay: 0.4s; }
+.starlight-visible .starlight-thread:nth-child(4) { transition-delay: 0.55s; }
+.starlight-visible .starlight-thread:nth-child(5) { transition-delay: 0.7s; }
+
+/* ─── Section 6: The Living Story ─── */
+.starlight-living {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem;
+}
+.starlight-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+  margin-bottom: 2.5rem;
+}
+.starlight-divider-line {
+  width: 50px;
+  height: 1px;
+  background: var(--accent-steel);
+}
+.starlight-divider-star {
+  width: 6px;
+  height: 6px;
+  background: var(--accent-steel);
+  border-radius: 50%;
+  animation: starlight-glow 3s ease-in-out infinite;
+}
+.starlight-living-title {
+  font-family: 'Cinzel', serif;
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  letter-spacing: 0.15em;
+  margin-bottom: 1.8rem;
+}
+.starlight-living-narration {
+  font-family: 'Crimson Pro', serif;
+  font-size: 1.2rem;
+  font-weight: 300;
+  font-style: italic;
+  color: var(--text-secondary);
+  max-width: 480px;
+  line-height: 1.8;
+  margin-bottom: 2.5rem;
+}
+.starlight-cta {
+  display: inline-block;
+  font-family: 'Cinzel', serif;
+  font-size: 1rem;
+  color: var(--accent-steel);
+  border: 1px solid var(--accent-steel);
+  padding: 0.85rem 2.5rem;
+  text-decoration: none;
+  letter-spacing: 0.15em;
+  transition: background 0.3s, color 0.3s;
+  border-radius: 2px;
+  margin-bottom: 1rem;
+}
+.starlight-cta:hover {
+  background: var(--accent-steel);
+  color: var(--bg-dark);
+}
+.starlight-cta-secondary {
+  display: inline-block;
+  font-family: 'Cinzel', serif;
+  font-size: 0.85rem;
+  color: var(--accent-gold);
+  text-decoration: none;
+  letter-spacing: 0.12em;
+  margin-top: 1rem;
+  transition: color 0.2s;
+}
+.starlight-cta-secondary:hover {
+  color: var(--accent-ember);
+}
+.starlight-living-closing {
+  font-family: 'Crimson Pro', serif;
+  font-size: 1.1rem;
+  font-weight: 300;
+  font-style: italic;
+  color: var(--text-secondary);
+  margin-top: 2.5rem;
+  max-width: 400px;
+  opacity: 0.7;
+}
+
+/* ─── Animations ─── */
+@keyframes starlight-line-drop {
+  from { opacity: 0; transform: translateY(-20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes starlight-fade-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes starlight-scroll-pulse {
+  0%, 100% { transform: translateY(0); opacity: 0.4; }
+  50%      { transform: translateY(8px); opacity: 0.7; }
+}
+@keyframes starlight-glow {
+  0%, 100% { opacity: 0.4; box-shadow: 0 0 4px var(--accent-steel); }
+  50%      { opacity: 1; box-shadow: 0 0 12px var(--accent-steel); }
+}
+
+/* ─── Responsive ─── */
+@media (max-width: 600px) {
+  .starlight-manuscript-subtitle {
+    font-size: 1.6rem;
+    letter-spacing: 0.08em;
+  }
+  .starlight-manuscript-title {
+    font-size: 1.1rem;
+    letter-spacing: 0.15em;
+  }
+  .starlight-wall {
+    padding-left: 1.5rem;
+    border-left-width: 2px;
+  }
+  .starlight-living-title {
+    font-size: 1.3rem;
+    letter-spacing: 0.08em;
+  }
+  .starlight-birth-atlas {
+    padding: 1rem;
+    font-size: 1.1rem;
+  }
+}
