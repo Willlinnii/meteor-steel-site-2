@@ -602,10 +602,12 @@ export default function ChronosphaeraPage() {
 
     // Calendar (12h default)
     const isCal = sub === '/calendar' || sub === '/calendar-24';
-    setShowCalendar(isCal || sub === ''); // root chronosphaera also shows calendar
+    const isStarlight = sub === '/fallen-starlight' || sub === '/story-of-stories';
+    const isMono = sub === '/monomyth' || sub === '/meteor-steel';
+    setShowCalendar(isCal || sub === '' || isStarlight || isMono); // root chronosphaera also shows calendar
     if (sub === '/calendar-24') { setClockMode('24h'); }
     else if (sub === '/calendar') { setClockMode('12h'); }
-    else if (!isCal && sub !== '') { setClockMode(null); }
+    else if (!isCal && !isStarlight && !isMono && sub !== '') { setClockMode(null); }
     if ((isCal || sub === '') && !selectedMonth) {
       setSelectedMonth(MONTHS[new Date().getMonth()]);
       setActiveMonthTab('stone');

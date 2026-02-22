@@ -469,9 +469,11 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
   const hoveredRingRef = useRef(null);
   const [stormFlash, setStormFlash] = useState(false);
   const [meteorShower, setMeteorShower] = useState(false);
+  const [fallingStarAnim, setFallingStarAnim] = useState(false);
   const isMobile = typeof window !== 'undefined' && window.innerWidth <= 600;
   const [mobileMenuOpen, setMobileMenuOpen] = useState(!isMobile);
   const prevMeteorSteelRef = useRef(false);
+  const prevFallenStarlightRef = useRef(false);
   const wheelOpenedRef = useRef(false); // eslint-disable-line no-unused-vars
 
   // --- Pinch-to-zoom state & handlers ---
@@ -595,6 +597,16 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
     }
     prevMeteorSteelRef.current = showMeteorSteel;
   }, [showMeteorSteel]);
+
+  // Trigger falling star animation when entering fallen starlight mode
+  useEffect(() => {
+    if (showFallenStarlight && !prevFallenStarlightRef.current) {
+      setFallingStarAnim(true);
+      const t = setTimeout(() => setFallingStarAnim(false), 2500);
+      return () => clearTimeout(t);
+    }
+    prevFallenStarlightRef.current = showFallenStarlight;
+  }, [showFallenStarlight]);
 
   const triggerStormFlash = useCallback(() => {
     if (stormFlash) return;
@@ -2548,6 +2560,14 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
             <line className="meteor-streak m12" x1="650" y1="-15" x2="600" y2="85"  />
             <circle className="meteor-impact" cx="350" cy="350" r="0" />
           </svg>
+        </div>
+      )}
+      {fallingStarAnim && (
+        <div className="falling-star-overlay" aria-hidden="true">
+          <div className="falling-star-body">
+            <div className="falling-star-trail" />
+            <div className="falling-star-head" />
+          </div>
         </div>
       )}
       {videoListId && (
