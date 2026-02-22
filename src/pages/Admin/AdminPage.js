@@ -192,16 +192,19 @@ function CampaignListView({ campaigns, onSelect, getStatusForCampaign }) {
 
 // --- Section tabs ---
 const SECTIONS = [
-  { id: 'system-health', label: 'System Health' },
+  { id: 'plan', label: 'Plan' },
+  { id: 'discover', label: 'Discover Page \u2197', href: '/discover' },
   { id: 'campaigns', label: 'Campaign Manager' },
+  { id: 'subscribers', label: 'Subscribers' },
+  { id: 'contacts', label: 'Contacts' },
+  { id: 'mentors', label: 'Mentors' },
   { id: 'coursework', label: 'Coursework' },
   { id: '360-media', label: '360 Media' },
-  { id: 'subscribers', label: 'Subscribers' },
-  { id: 'mentors', label: 'Mentors' },
-  { id: 'contacts', label: 'Contacts' },
-  { id: 'services', label: 'Services' },
   { id: 'ip-registry', label: 'IP Registry' },
   { id: 'legal', label: 'Legal' },
+  { id: 'services', label: 'Services' },
+  { id: 'dev-tools', label: 'Dev Tools' },
+  { id: 'system-health', label: 'System Health' },
 ];
 
 // --- Campaign Manager content (extracted for tab switching) ---
@@ -2839,6 +2842,1449 @@ function LegalSection() {
 }
 
 // --- System Health / Refresh Key ---
+// =============================================
+// STRATEGIC PLAN SECTION
+// =============================================
+
+const PLAN_PHASES = [
+  {
+    id: 'phase-0',
+    phase: '0',
+    title: 'Revenue Unlock',
+    subtitle: 'Turn the site into a business',
+    timeline: 'Immediate',
+    color: '#e74c3c',
+    icon: '\u26A1',
+    initiatives: [
+      { id: 'stripe', name: 'Stripe Integration', status: 'not-started', description: 'Payment processing for subscriptions and one-time purchases', priority: 'critical' },
+      { id: 'pricing', name: 'Pricing Page', status: 'not-started', description: 'Public-facing page with tier comparison and CTAs', priority: 'critical' },
+      { id: 'paywall', name: 'Paywall Gates', status: 'in-progress', description: 'Gate premium content (YBR, Forge, Starlight, Medicine Wheel) — toggles exist, need real payment', priority: 'critical' },
+      { id: 'trial', name: 'Free Trial / Freemium Boundary', status: 'not-started', description: 'Define exactly what\'s free vs. paid. Give enough to hook, gate enough to convert.', priority: 'high' },
+    ],
+  },
+  {
+    id: 'phase-1',
+    phase: '1',
+    title: 'First Experience & Conversion',
+    subtitle: 'Turn visitors into users into paying members',
+    timeline: 'Q1 2026',
+    color: '#f39c12',
+    icon: '\u2728',
+    initiatives: [
+      { id: 'onboarding', name: 'Guided Onboarding Flow', status: 'not-started', description: '3-minute experience: archetype quiz \u2192 natal snapshot \u2192 personalized journey recommendation', priority: 'critical' },
+      { id: 'landing-seo', name: 'SEO Landing Pages', status: 'not-started', description: 'Each major section (Monomyth, Chronosphaera, Story Forge, Games) needs its own optimized entry point', priority: 'high' },
+      { id: 'email-capture', name: 'Email Capture & Lead Magnet', status: 'not-started', description: '"Your Mythic Profile" — free natal chart + archetype result in exchange for email', priority: 'high' },
+      { id: 'discover-polish', name: 'Discover Starlight Landing', status: 'in-progress', description: 'Polish the front door — conversion-focused hero, social proof, clear value prop', priority: 'high' },
+      { id: 'stub-pages', name: 'Complete Stub Pages', status: 'in-progress', description: 'XR, Sacred Sites 360, Mythic Earth, Guild — finish or remove from nav', priority: 'medium' },
+      { id: 'mobile', name: 'Mobile Optimization', status: 'not-started', description: 'Responsive pass on all pages, especially Chronosphaera orbital diagram', priority: 'high' },
+    ],
+  },
+  {
+    id: 'phase-2',
+    phase: '2',
+    title: 'Content Flywheel & Marketing',
+    subtitle: 'Build the engine that grows itself',
+    timeline: 'Q2 2026',
+    color: '#2ecc71',
+    icon: '\u267B',
+    initiatives: [
+      { id: 'mythic-year-execute', name: 'Execute Mythic Year Campaign', status: 'in-progress', description: 'The 12-month zodiac Instagram campaign — infrastructure built, now execute', priority: 'critical' },
+      { id: 'email-sequences', name: 'Email Automation', status: 'not-started', description: 'Welcome drip, course nudges, re-engagement sequences, purchase follow-ups', priority: 'high' },
+      { id: 'seo-content', name: 'Blog / SEO Articles', status: 'not-started', description: '57 data files = 57+ articles waiting to be written. Monomyth stages, planet mythology, game history.', priority: 'high' },
+      { id: 'youtube', name: 'YouTube / Mythology Channel', status: 'in-progress', description: 'Video content from Mythology Channel page — series, shows, educational content', priority: 'medium' },
+      { id: 'forge-viral', name: 'Story Forge Sharing', status: 'not-started', description: 'Users create myths \u2192 share publicly \u2192 bring new users. Social proof + content generation.', priority: 'high' },
+      { id: 'referral', name: 'Referral Program', status: 'not-started', description: 'Invite friends, earn free months or purchase credits', priority: 'medium' },
+    ],
+  },
+  {
+    id: 'phase-3',
+    phase: '3',
+    title: 'Community & Retention',
+    subtitle: 'Keep members engaged and coming back',
+    timeline: 'Q3 2026',
+    color: '#3498db',
+    icon: '\u26ED',
+    initiatives: [
+      { id: 'guild-activate', name: 'Guild System Activation', status: 'not-started', description: 'Challenges, leaderboards, collaborative journeys, guild quests', priority: 'high' },
+      { id: 'mentor-marketplace', name: 'Mentor Marketplace', status: 'in-progress', description: 'Real scheduling, session payments, mentor profiles — infrastructure exists', priority: 'high' },
+      { id: 'ugc', name: 'User-Generated Content', status: 'not-started', description: 'Community myths, shared journeys, myth salon discussions', priority: 'medium' },
+      { id: 'live-events', name: 'Live Events', status: 'not-started', description: 'Virtual guided journeys, mythology salons, group Chronosphaera sessions', priority: 'medium' },
+      { id: 'certs-real', name: 'Real Certifications', status: 'not-started', description: 'LinkedIn badges, printable certificates, external credentialing for coursework ranks', priority: 'medium' },
+      { id: 'analytics', name: 'Analytics Dashboard', status: 'not-started', description: 'User engagement metrics, funnel tracking, cohort analysis in Dragon', priority: 'high' },
+    ],
+  },
+  {
+    id: 'phase-4',
+    phase: '4',
+    title: 'Platform & Scale',
+    subtitle: 'From product to platform',
+    timeline: 'Q4 2026 \u2192 2027',
+    color: '#9b59b6',
+    icon: '\u2604',
+    initiatives: [
+      { id: 'educator-license', name: 'Educator Licensing', status: 'not-started', description: 'Monomyth + coursework = ready-made mythology curriculum for schools and workshops', priority: 'high' },
+      { id: 'api-content', name: 'Content API / Third-Party Journeys', status: 'not-started', description: 'Let mythology scholars and educators add their own journeys via API', priority: 'medium' },
+      { id: 'multilingual', name: 'Multilingual Support', status: 'not-started', description: 'Mythology is universal — translate core experience to 5+ languages', priority: 'medium' },
+      { id: 'pwa', name: 'Progressive Web App / Mobile', status: 'not-started', description: 'Offline support, push notifications, app store presence', priority: 'high' },
+      { id: 'publisher', name: 'Publisher Partnerships', status: 'not-started', description: 'Book deals, documentary tie-ins, educational content licensing (IP registry ready)', priority: 'medium' },
+      { id: 'tv-integration', name: 'Lost Treasures TV Tie-In', status: 'in-progress', description: 'Myths page with Templars, Czar Gold series — extend into companion app experience', priority: 'medium' },
+    ],
+  },
+];
+
+const REVENUE_STREAMS = [
+  {
+    id: 'subscriptions',
+    name: 'Subscriptions',
+    icon: '\uD83D\uDD11',
+    phase: '0',
+    items: [
+      { name: 'Master Key', id: 'master-key', description: 'All-access bundle', status: 'built', priceNote: 'Set pricing' },
+      { name: 'Yellow Brick Road', id: 'ybr', description: 'Guided monomyth journey', status: 'built', priceNote: 'Set pricing' },
+      { name: 'Story Forge', id: 'forge', description: 'AI myth writing', status: 'built', priceNote: 'Set pricing' },
+      { name: 'Coursework', id: 'coursework', description: 'Progress tracking & ranks', status: 'built', priceNote: 'Set pricing' },
+    ],
+  },
+  {
+    id: 'purchases',
+    name: 'One-Time Purchases',
+    icon: '\uD83D\uDCE6',
+    phase: '0',
+    items: [
+      { name: 'Fallen Starlight', id: 'fallen-starlight', description: 'Narrative overlay', status: 'built', priceNote: 'Set pricing' },
+      { name: 'Story of Stories', id: 'story-of-stories', description: 'Meta-narrative layer', status: 'built', priceNote: 'Set pricing' },
+      { name: 'Medicine Wheel', id: 'medicine-wheel', description: 'Sacred hoop overlay', status: 'built', priceNote: 'Set pricing' },
+      { name: 'Starlight Bundle', id: 'starlight-bundle', description: 'Both books discounted', status: 'built', priceNote: 'Set pricing' },
+    ],
+  },
+  {
+    id: 'services',
+    name: 'Services',
+    icon: '\uD83E\uDD1D',
+    phase: '3',
+    items: [
+      { name: 'Mentorship Sessions', id: 'mentorship', description: 'Paid mentor pairing', status: 'partial', priceNote: 'TBD' },
+      { name: 'Consulting', id: 'consulting', description: 'Professional mythology consulting', status: 'partial', priceNote: 'TBD' },
+      { name: 'Live Events', id: 'events', description: 'Virtual mythology salons', status: 'not-started', priceNote: 'TBD' },
+    ],
+  },
+  {
+    id: 'licensing',
+    name: 'Licensing & Partnerships',
+    icon: '\uD83C\uDFDB',
+    phase: '4',
+    items: [
+      { name: 'Educator Packages', id: 'edu-license', description: 'School & workshop curriculum', status: 'not-started', priceNote: 'TBD' },
+      { name: 'Content API Access', id: 'api-access', description: 'Third-party journey creation', status: 'not-started', priceNote: 'TBD' },
+      { name: 'Publisher Deals', id: 'publisher', description: 'Books, documentaries, IP licensing', status: 'not-started', priceNote: 'TBD' },
+    ],
+  },
+];
+
+const FEATURE_MATRIX = [
+  { name: 'Home (Meteor Steel)', route: '/home', status: 'live', category: 'core' },
+  { name: 'Discover Starlight (Landing)', route: '/', status: 'live', category: 'core' },
+  { name: 'Monomyth (8 stages \u00D7 6 tabs)', route: '/monomyth', status: 'live', category: 'core' },
+  { name: 'Chronosphaera (7 planets, 12+ modes)', route: '/chronosphaera', status: 'live', category: 'core' },
+  { name: 'Games (6 ancient board games)', route: '/games', status: 'live', category: 'core' },
+  { name: 'Atlas AI (multi-persona chat)', route: '/atlas', status: 'live', category: 'core' },
+  { name: 'Story Forge (AI myth writing)', route: '/story-forge', status: 'live', category: 'premium' },
+  { name: 'Yellow Brick Road (26 stops)', route: '/yellow-brick-road', status: 'live', category: 'premium' },
+  { name: 'Ouroboros Journeys (monomyth + planetary + zodiac)', route: '/journey/:id', status: 'live', category: 'premium' },
+  { name: 'Fallen Starlight (8 chapters)', route: '/fallen-starlight', status: 'live', category: 'premium' },
+  { name: 'Story of Stories', route: '/story-of-stories', status: 'live', category: 'premium' },
+  { name: 'Library', route: '/library', status: 'live', category: 'core' },
+  { name: 'Mythology Channel', route: '/mythology-channel', status: 'live', category: 'core' },
+  { name: 'Profile (ranks, certs, natal, numerology)', route: '/profile', status: 'live', category: 'core' },
+  { name: 'Coursework System (7 courses)', route: 'system', status: 'live', category: 'premium' },
+  { name: 'Mentor Directory & Matching', route: '/mentors', status: 'live', category: 'community' },
+  { name: 'Discover Page', route: '/discover', status: 'live', category: 'core' },
+  { name: 'Myths / Lost Treasures TV', route: '/myths', status: 'live', category: 'content' },
+  { name: 'Chronosphaera VR', route: '/chronosphaera/vr', status: 'live', category: 'experimental' },
+  { name: 'Mythic Earth (map)', route: '/mythic-earth', status: 'early', category: 'experimental' },
+  { name: 'Sacred Sites 360', route: '/sacred-sites-360', status: 'early', category: 'experimental' },
+  { name: 'XR Page', route: '/xr', status: 'early', category: 'experimental' },
+  { name: 'Guild System', route: '/guild', status: 'early', category: 'community' },
+  { name: 'Stripe / Payments', route: 'system', status: 'not-built', category: 'revenue' },
+  { name: 'Email Automation', route: 'system', status: 'not-built', category: 'growth' },
+  { name: 'Analytics Dashboard', route: 'system', status: 'not-built', category: 'ops' },
+  { name: 'SEO / Blog', route: 'system', status: 'not-built', category: 'growth' },
+  { name: 'Mobile / PWA', route: 'system', status: 'not-built', category: 'platform' },
+];
+
+const FEATURE_STATUS_CONFIG = {
+  live: { color: '#5bd97a', label: 'Live', bg: 'rgba(91,217,122,0.1)' },
+  early: { color: '#d9a55b', label: 'Early', bg: 'rgba(217,165,91,0.1)' },
+  'not-built': { color: '#d95b5b', label: 'Not Built', bg: 'rgba(217,91,91,0.1)' },
+};
+
+const INITIATIVE_STATUS_CONFIG = {
+  complete: { color: '#5bd97a', label: 'Complete' },
+  'in-progress': { color: '#d9a55b', label: 'In Progress' },
+  'not-started': { color: '#6a6a7a', label: 'Not Started' },
+};
+
+// =============================================
+// PRODUCT ROADMAP DATA
+// =============================================
+
+const PRODUCT_CATEGORIES = [
+  { id: 'narrative', label: 'Narrative & Story', color: '#c4713a' },
+  { id: 'celestial', label: 'Celestial & Esoteric', color: '#7b68ee' },
+  { id: 'interactive', label: 'Games & Journeys', color: '#2ecc71' },
+  { id: 'ai', label: 'Atlas & AI', color: '#3498db' },
+  { id: 'media', label: 'Media & Library', color: '#e67e22' },
+  { id: 'community', label: 'Community & Profile', color: '#e74c3c' },
+  { id: 'immersive', label: 'Immersive & XR', color: '#1abc9c' },
+  { id: 'platform', label: 'Platform & Ops', color: '#95a5a6' },
+];
+
+const PRODUCT_ROADMAP = [
+  // --- NARRATIVE & STORY ---
+  {
+    id: 'fallen-starlight',
+    name: 'Fallen Starlight',
+    category: 'narrative',
+    description: 'The Revelation — 8-chapter descent of celestial fire through the seven planetary metals',
+    route: '/fallen-starlight',
+    released: [
+      { label: '8 chapters with audio player', version: '1.0' },
+      { label: 'Monomyth stage navigation per chapter', version: '1.0' },
+      { label: 'Meteor shower visual transitions', version: '1.0' },
+      { label: 'Coursework tracking (15s/chapter)', version: '1.0' },
+    ],
+    next: [
+      { label: 'Chapter annotations & commentary layer' },
+      { label: 'Study guides for book clubs' },
+      { label: 'Full audiobook player (continuous)' },
+    ],
+    future: [
+      { label: 'Illustrated edition with artist interviews' },
+      { label: 'Interactive reading experience with Atlas' },
+    ],
+    maturity: 'gold',
+    purchaseGate: 'fallen-starlight',
+  },
+  {
+    id: 'story-of-stories',
+    name: 'Story of Stories',
+    category: 'narrative',
+    description: 'The meta-narrative — stories that emerged from the fall of light into matter',
+    route: '/story-of-stories',
+    released: [
+      { label: '8 chapters mirroring monomyth', version: '1.0' },
+      { label: 'Tab-based content per chapter', version: '1.0' },
+      { label: 'Audio chapter player', version: '1.0' },
+    ],
+    next: [
+      { label: 'Creative writing prompts per chapter' },
+      { label: 'Author Q&A content layer' },
+    ],
+    future: [
+      { label: 'Interactive choose-your-own-adventure variant' },
+      { label: 'Community discussion per chapter' },
+    ],
+    maturity: 'gold',
+    purchaseGate: 'story-of-stories',
+  },
+  {
+    id: 'story-forge',
+    name: 'Story Forge',
+    category: 'narrative',
+    description: 'Write your own myth — 4 templates, 8 monomyth stages, Atlas AI collaboration',
+    route: '/story-forge',
+    released: [
+      { label: '4 templates: Personal, Fiction, Screenplay, Reflection', version: '1.0' },
+      { label: '8-stage monomyth writing framework', version: '1.0' },
+      { label: 'Atlas AI story synthesis & continuation', version: '1.0' },
+      { label: 'Persistent story library (WritingsContext)', version: '1.0' },
+      { label: 'Polarity generator (protagonist/antagonist)', version: '1.0' },
+    ],
+    next: [
+      { label: 'Story sharing gallery (public stories)' },
+      { label: 'Collaborative writing (multi-author)' },
+    ],
+    future: [
+      { label: 'Story-to-game converter' },
+      { label: 'Publishing pipeline (PDF export, community gallery)' },
+      { label: 'Story remix system' },
+    ],
+    maturity: 'gold',
+    subscriptionGate: 'forge',
+  },
+
+  // --- CELESTIAL & ESOTERIC ---
+  {
+    id: 'chronosphaera',
+    name: 'Chronosphaera',
+    category: 'celestial',
+    description: 'The Celestial Clocks — 7 planets, 12 zodiac, 4 cardinals, 12+ view modes across 13 data files',
+    route: '/chronosphaera',
+    released: [
+      { label: '7 planets with multi-cultural analysis', version: '1.0' },
+      { label: '12 zodiac signs with archetypal depth', version: '1.0' },
+      { label: '4 cardinal points (solstices/equinoxes)', version: '1.0' },
+      { label: '12+ modes: Calendar, Body, Monomyth, Deities, Archetypes, Artists, Hebrew, Modern, Theology...', version: '1.0' },
+      { label: 'Interactive orbital diagram', version: '1.0' },
+      { label: 'Tarot integration', version: '1.0' },
+      { label: 'Day/night cycles', version: '1.0' },
+    ],
+    next: [
+      { label: 'Personal birth chart reading system' },
+      { label: 'Audio meditations per planet/zodiac' },
+      { label: 'Transiting planet calculator (real-time positions)' },
+    ],
+    future: [
+      { label: 'Guided "Celestial Reading" immersive experience (30-60 min)' },
+      { label: 'Chronosphaera mobile widget' },
+    ],
+    maturity: 'gold',
+  },
+  {
+    id: 'medicine-wheel',
+    name: 'Medicine Wheel',
+    category: 'celestial',
+    description: 'Hyemeyohsts Storm\'s sacred hoop — four directions overlaid on the Chronosphaera',
+    route: '/chronosphaera',
+    released: [
+      { label: 'Medicine wheel overlay on Chronosphaera', version: '1.0' },
+      { label: 'Four directions with powers and animals', version: '1.0' },
+      { label: 'Multiple wheel traditions', version: '1.0' },
+    ],
+    next: [
+      { label: 'Guided medicine wheel ceremony walkthrough' },
+      { label: 'Personal direction reading' },
+    ],
+    future: [
+      { label: 'Indigenous wisdom interview series' },
+    ],
+    maturity: 'gold',
+    purchaseGate: 'medicine-wheel',
+  },
+
+  // --- GAMES & JOURNEYS ---
+  {
+    id: 'ancient-games',
+    name: 'Ancient Board Games',
+    category: 'interactive',
+    description: '6 historically researched games: Senet, Ur, Mehen, Jackals & Hounds, Pachisi, Snakes & Ladders',
+    route: '/games',
+    released: [
+      { label: '6 fully playable games', version: '1.0' },
+      { label: 'AI opponent engine', version: '1.0' },
+      { label: 'Multiplayer with lobby', version: '1.0' },
+      { label: 'Shared GameShell with completion tracking', version: '1.0' },
+      { label: 'Historical context per game', version: '1.0' },
+    ],
+    next: [
+      { label: 'Tournament mode (bracket competitions)' },
+      { label: 'Strategy guides per game' },
+      { label: 'Game leaderboards' },
+    ],
+    future: [
+      { label: 'Seasonal quests & game variants' },
+      { label: 'Time attack modes' },
+      { label: 'New game additions' },
+    ],
+    maturity: 'gold',
+  },
+  {
+    id: 'ouroboros-journeys',
+    name: 'Ouroboros Journeys',
+    category: 'interactive',
+    description: '6 journey types, 3 modes (Riddle/Story/Personal), 216+ interactive challenge sets',
+    route: '/journey/:id',
+    released: [
+      { label: 'Monomyth Journey (8 stops)', version: '1.0' },
+      { label: 'Meteor Steel Journey (8 stops)', version: '1.0' },
+      { label: 'Fused Journey (8 stops, 2 phases)', version: '1.0' },
+      { label: 'Planetary Journey (7 planets, 3 levels)', version: '1.0' },
+      { label: 'Zodiac Journey (12 signs, 3 levels)', version: '1.0' },
+      { label: 'Cosmic Journey (26 stops, 3 levels)', version: '1.0' },
+      { label: 'Riddle / Story / Personal modes', version: '1.0' },
+      { label: 'Dragon coil visualization', version: '1.0' },
+    ],
+    next: [
+      { label: 'Group/collaborative journey mode' },
+      { label: 'Post-journey synthesis booklet' },
+    ],
+    future: [
+      { label: 'Branching narrative paths (player choices)' },
+      { label: 'Custom user-designed journeys' },
+    ],
+    maturity: 'gold',
+    subscriptionGate: 'ybr',
+  },
+  {
+    id: 'yellow-brick-road',
+    name: 'Yellow Brick Road',
+    category: 'interactive',
+    description: '26-stop cosmic pathway — guided monomyth journey with Atlas at each threshold',
+    route: '/yellow-brick-road',
+    released: [
+      { label: '26 stops through mythic figures', version: '1.0' },
+      { label: 'Atlas walk-alongside AI guide', version: '1.0' },
+      { label: 'Journey selection hub', version: '1.0' },
+    ],
+    next: [
+      { label: 'Progress persistence across sessions' },
+      { label: 'Achievement milestones per segment' },
+    ],
+    future: [
+      { label: 'Multiplayer group walk' },
+    ],
+    maturity: 'gold',
+    subscriptionGate: 'ybr',
+  },
+
+  // --- ATLAS & AI ---
+  {
+    id: 'atlas',
+    name: 'Atlas AI',
+    category: 'ai',
+    description: 'Multi-persona AI mentor — 25+ voices across planets, zodiac, cardinals, and the primary Atlas guide',
+    route: '/atlas',
+    released: [
+      { label: 'Atlas primary guide', version: '1.0' },
+      { label: '7 planetary voices', version: '1.0' },
+      { label: '12 zodiac voices', version: '1.0' },
+      { label: '4 cardinal voices', version: '1.0' },
+      { label: 'Per-voice chat history', version: '1.0' },
+      { label: 'Voice I/O support', version: '1.0' },
+      { label: 'Course-aware summaries (knows your progress)', version: '1.0' },
+      { label: 'Cross-page sidebar integration', version: '1.0' },
+    ],
+    next: [
+      { label: 'Mythic figure personas (Merlin, Athena, Thoth...)' },
+      { label: 'Quest assignment system (Atlas assigns, tracks)' },
+      { label: 'Conversation bookmarks & highlights' },
+    ],
+    future: [
+      { label: 'Personal mentor voice creation' },
+      { label: 'Group conversation mode' },
+      { label: 'Atlas "office hours" scheduled sessions' },
+    ],
+    maturity: 'gold',
+  },
+
+  // --- MEDIA & LIBRARY ---
+  {
+    id: 'mythology-channel',
+    name: 'Mythology Channel',
+    category: 'media',
+    description: '15 curated shows on myth, depth psychology, and culture — YouTube integration',
+    route: '/mythology-channel',
+    released: [
+      { label: '15 shows embedded with playlist navigation', version: '1.0' },
+      { label: 'Episode tracking & coursework integration', version: '1.0' },
+      { label: 'Synthesis data per episode', version: '1.0' },
+    ],
+    next: [
+      { label: 'Transcript search across all shows' },
+      { label: 'Topic-based curated playlists' },
+      { label: 'Guided viewing courses' },
+    ],
+    future: [
+      { label: 'Live stream feature for new content' },
+      { label: 'Community watch parties' },
+    ],
+    maturity: 'gold',
+  },
+  {
+    id: 'library',
+    name: 'Myth Salon Library',
+    category: 'media',
+    description: '8-stop trail narrative — from Pacifica origins to Mentone sanctuary, rare collections',
+    route: '/library',
+    released: [
+      { label: '8-stop trail narrative', version: '1.0' },
+      { label: 'Physical collection catalog (Campbell, Eranos, Bollingen...)', version: '1.0' },
+      { label: 'Trail completion tracking', version: '1.0' },
+    ],
+    next: [
+      { label: 'Virtual library tour (3D walkthrough)' },
+      { label: 'Book recommendation AI' },
+    ],
+    future: [
+      { label: 'Rare book digitization (OCR + full-text search)' },
+      { label: 'Community reading groups' },
+    ],
+    maturity: 'gold',
+  },
+  {
+    id: 'myths-tv',
+    name: 'Myths: Lost Treasures',
+    category: 'media',
+    description: 'TV series hub — Templars, Czar Gold, structured by episode with 3-ring knowledge system',
+    route: '/myths',
+    released: [
+      { label: '3-ring knowledge hierarchy', version: '1.0' },
+      { label: 'Episode browser with synthesis', version: '1.0' },
+      { label: 'Mythouse card/arcana lookup', version: '1.0' },
+    ],
+    next: [
+      { label: 'Complete all 5 episode tabs (Themes, Playlist, References, Music, Previous)' },
+      { label: 'Behind-the-scenes material' },
+    ],
+    future: [
+      { label: 'Companion app experience for TV viewers' },
+      { label: 'Episode discussion forums' },
+    ],
+    maturity: 'silver',
+  },
+
+  // --- COMMUNITY & PROFILE ---
+  {
+    id: 'monomyth',
+    name: 'Monomyth Explorer',
+    category: 'interactive',
+    description: '8 stages x 6 tabs = 48 content areas — Campbell, Jung, Vogler, films, myths, cycles',
+    route: '/monomyth',
+    released: [
+      { label: '8 stages with full content', version: '1.0' },
+      { label: '6 tabs per stage: Overview, Cycles, Theorists, Experts, Myths, Films', version: '1.0' },
+      { label: 'Stage-based quizzes', version: '1.0' },
+      { label: '300+ mythological references', version: '1.0' },
+    ],
+    next: [
+      { label: 'Video/media interpretations per stage' },
+      { label: 'Expert depth psychology commentary' },
+    ],
+    future: [
+      { label: 'Collaborative myth-mapping' },
+      { label: 'Stage-by-stage discussion forums' },
+    ],
+    maturity: 'gold',
+  },
+  {
+    id: 'coursework',
+    name: 'Coursework System',
+    category: 'community',
+    description: '10 courses with progress tracking, ranks, and certificates',
+    route: '/profile',
+    released: [
+      { label: '10 courses spanning all product areas', version: '1.0' },
+      { label: 'Requirement engine (element, count, time, group tracking)', version: '1.0' },
+      { label: 'Firestore progress persistence', version: '1.0' },
+      { label: 'Rank system with progression', version: '1.0' },
+      { label: 'Admin analytics dashboard', version: '1.0' },
+    ],
+    next: [
+      { label: 'Difficulty levels (beginner/intermediate/master)' },
+      { label: 'Printable certificates' },
+      { label: 'LinkedIn badge integration' },
+    ],
+    future: [
+      { label: 'Course prereq chains' },
+      { label: 'Cohort-based group courses' },
+      { label: 'Mentor-led courses' },
+    ],
+    maturity: 'gold',
+    subscriptionGate: 'coursework',
+  },
+  {
+    id: 'profile',
+    name: 'Profile & Identity',
+    category: 'community',
+    description: 'User identity — ranks, natal chart, numerology, handle, mentor status, API keys',
+    route: '/profile',
+    released: [
+      { label: 'Rank display & progression', version: '1.0' },
+      { label: 'Natal chart entry', version: '1.0' },
+      { label: 'Numerology engine', version: '1.0' },
+      { label: 'Multiplayer handle registration', version: '1.0' },
+      { label: 'Subscription/purchase management', version: '1.0' },
+      { label: 'Photo upload', version: '1.0' },
+      { label: 'BYOK API key management', version: '1.0' },
+    ],
+    next: [
+      { label: 'Personal learning dashboard (progress timeline)' },
+      { label: 'Public profile portfolio' },
+    ],
+    future: [
+      { label: 'Social connections & following' },
+      { label: 'Achievement showcase' },
+    ],
+    maturity: 'gold',
+  },
+  {
+    id: 'mentors',
+    name: 'Mentorship & Consulting',
+    category: 'community',
+    description: 'Mentor directory, pairing, applications, consulting services',
+    route: '/mentors',
+    released: [
+      { label: 'Mentor types & status system', version: '1.0' },
+      { label: 'Application chat interface', version: '1.0' },
+      { label: 'Capacity management', version: '1.0' },
+      { label: 'Pairing & matching', version: '1.0' },
+      { label: 'Consulting services', version: '1.0' },
+    ],
+    next: [
+      { label: 'Booking & scheduling system' },
+      { label: 'Session payment processing' },
+    ],
+    future: [
+      { label: 'Mentor-created courses' },
+      { label: 'Video session integration' },
+    ],
+    maturity: 'silver',
+  },
+  {
+    id: 'guild',
+    name: 'Guild System',
+    category: 'community',
+    description: 'Community guilds, multiplayer identity, group activities',
+    route: '/guild',
+    released: [
+      { label: 'Guild page structure', version: '0.5' },
+      { label: 'Handle system & multiplayer context', version: '1.0' },
+    ],
+    next: [
+      { label: 'Guild creation & membership' },
+      { label: 'Group challenges & quests' },
+      { label: 'Leaderboards' },
+    ],
+    future: [
+      { label: 'Guild tournaments' },
+      { label: 'Guild-exclusive content' },
+    ],
+    maturity: 'bronze',
+  },
+
+  // --- IMMERSIVE & XR ---
+  {
+    id: 'chronosphaera-vr',
+    name: 'Chronosphaera VR',
+    category: 'immersive',
+    description: '3D celestial experience — orbit the Sun, stand at center, real-time planets',
+    route: '/chronosphaera/vr',
+    released: [
+      { label: 'Three.js + React Three Fiber 3D scene', version: '1.0' },
+      { label: 'XR headset support', version: '1.0' },
+      { label: 'Orbital visualization', version: '1.0' },
+    ],
+    next: [
+      { label: 'Personalized zodiac constellation view' },
+      { label: 'Guided VR meditation' },
+    ],
+    future: [
+      { label: 'Multiplayer VR meditation space' },
+      { label: 'Haptic feedback integration' },
+    ],
+    maturity: 'silver',
+  },
+  {
+    id: 'mythic-earth',
+    name: 'Mythic Earth',
+    category: 'immersive',
+    description: '3D globe with 50+ sacred sites, temples, mythic locations — Cesium.js',
+    route: '/mythic-earth',
+    released: [
+      { label: '3D globe with satellite imagery', version: '1.0' },
+      { label: '5 categories: Sacred Sites, Mythic, Literary, Temples, Libraries', version: '1.0' },
+      { label: 'Region filtering & billboard labels', version: '1.0' },
+      { label: '50+ mapped locations', version: '1.0' },
+    ],
+    next: [
+      { label: 'Pilgrimage routes (multi-site narratives)' },
+      { label: 'Timeline slider (historical changes)' },
+    ],
+    future: [
+      { label: 'AR overlay (point camera, see mythic context)' },
+      { label: 'User-submitted location stories' },
+    ],
+    maturity: 'silver',
+  },
+  {
+    id: 'sacred-sites-360',
+    name: 'Sacred Sites 360',
+    category: 'immersive',
+    description: 'Immersive Street View exploration of the world\'s sacred locations',
+    route: '/sacred-sites-360',
+    released: [
+      { label: 'Google Street View integration', version: '0.5' },
+      { label: 'Region filtering', version: '0.5' },
+    ],
+    next: [
+      { label: 'Sacred site passport (digital stamps)' },
+      { label: 'Integration with Mythic Earth globe' },
+    ],
+    future: [
+      { label: 'Historical overlay (how sites looked in different eras)' },
+      { label: 'AR phone mode' },
+    ],
+    maturity: 'bronze',
+  },
+  {
+    id: 'xr-hub',
+    name: 'XR Experiences Hub',
+    category: 'immersive',
+    description: 'Gateway to VR/AR experiences — Celestial Wheels 3D, Mythic Earth AR',
+    route: '/xr',
+    released: [
+      { label: 'Experience launcher with 2 experiences', version: '0.5' },
+      { label: 'VR headset + phone AR support', version: '0.5' },
+    ],
+    next: [
+      { label: 'Temple/sacred site VR walkthroughs' },
+      { label: 'Experience rating & feedback' },
+    ],
+    future: [
+      { label: 'User-created XR experiences' },
+      { label: 'Social VR (shared spaces)' },
+    ],
+    maturity: 'bronze',
+  },
+
+  // --- PLATFORM & OPS ---
+  {
+    id: 'payments',
+    name: 'Payments (Stripe)',
+    category: 'platform',
+    description: 'Payment processing for subscriptions and purchases — THE critical missing piece',
+    route: 'system',
+    released: [
+      { label: 'Subscription/purchase model defined', version: '0.5' },
+      { label: 'Profile toggle infrastructure', version: '0.5' },
+    ],
+    next: [
+      { label: 'Stripe integration' },
+      { label: 'Checkout flow' },
+      { label: 'Pricing page' },
+    ],
+    future: [
+      { label: 'Tiered pricing (annual discount)' },
+      { label: 'Gift subscriptions' },
+      { label: 'Promo codes' },
+    ],
+    maturity: 'bronze',
+  },
+  {
+    id: 'email-system',
+    name: 'Email & Marketing',
+    category: 'platform',
+    description: 'Email capture, drip sequences, campaign automation',
+    route: 'system',
+    released: [
+      { label: 'Subscriber collection (Dragon tab)', version: '0.5' },
+    ],
+    next: [
+      { label: 'Welcome drip sequence' },
+      { label: 'Course nudge emails' },
+      { label: 'Re-engagement automation' },
+    ],
+    future: [
+      { label: 'Personalized content recommendations via email' },
+      { label: 'Newsletter with AI-generated mythic content' },
+    ],
+    maturity: 'bronze',
+  },
+  {
+    id: 'campaign-system',
+    name: 'Campaign Manager',
+    category: 'platform',
+    description: 'Mythic Year — 12-month zodiac Instagram campaign infrastructure',
+    route: '/dragon',
+    released: [
+      { label: '12-month campaign framework', version: '1.0' },
+      { label: 'Post status tracking (draft/prepared/scheduled/posted)', version: '1.0' },
+      { label: '7 cultural lenses per post', version: '1.0' },
+      { label: 'Progress visualization', version: '1.0' },
+    ],
+    next: [
+      { label: 'Execute campaign (create & post content)' },
+      { label: 'Cross-platform support (Twitter/X, TikTok)' },
+    ],
+    future: [
+      { label: 'AI-assisted post generation' },
+      { label: 'Analytics integration (engagement tracking)' },
+    ],
+    maturity: 'gold',
+  },
+];
+
+const MATURITY_CONFIG = {
+  gold: { color: 'rgba(218,165,32,0.9)', bg: 'rgba(218,165,32,0.12)', label: 'Gold', description: 'Production-ready, rich content' },
+  silver: { color: '#a8b4c0', bg: 'rgba(168,180,192,0.12)', label: 'Silver', description: 'Functional, needs depth' },
+  bronze: { color: '#cd7f32', bg: 'rgba(205,127,50,0.12)', label: 'Bronze', description: 'Early / stub / not started' },
+};
+
+const KEY_METRICS = [
+  { name: 'Monthly Active Users', target: 'Track', source: 'Firebase Auth + analytics', phase: '1' },
+  { name: 'Free \u2192 Paid Conversion', target: '3-5%', source: 'Stripe + profiles', phase: '0' },
+  { name: 'Subscription Churn', target: '<5%/mo', source: 'Stripe', phase: '0' },
+  { name: 'Course Completion Rate', target: '>25%', source: 'Coursework system (built)', phase: '1' },
+  { name: 'Atlas Messages / User', target: 'Track', source: 'Chat API logs', phase: '1' },
+  { name: 'Stories Created (Forge)', target: 'Track', source: 'WritingsContext', phase: '2' },
+  { name: 'Journey Completion Rate', target: '>15%', source: 'Journey hooks', phase: '2' },
+  { name: 'Revenue Per User (ARPU)', target: 'Track', source: 'Stripe', phase: '0' },
+  { name: 'Organic Traffic Growth', target: '10%+ mo/mo', source: 'Google Analytics', phase: '2' },
+  { name: 'Email List Size', target: '1K in 90d', source: 'Subscribers system (built)', phase: '1' },
+  { name: 'Mentor Active Pairings', target: 'Track', source: 'Mentor system (built)', phase: '3' },
+  { name: 'Guild Members', target: 'Track', source: 'Guild system', phase: '3' },
+];
+
+// --- Strategic Notes persistence ---
+function useStrategicNotes() {
+  const key = 'dragon-strategic-notes';
+  const [notes, setNotes] = useState(() => {
+    try {
+      const saved = localStorage.getItem(key);
+      return saved || '';
+    } catch {
+      return '';
+    }
+  });
+
+  const [phaseNotes, setPhaseNotes] = useState(() => {
+    try {
+      const saved = localStorage.getItem(key + '-phases');
+      return saved ? JSON.parse(saved) : {};
+    } catch {
+      return {};
+    }
+  });
+
+  useEffect(() => {
+    localStorage.setItem(key, notes);
+  }, [notes]);
+
+  useEffect(() => {
+    localStorage.setItem(key + '-phases', JSON.stringify(phaseNotes));
+  }, [phaseNotes]);
+
+  const updatePhaseNote = useCallback((phaseId, value) => {
+    setPhaseNotes(prev => ({ ...prev, [phaseId]: value }));
+  }, []);
+
+  return { notes, setNotes, phaseNotes, updatePhaseNote };
+}
+
+// --- Initiative status persistence ---
+function useInitiativeStatuses() {
+  const key = 'dragon-initiative-statuses';
+  const [statuses, setStatuses] = useState(() => {
+    try {
+      const saved = localStorage.getItem(key);
+      return saved ? JSON.parse(saved) : {};
+    } catch {
+      return {};
+    }
+  });
+
+  useEffect(() => {
+    localStorage.setItem(key, JSON.stringify(statuses));
+  }, [statuses]);
+
+  const getStatus = useCallback((id, defaultStatus) => statuses[id] || defaultStatus, [statuses]);
+  const setStatus = useCallback((id, status) => {
+    setStatuses(prev => ({ ...prev, [id]: status }));
+  }, []);
+
+  return { getStatus, setStatus };
+}
+
+function StrategicPlanSection() {
+  const [expandedPhase, setExpandedPhase] = useState('phase-0');
+  const [viewMode, setViewMode] = useState('vision');
+  const { notes, setNotes, phaseNotes, updatePhaseNote } = useStrategicNotes();
+  const { getStatus, setStatus: setInitiativeStatus } = useInitiativeStatuses();
+  // Roadmap filter state (lifted here for hooks rules)
+  const [roadmapFilterCat, setRoadmapFilterCat] = useState('all');
+  const [roadmapFilterMaturity, setRoadmapFilterMaturity] = useState('all');
+  const [expandedProduct, setExpandedProduct] = useState(null);
+
+  const S = {
+    section: { padding: '32px 24px', maxWidth: 1100, margin: '0 auto' },
+    heading: { fontFamily: 'Cinzel, serif', color: 'rgba(218,165,32,0.9)', fontSize: '1.5rem', marginBottom: 4, letterSpacing: 2 },
+    subtitle: { color: '#888', fontSize: '0.9rem', marginBottom: 28, fontStyle: 'italic' },
+    tabRow: { display: 'flex', gap: 0, marginBottom: 28, borderBottom: '1px solid #2a2a3a' },
+    tab: (active) => ({
+      padding: '10px 20px', background: 'none', border: 'none',
+      borderBottom: active ? '2px solid rgba(218,165,32,0.7)' : '2px solid transparent',
+      color: active ? 'rgba(218,165,32,0.9)' : '#6a6a7a', fontFamily: 'Cinzel, serif',
+      fontSize: '0.82rem', letterSpacing: 1, cursor: 'pointer', transition: 'all 0.2s',
+    }),
+    card: (borderColor) => ({
+      background: 'rgba(26,26,36,0.7)', border: `1px solid ${borderColor || 'rgba(218,165,32,0.15)'}`,
+      borderRadius: 10, padding: '20px 22px', marginBottom: 16,
+    }),
+    grid: (cols) => ({
+      display: 'grid', gridTemplateColumns: `repeat(auto-fill, minmax(${cols || 280}px, 1fr))`, gap: 14,
+    }),
+    phaseLabel: (color) => ({
+      display: 'inline-block', padding: '2px 10px', borderRadius: 4,
+      background: color + '22', color: color, fontSize: '0.72rem',
+      fontFamily: 'Cinzel, serif', letterSpacing: 1, fontWeight: 600,
+    }),
+    statusDot: (color) => ({
+      display: 'inline-block', width: 8, height: 8, borderRadius: '50%',
+      background: color, marginRight: 8, verticalAlign: 'middle',
+    }),
+    initiativeRow: {
+      display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+      padding: '10px 14px', background: 'rgba(0,0,0,0.2)', borderRadius: 6, marginBottom: 6,
+    },
+    select: {
+      background: '#1a1a24', border: '1px solid #3a3a4a', borderRadius: 4,
+      color: '#ccc', padding: '3px 8px', fontSize: '0.75rem', fontFamily: 'inherit',
+    },
+    textarea: {
+      width: '100%', minHeight: 120, background: 'rgba(0,0,0,0.3)', border: '1px solid rgba(218,165,32,0.2)',
+      borderRadius: 8, padding: '14px 16px', color: '#ccc', fontSize: '0.85rem', lineHeight: 1.7,
+      fontFamily: 'Georgia, serif', resize: 'vertical',
+    },
+    sectionTitle: { fontFamily: 'Cinzel, serif', color: '#ddd', fontSize: '1rem', marginBottom: 14 },
+    badge: (bg, fg) => ({
+      display: 'inline-block', padding: '2px 8px', borderRadius: 4,
+      background: bg, color: fg, fontSize: '0.7rem', letterSpacing: 0.5,
+    }),
+  };
+
+  // Compute phase progress from initiative statuses
+  const phaseProgress = useMemo(() => {
+    const result = {};
+    for (const phase of PLAN_PHASES) {
+      const total = phase.initiatives.length;
+      let complete = 0;
+      let inProgress = 0;
+      for (const init of phase.initiatives) {
+        const s = getStatus(init.id, init.status);
+        if (s === 'complete') complete++;
+        else if (s === 'in-progress') inProgress++;
+      }
+      result[phase.id] = { total, complete, inProgress, pct: total > 0 ? Math.round((complete / total) * 100) : 0 };
+    }
+    return result;
+  }, [getStatus]);
+
+  const renderVision = () => (
+    <div>
+      {/* Phase overview bar */}
+      <div style={{ display: 'flex', gap: 10, marginBottom: 28, flexWrap: 'wrap' }}>
+        {PLAN_PHASES.map(phase => {
+          const p = phaseProgress[phase.id];
+          const isExpanded = expandedPhase === phase.id;
+          return (
+            <button
+              key={phase.id}
+              onClick={() => setExpandedPhase(isExpanded ? null : phase.id)}
+              style={{
+                flex: '1 1 180px', padding: '14px 16px', background: isExpanded ? phase.color + '22' : 'rgba(26,26,36,0.7)',
+                border: `1px solid ${isExpanded ? phase.color + '66' : '#2a2a3a'}`, borderRadius: 10,
+                cursor: 'pointer', textAlign: 'left', transition: 'all 0.2s', fontFamily: 'inherit',
+              }}
+            >
+              <div style={{ fontSize: '1.2rem', marginBottom: 4 }}>{phase.icon}</div>
+              <div style={{ fontFamily: 'Cinzel, serif', color: phase.color, fontSize: '0.82rem', letterSpacing: 1 }}>
+                Phase {phase.phase}
+              </div>
+              <div style={{ color: '#ddd', fontSize: '0.85rem', marginBottom: 4 }}>{phase.title}</div>
+              <div style={{ color: '#666', fontSize: '0.72rem', marginBottom: 8 }}>{phase.timeline}</div>
+              <div style={{ background: 'rgba(0,0,0,0.3)', borderRadius: 4, height: 4, overflow: 'hidden' }}>
+                <div style={{
+                  width: `${p.pct}%`, height: '100%', background: phase.color,
+                  borderRadius: 4, transition: 'width 0.3s',
+                }} />
+              </div>
+              <div style={{ color: '#666', fontSize: '0.68rem', marginTop: 4 }}>
+                {p.complete}/{p.total} complete
+              </div>
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Expanded phase detail */}
+      {expandedPhase && (() => {
+        const phase = PLAN_PHASES.find(p => p.id === expandedPhase);
+        if (!phase) return null;
+        return (
+          <div style={S.card(phase.color + '44')}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 6 }}>
+              <span style={{ fontSize: '1.4rem' }}>{phase.icon}</span>
+              <div>
+                <h3 style={{ fontFamily: 'Cinzel, serif', color: phase.color, fontSize: '1.1rem', margin: 0 }}>
+                  Phase {phase.phase}: {phase.title}
+                </h3>
+                <div style={{ color: '#888', fontSize: '0.82rem', fontStyle: 'italic' }}>{phase.subtitle}</div>
+              </div>
+              <div style={{ marginLeft: 'auto' }}>
+                <span style={S.phaseLabel(phase.color)}>{phase.timeline}</span>
+              </div>
+            </div>
+
+            <div style={{ marginTop: 18 }}>
+              {phase.initiatives.map(init => {
+                const currentStatus = getStatus(init.id, init.status);
+                const statusCfg = INITIATIVE_STATUS_CONFIG[currentStatus] || INITIATIVE_STATUS_CONFIG['not-started'];
+                return (
+                  <div key={init.id} style={S.initiativeRow}>
+                    <div style={{ flex: 1 }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 2 }}>
+                        <span style={S.statusDot(statusCfg.color)} />
+                        <span style={{ color: '#ddd', fontSize: '0.88rem' }}>{init.name}</span>
+                        {init.priority === 'critical' && (
+                          <span style={S.badge('rgba(231,76,60,0.2)', '#e74c3c')}>CRITICAL</span>
+                        )}
+                        {init.priority === 'high' && (
+                          <span style={S.badge('rgba(243,156,18,0.2)', '#f39c12')}>HIGH</span>
+                        )}
+                      </div>
+                      <div style={{ color: '#777', fontSize: '0.78rem', marginLeft: 16 }}>{init.description}</div>
+                    </div>
+                    <select
+                      value={currentStatus}
+                      onChange={e => setInitiativeStatus(init.id, e.target.value)}
+                      style={S.select}
+                    >
+                      <option value="not-started">Not Started</option>
+                      <option value="in-progress">In Progress</option>
+                      <option value="complete">Complete</option>
+                    </select>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Phase notes */}
+            <div style={{ marginTop: 18 }}>
+              <div style={{ color: '#888', fontSize: '0.78rem', marginBottom: 6, fontFamily: 'Cinzel, serif' }}>Phase Notes</div>
+              <textarea
+                style={{ ...S.textarea, minHeight: 70 }}
+                value={phaseNotes[phase.id] || ''}
+                onChange={e => updatePhaseNote(phase.id, e.target.value)}
+                placeholder={`Notes for Phase ${phase.phase}...`}
+              />
+            </div>
+          </div>
+        );
+      })()}
+    </div>
+  );
+
+  const renderRevenue = () => (
+    <div>
+      {/* Revenue at a glance */}
+      <div style={{ ...S.card('rgba(218,165,32,0.25)'), marginBottom: 24 }}>
+        <h3 style={{ fontFamily: 'Cinzel, serif', color: 'rgba(218,165,32,0.9)', fontSize: '1rem', marginBottom: 12 }}>
+          Revenue Architecture
+        </h3>
+        <div style={{ color: '#aaa', fontSize: '0.85rem', lineHeight: 1.7 }}>
+          <strong style={{ color: '#ddd' }}>4 subscriptions</strong> (Master Key bundle + 3 individual) +{' '}
+          <strong style={{ color: '#ddd' }}>4 one-time purchases</strong> (3 content + 1 bundle) are fully defined in the profile system.
+          Toggle infrastructure exists. <span style={{ color: '#e74c3c' }}>Missing: Stripe integration, pricing, and payment processing.</span>
+        </div>
+      </div>
+
+      {REVENUE_STREAMS.map(stream => (
+        <div key={stream.id} style={{ marginBottom: 24 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
+            <span style={{ fontSize: '1.2rem' }}>{stream.icon}</span>
+            <h3 style={{ fontFamily: 'Cinzel, serif', color: '#ddd', fontSize: '0.95rem', margin: 0 }}>
+              {stream.name}
+            </h3>
+            <span style={S.phaseLabel(PLAN_PHASES.find(p => p.phase === stream.phase)?.color || '#888')}>
+              Phase {stream.phase}
+            </span>
+          </div>
+          <div style={S.grid(300)}>
+            {stream.items.map(item => {
+              const statusColor = item.status === 'built' ? '#5bd97a' : item.status === 'partial' ? '#d9a55b' : '#d95b5b';
+              return (
+                <div key={item.id} style={{
+                  ...S.card(statusColor + '33'), padding: '14px 16px', marginBottom: 0,
+                }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
+                    <span style={{ color: '#ddd', fontSize: '0.88rem' }}>{item.name}</span>
+                    <span style={S.badge(statusColor + '22', statusColor)}>
+                      {item.status === 'built' ? 'BUILT' : item.status === 'partial' ? 'PARTIAL' : 'NOT BUILT'}
+                    </span>
+                  </div>
+                  <div style={{ color: '#777', fontSize: '0.78rem', marginBottom: 6 }}>{item.description}</div>
+                  <div style={{ color: '#d9a55b', fontSize: '0.75rem', fontStyle: 'italic' }}>{item.priceNote}</div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+
+  const renderFeatures = () => {
+    const categories = [...new Set(FEATURE_MATRIX.map(f => f.category))];
+    return (
+      <div>
+        <div style={{ display: 'flex', gap: 16, marginBottom: 20, flexWrap: 'wrap' }}>
+          {Object.entries(FEATURE_STATUS_CONFIG).map(([key, cfg]) => {
+            const count = FEATURE_MATRIX.filter(f => f.status === key).length;
+            return (
+              <div key={key} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                <span style={S.statusDot(cfg.color)} />
+                <span style={{ color: cfg.color, fontSize: '0.82rem' }}>{cfg.label}: {count}</span>
+              </div>
+            );
+          })}
+        </div>
+
+        {categories.map(cat => {
+          const features = FEATURE_MATRIX.filter(f => f.category === cat);
+          return (
+            <div key={cat} style={{ marginBottom: 20 }}>
+              <h4 style={{
+                fontFamily: 'Cinzel, serif', color: '#8a8aa0', fontSize: '0.8rem',
+                letterSpacing: 2, textTransform: 'uppercase', marginBottom: 10,
+              }}>
+                {cat}
+              </h4>
+              {features.map(f => {
+                const cfg = FEATURE_STATUS_CONFIG[f.status];
+                return (
+                  <div key={f.name} style={{
+                    display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                    padding: '8px 14px', background: cfg.bg, borderRadius: 6, marginBottom: 4,
+                    borderLeft: `3px solid ${cfg.color}`,
+                  }}>
+                    <span style={{ color: '#ccc', fontSize: '0.85rem' }}>{f.name}</span>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                      {f.route !== 'system' && (
+                        <span style={{ color: '#555', fontSize: '0.72rem', fontFamily: 'monospace' }}>{f.route}</span>
+                      )}
+                      <span style={S.badge(cfg.color + '22', cfg.color)}>{cfg.label.toUpperCase()}</span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          );
+        })}
+      </div>
+    );
+  };
+
+  const renderMetrics = () => (
+    <div>
+      <div style={{ ...S.card('rgba(52,152,219,0.25)'), marginBottom: 24 }}>
+        <h3 style={{ fontFamily: 'Cinzel, serif', color: '#3498db', fontSize: '1rem', marginBottom: 8 }}>
+          Key Performance Indicators
+        </h3>
+        <div style={{ color: '#aaa', fontSize: '0.85rem', lineHeight: 1.7 }}>
+          These are the metrics that matter. Several data sources already exist in the codebase
+          (coursework tracking, subscriber system, mentor pairing). Revenue metrics require Stripe integration.
+        </div>
+      </div>
+
+      <div style={S.grid(320)}>
+        {KEY_METRICS.map(metric => {
+          const phase = PLAN_PHASES.find(p => p.phase === metric.phase);
+          return (
+            <div key={metric.name} style={{ ...S.card(), padding: '14px 16px', marginBottom: 0 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 6 }}>
+                <span style={{ color: '#ddd', fontSize: '0.88rem', lineHeight: 1.3 }}>{metric.name}</span>
+                <span style={S.phaseLabel(phase?.color || '#888')}>P{metric.phase}</span>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <span style={{ color: '#5bd97a', fontSize: '0.82rem', fontFamily: 'Cinzel, serif' }}>
+                  Target: {metric.target}
+                </span>
+              </div>
+              <div style={{ color: '#666', fontSize: '0.72rem', marginTop: 4 }}>{metric.source}</div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+
+  const renderRoadmap = () => {
+    const filtered = PRODUCT_ROADMAP.filter(p => {
+      if (roadmapFilterCat !== 'all' && p.category !== roadmapFilterCat) return false;
+      if (roadmapFilterMaturity !== 'all' && p.maturity !== roadmapFilterMaturity) return false;
+      return true;
+    });
+
+    // Group by category for the lane view
+    const grouped = {};
+    for (const p of filtered) {
+      if (!grouped[p.category]) grouped[p.category] = [];
+      grouped[p.category].push(p);
+    }
+
+    return (
+      <div>
+        {/* Summary bar */}
+        <div style={{ display: 'flex', gap: 16, marginBottom: 20, flexWrap: 'wrap', alignItems: 'center' }}>
+          {Object.entries(MATURITY_CONFIG).map(([key, cfg]) => {
+            const count = PRODUCT_ROADMAP.filter(p => p.maturity === key).length;
+            return (
+              <button
+                key={key}
+                onClick={() => setRoadmapFilterMaturity(roadmapFilterMaturity === key ? 'all' : key)}
+                style={{
+                  display: 'flex', alignItems: 'center', gap: 6, background: roadmapFilterMaturity === key ? cfg.bg : 'none',
+                  border: roadmapFilterMaturity === key ? `1px solid ${cfg.color}44` : '1px solid transparent',
+                  borderRadius: 6, padding: '4px 12px', cursor: 'pointer', transition: 'all 0.2s',
+                }}
+              >
+                <span style={{ ...S.statusDot(cfg.color) }} />
+                <span style={{ color: cfg.color, fontSize: '0.82rem', fontFamily: 'inherit' }}>{cfg.label}: {count}</span>
+              </button>
+            );
+          })}
+          <div style={{ marginLeft: 'auto' }}>
+            <select
+              value={roadmapFilterCat}
+              onChange={e => setRoadmapFilterCat(e.target.value)}
+              style={{ ...S.select, padding: '5px 12px', fontSize: '0.8rem' }}
+            >
+              <option value="all">All Categories</option>
+              {PRODUCT_CATEGORIES.map(c => (
+                <option key={c.id} value={c.id}>{c.label}</option>
+              ))}
+            </select>
+          </div>
+        </div>
+
+        {/* Products by category */}
+        {PRODUCT_CATEGORIES.filter(cat => grouped[cat.id]?.length > 0).map(cat => (
+          <div key={cat.id} style={{ marginBottom: 28 }}>
+            <div style={{
+              display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12,
+              borderBottom: `1px solid ${cat.color}33`, paddingBottom: 8,
+            }}>
+              <div style={{ width: 4, height: 18, borderRadius: 2, background: cat.color }} />
+              <h3 style={{ fontFamily: 'Cinzel, serif', color: cat.color, fontSize: '0.9rem', margin: 0, letterSpacing: 1 }}>
+                {cat.label}
+              </h3>
+              <span style={{ color: '#555', fontSize: '0.75rem' }}>({grouped[cat.id].length} products)</span>
+            </div>
+
+            {grouped[cat.id].map(product => {
+              const matCfg = MATURITY_CONFIG[product.maturity];
+              const isExpanded = expandedProduct === product.id;
+              const totalReleased = product.released.length;
+              const totalNext = product.next.length;
+              const totalFuture = product.future.length;
+
+              return (
+                <div
+                  key={product.id}
+                  style={{
+                    background: isExpanded ? 'rgba(26,26,36,0.9)' : 'rgba(26,26,36,0.5)',
+                    border: `1px solid ${isExpanded ? cat.color + '44' : '#2a2a3a'}`,
+                    borderRadius: 10, marginBottom: 8, overflow: 'hidden',
+                    transition: 'all 0.2s',
+                  }}
+                >
+                  {/* Product header (always visible) */}
+                  <button
+                    onClick={() => setExpandedProduct(isExpanded ? null : product.id)}
+                    style={{
+                      width: '100%', display: 'flex', alignItems: 'center', gap: 14,
+                      padding: '14px 18px', background: 'none', border: 'none',
+                      cursor: 'pointer', textAlign: 'left', fontFamily: 'inherit',
+                    }}
+                  >
+                    {/* Maturity dot */}
+                    <span style={{ ...S.statusDot(matCfg.color), flexShrink: 0 }} />
+
+                    {/* Name & description */}
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{ color: '#ddd', fontSize: '0.9rem', marginBottom: 2 }}>
+                        {product.name}
+                        {product.purchaseGate && (
+                          <span style={{ ...S.badge('rgba(231,76,60,0.15)', '#e74c3c'), marginLeft: 8, fontSize: '0.65rem' }}>PURCHASE</span>
+                        )}
+                        {product.subscriptionGate && (
+                          <span style={{ ...S.badge('rgba(52,152,219,0.15)', '#3498db'), marginLeft: 8, fontSize: '0.65rem' }}>SUBSCRIPTION</span>
+                        )}
+                      </div>
+                      <div style={{ color: '#666', fontSize: '0.76rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                        {product.description}
+                      </div>
+                    </div>
+
+                    {/* Release counts */}
+                    <div style={{ display: 'flex', gap: 8, flexShrink: 0 }}>
+                      <span style={{ ...S.badge('rgba(91,217,122,0.15)', '#5bd97a'), fontSize: '0.7rem' }}>
+                        {totalReleased} shipped
+                      </span>
+                      <span style={{ ...S.badge('rgba(243,156,18,0.15)', '#f39c12'), fontSize: '0.7rem' }}>
+                        {totalNext} next
+                      </span>
+                      <span style={{ ...S.badge('rgba(155,89,182,0.15)', '#9b59b6'), fontSize: '0.7rem' }}>
+                        {totalFuture} future
+                      </span>
+                    </div>
+
+                    {/* Expand arrow */}
+                    <span style={{ color: '#555', fontSize: '0.9rem', flexShrink: 0, transition: 'transform 0.2s', transform: isExpanded ? 'rotate(90deg)' : 'none' }}>
+                      &#9654;
+                    </span>
+                  </button>
+
+                  {/* Expanded detail */}
+                  {isExpanded && (
+                    <div style={{ padding: '0 18px 18px', borderTop: '1px solid #2a2a3a' }}>
+                      {product.route && product.route !== 'system' && (
+                        <div style={{ color: '#555', fontSize: '0.72rem', fontFamily: 'monospace', marginTop: 10, marginBottom: 12 }}>
+                          Route: {product.route}
+                        </div>
+                      )}
+
+                      {/* Three columns: Shipped / Next / Future */}
+                      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 14, marginTop: 8 }}>
+                        {/* Shipped */}
+                        <div>
+                          <div style={{
+                            fontFamily: 'Cinzel, serif', fontSize: '0.75rem', color: '#5bd97a',
+                            letterSpacing: 1, marginBottom: 10, paddingBottom: 4,
+                            borderBottom: '1px solid rgba(91,217,122,0.2)',
+                          }}>
+                            SHIPPED
+                          </div>
+                          {product.released.map((item, i) => (
+                            <div key={i} style={{
+                              display: 'flex', alignItems: 'flex-start', gap: 8, marginBottom: 6,
+                            }}>
+                              <span style={{ color: '#5bd97a', fontSize: '0.7rem', marginTop: 2, flexShrink: 0 }}>&#10003;</span>
+                              <span style={{ color: '#aaa', fontSize: '0.78rem', lineHeight: 1.4 }}>{item.label}</span>
+                            </div>
+                          ))}
+                        </div>
+
+                        {/* Next Release */}
+                        <div>
+                          <div style={{
+                            fontFamily: 'Cinzel, serif', fontSize: '0.75rem', color: '#f39c12',
+                            letterSpacing: 1, marginBottom: 10, paddingBottom: 4,
+                            borderBottom: '1px solid rgba(243,156,18,0.2)',
+                          }}>
+                            NEXT RELEASE
+                          </div>
+                          {product.next.map((item, i) => (
+                            <div key={i} style={{
+                              display: 'flex', alignItems: 'flex-start', gap: 8, marginBottom: 6,
+                            }}>
+                              <span style={{ color: '#f39c12', fontSize: '0.65rem', marginTop: 3, flexShrink: 0 }}>&#9679;</span>
+                              <span style={{ color: '#999', fontSize: '0.78rem', lineHeight: 1.4 }}>{item.label}</span>
+                            </div>
+                          ))}
+                        </div>
+
+                        {/* Future */}
+                        <div>
+                          <div style={{
+                            fontFamily: 'Cinzel, serif', fontSize: '0.75rem', color: '#9b59b6',
+                            letterSpacing: 1, marginBottom: 10, paddingBottom: 4,
+                            borderBottom: '1px solid rgba(155,89,182,0.2)',
+                          }}>
+                            FUTURE
+                          </div>
+                          {product.future.map((item, i) => (
+                            <div key={i} style={{
+                              display: 'flex', alignItems: 'flex-start', gap: 8, marginBottom: 6,
+                            }}>
+                              <span style={{ color: '#9b59b6', fontSize: '0.65rem', marginTop: 3, flexShrink: 0 }}>&#9675;</span>
+                              <span style={{ color: '#777', fontSize: '0.78rem', lineHeight: 1.4 }}>{item.label}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        ))}
+      </div>
+    );
+  };
+
+  const renderNotes = () => (
+    <div>
+      <div style={{ marginBottom: 24 }}>
+        <h3 style={S.sectionTitle}>Strategic Vision Notes</h3>
+        <p style={{ color: '#888', fontSize: '0.82rem', marginBottom: 12 }}>
+          Living document. Write your vision, priorities, and strategic thinking here. Persists across sessions.
+        </p>
+        <textarea
+          style={{ ...S.textarea, minHeight: 300 }}
+          value={notes}
+          onChange={e => setNotes(e.target.value)}
+          placeholder="Write your strategic vision here...&#10;&#10;What is Mythouse? What problem does it solve? Who is it for?&#10;What does success look like in 6 months? 1 year? 5 years?&#10;What are the non-negotiable principles?&#10;What are you willing to sacrifice for speed?&#10;Where do you want to be when this is done?"
+        />
+      </div>
+
+      {/* Content inventory summary */}
+      <div style={S.card()}>
+        <h3 style={{ fontFamily: 'Cinzel, serif', color: '#ddd', fontSize: '0.95rem', marginBottom: 14 }}>
+          Asset Inventory (What You've Built)
+        </h3>
+        <div style={S.grid(220)}>
+          {[
+            { label: 'Pages', value: '23', detail: 'Unique routes' },
+            { label: 'Data Files', value: '57', detail: 'JSON/JS content' },
+            { label: 'API Endpoints', value: '14', detail: 'Serverless functions' },
+            { label: 'Journeys', value: '22+', detail: 'Monomyth + planetary + zodiac' },
+            { label: 'Courses', value: '7', detail: 'With progress tracking' },
+            { label: 'Games', value: '6', detail: 'Ancient board games' },
+            { label: 'AI Personas', value: 'Multi', detail: 'Atlas + specialized voices' },
+            { label: 'Planet Modes', value: '12+', detail: 'Chronosphaera view modes' },
+            { label: 'Subscriptions', value: '4', detail: 'Defined & togglable' },
+            { label: 'Purchases', value: '4', detail: 'Defined & togglable' },
+            { label: 'Mentor Types', value: 'Multi', detail: 'With pairing system' },
+            { label: 'IP Items', value: 'Tracked', detail: 'Filing registry ready' },
+          ].map(item => (
+            <div key={item.label} style={{
+              background: 'rgba(0,0,0,0.2)', borderRadius: 6, padding: '10px 12px',
+              borderLeft: '2px solid rgba(218,165,32,0.3)',
+            }}>
+              <div style={{ color: 'rgba(218,165,32,0.9)', fontSize: '1.3rem', fontFamily: 'Cinzel, serif' }}>
+                {item.value}
+              </div>
+              <div style={{ color: '#ccc', fontSize: '0.82rem' }}>{item.label}</div>
+              <div style={{ color: '#666', fontSize: '0.7rem' }}>{item.detail}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+
+  return (
+    <div style={S.section}>
+      <h2 style={S.heading}>STRATEGIC PLAN</h2>
+      <p style={S.subtitle}>Vision, sequence, revenue, and the road ahead</p>
+
+      <div style={S.tabRow}>
+        {[
+          { id: 'vision', label: 'Vision Timeline' },
+          { id: 'roadmap', label: 'Product Roadmap' },
+          { id: 'revenue', label: 'Revenue Model' },
+          { id: 'features', label: 'Feature Matrix' },
+          { id: 'metrics', label: 'Key Metrics' },
+          { id: 'notes', label: 'Strategic Notes' },
+        ].map(tab => (
+          <button key={tab.id} style={S.tab(viewMode === tab.id)} onClick={() => setViewMode(tab.id)}>
+            {tab.label}
+          </button>
+        ))}
+      </div>
+
+      {viewMode === 'vision' && renderVision()}
+      {viewMode === 'roadmap' && renderRoadmap()}
+      {viewMode === 'revenue' && renderRevenue()}
+      {viewMode === 'features' && renderFeatures()}
+      {viewMode === 'metrics' && renderMetrics()}
+      {viewMode === 'notes' && renderNotes()}
+    </div>
+  );
+}
+
 const REFRESH_KEY_PROMPT = `Run the full Mythouse diagnostic routine. Here's what to do:
 
 1. **Run the health check script**: \`cd /Users/willlinn/meteor-steel-site-2 && bash scripts/health-check.sh\`
@@ -2962,32 +4408,200 @@ function SystemHealthSection() {
   );
 }
 
+// --- Dev Tools Section ---
+const DEV_TOOLS = [
+  {
+    category: 'Voice & Input',
+    items: [
+      {
+        name: 'Mac Dictation',
+        shortcut: 'Fn Fn (double-tap)',
+        description: 'System-wide voice-to-text. Speak directly into Terminal / Claude Code.',
+        setup: 'System Settings > Keyboard > Dictation > On',
+        type: 'system',
+      },
+    ],
+  },
+  {
+    category: 'Claude Code Slash Commands',
+    items: [
+      {
+        name: '/deploy',
+        shortcut: '/deploy',
+        description: 'Runs npm build, checks for errors, then deploys to Vercel with --prod.',
+        setup: '.claude/commands/deploy.md',
+        type: 'slash',
+      },
+      {
+        name: '/dev',
+        shortcut: '/dev',
+        description: 'Starts the local development server. Runs npm install first if needed.',
+        setup: '.claude/commands/dev.md',
+        type: 'slash',
+      },
+      {
+        name: '/status',
+        shortcut: '/status',
+        description: 'Quick git status report: branch, uncommitted changes, last 3 commits.',
+        setup: '.claude/commands/status.md',
+        type: 'slash',
+      },
+      {
+        name: '/push',
+        shortcut: '/push',
+        description: 'Stage all changes, draft a commit message, and push (with approval).',
+        setup: '.claude/commands/push.md',
+        type: 'slash',
+      },
+    ],
+  },
+  {
+    category: 'Shell Aliases',
+    items: [
+      { name: 'ms', shortcut: 'ms', description: 'cd ~/meteor-steel-site-2', setup: '~/.zshrc', type: 'alias' },
+      { name: 'cc', shortcut: 'cc', description: 'Launch Claude Code', setup: '~/.zshrc', type: 'alias' },
+      { name: 'gs', shortcut: 'gs', description: 'git status', setup: '~/.zshrc', type: 'alias' },
+      { name: 'gl', shortcut: 'gl', description: 'git log --oneline -10', setup: '~/.zshrc', type: 'alias' },
+      { name: 'gd', shortcut: 'gd', description: 'git diff', setup: '~/.zshrc', type: 'alias' },
+      { name: 'gp', shortcut: 'gp', description: 'git push', setup: '~/.zshrc', type: 'alias' },
+      { name: 'dev', shortcut: 'dev', description: 'cd to project + npm start', setup: '~/.zshrc', type: 'alias' },
+    ],
+  },
+  {
+    category: 'Terminal Tools',
+    items: [
+      {
+        name: 'nvm (Node Version Manager)',
+        shortcut: 'nvm use / nvm install',
+        description: 'Pins Node.js version per project via .nvmrc. Auto-switches on cd.',
+        setup: '~/.nvm + .nvmrc (Node 24)',
+        type: 'tool',
+      },
+      {
+        name: 'tmux',
+        shortcut: 'mux',
+        description: 'Split-pane terminal session. Claude on left, free terminal on right.',
+        setup: 'brew install tmux (pending Homebrew install)',
+        type: 'tool',
+      },
+    ],
+  },
+];
+
+const TYPE_COLORS = {
+  system: '#5b8dd9',
+  slash: '#c4713a',
+  alias: '#5bd97a',
+  tool: '#d9a55b',
+};
+
+function DevToolsSection() {
+  return (
+    <div style={{ padding: '32px 24px', maxWidth: 900 }}>
+      <h2 style={{ color: '#e8d5b5', letterSpacing: 2, fontSize: '1.1rem', marginBottom: 8 }}>
+        DEV TOOLS & WORKFLOW
+      </h2>
+      <p style={{ color: '#6a6a7a', fontSize: '0.85rem', marginBottom: 32 }}>
+        Terminal shortcuts, Claude Code commands, and workflow tools configured for this project.
+      </p>
+
+      {DEV_TOOLS.map(cat => (
+        <div key={cat.category} style={{ marginBottom: 32 }}>
+          <h3 style={{
+            color: '#8a8aa0', fontSize: '0.8rem', letterSpacing: 2, textTransform: 'uppercase',
+            borderBottom: '1px solid #2a2a3a', paddingBottom: 8, marginBottom: 12,
+          }}>
+            {cat.category}
+          </h3>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            {cat.items.map(item => (
+              <div key={item.name} style={{
+                display: 'flex', alignItems: 'flex-start', gap: 16,
+                background: '#14141c', borderRadius: 6, padding: '12px 16px',
+                border: '1px solid #2a2a3a',
+              }}>
+                <code style={{
+                  color: TYPE_COLORS[item.type] || '#d4d4d4',
+                  background: '#1a1a24', padding: '3px 10px', borderRadius: 4,
+                  fontSize: '0.85rem', fontFamily: 'monospace', whiteSpace: 'nowrap',
+                  minWidth: 100, textAlign: 'center', flexShrink: 0,
+                }}>
+                  {item.shortcut}
+                </code>
+                <div style={{ flex: 1 }}>
+                  <div style={{ color: '#d4d4d4', fontSize: '0.9rem', marginBottom: 2 }}>
+                    {item.name}
+                  </div>
+                  <div style={{ color: '#6a6a7a', fontSize: '0.8rem' }}>
+                    {item.description}
+                  </div>
+                </div>
+                <span style={{
+                  color: '#4a4a5a', fontSize: '0.7rem', fontFamily: 'monospace',
+                  whiteSpace: 'nowrap', flexShrink: 0,
+                }}>
+                  {item.setup}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+
+      <div style={{
+        marginTop: 40, padding: 16, background: '#111118', borderRadius: 6,
+        border: '1px solid #2a2a3a',
+      }}>
+        <h4 style={{ color: '#8a8aa0', fontSize: '0.8rem', letterSpacing: 1, marginBottom: 8 }}>
+          LEGEND
+        </h4>
+        <div style={{ display: 'flex', gap: 24, flexWrap: 'wrap' }}>
+          {Object.entries(TYPE_COLORS).map(([type, color]) => (
+            <span key={type} style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: '0.8rem' }}>
+              <span style={{
+                width: 10, height: 10, borderRadius: '50%', background: color, display: 'inline-block',
+              }} />
+              <span style={{ color: '#6a6a7a', textTransform: 'capitalize' }}>{type}</span>
+            </span>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function AdminPage() {
-  const [activeSection, setActiveSection] = useState('campaigns');
+  const [activeSection, setActiveSection] = useState('plan');
 
   return (
     <div className="admin-page">
       <div className="admin-section-tabs">
-        {SECTIONS.map(s => (
-          <button
-            key={s.id}
-            className={`admin-section-tab ${activeSection === s.id ? 'active' : ''}`}
-            onClick={() => setActiveSection(s.id)}
-          >
-            {s.label}
-          </button>
-        ))}
-        <a
-          href="/discover"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="admin-section-tab"
-          style={{ textDecoration: 'none' }}
-        >
-          Discover Page &#8599;
-        </a>
+        {SECTIONS.map(s =>
+          s.href ? (
+            <a
+              key={s.id}
+              href={s.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="admin-section-tab"
+              style={{ textDecoration: 'none' }}
+            >
+              {s.label}
+            </a>
+          ) : (
+            <button
+              key={s.id}
+              className={`admin-section-tab ${activeSection === s.id ? 'active' : ''}`}
+              onClick={() => setActiveSection(s.id)}
+            >
+              {s.label}
+            </button>
+          )
+        )}
       </div>
 
+      {activeSection === 'plan' && <StrategicPlanSection />}
       {activeSection === 'system-health' && <SystemHealthSection />}
       {activeSection === 'campaigns' && <CampaignManagerSection />}
       {activeSection === 'coursework' && <CourseworkManagerSection />}
@@ -3002,6 +4616,7 @@ function AdminPage() {
       {activeSection === 'services' && <ServicesSection />}
       {activeSection === 'ip-registry' && <IPRegistrySection />}
       {activeSection === 'legal' && <LegalSection />}
+      {activeSection === 'dev-tools' && <DevToolsSection />}
     </div>
   );
 }

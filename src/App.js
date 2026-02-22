@@ -26,6 +26,7 @@ import saviors from './data/saviors.json';
 import ufo from './data/ufo.json';
 import monomyth from './data/monomyth.json';
 import synthesis from './data/synthesis.json';
+import ArchetypesPanel from './components/ArchetypesPanel';
 
 // YBR header context — pages register their toggle/active state so the header can show the button
 const YBRHeaderContext = createContext({ active: false, toggle: null });
@@ -567,6 +568,7 @@ const TEMPLATE_OPTIONS = [
   { id: 'screenplay', label: 'Screenplay', desc: 'Visual, cinematic storytelling' },
   { id: 'reflection', label: 'Reflection', desc: 'Philosophical exploration' },
   { id: 'my-stories', label: 'My Stories', desc: 'Your personal story journal' },
+  { id: 'archetypes', label: 'Archetypes', desc: 'Archetypal character alignments' },
 ];
 
 const FORGE_PROMPTS = {
@@ -635,6 +637,11 @@ function StoryForgeHome() {
   const [interviewStoryId, setInterviewStoryId] = useState(null);
   const [synthesisLoading, setSynthesisLoading] = useState(false);
   const [synthesisText, setSynthesisText] = useState(null);
+  // Polarity Generator state — null | 'protagonism' | 'antagonism'
+  const [generatorMode, setGeneratorMode] = useState(null);
+  const [generatorMessages, setGeneratorMessages] = useState([]);
+  const [generatorInput, setGeneratorInput] = useState('');
+  const [generatorLoading, setGeneratorLoading] = useState(false);
   // Draft mode state
   const [draftMessages, setDraftMessages] = useState({});
   const [draftInput, setDraftInput] = useState('');
@@ -851,6 +858,81 @@ function StoryForgeHome() {
     setGenerating(false);
   };
 
+  const handleGeneratorSend = async () => {
+    const text = generatorInput.trim();
+    if (!text || generatorLoading || !generatorMode) return;
+    setGeneratorInput('');
+    setGeneratorLoading(true);
+
+    const userMsg = { role: 'user', content: text };
+    const updated = [...generatorMessages, userMsg];
+    setGeneratorMessages(updated);
+
+    try {
+      const res = await apiFetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ mode: generatorMode, messages: updated }),
+      });
+      const data = await res.json();
+      const assistantMsg = { role: 'assistant', content: data.reply || 'No response.' };
+      setGeneratorMessages([...updated, assistantMsg]);
+    } catch {
+      setGeneratorMessages([...updated, { role: 'assistant', content: 'Network error.' }]);
+    }
+    setGeneratorLoading(false);
+  };
+
+  const cycleGenerator = () => {
+    if (!generatorMode) { setGeneratorMode('protagonism'); setGeneratorMessages([]); }
+    else if (generatorMode === 'protagonism') { setGeneratorMode('antagonism'); setGeneratorMessages([]); }
+    else { setGeneratorMode(null); }
+  };
+
+  const isProtag = generatorMode === 'protagonism';
+  const isAntag = generatorMode === 'antagonism';
+
+  const forgeControlsAndPanel = (
+    <>
+      <div className="forge-controls">
+        <button className="forge-ctrl-btn" onClick={() => setClockwise(!clockwise)} title={clockwise ? 'Counter-clockwise' : 'Clockwise'}>
+          {clockwise ? '\u21BB' : '\u21BA'}
+        </button>
+        <button className={`forge-ctrl-btn${generatorMode ? (isProtag ? ' active protag' : ' active antag') : ''}`} onClick={cycleGenerator} title={!generatorMode ? 'Protagonism Generator' : isProtag ? 'Switch to Antagonism' : 'Close Generator'}>
+          {!generatorMode ? '+' : isProtag ? '+' : '\u2212'}
+        </button>
+      </div>
+      {generatorMode && (
+        <div className={`protagonism-panel ${generatorMode}`}>
+          <div className="protagonism-header">
+            <h3>{isProtag ? 'Protagonism' : 'Antagonism'} Generator</h3>
+            <button onClick={() => setGeneratorMode(null)}>{'\u2715'}</button>
+          </div>
+          <p className="protagonism-intro">
+            {isProtag
+              ? 'Paste any antagonism \u2014 news, conflict, personal struggle, any story of opposition. The generator reads the narrative polarity and responds with the protagonism that antagonism inspires. Not analysis. Not commentary. The force it calls forth.'
+              : 'Paste any protagonism \u2014 triumph, hope, resolution, any story of light. The generator reads the narrative polarity and responds with the antagonism that protagonism conceals. Not critique. Not cynicism. The shadow it casts.'}
+          </p>
+          <div className="protagonism-messages">
+            {generatorMessages.map((msg, i) => (
+              <div key={i} className={`protagonism-msg ${msg.role}`}>
+                <span className="protagonism-label">{msg.role === 'user' ? (isProtag ? 'Antagonism' : 'Protagonism') : (isProtag ? 'Protagonism' : 'Antagonism')}</span>
+                {msg.content.split('\n\n').map((p, j) => <p key={j}>{p}</p>)}
+              </div>
+            ))}
+            {generatorLoading && <div className="protagonism-loading">{isProtag ? 'Reading polarity...' : 'Reading shadow...'}</div>}
+          </div>
+          <div className="protagonism-input-row">
+            <textarea value={generatorInput} onChange={e => setGeneratorInput(e.target.value)} placeholder={isProtag ? 'Paste antagonism here...' : 'Paste protagonism here...'} onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleGeneratorSend(); }}} />
+            <button onClick={handleGeneratorSend} disabled={generatorLoading || !generatorInput.trim()}>
+              {generatorLoading ? '...' : '\u2192'}
+            </button>
+          </div>
+        </div>
+      )}
+    </>
+  );
+
   // Template picker
   if (!template) {
     return (
@@ -861,13 +943,13 @@ function StoryForgeHome() {
           currentStage={currentStage}
           onSelectStage={handleSelectStage}
           clockwise={clockwise}
-          onToggleDirection={() => setClockwise(!clockwise)}
           centerLine1="Story"
           centerLine2=""
           centerLine3="Forge"
           showAuthor={false}
           getStageClass={courseworkMode ? (id) => isElementCompleted(`story-forge.stage.${id}`) ? 'cw-completed' : 'cw-incomplete' : undefined}
         />
+        {forgeControlsAndPanel}
         <div className="container">
           <div className="static-overview">
             <div className="overview-text" style={{ textAlign: 'center' }}>
@@ -882,6 +964,29 @@ function StoryForgeHome() {
               </button>
             ))}
           </div>
+        </div>
+      </>
+    );
+  }
+
+  // --- Archetypes mode ---
+  if (template === 'archetypes') {
+    return (
+      <>
+        <MeteorShower active={showMeteors} />
+        <CircleNav
+          stages={FORGE_STAGES}
+          currentStage={currentStage}
+          onSelectStage={handleSelectStage}
+          clockwise={clockwise}
+          centerLine1="Story"
+          centerLine2=""
+          centerLine3="Forge"
+          showAuthor={false}
+        />
+        {forgeControlsAndPanel}
+        <div className="container">
+          <ArchetypesPanel trackElement={trackElement} trackPrefix="story-forge" />
         </div>
       </>
     );
@@ -1053,12 +1158,12 @@ function StoryForgeHome() {
           currentStage={currentStage}
           onSelectStage={handleSelectStage}
           clockwise={clockwise}
-          onToggleDirection={() => setClockwise(!clockwise)}
           centerLine1="My"
           centerLine2=""
           centerLine3="Stories"
           showAuthor={false}
         />
+        {forgeControlsAndPanel}
         {isStage && <h2 className="stage-heading">{FORGE_STAGES.find(s => s.id === currentStage)?.label}</h2>}
         <div className="container">
           <div id="content-container">
@@ -1252,13 +1357,13 @@ function StoryForgeHome() {
         currentStage={currentStage}
         onSelectStage={handleSelectStage}
         clockwise={clockwise}
-        onToggleDirection={() => setClockwise(!clockwise)}
         centerLine1="Story"
         centerLine2=""
         centerLine3="Forge"
         showAuthor={false}
         getStageClass={courseworkMode ? (id) => isElementCompleted(`story-forge.stage.${id}`) ? 'cw-completed' : 'cw-incomplete' : undefined}
       />
+      {forgeControlsAndPanel}
 
       {currentLabel && <h2 className="stage-heading">{currentLabel}</h2>}
 

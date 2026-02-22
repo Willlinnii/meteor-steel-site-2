@@ -1,0 +1,188 @@
+[
+  {
+    "id": "septuagint",
+    "title": "Septuagint (Greek Old Testament)",
+    "author": "Seventy-two scholars",
+    "date": "3rd century BCE",
+    "category": "scripture",
+    "description": "The first Greek translation of the Hebrew Bible, legendarily produced by seventy-two Jewish scholars in Alexandria under Ptolemy II Philadelphus. The Septuagint became the Old Testament of early Christianity and the primary scripture of the Hellenistic Jewish diaspora. Its creation in Alexandria made the Library the birthplace of the Bible as the Western world would come to know it.",
+    "wikisourcePage": "Bible_(King_James)/Genesis",
+    "readUrl": "https://sacred-texts.com/bib/sep/index.htm"
+  },
+  {
+    "id": "elements-euclid",
+    "title": "Elements",
+    "author": "Euclid",
+    "date": "c. 300 BCE",
+    "category": "science",
+    "description": "The foundational treatise on geometry and number theory, compiled by Euclid while teaching at the Mouseion of Alexandria. In thirteen books, it systematized all known mathematics into a deductive framework from five axioms. The Elements remained the standard textbook of geometry for over two thousand years — the most influential mathematical work ever written.",
+    "wikisourcePage": "The_Elements_of_Euclid"
+  },
+  {
+    "id": "corpus-hermeticum",
+    "title": "Corpus Hermeticum",
+    "author": "Hermes Trismegistus (attributed)",
+    "date": "1st–3rd century CE",
+    "category": "magic",
+    "description": "A collection of mystical and philosophical dialogues attributed to Hermes Trismegistus, a syncretic fusion of the Greek Hermes and the Egyptian Thoth. Written in Hellenistic Alexandria, these texts blend Platonic philosophy with Egyptian theology, exploring the divine mind, the nature of the cosmos, and the soul's ascent. They became the foundation of the Western esoteric tradition.",
+    "wikisourcePage": "The_Virgin_of_the_World",
+    "readUrl": "https://sacred-texts.com/chr/herm/index.htm"
+  },
+  {
+    "id": "philo-works",
+    "title": "Writings of Philo",
+    "author": "Philo of Alexandria",
+    "date": "c. 20 BCE – 50 CE",
+    "category": "philosophy",
+    "description": "Philo Judaeus was the greatest Jewish philosopher of the ancient world and a native Alexandrian. He pioneered the allegorical interpretation of scripture, reading the Torah through the lens of Platonic and Stoic philosophy. His synthesis of Jewish faith and Greek reason laid the intellectual groundwork for both Christianity and rabbinic thought.",
+    "wikisourcePage": "The_Works_of_Philo_Judaeus",
+    "readUrl": "https://archive.org/details/worksofphilojuda01phil"
+  },
+  {
+    "id": "stromata-clement",
+    "title": "Stromata (Miscellanies)",
+    "author": "Clement of Alexandria",
+    "date": "c. 200 CE",
+    "category": "philosophy",
+    "description": "Clement, head of the Catechetical School of Alexandria, wrote the Stromata as a tapestry weaving together Greek philosophy, Christian theology, and Gnostic thought. He argued that philosophy was God's gift to the Greeks, just as the Law was God's gift to the Jews — both leading toward Christ. The work epitomizes Alexandria's spirit of intellectual synthesis.",
+    "wikisourcePage": "Ante-Nicene_Fathers/Volume_II/CLEMENT_OF_ALEXANDRIA/The_Stromata,_or_Miscellanies"
+  },
+  {
+    "id": "de-principiis-origen",
+    "title": "On First Principles",
+    "author": "Origen of Alexandria",
+    "date": "c. 230 CE",
+    "category": "philosophy",
+    "description": "The first systematic theology in Christian history, composed by Origen at the Catechetical School of Alexandria. He explored the nature of God, the pre-existence of souls, the allegorical reading of scripture, and the ultimate restoration of all things. Though later condemned as heretical, Origen's daring speculations shaped Christian thought for centuries.",
+    "wikisourcePage": "Ante-Nicene_Fathers/Volume_IV/Origen/Origen_de_Principiis"
+  },
+  {
+    "id": "gospel-of-thomas",
+    "title": "Gospel of Thomas",
+    "author": "Unknown (attributed to Didymos Thomas)",
+    "date": "c. 50–140 CE",
+    "category": "scripture",
+    "description": "A collection of 114 sayings attributed to Jesus, discovered at Nag Hammadi in Egypt. Though not composed in Alexandria, the Gospel of Thomas circulated widely in Alexandrian Christian and Gnostic communities. Its mystical, non-narrative format — 'these are the secret sayings' — reflects the esoteric currents of Alexandrian spirituality.",
+    "readUrl": "https://sacred-texts.com/chr/thomas.htm"
+  },
+  {
+    "id": "alexander-romance",
+    "title": "Alexander Romance",
+    "author": "Pseudo-Callisthenes",
+    "date": "3rd century BCE (earliest version)",
+    "category": "literature",
+    "description": "A legendary biography of Alexander the Great, originally composed in Alexandria and attributed to Alexander's court historian Callisthenes. The Romance transformed Alexander into a mythic hero — visiting oracles, descending to the ocean floor, ascending to heaven. It became one of the most widely translated works of the ancient and medieval world, spawning versions in over twenty-four languages.",
+    "readUrl": "https://archive.org/details/historyofalexand00pseu",
+    "fragments": true
+  },
+  {
+    "id": "gospel-of-luke",
+    "title": "Gospel of Luke",
+    "author": "Luke the Evangelist (attributed)",
+    "date": "c. 80–110 CE",
+    "category": "scripture",
+    "description": "Tradition holds that Luke composed his Gospel and the Acts of the Apostles in or near Alexandria. The Gospel of Luke emphasizes compassion, social justice, and the universality of salvation — themes resonant with Alexandria's cosmopolitan spirit. It contains some of the most beloved passages in the New Testament, including the parables of the Good Samaritan and the Prodigal Son.",
+    "wikisourcePage": "Bible_(King_James)/Luke"
+  },
+  {
+    "id": "hero-pneumatica",
+    "title": "Pneumatica",
+    "author": "Hero of Alexandria",
+    "date": "c. 60 CE",
+    "category": "science",
+    "description": "Hero of Alexandria was the ancient world's greatest engineer-inventor. His Pneumatica describes over seventy devices powered by air, water, and steam — including the first known steam engine (the aeolipile), automatic doors, coin-operated machines, and programmable automata. Hero worked at the Mouseion, and his inventions represent the zenith of Alexandrian applied science.",
+    "readUrl": "https://archive.org/details/pneumaticsofhero00hero"
+  },
+  {
+    "id": "almagest-ptolemy",
+    "title": "Almagest",
+    "author": "Claudius Ptolemy",
+    "date": "c. 150 CE",
+    "category": "science",
+    "description": "The definitive astronomical treatise of antiquity, composed at the Library's successor institutions in Roman Alexandria. In thirteen books, Ptolemy catalogued 1,022 stars, calculated planetary motions with unprecedented precision, and constructed the geocentric model that would govern astronomy for fourteen centuries. The Almagest is the crowning achievement of Alexandrian science.",
+    "readUrl": "https://archive.org/details/almaborealisbein0000unse"
+  },
+  {
+    "id": "tetrabiblos-ptolemy",
+    "title": "Tetrabiblos",
+    "author": "Claudius Ptolemy",
+    "date": "c. 150 CE",
+    "category": "magic",
+    "description": "Ptolemy's companion to the Almagest, the Tetrabiblos systematized the astrological knowledge of the ancient world into a rational framework. It covered natal astrology, mundane astrology, and the influence of celestial bodies on earthly events. For Ptolemy, astrology was the practical application of astronomy — the study of how the heavens shaped human fate.",
+    "wikisourcePage": "Tetrabiblos",
+    "readUrl": "https://sacred-texts.com/astro/ptb/index.htm"
+  },
+  {
+    "id": "argonautica-apollonius",
+    "title": "Argonautica",
+    "author": "Apollonius of Rhodes",
+    "date": "3rd century BCE",
+    "category": "literature",
+    "description": "The epic poem of Jason and the Argonauts' quest for the Golden Fleece, composed by Apollonius while he served as head librarian of Alexandria. The Argonautica revolutionized epic poetry by introducing psychological depth — especially in the character of Medea, whose inner conflict became the model for Virgil's Dido and all subsequent literary depictions of passionate love.",
+    "wikisourcePage": "The_Argonautica_(Seaton)"
+  },
+  {
+    "id": "callimachus-works",
+    "title": "Hymns and Epigrams",
+    "author": "Callimachus",
+    "date": "3rd century BCE",
+    "category": "literature",
+    "description": "Callimachus was the greatest poet-scholar of Alexandria and cataloguer of the Library's holdings in the monumental Pinakes. His surviving Hymns and Epigrams showcase the Alexandrian ideal of learned, polished, allusive poetry. His dictum 'a big book is a big evil' defined the aesthetic of brevity and wit that characterized Hellenistic literature.",
+    "readUrl": "https://sacred-texts.com/cla/callimachus/index.htm"
+  },
+  {
+    "id": "idylls-theocritus",
+    "title": "Idylls",
+    "author": "Theocritus",
+    "date": "3rd century BCE",
+    "category": "literature",
+    "description": "Theocritus invented pastoral poetry while living in Alexandria under Ptolemy II. His Idylls created an imagined Arcadia of singing shepherds, unrequited love, and golden landscapes — a literary genre that would echo through Virgil's Eclogues, Renaissance painting, and Romantic poetry. In the teeming metropolis of Alexandria, he dreamed of the countryside.",
+    "wikisourcePage": "The_Idylls_of_Theocritus_(Hallard)"
+  },
+  {
+    "id": "herophilus-writings",
+    "title": "Medical Writings of Herophilus",
+    "author": "Herophilus of Chalcedon",
+    "date": "c. 300 BCE",
+    "category": "science",
+    "description": "Herophilus was the father of anatomy, conducting the first systematic human dissections at the Mouseion of Alexandria. He identified the brain as the seat of intelligence, distinguished arteries from veins, discovered the nervous system, and described the anatomy of the eye, liver, and reproductive organs. His original writings are lost; they survive only as quotations in Galen and other later physicians.",
+    "fragments": true
+  },
+  {
+    "id": "erasistratus-writings",
+    "title": "Medical Writings of Erasistratus",
+    "author": "Erasistratus of Ceos",
+    "date": "c. 280 BCE",
+    "category": "science",
+    "description": "Erasistratus, working alongside Herophilus in Alexandria, was the founder of physiology. He theorized that the body operated as a mechanical system, with the heart as a pump and the arteries carrying pneuma (vital spirit). He distinguished between sensory and motor nerves and rejected humoral theory in favor of a proto-mechanistic understanding of disease. Like Herophilus, his works survive only in fragments quoted by later authors.",
+    "fragments": true
+  },
+  {
+    "id": "hexapla-origen",
+    "title": "Hexapla",
+    "author": "Origen of Alexandria",
+    "date": "c. 240 CE",
+    "category": "scripture",
+    "description": "Origen's monumental six-column edition of the Old Testament, placing the Hebrew text alongside the Septuagint and four other Greek translations in parallel columns. It was the first work of critical biblical scholarship and filled an estimated 6,500 pages. The original was likely housed in the library at Caesarea and is now lost; only fragments survive in marginal notes and quotations.",
+    "fragments": true,
+    "readUrl": "https://archive.org/details/hexaplorumorigeorigoft"
+  },
+  {
+    "id": "life-of-antony",
+    "title": "Life of Antony",
+    "author": "Athanasius of Alexandria",
+    "date": "c. 360 CE",
+    "category": "scripture",
+    "description": "Written by the Patriarch of Alexandria, this biography of the desert monk Antony created the template for Christian hagiography and inspired the monastic movement across the Roman world. Augustine's conversion was triggered by hearing of Antony's story. The work demonstrates Alexandria's late-antique role as spiritual capital of the Christian East.",
+    "wikisourcePage": "Nicene_and_Post-Nicene_Fathers:_Series_II/Volume_IV/Life_of_Antony"
+  },
+  {
+    "id": "greek-magical-papyri",
+    "title": "Greek Magical Papyri",
+    "author": "Various practitioners",
+    "date": "2nd century BCE – 5th century CE",
+    "category": "magic",
+    "description": "A collection of spells, hymns, and ritual instructions from Greco-Roman Egypt, blending Greek, Egyptian, Jewish, and Christian magical traditions. The papyri contain invocations of gods from multiple pantheons, love spells, binding curses, divination techniques, and recipes for amulets. They represent the syncretic spiritual underground of Alexandria — where Hermes met Thoth, and philosophy merged with sorcery.",
+    "readUrl": "https://archive.org/details/greek-magical-papyri-in-translation"
+  }
+]

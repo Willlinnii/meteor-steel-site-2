@@ -1,0 +1,1444 @@
+[
+  {
+    "id": "alexandria",
+    "name": "Library of Alexandria",
+    "location": "Alexandria, Egypt",
+    "era": "3rd century BCE – 7th century CE",
+    "tagline": "The greatest repository of knowledge in the ancient world, where East met West.",
+    "texts": [
+      {
+        "id": "septuagint",
+        "title": "Septuagint (Greek Old Testament)",
+        "author": "Seventy-two scholars",
+        "date": "3rd century BCE",
+        "category": "scripture",
+        "description": "The first Greek translation of the Hebrew Bible, legendarily produced by seventy-two Jewish scholars in Alexandria under Ptolemy II Philadelphus. The Septuagint became the Old Testament of early Christianity and the primary scripture of the Hellenistic Jewish diaspora. Its creation in Alexandria made the Library the birthplace of the Bible as the Western world would come to know it.",
+        "wikisourcePage": "Bible_(King_James)/Genesis",
+        "readUrl": "https://sacred-texts.com/bib/sep/index.htm"
+      },
+      {
+        "id": "elements-euclid",
+        "title": "Elements",
+        "author": "Euclid",
+        "date": "c. 300 BCE",
+        "category": "science",
+        "description": "The foundational treatise on geometry and number theory, compiled by Euclid while teaching at the Mouseion of Alexandria. In thirteen books, it systematized all known mathematics into a deductive framework from five axioms. The Elements remained the standard textbook of geometry for over two thousand years — the most influential mathematical work ever written.",
+        "wikisourcePage": "The_Elements_of_Euclid"
+      },
+      {
+        "id": "corpus-hermeticum",
+        "title": "Corpus Hermeticum",
+        "author": "Hermes Trismegistus (attributed)",
+        "date": "1st–3rd century CE",
+        "category": "magic",
+        "description": "A collection of mystical and philosophical dialogues attributed to Hermes Trismegistus, a syncretic fusion of the Greek Hermes and the Egyptian Thoth. Written in Hellenistic Alexandria, these texts blend Platonic philosophy with Egyptian theology, exploring the divine mind, the nature of the cosmos, and the soul's ascent. They became the foundation of the Western esoteric tradition.",
+        "wikisourcePage": "The_Virgin_of_the_World",
+        "readUrl": "https://sacred-texts.com/chr/herm/index.htm"
+      },
+      {
+        "id": "philo-works",
+        "title": "Writings of Philo",
+        "author": "Philo of Alexandria",
+        "date": "c. 20 BCE – 50 CE",
+        "category": "philosophy",
+        "description": "Philo Judaeus was the greatest Jewish philosopher of the ancient world and a native Alexandrian. He pioneered the allegorical interpretation of scripture, reading the Torah through the lens of Platonic and Stoic philosophy. His synthesis of Jewish faith and Greek reason laid the intellectual groundwork for both Christianity and rabbinic thought.",
+        "wikisourcePage": "The_Works_of_Philo_Judaeus",
+        "readUrl": "https://archive.org/details/worksofphilojuda01phil"
+      },
+      {
+        "id": "stromata-clement",
+        "title": "Stromata (Miscellanies)",
+        "author": "Clement of Alexandria",
+        "date": "c. 200 CE",
+        "category": "philosophy",
+        "description": "Clement, head of the Catechetical School of Alexandria, wrote the Stromata as a tapestry weaving together Greek philosophy, Christian theology, and Gnostic thought. He argued that philosophy was God's gift to the Greeks, just as the Law was God's gift to the Jews — both leading toward Christ. The work epitomizes Alexandria's spirit of intellectual synthesis.",
+        "wikisourcePage": "Ante-Nicene_Fathers/Volume_II/CLEMENT_OF_ALEXANDRIA/The_Stromata,_or_Miscellanies"
+      },
+      {
+        "id": "de-principiis-origen",
+        "title": "On First Principles",
+        "author": "Origen of Alexandria",
+        "date": "c. 230 CE",
+        "category": "philosophy",
+        "description": "The first systematic theology in Christian history, composed by Origen at the Catechetical School of Alexandria. He explored the nature of God, the pre-existence of souls, the allegorical reading of scripture, and the ultimate restoration of all things. Though later condemned as heretical, Origen's daring speculations shaped Christian thought for centuries.",
+        "wikisourcePage": "Ante-Nicene_Fathers/Volume_IV/Origen/Origen_de_Principiis"
+      },
+      {
+        "id": "gospel-of-thomas",
+        "title": "Gospel of Thomas",
+        "author": "Unknown (attributed to Didymos Thomas)",
+        "date": "c. 50–140 CE",
+        "category": "scripture",
+        "description": "A collection of 114 sayings attributed to Jesus, discovered at Nag Hammadi in Egypt. Though not composed in Alexandria, the Gospel of Thomas circulated widely in Alexandrian Christian and Gnostic communities. Its mystical, non-narrative format — 'these are the secret sayings' — reflects the esoteric currents of Alexandrian spirituality.",
+        "readUrl": "https://sacred-texts.com/chr/thomas.htm"
+      },
+      {
+        "id": "alexander-romance",
+        "title": "Alexander Romance",
+        "author": "Pseudo-Callisthenes",
+        "date": "3rd century BCE (earliest version)",
+        "category": "literature",
+        "description": "A legendary biography of Alexander the Great, originally composed in Alexandria and attributed to Alexander's court historian Callisthenes. The Romance transformed Alexander into a mythic hero — visiting oracles, descending to the ocean floor, ascending to heaven. It became one of the most widely translated works of the ancient and medieval world, spawning versions in over twenty-four languages.",
+        "readUrl": "https://archive.org/details/historyofalexand00pseu",
+        "fragments": true
+      },
+      {
+        "id": "gospel-of-luke",
+        "title": "Gospel of Luke",
+        "author": "Luke the Evangelist (attributed)",
+        "date": "c. 80–110 CE",
+        "category": "scripture",
+        "description": "Tradition holds that Luke composed his Gospel and the Acts of the Apostles in or near Alexandria. The Gospel of Luke emphasizes compassion, social justice, and the universality of salvation — themes resonant with Alexandria's cosmopolitan spirit. It contains some of the most beloved passages in the New Testament, including the parables of the Good Samaritan and the Prodigal Son.",
+        "wikisourcePage": "Bible_(King_James)/Luke"
+      },
+      {
+        "id": "hero-pneumatica",
+        "title": "Pneumatica",
+        "author": "Hero of Alexandria",
+        "date": "c. 60 CE",
+        "category": "science",
+        "description": "Hero of Alexandria was the ancient world's greatest engineer-inventor. His Pneumatica describes over seventy devices powered by air, water, and steam — including the first known steam engine (the aeolipile), automatic doors, coin-operated machines, and programmable automata. Hero worked at the Mouseion, and his inventions represent the zenith of Alexandrian applied science.",
+        "readUrl": "https://archive.org/details/pneumaticsofhero00hero"
+      },
+      {
+        "id": "almagest-ptolemy",
+        "title": "Almagest",
+        "author": "Claudius Ptolemy",
+        "date": "c. 150 CE",
+        "category": "science",
+        "description": "The definitive astronomical treatise of antiquity, composed at the Library's successor institutions in Roman Alexandria. In thirteen books, Ptolemy catalogued 1,022 stars, calculated planetary motions with unprecedented precision, and constructed the geocentric model that would govern astronomy for fourteen centuries. The Almagest is the crowning achievement of Alexandrian science.",
+        "readUrl": "https://archive.org/details/almaborealisbein0000unse"
+      },
+      {
+        "id": "tetrabiblos-ptolemy",
+        "title": "Tetrabiblos",
+        "author": "Claudius Ptolemy",
+        "date": "c. 150 CE",
+        "category": "magic",
+        "description": "Ptolemy's companion to the Almagest, the Tetrabiblos systematized the astrological knowledge of the ancient world into a rational framework. It covered natal astrology, mundane astrology, and the influence of celestial bodies on earthly events. For Ptolemy, astrology was the practical application of astronomy — the study of how the heavens shaped human fate.",
+        "wikisourcePage": "Tetrabiblos",
+        "readUrl": "https://sacred-texts.com/astro/ptb/index.htm"
+      },
+      {
+        "id": "argonautica-apollonius",
+        "title": "Argonautica",
+        "author": "Apollonius of Rhodes",
+        "date": "3rd century BCE",
+        "category": "literature",
+        "description": "The epic poem of Jason and the Argonauts' quest for the Golden Fleece, composed by Apollonius while he served as head librarian of Alexandria. The Argonautica revolutionized epic poetry by introducing psychological depth — especially in the character of Medea, whose inner conflict became the model for Virgil's Dido and all subsequent literary depictions of passionate love.",
+        "wikisourcePage": "The_Argonautica_(Seaton)"
+      },
+      {
+        "id": "callimachus-works",
+        "title": "Hymns and Epigrams",
+        "author": "Callimachus",
+        "date": "3rd century BCE",
+        "category": "literature",
+        "description": "Callimachus was the greatest poet-scholar of Alexandria and cataloguer of the Library's holdings in the monumental Pinakes. His surviving Hymns and Epigrams showcase the Alexandrian ideal of learned, polished, allusive poetry. His dictum 'a big book is a big evil' defined the aesthetic of brevity and wit that characterized Hellenistic literature.",
+        "readUrl": "https://sacred-texts.com/cla/callimachus/index.htm"
+      },
+      {
+        "id": "idylls-theocritus",
+        "title": "Idylls",
+        "author": "Theocritus",
+        "date": "3rd century BCE",
+        "category": "literature",
+        "description": "Theocritus invented pastoral poetry while living in Alexandria under Ptolemy II. His Idylls created an imagined Arcadia of singing shepherds, unrequited love, and golden landscapes — a literary genre that would echo through Virgil's Eclogues, Renaissance painting, and Romantic poetry. In the teeming metropolis of Alexandria, he dreamed of the countryside.",
+        "wikisourcePage": "The_Idylls_of_Theocritus_(Hallard)"
+      },
+      {
+        "id": "herophilus-writings",
+        "title": "Medical Writings of Herophilus",
+        "author": "Herophilus of Chalcedon",
+        "date": "c. 300 BCE",
+        "category": "science",
+        "description": "Herophilus was the father of anatomy, conducting the first systematic human dissections at the Mouseion of Alexandria. He identified the brain as the seat of intelligence, distinguished arteries from veins, discovered the nervous system, and described the anatomy of the eye, liver, and reproductive organs. His original writings are lost; they survive only as quotations in Galen and other later physicians.",
+        "fragments": true
+      },
+      {
+        "id": "erasistratus-writings",
+        "title": "Medical Writings of Erasistratus",
+        "author": "Erasistratus of Ceos",
+        "date": "c. 280 BCE",
+        "category": "science",
+        "description": "Erasistratus, working alongside Herophilus in Alexandria, was the founder of physiology. He theorized that the body operated as a mechanical system, with the heart as a pump and the arteries carrying pneuma (vital spirit). He distinguished between sensory and motor nerves and rejected humoral theory in favor of a proto-mechanistic understanding of disease. Like Herophilus, his works survive only in fragments quoted by later authors.",
+        "fragments": true
+      },
+      {
+        "id": "hexapla-origen",
+        "title": "Hexapla",
+        "author": "Origen of Alexandria",
+        "date": "c. 240 CE",
+        "category": "scripture",
+        "description": "Origen's monumental six-column edition of the Old Testament, placing the Hebrew text alongside the Septuagint and four other Greek translations in parallel columns. It was the first work of critical biblical scholarship and filled an estimated 6,500 pages. The original was likely housed in the library at Caesarea and is now lost; only fragments survive in marginal notes and quotations.",
+        "fragments": true,
+        "readUrl": "https://archive.org/details/hexaplorumorigeorigoft"
+      },
+      {
+        "id": "life-of-antony",
+        "title": "Life of Antony",
+        "author": "Athanasius of Alexandria",
+        "date": "c. 360 CE",
+        "category": "scripture",
+        "description": "Written by the Patriarch of Alexandria, this biography of the desert monk Antony created the template for Christian hagiography and inspired the monastic movement across the Roman world. Augustine's conversion was triggered by hearing of Antony's story. The work demonstrates Alexandria's late-antique role as spiritual capital of the Christian East.",
+        "wikisourcePage": "Nicene_and_Post-Nicene_Fathers:_Series_II/Volume_IV/Life_of_Antony"
+      },
+      {
+        "id": "greek-magical-papyri",
+        "title": "Greek Magical Papyri",
+        "author": "Various practitioners",
+        "date": "2nd century BCE – 5th century CE",
+        "category": "magic",
+        "description": "A collection of spells, hymns, and ritual instructions from Greco-Roman Egypt, blending Greek, Egyptian, Jewish, and Christian magical traditions. The papyri contain invocations of gods from multiple pantheons, love spells, binding curses, divination techniques, and recipes for amulets. They represent the syncretic spiritual underground of Alexandria — where Hermes met Thoth, and philosophy merged with sorcery.",
+        "readUrl": "https://archive.org/details/greek-magical-papyri-in-translation"
+      }
+    ]
+  },
+  {
+    "id": "ashurbanipal",
+    "name": "Library of Ashurbanipal",
+    "location": "Nineveh (near modern Mosul, Iraq)",
+    "era": "7th century BCE",
+    "tagline": "The world's first great mytho-scientific archive, buried beneath the sands of Assyria.",
+    "texts": [
+      {
+        "id": "gilgamesh",
+        "title": "Epic of Gilgamesh",
+        "author": "Sin-leqi-unninni (attributed)",
+        "date": "c. 2100 BCE (earliest); c. 1200 BCE (standard version)",
+        "category": "literature",
+        "description": "The oldest great work of literature in the world, telling the story of the king of Uruk who sought immortality after the death of his friend Enkidu. The standard twelve-tablet version was assembled in Ashurbanipal's library from fragments spanning a millennium. Tablet XI contains the Flood narrative that predates and parallels the biblical account of Noah."
+      },
+      {
+        "id": "enuma-elish",
+        "title": "Enuma Elish (Babylonian Creation Epic)",
+        "author": "Unknown (Babylonian priesthood)",
+        "date": "c. 1100 BCE",
+        "category": "religion",
+        "description": "The Mesopotamian creation myth recounting how Marduk slew the primordial dragon Tiamat and fashioned the cosmos from her body. Recited annually during the Akitu (New Year) festival in Babylon, it served as both cosmogony and political theology — legitimizing Marduk's supremacy and, by extension, Babylon's dominion over the world."
+      },
+      {
+        "id": "erra-ishum",
+        "title": "Epic of Erra and Ishum",
+        "author": "Kabti-ilani-Marduk",
+        "date": "c. 800 BCE",
+        "category": "literature",
+        "description": "A poem about the plague-god Erra's destructive rampage through Babylon, restrained only by his counselor Ishum. Unique among Mesopotamian epics for being attributed to a named author who claimed the god dictated it to him in a dream. The text functioned as an apotropaic amulet — copies were hung on walls to ward off plague."
+      },
+      {
+        "id": "mul-apin",
+        "title": "MUL.APIN (Star Catalogue)",
+        "author": "Unknown (Babylonian astronomers)",
+        "date": "c. 1000 BCE",
+        "category": "astronomy",
+        "description": "The earliest comprehensive catalogue of stars and constellations, listing the risings and settings of sixty-six stars and constellations organized into three 'paths' of the sky. MUL.APIN also contains planetary data, intercalation schemes, and shadow-length tables. It is the direct ancestor of the zodiac and the foundation of all subsequent Western astronomy."
+      },
+      {
+        "id": "diagnostic-handbook",
+        "title": "Diagnostic Handbook (Sakikkû)",
+        "author": "Esagil-kin-apli (attributed)",
+        "date": "c. 1069 BCE",
+        "category": "medicine",
+        "description": "A systematic medical text in forty tablets cataloguing diseases from head to foot, listing symptoms, prognoses, and treatments. It represents the world's earliest attempt at clinical diagnosis, distinguishing between diseases caused by gods, ghosts, and sorcery. The handbook was the standard reference for Mesopotamian healers for nearly a thousand years."
+      },
+      {
+        "id": "surpu",
+        "title": "Surpu (Burning)",
+        "author": "Unknown (Babylonian priesthood)",
+        "date": "c. 1000 BCE",
+        "category": "religion",
+        "description": "A series of incantation tablets used in purification rituals to release a person from the effects of sin, oath-breaking, or divine anger. The patient's transgressions were symbolically transferred to objects which were then burned. Surpu preserves an elaborate theology of moral contamination and ritual cleansing central to Mesopotamian religious life."
+      },
+      {
+        "id": "descent-ishtar",
+        "title": "Descent of Ishtar to the Underworld",
+        "author": "Unknown",
+        "date": "c. 1900 BCE (Sumerian); c. 1000 BCE (Akkadian)",
+        "category": "literature",
+        "description": "The goddess Ishtar descends through the seven gates of the underworld, surrendering a garment or ornament at each, until she stands naked before her sister Ereshkigal, queen of the dead. The myth was a cornerstone of Mesopotamian religion and likely influenced the Greek myth of Persephone and later initiatory traditions."
+      },
+      {
+        "id": "laws-hammurabi",
+        "title": "Code of Hammurabi",
+        "author": "Hammurabi of Babylon",
+        "date": "c. 1754 BCE",
+        "category": "law",
+        "description": "The most famous law collection of the ancient Near East, containing 282 laws covering property, trade, family, labor, and criminal justice. Though originally Babylonian, copies were preserved in Ashurbanipal's library. The stele depicts Hammurabi receiving the laws from the sun-god Shamash — establishing the divine origin of justice as a foundational principle of civilization."
+      },
+      {
+        "id": "enmerkar-aratta",
+        "title": "Enmerkar and the Lord of Aratta",
+        "author": "Unknown (Sumerian scribe)",
+        "date": "c. 2100 BCE",
+        "category": "literature",
+        "description": "A Sumerian epic poem recounting the contest between the kings of Uruk and Aratta, in which Enmerkar invents writing itself as a means of conveying a message too complex for a human messenger to memorize. This remarkable literary work is self-reflexive — a written text about the invention of writing."
+      },
+      {
+        "id": "ludlul-bel-nemeqi",
+        "title": "Ludlul bel nemeqi (I Will Praise the Lord of Wisdom)",
+        "author": "Unknown",
+        "date": "c. 1100 BCE",
+        "category": "literature",
+        "description": "Often called the 'Babylonian Job,' this poem tells of a righteous nobleman who suffers every calamity — disease, social ruin, demonic attack — before being restored by Marduk. It confronts the problem of theodicy with unflinching honesty, asking why the gods permit suffering, and arrives at an answer grounded in the inscrutable wisdom of the divine."
+      }
+    ]
+  },
+  {
+    "id": "house-of-wisdom",
+    "name": "House of Wisdom (Bayt al-Hikma)",
+    "location": "Baghdad, Iraq",
+    "era": "8th–13th century CE",
+    "tagline": "The crucible of the Islamic Golden Age, where Greek, Persian, and Indian knowledge were reforged.",
+    "texts": [
+      {
+        "id": "algebra-khwarizmi",
+        "title": "Al-Kitab al-Mukhtasar fi Hisab al-Jabr wal-Muqabala",
+        "author": "Muhammad ibn Musa al-Khwarizmi",
+        "date": "c. 820 CE",
+        "category": "science",
+        "description": "The founding text of algebra, whose title gave the discipline its name (al-jabr). Al-Khwarizmi systematized the solution of linear and quadratic equations using rhetorical methods, without symbols. His name, Latinized as Algoritmi, gave us the word 'algorithm.' The book was translated into Latin in the twelfth century and transformed European mathematics."
+      },
+      {
+        "id": "canon-medicine-avicenna",
+        "title": "The Canon of Medicine (Al-Qanun fi al-Tibb)",
+        "author": "Ibn Sina (Avicenna)",
+        "date": "c. 1025 CE",
+        "category": "medicine",
+        "description": "A million-word medical encyclopedia that synthesized Galenic, Hippocratic, and Islamic medical knowledge into a unified system. It covered anatomy, pharmacology, general medicine, and diseases organized by organ system. The Canon served as the primary medical textbook in both the Islamic world and European universities for over six centuries."
+      },
+      {
+        "id": "optics-ibn-haytham",
+        "title": "Kitab al-Manazir (Book of Optics)",
+        "author": "Ibn al-Haytham (Alhazen)",
+        "date": "c. 1011–1021 CE",
+        "category": "science",
+        "description": "A revolutionary work that overturned the Greek emission theory of vision, demonstrating through experiment that light travels from objects into the eye. Ibn al-Haytham invented the camera obscura, analyzed reflection and refraction, and established the experimental method as the foundation of scientific inquiry — earning him the title 'father of modern optics.'"
+      },
+      {
+        "id": "thousand-one-nights",
+        "title": "One Thousand and One Nights (Alf Layla wa-Layla)",
+        "author": "Various (compiled over centuries)",
+        "date": "c. 8th–14th century CE",
+        "category": "literature",
+        "description": "The great frame narrative of Scheherazade, who tells stories night after night to postpone her execution by King Shahryar. The collection weaves together Arabic, Persian, Indian, and Egyptian tales — Sinbad, Aladdin, Ali Baba — into a meditation on the power of storytelling itself. Baghdad's House of Wisdom milieu shapes many of the tales' settings and themes."
+      },
+      {
+        "id": "muqaddimah-ibn-khaldun",
+        "title": "Muqaddimah (Prolegomena)",
+        "author": "Ibn Khaldun",
+        "date": "1377 CE",
+        "category": "history",
+        "description": "The foundational text of sociology, historiography, and economics. Ibn Khaldun analyzed the rise and fall of civilizations through the concept of asabiyyah (social cohesion), proposing cyclical theories of dynastic power. Though composed in North Africa, the Muqaddimah draws on the intellectual traditions cultivated at the House of Wisdom and represents the culmination of Islamic historical science."
+      },
+      {
+        "id": "fihrist-ibn-nadim",
+        "title": "Kitab al-Fihrist (The Catalogue)",
+        "author": "Ibn al-Nadim",
+        "date": "c. 987 CE",
+        "category": "history",
+        "description": "A comprehensive catalogue of all books written in Arabic up to the tenth century, organized by subject. Ibn al-Nadim, a Baghdad bookseller, documented the entire intellectual output of Islamic civilization — listing thousands of authors and tens of thousands of titles across theology, philosophy, science, literature, and magic. It is our single most important source for the intellectual history of the Islamic Golden Age."
+      },
+      {
+        "id": "zij-sindhind",
+        "title": "Zij al-Sindhind (Astronomical Tables)",
+        "author": "Muhammad ibn Musa al-Khwarizmi",
+        "date": "c. 830 CE",
+        "category": "astronomy",
+        "description": "The first major Islamic astronomical table, synthesizing Indian (Siddhanta), Persian, and Ptolemaic traditions. Al-Khwarizmi's tables allowed the calculation of planetary positions, eclipses, and the direction of Mecca from any location — a practical necessity for Islamic worship. The work was later revised by al-Majriti in Spain and transmitted to medieval Europe."
+      },
+      {
+        "id": "hayy-ibn-yaqzan",
+        "title": "Hayy ibn Yaqzan (The Self-Taught Philosopher)",
+        "author": "Ibn Tufail",
+        "date": "c. 1160 CE",
+        "category": "philosophy",
+        "description": "A philosophical novel about a child raised by a gazelle on a deserted island who, through pure reason, discovers the truths of natural philosophy, metaphysics, and mystical union with God — without any teacher or scripture. Often considered the first philosophical novel, it influenced Defoe's Robinson Crusoe and Enlightenment ideas about natural religion."
+      },
+      {
+        "id": "incoherence-philosophers",
+        "title": "Tahafut al-Falasifa (The Incoherence of the Philosophers)",
+        "author": "Abu Hamid al-Ghazali",
+        "date": "1095 CE",
+        "category": "philosophy",
+        "description": "Al-Ghazali's devastating critique of Aristotelian philosophy as practiced by Islamic thinkers like Ibn Sina, arguing that philosophers' claims about causality, the eternity of the world, and God's knowledge were logically unsound. The work reshaped Islamic intellectual life, elevating Sufi mysticism and occasioning Ibn Rushd's counter-argument, The Incoherence of the Incoherence."
+      },
+      {
+        "id": "mafatih-ulum",
+        "title": "Mafatih al-Ulum (Keys to the Sciences)",
+        "author": "Al-Khwarizmi (Abu Abdullah)",
+        "date": "c. 977 CE",
+        "category": "science",
+        "description": "An encyclopedia of the sciences organized into two major sections — the Islamic religious sciences (jurisprudence, theology, grammar) and the 'foreign' sciences (philosophy, logic, medicine, arithmetic, astronomy, music, mechanics, alchemy). It provides a remarkable snapshot of the state of knowledge in the Islamic world at the height of the Abbasid period."
+      }
+    ]
+  },
+  {
+    "id": "nalanda",
+    "name": "Nalanda's Great Library (Dharmaganja)",
+    "location": "Nalanda, Bihar, India",
+    "era": "5th–12th century CE",
+    "tagline": "Buddhism's greatest university, whose three nine-story library towers held the Dharma's fullest expression.",
+    "texts": [
+      {
+        "id": "heart-sutra",
+        "title": "Heart Sutra (Prajnaparamita Hridaya)",
+        "author": "Unknown",
+        "date": "c. 350 CE",
+        "category": "scripture",
+        "description": "The most recited text in Mahayana Buddhism, condensing the vast Prajnaparamita literature into a single page. Its central declaration — 'form is emptiness, emptiness is form' — encapsulates the doctrine of sunyata (emptiness) that was Nalanda's supreme philosophical contribution. Xuanzang himself translated it into Chinese after studying at Nalanda."
+      },
+      {
+        "id": "nagarjuna-mula",
+        "title": "Mulamadhyamakakarika (Fundamental Verses on the Middle Way)",
+        "author": "Nagarjuna",
+        "date": "c. 150 CE",
+        "category": "philosophy",
+        "description": "The foundational text of Madhyamaka philosophy, in which Nagarjuna demonstrates through rigorous dialectic that all phenomena are empty of inherent existence (svabhava). His analysis of causation, motion, self, and time remains one of the most sophisticated philosophical achievements in human history. Nagarjuna is traditionally associated with Nalanda as its spiritual founder."
+      },
+      {
+        "id": "yogacara-bhumi",
+        "title": "Yogacarabhumi-sastra (Stages of Yoga Practice)",
+        "author": "Asanga (attributed)",
+        "date": "c. 4th century CE",
+        "category": "philosophy",
+        "description": "The encyclopedic treatise of the Yogacara (Mind-Only) school, describing the stages of meditative practice and the nature of consciousness. Asanga, who studied at Nalanda, developed the doctrine that the external world is a projection of consciousness — an idea that resonates with modern phenomenology and cognitive science."
+      },
+      {
+        "id": "abhidharmakosha",
+        "title": "Abhidharmakosha (Treasury of Higher Doctrine)",
+        "author": "Vasubandhu",
+        "date": "c. 4th–5th century CE",
+        "category": "philosophy",
+        "description": "A systematic compendium of Abhidharma philosophy — the Buddhist analysis of mind, matter, cosmology, and the path to liberation. Vasubandhu, Asanga's brother, composed this work as a masterful synthesis of the Sarvastivada tradition before converting to Mahayana. It became the standard philosophical textbook at Nalanda and across the Buddhist world."
+      },
+      {
+        "id": "bodhicaryavatara",
+        "title": "Bodhicaryavatara (Guide to the Bodhisattva's Way of Life)",
+        "author": "Shantideva",
+        "date": "c. 700 CE",
+        "category": "scripture",
+        "description": "A poetic masterpiece on the bodhisattva path, composed by the monk Shantideva at Nalanda. Legend holds that he was considered lazy until he delivered this text as a spontaneous teaching, levitating as he spoke chapter nine on wisdom. Its verses on patience, compassion, and the exchange of self for others remain central to Tibetan Buddhist practice."
+      },
+      {
+        "id": "pramana-varttika",
+        "title": "Pramanavarttika (Commentary on Valid Cognition)",
+        "author": "Dharmakirti",
+        "date": "c. 7th century CE",
+        "category": "philosophy",
+        "description": "The definitive Buddhist treatise on epistemology and logic, establishing the criteria for valid knowledge through perception and inference. Dharmakirti, a Nalanda scholar, developed a sophisticated theory of universals, perception, and logical reasoning that rivaled anything in Western philosophy. His system became the standard for Buddhist philosophical debate across Asia."
+      },
+      {
+        "id": "xuanzang-records",
+        "title": "Da Tang Xiyu Ji (Great Tang Records on the Western Regions)",
+        "author": "Xuanzang",
+        "date": "646 CE",
+        "category": "history",
+        "description": "The Chinese pilgrim Xuanzang's account of his seventeen-year journey to India to study at Nalanda, where he spent five years mastering Buddhist philosophy. His records describe 138 kingdoms, documenting their geography, customs, and religious practices. The text became the basis for Journey to the West, one of the Four Great Classical Novels of Chinese literature."
+      },
+      {
+        "id": "kalachakra-tantra",
+        "title": "Kalachakra Tantra (Wheel of Time Tantra)",
+        "author": "Unknown (attributed to the Buddha)",
+        "date": "c. 10th–11th century CE",
+        "category": "scripture",
+        "description": "The most complex and encyclopedic of the Buddhist tantric systems, integrating cosmology, astronomy, medicine, yoga, and meditation into a single mandala-based practice. Tradition holds it was taught by the Buddha himself and preserved in the mystical kingdom of Shambhala. Nalanda was a major center for its study and transmission to Tibet."
+      },
+      {
+        "id": "aryabhatiya",
+        "title": "Aryabhatiya",
+        "author": "Aryabhata",
+        "date": "499 CE",
+        "category": "science",
+        "description": "A pioneering mathematical and astronomical treatise composed at the university that preceded Nalanda. Aryabhata proposed that the Earth rotates on its axis, calculated pi to four decimal places, developed the place-value system, and used algebraic methods centuries before al-Khwarizmi. His work was studied and transmitted by Nalanda's later scholars."
+      },
+      {
+        "id": "charaka-samhita",
+        "title": "Charaka Samhita",
+        "author": "Charaka (redacted by Dridhabala)",
+        "date": "c. 100 CE (redacted c. 400 CE)",
+        "category": "medicine",
+        "description": "The foundational text of Ayurvedic medicine, covering anatomy, physiology, diagnosis, treatment, and medical ethics. It classifies diseases by their causes, describes hundreds of medicinal plants, and articulates ethical principles for physicians. Nalanda's medical faculty taught from this text, making the university one of the ancient world's great centers of medical learning."
+      }
+    ]
+  },
+  {
+    "id": "constantinople",
+    "name": "Imperial Library of Constantinople",
+    "location": "Constantinople (modern Istanbul, Turkey)",
+    "era": "4th–15th century CE",
+    "tagline": "The guardian of classical learning through the long medieval night, preserving what the West forgot.",
+    "texts": [
+      {
+        "id": "iliad-homer",
+        "title": "Iliad",
+        "author": "Homer",
+        "date": "c. 750 BCE",
+        "category": "literature",
+        "description": "The foundational epic of Western literature, telling of Achilles' rage during the Trojan War. Constantinople's scribes preserved the definitive text through centuries of careful copying, including the scholia (scholarly annotations) that transmit ancient Alexandrian literary criticism. Without Byzantine preservation, Homer would have been lost entirely to the Western world."
+      },
+      {
+        "id": "odyssey-homer",
+        "title": "Odyssey",
+        "author": "Homer",
+        "date": "c. 725 BCE",
+        "category": "literature",
+        "description": "The epic of Odysseus' ten-year journey home from Troy, through the lands of the Cyclops, Circe, and the Sirens. Like the Iliad, the Odyssey survived solely because Byzantine scholars meticulously copied and annotated it generation after generation. It is the prototype of all subsequent quest narratives in world literature."
+      },
+      {
+        "id": "histories-herodotus",
+        "title": "Histories",
+        "author": "Herodotus",
+        "date": "c. 430 BCE",
+        "category": "history",
+        "description": "The first major prose work of Western historiography, recounting the Greco-Persian Wars within a vast tapestry of ethnographic and geographic information about the known world. Called 'the Father of History' by Cicero, Herodotus was also 'the Father of Lies' to his critics. The Imperial Library's copies ensured this irreplaceable work survived intact."
+      },
+      {
+        "id": "republic-plato",
+        "title": "Republic",
+        "author": "Plato",
+        "date": "c. 375 BCE",
+        "category": "philosophy",
+        "description": "Plato's inquiry into the nature of justice, the ideal state, and the philosopher-king, featuring the Allegory of the Cave — one of the most influential passages in all of philosophy. Byzantine scholars not only preserved but actively studied and commented on Plato, maintaining a living Platonic tradition that would reignite the Renaissance when manuscripts flowed westward."
+      },
+      {
+        "id": "digest-justinian",
+        "title": "Digest of Justinian (Pandectae)",
+        "author": "Tribonian and legal scholars",
+        "date": "533 CE",
+        "category": "law",
+        "description": "The monumental codification of Roman law commissioned by Emperor Justinian, compiling the opinions of classical jurists into fifty books. The Digest preserved over a thousand years of Roman legal thought and became the foundation of civil law systems across Europe. Its rediscovery in twelfth-century Italy sparked the revival of legal science in the West."
+      },
+      {
+        "id": "suda-lexicon",
+        "title": "Suda (Byzantine Encyclopedia)",
+        "author": "Unknown (multiple compilers)",
+        "date": "c. 10th century CE",
+        "category": "history",
+        "description": "A massive encyclopedic lexicon of the ancient Mediterranean world, containing 30,000 entries on history, biography, and lexicography. The Suda preserves fragments of countless lost works — often our only source for the lives and writings of ancient Greek authors. It represents the culmination of Byzantine encyclopedic scholarship."
+      },
+      {
+        "id": "philokalia",
+        "title": "Philokalia (Love of the Beautiful)",
+        "author": "Various Church Fathers",
+        "date": "4th–15th century CE (compiled 1782)",
+        "category": "religion",
+        "description": "An anthology of mystical and ascetic writings by Eastern Orthodox monks and theologians, spanning from the desert fathers to the late Byzantine hesychasts. The Philokalia teaches the practice of inner prayer, stillness (hesychia), and the vision of divine light. It is the spiritual heart of the Orthodox tradition, preserving the contemplative wisdom cultivated in Constantinople's monasteries."
+      },
+      {
+        "id": "alexiad-anna",
+        "title": "Alexiad",
+        "author": "Anna Komnene",
+        "date": "c. 1148 CE",
+        "category": "history",
+        "description": "The first great historical work written by a woman, Anna Komnene's account of her father Emperor Alexios I's reign during the First Crusade. The Alexiad provides the Byzantine perspective on the Crusaders — whom Anna regards as brilliant barbarians — and demonstrates the sophisticated literary and intellectual culture of twelfth-century Constantinople."
+      },
+      {
+        "id": "chronographia-psellos",
+        "title": "Chronographia",
+        "author": "Michael Psellos",
+        "date": "c. 1078 CE",
+        "category": "history",
+        "description": "A vivid, psychologically acute chronicle of Byzantine emperors from Basil II to Michael VII, written by the most brilliant intellectual of the eleventh century. Psellos, who headed the University of Constantinople, combined classical learning with sharp political observation, creating a historical work of extraordinary literary power and modern sensibility."
+      },
+      {
+        "id": "greek-anthology",
+        "title": "Greek Anthology (Palatine Anthology)",
+        "author": "Various (compiled by Cephalas, c. 900 CE)",
+        "date": "7th century BCE – 10th century CE",
+        "category": "literature",
+        "description": "A collection of over 4,000 short Greek poems spanning 1,600 years — epigrams, love poems, riddles, epitaphs, and dedications. Preserved in a single manuscript in the Imperial Library, the Anthology is the most comprehensive surviving collection of ancient Greek lyric and epigrammatic poetry, showcasing the full range of classical poetic sensibility."
+      }
+    ]
+  },
+  {
+    "id": "dunhuang",
+    "name": "Library Cave of Dunhuang (Mogao Cave 17)",
+    "location": "Dunhuang, Gansu Province, China",
+    "era": "4th–11th century CE (sealed c. 1002 CE)",
+    "tagline": "A sealed chamber on the Silk Road, hiding 50,000 manuscripts in the desert dark for a thousand years.",
+    "texts": [
+      {
+        "id": "diamond-sutra",
+        "title": "Diamond Sutra (Vajracchedika Prajnaparamita)",
+        "author": "Unknown (translated by Kumarajiva)",
+        "date": "868 CE (printed edition); c. 4th century CE (text)",
+        "category": "scripture",
+        "description": "The oldest known dated printed book in the world, discovered in Cave 17 at Dunhuang. This woodblock-printed scroll of the Diamond Sutra predates Gutenberg by nearly six centuries. The sutra teaches that all phenomena are illusory and that true wisdom lies in seeing through the veil of appearances — 'like a dream, a phantom, a bubble, a shadow.'"
+      },
+      {
+        "id": "lotus-sutra-dunhuang",
+        "title": "Lotus Sutra (Saddharmapundarika)",
+        "author": "Unknown (translated by Kumarajiva)",
+        "date": "c. 5th century CE (Dunhuang copies)",
+        "category": "scripture",
+        "description": "Multiple manuscript copies of the most influential sutra in East Asian Buddhism were found in the Dunhuang caves. The Lotus Sutra teaches that all beings possess Buddha-nature and will eventually attain enlightenment. Its parables — the Burning House, the Prodigal Son, the Phantom City — shaped the religious imagination of China, Korea, and Japan."
+      },
+      {
+        "id": "platform-sutra",
+        "title": "Platform Sutra of the Sixth Patriarch",
+        "author": "Huineng (attributed)",
+        "date": "c. 8th century CE (Dunhuang version)",
+        "category": "scripture",
+        "description": "The foundational text of Chan (Zen) Buddhism, purportedly recording the teachings of the illiterate woodcutter Huineng, who achieved sudden enlightenment. The Dunhuang manuscript is the earliest surviving version of this text and differs significantly from later editions. It emphasizes sudden awakening over gradual cultivation — 'the mind is originally pure.'"
+      },
+      {
+        "id": "dunhuang-star-chart",
+        "title": "Dunhuang Star Chart",
+        "author": "Unknown (Chinese astronomer)",
+        "date": "c. 700 CE",
+        "category": "astronomy",
+        "description": "The oldest complete preserved star atlas in the world, mapping 1,585 stars in Chinese, classical, and polar projection formats. Found in the Library Cave, it uses a cylindrical projection technique not seen in the West until Mercator, eight centuries later. The chart represents the sophisticated astronomical knowledge of Tang Dynasty China."
+      },
+      {
+        "id": "book-of-rites-dunhuang",
+        "title": "Confucian Classics Manuscripts",
+        "author": "Various Confucian scholars",
+        "date": "5th–10th century CE",
+        "category": "philosophy",
+        "description": "Dunhuang preserved numerous manuscript copies of the Confucian classics — the Analects, the Book of Rites, the Classic of Poetry — in versions that predate the Song Dynasty printed editions. These manuscripts are invaluable for textual criticism, revealing how the canonical texts were read and transmitted along the Silk Road far from the Chinese heartland."
+      },
+      {
+        "id": "tibetan-annals",
+        "title": "Old Tibetan Annals",
+        "author": "Unknown (Tibetan court historians)",
+        "date": "c. 8th–9th century CE",
+        "category": "history",
+        "description": "Among the most important historical documents found at Dunhuang, these annals record year-by-year events of the Tibetan Empire during its period of greatest power. Written in Old Tibetan, they are the earliest native Tibetan historical texts and document the empire's administration, military campaigns, and diplomatic relations with Tang China."
+      },
+      {
+        "id": "contract-documents",
+        "title": "Silk Road Commercial Documents",
+        "author": "Various merchants and officials",
+        "date": "5th–10th century CE",
+        "category": "history",
+        "description": "Thousands of commercial documents in Chinese, Tibetan, Sogdian, Khotanese, and other languages, recording the daily business of the Silk Road — contracts, receipts, inventories, and letters. These documents reveal the multilingual, multicultural reality of medieval Central Asian trade and the complex legal systems that governed it."
+      },
+      {
+        "id": "dunhuang-medical-texts",
+        "title": "Medical Manuscripts",
+        "author": "Various physicians",
+        "date": "5th–10th century CE",
+        "category": "medicine",
+        "description": "The Dunhuang caves preserved a remarkable collection of Chinese, Tibetan, and Central Asian medical texts — herbal recipes, acupuncture charts, pharmacological manuals, and instructions for treating specific diseases. These manuscripts reveal a sophisticated medical culture at the crossroads of Chinese, Indian, and Central Asian healing traditions."
+      },
+      {
+        "id": "transformation-texts",
+        "title": "Bianwen (Transformation Texts)",
+        "author": "Buddhist storytellers",
+        "date": "c. 8th–10th century CE",
+        "category": "literature",
+        "description": "A genre of popular Buddhist storytelling unique to Dunhuang, combining prose narrative with verse passages to retell Buddhist sutras and Chinese legends for lay audiences. The bianwen — 'texts of transformation' — are among the earliest examples of Chinese vernacular literature, bridging the gap between elite literary culture and popular religious performance."
+      },
+      {
+        "id": "dao-de-jing-dunhuang",
+        "title": "Dao De Jing (Dunhuang Manuscripts)",
+        "author": "Laozi (attributed)",
+        "date": "c. 6th–10th century CE (Dunhuang copies)",
+        "category": "philosophy",
+        "description": "Multiple manuscript copies of Laozi's foundational Daoist text were found in the Library Cave, some with commentaries not preserved elsewhere. These manuscripts provide crucial evidence for the textual history of the Dao De Jing and document the interplay between Daoism and Buddhism along the Silk Road, where the two traditions frequently merged and competed."
+      }
+    ]
+  },
+  {
+    "id": "tibetan",
+    "name": "Tibetan Monastic Libraries (Samye & Sakya)",
+    "location": "Central Tibet (Samye, Sakya, and major monasteries)",
+    "era": "8th century CE – present",
+    "tagline": "The highest libraries in the world, where Indian Buddhism was preserved in translation after its destruction at Nalanda.",
+    "texts": [
+      {
+        "id": "kangyur",
+        "title": "Kangyur (The Translated Words of the Buddha)",
+        "author": "Various translators",
+        "date": "8th–14th century CE (compiled c. 1310–1320 CE)",
+        "category": "scripture",
+        "description": "The Tibetan Buddhist canon of the Buddha's own words, comprising over 70,000 pages in 108 volumes. When Muslim armies destroyed Nalanda and the great Indian monasteries, it was the Tibetan translations that preserved the majority of Mahayana and Vajrayana Buddhist literature. The Kangyur is the single most important repository of Indian Buddhist scripture in any language."
+      },
+      {
+        "id": "tengyur",
+        "title": "Tengyur (The Translated Treatises)",
+        "author": "Various Indian and Tibetan scholars",
+        "date": "8th–14th century CE (compiled c. 1310–1320 CE)",
+        "category": "philosophy",
+        "description": "The companion to the Kangyur, containing over 3,600 Indian Buddhist commentaries, philosophical treatises, and scientific works translated into Tibetan. The Tengyur preserves the writings of Nagarjuna, Asanga, Dharmakirti, and hundreds of other Indian masters whose original Sanskrit texts are now lost. In 225 volumes, it is one of the largest translation projects in human history."
+      },
+      {
+        "id": "book-of-the-dead",
+        "title": "Bardo Thodol (Tibetan Book of the Dead)",
+        "author": "Padmasambhava (attributed)",
+        "date": "c. 8th century CE (revealed 14th century CE)",
+        "category": "scripture",
+        "description": "A guide to the intermediate states (bardos) between death and rebirth, traditionally read aloud to the dying and recently deceased to help them navigate the after-death experience and achieve liberation. Attributed to Padmasambhava, the founder of Samye monastery, it was hidden as a 'treasure text' (terma) and rediscovered centuries later."
+      },
+      {
+        "id": "gesar-epic",
+        "title": "Epic of King Gesar",
+        "author": "Unknown (oral tradition, multiple bards)",
+        "date": "c. 11th century CE onward",
+        "category": "literature",
+        "description": "The longest epic poem in the world — over twenty million words in some versions — telling the saga of the divine warrior-king Gesar, who descends from heaven to subdue demons and establish the Dharma on Earth. Still performed by living bards across Tibet and Mongolia, the Gesar epic is the Tibetan Iliad and Mahabharata combined."
+      },
+      {
+        "id": "blue-annals",
+        "title": "Blue Annals (Deb ther sngon po)",
+        "author": "Go Lotsawa Zhonnu Pal",
+        "date": "1476 CE",
+        "category": "history",
+        "description": "The most comprehensive history of Buddhism in Tibet, tracing the transmission of every major teaching lineage from India to Tibet. The Blue Annals documents the lives of translators, yogis, and scholars who built Tibetan Buddhism, providing invaluable historical data that is often our only source for the Indian Buddhist masters of the Pala period."
+      },
+      {
+        "id": "lam-rim-chen-mo",
+        "title": "Lam Rim Chen Mo (Great Treatise on the Stages of the Path)",
+        "author": "Tsongkhapa",
+        "date": "1402 CE",
+        "category": "philosophy",
+        "description": "Tsongkhapa's magnum opus, systematizing the entire Buddhist path from initial motivation through to full enlightenment. Drawing on Indian and Tibetan sources, the Lam Rim Chen Mo became the foundational text of the Gelug school and the primary curriculum at Tibet's great monastic universities of Sera, Drepung, and Ganden."
+      },
+      {
+        "id": "four-medical-tantras",
+        "title": "Gyushi (Four Medical Tantras)",
+        "author": "Yuthok Yonten Gonpo (attributed)",
+        "date": "c. 12th century CE (current form)",
+        "category": "medicine",
+        "description": "The foundational text of Tibetan medicine, synthesizing Indian Ayurveda, Chinese medicine, and Central Asian healing traditions into a unique system organized around the Three Humors (wind, bile, phlegm). The Gyushi covers anatomy, diagnosis by pulse and urine, pharmacology using Himalayan herbs, and the spiritual dimensions of healing."
+      },
+      {
+        "id": "milarepa-songs",
+        "title": "Hundred Thousand Songs of Milarepa",
+        "author": "Milarepa (compiled by Tsangnyon Heruka)",
+        "date": "c. 11th century CE (compiled 1488 CE)",
+        "category": "literature",
+        "description": "The spiritual songs (doha) of Tibet's greatest yogi and poet, Milarepa, who lived in mountain caves practicing meditation for decades. His spontaneous songs of realization — addressing students, debating with demons, praising the guru — are among the most beloved works of Tibetan literature and the most accessible expression of tantric Buddhist experience."
+      },
+      {
+        "id": "sakya-pandita-treasury",
+        "title": "Treasury of Aphoristic Jewels (Legs bshad rin po che'i gter)",
+        "author": "Sakya Pandita Kunga Gyaltsen",
+        "date": "c. 1230 CE",
+        "category": "philosophy",
+        "description": "A collection of didactic verses on worldly wisdom and ethical conduct by the great scholar of Sakya monastery, blending Indian Buddhist moral philosophy with Tibetan folk wisdom. Sakya Pandita was renowned as the most learned person of his era, and his aphorisms became proverbial across the Tibetan-speaking world."
+      },
+      {
+        "id": "vaidurya-karpo",
+        "title": "Vaidurya Karpo (White Beryl)",
+        "author": "Desi Sangye Gyatso",
+        "date": "1685 CE",
+        "category": "astronomy",
+        "description": "The definitive Tibetan treatise on astronomy, astrology, and calendrical science, composed by the regent of the Fifth Dalai Lama. The White Beryl synthesizes Indian, Chinese, and Kalachakra astronomical systems into a unified framework used for calculating the Tibetan calendar, predicting eclipses, and determining auspicious dates for religious and secular activities."
+      }
+    ]
+  },
+  {
+    "id": "pergamon",
+    "name": "Royal Library of Pergamon",
+    "location": "Pergamon (modern Bergama, Turkey)",
+    "era": "3rd–1st century BCE",
+    "tagline": "Alexandria's great rival, where parchment was born and 200,000 scrolls challenged Egyptian supremacy.",
+    "texts": [
+      {
+        "id": "on-nature-parmenides",
+        "title": "On Nature",
+        "author": "Parmenides",
+        "date": "c. 475 BCE",
+        "category": "philosophy",
+        "description": "The foundational text of Western metaphysics, in which Parmenides argues through rigorous logic that reality is one, unchanging, and eternal — and that change and multiplicity are illusions. His distinction between 'the Way of Truth' and 'the Way of Appearance' established the central problem of philosophy. Pergamon's scholars preserved and studied this crucial pre-Socratic text."
+      },
+      {
+        "id": "on-medicine-galen",
+        "title": "On the Natural Faculties",
+        "author": "Galen of Pergamon",
+        "date": "c. 175 CE",
+        "category": "medicine",
+        "description": "Galen, the most influential physician in Western history after Hippocrates, was born and trained in Pergamon. His treatise on the body's natural faculties — attraction, retention, alteration, and expulsion — established the physiological framework that governed medicine for fifteen centuries. Galen learned anatomy by studying at Pergamon's famous Asclepion healing temple."
+      },
+      {
+        "id": "art-of-grammar",
+        "title": "Techne Grammatike (Art of Grammar)",
+        "author": "Dionysius Thrax",
+        "date": "c. 100 BCE",
+        "category": "science",
+        "description": "The first systematic grammar of any Western language, composed by a scholar trained in the Pergamene grammatical tradition. Dionysius Thrax classified the parts of speech, defined grammatical categories, and created the analytical framework that shaped the study of language in Greek, Latin, Arabic, and eventually all European languages."
+      },
+      {
+        "id": "histories-polybius",
+        "title": "Histories",
+        "author": "Polybius",
+        "date": "c. 150 BCE",
+        "category": "history",
+        "description": "A universal history of the Mediterranean world from 264 to 146 BCE, analyzing Rome's rise to supremacy through the concept of anacyclosis — the cyclical theory of government. Polybius was associated with the Pergamene intellectual circle and his analytical, cause-and-effect approach to history influenced the study of politics from Machiavelli to the American Founders."
+      },
+      {
+        "id": "deipnosophistae",
+        "title": "Deipnosophistae (Dinner-Table Philosophers)",
+        "author": "Athenaeus of Naucratis",
+        "date": "c. 200 CE",
+        "category": "literature",
+        "description": "A fifteen-book symposium dialogue in which learned diners discuss food, wine, music, games, and literature, quoting extensively from hundreds of lost Greek works. Athenaeus drew heavily on Pergamene scholarship and his work preserves more fragments of lost Greek literature than any other single source — a priceless window into the vanished literary landscape of antiquity."
+      },
+      {
+        "id": "stoic-fragments",
+        "title": "Stoic Philosophical Fragments",
+        "author": "Chrysippus, Cleanthes, and others",
+        "date": "3rd–2nd century BCE",
+        "category": "philosophy",
+        "description": "Pergamon was a major center for Stoic philosophy, and its library preserved the works of the school's founders — Zeno, Cleanthes, and especially Chrysippus, who wrote over 700 works. Though the originals are lost, Pergamene scholarship ensured their ideas survived through quotation and summary, shaping the Stoic tradition inherited by Seneca, Epictetus, and Marcus Aurelius."
+      },
+      {
+        "id": "crates-globe",
+        "title": "On the Globe (Geographic Treatise)",
+        "author": "Crates of Mallus",
+        "date": "c. 150 BCE",
+        "category": "science",
+        "description": "Crates, the head librarian of Pergamon, constructed the first known terrestrial globe and theorized the existence of four inhabited continents on a spherical Earth — anticipating the discovery of the Americas by sixteen centuries. His geographical and astronomical work represented the Pergamene approach to scholarship: grand, synthetic, and speculative."
+      },
+      {
+        "id": "nicander-theriaca",
+        "title": "Theriaca and Alexipharmaca",
+        "author": "Nicander of Colophon",
+        "date": "c. 130 BCE",
+        "category": "medicine",
+        "description": "Didactic poems on poisonous animals and their antidotes (Theriaca) and on poisons and their remedies (Alexipharmaca), composed by a poet associated with the Pergamene Attalid court. These works represent the intersection of poetry and pharmacology characteristic of Hellenistic learned culture, and preserved practical toxicological knowledge for later physicians."
+      },
+      {
+        "id": "mechanics-philon",
+        "title": "Mechanike Syntaxis (Compendium of Mechanics)",
+        "author": "Philo of Byzantium",
+        "date": "c. 200 BCE",
+        "category": "science",
+        "description": "A comprehensive treatise on military and civil engineering covering siege warfare, fortification, pneumatics, and automata. Philo traveled between Alexandria and Pergamon, synthesizing the engineering traditions of both cities. His work on artillery design and fortification theory was the standard military engineering manual of the Hellenistic world."
+      },
+      {
+        "id": "apollodorus-library",
+        "title": "Bibliotheca (Library of Greek Mythology)",
+        "author": "Pseudo-Apollodorus",
+        "date": "1st–2nd century CE",
+        "category": "literature",
+        "description": "The most comprehensive surviving handbook of Greek mythology, systematically recounting the myths of the gods, heroes, and the Trojan War cycle. Though its authorship is disputed, the Bibliotheca draws on the rich mythographic tradition cultivated at Pergamon. It remains the single most useful reference work for Greek mythology, preserving many variants found nowhere else."
+      }
+    ]
+  },
+  {
+    "id": "celsus",
+    "name": "Library of Celsus",
+    "location": "Ephesus (modern Selcuk, Turkey)",
+    "era": "2nd century CE",
+    "tagline": "A monumental tomb-library on the Aegean, where 12,000 scrolls honored a Roman senator's love of wisdom.",
+    "texts": [
+      {
+        "id": "heraclitus-fragments",
+        "title": "On Nature (Fragments)",
+        "author": "Heraclitus of Ephesus",
+        "date": "c. 500 BCE",
+        "category": "philosophy",
+        "description": "The cryptic, oracular fragments of Ephesus' greatest philosopher, who taught that all things are in perpetual flux ('you cannot step into the same river twice') and that the universe is governed by the Logos — a rational principle that unifies all opposites. Heraclitus deposited his original book in the Temple of Artemis at Ephesus; later copies were kept at the Library of Celsus.",
+        "fragments": true
+      },
+      {
+        "id": "ephesians-paul",
+        "title": "Epistle to the Ephesians",
+        "author": "Paul the Apostle (attributed)",
+        "date": "c. 60–90 CE",
+        "category": "scripture",
+        "description": "Paul's letter to the Christian community at Ephesus, expounding the cosmic scope of Christ's redemption and the unity of all believers in one body. Ephesus was one of the most important cities in early Christianity — Paul spent three years there, and the city's libraries would have circulated early Christian texts alongside pagan philosophy."
+      },
+      {
+        "id": "gospel-of-john",
+        "title": "Gospel of John",
+        "author": "John the Apostle (attributed)",
+        "date": "c. 90–110 CE",
+        "category": "scripture",
+        "description": "Tradition places the composition of the Fourth Gospel at Ephesus, where the Apostle John reportedly spent his final years. The Gospel of John opens with a Logos theology — 'In the beginning was the Word' — that echoes Heraclitus' own Ephesian philosophy, creating a remarkable bridge between Greek thought and Christian revelation in the city where both traditions converged."
+      },
+      {
+        "id": "artemidorus-dreams",
+        "title": "Oneirocritica (Interpretation of Dreams)",
+        "author": "Artemidorus of Ephesus",
+        "date": "c. 150 CE",
+        "category": "science",
+        "description": "The most comprehensive dream interpretation manual of antiquity, cataloguing thousands of dream symbols and their meanings. Artemidorus conducted field research across the Mediterranean, interviewing dreamers and fortune-tellers. His systematic approach influenced Islamic dream interpretation, Renaissance oneirology, and Sigmund Freud, who cited the Oneirocritica in The Interpretation of Dreams."
+      },
+      {
+        "id": "soranus-gynecology",
+        "title": "Gynaecology",
+        "author": "Soranus of Ephesus",
+        "date": "c. 100 CE",
+        "category": "medicine",
+        "description": "The most important gynecological and obstetric text of antiquity, covering conception, pregnancy, childbirth, and newborn care with remarkable clinical detail and compassion. Soranus rejected many superstitious practices, advocated for the health of mothers, and described contraceptive methods. His work influenced medical practice for over a millennium."
+      },
+      {
+        "id": "rufus-anatomy",
+        "title": "On the Naming of the Parts of the Body",
+        "author": "Rufus of Ephesus",
+        "date": "c. 100 CE",
+        "category": "medicine",
+        "description": "An anatomical treatise that standardized Greek medical terminology by systematically naming the organs, muscles, and structures of the human body. Rufus studied medicine at Ephesus and Alexandria, and his work on anatomy, pulse diagnosis, and kidney disease was cited by Galen and influenced both Islamic and Byzantine medical traditions."
+      },
+      {
+        "id": "acts-john",
+        "title": "Acts of John",
+        "author": "Unknown",
+        "date": "c. 150–200 CE",
+        "category": "scripture",
+        "description": "An apocryphal narrative of the Apostle John's missionary activities in Ephesus, including dramatic miracles — raising the dead, destroying the Temple of Artemis, and drinking poison unharmed. The text includes the mysterious 'Hymn of the Dance,' a gnostic ritual poem in which Christ leads the apostles in a circular dance before his crucifixion."
+      },
+      {
+        "id": "xenophon-ephesiaca",
+        "title": "Ephesian Tale (Ephesiaca)",
+        "author": "Xenophon of Ephesus",
+        "date": "c. 2nd century CE",
+        "category": "literature",
+        "description": "An early Greek novel telling the love story of Habrocomes and Anthia, who are separated by pirates, enslavement, and false death before reuniting in Ephesus. Set against the backdrop of the city's famous Temple of Artemis, the Ephesiaca is one of the earliest surviving romantic novels and a precursor to the modern genre of adventure fiction."
+      },
+      {
+        "id": "maximus-dissertations",
+        "title": "Philosophical Dissertations",
+        "author": "Maximus of Tyre",
+        "date": "c. 180 CE",
+        "category": "philosophy",
+        "description": "Forty-one popular philosophical lectures by a Platonic philosopher who lectured throughout the Roman East, including at Ephesus. Maximus addressed questions like the nature of God, the problem of evil, the value of prayer, and whether Socrates was right to refuse escape from prison — making philosophy accessible to educated Roman audiences."
+      },
+      {
+        "id": "pliny-natural-history",
+        "title": "Natural History (references to Ephesus)",
+        "author": "Pliny the Elder",
+        "date": "77 CE",
+        "category": "science",
+        "description": "Pliny's encyclopedic Natural History in thirty-seven books catalogues the natural world from cosmology to metallurgy, frequently citing the marvels of Ephesus — its Temple of Artemis (one of the Seven Wonders), its medicinal springs, and its contribution to painting, sculpture, and architecture. Copies of this vast work circulated in all major Roman libraries, including the Library of Celsus."
+      }
+    ]
+  },
+  {
+    "id": "timbuktu",
+    "name": "Timbuktu Manuscript Libraries",
+    "location": "Timbuktu, Mali",
+    "era": "13th–17th century CE",
+    "tagline": "Africa's great city of books, where hundreds of thousands of manuscripts illuminated the Sahara.",
+    "texts": [
+      {
+        "id": "tarikh-sudan",
+        "title": "Tarikh al-Sudan (Chronicle of the Sudan)",
+        "author": "Abd al-Rahman al-Sadi",
+        "date": "1655 CE",
+        "category": "history",
+        "description": "The most important chronicle of the Songhai Empire and the western Sudan, documenting three centuries of West African history including the rise and fall of Timbuktu as an intellectual center. Al-Sadi describes the city's scholars, libraries, and the devastating Moroccan invasion of 1591 that ended Timbuktu's golden age."
+      },
+      {
+        "id": "tarikh-fattash",
+        "title": "Tarikh al-Fattash (Chronicle of the Seeker)",
+        "author": "Mahmud Kati and descendants",
+        "date": "c. 1519–1665 CE",
+        "category": "history",
+        "description": "A history of the Songhai Empire written by a family of scholars over multiple generations, providing an insider's view of West African court politics, intellectual life, and the trans-Saharan trade networks. The Tarikh al-Fattash is one of the two great chronicles of Timbuktu and an essential source for precolonial African history."
+      },
+      {
+        "id": "ahmed-baba-works",
+        "title": "Mi'raj al-Su'ud (The Ladder of Ascent)",
+        "author": "Ahmad Baba al-Timbukti",
+        "date": "c. 1600 CE",
+        "category": "law",
+        "description": "A legal treatise on the status of enslaved peoples in Islamic law by Timbuktu's most famous scholar, who argued that free-born Muslims could not be enslaved regardless of their skin color. Ahmad Baba, who owned a personal library of 1,600 manuscripts, was deported to Morocco after the 1591 invasion and became a celebrated teacher in Marrakesh."
+      },
+      {
+        "id": "timbuktu-astronomy",
+        "title": "Astronomical and Mathematical Manuscripts",
+        "author": "Various Timbuktu scholars",
+        "date": "14th–17th century CE",
+        "category": "astronomy",
+        "description": "A collection of treatises on astronomy, mathematics, and timekeeping produced by Timbuktu's scholars, integrating Arabic astronomical traditions with local observational data. These manuscripts include star charts, planetary tables, and methods for determining prayer times and the direction of Mecca — practical necessities that drove West African astronomical science."
+      },
+      {
+        "id": "timbuktu-medicine",
+        "title": "Medical Manuscripts",
+        "author": "Various Timbuktu scholars",
+        "date": "14th–17th century CE",
+        "category": "medicine",
+        "description": "Medical treatises combining Galenic and Islamic pharmacological traditions with indigenous West African herbal medicine. The manuscripts describe treatments using local plants, minerals, and animal products, along with prophetic medicine and Sufi healing practices. They document a sophisticated medical tradition that served Timbuktu's population of 100,000 at the city's peak."
+      },
+      {
+        "id": "timbuktu-quran-commentaries",
+        "title": "Quranic Commentaries and Tafsir",
+        "author": "Various Timbuktu scholars",
+        "date": "14th–17th century CE",
+        "category": "religion",
+        "description": "Timbuktu's scholars produced extensive commentaries on the Quran, blending classical Arabic tafsir traditions with local interpretive approaches. These manuscripts demonstrate the depth of Quranic scholarship in West Africa and the transmission of Islamic learning across the Sahara through networks of scholars, pilgrims, and merchants."
+      },
+      {
+        "id": "timbuktu-jurisprudence",
+        "title": "Legal Opinions and Fatwas",
+        "author": "Various Timbuktu jurists",
+        "date": "15th–17th century CE",
+        "category": "law",
+        "description": "Collections of legal opinions (fatwas) addressing the practical questions of daily life in a major commercial city — trade disputes, marriage contracts, inheritance, property rights, and the legal status of diverse populations. These documents reveal a sophisticated legal culture operating within the Maliki school of Islamic jurisprudence adapted to West African conditions."
+      },
+      {
+        "id": "timbuktu-poetry",
+        "title": "Poetry Collections (Diwan)",
+        "author": "Various Timbuktu poets",
+        "date": "14th–17th century CE",
+        "category": "literature",
+        "description": "Anthologies of Arabic and local-language poetry celebrating love, piety, scholarship, and the beauty of Timbuktu itself. The city's poets worked within classical Arabic poetic forms while developing distinctive West African themes and imagery, creating a literary tradition that expressed the unique cultural identity of the Saharan intellectual world."
+      },
+      {
+        "id": "timbuktu-sufism",
+        "title": "Sufi Devotional Manuscripts",
+        "author": "Various Sufi masters",
+        "date": "15th–17th century CE",
+        "category": "religion",
+        "description": "Texts on Sufi mystical practice, including prayer manuals, litanies (wird), biographical dictionaries of saints, and treatises on the spiritual path. Timbuktu was a major center of the Qadiriyya Sufi order, and its manuscripts document a vibrant mystical tradition that shaped West African Islam through networks of Sufi brotherhoods and saints."
+      },
+      {
+        "id": "diplomatic-letters",
+        "title": "Royal and Diplomatic Correspondence",
+        "author": "Various rulers and officials",
+        "date": "15th–17th century CE",
+        "category": "history",
+        "description": "Official letters between the rulers of the Songhai, Mali, and Moroccan empires, documenting diplomatic relations, trade agreements, military alliances, and scholarly exchanges. These manuscripts provide invaluable evidence of the sophisticated statecraft practiced by West African kingdoms and their engagement with the broader Islamic world."
+      }
+    ]
+  },
+  {
+    "id": "qarawiyyin",
+    "name": "Library of Al-Qarawiyyin",
+    "location": "Fez, Morocco",
+    "era": "859 CE – present",
+    "tagline": "The world's oldest continually operating library, founded by a woman at the oldest university on Earth.",
+    "texts": [
+      {
+        "id": "muqaddimah-qarawiyyin",
+        "title": "Muqaddimah (original manuscript)",
+        "author": "Ibn Khaldun",
+        "date": "1377 CE",
+        "category": "history",
+        "description": "Al-Qarawiyyin holds one of the oldest surviving manuscripts of Ibn Khaldun's revolutionary introduction to history. Ibn Khaldun taught at Al-Qarawiyyin, and his theory of the rise and fall of civilizations through asabiyyah (group solidarity) is widely regarded as the founding text of sociology, political science, and economic theory."
+      },
+      {
+        "id": "muwatta-malik",
+        "title": "Al-Muwatta (The Well-Trodden Path)",
+        "author": "Imam Malik ibn Anas",
+        "date": "c. 765 CE",
+        "category": "law",
+        "description": "The earliest surviving comprehensive collection of hadith (prophetic traditions) and legal rulings, compiled by the founder of the Maliki school of jurisprudence that dominates North and West Africa. Al-Qarawiyyin, as the premier Maliki institution, preserved some of the most authoritative manuscripts of this foundational legal text."
+      },
+      {
+        "id": "risala-qayrawani",
+        "title": "Al-Risala (The Epistle)",
+        "author": "Ibn Abi Zayd al-Qayrawani",
+        "date": "c. 938 CE",
+        "category": "law",
+        "description": "The most widely studied primer of Maliki Islamic law, covering worship, transactions, marriage, and criminal justice in a concise, systematic format. Known as 'the little Maliki fiqh,' it was the standard introductory text at Al-Qarawiyyin for over a millennium, memorized by generations of students from Morocco to Malaysia."
+      },
+      {
+        "id": "ihya-ulum-din",
+        "title": "Ihya Ulum al-Din (Revival of the Religious Sciences)",
+        "author": "Abu Hamid al-Ghazali",
+        "date": "c. 1096–1106 CE",
+        "category": "religion",
+        "description": "Al-Ghazali's masterwork synthesizing Islamic law, theology, philosophy, and Sufi mysticism into a comprehensive guide for the Muslim spiritual life. Considered the most important work of Islamic thought after the Quran itself by many scholars, the Ihya was copied and studied extensively at Al-Qarawiyyin, where it helped shape the distinctive Moroccan synthesis of law and mysticism."
+      },
+      {
+        "id": "quranic-manuscripts",
+        "title": "Early Quranic Manuscripts",
+        "author": "Various calligraphers",
+        "date": "9th–12th century CE",
+        "category": "scripture",
+        "description": "Al-Qarawiyyin's collection includes some of the world's oldest Quranic manuscripts, written in Kufic and Maghribi scripts on parchment. These manuscripts are masterpieces of Islamic calligraphy and among the most important physical witnesses to the early textual transmission of the Quran, documenting the development of Arabic calligraphic traditions across North Africa."
+      },
+      {
+        "id": "idrissi-geography",
+        "title": "Nuzhat al-Mushtaq (Roger's Book / Entertainment for He Who Longs to Travel the World)",
+        "author": "Muhammad al-Idrisi",
+        "date": "1154 CE",
+        "category": "science",
+        "description": "The most advanced geographic work of the medieval world, commissioned by the Norman King Roger II of Sicily. Al-Idrisi mapped the known world with unprecedented accuracy, describing the geography, climate, peoples, and economies of regions from Scandinavia to Southeast Asia. His work, studied at Al-Qarawiyyin, remained the most accurate world map for three centuries."
+      },
+      {
+        "id": "shifa-qadi-iyad",
+        "title": "Al-Shifa (The Healing)",
+        "author": "Qadi Iyad",
+        "date": "c. 1135 CE",
+        "category": "religion",
+        "description": "A comprehensive work on the life, virtues, and status of the Prophet Muhammad, composed by the chief judge of Ceuta and one of the greatest Maliki scholars of the medieval Maghreb. The Shifa became the most widely read biography of the Prophet in the Muslim West, and its veneration at Al-Qarawiyyin contributed to the distinctive Moroccan tradition of prophetic devotion."
+      },
+      {
+        "id": "zarqali-tables",
+        "title": "Toledan Tables (Zij al-Zarqali)",
+        "author": "Al-Zarqali (Arzachel)",
+        "date": "c. 1080 CE",
+        "category": "astronomy",
+        "description": "Astronomical tables compiled by the greatest astronomer of Islamic Spain, who corrected Ptolemy's measurement of the Mediterranean's length and developed an improved astrolabe. Al-Zarqali's tables, studied at Al-Qarawiyyin, were used by Copernicus five centuries later and represent the peak of Andalusian-Maghrebi astronomical science."
+      },
+      {
+        "id": "lisan-al-arab",
+        "title": "Lisan al-Arab (Tongue of the Arabs)",
+        "author": "Ibn Manzur",
+        "date": "1290 CE",
+        "category": "literature",
+        "description": "The most comprehensive classical Arabic dictionary, containing over 80,000 entries with extensive quotations from the Quran, hadith, poetry, and prose. Ibn Manzur compiled it from earlier dictionaries to preserve the richness of the Arabic language. Al-Qarawiyyin's copy was among the most prized in its collection, essential for Quranic scholarship and literary studies."
+      },
+      {
+        "id": "jawhara-tawhid",
+        "title": "Jawharat al-Tawhid (The Jewel of Divine Unity)",
+        "author": "Ibrahim al-Laqqani",
+        "date": "c. 1610 CE",
+        "category": "religion",
+        "description": "A didactic poem on Islamic theology (aqida) that became the standard creedal text of Ash'ari theology across North and West Africa. Composed in 144 verses for easy memorization, the Jawhara was taught to every student at Al-Qarawiyyin as the foundation of orthodox Sunni belief, and it remains part of the curriculum to this day."
+      }
+    ]
+  },
+  {
+    "id": "maya",
+    "name": "Maya Codex Tradition",
+    "location": "Yucatan Peninsula and Central America",
+    "era": "c. 300–1600 CE",
+    "tagline": "An entire civilization's written knowledge, of which only four bark-paper books survived the flames.",
+    "texts": [
+      {
+        "id": "dresden-codex",
+        "title": "Dresden Codex",
+        "author": "Maya astronomers and priests",
+        "date": "c. 11th–12th century CE",
+        "category": "astronomy",
+        "description": "The most elaborate and best-preserved of the four surviving Maya codices, containing sophisticated astronomical tables for predicting Venus cycles, lunar eclipses, and solar eclipses with remarkable accuracy. The Dresden Codex demonstrates that Maya astronomers had calculated the synodic period of Venus to within two hours of the modern value and could predict eclipses centuries in advance."
+      },
+      {
+        "id": "madrid-codex",
+        "title": "Madrid Codex (Tro-Cortesianus)",
+        "author": "Maya priests",
+        "date": "c. 13th–15th century CE",
+        "category": "religion",
+        "description": "The longest of the surviving Maya codices, containing almanacs and ritual instructions for activities such as agriculture, hunting, beekeeping, and weather prediction. Each section pairs a day-count cycle with images of gods performing ritual actions, providing a practical guide for timing ceremonies and daily activities according to the sacred calendar."
+      },
+      {
+        "id": "paris-codex",
+        "title": "Paris Codex (Peresianus)",
+        "author": "Maya priests and astronomers",
+        "date": "c. 13th–15th century CE",
+        "category": "astronomy",
+        "description": "A fragmentary codex focusing on Maya zodiacal constellations and katun prophecies — predictions for twenty-year periods of the Maya Long Count calendar. The Paris Codex contains the only known Maya zodiac, depicting animals hanging from a celestial band, and provides evidence for a sophisticated system of astral mythology and calendrical prophecy."
+      },
+      {
+        "id": "grolier-codex",
+        "title": "Grolier Codex (Maya Codex of Mexico)",
+        "author": "Maya astronomers",
+        "date": "c. 13th century CE",
+        "category": "astronomy",
+        "description": "The most recently authenticated Maya codex, containing a Venus almanac that tracks the planet's 584-day synodic cycle. Long controversial, scientific testing in 2018 confirmed its authenticity, making it the oldest surviving manuscript from the Americas. It demonstrates the central role of Venus in Maya warfare and political ideology."
+      },
+      {
+        "id": "popol-vuh",
+        "title": "Popol Vuh",
+        "author": "K'iche' Maya nobles (transcribed c. 1554)",
+        "date": "c. 1554 CE (based on ancient oral and codex tradition)",
+        "category": "literature",
+        "description": "The creation epic of the K'iche' Maya, telling of the Hero Twins Hunahpu and Xbalanque, who descend to the underworld of Xibalba and defeat the lords of death through trickery and sacrifice. Though transcribed in Latin script after the Spanish conquest, the Popol Vuh preserves mythic narratives stretching back thousands of years — the Maya equivalent of Genesis and the Odyssey combined."
+      },
+      {
+        "id": "chilam-balam",
+        "title": "Books of Chilam Balam",
+        "author": "Various Maya priests and scribes",
+        "date": "16th–18th century CE (preserving ancient traditions)",
+        "category": "religion",
+        "description": "A collection of prophetic and historical texts from various Yucatecan towns, named after a legendary Maya prophet. Written in Maya using the Latin alphabet after the conquest, they preserve katun prophecies, creation myths, historical chronicles, and medicinal recipes that derive from the destroyed codex tradition. Each town's book is unique, creating a mosaic of Maya knowledge."
+      },
+      {
+        "id": "ritual-bacabs",
+        "title": "Ritual of the Bacabs",
+        "author": "Unknown Maya healer-priests",
+        "date": "c. 18th century CE (preserving ancient traditions)",
+        "category": "medicine",
+        "description": "A collection of Maya incantations for healing diseases, addressing each illness as a supernatural entity that must be defeated through ritual speech. The healer invokes the mythological origins of the disease, names its cosmic parents, and commands it to leave the patient's body. The text preserves pre-Columbian Maya medical and mythological knowledge in extraordinary detail."
+      },
+      {
+        "id": "maya-ceramic-texts",
+        "title": "Classic Maya Ceramic Texts",
+        "author": "Maya scribes and artists",
+        "date": "c. 600–900 CE",
+        "category": "literature",
+        "description": "Thousands of painted Maya vessels bear hieroglyphic texts narrating mythological scenes — the Maize God's resurrection, the Hero Twins' adventures, the acts of creation. Though not codices, these ceramic texts constitute a vast literary corpus that preserves Maya mythology in its original hieroglyphic form, often depicting scenes described in the later Popol Vuh."
+      },
+      {
+        "id": "maya-inscriptions",
+        "title": "Monumental Inscriptions (Stelae and Lintels)",
+        "author": "Maya kings and court scribes",
+        "date": "c. 200–900 CE",
+        "category": "history",
+        "description": "The carved stone monuments of Maya cities record royal histories, dynastic genealogies, warfare, astronomical events, and ritual performances in elaborate hieroglyphic texts. Sites like Palenque, Tikal, and Copan preserve centuries of political history in stone — the only surviving record of Maya statecraft, since the bark-paper books recording detailed history were destroyed."
+      },
+      {
+        "id": "maya-astronomical-records",
+        "title": "Astronomical Records and Calendar Calculations",
+        "author": "Maya astronomers",
+        "date": "c. 300 BCE – 1500 CE",
+        "category": "astronomy",
+        "description": "Maya astronomers tracked celestial cycles with extraordinary precision, recording observations in codices and inscriptions. They calculated the length of the tropical year to 365.2420 days (modern value: 365.2422), tracked Venus and Mars cycles, predicted eclipses, and developed a calendar system of interlocking cycles spanning millions of years — the most sophisticated calendrical system in the pre-modern world."
+      }
+    ]
+  },
+  {
+    "id": "quipu",
+    "name": "Inca Quipu Archives",
+    "location": "Cusco and throughout the Andes",
+    "era": "c. 1400–1532 CE",
+    "tagline": "An empire's memory knotted in cotton and camelid fiber — information science without paper or ink.",
+    "texts": [
+      {
+        "id": "census-quipus",
+        "title": "Census Quipus",
+        "author": "Quipucamayocs (knot-keepers)",
+        "date": "c. 15th–16th century CE",
+        "category": "archive",
+        "description": "The Inca Empire conducted regular censuses of its population using quipus — knotted string devices that encoded numerical and possibly narrative information. Quipucamayocs in each province recorded population counts by age, gender, and occupation on pendant cords using a decimal place-value system. This data informed imperial taxation, labor conscription, and resource allocation across a territory of twelve million people."
+      },
+      {
+        "id": "tribute-quipus",
+        "title": "Tribute and Tax Records",
+        "author": "Quipucamayocs",
+        "date": "c. 15th–16th century CE",
+        "category": "archive",
+        "description": "Quipus recording the tribute obligations of each province to the Inca state — quantities of textiles, food stores, precious metals, and labor days owed. The system functioned as a three-dimensional spreadsheet, with cord colors, knot positions, and subsidiary strings creating a complex relational database. Spanish colonial administrators initially relied on these quipu records before replacing them with written ledgers."
+      },
+      {
+        "id": "storehouse-quipus",
+        "title": "Storehouse Inventory Quipus",
+        "author": "Quipucamayocs",
+        "date": "c. 15th–16th century CE",
+        "category": "archive",
+        "description": "The Inca maintained vast networks of storehouses (qollqas) along their road system, each inventoried by quipu. These records tracked quantities of maize, potatoes, dried meat, wool, weapons, and other supplies — a logistical system that sustained armies, fed populations during famine, and enabled the empire's rapid expansion across 4,000 kilometers of the Andes."
+      },
+      {
+        "id": "narrative-quipus",
+        "title": "Narrative and Historical Quipus",
+        "author": "Quipucamayocs and court historians",
+        "date": "c. 15th–16th century CE",
+        "category": "archive",
+        "description": "Spanish chroniclers record that quipus were used to preserve historical narratives, genealogies, and songs — not just numerical data. Recent research suggests that some quipus encode narrative information through cord color sequences, knot patterns, and fiber composition. If fully deciphered, these narrative quipus would unlock the lost historical literature of the Inca Empire."
+      },
+      {
+        "id": "calendar-quipus",
+        "title": "Calendar and Astronomical Quipus",
+        "author": "Inca astronomers and quipucamayocs",
+        "date": "c. 15th–16th century CE",
+        "category": "archive",
+        "description": "Quipus recording astronomical observations and calendrical cycles used to time agricultural activities and religious festivals. The Inca tracked solar and lunar cycles, the Pleiades, and the 'dark constellations' of the Milky Way — shadowy regions between stars that they interpreted as celestial animals. These observations were recorded on quipus and stored in Cusco's central archive."
+      },
+      {
+        "id": "nueva-coronica",
+        "title": "Nueva Coronica y Buen Gobierno",
+        "author": "Felipe Guaman Poma de Ayala",
+        "date": "c. 1615 CE",
+        "category": "history",
+        "description": "A 1,189-page illustrated chronicle written by an indigenous Andean nobleman to the Spanish king, documenting Inca society, history, and the abuses of colonial rule. Guaman Poma drew on quipu records and oral tradition to reconstruct Inca history, and his 398 drawings provide the most detailed visual record of Andean life before and after the conquest."
+      },
+      {
+        "id": "royal-commentaries",
+        "title": "Royal Commentaries of the Incas",
+        "author": "Inca Garcilaso de la Vega",
+        "date": "1609 CE",
+        "category": "history",
+        "description": "The most literary account of Inca civilization, written by the son of an Inca princess and a Spanish conquistador. Garcilaso drew on childhood memories, quipu records, and conversations with his royal Inca relatives to produce a sympathetic portrait of Inca governance, religion, and intellectual achievement, including detailed descriptions of how quipucamayocs operated."
+      },
+      {
+        "id": "huarochiri-manuscript",
+        "title": "Huarochiri Manuscript",
+        "author": "Unknown (compiled by Francisco de Avila)",
+        "date": "c. 1598–1608 CE",
+        "category": "religion",
+        "description": "The only extensive collection of Andean mythology recorded in Quechua, preserving the origin stories, ritual practices, and sacred geography of the Huarochiri people. It tells of the god Pariacaca's battles, the creation of irrigation canals, and the complex relationships between mountain deities, humans, and animals — the closest thing to a Popol Vuh of the Andes."
+      },
+      {
+        "id": "mita-labor-quipus",
+        "title": "Mit'a Labor Quipus",
+        "author": "Provincial quipucamayocs",
+        "date": "c. 15th–16th century CE",
+        "category": "archive",
+        "description": "Quipus recording the mit'a labor tax — the rotational conscription system that built Inca roads, temples, agricultural terraces, and military installations. Each community's labor obligations were precisely tracked: which households had served, for how long, and in what capacity. The system was so efficient that the Spanish colonial government attempted to maintain it using written records."
+      },
+      {
+        "id": "rapaz-quipus",
+        "title": "Rapaz Quipus (Living Quipu Tradition)",
+        "author": "Community record-keepers",
+        "date": "c. 17th–19th century CE (possibly earlier)",
+        "category": "archive",
+        "description": "A remarkable collection of quipus discovered in the village of San Cristobal de Rapaz in the central Peruvian highlands, still venerated by the community into the modern era. These quipus, stored in a ceremonial building, appear to record community resources — livestock, pastures, and irrigation rights — demonstrating the survival of the quipu tradition centuries after the Spanish conquest."
+      }
+    ]
+  },
+  {
+    "id": "ugarit",
+    "name": "Library of Ugarit",
+    "location": "Ras Shamra (modern Latakia, Syria)",
+    "era": "14th–12th century BCE",
+    "tagline": "Where the world's first alphabet was born and Canaanite myths illuminated the Bible's oldest roots.",
+    "texts": [
+      {
+        "id": "baal-cycle",
+        "title": "Baal Cycle",
+        "author": "Ilimilku (scribe)",
+        "date": "c. 1400–1200 BCE",
+        "category": "literature",
+        "description": "The central mythological narrative of Ugarit, telling of the storm-god Baal's battles against Yam (Sea) and Mot (Death), his descent to the underworld, and his triumphant return. The Baal Cycle illuminates the background of biblical imagery — Baal's victory over the sea-dragon echoes in Psalm 74, and his death-and-resurrection pattern foreshadows later Near Eastern mythology."
+      },
+      {
+        "id": "legend-keret",
+        "title": "Legend of Keret",
+        "author": "Ilimilku (scribe)",
+        "date": "c. 1400–1200 BCE",
+        "category": "literature",
+        "description": "The story of King Keret, whose family is destroyed by plague and who embarks on a military campaign to win a new bride, guided by the god El in a dream. The tale explores themes of divine kingship, the fragility of royal power, and the relationship between gods and human suffering — themes that resonate throughout the Hebrew Bible's accounts of Israelite kingship."
+      },
+      {
+        "id": "aqhat-epic",
+        "title": "Epic of Aqhat",
+        "author": "Ilimilku (scribe)",
+        "date": "c. 1400–1200 BCE",
+        "category": "literature",
+        "description": "The tale of the young hero Aqhat, who receives a divine bow from the craftsman-god Kothar-wa-Khasis but refuses to give it to the goddess Anat, who has him killed in retaliation. The epic explores the boundaries between human and divine prerogative and the tragic consequences of defying the gods — a theme echoed in the Gilgamesh epic and Greek tragedy."
+      },
+      {
+        "id": "ugaritic-alphabet",
+        "title": "Abecedaries (Alphabet Tablets)",
+        "author": "Ugaritic scribes",
+        "date": "c. 1400–1200 BCE",
+        "category": "science",
+        "description": "Clay tablets listing the thirty letters of the Ugaritic alphabet in their canonical order — the world's oldest known alphabetic sequence. The Ugaritic cuneiform alphabet, though written with a stylus on clay, established the letter order (aleph-bet) that was inherited by Phoenician, Hebrew, Greek, and ultimately all Western alphabets. These schoolroom exercises document the birth of alphabetic literacy."
+      },
+      {
+        "id": "ugarit-religious-texts",
+        "title": "Ritual and Sacrificial Texts",
+        "author": "Ugaritic priests",
+        "date": "c. 1400–1200 BCE",
+        "category": "religion",
+        "description": "Detailed prescriptions for sacrificial rituals, festivals, and temple procedures that provide the closest parallel to the ritual legislation of the Hebrew Bible's Book of Leviticus. The Ugaritic sacrificial vocabulary — terms for burnt offerings, peace offerings, and guilt offerings — is virtually identical to the Hebrew, demonstrating the shared Canaanite religious heritage of biblical Israel."
+      },
+      {
+        "id": "ugarit-diplomatic",
+        "title": "Diplomatic Correspondence",
+        "author": "Kings and scribes of Ugarit",
+        "date": "c. 1400–1200 BCE",
+        "category": "law",
+        "description": "Letters exchanged between the kings of Ugarit and the Hittite, Egyptian, and Babylonian empires, written in Akkadian — the diplomatic language of the Late Bronze Age. These letters document international relations, trade agreements, and the growing crisis of the Sea Peoples that would ultimately destroy Ugarit and trigger the Bronze Age Collapse."
+      },
+      {
+        "id": "ugarit-hymns",
+        "title": "Hymns to Shapash and Other Deities",
+        "author": "Ugaritic priests and poets",
+        "date": "c. 1400–1200 BCE",
+        "category": "religion",
+        "description": "Liturgical hymns addressed to the sun-goddess Shapash, the moon-god Yarikh, and other deities of the Ugaritic pantheon. These hymns employ poetic parallelism — the distinctive feature of Hebrew biblical poetry — providing evidence that this literary form originated in the broader Canaanite poetic tradition shared by Ugarit and ancient Israel."
+      },
+      {
+        "id": "ugarit-hurrian-songs",
+        "title": "Hurrian Hymn to Nikkal (Oldest Known Melody)",
+        "author": "Unknown Hurrian musician",
+        "date": "c. 1400 BCE",
+        "category": "literature",
+        "description": "A hymn to the moon-goddess Nikkal written in Hurrian cuneiform with musical notation — the oldest known melody in the world. Discovered at Ugarit, it includes instructions for a nine-string lyre and demonstrates that the ancient Near East possessed a sophisticated system of musical notation and composition three thousand years before Western staff notation."
+      },
+      {
+        "id": "ugarit-veterinary",
+        "title": "Hippiatric Texts (Veterinary Medicine)",
+        "author": "Unknown Ugaritic practitioner",
+        "date": "c. 1400–1200 BCE",
+        "category": "medicine",
+        "description": "Texts describing treatments for horses — the oldest known veterinary medical literature in the world. Given the military importance of chariotry in the Late Bronze Age, the health of horses was a matter of state security. These texts prescribe herbal remedies, poultices, and ritual treatments for equine diseases and injuries."
+      },
+      {
+        "id": "rs-legal-texts",
+        "title": "Legal Texts and Royal Decrees",
+        "author": "Kings and judges of Ugarit",
+        "date": "c. 1400–1200 BCE",
+        "category": "law",
+        "description": "Court records, property transactions, marriage contracts, and royal edicts that reveal the legal system of a sophisticated Bronze Age city-state. These texts document land sales, inheritance disputes, the manumission of slaves, and international commercial law, providing context for understanding the legal traditions reflected in the biblical codes of Exodus and Deuteronomy."
+      }
+    ]
+  },
+  {
+    "id": "ebla",
+    "name": "Library of Ebla",
+    "location": "Tell Mardikh (modern Idlib Province, Syria)",
+    "era": "c. 2400–2300 BCE",
+    "tagline": "The oldest known library in the world, holding 20,000 tablets from before Abraham's time.",
+    "texts": [
+      {
+        "id": "ebla-creation-hymn",
+        "title": "Hymn to the Lord of Heaven and Earth",
+        "author": "Unknown Eblaite poet",
+        "date": "c. 2400 BCE",
+        "category": "religion",
+        "description": "A hymn invoking 'the Lord of heaven and earth' who created the world and established order — one of the earliest monotheistic-leaning texts in history. Written five centuries before Abraham, it documents the religious thought of northern Syria at the dawn of urban civilization, when the first complex theologies were taking shape in cuneiform."
+      },
+      {
+        "id": "ebla-lexical-lists",
+        "title": "Bilingual Lexical Lists (Sumerian-Eblaite)",
+        "author": "Eblaite scribes",
+        "date": "c. 2400 BCE",
+        "category": "science",
+        "description": "The world's oldest known bilingual dictionaries, listing thousands of Sumerian words with their Eblaite (Semitic) equivalents. These tablets prove that systematic translation between languages was practiced four thousand years ago and provide invaluable evidence for the oldest known Semitic language, which is closely related to later Hebrew and Aramaic."
+      },
+      {
+        "id": "ebla-administrative",
+        "title": "Administrative and Economic Archives",
+        "author": "Eblaite scribes and officials",
+        "date": "c. 2400–2300 BCE",
+        "category": "archive",
+        "description": "Thousands of tablets documenting the economic operations of a city-state that controlled trade routes across the ancient Near East. The archives record textile production, metal transactions, agricultural yields, and diplomatic gifts — revealing that Ebla was a commercial powerhouse trading with Egypt, Mesopotamia, and the Indus Valley four millennia ago."
+      },
+      {
+        "id": "ebla-treaties",
+        "title": "State Treaties",
+        "author": "Kings and diplomats of Ebla",
+        "date": "c. 2400–2300 BCE",
+        "category": "law",
+        "description": "Among the oldest known diplomatic treaties, these tablets record agreements between Ebla and neighboring city-states regarding borders, trade rights, and mutual obligations. They demonstrate that international law and diplomacy were already sophisticated practices in the third millennium BCE, predating the famous Hittite-Egyptian treaty by over a thousand years."
+      },
+      {
+        "id": "ebla-incantations",
+        "title": "Ritual Incantations",
+        "author": "Eblaite priests",
+        "date": "c. 2400 BCE",
+        "category": "religion",
+        "description": "Magical and religious texts including incantations against evil spirits, birth rituals, and prayers to the gods of the Eblaite pantheon — Dagan, Hadad, Ishtar, and others. These texts document the religious practices of a Semitic people centuries before the cultures of the Hebrew Bible, providing crucial context for understanding the deep roots of Near Eastern religion."
+      },
+      {
+        "id": "ebla-royal-rituals",
+        "title": "Royal Rituals and Coronation Texts",
+        "author": "Court ritualists",
+        "date": "c. 2400 BCE",
+        "category": "religion",
+        "description": "Texts describing the ritual procedures for royal ceremonies, including coronation, marriage, and funerary rites for the kings of Ebla. These documents reveal the sacred dimension of kingship in the earliest Semitic civilization, where the ruler served as intermediary between the gods and the people — a concept that would shape Israelite and later Western theories of sacred kingship."
+      },
+      {
+        "id": "ebla-geographical",
+        "title": "Geographical and City Lists",
+        "author": "Eblaite scribes",
+        "date": "c. 2400 BCE",
+        "category": "history",
+        "description": "Tablets listing hundreds of cities, regions, and peoples known to the Eblaite kingdom, providing the earliest known gazetteer of the ancient Near East. Some of the place names — including possible early references to cities later known from the Bible — generated enormous scholarly excitement when first published, though many identifications remain debated."
+      },
+      {
+        "id": "ebla-literary-texts",
+        "title": "Mythological and Literary Texts",
+        "author": "Eblaite scribes",
+        "date": "c. 2400 BCE",
+        "category": "literature",
+        "description": "Fragments of mythological narratives and literary compositions in both Sumerian and Eblaite, including flood stories, divine battles, and wisdom literature. Though fragmentary, these texts demonstrate that northern Syria had a rich literary culture contemporary with — and independent of — Mesopotamia's, challenging the assumption that all ancient Near Eastern culture radiated from Sumer."
+      },
+      {
+        "id": "ebla-school-texts",
+        "title": "Scribal School Exercises",
+        "author": "Student scribes",
+        "date": "c. 2400 BCE",
+        "category": "science",
+        "description": "Practice tablets from the scribal academy of Ebla, including sign lists, mathematical exercises, and copying exercises. These documents reveal how literacy was taught in the third millennium BCE — through systematic drilling in cuneiform signs, followed by vocabulary lists, then mathematical problems, and finally the copying of literary and administrative texts."
+      },
+      {
+        "id": "ebla-textile-accounts",
+        "title": "Textile Production Records",
+        "author": "Eblaite administrators",
+        "date": "c. 2400–2300 BCE",
+        "category": "archive",
+        "description": "Detailed accounts of Ebla's textile industry — one of the largest in the ancient world — recording the types, quantities, and destinations of fabrics produced in royal workshops. These records reveal that Ebla exported high-quality textiles to Egypt and Mesopotamia, generating the wealth that made the city a major power. The archive documents thousands of workers, mostly women, employed in textile production."
+      }
+    ]
+  }
+]

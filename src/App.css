@@ -5830,3 +5830,216 @@ body {
   opacity: 0.6;
   background: rgba(201, 169, 97, 0.08);
 }
+
+/* ===== FORGE CONTROLS ROW ===== */
+
+.forge-controls {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin: -10px auto 20px;
+}
+
+.forge-ctrl-btn {
+  background: none;
+  border: 1px solid var(--accent-ember);
+  color: var(--accent-ember);
+  font-size: 1.3rem;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  opacity: 0.6;
+}
+
+.forge-ctrl-btn:hover {
+  opacity: 1;
+  box-shadow: 0 0 10px rgba(196, 113, 58, 0.4);
+}
+
+.forge-ctrl-btn.active.protag {
+  opacity: 1;
+  border-color: var(--accent-gold);
+  color: var(--accent-gold);
+}
+
+.forge-ctrl-btn.active.antag {
+  opacity: 1;
+  border-color: var(--accent-ember);
+  color: var(--accent-ember);
+  box-shadow: 0 0 10px rgba(196, 113, 58, 0.4);
+}
+
+/* ===== PROTAGONISM GENERATOR ===== */
+
+.protagonism-panel {
+  max-width: 700px;
+  margin: 0 auto 30px;
+  background: rgba(20, 20, 30, 0.85);
+  border: 1px solid rgba(196, 113, 58, 0.3);
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.protagonism-panel.antagonism {
+  border-color: rgba(196, 113, 58, 0.5);
+}
+
+.protagonism-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.protagonism-header h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  color: var(--accent-gold);
+  letter-spacing: 0.05em;
+}
+
+.protagonism-panel.antagonism .protagonism-header h3 {
+  color: var(--accent-ember);
+}
+
+.protagonism-header button {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 1.2rem;
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity 0.2s;
+}
+
+.protagonism-header button:hover {
+  opacity: 1;
+}
+
+.protagonism-intro {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin: 0 0 16px;
+  opacity: 0.8;
+}
+
+.protagonism-messages {
+  max-height: 400px;
+  overflow-y: auto;
+  margin-bottom: 16px;
+}
+
+.protagonism-msg {
+  margin-bottom: 16px;
+  padding: 12px 14px;
+  border-radius: 8px;
+}
+
+.protagonism-msg.user {
+  background: rgba(100, 100, 120, 0.2);
+  border-left: 3px solid var(--text-secondary);
+}
+
+.protagonism-msg.assistant {
+  background: rgba(201, 169, 97, 0.08);
+  border-left: 3px solid var(--accent-gold);
+}
+
+.protagonism-panel.antagonism .protagonism-msg.assistant {
+  background: rgba(196, 113, 58, 0.08);
+  border-left-color: var(--accent-ember);
+}
+
+.protagonism-panel.antagonism .protagonism-msg.assistant .protagonism-label {
+  color: var(--accent-ember);
+}
+
+.protagonism-label {
+  display: block;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 6px;
+  opacity: 0.6;
+}
+
+.protagonism-msg.user .protagonism-label { color: var(--text-secondary); }
+.protagonism-msg.assistant .protagonism-label { color: var(--accent-gold); }
+
+.protagonism-msg p {
+  margin: 0 0 8px;
+  font-size: 0.92rem;
+  line-height: 1.7;
+}
+
+.protagonism-msg p:last-child { margin-bottom: 0; }
+
+.protagonism-loading {
+  text-align: center;
+  color: var(--accent-gold);
+  font-size: 0.85rem;
+  opacity: 0.7;
+  padding: 12px;
+  font-style: italic;
+}
+
+.protagonism-input-row {
+  display: flex;
+  gap: 10px;
+  align-items: flex-end;
+}
+
+.protagonism-input-row textarea {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(196, 113, 58, 0.3);
+  border-radius: 8px;
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 0.9rem;
+  padding: 10px 12px;
+  resize: vertical;
+  min-height: 60px;
+  max-height: 150px;
+}
+
+.protagonism-input-row textarea::placeholder {
+  color: var(--text-secondary);
+  opacity: 0.5;
+}
+
+.protagonism-input-row textarea:focus {
+  outline: none;
+  border-color: var(--accent-ember);
+}
+
+.protagonism-input-row button {
+  background: none;
+  border: 1px solid var(--accent-ember);
+  color: var(--accent-ember);
+  font-size: 1.2rem;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.protagonism-input-row button:hover:not(:disabled) {
+  background: rgba(196, 113, 58, 0.15);
+}
+
+.protagonism-input-row button:disabled {
+  opacity: 0.3;
+  cursor: default;
+}

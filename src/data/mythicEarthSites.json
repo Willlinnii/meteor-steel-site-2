@@ -4,7 +4,8 @@
     "name": "Oracle of Delphi",
     "lat": 38.4824,
     "lng": 22.5010,
-    "category": "sacred-site",
+    "category": "temple",
+    "isTemple": true,
     "description": "Ancient Greek sanctuary sacred to Apollo, home of the Pythia oracle who spoke prophecy from volcanic fumes at the navel of the world.",
     "region": "Greece",
     "streetView": { "heading": 220, "pitch": 10 }
@@ -142,7 +143,8 @@
     "name": "Angkor Wat",
     "lat": 13.4125,
     "lng": 103.8670,
-    "category": "sacred-site",
+    "category": "temple",
+    "isTemple": true,
     "description": "Largest religious monument in the world, originally Hindu, later Buddhist. A stone mandala representing Mount Meru, cosmic center of the universe.",
     "region": "Cambodia",
     "streetView": { "heading": 90, "pitch": 10 }
@@ -521,7 +523,8 @@
     "name": "The Parthenon",
     "lat": 37.9715,
     "lng": 23.7267,
-    "category": "sacred-site",
+    "category": "temple",
+    "isTemple": true,
     "description": "Temple dedicated to Athena on the Athenian Acropolis, masterpiece of Classical Greek architecture. For nearly 2,500 years it has stood as a symbol of democracy, civilization, and the Western pursuit of ideal form.",
     "region": "Greece",
     "streetView": { "heading": 150, "pitch": 15 }
@@ -661,7 +664,8 @@
     "name": "Borobudur",
     "lat": -7.6079,
     "lng": 110.2038,
-    "category": "sacred-site",
+    "category": "temple",
+    "isTemple": true,
     "description": "The world's largest Buddhist temple, a massive stone mandala rising from the Javanese jungle. Its nine platforms and 72 bell-shaped stupas trace the pilgrim's path from desire through form to formlessness.",
     "region": "Indonesia",
     "streetView": { "heading": 0, "pitch": 15 }
@@ -731,7 +735,8 @@
     "name": "Karnak Temple",
     "lat": 25.7188,
     "lng": 32.6573,
-    "category": "sacred-site",
+    "category": "temple",
+    "isTemple": true,
     "description": "Vast temple complex dedicated to Amun-Ra, built and expanded over 2,000 years by thirty pharaohs. Its Hypostyle Hall of 134 massive columns is the largest religious building ever constructed.",
     "region": "Egypt",
     "streetView": { "heading": 90, "pitch": 10 }
@@ -871,7 +876,8 @@
     "name": "Ise Grand Shrine",
     "lat": 34.4554,
     "lng": 136.7254,
-    "category": "sacred-site",
+    "category": "temple",
+    "isTemple": true,
     "description": "The most sacred Shinto shrine in Japan, dedicated to the sun goddess Amaterasu. Rebuilt every 20 years in an unbroken tradition stretching back to the 7th century, embodying Shinto's embrace of impermanence and renewal.",
     "region": "Japan",
     "streetView": { "heading": 0, "pitch": 5 }
@@ -891,7 +897,8 @@
     "name": "Temple of Heaven",
     "lat": 39.8822,
     "lng": 116.4066,
-    "category": "sacred-site",
+    "category": "temple",
+    "isTemple": true,
     "description": "Imperial altar complex in Beijing where Ming and Qing emperors performed annual rituals to pray for good harvests. Its circular Hall of Prayer embodies the ancient Chinese belief in a round heaven and square earth.",
     "region": "China",
     "streetView": { "heading": 0, "pitch": 15 }
@@ -924,6 +931,51 @@
     "category": "sacred-site",
     "description": "Pre-Columbian city larger than London in 1250 CE, center of Mississippian civilization. Monks Mound, the largest earthwork in the Americas, anchored a metropolis of 20,000 people aligned to the stars.",
     "region": "Illinois, USA",
+    "streetView": { "heading": 0, "pitch": 10 }
+  },
+  {
+    "id": "temple-of-solomon",
+    "name": "Temple of Solomon",
+    "lat": 31.7781,
+    "lng": 35.2354,
+    "category": "temple",
+    "isTemple": true,
+    "description": "The First Temple, built by King Solomon around 957 BCE as the dwelling place of the Ark of the Covenant. The divine presence rested in the Holy of Holies between the wings of two golden cherubim, making it the spiritual center of ancient Israel.",
+    "region": "Israel / Palestine",
+    "streetView": { "heading": 0, "pitch": 15 }
+  },
+  {
+    "id": "mahabodhi",
+    "name": "Mahabodhi Temple",
+    "lat": 24.6961,
+    "lng": 84.9911,
+    "category": "temple",
+    "isTemple": true,
+    "description": "Where Siddhartha Gautama attained enlightenment under the Bodhi Tree around 528 BCE. Emperor Ashoka built the first shrine here in the 3rd century BCE; the current 55-meter tower dates from the Gupta period. The most sacred site in Buddhism.",
+    "region": "India",
+    "streetView": { "heading": 0, "pitch": 15 }
+  },
+  {
+    "id": "brihadeeswarar",
+    "name": "Brihadeeswarar Temple",
+    "lat": 10.7828,
+    "lng": 79.1318,
+    "category": "temple",
+    "isTemple": true,
+    "description": "The crown jewel of Chola architecture, completed in 1010 CE by Rajaraja Chola I. Its 66-meter vimana tower, capped with a single 80-ton granite block, houses a massive Shiva lingam. A UNESCO World Heritage masterpiece of Dravidian temple building.",
+    "region": "India",
+    "streetView": { "heading": 0, "pitch": 15 }
+  },
+  {
+    "id": "library-of-alexandria",
+    "name": "Library of Alexandria",
+    "lat": 31.2001,
+    "lng": 29.9187,
+    "category": "library",
+    "isLibrary": true,
+    "description": "The ancient Library of Alexandria was the greatest repository of knowledge in the classical world. Founded in the 3rd century BCE under Ptolemy I Soter, it held hundreds of thousands of scrolls spanning philosophy, science, mathematics, medicine, astronomy, literature, and theology. Scholars from across the Mediterranean gathered here — Euclid, Eratosthenes, Callimachus, Apollonius, Aristarchus, Hero, Ptolemy. Its destruction, gradual rather than singular, remains one of the most symbolic losses in human history. What follows is a curated collection of texts connected to the Library — works written, copied, studied, or housed within its walls.",
+    "region": "Egypt",
+    "tradition": "Hellenistic",
     "streetView": { "heading": 0, "pitch": 10 }
   }
 ]

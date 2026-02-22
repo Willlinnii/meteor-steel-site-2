@@ -1754,6 +1754,61 @@ INSTRUCTIONS:
     }
   }
 
+  // --- Protagonism / Antagonism Generator mode ---
+  if (mode === 'protagonism' || mode === 'antagonism') {
+    if (!Array.isArray(messages) || messages.length === 0) {
+      return res.status(400).json({ error: 'Messages array is required.' });
+    }
+    const raw = messages.slice(-20).map((m) => ({
+      role: m.role === 'assistant' ? 'assistant' : 'user',
+      content: String(m.content || '').slice(0, 4000),
+    }));
+    const trimmed = [];
+    for (const msg of raw) {
+      if (trimmed.length > 0 && trimmed[trimmed.length - 1].role === msg.role) {
+        trimmed[trimmed.length - 1].content += '\n' + msg.content;
+      } else {
+        trimmed.push({ ...msg });
+      }
+    }
+    if (trimmed.length > 0 && trimmed[0].role !== 'user') {
+      trimmed.shift();
+    }
+
+    const polarityPrompt = mode === 'protagonism'
+      ? `You are a narrative instrument. You read antagonism and respond with protagonism. You do not analyze sources, evaluate truth claims, discuss people, or fact-check. You read the narrative force — the polarity.
+
+Whatever antagonism is presented, you respond with the equal-and-opposite protagonistic force it inspires. Speak in terms of forces, not people. Antagonism and protagonism. What does this darkness call forth? What light does it demand?
+
+Keep responses concise (150-300 words), poetic but grounded. Do not summarize or restate what the user wrote. Respond only with the protagonism.`
+      : `You are a narrative instrument. You read protagonism and respond with antagonism. You do not analyze sources, evaluate truth claims, discuss people, or fact-check. You read the narrative force — the polarity.
+
+Whatever protagonism is presented, you respond with the equal-and-opposite antagonistic force it reveals. Speak in terms of forces, not people. Protagonism and antagonism. What shadow does this light cast? What resistance does it provoke? What is the cost, the tension, the opposing current beneath the surface?
+
+Keep responses concise (150-300 words), poetic but grounded. Do not summarize or restate what the user wrote. Respond only with the antagonism.`;
+
+    const anthropic = getAnthropicClient(userKeys.anthropicKey);
+    const polarityModel = isByok ? MODELS.quality : MODELS.quality;
+
+    try {
+      const response = await anthropic.messages.create({
+        model: polarityModel,
+        max_tokens: 1500,
+        system: polarityPrompt,
+        messages: trimmed,
+      });
+
+      const reply = response.content.map(b => b.text || '').join('');
+      return res.status(200).json({ reply });
+    } catch (err) {
+      console.error(`${mode} API error:`, err?.message, err?.status);
+      if (err.status === 401 && isByok) {
+        return res.status(401).json({ error: 'Your Anthropic API key is invalid or expired. Please update it in your profile settings.', keyError: true });
+      }
+      return res.status(500).json({ error: `Something went wrong: ${err?.message || 'Unknown error'}` });
+    }
+  }
+
   // --- Tarot Reading mode ---
   if (mode === 'tarot-reading') {
     if (!Array.isArray(messages) || messages.length === 0) {

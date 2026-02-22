@@ -31,7 +31,7 @@ export default function PersonaChatPanel({ entityType, entityName, entityLabel, 
   const hasSentGreeting = useRef(false);
   const navigate = useNavigate();
   const location = useLocation();
-  const { voiceEnabled, recording, speaking, toggleVoice, startListening, stopListening, speak } = useVoice(setInput);
+  const { voiceEnabled, recording, speaking, toggleVoice, startListening, stopListening, speak } = useVoice(setInput, entityName?.toLowerCase() || 'atlas');
   const { buildCourseSummary } = useCoursework();
   const { saveConversation } = useWritings();
 

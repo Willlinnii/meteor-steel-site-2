@@ -5,7 +5,10 @@ import CircleNav from '../../components/CircleNav';
 import { ring1, ring2, ring3, allEpisodes, subtitle as seriesSubtitle, description as seriesDescription, rokuUrl } from '../../data/mythsSeriesData';
 import treasuresData from '../../data/treasuresData';
 import mythicEarthSites from '../../data/mythicEarthSites.json';
+import ancientLibraries from '../../data/ancientLibraries.json';
+import ancientTemples from '../../data/ancientTemples.json';
 import mythsSynthesis from '../../data/mythsSynthesis.json';
+import worldData from '../../data/normalOtherWorld.json';
 import {
   CULTURES, ARCANA_POSITIONS,
   getArcanaForCulture, getArcanaPosition, getCrossReference,
@@ -13,6 +16,7 @@ import {
 } from '../../games/mythouse/mythouseCardData';
 import { StreetViewEmbed } from '../MythicEarth/MythicEarthPage';
 import '../Treasures/TreasuresPage.css';
+import ArchetypesPanel from '../../components/ArchetypesPanel';
 import './MythsPage.css';
 
 const MythicEarthPage = lazy(() => import('../MythicEarth/MythicEarthPage'));
@@ -21,6 +25,8 @@ const MYTHIC_EARTH_CATEGORIES = [
   { id: 'sacred-site', label: 'Sacred Sites', color: '#c9a961' },
   { id: 'mythic-location', label: 'Mythic Locations', color: '#c4713a' },
   { id: 'literary-location', label: 'Literary Locations', color: '#8b9dc3' },
+  { id: 'temple', label: 'Temples', color: '#c47a5a' },
+  { id: 'library', label: 'Libraries', color: '#a89060' },
 ];
 
 /* ── Text Reader (mirrors MythicEarthPage's internal TextReader) ── */
@@ -153,6 +159,260 @@ function TextReader({ readUrl, wikisourcePage }) {
           </div>
         </div>
       )}
+    </div>
+  );
+}
+
+/* ── Ancient Libraries Panel (3-level: library grid → text grid → text detail) ── */
+const ALL_CATEGORIES = [
+  { id: 'all', label: 'All' },
+  { id: 'scripture', label: 'Scripture' },
+  { id: 'philosophy', label: 'Philosophy' },
+  { id: 'science', label: 'Science' },
+  { id: 'literature', label: 'Literature' },
+  { id: 'magic', label: 'Magic' },
+  { id: 'religion', label: 'Religion' },
+  { id: 'law', label: 'Law' },
+  { id: 'history', label: 'History' },
+  { id: 'medicine', label: 'Medicine' },
+  { id: 'astronomy', label: 'Astronomy' },
+  { id: 'archive', label: 'Archive' },
+];
+
+function LibrariesPanel({ trackElement }) {
+  const [selectedLibrary, setSelectedLibrary] = useState(null);
+  const [activeFilter, setActiveFilter] = useState('all');
+  const [selectedText, setSelectedText] = useState(null);
+
+  // Level 3: Text detail
+  if (selectedText) {
+    return (
+      <div className="alexandria-detail">
+        <button className="mythic-earth-back" onClick={() => setSelectedText(null)}>
+          {'\u2190'} Back to {selectedLibrary.name}
+        </button>
+        <h3>{selectedText.title}</h3>
+        <div className="alexandria-detail-meta">
+          <span className="alexandria-detail-author">{selectedText.author}</span>
+          <span className="alexandria-detail-date">{selectedText.date}</span>
+          <span className={`alexandria-detail-badge ${selectedText.category}`}>{selectedText.category}</span>
+        </div>
+        <div className="mythic-earth-site-text">
+          {selectedText.description.split('\n\n').map((p, i) => <p key={i}>{p}</p>)}
+        </div>
+
+        {selectedText.fragments && (
+          <div className="alexandria-fragments">
+            This text survives only in fragments quoted by later authors. No complete manuscript is known to exist.
+          </div>
+        )}
+
+        {selectedText.wikisourcePage ? (
+          <TextReader readUrl={selectedText.readUrl} wikisourcePage={selectedText.wikisourcePage} />
+        ) : selectedText.readUrl ? (
+          <div className="mythic-earth-reader-toggle">
+            <a href={selectedText.readUrl} target="_blank" rel="noopener noreferrer" className="mythic-earth-reader-btn">
+              Read Full Text
+            </a>
+          </div>
+        ) : null}
+      </div>
+    );
+  }
+
+  // Level 2: Text grid for selected library
+  if (selectedLibrary) {
+    const libCategories = [...new Set(selectedLibrary.texts.map(t => t.category))];
+    const filters = ALL_CATEGORIES.filter(c => c.id === 'all' || libCategories.includes(c.id));
+    const filteredTexts = activeFilter === 'all'
+      ? selectedLibrary.texts
+      : selectedLibrary.texts.filter(t => t.category === activeFilter);
+
+    return (
+      <div className="alexandria-panel libraries-panel">
+        <button className="mythic-earth-back" onClick={() => { setSelectedLibrary(null); setActiveFilter('all'); }}>
+          {'\u2190'} Back to Libraries
+        </button>
+        <div className="alexandria-header libraries-header">
+          <h3>{selectedLibrary.name}</h3>
+          <p className="library-card-location">{selectedLibrary.location} &middot; {selectedLibrary.era}</p>
+          <p>{selectedLibrary.tagline}</p>
+        </div>
+
+        <div className="alexandria-filters">
+          {filters.map(f => (
+            <button
+              key={f.id}
+              className={`mythic-earth-cat-btn${activeFilter === f.id ? ' active' : ''}`}
+              style={{ '--cat-color': '#a89060' }}
+              onClick={() => { setActiveFilter(f.id); trackElement(`myths.library.${selectedLibrary.id}.filter.${f.id}`); }}
+            >
+              {f.label}
+            </button>
+          ))}
+        </div>
+
+        <div className="mythic-earth-site-grid">
+          {filteredTexts.map(text => (
+            <button
+              key={text.id}
+              className="mythic-earth-site-card alexandria-card"
+              onClick={() => { setSelectedText(text); trackElement(`myths.library.${selectedLibrary.id}.text.${text.id}`); }}
+            >
+              <span className="site-card-name">{text.title}</span>
+              <span className="site-card-region">{text.author}</span>
+              <div className="alexandria-card-footer">
+                <span className="alexandria-card-date">{text.date}</span>
+                <span className={`alexandria-card-badge ${text.category}`}>{text.category}</span>
+              </div>
+              {text.fragments && <span className="alexandria-card-fragments">Fragments</span>}
+            </button>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  // Level 1: Library grid
+  return (
+    <div className="libraries-panel">
+      <div className="alexandria-header libraries-header">
+        <h3>Ancient Libraries</h3>
+        <p>Fifteen libraries spanning four thousand years and five continents — the great repositories of human knowledge from cuneiform to quipu.</p>
+      </div>
+
+      <div className="mythic-earth-site-grid">
+        {ancientLibraries.map(lib => (
+          <button
+            key={lib.id}
+            className="mythic-earth-site-card library-card"
+            onClick={() => { setSelectedLibrary(lib); trackElement(`myths.library.${lib.id}`); }}
+          >
+            <span className="site-card-name">{lib.name}</span>
+            <span className="site-card-region">{lib.location}</span>
+            <span className="library-card-era">{lib.era}</span>
+            <span className="library-card-tagline">{lib.tagline}</span>
+            <span className="library-card-count">{lib.texts.length} texts</span>
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ── Ancient Temples Panel (3-level: temple grid → deity grid → deity detail) ── */
+const TEMPLE_DOMAINS = [
+  { id: 'all', label: 'All' },
+  { id: 'creator', label: 'Creator' },
+  { id: 'guardian', label: 'Guardian' },
+  { id: 'cosmic', label: 'Cosmic' },
+  { id: 'underworld', label: 'Underworld' },
+  { id: 'warrior', label: 'Warrior' },
+  { id: 'wisdom', label: 'Wisdom' },
+  { id: 'nature', label: 'Nature' },
+  { id: 'love', label: 'Love' },
+  { id: 'divine-figure', label: 'Divine Figure' },
+  { id: 'sacred-object', label: 'Sacred Object' },
+];
+
+function TemplesPanel({ trackElement }) {
+  const [selectedTemple, setSelectedTemple] = useState(null);
+  const [activeFilter, setActiveFilter] = useState('all');
+  const [selectedDeity, setSelectedDeity] = useState(null);
+
+  // Level 3: Deity detail
+  if (selectedDeity) {
+    return (
+      <div className="alexandria-detail">
+        <button className="mythic-earth-back" onClick={() => setSelectedDeity(null)}>
+          {'\u2190'} Back to {selectedTemple.name}
+        </button>
+        <h3>{selectedDeity.title}</h3>
+        <div className="alexandria-detail-meta">
+          <span className="alexandria-detail-author">{selectedDeity.role}</span>
+          <span className={`alexandria-detail-badge ${selectedDeity.domain}`}>{selectedDeity.domain}</span>
+        </div>
+        <div className="mythic-earth-site-text">
+          {selectedDeity.description.split('\n\n').map((p, i) => <p key={i}>{p}</p>)}
+        </div>
+      </div>
+    );
+  }
+
+  // Level 2: Deity grid for selected temple
+  if (selectedTemple) {
+    const templeDomains = [...new Set(selectedTemple.deities.map(d => d.domain))];
+    const filters = TEMPLE_DOMAINS.filter(d => d.id === 'all' || templeDomains.includes(d.id));
+    const filteredDeities = activeFilter === 'all'
+      ? selectedTemple.deities
+      : selectedTemple.deities.filter(d => d.domain === activeFilter);
+
+    return (
+      <div className="alexandria-panel libraries-panel">
+        <button className="mythic-earth-back" onClick={() => { setSelectedTemple(null); setActiveFilter('all'); }}>
+          {'\u2190'} Back to Temples
+        </button>
+        <div className="alexandria-header libraries-header">
+          <h3>{selectedTemple.name}</h3>
+          <p className="library-card-location">{selectedTemple.location} &middot; {selectedTemple.era}</p>
+          <p>{selectedTemple.tagline}</p>
+        </div>
+
+        <div className="alexandria-filters">
+          {filters.map(f => (
+            <button
+              key={f.id}
+              className={`mythic-earth-cat-btn${activeFilter === f.id ? ' active' : ''}`}
+              style={{ '--cat-color': '#c47a5a' }}
+              onClick={() => { setActiveFilter(f.id); trackElement(`myths.temple.${selectedTemple.id}.filter.${f.id}`); }}
+            >
+              {f.label}
+            </button>
+          ))}
+        </div>
+
+        <div className="mythic-earth-site-grid">
+          {filteredDeities.map(deity => (
+            <button
+              key={deity.id}
+              className="mythic-earth-site-card alexandria-card"
+              onClick={() => { setSelectedDeity(deity); trackElement(`myths.temple.${selectedTemple.id}.deity.${deity.id}`); }}
+            >
+              <span className="site-card-name">{deity.title}</span>
+              <span className="site-card-region">{deity.role}</span>
+              <div className="alexandria-card-footer">
+                <span className={`alexandria-card-badge ${deity.domain}`}>{deity.domain}</span>
+              </div>
+            </button>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  // Level 1: Temple grid
+  return (
+    <div className="libraries-panel">
+      <div className="alexandria-header libraries-header">
+        <h3>Ancient Temples</h3>
+        <p>Ten temples spanning five millennia and five continents — the great houses of worship where humanity honored its gods.</p>
+      </div>
+
+      <div className="mythic-earth-site-grid">
+        {ancientTemples.map(temple => (
+          <button
+            key={temple.id}
+            className="mythic-earth-site-card temple-card"
+            onClick={() => { setSelectedTemple(temple); trackElement(`myths.temple.${temple.id}`); }}
+          >
+            <span className="site-card-name">{temple.name}</span>
+            <span className="site-card-region">{temple.location}</span>
+            <span className="temple-card-era">{temple.era}</span>
+            <span className="temple-card-tagline">{temple.tagline}</span>
+            <span className="temple-card-count">{temple.deities.length} deities</span>
+          </button>
+        ))}
+      </div>
     </div>
   );
 }
@@ -1045,6 +1305,8 @@ function SeriesContent({ currentEpisode, onSelectEpisode, viewToggle }) {
   const [videoUrl, setVideoUrl] = useState(null);
   const [interviewMode, setInterviewMode] = useState(false);
   const [expandedEntry, setExpandedEntry] = useState(null);
+  const [detailOpen, setDetailOpen] = useState(false);
+  const [detailExpanded, setDetailExpanded] = useState({});
 
   const episodeData = allEpisodes.find(ep => ep.id === currentEpisode);
   const synthesisData = mythsSynthesis[currentEpisode] || null;
@@ -1064,8 +1326,148 @@ function SeriesContent({ currentEpisode, onSelectEpisode, viewToggle }) {
       setVideoUrl(null);
       setInterviewMode(false);
       setExpandedEntry(null);
+      setDetailOpen(false);
+      setDetailExpanded({});
     }
   }, [currentEpisode]);
+
+  // Handle CircleNav clicks — second click on same episode opens detail page
+  const handleStageSelect = useCallback((ep) => {
+    if (ep === currentEpisode && ep !== 'overview' && ep !== 'bio') {
+      setDetailOpen(true);
+      setDetailExpanded({});
+      trackElement(`myths.series.detail.${ep}`);
+    } else {
+      setDetailOpen(false);
+      setDetailExpanded({});
+      onSelectEpisode(ep);
+    }
+  }, [currentEpisode, onSelectEpisode, trackElement]);
+
+  const toggleDetailSection = useCallback((key) => {
+    setDetailExpanded(prev => ({ ...prev, [key]: !prev[key] }));
+  }, []);
+
+  /* ── Episode Detail Page ── */
+  if (detailOpen && episodeData) {
+    const storylineEntries = episodeData.entries.filter(e => !e.question);
+    const questionEntries = episodeData.entries.filter(e => e.question);
+    return (
+      <div className="series-detail">
+        <button className="series-detail-back" onClick={() => setDetailOpen(false)}>
+          {'\u2190'} Back
+        </button>
+
+        <h2 className="series-detail-title">{episodeData.title}</h2>
+
+        {episodeData.summary && (
+          <p className="series-detail-summary">{episodeData.summary}</p>
+        )}
+
+        {episodeData.playlist && (
+          <div className="series-detail-play">
+            <button
+              className={`myths-play-btn${videoUrl ? ' active' : ''}`}
+              onClick={() => setVideoUrl(videoUrl ? null : episodeData.playlist)}
+            >
+              {videoUrl ? '\u25A0 Stop Playlist' : '\u25B6 Watch Playlist'}
+            </button>
+            {videoUrl && (
+              <div className="series-detail-video">
+                <iframe
+                  src={videoUrl}
+                  title={episodeData.title}
+                  width="100%"
+                  height="360"
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Synthesis sections */}
+        {synthesisData && (
+          <div className="series-detail-section">
+            <button
+              className={`series-detail-section-btn${detailExpanded.synthesis ? ' open' : ''}`}
+              onClick={() => toggleDetailSection('synthesis')}
+            >
+              <span className="series-detail-arrow">{detailExpanded.synthesis ? '\u25BC' : '\u25B6'}</span>
+              Synthesis
+            </button>
+            {detailExpanded.synthesis && (
+              <div className="series-detail-section-body">
+                {synthesisData.sections.map((s, i) => (
+                  <div key={i} className="series-detail-synth">
+                    <h4 className="series-detail-synth-heading">{s.heading}</h4>
+                    <div className="series-detail-synth-text">
+                      {s.text.split('\n\n').map((p, j) => <p key={j}>{p}</p>)}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Storyline */}
+        {storylineEntries.length > 0 && (
+          <div className="series-detail-section">
+            <button
+              className={`series-detail-section-btn${detailExpanded.storyline ? ' open' : ''}`}
+              onClick={() => toggleDetailSection('storyline')}
+            >
+              <span className="series-detail-arrow">{detailExpanded.storyline ? '\u25BC' : '\u25B6'}</span>
+              Storyline
+            </button>
+            {detailExpanded.storyline && (
+              <div className="series-detail-section-body">
+                {storylineEntries.map((entry, i) =>
+                  entry.text.split('\n\n').map((p, j) => <p key={`${i}-${j}`}>{p}</p>)
+                )}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Interview Q&A */}
+        {questionEntries.length > 0 && (
+          <div className="series-detail-section">
+            <button
+              className={`series-detail-section-btn${detailExpanded.interview ? ' open' : ''}`}
+              onClick={() => toggleDetailSection('interview')}
+            >
+              <span className="series-detail-arrow">{detailExpanded.interview ? '\u25BC' : '\u25B6'}</span>
+              Interview ({questionEntries.length})
+            </button>
+            {detailExpanded.interview && (
+              <div className="series-detail-section-body">
+                {questionEntries.map((entry, i) => (
+                  <div key={i} className="series-detail-qa">
+                    <button
+                      className={`series-detail-qa-q${detailExpanded[`q-${i}`] ? ' open' : ''}`}
+                      onClick={() => toggleDetailSection(`q-${i}`)}
+                    >
+                      <span className="series-detail-arrow">{detailExpanded[`q-${i}`] ? '\u25BE' : '\u25B8'}</span>
+                      {entry.question}
+                    </button>
+                    {detailExpanded[`q-${i}`] && (
+                      <div className="series-detail-qa-a">
+                        {entry.text.split('\n\n').map((p, j) => <p key={j}>{p}</p>)}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+    );
+  }
 
   return (
     <>
@@ -1074,7 +1476,7 @@ function SeriesContent({ currentEpisode, onSelectEpisode, viewToggle }) {
           rings={RINGS}
           ringCircles={RING_CIRCLES}
           currentStage={currentEpisode}
-          onSelectStage={onSelectEpisode}
+          onSelectStage={handleStageSelect}
           clockwise={false}
           centerLine1="Myths"
           centerLine2=""
@@ -1228,6 +1630,261 @@ function SeriesContent({ currentEpisode, onSelectEpisode, viewToggle }) {
   );
 }
 
+/* ── Cosmology View ── */
+const COSMOLOGY_SECTIONS = {
+  'normal-world': { ...worldData.normalWorld, accent: 'steel' },
+  'threshold': { ...worldData.threshold, accent: 'gold' },
+  'other-world': { ...worldData.otherWorld, accent: 'ember' },
+};
+
+function CosmologyView({ trackElement }) {
+  const [activeSection, setActiveSection] = useState('normal-world');
+  const [expanded, setExpanded] = useState({});
+  const contentRef = useRef(null);
+
+  const data = COSMOLOGY_SECTIONS[activeSection];
+
+  const selectSection = useCallback((id) => {
+    setActiveSection(id);
+    setExpanded({});
+    trackElement(`myths.cosmology.${id}`);
+    if (contentRef.current) contentRef.current.scrollTop = 0;
+  }, [trackElement]);
+
+  const toggleSection = useCallback((label) => {
+    setExpanded(prev => ({ ...prev, [label]: !prev[label] }));
+  }, []);
+
+  const renderExpandable = (label, content) => {
+    if (!content) return null;
+    const isOpen = expanded[label];
+    return (
+      <div className="cosmology-expand" key={label}>
+        <button className={`cosmology-expand-btn${isOpen ? ' open' : ''}`} onClick={() => toggleSection(label)}>
+          <span className="cosmology-expand-arrow">{isOpen ? '\u25BC' : '\u25B6'}</span>
+          {label}
+        </button>
+        {isOpen && (
+          <div className="cosmology-expand-body">
+            {typeof content === 'object' && !Array.isArray(content)
+              ? Object.entries(content).map(([k, v]) => (
+                  <div className="cosmology-kv" key={k}>
+                    <strong>{typeof v === 'object' ? v.name || v.title || k : k}</strong>
+                    <p>{typeof v === 'object' ? v.description : v}</p>
+                  </div>
+                ))
+              : <p>{String(content)}</p>
+            }
+          </div>
+        )}
+      </div>
+    );
+  };
+
+  return (
+    <div className="cosmology-view">
+      <div className="cosmology-diagram-wrap">
+        <CosmologyCircle activeSection={activeSection} onSelect={selectSection} />
+      </div>
+
+      {/* Content panel */}
+      <div className={`cosmology-content accent-${data.accent}`} ref={contentRef}>
+        <h3 className="cosmology-content-title">{data.title}</h3>
+        <p className="cosmology-content-subtitle">{data.subtitle}</p>
+        <p className="cosmology-content-desc">{data.description}</p>
+        {renderExpandable('Overview', data.overview)}
+        {renderExpandable('Separation', data.separation)}
+        {renderExpandable('Shelter', data.shelter)}
+        {renderExpandable('Shadow', data.shadow)}
+        {renderExpandable('Wasteland', data.wasteland)}
+        {renderExpandable('Underworld', data.underworld)}
+        {renderExpandable('Dimensions', data.dimensions)}
+        {renderExpandable('Dream', data.dream)}
+        {renderExpandable('Myths', data.myths)}
+        {renderExpandable('Center', data.center)}
+        {renderExpandable('Mimesis', data.mimesis)}
+        {renderExpandable('Regeneration', data.regeneration)}
+        {renderExpandable('Guardians', data.guardians)}
+        {renderExpandable('Motifs', data.motifs)}
+        {renderExpandable('Adze', data.adze)}
+      </div>
+    </div>
+  );
+}
+
+/* ── Shared Cosmology Diagram ── */
+function CosmologyCircle({ activeSection, onSelect }) {
+  const s = activeSection;
+  const steel = 'rgba(139,157,195,';
+  const gold = 'rgba(201,169,97,';
+  const ember = 'rgba(196,113,58,';
+  const blend = 'rgba(168,135,127,';
+
+  return (
+    <svg viewBox="0 0 350 200" className="cosmology-diagram" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <clipPath id="clip-top"><rect x="0" y="0" width="350" height="98" /></clipPath>
+        <clipPath id="clip-bottom"><rect x="0" y="122" width="350" height="80" /></clipPath>
+      </defs>
+      {/* Top half arc stroke */}
+      <path d="M 90 110 A 85 85 0 0 1 260 110" fill="none"
+        stroke={s === 'normal-world' ? `${steel}0.8)` : `${steel}0.2)`} strokeWidth="1.2" pointerEvents="none" />
+      {/* Top half fill */}
+      <path d="M 175 25 A 85 85 0 0 1 260 110 L 90 110 A 85 85 0 0 1 175 25 Z"
+        fill={s === 'normal-world' ? `${steel}0.28)` : `${steel}0.07)`} stroke="none"
+        clipPath="url(#clip-top)" className="cosmology-hit-area" onClick={() => onSelect('normal-world')} />
+      {/* Bottom half arc stroke */}
+      <path d="M 90 110 A 85 85 0 0 0 260 110" fill="none"
+        stroke={s === 'other-world' ? `${ember}0.8)` : `${ember}0.2)`} strokeWidth="1.2" pointerEvents="none" />
+      {/* Bottom half fill */}
+      <path d="M 90 110 A 85 85 0 0 0 260 110 Z"
+        fill={s === 'other-world' ? `${ember}0.28)` : `${ember}0.07)`} stroke="none"
+        clipPath="url(#clip-bottom)" className="cosmology-hit-area" onClick={() => onSelect('other-world')} />
+      {/* Threshold band */}
+      <rect x="90" y="98" width="170" height="24" rx="2"
+        fill={s === 'threshold' ? `${blend}0.25)` : `${blend}0.08)`}
+        stroke={s === 'threshold' ? `${blend}0.8)` : `${blend}0.25)`} strokeWidth="1"
+        className="cosmology-hit-area" onClick={() => onSelect('threshold')} />
+      <text x="175" y="114.5" textAnchor="middle" pointerEvents="none"
+        fill={`${blend}${s === 'threshold' ? '1)' : '0.5)'}`}
+        fontFamily="'Cinzel',serif" fontSize="10" fontWeight="600" letterSpacing="0.14em">THRESHOLD</text>
+      {/* Normal World label */}
+      <text x="175" y="64" textAnchor="middle" pointerEvents="none"
+        fill={`${steel}${s === 'normal-world' ? '0.6)' : '0.25)'}`} fontSize="8.5" fontStyle="italic">
+        Consciousness &#183; Ego &#183; Zenith</text>
+      <text x="175" y="80" textAnchor="middle" pointerEvents="none"
+        fill={`${steel}${s === 'normal-world' ? '1)' : '0.4)'}`}
+        fontFamily="'Cinzel',serif" fontSize="13" fontWeight="600" letterSpacing="0.08em">NORMAL WORLD</text>
+      {/* Other World label */}
+      <text x="175" y="148" textAnchor="middle" pointerEvents="none"
+        fill={`${ember}${s === 'other-world' ? '1)' : '0.4)'}`}
+        fontFamily="'Cinzel',serif" fontSize="13" fontWeight="600" letterSpacing="0.08em">OTHER WORLD</text>
+      <text x="175" y="166" textAnchor="middle" pointerEvents="none"
+        fill={`${ember}${s === 'other-world' ? '0.6)' : '0.25)'}`} fontSize="8.5" fontStyle="italic">
+        Unconscious &#183; Dream &#183; Nadir</text>
+    </svg>
+  );
+}
+
+/* ── Cosmology Cycles View ── */
+const CYCLE_KEYS = ['Solar Day', 'Lunar Month', 'Solar Year', 'Wake & Sleep', 'Procreation', 'Mortality'];
+const CYCLE_SOURCES = {
+  'normal-world': { data: worldData.normalWorld, accent: 'steel' },
+  'threshold': { data: worldData.threshold, accent: 'gold' },
+  'other-world': { data: worldData.otherWorld, accent: 'ember' },
+};
+
+function CosmologyCycles({ trackElement }) {
+  const [activeSection, setActiveSection] = useState('normal-world');
+
+  const selectSection = useCallback((id) => {
+    setActiveSection(id);
+    trackElement(`myths.cosmology.cycles.${id}`);
+  }, [trackElement]);
+
+  const src = CYCLE_SOURCES[activeSection];
+
+  return (
+    <div className="cosmology-view">
+      <div className="cosmology-diagram-wrap">
+        <CosmologyCircle activeSection={activeSection} onSelect={selectSection} />
+      </div>
+      <div className={`cosmology-content accent-${src.accent}`}>
+        <h3 className="cosmology-content-title">{src.data.title}</h3>
+        <p className="cosmology-content-subtitle">Natural Cycles</p>
+        <div className="cosmology-cycles-grid">
+          {CYCLE_KEYS.map(cycle => (
+            <div className="cosmology-cycle-entry" key={cycle}>
+              <strong className="cosmology-cycle-name">{cycle}</strong>
+              <p>{src.data.cycles[cycle]}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ── Cosmology Theorists View ── */
+const THEORIST_SOURCES = {
+  'normal-world': { data: worldData.normalWorld, accent: 'steel' },
+  'threshold': { data: worldData.threshold, accent: 'gold' },
+  'other-world': { data: worldData.otherWorld, accent: 'ember' },
+};
+
+function CosmologyTheorists({ trackElement }) {
+  const [activeSection, setActiveSection] = useState('normal-world');
+
+  const selectSection = useCallback((id) => {
+    setActiveSection(id);
+    trackElement(`myths.cosmology.theorists.${id}`);
+  }, [trackElement]);
+
+  const src = THEORIST_SOURCES[activeSection];
+
+  return (
+    <div className="cosmology-view">
+      <div className="cosmology-diagram-wrap">
+        <CosmologyCircle activeSection={activeSection} onSelect={selectSection} />
+      </div>
+      <div className={`cosmology-content accent-${src.accent}`}>
+        <h3 className="cosmology-content-title">{src.data.title}</h3>
+        <p className="cosmology-content-subtitle">Theorists</p>
+        <div className="cosmology-cycles-grid">
+          {Object.entries(src.data.theorists).map(([key, t]) => (
+            <div className="cosmology-cycle-entry" key={key}>
+              <strong className="cosmology-cycle-name">{t.name}</strong>
+              <p>{t.description}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ── Cosmology Films View ── */
+const FILM_SOURCES = {
+  'normal-world': { data: worldData.normalWorld, accent: 'steel' },
+  'threshold': { data: worldData.threshold, accent: 'gold' },
+  'other-world': { data: worldData.otherWorld, accent: 'ember' },
+};
+
+function CosmologyFilms({ trackElement }) {
+  const [activeSection, setActiveSection] = useState('normal-world');
+
+  const selectSection = useCallback((id) => {
+    setActiveSection(id);
+    trackElement(`myths.cosmology.films.${id}`);
+  }, [trackElement]);
+
+  const src = FILM_SOURCES[activeSection];
+
+  return (
+    <div className="cosmology-view">
+      <div className="cosmology-diagram-wrap">
+        <CosmologyCircle activeSection={activeSection} onSelect={selectSection} />
+      </div>
+      <div className={`cosmology-content accent-${src.accent}`}>
+        <h3 className="cosmology-content-title">{src.data.title}</h3>
+        <p className="cosmology-content-subtitle">Films</p>
+        {src.data.films ? (
+          <div className="cosmology-cycles-grid">
+            {Object.entries(src.data.films).map(([key, f]) => (
+              <div className="cosmology-cycle-entry" key={key}>
+                <strong className="cosmology-cycle-name">{f.title} ({f.year})</strong>
+                <p>{f.description}</p>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p className="cosmology-content-desc" style={{ opacity: 0.5, fontStyle: 'italic' }}>No films for this section yet.</p>
+        )}
+      </div>
+    </div>
+  );
+}
+
 /* ── Combined Myths Page ── */
 function MythsPage() {
   const { trackElement } = useCoursework();
@@ -1236,6 +1893,9 @@ function MythsPage() {
   const [treasuresEpisode, setTreasuresEpisode] = useState('overview');
   const [selectedMythicSite, setSelectedMythicSite] = useState(null);
   const [mythicEarthCategory, setMythicEarthCategory] = useState('sacred-site');
+  const [activeEarthFilters, setActiveEarthFilters] = useState(
+    () => new Set(MYTHIC_EARTH_CATEGORIES.map(c => c.id))
+  );
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => { trackElement('myths.page.visited'); }, []); // eslint-disable-line react-hooks/exhaustive-deps
@@ -1269,7 +1929,12 @@ function MythsPage() {
           <Suspense fallback={<div className="mythic-earth-loading"><span className="mythic-earth-loading-spinner" /></div>}>
             <MythicEarthPage
               embedded
-              onSiteSelect={setSelectedMythicSite}
+              externalFilters={activeEarthFilters}
+              onSiteSelect={(site) => {
+                setSelectedMythicSite(site);
+                if (site?.isTemple) setMythicEarthCategory('temple');
+                else if (site?.isLibrary) setMythicEarthCategory('library');
+              }}
               externalSite={selectedMythicSite}
             />
           </Suspense>
@@ -1279,16 +1944,30 @@ function MythsPage() {
               {MYTHIC_EARTH_CATEGORIES.map(cat => (
                 <button
                   key={cat.id}
-                  className={`mythic-earth-cat-btn${mythicEarthCategory === cat.id ? ' active' : ''}`}
+                  className={`mythic-earth-cat-btn${activeEarthFilters.has(cat.id) ? ' active' : ''}`}
                   style={{ '--cat-color': cat.color }}
-                  onClick={() => { setMythicEarthCategory(cat.id); setSelectedMythicSite(null); trackElement(`myths.earth.category.${cat.id}`); }}
+                  onClick={() => {
+                    setActiveEarthFilters(prev => {
+                      const next = new Set(prev);
+                      if (next.has(cat.id)) next.delete(cat.id);
+                      else next.add(cat.id);
+                      return next;
+                    });
+                    setMythicEarthCategory(cat.id);
+                    setSelectedMythicSite(null);
+                    trackElement(`myths.earth.category.${cat.id}`);
+                  }}
                 >
                   {cat.label}
                 </button>
               ))}
             </div>
 
-            {selectedMythicSite ? (
+            {mythicEarthCategory === 'temple' || selectedMythicSite?.isTemple ? (
+              <TemplesPanel trackElement={trackElement} />
+            ) : mythicEarthCategory === 'library' || selectedMythicSite?.isLibrary ? (
+              <LibrariesPanel trackElement={trackElement} />
+            ) : selectedMythicSite ? (
               <div className="mythic-earth-site-detail">
                 <button className="mythic-earth-back" onClick={() => setSelectedMythicSite(null)}>
                   {'\u2190'} Back to {MYTHIC_EARTH_CATEGORIES.find(c => c.id === mythicEarthCategory)?.label}
@@ -1360,6 +2039,16 @@ function MythsPage() {
         <MotifIndex />
       ) : activeView === 'tarot' ? (
         <TarotContent />
+      ) : activeView === 'cosmology' ? (
+        <CosmologyView trackElement={trackElement} />
+      ) : activeView === 'cosmology-cycles' ? (
+        <CosmologyCycles trackElement={trackElement} />
+      ) : activeView === 'cosmology-theorists' ? (
+        <CosmologyTheorists trackElement={trackElement} />
+      ) : activeView === 'cosmology-films' ? (
+        <CosmologyFilms trackElement={trackElement} />
+      ) : activeView === 'archetypes' ? (
+        <ArchetypesPanel trackElement={trackElement} trackPrefix="myths" />
       ) : null}
 
       {/* Floating toggle buttons */}
@@ -1394,19 +2083,6 @@ function MythsPage() {
           </svg>
         </button>
         <button
-          className={`myths-float-btn${activeView === 'motifs' ? ' active' : ''}`}
-          onClick={() => handleViewSwitch('motifs')}
-          title="Motif Index"
-        >
-          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M3 3h18v18H3z" />
-            <path d="M7 7h4" />
-            <path d="M7 11h10" />
-            <path d="M7 15h10" />
-            <path d="M7 19h6" />
-          </svg>
-        </button>
-        <button
           className={`myths-float-btn${activeView === 'tarot' ? ' active' : ''}`}
           onClick={() => handleViewSwitch('tarot')}
           title="Tarot Decks"
@@ -1423,11 +2099,48 @@ function MythsPage() {
           </svg>
         </button>
         <button
+          className={`myths-float-btn${activeView.startsWith('cosmology') ? ' active' : ''}`}
+          onClick={() => {
+            const cosmoViews = ['cosmology', 'cosmology-cycles', 'cosmology-theorists', 'cosmology-films'];
+            const idx = cosmoViews.indexOf(activeView);
+            handleViewSwitch(cosmoViews[(idx + 1) % cosmoViews.length]);
+          }}
+          title="Mythic Cosmology"
+        >
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.6">
+            <circle cx="12" cy="12" r="10" />
+            <line x1="2" y1="12" x2="22" y2="12" />
+          </svg>
+        </button>
+        <button
+          className={`myths-float-btn${activeView === 'archetypes' ? ' active' : ''}`}
+          onClick={() => handleViewSwitch('archetypes')}
+          title="Archetypes"
+        >
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="12" cy="7" r="4" />
+            <path d="M5.5 21c0-3.5 2.9-6.5 6.5-6.5s6.5 3 6.5 6.5" />
+          </svg>
+        </button>
+        <button
           className={`myths-float-btn${activeView === 'series' || activeView === 'treasures' ? ' active' : ''}`}
           onClick={() => handleViewSwitch(activeView === 'treasures' ? 'treasures' : 'series')}
           title="Myths Content"
         >
           <span className="myths-float-m">M</span>
+        </button>
+        <button
+          className={`myths-float-btn${activeView === 'motifs' ? ' active' : ''}`}
+          onClick={() => handleViewSwitch('motifs')}
+          title="Motif Index"
+        >
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M3 3h18v18H3z" />
+            <path d="M7 7h4" />
+            <path d="M7 11h10" />
+            <path d="M7 15h10" />
+            <path d="M7 19h6" />
+          </svg>
         </button>
       </div>
     </div>

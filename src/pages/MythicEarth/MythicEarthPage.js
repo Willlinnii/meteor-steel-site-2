@@ -27,6 +27,8 @@ const CATEGORIES = [
   { id: 'sacred-site', label: 'Sacred Sites', singular: 'Sacred Site', color: '#c9a961' },
   { id: 'mythic-location', label: 'Mythic Locations', singular: 'Mythic Location', color: '#c4713a' },
   { id: 'literary-location', label: 'Literary Locations', singular: 'Literary Location', color: '#8b9dc3' },
+  { id: 'temple', label: 'Temples', singular: 'Temple', color: '#c47a5a' },
+  { id: 'library', label: 'Library', singular: 'Library', color: '#a89060' },
 ];
 
 const CATEGORY_MAP = Object.fromEntries(CATEGORIES.map(c => [c.id, c]));
@@ -45,8 +47,33 @@ function makePinSvg(color) {
   )}`;
 }
 
+function makeLibraryPinSvg(color) {
+  return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(
+    `<svg xmlns="http://www.w3.org/2000/svg" width="28" height="40" viewBox="0 0 28 40">
+      <path d="M14 0C6.27 0 0 6.27 0 14c0 10.5 14 26 14 26s14-15.5 14-26C28 6.27 21.73 0 14 0z" fill="${color}" stroke="#0a0a0f" stroke-width="1.5"/>
+      <rect x="8" y="7" width="12" height="13" rx="1" fill="#0a0a0f" opacity="0.3"/>
+      <rect x="9" y="8" width="10" height="11" rx="0.5" fill="#fff" opacity="0.9"/>
+      <line x1="11" y1="11" x2="17" y2="11" stroke="#0a0a0f" stroke-width="0.8" opacity="0.4"/>
+      <line x1="11" y1="13.5" x2="17" y2="13.5" stroke="#0a0a0f" stroke-width="0.8" opacity="0.4"/>
+      <line x1="11" y1="16" x2="15" y2="16" stroke="#0a0a0f" stroke-width="0.8" opacity="0.4"/>
+    </svg>`
+  )}`;
+}
+
+function makeTemplePinSvg(color) {
+  return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(
+    `<svg xmlns="http://www.w3.org/2000/svg" width="28" height="40" viewBox="0 0 28 40">
+      <path d="M14 0C6.27 0 0 6.27 0 14c0 10.5 14 26 14 26s14-15.5 14-26C28 6.27 21.73 0 14 0z" fill="${color}" stroke="#0a0a0f" stroke-width="1.5"/>
+      <path d="M14 5 L8 10 L8 19 L20 19 L20 10 Z" fill="#0a0a0f" opacity="0.3"/>
+      <path d="M14 6 L9 10.5 L9 18 L19 18 L19 10.5 Z" fill="#fff" opacity="0.9"/>
+      <rect x="10.5" y="11" width="2.5" height="7" fill="#0a0a0f" opacity="0.25"/>
+      <rect x="15" y="11" width="2.5" height="7" fill="#0a0a0f" opacity="0.25"/>
+    </svg>`
+  )}`;
+}
+
 const PIN_SVGS = Object.fromEntries(
-  CATEGORIES.map(c => [c.id, makePinSvg(c.color)])
+  CATEGORIES.map(c => [c.id, c.id === 'temple' ? makeTemplePinSvg(c.color) : c.id === 'library' ? makeLibraryPinSvg(c.color) : makePinSvg(c.color)])
 );
 
 /* ── Internal Text Reader ── */
@@ -643,7 +670,7 @@ function MythicEarthSearch({ onSelectSite, globeApi, onHighlight }) {
   );
 }
 
-function MythicEarthPage({ embedded, onSiteSelect: onSiteSelectExternal, externalSite }) {
+function MythicEarthPage({ embedded, onSiteSelect: onSiteSelectExternal, externalSite, externalFilters }) {
   const { track } = usePageTracking('mythic-earth');
   const { xrMode } = useXRMode();
   const [activeFilters, setActiveFilters] = useState(
@@ -868,7 +895,7 @@ function MythicEarthPage({ embedded, onSiteSelect: onSiteSelectExternal, externa
           )}
 
           <MythicEarthGlobe
-            activeFilters={activeFilters}
+            activeFilters={embedded && externalFilters ? externalFilters : activeFilters}
             onSelectSite={handleSelectSite}
             onReady={handleGlobeReady}
             highlightedSiteIds={highlightedSiteIds}

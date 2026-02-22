@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import mythsData from '../../data/mythsEpisodes.json';
+import mythsSynthesis from '../../data/mythsSynthesis.json';
 import { useCoursework } from '../../coursework/CourseworkContext';
 import './MythologyChannelPage.css';
 
@@ -98,6 +99,204 @@ const SHOWS = [
   },
 ];
 
+/* ── Show Detail Page (second click on a show card) ── */
+function ShowDetailPage({ show, onBack, trackElement }) {
+  const [expanded, setExpanded] = useState({});
+
+  const toggleSection = useCallback((key) => {
+    setExpanded(prev => ({ ...prev, [key]: !prev[key] }));
+  }, []);
+
+  // For Myths TV, render full episode list with synthesis
+  if (show.isMythsTV) {
+    return (
+      <MythsTVDetailPage show={show} onBack={onBack} trackElement={trackElement} />
+    );
+  }
+
+  return (
+    <div className="show-detail">
+      <button className="show-detail-back" onClick={onBack}>
+        {'\u2190'} Back to Channel
+      </button>
+      <h2 className="show-detail-title">{show.label}</h2>
+      <p className="show-detail-desc">{show.description}</p>
+
+      {show.playlist && (
+        <div className="show-detail-player">
+          <iframe
+            src={show.playlist}
+            title={show.label}
+            width="100%"
+            height="400"
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          />
+        </div>
+      )}
+
+      <div className="show-detail-placeholder">
+        <p>More content for <strong>{show.label}</strong> coming soon.</p>
+      </div>
+    </div>
+  );
+}
+
+/* ── Myths TV Detail Page (full episode content) ── */
+function MythsTVDetailPage({ show, onBack, trackElement }) {
+  const [selectedEpisode, setSelectedEpisode] = useState(null);
+  const [expanded, setExpanded] = useState({});
+
+  const toggleSection = useCallback((key) => {
+    setExpanded(prev => ({ ...prev, [key]: !prev[key] }));
+  }, []);
+
+  const handleEpisodeSelect = useCallback((ep) => {
+    if (selectedEpisode?.id === ep.id) {
+      setSelectedEpisode(null);
+      setExpanded({});
+    } else {
+      setSelectedEpisode(ep);
+      setExpanded({});
+      trackElement(`mythology-channel.detail.episode.${ep.id}`);
+    }
+  }, [selectedEpisode, trackElement]);
+
+  const synthesis = selectedEpisode ? (mythsSynthesis[selectedEpisode.id] || null) : null;
+
+  return (
+    <div className="show-detail">
+      <button className="show-detail-back" onClick={onBack}>
+        {'\u2190'} Back to Channel
+      </button>
+      <h2 className="show-detail-title">{show.label}</h2>
+      <p className="show-detail-desc">{show.description}</p>
+
+      {show.playlist && (
+        <div className="show-detail-player">
+          <iframe
+            src={show.playlist}
+            title={show.label}
+            width="100%"
+            height="400"
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          />
+        </div>
+      )}
+
+      <h3 className="show-detail-episodes-heading">Episodes</h3>
+      <div className="show-detail-episodes-grid">
+        {mythsData.episodes.map(ep => (
+          <button
+            key={ep.id}
+            className={`show-detail-ep-btn${selectedEpisode?.id === ep.id ? ' active' : ''}`}
+            onClick={() => handleEpisodeSelect(ep)}
+          >
+            {ep.title}
+          </button>
+        ))}
+      </div>
+
+      {selectedEpisode && (
+        <div className="show-detail-ep-content">
+          <h3 className="show-detail-ep-title">{selectedEpisode.title}</h3>
+          {selectedEpisode.summary && (
+            <p className="show-detail-ep-summary">{selectedEpisode.summary}</p>
+          )}
+
+          {/* Synthesis sections */}
+          {synthesis && (
+            <div className="show-detail-section">
+              <button
+                className={`show-detail-section-btn${expanded.synthesis ? ' open' : ''}`}
+                onClick={() => toggleSection('synthesis')}
+              >
+                <span className="show-detail-arrow">{expanded.synthesis ? '\u25BC' : '\u25B6'}</span>
+                Synthesis
+              </button>
+              {expanded.synthesis && (
+                <div className="show-detail-section-body">
+                  {synthesis.sections.map((s, i) => (
+                    <div key={i} className="show-detail-synth">
+                      <h4 className="show-detail-synth-heading">{s.heading}</h4>
+                      <div className="show-detail-synth-text">
+                        {s.text.split('\n\n').map((p, j) => <p key={j}>{p}</p>)}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Interview entries */}
+          {selectedEpisode.entries.length > 0 && (() => {
+            const storyline = selectedEpisode.entries.filter(e => !e.question);
+            const questions = selectedEpisode.entries.filter(e => e.question);
+            return (
+              <>
+                {storyline.length > 0 && (
+                  <div className="show-detail-section">
+                    <button
+                      className={`show-detail-section-btn${expanded.storyline ? ' open' : ''}`}
+                      onClick={() => toggleSection('storyline')}
+                    >
+                      <span className="show-detail-arrow">{expanded.storyline ? '\u25BC' : '\u25B6'}</span>
+                      Storyline
+                    </button>
+                    {expanded.storyline && (
+                      <div className="show-detail-section-body">
+                        {storyline.map((entry, i) =>
+                          entry.text.split('\n\n').map((p, j) => <p key={`${i}-${j}`}>{p}</p>)
+                        )}
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {questions.length > 0 && (
+                  <div className="show-detail-section">
+                    <button
+                      className={`show-detail-section-btn${expanded.interview ? ' open' : ''}`}
+                      onClick={() => toggleSection('interview')}
+                    >
+                      <span className="show-detail-arrow">{expanded.interview ? '\u25BC' : '\u25B6'}</span>
+                      Interview ({questions.length})
+                    </button>
+                    {expanded.interview && (
+                      <div className="show-detail-section-body">
+                        {questions.map((entry, i) => (
+                          <div key={i} className="show-detail-qa">
+                            <button
+                              className={`show-detail-qa-q${expanded[`q-${i}`] ? ' open' : ''}`}
+                              onClick={() => toggleSection(`q-${i}`)}
+                            >
+                              <span className="show-detail-arrow">{expanded[`q-${i}`] ? '\u25BE' : '\u25B8'}</span>
+                              {entry.question}
+                            </button>
+                            {expanded[`q-${i}`] && (
+                              <div className="show-detail-qa-a">
+                                {entry.text.split('\n\n').map((p, j) => <p key={j}>{p}</p>)}
+                              </div>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
+              </>
+            );
+          })()}
+        </div>
+      )}
+    </div>
+  );
+}
+
 function MythsEpisodeContent({ episode }) {
   return (
     <div className="myths-episode-content">
@@ -132,6 +331,8 @@ export default function MythologyChannelPage() {
   const [zapKey, setZapKey] = useState(0);
   const playerRef = useRef(null);
   const playerContainerRef = useRef(null);
+
+  const [detailShow, setDetailShow] = useState(null);
 
   const { trackElement, trackTime, isElementCompleted, courseworkMode } = useCoursework();
   const triggerZap = useCallback(() => setZapKey(k => k + 1), []);
@@ -230,14 +431,14 @@ export default function MythologyChannelPage() {
 
   const handleShowClick = (show) => {
     if (activeShow?.id === show.id) {
-      setActiveShow(null);
-      setVideoUrl(null);
-      setActiveEpisode(null);
-      navigate('/mythology-channel', { replace: true });
+      // Second click — open detail page
+      setDetailShow(show);
+      trackElement(`mythology-channel.detail.${show.id}`);
     } else {
       trackElement(`mythology-channel.show.${show.id}`);
       setActiveShow(show);
       setActiveEpisode(null);
+      setDetailShow(null);
       setVideoUrl(show.playlist || null);
       triggerZap();
       navigate(`/mythology-channel/${show.id}`, { replace: true });
@@ -274,6 +475,19 @@ export default function MythologyChannelPage() {
 
   const isMythsActive = activeShow?.isMythsTV;
   const isOn = !!videoUrl;
+
+  // Show detail page if open
+  if (detailShow) {
+    return (
+      <div className="mythology-channel-page">
+        <ShowDetailPage
+          show={detailShow}
+          onBack={() => setDetailShow(null)}
+          trackElement={trackElement}
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="mythology-channel-page">

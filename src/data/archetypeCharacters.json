@@ -1,0 +1,322 @@
+[
+  {
+    "id": "archetypal-roles",
+    "name": "Archetypal Roles",
+    "color": "#b08d57",
+    "description": "Seven recurring character functions identified by Jung, Campbell, and Vogler. These archetypes appear across all mythologies and stories — not as fixed personalities, but as dramatic roles that any character may wear for a time.",
+    "entries": [
+      {
+        "id": "hero",
+        "name": "Hero",
+        "subtitle": "The willful protagonist who undertakes the journey",
+        "domain": "archetypal-roles",
+        "description": "The Hero is the central figure of the story — the one who acts, who chooses, who crosses the threshold. In Campbell's formulation, the Hero undertakes the monomyth: separation from the known world, initiation through trials, and return bearing a boon for the community. The Hero is not defined by strength or virtue alone but by willingness — the readiness to answer the call and face the unknown.\n\nVogler emphasizes that the Hero must be active, not passive. The audience identifies with the Hero through shared universal drives: the desire to be understood, to succeed, to be free, to find justice. A Hero who merely reacts is no hero at all. The Hero must make choices, take risks, and accept sacrifice. The key psychological function is ego — the Hero represents the self striving for wholeness.\n\nCampbell warns that the Hero's journey is not merely external. The real territory is inward: the descent into the unconscious, the confrontation with the Shadow, and the integration of all that has been repressed. The Hero who returns unchanged has not truly completed the journey.",
+        "quotes": [
+          { "text": "A hero is someone who has given his or her life to something bigger than oneself.", "source": "Campbell, The Hero with a Thousand Faces" },
+          { "text": "The Hero's journey is first and foremost a journey of the self.", "source": "Vogler 30" },
+          { "text": "Heroes are symbols of the soul in transformation.", "source": "Vogler 35" }
+        ]
+      },
+      {
+        "id": "mentor",
+        "name": "Mentor",
+        "subtitle": "The wise guide who bestows gifts and wisdom",
+        "domain": "archetypal-roles",
+        "description": "The Mentor is the figure of wisdom — Gandalf, Obi-Wan, Athena, Merlin. In Campbell's monomyth, the Mentor appears as the Supernatural Aid, the helper who arrives once the Hero has committed to the quest. The Mentor provides essential gifts: a weapon, a talisman, knowledge, or simply the confidence to proceed. But the Mentor can never accompany the Hero all the way — at some point, the Hero must face the ordeal alone.\n\nPsychologically, the Mentor represents the Self — the god within, the higher wisdom that the Hero must eventually internalize. Vogler notes that the Mentor is often a former Hero: someone who has completed their own journey and now passes the torch. This creates the sense that the journey is cyclical, that every Hero becomes a Mentor in time.\n\nThe dark Mentor is equally powerful — the teacher who leads the Hero astray, the guide with hidden motives. Even positive Mentors may test the Hero, withhold information, or push them toward danger as a necessary part of growth.",
+        "quotes": [
+          { "text": "The first encounter of the hero-journey is with a protective figure who provides the adventurer with amulets against the dragon forces he is about to pass.", "source": "Campbell 69" },
+          { "text": "The Mentor's gift is not the sword — it is the belief that you can wield it.", "source": "Vogler 49" }
+        ]
+      },
+      {
+        "id": "herald",
+        "name": "Herald",
+        "subtitle": "The announcer of change who issues the call to adventure",
+        "domain": "archetypal-roles",
+        "description": "The Herald is the force that announces change — a person, an event, a letter, a dream. In the monomyth, the Herald delivers the Call to Adventure, the moment that shatters the ordinary world and demands a response. The Herald need not be a character at all; it can be an internal stirring, a crisis, or a sudden shift in circumstances.\n\nVogler notes that the Herald's function is primarily motivational: something must happen to set the story in motion. Without the Herald, the Hero remains in stasis. The Herald represents the first stirrings of energy in the unconscious — the signal that the psyche is ready for transformation, even if the conscious mind resists.\n\nHeralds can be positive (a message of hope or opportunity), negative (a declaration of war, a diagnosis), or neutral (a chance encounter that sets events in motion). What matters is that the Herald's arrival makes the status quo untenable — the world can no longer remain as it was.",
+        "quotes": [
+          { "text": "The herald or announcer of the adventure is often dark, loathly, or terrifying, judged evil by the world.", "source": "Campbell 53" },
+          { "text": "The Herald issues challenges and announces the coming of significant change.", "source": "Vogler 57" }
+        ]
+      },
+      {
+        "id": "threshold-guardian",
+        "name": "Threshold Guardian",
+        "subtitle": "The obstacle that tests the Hero's worthiness to proceed",
+        "domain": "archetypal-roles",
+        "description": "Threshold Guardians are the sentries at the gates between worlds. They block the Hero's passage — not necessarily as enemies, but as tests. The Hero must prove worthiness to proceed by overcoming, outwitting, or winning over these figures. In mythology, they appear as the monsters at the cave entrance, the riddle-posing sphinx, the bureaucrat who won't let you pass.\n\nVogler emphasizes that Threshold Guardians are not villains. They are obstacles that can often be converted into allies once the Hero demonstrates commitment and resourcefulness. Many Threshold Guardians are simply doing their jobs — guarding a boundary that exists for good reason. The Hero's task is not always to defeat them, but to find the right approach.\n\nPsychologically, Threshold Guardians represent internal resistances — neuroses, emotional scars, fears, and limiting beliefs that guard the thresholds of growth. Passing them requires the Hero to confront what holds them back, often by absorbing the Guardian's energy rather than fighting it.",
+        "quotes": [
+          { "text": "Threshold Guardians are not to be defeated but incorporated.", "source": "Vogler 59" },
+          { "text": "The passage of the threshold is a form of self-annihilation.", "source": "Campbell 91" }
+        ]
+      },
+      {
+        "id": "shapeshifter",
+        "name": "Shapeshifter",
+        "subtitle": "The changeable figure who dazzles and confuses",
+        "domain": "archetypal-roles",
+        "description": "The Shapeshifter is the archetype of change and instability — the character whose loyalty, appearance, or nature seems to shift moment to moment. In mythology, shapeshifters are everywhere: Proteus who must be wrestled into giving prophecy, the selkies who shed their skins, the foxes and coyotes who take human form. In story, the Shapeshifter is often the romantic interest or a crucial ally whose true nature remains uncertain.\n\nVogler identifies the Shapeshifter's primary function as catalyst for change and uncertainty. They keep the Hero (and the audience) guessing. Is this person an ally or an enemy? Can they be trusted? The Shapeshifter introduces doubt and suspicion into the story, which generates energy and tension.\n\nPsychologically, the Shapeshifter represents the anima or animus — the contrasexual element within the psyche that is simultaneously fascinating and dangerous. Jung saw the anima/animus as a bridge to the unconscious, but one that could also lead to projection and obsession. The Shapeshifter in story embodies this dual potential.",
+        "quotes": [
+          { "text": "The Shapeshifter serves the dramatic function of bringing doubt and suspense into a story.", "source": "Vogler 65" },
+          { "text": "The anima is both the temptress and the guide to the soul.", "source": "Jung, Archetypes and the Collective Unconscious" }
+        ]
+      },
+      {
+        "id": "shadow",
+        "name": "Shadow",
+        "subtitle": "The dark mirror who represents the Hero's repressed qualities",
+        "domain": "archetypal-roles",
+        "description": "The Shadow is the dark reflection of the Hero — the villain, the antagonist, the force that threatens destruction. But the Shadow is more than mere opposition. In Jungian psychology, the Shadow is the repository of everything the conscious self has rejected: forbidden desires, unacknowledged weaknesses, untapped potential. The most compelling villains are those who reflect the Hero's own darker possibilities.\n\nVogler notes that the best Shadows believe they are the heroes of their own stories. A Shadow who is purely evil is less interesting than one whose goals are understandable, even sympathetic, but whose methods or values place them in direct conflict with the Hero. The Shadow represents the energy of the dark side — the unexpressed, unrealized, or rejected aspects of something.\n\nCampbell's concept of the Shadow extends beyond personal psychology to cultural myth: the Shadow is what a society refuses to acknowledge about itself. Projecting the Shadow onto others — onto the foreigner, the stranger, the enemy — is the root of scapegoating and war. The Hero's ultimate task is not to destroy the Shadow but to integrate it.",
+        "quotes": [
+          { "text": "Everyone carries a shadow, and the less it is embodied in the individual's conscious life, the blacker and denser it is.", "source": "Jung, Psychology and Religion" },
+          { "text": "The Shadow represents the energy of the dark side, the unexpressed, unrealized, or rejected aspects of something.", "source": "Vogler 71" },
+          { "text": "The villain is the hero of his own story.", "source": "Vogler 73" }
+        ]
+      },
+      {
+        "id": "trickster",
+        "name": "Trickster",
+        "subtitle": "The disruptive catalyst who upsets the status quo",
+        "domain": "archetypal-roles",
+        "description": "The Trickster is the mischief-maker — Loki, Coyote, Hermes, Anansi, Puck. The Trickster cuts big egos down to size, exposes hypocrisy, and overturns the established order. In story, Tricksters provide comic relief and serve as catalysts for change, often precipitating crises that force other characters to adapt and grow.\n\nVogler identifies the Trickster as an embodiment of the energy of mischief and the desire for change. Tricksters are often neutral rather than good or evil — they disrupt for disruption's sake, or to serve their own appetites. Yet their disruptions frequently benefit the Hero by breaking deadlocks, revealing hidden truths, or forcing confrontations that have been avoided.\n\nPsychologically, the Trickster represents the part of the psyche that refuses to take anything too seriously — the irreverent inner voice that punctures pretension and keeps the ego honest. Cultures that honor the Trickster tend to be more adaptable; those that suppress trickster energy become rigid and brittle.",
+        "quotes": [
+          { "text": "The Trickster archetype embodies the energies of mischief and desire for change.", "source": "Vogler 77" },
+          { "text": "Where there's a will, there's a way — and where there's a Trickster, there's a detour.", "source": "Vogler 79" }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "hero-faces",
+    "name": "Faces of the Hero",
+    "color": "#8b5e3c",
+    "description": "Campbell and Vogler identify multiple faces or modes of the Hero — variations on the protagonist archetype shaped by the nature of the quest, the Hero's gifts, and the price of the journey.",
+    "entries": [
+      {
+        "id": "redeemer",
+        "name": "Redeemer / Savior",
+        "subtitle": "The spiritual hero who brings salvation through sacrifice",
+        "domain": "hero-faces",
+        "description": "The Redeemer or Savior is the hero of spiritual transformation — the one who descends into darkness, suffers, dies, and is reborn to bring salvation to others. Christ, Osiris, Dionysus, Buddha, Krishna, Quetzalcoatl: across every mythology, we find the figure who takes on the sins or sufferings of the world and transmutes them through personal sacrifice.\n\nCampbell identifies the Redeemer's journey as the supreme version of the monomyth. Where the ordinary hero brings back a material boon — fire, golden fleece, the princess — the Redeemer brings back spiritual knowledge: the truth about the nature of reality, the path to liberation, the promise that death is not final. The Redeemer's boon is consciousness itself.\n\nThe Redeemer's journey always involves descent — into the underworld, into the belly of the whale, into the tomb. This katabasis is the essential pattern: one must die to the old self before the new self can be born. The resurrection that follows is not a return to what was, but an elevation to a higher plane of being.",
+        "quotes": [
+          { "text": "The effect of the successful adventure of the hero is the unlocking and release again of the flow of life into the body of the world.", "source": "Campbell 40" },
+          { "text": "The hero is the champion of things becoming, not of things become.", "source": "Campbell 243" }
+        ]
+      },
+      {
+        "id": "ascetic",
+        "name": "Ascetic",
+        "subtitle": "The world-renouncer who dissolves the ego on the mystic path",
+        "domain": "hero-faces",
+        "description": "The Ascetic is the hero who turns inward — the monk, the hermit, the yogi, the mystic. Rather than conquering the outer world, the Ascetic conquers the inner one: desires, attachments, illusions, and ultimately the ego itself. The Ascetic's journey is one of subtraction rather than addition — stripping away everything that is not essential until only truth remains.\n\nCampbell describes the Ascetic's path as the inward journey of the monomyth. The forest, the desert, the mountain cave — these are the threshold spaces where the Ascetic withdraws from ordinary life to confront the ultimate questions. The trials are not dragons and armies but temptations, doubts, and the terrifying emptiness that comes when all props are removed.\n\nThe Ascetic's boon is liberation — moksha, nirvana, satori, union with the divine. But this boon comes at a cost: the Ascetic's return to ordinary life is often fraught. How does one who has seen beyond the veil live among those who haven't? The Ascetic must find a way to translate transcendent experience into compassionate action.",
+        "quotes": [
+          { "text": "The ascetic is the one who, having died to the world, is alive to the divine.", "source": "Campbell 315" },
+          { "text": "The goal of the hero's journey is not to destroy the ego but to transcend it.", "source": "Campbell 163" }
+        ]
+      },
+      {
+        "id": "super-hero",
+        "name": "Super Hero",
+        "subtitle": "The hero of extraordinary powers and superhuman deeds",
+        "domain": "hero-faces",
+        "description": "The Super Hero is the champion of impossible feats — Hercules lifting the sky, Cuchulainn in his battle frenzy, Gilgamesh wrestling Enkidu, Superman catching bullets. The Super Hero's power sets them apart from ordinary humanity, creating both admiration and isolation. Their strength is a gift and a burden.\n\nCampbell notes that the Super Hero appears in every culture: the demigod, the culture hero, the giant-slayer. These figures embody humanity's wish to transcend its limitations — to be stronger, faster, more powerful than nature allows. But the most enduring Super Hero stories recognize that power without wisdom is dangerous, and that the Super Hero's greatest challenge is not the monster but the question of how to use their gifts responsibly.\n\nThe Super Hero's vulnerability is essential to their appeal. Achilles has his heel, Samson his hair, Superman his kryptonite. Without vulnerability, the Super Hero becomes a god — admired but not identified with. It is the crack in the armor that makes the Super Hero human, that allows the audience to feel empathy alongside awe.",
+        "quotes": [
+          { "text": "The hero of yesterday becomes the tyrant of tomorrow, unless he crucifies himself today.", "source": "Campbell 353" },
+          { "text": "The mighty hero of extraordinary powers is each of us: not the physical self visible in the mirror, but the king within.", "source": "Campbell 365" }
+        ]
+      },
+      {
+        "id": "lover",
+        "name": "Lover",
+        "subtitle": "The hero who achieves freedom through the power of love",
+        "domain": "hero-faces",
+        "description": "The Lover is the hero whose quest is for union — with the beloved, with the anima/animus, with the other half of the self. Orpheus descending to Hades for Eurydice, Psyche enduring Aphrodite's trials for Eros, Romeo defying family and fate for Juliet: the Lover's journey is driven by a force that overrides all rational calculation.\n\nCampbell describes the meeting with the beloved as the mystical marriage — the union of opposites that produces wholeness. The Lover does not seek power or knowledge but completion. The beloved represents everything the Hero lacks, everything the Hero has been unable to integrate. In this sense, the Lover's quest is always an inner one: the search for the missing portion of the self.\n\nThe Lover's vulnerability is total exposure. To love is to be open to loss, to rejection, to devastation. The Lover Hero accepts this risk willingly, and it is this willingness — this courage of the heart rather than the sword — that makes the Lover heroic. The Lover's boon, when won, transforms not just the Hero but the world around them.",
+        "quotes": [
+          { "text": "The meeting with the goddess is the final test of the talent of the hero to win the boon of love.", "source": "Campbell 109" },
+          { "text": "When the hero-Loss is a lover, the agony is the agony of love.", "source": "Campbell 195" }
+        ]
+      },
+      {
+        "id": "warrior",
+        "name": "Warrior",
+        "subtitle": "The martial champion of things becoming",
+        "domain": "hero-faces",
+        "description": "The Warrior is the hero of action — the champion who meets the world's threats with skill, courage, and force. Arjuna on the battlefield of Kurukshetra, Achilles before the walls of Troy, Beowulf descending into Grendel's mere: the Warrior's arena is combat, and their virtue is valor. But the Warrior's journey is never simply about fighting — it is about what one fights for.\n\nCampbell identifies the Warrior as the 'champion of things becoming' — the force that clears the way for new life by confronting and overcoming the forces of stagnation, tyranny, and death. The Warrior's violence is sanctified by purpose: it serves creation, not destruction. The Warrior who fights without purpose becomes a mercenary; the Warrior who fights for the wrong cause becomes a tool of tyranny.\n\nThe Warrior's deepest challenge is not the enemy but the self. The battlefield reveals character under the ultimate pressure. Cowardice, cruelty, mercy, sacrifice — all are laid bare when death is near. The greatest Warrior stories (the Bhagavad Gita, the Iliad) use combat as a crucible for philosophical and spiritual transformation.",
+        "quotes": [
+          { "text": "The hero is the champion of things becoming, not of things become.", "source": "Campbell 243" },
+          { "text": "The warrior's approach is not to fight against the world, but to fight through to the world beyond.", "source": "Campbell 337" }
+        ]
+      },
+      {
+        "id": "tyrant",
+        "name": "Tyrant",
+        "subtitle": "The hero corrupted by power, pride, and hubris",
+        "domain": "hero-faces",
+        "description": "The Tyrant is the hero who fails — the one who gains power but cannot let it go, who wins the boon but hoards it for himself. Herod slaughtering the innocents, Kronos devouring his children, the Fisher King in his wasted land: the Tyrant clings to power past its rightful season, and the world suffers for it.\n\nCampbell identifies the Tyrant as the dark face of the Hero — what happens when the journey's lessons are not learned, when the ego inflates rather than surrenders. The Tyrant is often a former hero who has become attached to his own myth. He confuses himself with the role, mistakes personal power for cosmic mandate, and loses the ability to hear counsel or feel compassion.\n\nThe Tyrant's tragedy is that his very strengths become his prison. The will that once drove him forward now drives him to crush all opposition. The intelligence that once solved problems now rationalizes atrocity. The charisma that once inspired loyalty now demands it. The Tyrant cannot step aside because he has forgotten that the power was never his — it was always on loan from the forces that called him to the journey.",
+        "quotes": [
+          { "text": "The hero of yesterday becomes the tyrant of tomorrow, unless he crucifies himself today.", "source": "Campbell 353" },
+          { "text": "The tyrant is proud, and therein resides his doom. He is proud because he thinks of his strength as his own.", "source": "Campbell 15" }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "character-design",
+    "name": "Character Design",
+    "color": "#5a7a8b",
+    "description": "Principles of character construction from Syd Field and Robert McKee — the craft of building dimensional, compelling characters whose inner architecture drives story forward.",
+    "entries": [
+      {
+        "id": "dramatic-need",
+        "name": "Dramatic Need",
+        "subtitle": "What the character wants — the spine of the story",
+        "domain": "character-design",
+        "description": "Dramatic need is the engine of character and story. Field defines it as what the character wants to win, gain, get, or achieve during the screenplay. It is the through-line — the spine — that holds the character together and gives the story its forward momentum. Without a clear dramatic need, a character wanders aimlessly and the story collapses.\n\nThe dramatic need must be concrete enough to generate visible action. 'To be happy' is too vague; 'to find the person who killed my sister' drives every scene. But the dramatic need can also operate on two levels: the conscious want (what the character thinks they need) and the unconscious need (what they actually need for wholeness). The gap between want and need is where the richest drama lives.\n\nField emphasizes that defining the dramatic need is the writer's first and most important task. Every scene should relate to it — either advancing the character toward their goal or introducing obstacles that block them. If a scene doesn't connect to the dramatic need, it doesn't belong in the story.",
+        "quotes": [
+          { "text": "Dramatic need is what your character wants to win, gain, get, or achieve during the course of your screenplay. It is their purpose, their mission, their motivation.", "source": "Field 42" },
+          { "text": "The through-line of action — a character's dramatic need — is the spine of the screenplay.", "source": "Field 44" }
+        ]
+      },
+      {
+        "id": "point-of-view",
+        "name": "Point of View",
+        "subtitle": "How the character sees the world — their belief system",
+        "domain": "character-design",
+        "description": "Point of view is the way a character sees the world — their philosophy, their belief system, their frame for interpreting reality. Field describes it as the character's individual way of looking at the world, which colors every decision they make and every word they speak. Two characters can experience the same event and draw completely different conclusions based on their points of view.\n\nPoint of view is shaped by backstory — by everything that has happened to the character before the story begins. A character raised in privilege sees the world differently than one raised in poverty. A character who has been betrayed sees trust differently than one who has been loved. The writer must know the character's point of view intimately, even if it is never explicitly stated.\n\nMcKee adds that point of view creates the lens through which the audience experiences the story. When we understand a character's worldview, we understand their choices — even when we disagree with them. The most compelling characters have coherent, deeply held points of view that are challenged and transformed by the events of the story.",
+        "quotes": [
+          { "text": "Point of view is the way a character views the world. It is a belief system, formed and molded through experience.", "source": "Field 46" },
+          { "text": "Every human being has a point of view, a way of looking at the world that is uniquely theirs.", "source": "Field 46" }
+        ]
+      },
+      {
+        "id": "attitude",
+        "name": "Attitude",
+        "subtitle": "The character's manner and intellectual stance toward life",
+        "domain": "character-design",
+        "description": "Attitude is distinct from point of view — it is the manner, the opinion, the intellectual position a character takes toward the world. Where point of view is deep and often unconscious, attitude is on the surface: it's how the character presents themselves. Optimistic or pessimistic? Superior or inferior? Aggressive or passive? Right or wrong?\n\nField distinguishes attitude from point of view with a simple test: point of view is how you see the world; attitude is how you behave in it. Two characters might share the same point of view (say, that the world is unjust) but have completely different attitudes (one fights injustice with fury, the other accepts it with ironic resignation).\n\nAttitude is one of the most useful tools for differentiating characters in a cast. When each character has a distinct attitude, scenes come alive with friction and surprise. Attitude also gives actors something to play — it is the texture of performance, the quality that makes a character memorable even in brief scenes.",
+        "quotes": [
+          { "text": "Attitude is a manner or opinion, a way of acting or feeling that reveals a person's personal opinion. Is it positive or negative?", "source": "Field 48" },
+          { "text": "Point of view is how you see the world; attitude is how you act in it.", "source": "Field 48" }
+        ]
+      },
+      {
+        "id": "transformation",
+        "name": "Transformation",
+        "subtitle": "The character arc — change through the story's events",
+        "domain": "character-design",
+        "description": "Transformation is the character arc — the inner change that occurs as a result of the story's events. Field describes it as the change that occurs within the character during the course of the screenplay. A character who begins as fearful may end as courageous; one who begins as selfish may end as generous; one who begins as naive may end as wise.\n\nMcKee distinguishes between flat-arc characters (who maintain their values and change the world around them) and change-arc characters (who are transformed by events). Both are valid, but the change arc is more common in modern storytelling. The key is that the transformation must be earned — it must emerge organically from the pressures and choices of the story, not be imposed arbitrarily.\n\nTransformation is what gives a story its emotional payoff. The audience invests in a character's journey because they sense the possibility of change — the hope that suffering and struggle will lead somewhere meaningful. When transformation works, the ending feels both surprising and inevitable. The character has become who they were always meant to be, even though neither they nor the audience knew it at the start.",
+        "quotes": [
+          { "text": "Transformation is the change that occurs within the character during the course of the screenplay.", "source": "Field 50" },
+          { "text": "The finest writing not only reveals true character, but arcs or changes that inner nature, for better or worse, over the course of the telling.", "source": "McKee 104" }
+        ]
+      },
+      {
+        "id": "characterization-vs-character",
+        "name": "Characterization vs True Character",
+        "subtitle": "Observable surface versus choices under pressure",
+        "domain": "character-design",
+        "description": "McKee draws a crucial distinction between characterization and true character. Characterization is the sum of all observable qualities — physical appearance, mannerisms, style of speech, education, occupation, personality. It is the surface of the character, what we see before the story tests them. True character, by contrast, is revealed only through choices made under pressure.\n\nThe greater the pressure, the deeper the revelation. When a character must choose between two irreconcilable goods, or between a good and a necessary evil, the choice they make reveals who they truly are — beneath the mask, beneath the social performance, beneath even their own self-image. A seemingly kind person who betrays a friend under pressure reveals a true character different from their characterization.\n\nThis distinction is the foundation of dramatic irony and surprise. The audience thinks they know a character based on characterization — then a moment of crisis reveals something unexpected. The gap between characterization and true character is where the most powerful dramatic moments live. It is also what makes characters feel real: we all know that people are not always what they seem.",
+        "quotes": [
+          { "text": "True character is revealed in the choices a human being makes under pressure — the greater the pressure, the deeper the revelation.", "source": "McKee 101" },
+          { "text": "Characterization is the sum of all observable qualities of a human being. True character waits behind this mask.", "source": "McKee 100" }
+        ]
+      },
+      {
+        "id": "multi-dimensional",
+        "name": "Multi-Dimensional Characters",
+        "subtitle": "Contradiction as the key to dimension and depth",
+        "domain": "character-design",
+        "description": "McKee defines dimension as contradiction — a character becomes three-dimensional when they contain qualities that seem to conflict. A ruthless businessperson who is tender with their children. A coward who performs one act of extraordinary bravery. A saint with a secret vice. These contradictions are not flaws in characterization — they are the very essence of dimensionality.\n\nMcKee describes three levels of life that create dimension: the professional life (how the character behaves at work), the personal life (how they are with friends and family), and the private life (what they do and think when alone). A character whose behavior is consistent across all three levels is one-dimensional. A character who shows different faces in different contexts — whose private self contradicts their public self — begins to feel real.\n\nThe key insight is that contradiction must be deeply embedded, not superficial. A character who is merely quirky — a tough guy who likes poetry — is not truly dimensional. True dimension arises when the contradiction creates genuine inner tension, when two aspects of the character pull in opposite directions and the character must constantly negotiate between them.",
+        "quotes": [
+          { "text": "Dimension means contradiction: either within deep character or between characterization and deep character.", "source": "McKee 378" },
+          { "text": "A character with contradictions is a character worth watching — we're never quite sure what they'll do next.", "source": "McKee 380" }
+        ]
+      },
+      {
+        "id": "cast-design",
+        "name": "Cast Design",
+        "subtitle": "The solar system model — a polarized ensemble that creates conflict",
+        "domain": "character-design",
+        "description": "McKee describes cast design as a solar system: the protagonist is the sun at the center, and all other characters orbit around them, each exerting gravitational pull in different directions. The key principle is polarity — each character in the cast should represent a different attitude, approach, or set of values that creates potential for conflict with every other character.\n\nA well-designed cast ensures that every possible pairing of characters generates friction, interest, and revelation. If two characters are too similar, one is redundant. Each character should embody a different response to the story's central question or theme. This polarity doesn't mean characters must be opposites — it means each must occupy a distinct position in the moral and emotional landscape of the story.\n\nField reinforces this by noting that characters define each other through contrast. We understand the hero better by seeing what the hero is not. The mentor's wisdom highlights the hero's inexperience. The villain's ruthlessness throws the hero's compassion into relief. Cast design is not about creating individual characters in isolation — it is about building a constellation where each star's light makes the others more visible.",
+        "quotes": [
+          { "text": "The protagonist creates the rest of the cast. All other characters are in the story first and foremost because of the relationship they strike with the protagonist.", "source": "McKee 382" },
+          { "text": "A cast of characters is like a solar system — every character is a planet revolving around the sun of the protagonist.", "source": "McKee 383" }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "psychology",
+    "name": "Psychology of Character",
+    "color": "#7a5a8b",
+    "description": "The deeper psychological mechanics that make characters resonate — how audiences connect with fictional people, and how writers exploit the gap between surface and depth.",
+    "entries": [
+      {
+        "id": "projection-empathy",
+        "name": "Projection & Empathy",
+        "subtitle": "How audiences identify with characters through shared humanity",
+        "domain": "psychology",
+        "description": "Audience identification with character is the fundamental mechanism of storytelling. We do not merely observe characters — we project ourselves into them, feel their emotions, experience their triumphs and failures as our own. This is not metaphor: mirror neurons fire in our brains when we watch another person act, creating a literal neural simulation of their experience.\n\nMcKee identifies the key to empathy as shared humanity — the recognition of universal drives and vulnerabilities beneath the specific details of character and situation. We may never be a Danish prince, but we know what it feels like to be paralyzed by grief and indecision. We may never be a drug lord, but we understand ambition and the fear of losing what we've built.\n\nThe writer's task is to create characters who are specific enough to be interesting but universal enough to allow projection. Too much specificity alienates; too much universality bores. The sweet spot is a character whose external circumstances are unique but whose internal landscape — their fears, desires, contradictions — mirrors our own.",
+        "quotes": [
+          { "text": "The audience identifies with a character not because of external circumstances, but because of deep character — the essential humanness that we all share.", "source": "McKee 141" },
+          { "text": "Empathy is absolute — we feel what the character feels.", "source": "McKee 142" }
+        ]
+      },
+      {
+        "id": "shadow-projection",
+        "name": "Shadow Projection",
+        "subtitle": "Repressed qualities cast onto others — the root of conflict",
+        "domain": "psychology",
+        "description": "Shadow projection is Jung's term for the unconscious process by which we attribute our own rejected qualities to others. What we cannot accept in ourselves, we see — and condemn — in other people. The angry person accuses others of hostility. The dishonest person suspects everyone of lying. The culture that represses sexuality becomes obsessed with policing it in others.\n\nIn storytelling, shadow projection operates on multiple levels. Characters project their shadows onto each other, creating conflict rooted in misperception and denial. The audience projects its shadow onto characters, which is why villains are often as fascinating as heroes — they enact what we secretly wish we could do but dare not. The writer projects their own shadow into the story, which is why the best writing often reveals more than the writer intended.\n\nCampbell connects shadow projection to the psychology of war and scapegoating. When a society projects its collective shadow onto an enemy — the Other, the Outsider — it creates a target for all its repressed fear and aggression. The Hero's task in such a world is to recognize the shadow as one's own, to withdraw the projection and accept the darkness within. This is the hardest journey of all.",
+        "quotes": [
+          { "text": "One does not become enlightened by imagining figures of light, but by making the darkness conscious.", "source": "Jung, The Philosophical Tree" },
+          { "text": "The shadow is a moral problem that challenges the whole ego-personality.", "source": "Jung, Aion" }
+        ]
+      },
+      {
+        "id": "subtext-persona",
+        "name": "Subtext & Persona",
+        "subtitle": "The mask characters wear versus the truth beneath",
+        "domain": "psychology",
+        "description": "McKee defines subtext as the life under the surface of a scene — the true thoughts and feelings that characters conceal beneath their words and actions. Nothing is what it seems. A declaration of love may mask desperation. A casual question may be an interrogation. A smile may hide murder. The gap between text and subtext is where drama lives.\n\nJung's concept of the persona — the social mask — maps directly onto this dramatic principle. Every character presents a persona to the world: the face they want others to see, the role they play in their social context. Beneath the persona lies the shadow, the anima/animus, and ultimately the Self. Drama is the art of cracking the persona open to reveal what lies beneath.\n\nMcKee insists that the best writing occurs when text and subtext are in opposition — when characters say one thing and mean another, when the surface action contradicts the underlying emotional reality. Flat writing puts the meaning on the surface; dimensional writing buries it beneath layers of contradiction, evasion, and performance. The audience's pleasure comes from reading between the lines, from sensing the truth beneath the mask.",
+        "quotes": [
+          { "text": "Nothing is what it seems. This is the essence of subtext and the key to all great drama.", "source": "McKee 252" },
+          { "text": "Subtext is the life under the text — the true thoughts and feelings beneath what is said and done.", "source": "McKee 253" }
+        ]
+      },
+      {
+        "id": "center-of-good",
+        "name": "Center of Good",
+        "subtitle": "The audience's need for a moral anchor in the story",
+        "domain": "psychology",
+        "description": "The center of good is the character or quality in a story that gives the audience a moral anchor — a reason to care about the outcome, a standard against which to measure the actions of all other characters. Vogler and McKee both identify this as essential: without a center of good, the audience drifts into cynicism or indifference.\n\nThe center of good is not the same as perfection. The most compelling protagonists are flawed, conflicted, even morally compromised — but they possess some quality that the audience recognizes as genuinely good: compassion, loyalty, courage, honesty, a sense of justice. This quality doesn't have to dominate the character; it only has to be present and authentic.\n\nMcKee notes that the center of good creates the emotional stakes of the story. We fear for the protagonist because we care about the good within them. We want them to succeed not because they are powerful or clever but because their success represents the triumph of something we value. When the center of good is destroyed or corrupted, we experience it as tragedy. When it endures and prevails, we experience it as hope.",
+        "quotes": [
+          { "text": "The audience will not follow a character who does not have a center of good, a quality with which they can identify.", "source": "McKee 139" },
+          { "text": "Inside the protagonist, the audience recognizes a shared humanity — a center of goodness.", "source": "Vogler 33" }
+        ]
+      },
+      {
+        "id": "antagonism",
+        "name": "Antagonism",
+        "subtitle": "Forces of opposition that define and elevate the protagonist",
+        "domain": "psychology",
+        "description": "McKee's principle of antagonism states that a protagonist can only be as intellectually fascinating and emotionally compelling as the forces of antagonism make them. Weak opposition produces a weak story. The antagonist — whether a person, an institution, nature, or an internal force — must be powerful enough to push the protagonist to their absolute limit.\n\nAntagonism operates on multiple levels. At the surface, there is the direct conflict: hero versus villain, individual versus society. Beneath that lies the contradiction: the antagonist who makes a valid point, whose worldview contains an uncomfortable truth. Deeper still lies the negation of the negation — the most extreme form of opposition, where the values the protagonist champions are shown to be capable of producing the very evil they fight against.\n\nMcKee insists that writers must love their antagonists. The antagonist is not a cardboard obstacle but a fully realized being with their own logic, their own needs, their own center of good (however twisted). The best antagonists force the audience to understand a perspective they would rather reject. In doing so, they deepen the story's exploration of its central theme.",
+        "quotes": [
+          { "text": "A protagonist and his story can only be as intellectually fascinating and emotionally compelling as the forces of antagonism make them.", "source": "McKee 317" },
+          { "text": "The more powerful and complex the forces of antagonism opposing the character, the more completely realized character and story must become.", "source": "McKee 319" }
+        ]
+      },
+      {
+        "id": "against-the-grain",
+        "name": "Going Against the Grain",
+        "subtitle": "Playing scenes from the unexpected angle to create surprise",
+        "domain": "psychology",
+        "description": "Going against the grain is McKee's principle for creating scenes that surprise and resonate. The obvious approach to a sad scene is to play it sadly — tears, somber music, slow pacing. The against-the-grain approach finds the humor in grief, the tenderness in violence, the fear in triumph. By playing against the expected emotional register, the writer creates something richer and more truthful than the obvious version.\n\nThis principle connects to the deeper truth that real human emotions are rarely pure. Grief contains relief. Joy contains anxiety. Anger contains love. By going against the grain, the writer captures this emotional complexity — the contradictory feelings that make moments feel authentic rather than sentimental or melodramatic.\n\nMcKee also applies this principle to character behavior. When a character does the unexpected — when the coward stands firm, when the tough guy weeps, when the villain shows mercy — the scene comes alive with surprise and revelation. Going against the grain is ultimately about leaving room for the unexpected, for the human capacity to confound our assumptions.",
+        "quotes": [
+          { "text": "Write against the obvious. Go against the grain of the expected emotion.", "source": "McKee 358" },
+          { "text": "Leave room for the actor. If you write weeping, you give the actor nothing to play. If you write control, you give them everything.", "source": "McKee 360" }
+        ]
+      }
+    ]
+  }
+]
