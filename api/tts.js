@@ -125,7 +125,7 @@ module.exports = async function handler(req, res) {
 
   // Resolve voice sample URL — must be publicly accessible
   const samplePath = VOICE_SAMPLES[voiceId] || VOICE_SAMPLES.atlas;
-  const siteUrl = process.env.SITE_URL || 'https://mythouse.com';
+  const siteUrl = (process.env.SITE_URL || 'https://meteor-steel-site-2.vercel.app').replace(/[^a-zA-Z0-9:\/.\-_]/g, '');
   const voiceSampleUrl = `${siteUrl}${samplePath}`;
 
   try {
