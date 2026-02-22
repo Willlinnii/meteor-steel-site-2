@@ -14,7 +14,7 @@ const HINDU_GEMS = {
 };
 
 function OverviewTab({ data }) {
-  if (!data) return <p className="metals-empty">Select a planet to begin.</p>;
+  if (!data) return <p className="chrono-empty">Select a planet to begin.</p>;
   const m = data.core;
   const gem = HINDU_GEMS[m.planet];
   return (
@@ -76,7 +76,7 @@ const DEITY_CULTURE_ALIASES = {
 };
 
 function DeitiesTab({ data, activeCulture }) {
-  if (!data?.deities) return <p className="metals-empty">No deity data available.</p>;
+  if (!data?.deities) return <p className="chrono-empty">No deity data available.</p>;
   const deityList = data.deities.deities || [];
   const aliases = DEITY_CULTURE_ALIASES[activeCulture] || [activeCulture.toLowerCase()];
   const filtered = activeCulture
@@ -85,7 +85,7 @@ function DeitiesTab({ data, activeCulture }) {
 
   return (
     <div className="tab-content">
-      {filtered.length === 0 && <p className="metals-empty">No deities found for this culture.</p>}
+      {filtered.length === 0 && <p className="chrono-empty">No deities found for this culture.</p>}
       {filtered.map((d, i) => (
         <DeityCard key={`${d.name}-${i}`} deity={d} />
       ))}
@@ -102,7 +102,7 @@ function SinsTab({ data }) {
   const sinName = data?.core?.sin;
   const virtueName = data?.core?.virtue;
   const chakra = PLANET_CHAKRA_DETAILS[data?.core?.planet];
-  if (!a && !m && !artists && !t && !s) return <p className="metals-empty">No sin/virtue data available.</p>;
+  if (!a && !m && !artists && !t && !s) return <p className="chrono-empty">No sin/virtue data available.</p>;
 
   const artistFields = [
     ['bosch', 'Hieronymus Bosch'],
@@ -213,7 +213,7 @@ function SinsTab({ data }) {
 function DayTab({ data }) {
   const m = data?.modern;
   const core = data?.core;
-  if (!m && !core) return <p className="metals-empty">No day data available.</p>;
+  if (!m && !core) return <p className="chrono-empty">No day data available.</p>;
 
   return (
     <div className="tab-content">
@@ -316,7 +316,7 @@ const PLANET_CHAKRA_DETAILS = {
 };
 
 function BodyTab({ data }) {
-  if (!data?.core?.body) return <p className="metals-empty">No body data available.</p>;
+  if (!data?.core?.body) return <p className="chrono-empty">No body data available.</p>;
   const b = data.core.body;
   const planet = data.core.planet;
   const chakra = PLANET_CHAKRA_DETAILS[planet];
@@ -348,7 +348,7 @@ function BodyTab({ data }) {
 }
 
 function HebrewTab({ data }) {
-  if (!data?.hebrew) return <p className="metals-empty">No Hebrew data available.</p>;
+  if (!data?.hebrew) return <p className="chrono-empty">No Hebrew data available.</p>;
   const h = data.hebrew;
   return (
     <div className="tab-content">
@@ -377,7 +377,7 @@ function HebrewTab({ data }) {
 
 function SynthesisTab({ data }) {
   const essays = data?.deities?.thematicEssays;
-  if (!essays) return <p className="metals-empty">No synthesis data available.</p>;
+  if (!essays) return <p className="chrono-empty">No synthesis data available.</p>;
   return (
     <div className="tab-content">
       {Object.entries(essays).map(([key, text]) => (
@@ -412,7 +412,7 @@ export default function MetalDetailPanel({ data, activeTab, onSelectTab, activeC
         {activeTab === 'development' && forgeMode && (
           <DevelopmentPanel
             stageLabel={`${data.core.planet} — ${data.core.metal}`}
-            stageKey={`metals-${data.core.planet}`}
+            stageKey={`chronosphaera-${data.core.planet}`}
             entries={devEntries}
             setEntries={setDevEntries}
           />

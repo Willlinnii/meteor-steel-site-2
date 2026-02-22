@@ -3,6 +3,7 @@ import { useSearchParams } from 'react-router-dom';
 import { useProfile } from '../../profile/ProfileContext';
 import GuildForum from './GuildForum';
 import GuildDirectory from './GuildDirectory';
+import { usePageTracking } from '../../coursework/CourseworkContext';
 
 const TABS = [
   { id: 'directory', label: 'Directory' },
@@ -12,12 +13,14 @@ const TABS = [
 export default function GuildPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const { effectiveMentorStatus } = useProfile();
+  const { track } = usePageTracking('guild');
   const tabParam = searchParams.get('tab');
   const [activeTab, setActiveTab] = useState(TABS.find(t => t.id === tabParam)?.id || 'directory');
 
   const handleTabChange = (tabId) => {
     setActiveTab(tabId);
     setSearchParams({ tab: tabId });
+    track(`tab.${tabId}`);
   };
 
   const isMentor = effectiveMentorStatus === 'active';

@@ -1,6 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import CircleNav from '../../components/CircleNav';
 import data from '../../data/treasuresData';
+import { usePageTracking } from '../../coursework/CourseworkContext';
 import './TreasuresPage.css';
 
 const EPISODES = data.episodes.map(ep => ({ id: ep.id, label: ep.label }));
@@ -14,6 +15,8 @@ const TABS = [
 ];
 
 function TreasuresPage() {
+  const { track } = usePageTracking('treasures');
+
   const [currentEpisode, setCurrentEpisode] = useState('overview');
   const [clockwise, setClockwise] = useState(false);
   const [activeTab, setActiveTab] = useState('themes');
@@ -26,12 +29,14 @@ function TreasuresPage() {
     setCurrentEpisode(stage);
     setActiveTab('themes');
     setActiveTheme(null);
-  }, []);
+    track(`episode.${stage}`);
+  }, [track]);
 
   const handleTabClick = useCallback((tabId) => {
     setActiveTab(tabId);
     if (tabId !== 'themes') setActiveTheme(null);
-  }, []);
+    track(`tab.${tabId}`);
+  }, [track]);
 
   const videoUrl = activeTab === 'playlist' && episodeData?.playlist ? episodeData.playlist : null;
 

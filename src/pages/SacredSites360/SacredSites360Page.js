@@ -3,9 +3,11 @@ import { Link } from 'react-router-dom';
 import sites from '../../data/mythicEarthSites.json';
 import useGoogleMapsApi from '../../hooks/useGoogleMapsApi';
 import StreetViewPanorama from './StreetViewPanorama';
+import { usePageTracking } from '../../coursework/CourseworkContext';
 import './SacredSites360Page.css';
 
 export default function SacredSites360Page() {
+  const { track } = usePageTracking('sacred-sites');
   const streetViewSites = useMemo(
     () => sites.filter(s => s.streetView),
     []
@@ -52,7 +54,7 @@ export default function SacredSites360Page() {
               <button
                 key={r}
                 className={`sacred360-region-btn${regionFilter === r ? ' active' : ''}`}
-                onClick={() => setRegionFilter(r)}
+                onClick={() => { setRegionFilter(r); track(`region.${r}`); }}
               >
                 {r}
               </button>
@@ -64,7 +66,7 @@ export default function SacredSites360Page() {
               <button
                 key={site.id}
                 className={`sacred360-site-card${selectedSite?.id === site.id ? ' active' : ''}`}
-                onClick={() => setSelectedSite(site)}
+                onClick={() => { setSelectedSite(site); track(`site.${site.id}`); }}
               >
                 <span className="sacred360-site-name">{site.name}</span>
                 <span className="sacred360-site-region">{site.region}</span>

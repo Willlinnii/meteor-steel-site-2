@@ -8,7 +8,7 @@ import psychlesData from '../../data/monomythPsychles.json';
 import starsNorth from '../../data/starsNorth.json';
 import starsSouth from '../../data/starsSouth.json';
 import constellationsData from '../../data/constellations.json';
-import zodiacCultureData from '../../data/sevenMetalsZodiac.json';
+import zodiacCultureData from '../../data/chronosphaeraZodiac.json';
 import constellationCultures from '../../data/constellationCultures.json';
 
 const BODY_MAP = {
@@ -260,8 +260,10 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
   const { hasPurchase } = useProfile();
   const navigate = useNavigate();
   const [starlightGateId, setStarlightGateId] = useState(null); // null, 'fallen-starlight', or 'story-of-stories'
+  const [medicineWheelGateId, setMedicineWheelGateId] = useState(null);
   const hasFallenStarlight = hasPurchase('fallen-starlight');
   const hasStoryOfStories = hasPurchase('story-of-stories');
+  const hasMedicineWheel = hasPurchase('medicine-wheel');
 
   // --- Analog clock state & effects ---
   const showClock = !!clockMode;
@@ -2694,12 +2696,13 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
 
         <span style={{ position: 'relative' }}>
           <button
-            className={`medicine-wheel-toggle${showMedicineWheel ? ' active' : ''}`}
+            className={`medicine-wheel-toggle${showMedicineWheel ? ' active' : ''}${!hasMedicineWheel ? ' disabled' : ''}`}
             onClick={() => {
+              if (!hasMedicineWheel) { setMedicineWheelGateId('medicine-wheel'); return; }
               triggerStormFlash();
               onToggleMedicineWheel && onToggleMedicineWheel();
             }}
-            title={showMedicineWheel ? 'Show celestial wheels' : 'Show medicine wheel'}
+            title={!hasMedicineWheel ? 'Unlock Medicine Wheel' : showMedicineWheel ? 'Show celestial wheels' : 'Show medicine wheel'}
           >
             <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M13 2 L5 14 L11 14 L11 22 L19 10 L13 10 Z" />
@@ -2725,6 +2728,22 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
                 Manage Membership
               </button>
               <button className="subscription-gate-secondary" onClick={() => setStarlightGateId(null)}>
+                Not now
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      {medicineWheelGateId && (
+        <div className="subscription-gate-overlay" onClick={() => setMedicineWheelGateId(null)}>
+          <div className="subscription-gate-popup" onClick={e => e.stopPropagation()}>
+            <h3 className="subscription-gate-title">Medicine Wheel</h3>
+            <p className="subscription-gate-desc">The medicine wheel — Hyemeyohsts Storm's teachings on the sacred hoop and the four directions, overlaid on the Chronosphaera.</p>
+            <div className="subscription-gate-actions">
+              <button className="subscription-gate-primary" onClick={() => { navigate('/profile#purchases'); setMedicineWheelGateId(null); }}>
+                Manage Membership
+              </button>
+              <button className="subscription-gate-secondary" onClick={() => setMedicineWheelGateId(null)}>
                 Not now
               </button>
             </div>

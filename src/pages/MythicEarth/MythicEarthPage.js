@@ -12,6 +12,7 @@ import {
 import 'cesium/Build/Cesium/Widgets/widgets.css';
 import sites from '../../data/mythicEarthSites.json';
 import { useAreaOverride, useXRMode } from '../../App';
+import { usePageTracking } from '../../coursework/CourseworkContext';
 import './MythicEarthPage.css';
 
 import { apiFetch } from '../../lib/chatApi';
@@ -283,9 +284,10 @@ function SiteDetail({ site }) {
   );
 }
 
-function MythicEarthGlobe({ activeFilters, onSelectSite, onReady, highlightedSiteIds, cameraAR, vrSupported, onViewerReady }) {
+function MythicEarthGlobe({ activeFilters, onSelectSite, onReady, highlightedSiteIds, cameraAR, vrSupported, onViewerReady, initialLocation }) {
   const viewerRef = useRef(null);
   const readyFired = useRef(false);
+  const geoApplied = useRef(false);
 
   const highlightSet = useMemo(
     () => new Set(highlightedSiteIds || []),
@@ -314,6 +316,14 @@ function MythicEarthGlobe({ activeFilters, onSelectSite, onReady, highlightedSit
     const viewer = viewerRef.current?.cesiumElement;
     if (!viewer) return;
     readyFired.current = true;
+
+    // Center globe on user's IP-based location (instant, no animation)
+    if (initialLocation && !geoApplied.current) {
+      geoApplied.current = true;
+      viewer.camera.setView({
+        destination: Cartesian3.fromDegrees(initialLocation.lng, initialLocation.lat, 20000000),
+      });
+    }
 
     // Ensure touch events work on mobile by setting touch-action on the canvas
     const canvas = viewer.canvas;
@@ -348,6 +358,17 @@ function MythicEarthGlobe({ activeFilters, onSelectSite, onReady, highlightedSit
       });
     }
   });
+
+  // Apply geo-centering if location arrives after viewer was already initialized
+  useEffect(() => {
+    if (geoApplied.current || !initialLocation) return;
+    const viewer = viewerRef.current?.cesiumElement;
+    if (!viewer) return;
+    geoApplied.current = true;
+    viewer.camera.setView({
+      destination: Cartesian3.fromDegrees(initialLocation.lng, initialLocation.lat, 20000000),
+    });
+  }, [initialLocation]);
 
   // Make Cesium scene transparent in AR mode
   useEffect(() => {
@@ -623,12 +644,14 @@ function MythicEarthSearch({ onSelectSite, globeApi, onHighlight }) {
 }
 
 function MythicEarthPage({ embedded, onSiteSelect: onSiteSelectExternal, externalSite }) {
+  const { track } = usePageTracking('mythic-earth');
   const { xrMode } = useXRMode();
   const [activeFilters, setActiveFilters] = useState(
     () => new Set(CATEGORIES.map(c => c.id))
   );
   const [selectedSite, setSelectedSite] = useState(null);
   const [highlightedSiteIds, setHighlightedSiteIds] = useState([]);
+  const [initialLocation, setInitialLocation] = useState(null);
   const detailRef = useRef(null);
   const globeApi = useRef(null);
 
@@ -647,6 +670,20 @@ function MythicEarthPage({ embedded, onSiteSelect: onSiteSelectExternal, externa
     if (!embedded) registerArea('mythic-earth');
     return () => registerArea(null);
   }, [embedded, registerArea]);
+
+  // Fetch user's approximate location from IP for initial globe centering
+  useEffect(() => {
+    let cancelled = false;
+    fetch('https://ipwho.is/')
+      .then(r => r.json())
+      .then(data => {
+        if (!cancelled && data.latitude != null && data.longitude != null) {
+          setInitialLocation({ lat: data.latitude, lng: data.longitude });
+        }
+      })
+      .catch(() => {}); // silent fail — globe stays at default view
+    return () => { cancelled = true; };
+  }, []);
 
   // Detect WebXR VR support
   useEffect(() => {
@@ -667,12 +704,13 @@ function MythicEarthPage({ embedded, onSiteSelect: onSiteSelectExternal, externa
   }, []);
 
   const toggleFullscreen = useCallback(() => {
+    track('fullscreen');
     if (document.fullscreenElement) {
       document.exitFullscreen();
     } else {
       document.documentElement.requestFullscreen().catch(() => {});
     }
-  }, []);
+  }, [track]);
 
   const startCameraAR = useCallback(async () => {
     try {
@@ -694,12 +732,13 @@ function MythicEarthPage({ embedded, onSiteSelect: onSiteSelectExternal, externa
         videoRef.current.srcObject = stream;
         videoRef.current.play();
       }
+      track('ar.started');
       setCameraAR(true);
     } catch (err) {
       console.warn('Camera AR failed:', err);
       alert('Could not access camera. Make sure you allow camera access and are on HTTPS.');
     }
-  }, []);
+  }, [track]);
 
   const stopCameraAR = useCallback(() => {
     if (streamRef.current) {
@@ -765,19 +804,21 @@ function MythicEarthPage({ embedded, onSiteSelect: onSiteSelectExternal, externa
   }, []);
 
   const toggleFilter = useCallback((catId) => {
+    track('category.' + catId);
     setActiveFilters(prev => {
       const next = new Set(prev);
       if (next.has(catId)) next.delete(catId);
       else next.add(catId);
       return next;
     });
-  }, []);
+  }, [track]);
 
   const handleSelectSite = useCallback((site) => {
+    track('site.' + site.id);
     if (!embedded) setSelectedSite(site);
     if (onSiteSelectExternal) onSiteSelectExternal(site);
     setHighlightedSiteIds([site.id]);
-  }, [embedded, onSiteSelectExternal]);
+  }, [embedded, onSiteSelectExternal, track]);
 
   const handleGlobeReady = useCallback((api) => {
     globeApi.current = api;
@@ -834,27 +875,29 @@ function MythicEarthPage({ embedded, onSiteSelect: onSiteSelectExternal, externa
             cameraAR={cameraAR}
             vrSupported={vrSupported}
             onViewerReady={handleViewerReady}
+            initialLocation={initialLocation}
           />
 
           {!cameraAR && (
-            <MythicEarthSearch
-              onSelectSite={handleSelectSite}
-              globeApi={globeApi}
-              onHighlight={handleHighlight}
-            />
-          )}
-
-          {!embedded && !cameraAR && (
-            <div className="mythic-earth-filters">
-              {CATEGORIES.map(cat => (
-                <button
-                  key={cat.id}
-                  className={`mythic-earth-filter-btn ${cat.id}${activeFilters.has(cat.id) ? ' active' : ''}`}
-                  onClick={() => toggleFilter(cat.id)}
-                >
-                  {cat.label}
-                </button>
-              ))}
+            <div className="mythic-earth-bottom-controls">
+              <MythicEarthSearch
+                onSelectSite={handleSelectSite}
+                globeApi={globeApi}
+                onHighlight={handleHighlight}
+              />
+              {!embedded && (
+                <div className="mythic-earth-filters">
+                  {CATEGORIES.map(cat => (
+                    <button
+                      key={cat.id}
+                      className={`mythic-earth-filter-btn ${cat.id}${activeFilters.has(cat.id) ? ' active' : ''}`}
+                      onClick={() => toggleFilter(cat.id)}
+                    >
+                      {cat.label}
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
           )}
         </div>

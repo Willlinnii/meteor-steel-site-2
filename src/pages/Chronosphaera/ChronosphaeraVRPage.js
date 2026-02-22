@@ -1,31 +1,32 @@
 import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { createXRStore } from '@react-three/xr';
-import CelestialScene from '../../components/sevenMetals/vr/CelestialScene';
-import ARJoystick from '../../components/sevenMetals/vr/ARJoystick';
-import ARMiniMap from '../../components/sevenMetals/vr/ARMiniMap';
-import { ORBITAL_MODES, MODE_LABELS, MODE_SYMBOLS } from '../../components/sevenMetals/vr/constants3D';
-import '../../components/sevenMetals/vr/CelestialScene.css';
-import './SevenMetalsPage.css';
+import CelestialScene from '../../components/chronosphaera/vr/CelestialScene';
+import ARJoystick from '../../components/chronosphaera/vr/ARJoystick';
+import ARMiniMap from '../../components/chronosphaera/vr/ARMiniMap';
+import { ORBITAL_MODES, MODE_LABELS, MODE_SYMBOLS } from '../../components/chronosphaera/vr/constants3D';
+import '../../components/chronosphaera/vr/CelestialScene.css';
+import './ChronosphaeraPage.css';
+import { usePageTracking } from '../../coursework/CourseworkContext';
 
 // Reuse all existing data + content components from 2D page
-import MetalDetailPanel from '../../components/sevenMetals/MetalDetailPanel';
-import CultureSelector from '../../components/sevenMetals/CultureSelector';
-import TarotCardContent from '../../components/sevenMetals/TarotCardContent';
+import MetalDetailPanel from '../../components/chronosphaera/MetalDetailPanel';
+import CultureSelector from '../../components/chronosphaera/CultureSelector';
+import TarotCardContent from '../../components/chronosphaera/TarotCardContent';
 
-import coreData from '../../data/sevenMetals.json';
-import deitiesData from '../../data/sevenMetalsDeities.json';
-import archetypesData from '../../data/sevenMetalsArchetypes.json';
-import artistsData from '../../data/sevenMetalsArtists.json';
-import hebrewData from '../../data/sevenMetalsHebrew.json';
-import modernData from '../../data/sevenMetalsModern.json';
-import sharedData from '../../data/sevenMetalsShared.json';
-import storiesData from '../../data/sevenMetalsStories.json';
-import theologyData from '../../data/sevenMetalsTheology.json';
-import zodiacData from '../../data/sevenMetalsZodiac.json';
-import cardinalsData from '../../data/sevenMetalsCardinals.json';
-import elementsData from '../../data/sevenMetalsElements.json';
-import planetaryCultures from '../../data/sevenMetalsPlanetaryCultures.json';
+import coreData from '../../data/chronosphaera.json';
+import deitiesData from '../../data/chronosphaeraDeities.json';
+import archetypesData from '../../data/chronosphaeraArchetypes.json';
+import artistsData from '../../data/chronosphaeraArtists.json';
+import hebrewData from '../../data/chronosphaeraHebrew.json';
+import modernData from '../../data/chronosphaeraModern.json';
+import sharedData from '../../data/chronosphaeraShared.json';
+import storiesData from '../../data/chronosphaeraStories.json';
+import theologyData from '../../data/chronosphaeraTheology.json';
+import zodiacData from '../../data/chronosphaeraZodiac.json';
+import cardinalsData from '../../data/chronosphaeraCardinals.json';
+import elementsData from '../../data/chronosphaeraElements.json';
+import planetaryCultures from '../../data/chronosphaeraPlanetaryCultures.json';
 import dayNightData from '../../data/dayNight.json';
 
 function findByMetal(arr, metal) {
@@ -48,10 +49,10 @@ const MODE_ORDER = [
   ORBITAL_MODES.ALIGNED,
 ];
 
-// ---- Content components (mirrored from SevenMetalsPage) ----
+// ---- Content components (mirrored from ChronosphaeraPage) ----
 
 function CultureBlock({ cultureData }) {
-  if (!cultureData) return <p className="metals-empty">No data for this tradition.</p>;
+  if (!cultureData) return <p className="chrono-empty">No data for this tradition.</p>;
   return (
     <div className="culture-block">
       <h4>{cultureData.name}</h4>
@@ -201,7 +202,9 @@ function PlanetCultureContent({ planet, activeCulture }) {
 
 // ---- Main page ----
 
-export default function SevenMetalsVRPage() {
+export default function ChronosphaeraVRPage() {
+  const { track } = usePageTracking('chronosphaera-vr');
+
   const [mode, setMode] = useState(ORBITAL_MODES.GEOCENTRIC);
   const [selectedPlanet, setSelectedPlanet] = useState('Sun');
   const [selectedSign, setSelectedSign] = useState(null);
@@ -239,12 +242,14 @@ export default function SevenMetalsVRPage() {
   }, []);
 
   const enterAR = () => {
+    track('xr-ar.started');
     xrStore.enterAR().catch((err) => {
       console.warn('AR not available:', err.message);
       alert('AR is not supported on this device. Try opening this page on a phone with AR support (Android Chrome).');
     });
   };
   const enterVR = () => {
+    track('xr-vr.started');
     xrStore.enterVR().catch((err) => {
       console.warn('VR not available:', err.message);
       alert('VR is not supported on this device. Try a VR headset browser (Quest, Vision Pro).');
@@ -284,11 +289,13 @@ export default function SevenMetalsVRPage() {
         videoRef.current.srcObject = stream;
         videoRef.current.play();
       }
+      track('ar.started');
       setCameraAR(true);
     } catch (err) {
       console.warn('Camera AR failed:', err);
       alert('Could not access camera. Make sure you allow camera access and are on HTTPS.');
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const stopCameraAR = useCallback(() => {
@@ -349,10 +356,13 @@ export default function SevenMetalsVRPage() {
 
   const cycleMode = () => {
     const idx = MODE_ORDER.indexOf(mode);
-    setMode(MODE_ORDER[(idx + 1) % MODE_ORDER.length]);
+    const nextMode = MODE_ORDER[(idx + 1) % MODE_ORDER.length];
+    track('mode.' + nextMode);
+    setMode(nextMode);
   };
 
   const handleSelectPlanet = (p) => {
+    track('planet.' + p);
     setSelectedPlanet(p);
     setSelectedSign(null);
     setSelectedCardinal(null);
@@ -361,18 +371,21 @@ export default function SevenMetalsVRPage() {
     setPanelOpen(true);
   };
   const handleSelectSign = (sign) => {
+    track('zodiac.' + sign);
     setSelectedSign(sign);
     setSelectedCardinal(null);
     setSelectedEarth(null);
     setPanelOpen(true);
   };
   const handleSelectCardinal = (c) => {
+    track('cardinal.' + c);
     setSelectedCardinal(c);
     setSelectedSign(null);
     setSelectedEarth(null);
     setPanelOpen(true);
   };
   const handleSelectEarth = (e) => {
+    track('earth.' + e);
     setSelectedEarth(e);
     setSelectedSign(null);
     setSelectedCardinal(null);
@@ -508,7 +521,7 @@ export default function SevenMetalsVRPage() {
         )}
 
         {/* Overlay controls on the 3D canvas */}
-        <Link to="/metals" className="celestial-back-link">
+        <Link to="/chronosphaera" className="celestial-back-link">
           &larr; Back to 2D
         </Link>
 
@@ -577,7 +590,7 @@ export default function SevenMetalsVRPage() {
         </div>
 
         <div className="celestial-panel-body">
-          {panelContent || <p className="metals-empty">Select a planet, zodiac sign, or cardinal point to explore.</p>}
+          {panelContent || <p className="chrono-empty">Select a planet, zodiac sign, or cardinal point to explore.</p>}
         </div>
       </div>
     </div>

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import TextBlock from '../sevenMetals/TextBlock';
+import TextBlock from '../chronosphaera/TextBlock';
 import DevelopmentPanel from '../DevelopmentPanel';
+import CrossStageModal from '../CrossStageModal';
 import { THEORIST_TO_MODEL, CYCLE_TO_MODEL, MONOMYTH_STAGES } from '../../data/monomythConstants';
 import { useStoryForge, useYBRMode } from '../../App';
 
@@ -34,6 +35,8 @@ const PSYCHLE_KEY_TO_CYCLE = {
   procreation: 'Procreation',
   wakingDreaming: 'Wake & Sleep',
 };
+
+const CS_STAGES = MONOMYTH_STAGES.map(s => ({ id: s.id, label: s.label }));
 
 function OverviewTab({ stageId }) {
   const overview = stageOverviews[stageId];
@@ -69,12 +72,12 @@ function OverviewTab({ stageId }) {
   );
 }
 
-function TheoristsTab({ stageId, activeGroup, onSelectModel, selectedModelId }) {
+function TheoristsTab({ stageId, activeGroup, onSelectModel, selectedModelId, onItemClick }) {
   const stageData = theoristsData[stageId];
-  if (!stageData) return <p className="metals-empty">No theorist data available.</p>;
+  if (!stageData) return <p className="chrono-empty">No theorist data available.</p>;
 
   const group = stageData[activeGroup];
-  if (!group) return <p className="metals-empty">No {activeGroup} theorists for this stage.</p>;
+  if (!group) return <p className="chrono-empty">No {activeGroup} theorists for this stage.</p>;
 
   const depthPsych = depthData[stageId]?.depth;
 
@@ -86,10 +89,20 @@ function TheoristsTab({ stageId, activeGroup, onSelectModel, selectedModelId }) 
         return (
         <div
           key={key}
-          className={`mono-card${hasModel ? ' mono-card-clickable' : ''}${isActive ? ' mono-card-model-active' : ''}`}
-          onClick={hasModel ? () => onSelectModel(key) : undefined}
+          className={`mono-card mono-card-clickable${isActive ? ' mono-card-model-active' : ''}`}
+          onClick={() => onItemClick('theorist', key, activeGroup)}
         >
-          <h4 className="mono-card-name">{t.name}{hasModel && <span className="mono-model-icon">{isActive ? ' \u25C9' : ' \u25CE'}</span>}</h4>
+          <h4 className="mono-card-name">
+            {t.name}
+            {hasModel && (
+              <span
+                className="mono-model-icon"
+                onClick={(e) => { e.stopPropagation(); onSelectModel(key); }}
+              >
+                {isActive ? ' \u25C9' : ' \u25CE'}
+              </span>
+            )}
+          </h4>
           <h5 className="mono-card-concept">{t.concept}</h5>
           <p>{t.description}</p>
           {key === 'jung' && activeGroup === 'mythological' && depthPsych && (
@@ -108,7 +121,7 @@ function TheoristsTab({ stageId, activeGroup, onSelectModel, selectedModelId }) 
 
 function HistoryTab({ stageId }) {
   const philosophy = depthData[stageId]?.philosophy;
-  if (!philosophy) return <p className="metals-empty">No history data available.</p>;
+  if (!philosophy) return <p className="chrono-empty">No history data available.</p>;
 
   return (
     <div className="tab-content">
@@ -123,16 +136,18 @@ function HistoryTab({ stageId }) {
   );
 }
 
-function MythsTab({ stageId }) {
+function MythsTab({ stageId, onItemClick }) {
   const stageData = mythsData[stageId];
-  if (!stageData) return <p className="metals-empty">No myth data available.</p>;
-
-  const entries = Object.values(stageData);
+  if (!stageData) return <p className="chrono-empty">No myth data available.</p>;
 
   return (
     <div className="tab-content">
-      {entries.map((m) => (
-        <div key={m.title} className="mono-card">
+      {Object.entries(stageData).map(([key, m]) => (
+        <div
+          key={key}
+          className="mono-card mono-card-clickable"
+          onClick={() => onItemClick('myth', key)}
+        >
           <span className="mono-card-tradition">{m.tradition}</span>
           <h4 className="mono-card-name">{m.title}</h4>
           <p>{m.description}</p>
@@ -142,16 +157,18 @@ function MythsTab({ stageId }) {
   );
 }
 
-function FilmsTab({ stageId }) {
+function FilmsTab({ stageId, onItemClick }) {
   const stageData = filmsData[stageId];
-  if (!stageData) return <p className="metals-empty">No film data available.</p>;
-
-  const entries = Object.values(stageData);
+  if (!stageData) return <p className="chrono-empty">No film data available.</p>;
 
   return (
     <div className="tab-content">
-      {entries.map((f) => (
-        <div key={f.title} className="mono-card">
+      {Object.entries(stageData).map(([key, f]) => (
+        <div
+          key={key}
+          className="mono-card mono-card-clickable"
+          onClick={() => onItemClick('film', key)}
+        >
           <span className="mono-card-tradition">{f.year}</span>
           <h4 className="mono-card-name">{f.title}</h4>
           <p>{f.description}</p>
@@ -161,9 +178,9 @@ function FilmsTab({ stageId }) {
   );
 }
 
-function CyclesTab({ stageId, onSelectCycle, selectedModelId }) {
+function CyclesTab({ stageId, onSelectCycle, selectedModelId, onItemClick }) {
   const stageData = psychlesData[stageId];
-  if (!stageData) return <p className="metals-empty">No cycle data available.</p>;
+  if (!stageData) return <p className="chrono-empty">No cycle data available.</p>;
 
   const { stageName, summary, cycles } = stageData;
 
@@ -179,16 +196,79 @@ function CyclesTab({ stageId, onSelectCycle, selectedModelId }) {
         return (
         <div
           key={key}
-          className={`mono-card${hasCycle ? ' mono-card-clickable' : ''}${isActive ? ' mono-card-model-active' : ''}`}
-          onClick={hasCycle && onSelectCycle ? () => onSelectCycle(cycleKey) : undefined}
+          className={`mono-card mono-card-clickable${isActive ? ' mono-card-model-active' : ''}`}
+          onClick={() => onItemClick('cycle', key)}
         >
-          <h5 className="mono-card-concept">{c.label}{hasCycle && <span className="mono-model-icon">{isActive ? ' \u25C9' : ' \u25CE'}</span>}</h5>
+          <h5 className="mono-card-concept">
+            {c.label}
+            {hasCycle && (
+              <span
+                className="mono-model-icon"
+                onClick={(e) => { e.stopPropagation(); if (onSelectCycle) onSelectCycle(cycleKey); }}
+              >
+                {isActive ? ' \u25C9' : ' \u25CE'}
+              </span>
+            )}
+          </h5>
           <span className="mono-card-tradition">{c.phase}</span>
           <p>{c.description}</p>
         </div>
       ); })}
     </div>
   );
+}
+
+function buildCrossStage(type, key, group) {
+  const stageIds = MONOMYTH_STAGES.map(s => s.id);
+
+  switch (type) {
+    case 'myth': {
+      const firstEntry = stageIds.reduce((acc, sid) => acc || mythsData[sid]?.[key], null);
+      if (!firstEntry) return null;
+      const title = (firstEntry.title || key).split(' \u2014 ')[0];
+      const subtitle = firstEntry.tradition;
+      const entries = stageIds.map(sid => {
+        const m = mythsData[sid]?.[key];
+        if (!m) return null;
+        return { heading: m.title, text: m.description };
+      });
+      return { title, subtitle, entries };
+    }
+    case 'theorist': {
+      const firstEntry = stageIds.reduce((acc, sid) => acc || theoristsData[sid]?.[group]?.[key], null);
+      if (!firstEntry) return null;
+      const groupLabel = THEORIST_GROUPS.find(g => g.id === group)?.label || group;
+      const entries = stageIds.map(sid => {
+        const t = theoristsData[sid]?.[group]?.[key];
+        if (!t) return null;
+        return { heading: t.concept, text: t.description };
+      });
+      return { title: firstEntry.name, subtitle: groupLabel, entries };
+    }
+    case 'cycle': {
+      const firstEntry = stageIds.reduce((acc, sid) => acc || psychlesData[sid]?.cycles?.[key], null);
+      if (!firstEntry) return null;
+      const title = PSYCHLE_KEY_TO_CYCLE[key] || firstEntry.label;
+      const entries = stageIds.map(sid => {
+        const c = psychlesData[sid]?.cycles?.[key];
+        if (!c) return null;
+        return { heading: c.phase, text: c.description };
+      });
+      return { title, entries };
+    }
+    case 'film': {
+      const firstEntry = stageIds.reduce((acc, sid) => acc || filmsData[sid]?.[key], null);
+      if (!firstEntry) return null;
+      const entries = stageIds.map(sid => {
+        const f = filmsData[sid]?.[key];
+        if (!f) return null;
+        return { heading: f.title, text: f.description };
+      });
+      return { title: firstEntry.title, subtitle: String(firstEntry.year), entries };
+    }
+    default:
+      return null;
+  }
 }
 
 export default function StageContent({
@@ -205,8 +285,14 @@ export default function StageContent({
   ybrActive,
 }) {
   const [activeGroup, setActiveGroup] = useState('mythological');
+  const [crossStageData, setCrossStageData] = useState(null);
   const { forgeMode } = useStoryForge();
   const { ybrMode } = useYBRMode();
+
+  const handleItemClick = (type, key, group) => {
+    const data = buildCrossStage(type, key, group);
+    if (data) setCrossStageData(data);
+  };
 
   return (
     <div className="metal-detail-panel">
@@ -272,13 +358,23 @@ export default function StageContent({
 
       <div className="metal-content-scroll">
         {activeTab === 'overview' && <OverviewTab stageId={stageId} />}
-        {activeTab === 'cycles' && <CyclesTab stageId={stageId} onSelectCycle={onSelectCycle} selectedModelId={selectedModelId} />}
-        {activeTab === 'theorists' && <TheoristsTab stageId={stageId} activeGroup={activeGroup} onSelectModel={onSelectModel} selectedModelId={selectedModelId} />}
+        {activeTab === 'cycles' && <CyclesTab stageId={stageId} onSelectCycle={onSelectCycle} selectedModelId={selectedModelId} onItemClick={handleItemClick} />}
+        {activeTab === 'theorists' && <TheoristsTab stageId={stageId} activeGroup={activeGroup} onSelectModel={onSelectModel} selectedModelId={selectedModelId} onItemClick={handleItemClick} />}
         {activeTab === 'history' && <HistoryTab stageId={stageId} />}
-        {activeTab === 'myths' && <MythsTab stageId={stageId} />}
-        {activeTab === 'films' && <FilmsTab stageId={stageId} />}
+        {activeTab === 'myths' && <MythsTab stageId={stageId} onItemClick={handleItemClick} />}
+        {activeTab === 'films' && <FilmsTab stageId={stageId} onItemClick={handleItemClick} />}
         {activeTab === 'development' && <DevelopmentPanel stageLabel={MONOMYTH_STAGES.find(s => s.id === stageId)?.label || stageId} stageKey={`monomyth-${stageId}`} entries={devEntries || {}} setEntries={setDevEntries || (() => {})} />}
       </div>
+
+      {crossStageData && (
+        <CrossStageModal
+          title={crossStageData.title}
+          subtitle={crossStageData.subtitle}
+          stages={CS_STAGES}
+          entries={crossStageData.entries}
+          onClose={() => setCrossStageData(null)}
+        />
+      )}
     </div>
   );
 }

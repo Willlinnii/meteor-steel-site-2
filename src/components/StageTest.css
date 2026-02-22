@@ -1,0 +1,242 @@
+/* ===== STAGE TEST ===== */
+
+.stage-test {
+  padding: 8px 0;
+}
+
+.stage-test-separator {
+  border: none;
+  border-top: 1px solid var(--border-subtle);
+  margin: 24px 0 16px;
+}
+
+.stage-test-heading {
+  font-family: 'Cinzel', serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--accent-gold);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+
+/* Progress bar */
+.test-progress {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.test-progress-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--accent-gold);
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+.test-progress-bar {
+  flex: 1;
+  height: 4px;
+  background: rgba(139, 157, 195, 0.15);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.test-progress-fill {
+  height: 100%;
+  background: var(--accent-gold);
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+/* Question card */
+.test-card {
+  padding: 20px 22px;
+  margin-bottom: 16px;
+  background: rgba(139, 157, 195, 0.04);
+  border: 1px solid var(--border-subtle);
+}
+
+.test-prompt {
+  font-family: 'Cinzel', serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 6px;
+  line-height: 1.5;
+}
+
+.test-instruction {
+  font-family: 'Crimson Pro', serif;
+  font-size: 0.8rem;
+  color: var(--accent-steel, #8b9dc3);
+  margin-bottom: 14px;
+  font-style: italic;
+}
+
+/* Options */
+.test-options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.test-option {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 14px;
+  background: rgba(139, 157, 195, 0.06);
+  border: 1px solid var(--border-subtle);
+  border-radius: 2px;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+  text-align: left;
+  font-family: 'Crimson Pro', serif;
+  font-size: 0.95rem;
+  color: var(--text-primary);
+  line-height: 1.5;
+}
+
+.test-option:hover {
+  border-color: rgba(201, 169, 97, 0.4);
+  background: rgba(139, 157, 195, 0.1);
+}
+
+.test-option.selected {
+  border-color: var(--accent-gold);
+  background: rgba(201, 169, 97, 0.08);
+}
+
+.test-option.correct {
+  border-color: #5a9e6f;
+  background: rgba(90, 158, 111, 0.08);
+  cursor: default;
+}
+
+.test-option.locked {
+  cursor: default;
+}
+
+.test-option.locked:hover {
+  border-color: var(--border-subtle);
+  background: rgba(139, 157, 195, 0.06);
+}
+
+.test-option.locked.selected,
+.test-option.locked.selected:hover {
+  border-color: #5a9e6f;
+  background: rgba(90, 158, 111, 0.08);
+}
+
+.test-checkbox {
+  width: 16px;
+  height: 16px;
+  min-width: 16px;
+  border: 1.5px solid rgba(139, 157, 195, 0.4);
+  border-radius: 2px;
+  margin-top: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.test-option.selected .test-checkbox {
+  border-color: var(--accent-gold);
+  background: var(--accent-gold);
+}
+
+.test-option.correct .test-checkbox {
+  border-color: #5a9e6f;
+  background: #5a9e6f;
+}
+
+.test-checkmark {
+  color: #0a0818;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+/* Feedback */
+.test-feedback {
+  padding: 10px 14px;
+  margin-bottom: 16px;
+  border-left: 3px solid;
+  font-family: 'Crimson Pro', serif;
+  font-size: 0.9rem;
+}
+
+.test-feedback.correct {
+  border-left-color: #5a9e6f;
+  color: #5a9e6f;
+  background: rgba(90, 158, 111, 0.06);
+}
+
+.test-feedback.incorrect {
+  border-left-color: var(--accent-ember);
+  color: var(--accent-ember);
+  background: rgba(196, 113, 58, 0.06);
+}
+
+/* Actions */
+.test-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.test-btn {
+  font-family: 'Cinzel', serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  padding: 8px 20px;
+  border: 1px solid var(--accent-gold);
+  color: var(--accent-gold);
+  background: transparent;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.test-btn:hover {
+  background: rgba(201, 169, 97, 0.12);
+}
+
+.test-btn:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.test-btn:disabled:hover {
+  background: transparent;
+}
+
+.test-btn.primary {
+  background: rgba(201, 169, 97, 0.12);
+}
+
+/* Completed state */
+.test-completed {
+  text-align: center;
+  padding: 24px 20px;
+}
+
+.test-completed-icon {
+  font-size: 2rem;
+  margin-bottom: 10px;
+  color: #5a9e6f;
+}
+
+.test-completed-text {
+  font-family: 'Cinzel', serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #5a9e6f;
+  letter-spacing: 0.03em;
+}
+

@@ -13,7 +13,7 @@ import CircleNav from './components/CircleNav';
 import DevelopmentPanel from './components/DevelopmentPanel';
 import useWheelJourney from './hooks/useWheelJourney';
 import WheelJourneyPanel from './components/WheelJourneyPanel';
-import SevenMetalsPage from './pages/SevenMetals/SevenMetalsPage';
+import ChronosphaeraPage from './pages/Chronosphaera/ChronosphaeraPage';
 import MonomythPage from './pages/Monomyth/MonomythPage';
 import MythologyChannelPage from './pages/MythologyChannel/MythologyChannelPage';
 import GamesPage from './pages/Games/GamesPage';
@@ -47,7 +47,7 @@ export const useAreaOverride = () => useContext(AreaOverrideContext);
 const XRModeContext = createContext({ xrMode: false });
 export const useXRMode = () => useContext(XRModeContext);
 
-const SevenMetalsVRPage = lazy(() => import('./pages/SevenMetals/SevenMetalsVRPage'));
+const ChronosphaeraVRPage = lazy(() => import('./pages/Chronosphaera/ChronosphaeraVRPage'));
 const AdminPage = lazy(() => import('./pages/Admin/AdminPage'));
 const OuroborosJourneyPage = lazy(() => import('./pages/OuroborosJourney/OuroborosJourneyPage'));
 const AtlasPage = lazy(() => import('./pages/Atlas/AtlasPage'));
@@ -370,7 +370,7 @@ function MeteorSteelHome() {
       const relevant = {};
       Object.entries(notesData.entries).forEach(([key, val]) => {
         // Home page keys don't have a prefix (stage keys like "golden-age-noting")
-        if (!key.startsWith('starlight-') && !key.startsWith('forge-') && !key.startsWith('monomyth-') && !key.startsWith('metals-')) {
+        if (!key.startsWith('starlight-') && !key.startsWith('forge-') && !key.startsWith('monomyth-') && !key.startsWith('chronosphaera-') && !key.startsWith('metals-')) {
           relevant[key] = val;
         }
       });
@@ -1675,6 +1675,17 @@ const PURCHASES_META = {
     ],
     cta: 'Visit the Purchases area of your Profile page to learn more and activate.',
   },
+  'medicine-wheel': {
+    id: 'medicine-wheel',
+    name: 'Medicine Wheel',
+    description: 'The medicine wheel — Hyemeyohsts Storm\'s teachings on the sacred hoop and the four directions, overlaid on the Chronosphaera.',
+    features: [
+      'Overlay the medicine wheel on the Chronosphaera',
+      'Explore the four directions and their powers',
+      'Based on the teachings of Hyemeyohsts Storm',
+    ],
+    cta: 'Visit the Purchases area of your Profile page to learn more and activate.',
+  },
 };
 
 const STORE_SUBSCRIPTIONS = [
@@ -1758,6 +1769,16 @@ const STORE_PURCHASES = [
     ),
     description: 'The meta-narrative — the stories that emerged from the fall of light into matter.',
     details: 'Story of Stories is a companion layer to Fallen Starlight — the mythic tradition behind the seven metals, told through the Chronosphaera. It traces the stories that emerged as celestial fire descended into the material world.',
+  },
+  {
+    id: 'medicine-wheel', name: 'Medicine Wheel',
+    icon: (
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M13 2 L5 14 L11 14 L11 22 L19 10 L13 10 Z" />
+      </svg>
+    ),
+    description: 'The medicine wheel — Hyemeyohsts Storm\'s teachings on the sacred hoop and the four directions.',
+    details: 'Activating the Medicine Wheel overlays the sacred hoop onto the Chronosphaera, mapping the four directions, their powers, and their animals onto the celestial clock. Based on the teachings of Hyemeyohsts Storm.',
   },
   {
     id: 'starlight-bundle', name: 'Starlight Bundle',
@@ -2208,9 +2229,32 @@ function AppContent() {
   }, [location.pathname]);
   const [areaMeta, setAreaMeta] = useState(null);
   const areaRegister = useCallback((area, meta) => { setAreaOverride(area); setAreaMeta(meta || null); }, []);
-  const [forgeMode, setForgeMode] = useState(false);
-  const [ybrMode, setYbrMode] = useState(false);
-  const [xrMode, setXrMode] = useState(false);
+  const [forgeMode, _setForgeMode] = useState(() => {
+    try { return localStorage.getItem('mythouse_forge_mode') === '1'; } catch { return false; }
+  });
+  const setForgeMode = useCallback((v) => {
+    const val = typeof v === 'function' ? v(forgeMode) : v;
+    _setForgeMode(val);
+    try { localStorage.setItem('mythouse_forge_mode', val ? '1' : '0'); } catch {}
+  }, [forgeMode]);
+
+  const [ybrMode, _setYbrMode] = useState(() => {
+    try { return localStorage.getItem('mythouse_ybr_mode') === '1'; } catch { return false; }
+  });
+  const setYbrMode = useCallback((v) => {
+    const val = typeof v === 'function' ? v(ybrMode) : v;
+    _setYbrMode(val);
+    try { localStorage.setItem('mythouse_ybr_mode', val ? '1' : '0'); } catch {}
+  }, [ybrMode]);
+
+  const [xrMode, _setXrMode] = useState(() => {
+    try { return localStorage.getItem('mythouse_xr_mode') === '1'; } catch { return false; }
+  });
+  const setXrMode = useCallback((v) => {
+    const val = typeof v === 'function' ? v(xrMode) : v;
+    _setXrMode(val);
+    try { localStorage.setItem('mythouse_xr_mode', val ? '1' : '0'); } catch {}
+  }, [xrMode]);
 
   return (
     <StoryForgeContext.Provider value={{ forgeMode, setForgeMode }}>
@@ -2225,8 +2269,8 @@ function AppContent() {
       <MentorContractPopup />
       <Routes>
         <Route path="/" element={<MeteorSteelHome />} />
-        <Route path="/chronosphaera/vr" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" />Loading 3D...</div>}><SevenMetalsVRPage /></Suspense>} />
-        <Route path="/chronosphaera/*" element={<SevenMetalsPage />} />
+        <Route path="/chronosphaera/vr" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" />Loading 3D...</div>}><ChronosphaeraVRPage /></Suspense>} />
+        <Route path="/chronosphaera/*" element={<ChronosphaeraPage />} />
         {/* Redirects from old /metals paths */}
         <Route path="/metals/vr" element={<Navigate to="/chronosphaera/vr" replace />} />
         <Route path="/metals/*" element={<Navigate to="/chronosphaera" replace />} />

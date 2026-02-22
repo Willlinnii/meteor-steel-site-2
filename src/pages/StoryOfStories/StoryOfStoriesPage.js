@@ -1,7 +1,10 @@
 import React, { useState, useCallback, useRef, useEffect } from 'react';
+import { Navigate } from 'react-router-dom';
+import { useProfile } from '../../profile/ProfileContext';
 import CircleNav from '../../components/CircleNav';
 import data from '../../data/storyOfStoriesData';
 import { INNER_RING_SETS, getInnerRingModel } from '../../data/monomythConstants';
+import { usePageTracking } from '../../coursework/CourseworkContext';
 import './StoryOfStoriesPage.css';
 
 const RING_TABS = [
@@ -77,6 +80,8 @@ function MeteorShower({ active }) {
 }
 
 function StoryOfStoriesPage() {
+  const { hasPurchase } = useProfile();
+  const { track } = usePageTracking('story-of-stories');
   const [currentStage, setCurrentStage] = useState('overview');
   const [clockwise, setClockwise] = useState(false);
   const [activeSection, setActiveSection] = useState(null);
@@ -88,6 +93,7 @@ function StoryOfStoriesPage() {
   const audioRef = useRef(null);
 
   const handleSelectStage = useCallback((stage) => {
+    track('stage.' + stage);
     setCurrentStage(stage);
     setActiveSection(null);
 
@@ -103,7 +109,7 @@ function StoryOfStoriesPage() {
     if (stage === 'overview') {
       setPlayIntroAnim(prev => prev + 1);
     }
-  }, []);
+  }, [track]);
 
   const toggleAudio = useCallback(() => {
     const audio = audioRef.current;
@@ -111,10 +117,11 @@ function StoryOfStoriesPage() {
     if (isPlaying) {
       audio.pause();
     } else {
+      track('audio.played');
       audio.play();
     }
     setIsPlaying(!isPlaying);
-  }, [isPlaying]);
+  }, [isPlaying, track]);
 
   // Auto-play audio when lullaby section opens
   useEffect(() => {
@@ -147,6 +154,8 @@ function StoryOfStoriesPage() {
     ? data.proposalSections.find(s => s.id === activeSection)
     : null;
 
+  if (!hasPurchase('story-of-stories')) return <Navigate to="/chronosphaera" replace />;
+
   return (
     <div className="sos-page">
       <MeteorShower active={showMeteors} />
@@ -175,7 +184,7 @@ function StoryOfStoriesPage() {
           <button
             key={t.id}
             className={`ring-selector-btn${activeRingTab === t.id ? ' active' : ''}`}
-            onClick={() => { setActiveRingTab(activeRingTab === t.id ? null : t.id); setSelectedModel(null); }}
+            onClick={() => { track('ring.' + t.id); setActiveRingTab(activeRingTab === t.id ? null : t.id); setSelectedModel(null); }}
           >
             {t.label}
           </button>
@@ -197,7 +206,7 @@ function StoryOfStoriesPage() {
                     <button
                       key={section.id}
                       className={`sos-section-btn${activeSection === section.id ? ' active' : ''}`}
-                      onClick={() => setActiveSection(activeSection === section.id ? null : section.id)}
+                      onClick={() => { track('section.' + section.id); setActiveSection(activeSection === section.id ? null : section.id); }}
                     >
                       {section.label}
                     </button>
@@ -211,7 +220,7 @@ function StoryOfStoriesPage() {
                     <button
                       key={section.id}
                       className={`sos-section-btn${activeSection === section.id ? ' active' : ''}`}
-                      onClick={() => setActiveSection(activeSection === section.id ? null : section.id)}
+                      onClick={() => { track('section.' + section.id); setActiveSection(activeSection === section.id ? null : section.id); }}
                     >
                       {section.label}
                       {section.id === 'lullaby' && (

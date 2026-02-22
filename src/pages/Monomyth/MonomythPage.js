@@ -1,15 +1,17 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback, useRef, lazy, Suspense } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import CircleNav from '../../components/CircleNav';
 import DevelopmentPanel from '../../components/DevelopmentPanel';
-import TextBlock from '../../components/sevenMetals/TextBlock';
+import TextBlock from '../../components/chronosphaera/TextBlock';
 import useWheelJourney from '../../hooks/useWheelJourney';
 import WheelJourneyPanel from '../../components/WheelJourneyPanel';
+import StageTest from '../../components/StageTest';
+import useTest from '../../hooks/useTest';
+import { getSectionQuestions } from '../../coursework/tests';
 import { useCoursework } from '../../coursework/CourseworkContext';
 import { useWritings } from '../../writings/WritingsContext';
 import { useYBRHeader, useStoryForge, useYBRMode } from '../../App';
-import './MonomythPage.css';
-
+import use360Media from '../../hooks/use360Media';
 import monomythProse from '../../data/monomyth.json';
 import stageOverviews from '../../data/stageOverviews.json';
 import theoristsData from '../../data/monomythTheorists.json';
@@ -19,6 +21,9 @@ import depthData from '../../data/monomythDepth.json';
 import filmsData from '../../data/monomythFilms.json';
 import worldData from '../../data/normalOtherWorld.json';
 import { MONOMYTH_STAGES, THEORIST_TO_MODEL, CYCLE_TO_MODEL, getModelById, getCycleById, INNER_RING_SETS, getInnerRingModel } from '../../data/monomythConstants';
+import './MonomythPage.css';
+
+const TrailOverlay = lazy(() => import('../../components/TrailOverlay'));
 
 const TABS = [
   { id: 'overview', label: 'Overview' },
@@ -71,10 +76,10 @@ function OverviewTab({ stageId }) {
 
 function TheoristsTab({ stageId, activeGroup, onSelectModel, selectedModelId }) {
   const stageData = theoristsData[stageId];
-  if (!stageData) return <p className="metals-empty">No theorist data available.</p>;
+  if (!stageData) return <p className="chrono-empty">No theorist data available.</p>;
 
   const group = stageData[activeGroup];
-  if (!group) return <p className="metals-empty">No {activeGroup} theorists for this stage.</p>;
+  if (!group) return <p className="chrono-empty">No {activeGroup} theorists for this stage.</p>;
 
   const depthPsych = depthData[stageId]?.depth;
 
@@ -108,10 +113,10 @@ function TheoristsTab({ stageId, activeGroup, onSelectModel, selectedModelId }) 
 
 function ExpertsTab({ stageId, onSelectModel, selectedModelId }) {
   const stageData = theoristsData[stageId];
-  if (!stageData) return <p className="metals-empty">No expert data available.</p>;
+  if (!stageData) return <p className="chrono-empty">No expert data available.</p>;
 
   const group = stageData.screenplay;
-  if (!group) return <p className="metals-empty">No screenplay experts for this stage.</p>;
+  if (!group) return <p className="chrono-empty">No screenplay experts for this stage.</p>;
 
   return (
     <div className="tab-content">
@@ -136,7 +141,7 @@ function ExpertsTab({ stageId, onSelectModel, selectedModelId }) {
 
 function HistoryTab({ stageId }) {
   const philosophy = depthData[stageId]?.philosophy;
-  if (!philosophy) return <p className="metals-empty">No history data available.</p>;
+  if (!philosophy) return <p className="chrono-empty">No history data available.</p>;
 
   return (
     <div className="tab-content">
@@ -153,7 +158,7 @@ function HistoryTab({ stageId }) {
 
 function MythsTab({ stageId }) {
   const stageData = mythsData[stageId];
-  if (!stageData) return <p className="metals-empty">No myth data available.</p>;
+  if (!stageData) return <p className="chrono-empty">No myth data available.</p>;
 
   const entries = Object.values(stageData);
 
@@ -172,7 +177,7 @@ function MythsTab({ stageId }) {
 
 function FilmsTab({ stageId }) {
   const stageData = filmsData[stageId];
-  if (!stageData) return <p className="metals-empty">No film data available.</p>;
+  if (!stageData) return <p className="chrono-empty">No film data available.</p>;
 
   const entries = Object.values(stageData);
 
@@ -200,7 +205,7 @@ const PSYCHLE_KEY_TO_CYCLE = {
 
 function CyclesTab({ stageId, onSelectCycle, selectedModelId }) {
   const stageData = psychlesData[stageId];
-  if (!stageData) return <p className="metals-empty">No cycle data available.</p>;
+  if (!stageData) return <p className="chrono-empty">No cycle data available.</p>;
 
   const { stageName, summary, cycles } = stageData;
 
@@ -455,12 +460,19 @@ export default function MonomythPage() {
   const [selectedModel, setSelectedModel] = useState(null);
   const [ybrAutoStart, setYbrAutoStart] = useState(false);
   const [introAnim, setIntroAnim] = useState(false);
+  const [trailOpen, setTrailOpen] = useState(false);
 
   const journey = useWheelJourney('monomyth', MONOMYTH_STAGES);
-  const { forgeMode } = useStoryForge();
-  const { ybrMode } = useYBRMode();
-  const { trackElement, trackTime, isElementCompleted, courseworkMode } = useCoursework();
+  const { getSlotsByPrefix, hasAnySlots } = use360Media();
+  const { forgeMode, setForgeMode } = useStoryForge();
+  const { ybrMode, setYbrMode } = useYBRMode();
+  const { trackElement, trackTime, isElementCompleted, courseworkMode, toggleCourseworkMode } = useCoursework();
   const { notesData, saveNotes, loaded: writingsLoaded } = useWritings();
+
+  // Test state — questions come from the coursework test registry
+  const stageQuestions = getSectionQuestions('monomyth-explorer', currentStage);
+  const testCompleted = isElementCompleted(`monomyth.test.${currentStage}`);
+  const test = useTest({ questions: stageQuestions, alreadyCompleted: testCompleted });
 
   // Load dev entries from persisted notes
   useEffect(() => {
@@ -512,6 +524,16 @@ export default function MonomythPage() {
       }
     };
   }, [activeTab, currentStage, trackTime]);
+
+  // Track test completion
+  useEffect(() => {
+    if (test.isFinished && !testCompleted && stageQuestions.length > 0) {
+      trackElement(`monomyth.test.${currentStage}`);
+    }
+  }, [test.isFinished, testCompleted, currentStage, stageQuestions.length, trackElement]);
+
+  // Reset test when stage changes
+  useEffect(() => { test.reset(); }, [currentStage]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Play YBR light-up animation on page open
   useEffect(() => {
@@ -726,37 +748,76 @@ export default function MonomythPage() {
                     </button>
                   );
                 })}
-                {forgeMode && (
+                {hasAnySlots('monomyth') && (
                   <button
-                    className={`metal-tab forge-icon-tab${activeTab === 'development' ? ' active' : ''}`}
-                    title="Story Forge"
-                    onClick={() => { trackElement(`monomyth.development.${currentStage}`); setActiveTab('development'); }}
+                    className="metal-tab trail-icon-tab"
+                    title="360 Trail"
+                    onClick={() => setTrailOpen(true)}
                   >
                     <svg viewBox="0 0 20 20" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M10,2 L10,11" />
-                      <path d="M7,5 Q10,3 13,5" />
-                      <path d="M6,11 L14,11" />
-                      <path d="M5,11 L5,14 Q10,18 15,14 L15,11" />
+                      <circle cx="10" cy="10" r="8" />
+                      <path d="M10,2 L10,4" />
+                      <path d="M10,16 L10,18" />
+                      <path d="M2,10 L4,10" />
+                      <path d="M16,10 L18,10" />
+                      <path d="M10,6 L10,10 L13,13" />
                     </svg>
                   </button>
                 )}
-                {ybrMode && (
-                  <button
-                    className={`metal-tab ybr-icon-tab${journey.active ? ' active' : ''}`}
-                    title={journey.active ? 'Exit Yellow Brick Road' : 'Walk the Yellow Brick Road'}
-                    onClick={handleYBRToggle}
-                  >
-                    <svg viewBox="0 0 20 14" width="14" height="10" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinejoin="round">
-                      <path d="M1,4 L7,1 L19,1 L13,4 Z" />
-                      <path d="M1,4 L1,13 L13,13 L13,4" />
-                      <path d="M13,4 L19,1 L19,10 L13,13" />
-                      <line x1="7" y1="4" x2="7" y2="13" />
-                      <line x1="1" y1="8.5" x2="13" y2="8.5" />
-                      <line x1="4" y1="8.5" x2="4" y2="13" />
-                      <line x1="10" y1="4" x2="10" y2="8.5" />
-                    </svg>
-                  </button>
-                )}
+                <button
+                  className={`metal-tab cw-icon-tab${courseworkMode ? (activeTab === 'test' ? ' active' : '') : ''}`}
+                  title={courseworkMode ? 'Stage Test' : 'Coursework'}
+                  onClick={() => {
+                    if (courseworkMode) {
+                      trackElement(`monomyth.test.view.${currentStage}`);
+                      setActiveTab('test');
+                    } else {
+                      toggleCourseworkMode();
+                    }
+                  }}
+                >
+                  <span style={{color:'#c9a961',fontWeight:'bold',fontSize:'0.7rem'}}>TEST</span>
+                </button>
+                <button
+                  className={`metal-tab forge-icon-tab${forgeMode ? (activeTab === 'development' ? ' active' : '') : ''}`}
+                  title={forgeMode ? 'Story Forge' : 'Story Forge (off)'}
+                  onClick={() => {
+                    if (forgeMode) {
+                      trackElement(`monomyth.development.${currentStage}`);
+                      setActiveTab('development');
+                    } else {
+                      setForgeMode(true);
+                    }
+                  }}
+                >
+                  <svg viewBox="0 0 20 20" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M10,2 L10,11" />
+                    <path d="M7,5 Q10,3 13,5" />
+                    <path d="M6,11 L14,11" />
+                    <path d="M5,11 L5,14 Q10,18 15,14 L15,11" />
+                  </svg>
+                </button>
+                <button
+                  className={`metal-tab ybr-icon-tab${ybrMode ? (journey.active ? ' active' : '') : ''}`}
+                  title={ybrMode ? (journey.active ? 'Exit Yellow Brick Road' : 'Walk the Yellow Brick Road') : 'Yellow Brick Road (off)'}
+                  onClick={() => {
+                    if (ybrMode) {
+                      handleYBRToggle();
+                    } else {
+                      setYbrMode(true);
+                    }
+                  }}
+                >
+                  <svg viewBox="0 0 20 14" width="14" height="10" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinejoin="round">
+                    <path d="M1,4 L7,1 L19,1 L13,4 Z" />
+                    <path d="M1,4 L1,13 L13,13 L13,4" />
+                    <path d="M13,4 L19,1 L19,10 L13,13" />
+                    <line x1="7" y1="4" x2="7" y2="13" />
+                    <line x1="1" y1="8.5" x2="13" y2="8.5" />
+                    <line x1="4" y1="8.5" x2="4" y2="13" />
+                    <line x1="10" y1="4" x2="10" y2="8.5" />
+                  </svg>
+                </button>
                 {(() => {
                   const stage = MONOMYTH_STAGES.find(s => s.id === currentStage);
                   if (!stage?.playlist) return null;
@@ -794,7 +855,24 @@ export default function MonomythPage() {
               )}
 
               <div className="metal-content-scroll">
-                {activeTab === 'overview' && <OverviewTab stageId={currentStage} />}
+                {activeTab === 'overview' && (
+                  <OverviewTab stageId={currentStage} />
+                )}
+                {activeTab === 'test' && courseworkMode && (
+                  <StageTest
+                    questions={stageQuestions}
+                    currentIndex={test.currentIndex}
+                    currentQuestion={test.currentQuestion}
+                    totalQuestions={test.totalQuestions}
+                    selected={test.selected}
+                    feedback={test.feedback}
+                    isFinished={test.isFinished}
+                    onToggleOption={test.toggleOption}
+                    onSubmit={test.submit}
+                    onAdvance={test.advance}
+                    stageLabel={stageLabel}
+                  />
+                )}
                 {activeTab === 'cycles' && <CyclesTab stageId={currentStage} onSelectCycle={handleSelectCycle} selectedModelId={selectedModel?.id} />}
                 {activeTab === 'theorists' && <TheoristsTab stageId={currentStage} activeGroup={activeGroup} onSelectModel={handleSelectModel} selectedModelId={selectedModel?.id} />}
                 {activeTab === 'experts' && <ExpertsTab stageId={currentStage} onSelectModel={handleSelectModel} selectedModelId={selectedModel?.id} />}
@@ -818,6 +896,15 @@ export default function MonomythPage() {
           )}
         </div>
       </div>
+
+      {trailOpen && (
+        <Suspense fallback={null}>
+          <TrailOverlay
+            mediaSlots={getSlotsByPrefix('monomyth')}
+            onClose={() => setTrailOpen(false)}
+          />
+        </Suspense>
+      )}
     </div>
   );
 }

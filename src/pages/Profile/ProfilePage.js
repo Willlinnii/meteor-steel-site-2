@@ -97,6 +97,16 @@ const PURCHASES = [
     details: 'Story of Stories is a companion layer to Fallen Starlight \u2014 the mythic tradition behind the seven metals, told through the Chronosphaera. It traces the stories that emerged as celestial fire descended into the material world.',
   },
   {
+    id: 'medicine-wheel', name: 'Medicine Wheel',
+    icon: (
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M13 2 L5 14 L11 14 L11 22 L19 10 L13 10 Z" />
+      </svg>
+    ),
+    description: 'The medicine wheel — Hyemeyohsts Storm\'s teachings on the sacred hoop and the four directions.',
+    details: 'Activating the Medicine Wheel overlays the sacred hoop onto the Chronosphaera, mapping the four directions, their powers, and their animals onto the celestial clock. Based on the teachings of Hyemeyohsts Storm.',
+  },
+  {
     id: 'starlight-bundle', name: 'Starlight Bundle',
     isBundle: true,
     bundleItems: ['fallen-starlight', 'story-of-stories'],

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useXRMode } from '../../App';
+import { usePageTracking } from '../../coursework/CourseworkContext';
 import './XRPage.css';
 
 const EXPERIENCES = [
@@ -8,7 +9,7 @@ const EXPERIENCES = [
     id: 'celestial-3d',
     label: 'Celestial Wheels 3D',
     description: 'Step inside the planetary spheres. Orbit the Sun in heliocentric view, stand at the center in geocentric, or see where the planets are right now. Full VR headset and phone AR support.',
-    path: '/metals/vr',
+    path: '/chronosphaera/vr',
     features: 'VR · Phone AR · Fullscreen',
     icon: (
       <svg viewBox="0 0 40 40" width="36" height="36" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
@@ -64,8 +65,10 @@ const EXPERIENCES = [
 export default function XRPage() {
   const navigate = useNavigate();
   const { xrMode, setXrMode } = useXRMode();
+  const { track } = usePageTracking('xr');
 
-  const handleEnter = (path) => {
+  const handleEnter = (path, experienceId) => {
+    track(`experience.${experienceId}`);
     if (!xrMode) setXrMode(true);
     navigate(path);
   };
@@ -100,7 +103,7 @@ export default function XRPage() {
             </div>
             <button
               className="xr-card-enter"
-              onClick={() => handleEnter(exp.path)}
+              onClick={() => handleEnter(exp.path, exp.id)}
             >
               Enter Experience
             </button>

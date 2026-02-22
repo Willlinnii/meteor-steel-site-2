@@ -4,6 +4,7 @@ import { db, firebaseConfigured } from '../../auth/firebase';
 import { useAuth } from '../../auth/AuthContext';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { storage } from '../../auth/firebase';
+import { useCoursework } from '../../coursework/CourseworkContext';
 
 const POSTS_PER_PAGE = 20;
 const MAX_NESTING = 3;
@@ -34,6 +35,7 @@ function TimeAgo({ timestamp }) {
 
 export default function GuildForum() {
   const { user } = useAuth();
+  const { trackElement } = useCoursework();
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [lastDoc, setLastDoc] = useState(null);
@@ -168,6 +170,7 @@ export default function GuildForum() {
         }),
       });
       if (resp.ok) {
+        trackElement('guild.forum.post.created');
         setNewTitle('');
         setNewBody('');
         setNewImages([]);
@@ -194,6 +197,7 @@ export default function GuildForum() {
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify({ action: 'vote', targetId, targetType, postId, value }),
       });
+      trackElement('guild.forum.vote');
     } catch (err) {
       console.error('Vote failed:', err);
     }
@@ -370,6 +374,7 @@ function ExpandedPost({ post, userVotes, onVote, currentUid }) {
   const [lastReplyDoc, setLastReplyDoc] = useState(null);
   const [hasMoreReplies, setHasMoreReplies] = useState(false);
   const { user } = useAuth();
+  const { trackElement } = useCoursework();
 
   useEffect(() => {
     if (!firebaseConfigured || !db) return;
@@ -425,6 +430,7 @@ function ExpandedPost({ post, userVotes, onVote, currentUid }) {
         }),
       });
       if (resp.ok) {
+        trackElement('guild.forum.reply');
         setReplyText('');
         setReplyingTo(null);
         // Refresh replies (load all currently visible + new one)

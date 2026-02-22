@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import useWheelJourney from '../../hooks/useWheelJourney';
 import useMultiLevelJourney from '../../hooks/useMultiLevelJourney';
 import useVoice, { SpeechRecognition } from '../../hooks/useVoice';
-import useYellowBrickRoad from '../../components/sevenMetals/useYellowBrickRoad';
+import useYellowBrickRoad from '../../components/chronosphaera/useYellowBrickRoad';
 import challengeData from '../../data/yellowBrickRoad.json';
 import JOURNEY_DEFS from '../../data/journeyDefs';
 import { useCoursework } from '../../coursework/CourseworkContext';

@@ -1,13 +1,18 @@
-import React, { useState, useMemo, useEffect, useCallback, lazy, Suspense } from 'react';
-import { collection, getDocs, query, orderBy } from 'firebase/firestore';
+import React, { useState, useMemo, useEffect, useCallback, useRef, lazy, Suspense } from 'react';
+import { collection, getDocs, query, orderBy, doc, setDoc, getDoc } from 'firebase/firestore';
 import { db, firebaseConfigured } from '../../auth/firebase';
 import { useAuth } from '../../auth/AuthContext';
 import { COURSES, checkRequirement, requirementProgress } from '../../coursework/courseEngine';
+import { validate360File, upload360Media, delete360Media } from '../../lib/media360Upload';
+import use360Media from '../../hooks/use360Media';
+import { serverTimestamp } from 'firebase/firestore';
 
 import campaignData from '../../data/campaigns/mythicYear.json';
+import LEGAL_DOCUMENTS from '../../data/legalDocuments';
 import './AdminPage.css';
 
 const ContactsPage = lazy(() => import('./ContactsPage'));
+const PanoViewer = lazy(() => import('../../components/PanoViewer'));
 
 const ZODIAC_SYMBOLS = {
   Aries: '\u2648', Taurus: '\u2649', Gemini: '\u264A', Cancer: '\u264B',
@@ -85,6 +90,36 @@ function usePostStatuses(campaignId) {
   return { getStatus, setStatus, setBulkStatus };
 }
 
+// --- Filing tracker hook (localStorage persistence) ---
+function useFilingTracker() {
+  const key = 'ip-filing-tracker';
+  const [tracker, setTracker] = useState(() => {
+    try {
+      const saved = localStorage.getItem(key);
+      return saved ? JSON.parse(saved) : {};
+    } catch {
+      return {};
+    }
+  });
+
+  useEffect(() => {
+    localStorage.setItem(key, JSON.stringify(tracker));
+  }, [tracker]);
+
+  const getItemData = useCallback((itemId) => tracker[itemId] || {
+    status: 'unregistered', filingDate: '', confirmationNumber: '', registrationNumber: '', notes: ''
+  }, [tracker]);
+
+  const updateItemData = useCallback((itemId, field, value) => {
+    setTracker(prev => ({
+      ...prev,
+      [itemId]: { ...prev[itemId], status: 'unregistered', filingDate: '', confirmationNumber: '', registrationNumber: '', notes: '', ...prev[itemId], [field]: value }
+    }));
+  }, []);
+
+  return { tracker, getItemData, updateItemData };
+}
+
 // --- Status dot component ---
 function StatusDot({ status }) {
   const cfg = STATUS_CONFIG[status] || STATUS_CONFIG.draft;
@@ -157,13 +192,16 @@ function CampaignListView({ campaigns, onSelect, getStatusForCampaign }) {
 
 // --- Section tabs ---
 const SECTIONS = [
+  { id: 'system-health', label: 'System Health' },
   { id: 'campaigns', label: 'Campaign Manager' },
   { id: 'coursework', label: 'Coursework' },
+  { id: '360-media', label: '360 Media' },
   { id: 'subscribers', label: 'Subscribers' },
   { id: 'mentors', label: 'Mentors' },
   { id: 'contacts', label: 'Contacts' },
   { id: 'services', label: 'Services' },
   { id: 'ip-registry', label: 'IP Registry' },
+  { id: 'legal', label: 'Legal' },
 ];
 
 // --- Campaign Manager content (extracted for tab switching) ---
@@ -1287,7 +1325,7 @@ const IP_REGISTRY = [
   { id: 'game-jackals', category: 'game-designs', name: 'Jackals & Hounds (Digital)', description: 'Digital adaptation of ancient Egyptian race game with original AI and UI', type: 'copyright', source: ['src/pages/Games/JackalsAndHounds/'], status: 'unregistered', protection: 'medium', year: 2024 },
 
   // Data Compilations
-  { id: 'seven-metals', category: 'data-compilations', name: 'Seven Metals System', description: 'Original data compilation — planetary metals, correspondences, mythology across 13 data files', type: 'copyright', source: ['src/data/metals/', 'src/pages/SevenMetals/'], status: 'unregistered', protection: 'high', year: 2024 },
+  { id: 'seven-metals', category: 'data-compilations', name: 'Seven Metals System', description: 'Original data compilation — planetary metals, correspondences, mythology across 13 data files', type: 'copyright', source: ['src/data/chronosphaera/', 'src/pages/Chronosphaera/'], status: 'unregistered', protection: 'high', year: 2024 },
   { id: 'monomyth-extended', category: 'data-compilations', name: 'Monomyth Extended Data', description: 'Original structured data — stages, theorists, cycles, cultural examples across 8 data files', type: 'copyright', source: ['src/data/monomyth/'], status: 'unregistered', protection: 'medium', year: 2024 },
   { id: 'constellation-systems', category: 'data-compilations', name: 'Constellation Systems', description: 'Original curated data — zodiac constellations, star lore, cultural mappings across 5 data files', type: 'copyright', source: ['src/data/constellations/'], status: 'unregistered', protection: 'medium', year: 2024 },
   { id: 'medicine-wheels', category: 'data-compilations', name: 'Medicine Wheels', description: 'Original data compilation — directional symbolism and cultural wheel systems', type: 'copyright', source: ['src/data/wheels/'], status: 'unregistered', protection: 'medium', year: 2024 },
@@ -1302,8 +1340,8 @@ const IP_REGISTRY = [
   { id: 'course-engine', category: 'algorithms', name: 'Course Engine', description: 'Original algorithm — requirement checking, progress tracking, certificate logic', type: 'trade-secret', source: ['src/coursework/courseEngine.js'], status: 'unregistered', protection: 'medium', year: 2024 },
   { id: 'mentor-engine', category: 'algorithms', name: 'Mentor Engine', description: 'Original algorithm — multi-stage mentor application screening with AI assessment', type: 'trade-secret', source: ['api/mentor-apply.js', 'src/pages/Mentors/'], status: 'unregistered', protection: 'medium', year: 2025 },
   { id: 'profile-engine', category: 'algorithms', name: 'Profile Engine', description: 'Original algorithm — user rank progression, subscription gating, achievement tracking', type: 'trade-secret', source: ['src/pages/Profile/ProfilePage.js'], status: 'unregistered', protection: 'medium', year: 2024 },
-  { id: 'numerology-engine', category: 'algorithms', name: 'Numerology Engine', description: 'Original algorithm — Pythagorean and Chaldean numerology calculations', type: 'trade-secret', source: ['src/pages/SevenMetals/'], status: 'unregistered', protection: 'low', year: 2024 },
-  { id: 'natal-chart', category: 'algorithms', name: 'Natal Chart Calculator', description: 'Original algorithm — astronomical position calculations for birth chart generation', type: 'trade-secret', source: ['src/pages/SevenMetals/'], status: 'unregistered', protection: 'low', year: 2024 },
+  { id: 'numerology-engine', category: 'algorithms', name: 'Numerology Engine', description: 'Original algorithm — Pythagorean and Chaldean numerology calculations', type: 'trade-secret', source: ['src/pages/Chronosphaera/'], status: 'unregistered', protection: 'low', year: 2024 },
+  { id: 'natal-chart', category: 'algorithms', name: 'Natal Chart Calculator', description: 'Original algorithm — astronomical position calculations for birth chart generation', type: 'trade-secret', source: ['src/pages/Chronosphaera/'], status: 'unregistered', protection: 'low', year: 2024 },
   { id: 'game-ai-core', category: 'algorithms', name: 'Game AI Core', description: 'Original algorithm — AI opponents for ancient board games with difficulty scaling', type: 'trade-secret', source: ['src/pages/Games/'], status: 'unregistered', protection: 'medium', year: 2024 },
 
   // Brand Elements
@@ -1329,6 +1367,43 @@ const IP_PROTECTION_COLORS = {
   high: { color: '#d95b5b', bg: 'rgba(217, 91, 91, 0.12)', border: 'rgba(217, 91, 91, 0.3)' },
   medium: { color: '#d9a55b', bg: 'rgba(217, 165, 91, 0.12)', border: 'rgba(217, 165, 91, 0.3)' },
   low: { color: '#8a8aa0', bg: 'rgba(138, 138, 160, 0.12)', border: 'rgba(138, 138, 160, 0.3)' },
+};
+
+const IP_FILING_STATUSES = ['unregistered', 'preparing', 'filed', 'pending-review', 'registered'];
+
+const IP_FILING_STATUS_COLORS = {
+  unregistered:    { color: '#6a6a7a', bg: 'rgba(106, 106, 122, 0.12)', border: 'rgba(106, 106, 122, 0.3)' },
+  preparing:       { color: '#5b8dd9', bg: 'rgba(91, 141, 217, 0.12)', border: 'rgba(91, 141, 217, 0.3)' },
+  filed:           { color: '#d9a55b', bg: 'rgba(217, 165, 91, 0.12)', border: 'rgba(217, 165, 91, 0.3)' },
+  'pending-review':{ color: '#b87ab8', bg: 'rgba(184, 122, 184, 0.12)', border: 'rgba(184, 122, 184, 0.3)' },
+  registered:      { color: '#5bd97a', bg: 'rgba(91, 217, 122, 0.12)', border: 'rgba(91, 217, 122, 0.3)' },
+};
+
+const IP_COST_ESTIMATES = {
+  copyright: { min: 55, max: 65 },
+  trademark: { min: 250, max: 350 },
+  'trade-secret': { min: 0, max: 0 },
+};
+
+const IP_SPECIMEN_URLS = {
+  'site-names': [
+    { url: '/', label: 'Homepage — "Mythouse" brand display' },
+    { url: '/chronosphaera', label: 'Chronosphaera — "Meteor Steel" in header' },
+  ],
+  'feature-names': [
+    { url: '/atlas', label: 'Atlas page — "Atlas" brand in use' },
+    { url: '/mythic-earth', label: 'Mythic Earth — feature name displayed' },
+    { url: '/story-forge', label: 'Story Forge — feature name displayed' },
+    { url: '/mythology-channel', label: 'Mythology Channel — feature name displayed' },
+  ],
+  'course-names': [
+    { url: '/yellow-brick-road', label: 'Yellow Brick Road — course name in use' },
+    { url: '/fallen-starlight', label: 'Fallen Starlight — title displayed' },
+    { url: '/story-of-stories', label: 'Story of Stories — title displayed' },
+  ],
+  'rank-names': [
+    { url: '/profile', label: 'Profile page — rank names displayed' },
+  ],
 };
 
 function formatSubmissionText(items) {
@@ -1622,13 +1697,146 @@ function formatFilingDrafts(items) {
   return drafts;
 }
 
+function generateTradeSecretHeader(item) {
+  return `/* ================================================================
+ * CONFIDENTIAL — TRADE SECRET
+ * ${item.name}
+ * Owner: Mythouse / Meteor Steel
+ * Created: ${item.year}
+ *
+ * This file contains proprietary trade secret information owned by
+ * Mythouse / Meteor Steel. Unauthorized copying, disclosure, or
+ * distribution of this material is strictly prohibited and may
+ * result in legal action under the Defend Trade Secrets Act (DTSA),
+ * 18 U.S.C. § 1836, and applicable state trade secret laws.
+ *
+ * Access to this file is restricted to authorized personnel only.
+ * ================================================================ */`;
+}
+
+function generateNDAText(tradeSecretItems) {
+  const today = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+  const itemList = tradeSecretItems.map((item, i) => `   ${i + 1}. ${item.name} — ${item.description}`).join('\n');
+
+  return `NON-DISCLOSURE AGREEMENT (NDA)
+
+Date: ${today}
+
+PARTIES
+
+   Disclosing Party:  [Your Full Legal Name]
+                      d/b/a Mythouse / Meteor Steel
+                      ("Discloser")
+
+   Receiving Party:   [Recipient Full Legal Name]
+                      [Recipient Address]
+                      ("Recipient")
+
+RECITALS
+
+   The Discloser possesses certain confidential and proprietary
+   information relating to the Mythouse / Meteor Steel platform,
+   including but not limited to the trade secrets identified below.
+   The Recipient desires to receive access to such information for
+   the purpose of [PURPOSE — e.g., collaboration, evaluation,
+   development work].
+
+1. DEFINITION OF CONFIDENTIAL INFORMATION
+
+   "Confidential Information" means all non-public information
+   disclosed by the Discloser to the Recipient, whether orally, in
+   writing, or by inspection of tangible or digital objects, including
+   but not limited to the following trade secrets:
+
+${itemList}
+
+   Confidential Information also includes any notes, analyses,
+   compilations, or derivative works prepared by the Recipient that
+   contain or reflect the above information.
+
+2. OBLIGATIONS OF RECIPIENT
+
+   The Recipient agrees to:
+   a) Hold all Confidential Information in strict confidence;
+   b) Not disclose Confidential Information to any third party
+      without prior written consent of the Discloser;
+   c) Use Confidential Information solely for the stated purpose;
+   d) Protect Confidential Information using at least the same
+      degree of care used to protect its own confidential information,
+      but in no event less than reasonable care;
+   e) Limit access to Confidential Information to those employees
+      or agents who have a need to know and who are bound by
+      obligations of confidentiality at least as restrictive as
+      those contained herein.
+
+3. EXCLUSIONS
+
+   Confidential Information does not include information that:
+   a) Is or becomes publicly available through no fault of Recipient;
+   b) Was known to Recipient prior to disclosure by Discloser;
+   c) Is independently developed by Recipient without use of or
+      reference to Confidential Information;
+   d) Is disclosed to Recipient by a third party not under an
+      obligation of confidentiality to Discloser.
+
+4. TERM
+
+   This Agreement shall remain in effect for a period of three (3)
+   years from the date first written above. The obligations of
+   confidentiality shall survive termination of this Agreement with
+   respect to Confidential Information disclosed during the term.
+
+5. REMEDIES
+
+   The Recipient acknowledges that unauthorized disclosure of
+   Confidential Information may cause irreparable harm to the
+   Discloser. The Discloser shall be entitled to seek injunctive
+   relief in addition to any other remedies available at law or
+   in equity, including damages under the Defend Trade Secrets
+   Act (DTSA), 18 U.S.C. § 1836.
+
+6. RETURN OF MATERIALS
+
+   Upon termination of this Agreement or upon request by the
+   Discloser, the Recipient shall promptly return or destroy all
+   copies of Confidential Information in its possession and
+   certify in writing that it has done so.
+
+7. GENERAL PROVISIONS
+
+   a) Governing Law: This Agreement shall be governed by the
+      laws of the State of [STATE].
+   b) Entire Agreement: This Agreement constitutes the entire
+      understanding between the parties regarding the subject
+      matter hereof.
+   c) Amendment: This Agreement may only be amended by written
+      instrument signed by both parties.
+   d) Severability: If any provision is found unenforceable, the
+      remaining provisions shall remain in full force and effect.
+
+SIGNATURES
+
+_______________________________     Date: _______________
+[Your Full Legal Name]
+Discloser
+
+
+_______________________________     Date: _______________
+[Recipient Full Legal Name]
+Recipient
+`;
+}
+
 function IPRegistrySection() {
   const [typeFilter, setTypeFilter] = useState(null);
   const [statusFilter, setStatusFilter] = useState(null);
   const [collapsed, setCollapsed] = useState({});
-  const [viewMode, setViewMode] = useState('registry'); // 'registry' | 'inventory' | 'filings'
+  const [viewMode, setViewMode] = useState('registry'); // 'registry' | 'inventory' | 'filings' | 'workflow'
   const [copied, setCopied] = useState(false);
   const [expandedFiling, setExpandedFiling] = useState({});
+  const [workflowCollapsed, setWorkflowCollapsed] = useState({});
+
+  const { tracker, getItemData, updateItemData } = useFilingTracker();
 
   const filtered = useMemo(() => {
     return IP_REGISTRY.filter(item => {
@@ -1663,6 +1871,77 @@ function IPRegistrySection() {
   const toggleCategory = (catId) => {
     setCollapsed(prev => ({ ...prev, [catId]: !prev[catId] }));
   };
+
+  // Workflow memos
+  const priorityQueue = useMemo(() => {
+    const po = { high: 0, medium: 1, low: 2 };
+    const to = { copyright: 0, trademark: 1, 'trade-secret': 2 };
+    return [...IP_REGISTRY].sort((a, b) => {
+      const pDiff = po[a.protection] - po[b.protection];
+      if (pDiff !== 0) return pDiff;
+      return to[a.type] - to[b.type];
+    });
+  }, []);
+
+  const filingProgress = useMemo(() => {
+    const counts = {};
+    IP_FILING_STATUSES.forEach(s => { counts[s] = 0; });
+    IP_REGISTRY.forEach(item => {
+      const s = (tracker[item.id] && tracker[item.id].status) || 'unregistered';
+      counts[s] = (counts[s] || 0) + 1;
+    });
+    return counts;
+  }, [tracker]);
+
+  const costSummary = useMemo(() => {
+    let min = 0, max = 0;
+    IP_REGISTRY.forEach(item => {
+      const s = (tracker[item.id] && tracker[item.id].status) || 'unregistered';
+      if (s !== 'registered' && s !== 'filed' && s !== 'pending-review') {
+        const cost = IP_COST_ESTIMATES[item.type];
+        if (cost) { min += cost.min; max += cost.max; }
+      }
+    });
+    return { min, max };
+  }, [tracker]);
+
+  const downloadTextFile = useCallback((content, filename) => {
+    const blob = new Blob([content], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }, []);
+
+  const generateDepositManifest = useCallback((item) => {
+    const today = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+    let text = `COPYRIGHT DEPOSIT MANIFEST\n`;
+    text += `${'='.repeat(56)}\n`;
+    text += `Title:    ${item.name}\n`;
+    text += `Author:   Mythouse / Meteor Steel\n`;
+    text += `Created:  ${item.year}\n`;
+    text += `Prepared: ${today}\n\n`;
+    text += `SOURCE FILES TO INCLUDE IN DEPOSIT:\n`;
+    text += `${'-'.repeat(56)}\n`;
+    if (item.source.length > 0) {
+      item.source.forEach(s => { text += `  ${s}\n`; });
+    } else {
+      text += `  (No source files specified — use published website)\n`;
+    }
+    text += `\nCOLLECTION INSTRUCTIONS:\n`;
+    text += `${'-'.repeat(56)}\n`;
+    text += `1. Print or PDF the source code from the paths above\n`;
+    text += `2. Include first and last 25 pages of each source file\n`;
+    text += `   (per Copyright Office Circular 61 guidelines)\n`;
+    text += `3. Redact any trade secret content (API keys, prompts)\n`;
+    text += `4. Upload as a single PDF via eCO (copyright.gov)\n`;
+    text += `5. Label deposit: "${item.name} — Source Code"\n`;
+    return text;
+  }, []);
 
   return (
     <div className="admin-ip-registry">
@@ -1714,6 +1993,12 @@ function IPRegistrySection() {
           onClick={() => { setViewMode(viewMode === 'filings' ? 'registry' : 'filings'); setCopied(false); setExpandedFiling({}); }}
         >
           {viewMode === 'filings' ? 'Back to Registry' : 'Draft IP Filings'}
+        </button>
+        <button
+          className={`admin-ip-submit-btn admin-ip-workflow-btn ${viewMode === 'workflow' ? 'active' : ''}`}
+          onClick={() => { setViewMode(viewMode === 'workflow' ? 'registry' : 'workflow'); setCopied(false); }}
+        >
+          {viewMode === 'workflow' ? 'Back to Registry' : 'Filing Workflow'}
         </button>
       </div>
 
@@ -1781,6 +2066,237 @@ function IPRegistrySection() {
               </div>
             );
           })}
+        </div>
+      ) : viewMode === 'workflow' ? (
+        <div className="admin-ip-workflow-view">
+          {/* Section 1: Filing Tracker */}
+          <div className="admin-ip-wf-section">
+            <button className="admin-ip-wf-section-header" onClick={() => setWorkflowCollapsed(p => ({ ...p, tracker: !p.tracker }))}>
+              <span className="admin-ip-category-arrow">{workflowCollapsed.tracker ? '\u25B6' : '\u25BC'}</span>
+              <span className="admin-ip-category-name">Filing Tracker</span>
+              <span className="admin-ip-category-count">{IP_REGISTRY.length} items</span>
+            </button>
+            {!workflowCollapsed.tracker && (
+              <div className="admin-ip-wf-section-body">
+                <div className="admin-ip-wf-progress">
+                  {IP_FILING_STATUSES.map(s => {
+                    const pct = IP_REGISTRY.length > 0 ? (filingProgress[s] / IP_REGISTRY.length) * 100 : 0;
+                    if (pct === 0) return null;
+                    return (
+                      <div key={s} className="admin-progress-segment" style={{ width: `${pct}%`, background: IP_FILING_STATUS_COLORS[s].color }} />
+                    );
+                  })}
+                </div>
+                <div className="admin-ip-wf-legend">
+                  {IP_FILING_STATUSES.map(s => (
+                    <span key={s} className="admin-ip-wf-legend-item">
+                      <span className="admin-ip-wf-dot" style={{ background: IP_FILING_STATUS_COLORS[s].color }} />
+                      {s.replace('-', ' ')} ({filingProgress[s]})
+                    </span>
+                  ))}
+                </div>
+                {IP_REGISTRY.map(item => {
+                  const data = getItemData(item.id);
+                  const tc = IP_TYPE_COLORS[item.type];
+                  const pc = IP_PROTECTION_COLORS[item.protection];
+                  return (
+                    <div key={item.id} className="admin-ip-wf-tracker-row">
+                      <div className="admin-ip-wf-tracker-info">
+                        <span className="admin-ip-wf-tracker-name">{item.name}</span>
+                        <span className="admin-ip-badge" style={{ color: tc.color, background: tc.bg, borderColor: tc.border }}>
+                          {item.type === 'trade-secret' ? 'Trade Secret' : item.type.charAt(0).toUpperCase() + item.type.slice(1)}
+                        </span>
+                        <span className="admin-ip-badge" style={{ color: pc.color, background: pc.bg, borderColor: pc.border }}>
+                          {item.protection.charAt(0).toUpperCase() + item.protection.slice(1)}
+                        </span>
+                      </div>
+                      <div className="admin-ip-wf-tracker-fields">
+                        <select
+                          value={data.status}
+                          onChange={e => updateItemData(item.id, 'status', e.target.value)}
+                          style={{ borderColor: IP_FILING_STATUS_COLORS[data.status]?.color || '#2a2a3a' }}
+                        >
+                          {IP_FILING_STATUSES.map(s => (
+                            <option key={s} value={s}>{s.replace('-', ' ')}</option>
+                          ))}
+                        </select>
+                        <input type="date" placeholder="Filing date" value={data.filingDate} onChange={e => updateItemData(item.id, 'filingDate', e.target.value)} />
+                        <input type="text" placeholder="Confirmation #" value={data.confirmationNumber} onChange={e => updateItemData(item.id, 'confirmationNumber', e.target.value)} />
+                        <input type="text" placeholder="Registration #" value={data.registrationNumber} onChange={e => updateItemData(item.id, 'registrationNumber', e.target.value)} />
+                        <input type="text" placeholder="Notes" value={data.notes} onChange={e => updateItemData(item.id, 'notes', e.target.value)} />
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+
+          {/* Section 2: Priority Filing Queue */}
+          <div className="admin-ip-wf-section">
+            <button className="admin-ip-wf-section-header" onClick={() => setWorkflowCollapsed(p => ({ ...p, queue: !p.queue }))}>
+              <span className="admin-ip-category-arrow">{workflowCollapsed.queue ? '\u25B6' : '\u25BC'}</span>
+              <span className="admin-ip-category-name">Priority Filing Queue</span>
+              <span className="admin-ip-category-count">{IP_REGISTRY.length} items</span>
+            </button>
+            {!workflowCollapsed.queue && (
+              <div className="admin-ip-wf-section-body">
+                <div className="admin-ip-wf-cost-summary">
+                  Estimated remaining cost: ${costSummary.min.toLocaleString()}&ndash;${costSummary.max.toLocaleString()}
+                </div>
+                {priorityQueue.map((item, i) => {
+                  const data = getItemData(item.id);
+                  const isDone = data.status === 'filed' || data.status === 'pending-review' || data.status === 'registered';
+                  const tc = IP_TYPE_COLORS[item.type];
+                  const pc = IP_PROTECTION_COLORS[item.protection];
+                  const cost = IP_COST_ESTIMATES[item.type];
+                  return (
+                    <div key={item.id} className={`admin-ip-wf-queue-row ${isDone ? 'done' : ''}`}>
+                      <span className="admin-ip-wf-queue-rank">{isDone ? '\u2713' : `#${i + 1}`}</span>
+                      <span className="admin-ip-wf-queue-name">{item.name}</span>
+                      <span className="admin-ip-badge" style={{ color: tc.color, background: tc.bg, borderColor: tc.border }}>
+                        {item.type === 'trade-secret' ? 'Trade Secret' : item.type.charAt(0).toUpperCase() + item.type.slice(1)}
+                      </span>
+                      <span className="admin-ip-badge" style={{ color: pc.color, background: pc.bg, borderColor: pc.border }}>
+                        {item.protection.charAt(0).toUpperCase() + item.protection.slice(1)}
+                      </span>
+                      <span className="admin-ip-wf-queue-cost">
+                        {cost.max > 0 ? `$${cost.min}\u2013${cost.max}` : 'No fee'}
+                      </span>
+                    </div>
+                  );
+                })}
+                <div className="admin-ip-wf-queue-total">
+                  Total estimated: ${(() => { let min = 0, max = 0; IP_REGISTRY.forEach(item => { const c = IP_COST_ESTIMATES[item.type]; min += c.min; max += c.max; }); return `${min.toLocaleString()}\u2013${max.toLocaleString()}`; })()}
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Section 3: Deposit Copy Generator */}
+          <div className="admin-ip-wf-section">
+            <button className="admin-ip-wf-section-header" onClick={() => setWorkflowCollapsed(p => ({ ...p, deposit: !p.deposit }))}>
+              <span className="admin-ip-category-arrow">{workflowCollapsed.deposit ? '\u25B6' : '\u25BC'}</span>
+              <span className="admin-ip-category-name">Deposit Copy Generator</span>
+              <span className="admin-ip-category-count">{IP_REGISTRY.filter(i => i.type === 'copyright').length} items</span>
+            </button>
+            {!workflowCollapsed.deposit && (
+              <div className="admin-ip-wf-section-body">
+                <p className="admin-ip-filings-intro" style={{ margin: '0 0 12px' }}>
+                  Generate deposit manifests for copyright registration. Each manifest lists the source files to include and collection instructions per Copyright Office guidelines.
+                </p>
+                {IP_REGISTRY.filter(i => i.type === 'copyright').map(item => (
+                  <div key={item.id} className="admin-ip-wf-deposit-row">
+                    <span className="admin-ip-wf-deposit-name">{item.name}</span>
+                    <span className="admin-ip-wf-deposit-sources">{item.source.length > 0 ? item.source.join(', ') : '(no sources)'}</span>
+                    <button
+                      className="admin-ip-wf-download-btn"
+                      onClick={() => downloadTextFile(generateDepositManifest(item), `deposit-${item.id}.txt`)}
+                    >
+                      Download Manifest
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Section 4: Specimen URL Guide */}
+          <div className="admin-ip-wf-section">
+            <button className="admin-ip-wf-section-header" onClick={() => setWorkflowCollapsed(p => ({ ...p, specimen: !p.specimen }))}>
+              <span className="admin-ip-category-arrow">{workflowCollapsed.specimen ? '\u25B6' : '\u25BC'}</span>
+              <span className="admin-ip-category-name">Specimen URL Guide</span>
+              <span className="admin-ip-category-count">{IP_REGISTRY.filter(i => i.type === 'trademark').length} items</span>
+            </button>
+            {!workflowCollapsed.specimen && (
+              <div className="admin-ip-wf-section-body">
+                <p className="admin-ip-filings-intro" style={{ margin: '0 0 12px' }}>
+                  Specimen requirements: full-page screenshot showing the mark in use with the identified services. Format: JPEG or PDF, max 5 MB per specimen.
+                </p>
+                {IP_REGISTRY.filter(i => i.type === 'trademark').map(item => {
+                  const urls = IP_SPECIMEN_URLS[item.id] || [];
+                  return (
+                    <div key={item.id} className="admin-ip-wf-specimen-group">
+                      <div className="admin-ip-wf-specimen-name">{item.name}</div>
+                      <div className="admin-ip-wf-specimen-desc">{item.description}</div>
+                      {urls.length > 0 ? urls.map((u, i) => (
+                        <a key={i} className="admin-ip-wf-specimen-url" href={u.url} target="_blank" rel="noopener noreferrer">
+                          {u.url} &mdash; {u.label}
+                        </a>
+                      )) : (
+                        <span className="admin-ip-wf-specimen-url" style={{ color: '#6a6a7a' }}>No specimen URLs configured</span>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+
+          {/* Section 5: Trade Secret Headers */}
+          <div className="admin-ip-wf-section">
+            <button className="admin-ip-wf-section-header" onClick={() => setWorkflowCollapsed(p => ({ ...p, headers: !p.headers }))}>
+              <span className="admin-ip-category-arrow">{workflowCollapsed.headers ? '\u25B6' : '\u25BC'}</span>
+              <span className="admin-ip-category-name">Trade Secret Headers</span>
+              <span className="admin-ip-category-count">{IP_REGISTRY.filter(i => i.type === 'trade-secret').length} items</span>
+            </button>
+            {!workflowCollapsed.headers && (
+              <div className="admin-ip-wf-section-body">
+                <p className="admin-ip-filings-intro" style={{ margin: '0 0 12px' }}>
+                  Add these confidentiality headers to the top of trade secret source files to establish and document secrecy measures.
+                </p>
+                {IP_REGISTRY.filter(i => i.type === 'trade-secret').map(item => {
+                  const header = generateTradeSecretHeader(item);
+                  return (
+                    <div key={item.id} className="admin-ip-wf-header-block">
+                      <div className="admin-ip-wf-header-info">
+                        <span className="admin-ip-wf-tracker-name">{item.name}</span>
+                        {item.source.length > 0 && (
+                          <span className="admin-ip-wf-deposit-sources">{item.source.join(', ')}</span>
+                        )}
+                      </div>
+                      <div className="admin-ip-wf-code-wrap">
+                        <button
+                          className="admin-ip-copy-single-btn"
+                          onClick={() => navigator.clipboard.writeText(header)}
+                        >
+                          Copy Header
+                        </button>
+                        <pre className="admin-ip-wf-code">{header}</pre>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+
+          {/* Section 6: NDA Template */}
+          <div className="admin-ip-wf-section">
+            <button className="admin-ip-wf-section-header" onClick={() => setWorkflowCollapsed(p => ({ ...p, nda: !p.nda }))}>
+              <span className="admin-ip-category-arrow">{workflowCollapsed.nda ? '\u25B6' : '\u25BC'}</span>
+              <span className="admin-ip-category-name">NDA Template</span>
+            </button>
+            {!workflowCollapsed.nda && (() => {
+              const tsItems = IP_REGISTRY.filter(i => i.type === 'trade-secret');
+              const ndaText = generateNDAText(tsItems);
+              const previewLines = ndaText.split('\n').slice(0, 25).join('\n') + '\n...';
+              return (
+                <div className="admin-ip-wf-section-body">
+                  <p className="admin-ip-filings-intro" style={{ margin: '0 0 12px' }}>
+                    Download a pre-filled NDA covering all {tsItems.length} trade secret items. Review and customize before use.
+                  </p>
+                  <button
+                    className="admin-ip-wf-download-btn"
+                    onClick={() => downloadTextFile(ndaText, 'mythouse-nda.txt')}
+                  >
+                    Download NDA (.txt)
+                  </button>
+                  <pre className="admin-ip-wf-nda-preview">{previewLines}</pre>
+                </div>
+              );
+            })()}
+          </div>
         </div>
       ) : (
         <>
@@ -1873,6 +2389,579 @@ function IPRegistrySection() {
   );
 }
 
+// --- 360 Media Slot Definitions ---
+const MEDIA_360_SLOTS = [
+  { key: 'monomyth.golden-age', label: 'Surface (Golden Age)' },
+  { key: 'monomyth.falling-star', label: 'Calling (Falling Star)' },
+  { key: 'monomyth.impact-crater', label: 'Crossing (Impact Crater)' },
+  { key: 'monomyth.forge', label: 'Initiating (Forge)' },
+  { key: 'monomyth.quenching', label: 'Nadir (Quenching)' },
+  { key: 'monomyth.integration', label: 'Return (Integration)' },
+  { key: 'monomyth.drawing', label: 'Arrival (Drawing)' },
+  { key: 'monomyth.new-age', label: 'Renewal (New Age)' },
+];
+
+function Media360Section() {
+  const { slots, getSlot } = use360Media();
+  const [uploading, setUploading] = useState({});
+  const [previewSlot, setPreviewSlot] = useState(null);
+  const [editFields, setEditFields] = useState({});
+  const debounceTimers = useRef({});
+
+  const handleUpload = async (slotKey, file) => {
+    const validation = validate360File(file);
+    if (!validation.valid) { alert(validation.error); return; }
+
+    setUploading(p => ({ ...p, [slotKey]: true }));
+    try {
+      const result = await upload360Media(slotKey, file);
+      const docRef = doc(db, 'site-content', '360-media');
+      const snap = await getDoc(docRef);
+      const existing = snap.exists() ? snap.data().slots || {} : {};
+      existing[slotKey] = {
+        url: result.url,
+        storagePath: result.storagePath,
+        type: result.type,
+        title: getSlot(slotKey)?.title || '',
+        description: getSlot(slotKey)?.description || '',
+        uploadedAt: serverTimestamp(),
+      };
+      await setDoc(docRef, { slots: existing }, { merge: true });
+    } catch (err) {
+      alert('Upload failed: ' + err.message);
+    }
+    setUploading(p => ({ ...p, [slotKey]: false }));
+  };
+
+  const handleDelete = async (slotKey) => {
+    const slot = getSlot(slotKey);
+    if (!slot) return;
+    if (!window.confirm(`Delete 360 media for "${slotKey}"?`)) return;
+    try {
+      await delete360Media(slot.storagePath);
+      const docRef = doc(db, 'site-content', '360-media');
+      const snap = await getDoc(docRef);
+      const existing = snap.exists() ? snap.data().slots || {} : {};
+      delete existing[slotKey];
+      await setDoc(docRef, { slots: existing });
+    } catch (err) {
+      alert('Delete failed: ' + err.message);
+    }
+  };
+
+  const handleFieldChange = (slotKey, field, value) => {
+    setEditFields(p => ({ ...p, [`${slotKey}.${field}`]: value }));
+    clearTimeout(debounceTimers.current[`${slotKey}.${field}`]);
+    debounceTimers.current[`${slotKey}.${field}`] = setTimeout(async () => {
+      try {
+        const docRef = doc(db, 'site-content', '360-media');
+        const snap = await getDoc(docRef);
+        const existing = snap.exists() ? snap.data().slots || {} : {};
+        if (!existing[slotKey]) return;
+        existing[slotKey][field] = value;
+        await setDoc(docRef, { slots: existing }, { merge: true });
+      } catch (err) {
+        console.error('Failed to update field:', err);
+      }
+    }, 800);
+  };
+
+  const getFieldValue = (slotKey, field) => {
+    const editKey = `${slotKey}.${field}`;
+    if (editKey in editFields) return editFields[editKey];
+    return getSlot(slotKey)?.[field] || '';
+  };
+
+  return (
+    <div className="admin-360-media">
+      <h2 className="admin-360-title">360 MEDIA MANAGER</h2>
+      <p className="admin-360-subtitle">Upload equirectangular images/videos for 360 panorama viewing</p>
+      <div className="admin-360-grid">
+        {MEDIA_360_SLOTS.map(({ key, label }) => {
+          const slot = getSlot(key);
+          const isUploading = uploading[key];
+          return (
+            <div key={key} className={`admin-360-card${slot ? ' has-media' : ''}`}>
+              <div className="admin-360-card-header">
+                <h3 className="admin-360-card-name">{label}</h3>
+                {slot && (
+                  <span className="admin-360-card-type">{slot.type}</span>
+                )}
+              </div>
+
+              {slot ? (
+                <>
+                  <div
+                    className="admin-360-preview-thumb"
+                    onClick={() => setPreviewSlot(key)}
+                    title="Click to preview in 360"
+                  >
+                    {slot.type === 'image' ? (
+                      <img src={slot.url} alt={label} />
+                    ) : (
+                      <video src={slot.url} muted />
+                    )}
+                    <div className="admin-360-preview-badge">360</div>
+                  </div>
+
+                  <input
+                    className="admin-360-input"
+                    type="text"
+                    placeholder="Title"
+                    value={getFieldValue(key, 'title')}
+                    onChange={e => handleFieldChange(key, 'title', e.target.value)}
+                  />
+                  <input
+                    className="admin-360-input"
+                    type="text"
+                    placeholder="Description"
+                    value={getFieldValue(key, 'description')}
+                    onChange={e => handleFieldChange(key, 'description', e.target.value)}
+                  />
+
+                  <div className="admin-360-actions">
+                    <label className="admin-360-replace-btn">
+                      Replace
+                      <input
+                        type="file"
+                        accept="image/jpeg,image/png,image/webp,video/mp4,video/webm"
+                        style={{ display: 'none' }}
+                        onChange={e => { if (e.target.files[0]) handleUpload(key, e.target.files[0]); }}
+                      />
+                    </label>
+                    <button className="admin-360-delete-btn" onClick={() => handleDelete(key)}>
+                      Delete
+                    </button>
+                  </div>
+                </>
+              ) : (
+                <label className={`admin-360-upload-zone${isUploading ? ' uploading' : ''}`}>
+                  {isUploading ? (
+                    <span className="admin-360-uploading">Uploading...</span>
+                  ) : (
+                    <>
+                      <span className="admin-360-upload-icon">+</span>
+                      <span className="admin-360-upload-text">Upload 360 media</span>
+                      <span className="admin-360-upload-hint">JPEG, PNG, WebP, MP4, WebM</span>
+                    </>
+                  )}
+                  <input
+                    type="file"
+                    accept="image/jpeg,image/png,image/webp,video/mp4,video/webm"
+                    style={{ display: 'none' }}
+                    disabled={isUploading}
+                    onChange={e => { if (e.target.files[0]) handleUpload(key, e.target.files[0]); }}
+                  />
+                </label>
+              )}
+            </div>
+          );
+        })}
+      </div>
+
+      {previewSlot && getSlot(previewSlot) && (
+        <div className="admin-360-modal" onClick={() => setPreviewSlot(null)}>
+          <div className="admin-360-modal-content" onClick={e => e.stopPropagation()}>
+            <button className="admin-360-modal-close" onClick={() => setPreviewSlot(null)}>
+              &times;
+            </button>
+            <Suspense fallback={<div style={{ height: 400, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#8a8aa0' }}>Loading viewer...</div>}>
+              <PanoViewer src={getSlot(previewSlot).url} type={getSlot(previewSlot).type} />
+            </Suspense>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// --- Legal Section ---
+
+const LEGAL_CONTRACTS = [
+  {
+    id: 'terms-of-service',
+    title: 'Terms of Service',
+    category: 'contract',
+    scope: 'All Users',
+    trigger: 'Account creation / first login',
+    description: 'Master agreement governing use of the Mythouse platform. Covers account creation, acceptable use, content guidelines, service availability, limitation of liability, and dispute resolution.',
+    covers: ['Account registration & authentication (Firebase Auth)', 'Site browsing & content access', 'Atlas AI chat interactions', 'Game play (Senet, Pachisi, Ur, Mehen, Snakes & Ladders, Mythouse)', 'Journeys & Yellow Brick Road participation', 'Profile data (handle, birth date, natal chart, numerology, lucky number, photo)'],
+    status: 'draft',
+  },
+  {
+    id: 'privacy-policy',
+    title: 'Privacy Policy',
+    category: 'contract',
+    scope: 'All Users',
+    trigger: 'Account creation / first login',
+    description: 'Data collection, usage, storage, and sharing practices. Required by GDPR, CCPA, and Firebase/Google terms.',
+    covers: ['Personal data: email, display name, birth date/time, profile photo', 'Behavioral data: coursework progress, page visits, element tracking, game completions', 'AI interaction data: Atlas conversations, Story Forge drafts, mentor application chats', 'Natal chart & numerology data', 'BYOK API keys (encrypted storage)', 'Third-party services: Firebase/Google, Anthropic, OpenAI, Vercel, YouTube embeds, Google Maps/Street View', 'Cookies & localStorage (session persistence, last-path recall)'],
+    status: 'draft',
+  },
+  {
+    id: 'mentor-agreement',
+    title: 'Mentor Agreement',
+    category: 'contract',
+    scope: 'Mentors',
+    trigger: 'After mentor application approval (before activation)',
+    description: 'Agreement between Mythouse and approved mentors. Covers mentor responsibilities, student relationship guidelines, capacity commitments, code of conduct, content ownership, termination, and liability.',
+    covers: ['Mentor qualifications & ongoing requirements (Level 2+ credential)', 'Student pairing acceptance & capacity limits (default 5)', 'Bio & directory listing consent', 'Communication standards & boundaries', 'Consulting rate setting & session conduct', 'Content ownership of mentor-created materials', 'Termination & unpublishing process', 'Guild participation guidelines'],
+    status: 'draft',
+  },
+  {
+    id: 'subscription-agreement',
+    title: 'Subscription & Purchase Agreement',
+    category: 'contract',
+    scope: 'Paying Users',
+    trigger: 'First purchase or subscription activation',
+    description: 'Terms for paid features including subscriptions and one-time purchases. Covers billing, refunds, access levels, and cancellation.',
+    covers: ['Chronosphaera subscription tiers (Active Buttons, Clock/Body Buttons, Atlas)', 'Monomyth + Meteor Steel access', 'Fallen Starlight + Story of Stories access', 'Medicine Wheels access', 'Mythosphaera access', 'Coursework subscription activation', 'Payment processing & billing', 'Refund & cancellation policy', 'Feature availability & changes'],
+    status: 'draft',
+  },
+  {
+    id: 'byok-agreement',
+    title: 'BYOK (Bring Your Own Key) Agreement',
+    category: 'contract',
+    scope: 'BYOK Users',
+    trigger: 'When user enters their own API key',
+    description: 'Terms for users who provide their own Anthropic or OpenAI API keys. Covers key storage, usage, billing responsibility, and data handling.',
+    covers: ['API key encrypted storage in Firestore (owner-only access)', 'Key usage limited to Mythouse AI features (Atlas, Story Forge)', 'User responsible for their own API billing', 'No sharing or exposure of keys to other users', 'Key deletion on request', 'Mythouse not liable for API charges incurred'],
+    status: 'draft',
+  },
+  {
+    id: 'consulting-agreement',
+    title: 'Consulting Services Agreement',
+    category: 'contract',
+    scope: 'Consulting Mentors & Clients',
+    trigger: 'When a consulting session is booked',
+    description: 'Three-party agreement governing paid consulting sessions between mentors, clients, and Mythouse as platform.',
+    covers: ['Session scheduling & cancellation', 'Payment terms & platform fee', 'Mentor as independent contractor (not employee)', 'Confidentiality of session content', 'Liability & professional disclaimers', 'Dispute resolution between mentor and client'],
+    status: 'draft',
+  },
+  {
+    id: 'story-forge-content',
+    title: 'User Content & Story Forge License',
+    category: 'contract',
+    scope: 'Content Creators',
+    trigger: 'First Story Forge draft or writing save',
+    description: 'Content ownership and licensing terms for user-generated material including Story Forge narratives, personal stories, and Atlas conversation exports.',
+    covers: ['User retains ownership of their original content', 'Limited license to Mythouse for platform display & AI processing', 'AI-generated content co-ownership / usage rights', 'Story Forge drafts & assembled narratives', 'Writings (personal stories, reflections)', 'Atlas conversation history', 'Right to export & delete user content'],
+    status: 'draft',
+  },
+];
+
+const LEGAL_POLICIES = [
+  {
+    id: 'ai-disclaimer',
+    title: 'AI Usage Disclaimer',
+    category: 'policy',
+    scope: 'All Users',
+    description: 'Disclaimer that Atlas and AI features provide educational/entertainment content, not professional advice. Covers mythology, psychology, astrology, and spiritual content.',
+    covers: ['Atlas chat is not therapy, medical, legal, or financial advice', 'Natal chart readings are educational/entertainment', 'Numerology & tarot readings are cultural exploration, not prediction', 'AI-generated story content may contain inaccuracies', 'Mentor interactions are not licensed professional services (unless explicitly stated)'],
+    status: 'draft',
+  },
+  {
+    id: 'content-disclaimer',
+    title: 'Educational Content Disclaimer',
+    category: 'policy',
+    scope: 'All Users',
+    description: 'Disclaimer covering the mythological, psychological, and spiritual content throughout the site.',
+    covers: ['Monomyth & hero\'s journey content is educational interpretation', 'Seven Metals / Celestial Clocks presents historical & symbolic systems', 'Documentary content (Myths series) represents interview perspectives', 'Game content draws on historical/mythological sources', 'Library recommendations are curated, not endorsed'],
+    status: 'draft',
+  },
+  {
+    id: 'copyright-notice',
+    title: 'Copyright & Attribution Notice',
+    category: 'policy',
+    scope: 'Public',
+    description: 'Site-wide copyright notice and attribution for third-party content, open-source data, and creative commons materials.',
+    covers: ['Mythouse original content copyright', 'Will Linn interview content (Myths series)', 'Stith Thompson Motif-Index (Apache 2.0 license, fbkarsdorp/tmi)', 'YouTube embedded content (playlist fair use)', 'Google Maps / Street View embeds', 'Wikisource text reader content (public domain)', 'Open-source library attributions'],
+    status: 'draft',
+  },
+  {
+    id: 'community-guidelines',
+    title: 'Community Guidelines',
+    category: 'policy',
+    scope: 'All Users',
+    description: 'Behavioral expectations for multiplayer interactions, mentor-student relationships, and Guild participation.',
+    covers: ['Multiplayer game conduct (real-time board games)', 'Mentor-student communication standards', 'Guild discussion guidelines', 'Prohibited content & behavior', 'Reporting & enforcement process'],
+    status: 'draft',
+  },
+  {
+    id: 'data-retention',
+    title: 'Data Retention & Deletion Policy',
+    category: 'policy',
+    scope: 'All Users',
+    description: 'How long user data is kept and how users can request deletion. Required for GDPR compliance.',
+    covers: ['Firestore data retention periods', 'Account deletion process & data purge', 'Coursework progress retention', 'Conversation history retention', 'BYOK key deletion guarantees', 'Backup & recovery limitations'],
+    status: 'draft',
+  },
+  {
+    id: 'third-party-services',
+    title: 'Third-Party Services Notice',
+    category: 'policy',
+    scope: 'All Users',
+    description: 'Disclosure of third-party services and their respective terms that apply when using the Mythouse.',
+    covers: ['Firebase / Google Cloud (authentication, database, storage)', 'Anthropic Claude API (Atlas AI, journey synthesis)', 'OpenAI API (Story Forge narrative generation, persona voices)', 'Vercel (hosting, serverless functions)', 'YouTube (embedded video playlists)', 'Google Maps / Street View (Mythic Earth, Sacred Sites 360)', 'Wikisource (sacred text reader)'],
+    status: 'draft',
+  },
+];
+
+const LEGAL_STATUS_CONFIG = {
+  'draft-needed': { label: 'Draft Needed', color: '#d9a55b' },
+  'drafting': { label: 'Drafting', color: '#5b8dd9' },
+  'review': { label: 'Under Review', color: '#b35bd9' },
+  'final': { label: 'Final', color: '#5bd97a' },
+  'active': { label: 'Active', color: '#5bd97a' },
+};
+
+function renderLegalDocument(text) {
+  if (!text) return null;
+  return text.trim().split('\n').map((line, i) => {
+    const trimmed = line.trimEnd();
+    if (!trimmed) return <br key={i} />;
+    // Title lines (all caps, first non-empty line)
+    if (/^MYTHOUSE\s/.test(trimmed)) return <h3 key={i} className="admin-legal-doc-title">{trimmed}</h3>;
+    // Section headers like "1. ACCEPTANCE" or "1.1 Account"
+    if (/^\d+\.\s+[A-Z]/.test(trimmed)) return <h4 key={i} className="admin-legal-doc-section">{trimmed}</h4>;
+    if (/^\d+\.\d+\s/.test(trimmed)) return <p key={i} className="admin-legal-doc-subsection">{trimmed}</p>;
+    // Bullet points
+    if (/^- /.test(trimmed)) return <li key={i} className="admin-legal-doc-bullet">{trimmed.slice(2)}</li>;
+    // "Last Updated" line
+    if (/^Last Updated/.test(trimmed)) return <p key={i} className="admin-legal-doc-date">{trimmed}</p>;
+    // Normal paragraph text
+    return <p key={i} className="admin-legal-doc-para">{trimmed}</p>;
+  });
+}
+
+function LegalSection() {
+  const [viewMode, setViewMode] = useState('contracts');
+  const [expandedItem, setExpandedItem] = useState(null);
+
+  const items = viewMode === 'contracts' ? LEGAL_CONTRACTS : LEGAL_POLICIES;
+
+  return (
+    <div className="admin-legal">
+      <h2 className="admin-legal-title">LEGAL</h2>
+      <p className="admin-legal-subtitle">
+        Contracts, agreements, policies, and disclaimers for the Mythouse platform.
+      </p>
+
+      <div className="admin-legal-stats">
+        <div className="admin-ip-stat">
+          <span className="admin-ip-stat-value">{LEGAL_CONTRACTS.length}</span>
+          <span className="admin-ip-stat-label">Contracts</span>
+        </div>
+        <div className="admin-ip-stat">
+          <span className="admin-ip-stat-value">{LEGAL_POLICIES.length}</span>
+          <span className="admin-ip-stat-label">Policies</span>
+        </div>
+        <div className="admin-ip-stat">
+          <span className="admin-ip-stat-value" style={{ color: '#5b8dd9' }}>
+            {[...LEGAL_CONTRACTS, ...LEGAL_POLICIES].filter(i => i.status === 'draft').length}
+          </span>
+          <span className="admin-ip-stat-label">Drafted</span>
+        </div>
+        <div className="admin-ip-stat">
+          <span className="admin-ip-stat-value" style={{ color: '#5bd97a' }}>
+            {[...LEGAL_CONTRACTS, ...LEGAL_POLICIES].filter(i => i.status === 'active' || i.status === 'final').length}
+          </span>
+          <span className="admin-ip-stat-label">Active</span>
+        </div>
+      </div>
+
+      <div className="admin-legal-tabs">
+        <button
+          className={`admin-section-tab ${viewMode === 'contracts' ? 'active' : ''}`}
+          onClick={() => { setViewMode('contracts'); setExpandedItem(null); }}
+        >
+          Contracts & Agreements ({LEGAL_CONTRACTS.length})
+        </button>
+        <button
+          className={`admin-section-tab ${viewMode === 'policies' ? 'active' : ''}`}
+          onClick={() => { setViewMode('policies'); setExpandedItem(null); }}
+        >
+          Policies & Disclaimers ({LEGAL_POLICIES.length})
+        </button>
+      </div>
+
+      <div className="admin-legal-list">
+        {items.map(item => {
+          const isExpanded = expandedItem === item.id;
+          const statusConf = LEGAL_STATUS_CONFIG[item.status] || LEGAL_STATUS_CONFIG['draft-needed'];
+          return (
+            <div key={item.id} className={`admin-legal-item${isExpanded ? ' expanded' : ''}`}>
+              <button className="admin-legal-item-header" onClick={() => setExpandedItem(isExpanded ? null : item.id)}>
+                <div className="admin-legal-item-title-row">
+                  <span className="admin-legal-item-title">{item.title}</span>
+                  <span className="admin-legal-item-scope">{item.scope}</span>
+                </div>
+                <div className="admin-legal-item-meta">
+                  <span className="admin-legal-item-status" style={{ color: statusConf.color, borderColor: statusConf.color }}>
+                    {statusConf.label}
+                  </span>
+                  <span className="admin-legal-item-chevron">{isExpanded ? '\u25BE' : '\u25B8'}</span>
+                </div>
+              </button>
+              {isExpanded && (
+                <div className="admin-legal-item-body">
+                  <p className="admin-legal-item-desc">{item.description}</p>
+                  {item.trigger && (
+                    <div className="admin-legal-item-trigger">
+                      <span className="admin-legal-field-label">Trigger:</span> {item.trigger}
+                    </div>
+                  )}
+                  <div className="admin-legal-item-covers">
+                    <span className="admin-legal-field-label">Covers:</span>
+                    <ul>
+                      {item.covers.map((c, i) => <li key={i}>{c}</li>)}
+                    </ul>
+                  </div>
+                  <div className="admin-legal-item-draft-area">
+                    {LEGAL_DOCUMENTS[item.id] ? (
+                      <div className="admin-legal-doc">
+                        {renderLegalDocument(LEGAL_DOCUMENTS[item.id])}
+                      </div>
+                    ) : (
+                      <div className="admin-legal-draft-placeholder">
+                        Document draft not yet available.
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+// --- System Health / Refresh Key ---
+const REFRESH_KEY_PROMPT = `Run the full Mythouse diagnostic routine. Here's what to do:
+
+1. **Run the health check script**: \`cd /Users/willlinn/meteor-steel-site-2 && bash scripts/health-check.sh\`
+2. **Interpret every FAIL and WARN** — explain what each means and whether it needs fixing.
+3. **For each FAIL, fix it** if you can (missing files, syntax errors, bad JSON, build errors). If it requires user action (like adding an API key), tell me what to do.
+4. **Check API integrations deeper**:
+   - Read \`api/chat.js\` and verify Anthropic/OpenAI SDK usage matches current SDK versions
+   - Read \`api/_lib/llm.js\` and verify client factory functions are correct
+   - Check that all API endpoints in \`api/\` have proper error handling
+5. **Check for stale patterns**:
+   - Scan for any unused imports in recently modified files
+   - Check that all context providers in App.js are properly nested
+   - Verify that all route paths in App.js point to files that exist
+   - Check for any broken \`import\` paths
+6. **Check subscription/purchase gates**:
+   - Verify all gated features (YBR, Fallen Starlight, Story of Stories, Medicine Wheel) properly check purchases/subscriptions
+   - Check that gate popups navigate to the correct profile section
+7. **Check Firebase rules**: Read \`firestore.rules\` and flag any security concerns
+8. **Summary**: Give me a clear report with what's healthy, what you fixed, and what needs my attention.
+
+After the routine, if there are build warnings or deprecation notices, suggest specific fixes.`;
+
+function SystemHealthSection() {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(REFRESH_KEY_PROMPT).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+  };
+
+  return (
+    <div className="admin-section-content" style={{ padding: '32px 24px', maxWidth: 900 }}>
+      <h2 style={{ fontFamily: 'Cinzel, serif', color: 'rgba(218,165,32,0.9)', fontSize: '1.4rem', marginBottom: 8 }}>
+        System Health &amp; Refresh Key
+      </h2>
+      <p style={{ color: '#aaa', fontSize: '0.9rem', lineHeight: 1.6, marginBottom: 24 }}>
+        Copy the Refresh Key below and paste it into Claude Code in your terminal. It runs a full diagnostic
+        of the site — build, APIs, integrations, gates, data files, and common bugs — then fixes what it can
+        and reports what needs your attention.
+      </p>
+
+      <div style={{ marginBottom: 32 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 10 }}>
+          <h3 style={{ fontFamily: 'Cinzel, serif', color: '#ddd', fontSize: '1rem', margin: 0 }}>
+            Refresh Key
+          </h3>
+          <button
+            onClick={handleCopy}
+            style={{
+              padding: '5px 14px', fontSize: '0.78rem', fontFamily: 'Cinzel, serif',
+              background: copied ? 'rgba(80,180,80,0.2)' : 'rgba(218,165,32,0.15)',
+              border: `1px solid ${copied ? 'rgba(80,180,80,0.5)' : 'rgba(218,165,32,0.4)'}`,
+              borderRadius: 6, color: copied ? '#8f8' : 'rgba(218,165,32,0.9)',
+              cursor: 'pointer', transition: 'all 0.2s',
+            }}
+          >
+            {copied ? 'Copied!' : 'Copy to Clipboard'}
+          </button>
+        </div>
+        <pre style={{
+          background: 'rgba(0,0,0,0.4)', border: '1px solid rgba(218,165,32,0.2)',
+          borderRadius: 8, padding: '16px 18px', fontSize: '0.8rem', lineHeight: 1.6,
+          color: '#ccc', whiteSpace: 'pre-wrap', wordBreak: 'break-word',
+          maxHeight: 400, overflowY: 'auto', fontFamily: 'monospace',
+        }}>
+          {REFRESH_KEY_PROMPT}
+        </pre>
+      </div>
+
+      <div style={{ marginBottom: 32 }}>
+        <h3 style={{ fontFamily: 'Cinzel, serif', color: '#ddd', fontSize: '1rem', marginBottom: 10 }}>
+          What It Checks
+        </h3>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: 12 }}>
+          {[
+            { title: 'Environment Variables', desc: 'Firebase, Anthropic, OpenAI, Google Maps keys' },
+            { title: 'Dependencies', desc: 'Outdated packages, vulnerabilities, lock file' },
+            { title: 'Build', desc: 'Full npm build — catches syntax & import errors' },
+            { title: 'API Endpoints', desc: 'Syntax check all serverless functions' },
+            { title: 'External Services', desc: 'Anthropic, OpenAI, YouTube, Wikisource reachability' },
+            { title: 'Data Files', desc: 'JSON validation for all data files in src/data/' },
+            { title: 'Pages & Routes', desc: 'Verify all page files exist and routes resolve' },
+            { title: 'Git Status', desc: 'Branch, uncommitted changes, remote sync' },
+            { title: 'Code Quality', desc: 'Console logs, TODOs, duplicate imports' },
+            { title: 'Purchase/Sub Gates', desc: 'YBR, Starlight, Medicine Wheel gate integrity' },
+            { title: 'Firebase Rules', desc: 'Security review of firestore.rules' },
+            { title: 'SDK Versions', desc: 'Anthropic & OpenAI SDK usage vs current API' },
+          ].map(item => (
+            <div key={item.title} style={{
+              background: 'rgba(26,26,36,0.7)', border: '1px solid rgba(218,165,32,0.15)',
+              borderRadius: 8, padding: '12px 14px',
+            }}>
+              <div style={{ fontFamily: 'Cinzel, serif', fontSize: '0.82rem', color: 'rgba(218,165,32,0.8)', marginBottom: 4 }}>
+                {item.title}
+              </div>
+              <div style={{ fontSize: '0.78rem', color: '#999', lineHeight: 1.4 }}>
+                {item.desc}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div style={{ background: 'rgba(26,26,36,0.5)', border: '1px solid rgba(218,165,32,0.15)', borderRadius: 8, padding: '16px 18px' }}>
+        <h3 style={{ fontFamily: 'Cinzel, serif', color: '#ddd', fontSize: '1rem', marginBottom: 8 }}>
+          How to Use
+        </h3>
+        <ol style={{ color: '#aaa', fontSize: '0.85rem', lineHeight: 1.8, margin: 0, paddingLeft: 20 }}>
+          <li>Open your terminal and launch Claude Code in the project directory</li>
+          <li>Click <strong>Copy to Clipboard</strong> above</li>
+          <li>Paste into Claude Code and press Enter</li>
+          <li>Claude will run all checks, fix what it can, and report what needs your attention</li>
+        </ol>
+        <p style={{ color: '#888', fontSize: '0.8rem', marginTop: 12, marginBottom: 0, fontStyle: 'italic' }}>
+          Also available at: scripts/health-check.sh (standalone) and scripts/refresh-key-prompt.md (full prompt)
+        </p>
+      </div>
+    </div>
+  );
+}
+
 function AdminPage() {
   const [activeSection, setActiveSection] = useState('campaigns');
 
@@ -1890,8 +2979,10 @@ function AdminPage() {
         ))}
       </div>
 
+      {activeSection === 'system-health' && <SystemHealthSection />}
       {activeSection === 'campaigns' && <CampaignManagerSection />}
       {activeSection === 'coursework' && <CourseworkManagerSection />}
+      {activeSection === '360-media' && <Media360Section />}
       {activeSection === 'subscribers' && <SubscribersSection />}
       {activeSection === 'mentors' && <MentorManagerSection />}
       {activeSection === 'contacts' && (
@@ -1901,6 +2992,7 @@ function AdminPage() {
       )}
       {activeSection === 'services' && <ServicesSection />}
       {activeSection === 'ip-registry' && <IPRegistrySection />}
+      {activeSection === 'legal' && <LegalSection />}
     </div>
   );
 }

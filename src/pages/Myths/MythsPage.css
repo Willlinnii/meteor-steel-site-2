@@ -208,6 +208,177 @@
   font-style: italic;
 }
 
+/* --- Mode Toggle (Synthesis / Interview Transcript) --- */
+.myths-mode-toggle {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.myths-mode-btn {
+  font-family: 'Cinzel', serif;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent-steel);
+  background: var(--bg-medium);
+  border: 1px solid var(--border-subtle);
+  padding: 7px 18px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.myths-mode-btn:hover {
+  background: rgba(139, 157, 195, 0.1);
+  border-color: var(--accent-steel);
+}
+
+.myths-mode-btn.active {
+  color: var(--accent-gold);
+  border-color: var(--accent-gold);
+  background: rgba(201, 169, 97, 0.1);
+  box-shadow: 0 0 12px rgba(201, 169, 97, 0.2);
+}
+
+/* --- Synthesis Sections --- */
+.myths-synthesis {
+  max-width: 800px;
+  margin: 0 auto;
+  animation: myths-fade-in 0.4s ease;
+}
+
+.myths-synthesis-section {
+  margin-bottom: 28px;
+}
+
+.myths-synthesis-heading {
+  font-family: 'Cinzel', serif;
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent-gold);
+  margin: 0 0 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(201, 169, 97, 0.25);
+}
+
+.myths-synthesis-body {
+  font-family: 'Crimson Pro', serif;
+  font-size: 1.15rem;
+  line-height: 1.9;
+  color: var(--text-primary);
+  padding: 0 0 0 20px;
+  border-left: 3px solid rgba(201, 169, 97, 0.2);
+}
+
+.myths-synthesis-body p {
+  margin-bottom: 1em;
+}
+
+.myths-synthesis-body p:last-child {
+  margin-bottom: 0;
+}
+
+/* --- Interview Transcript (sequential Q&A) --- */
+.myths-transcript {
+  max-width: 800px;
+  margin: 0 auto;
+  animation: myths-fade-in 0.4s ease;
+}
+
+.myths-transcript-entry {
+  margin-bottom: 4px;
+}
+
+.myths-transcript-entry.expanded {
+  margin-bottom: 16px;
+}
+
+.myths-transcript-question {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  width: 100%;
+  font-family: 'Cinzel', serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--accent-gold);
+  line-height: 1.5;
+  padding: 10px 12px 10px 16px;
+  border: none;
+  border-left: 3px solid transparent;
+  background: none;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.2s ease;
+}
+
+.myths-transcript-question:hover {
+  background: rgba(201, 169, 97, 0.06);
+  border-left-color: var(--accent-gold);
+}
+
+.myths-transcript-entry.expanded .myths-transcript-question {
+  border-left-color: var(--accent-gold);
+  background: rgba(201, 169, 97, 0.08);
+}
+
+.myths-transcript-question-text {
+  flex: 1;
+}
+
+.myths-transcript-storyline {
+  color: var(--accent-steel);
+  font-style: italic;
+}
+
+.myths-transcript-storyline:hover {
+  border-left-color: var(--accent-steel);
+  background: rgba(139, 157, 195, 0.06);
+}
+
+.myths-transcript-entry.expanded .myths-transcript-storyline {
+  border-left-color: var(--accent-steel);
+  background: rgba(139, 157, 195, 0.08);
+}
+
+.myths-transcript-storyline .myths-transcript-chevron {
+  color: var(--accent-steel);
+}
+
+.myths-transcript-chevron {
+  font-size: 0.75rem;
+  color: var(--accent-gold);
+  opacity: 0.5;
+  flex-shrink: 0;
+}
+
+.myths-transcript-entry.expanded .myths-transcript-chevron {
+  opacity: 0.8;
+}
+
+.myths-transcript-answer {
+  font-family: 'Crimson Pro', serif;
+  font-size: 1.15rem;
+  line-height: 1.9;
+  color: var(--text-primary);
+  padding: 12px 12px 16px 20px;
+  border-left: 3px solid rgba(201, 169, 97, 0.2);
+  margin-left: 16px;
+  animation: myths-fade-in 0.3s ease;
+}
+
+.myths-transcript-answer p {
+  margin-bottom: 1em;
+}
+
+.myths-transcript-answer p:last-child {
+  margin-bottom: 0;
+}
+
 /* --- Theme Buttons (same pattern as Treasures) --- */
 .myths-theme-buttons {
   display: flex;
@@ -445,6 +616,31 @@
   .myths-interview-intro {
     font-size: 0.85rem;
   }
+
+  .myths-mode-btn {
+    font-size: 0.58rem;
+    padding: 6px 12px;
+  }
+
+  .myths-synthesis-heading {
+    font-size: 0.9rem;
+  }
+
+  .myths-synthesis-body {
+    font-size: 1rem;
+    padding-left: 14px;
+  }
+
+  .myths-transcript-question {
+    font-size: 0.78rem;
+    padding: 8px 10px 8px 12px;
+  }
+
+  .myths-transcript-answer {
+    font-size: 1rem;
+    padding: 10px 10px 14px 14px;
+    margin-left: 12px;
+  }
 }
 
 /* ── Play button ── */
@@ -597,7 +793,7 @@
   to { transform: rotate(360deg); }
 }
 
-/* ===== MYTHIC EARTH CONTENT (shared with SevenMetals) ===== */
+/* ===== MYTHIC EARTH CONTENT (shared with Chronosphaera) ===== */
 
 .mythic-earth-content-area {
   max-width: 900px;

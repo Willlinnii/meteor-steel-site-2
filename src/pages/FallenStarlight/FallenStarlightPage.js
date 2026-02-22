@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useRef, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, Navigate } from 'react-router-dom';
+import { useProfile } from '../../profile/ProfileContext';
 import CircleNav from '../../components/CircleNav';
 import DevelopmentPanel from '../../components/DevelopmentPanel';
 import fallenStarlightData from '../../data/fallenStarlight.json';
@@ -86,6 +87,7 @@ function BioView() {
 }
 
 export default function FallenStarlightPage() {
+  const { hasPurchase } = useProfile();
   const [searchParams, setSearchParams] = useSearchParams();
   const [currentStage, setCurrentStage] = useState('overview');
   const [clockwise, setClockwise] = useState(false);
@@ -181,6 +183,8 @@ export default function FallenStarlightPage() {
   const chapterText = currentStage !== 'overview' && currentStage !== 'bio'
     ? fallenStarlightData.chapters[currentStage]
     : null;
+
+  if (!hasPurchase('fallen-starlight')) return <Navigate to="/chronosphaera" replace />;
 
   return (
     <>

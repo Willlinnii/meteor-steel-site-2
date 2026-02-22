@@ -97,7 +97,7 @@ export default function TarotCardContent({ correspondenceType, correspondenceVal
     position = ARCANA_POSITIONS.find(p => p.type === 'zodiac' && p.correspondence === sign);
   }
 
-  if (!position) return <p className="metals-empty">No tarot correspondence found.</p>;
+  if (!position) return <p className="chrono-empty">No tarot correspondence found.</p>;
 
   const cards = getCrossReference(position.number);
 

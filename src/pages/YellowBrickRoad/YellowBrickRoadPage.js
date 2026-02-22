@@ -1,6 +1,7 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { usePageTracking } from '../../coursework/CourseworkContext';
+import { useProfile } from '../../profile/ProfileContext';
 import './YellowBrickRoadPage.css';
 
 const JOURNEYS = [
@@ -8,7 +9,7 @@ const JOURNEYS = [
     id: 'cosmic',
     label: 'Cosmic Journey',
     description: 'Ascend through the planetary spheres, traverse the zodiac, and descend carrying what you\'ve gathered. 26 encounters. 3 levels each.',
-    path: '/metals/yellow-brick-road',
+    path: '/chronosphaera/yellow-brick-road',
     storyPath: '/journey/cosmic',
     stages: '26 stops',
     icon: (
@@ -27,7 +28,7 @@ const JOURNEYS = [
     id: 'planetary',
     label: 'Planetary Journey',
     description: 'Ascend through the seven planetary spheres. Each planet tests you three times — Moon, Mercury, Venus, Sun, Mars, Jupiter, Saturn.',
-    path: '/metals/yellow-brick-road',
+    path: '/chronosphaera/yellow-brick-road',
     storyPath: '/journey/planetary',
     stages: '7 stops, 3 levels each',
     icon: (
@@ -47,7 +48,7 @@ const JOURNEYS = [
     id: 'zodiac',
     label: 'Zodiac Journey',
     description: 'Traverse the twelve signs of the zodiac. Each sign tests you three times — Aries through Pisces.',
-    path: '/metals/yellow-brick-road',
+    path: '/chronosphaera/yellow-brick-road',
     storyPath: '/journey/zodiac',
     stages: '12 stops, 3 levels each',
     icon: (
@@ -116,6 +117,17 @@ const JOURNEYS = [
 
 export default function YellowBrickRoadPage() {
   usePageTracking('ybr');
+  const { hasSubscription } = useProfile();
+  const navigate = useNavigate();
+  const [showGate, setShowGate] = useState(false);
+  const hasYBR = hasSubscription('ybr');
+
+  const handleGatedClick = (e) => {
+    if (!hasYBR) {
+      e.preventDefault();
+      setShowGate(true);
+    }
+  };
 
   return (
     <div className="ybr-page">
@@ -139,9 +151,9 @@ export default function YellowBrickRoadPage() {
 
       <div className="ybr-grid">
         {JOURNEYS.map(j => (
-          <div key={j.id} className="ybr-card">
+          <div key={j.id} className={`ybr-card${!hasYBR ? ' ybr-card-locked' : ''}`}>
             {j.path ? (
-              <Link className="ybr-card-main" to={j.path}>
+              <Link className="ybr-card-main" to={j.path} onClick={handleGatedClick}>
                 <div className="ybr-card-icon">{j.icon}</div>
                 <div className="ybr-card-body">
                   <span className="ybr-card-title">{j.label}</span>
@@ -150,7 +162,7 @@ export default function YellowBrickRoadPage() {
                 </div>
               </Link>
             ) : (
-              <div className="ybr-card-main">
+              <div className="ybr-card-main" onClick={!hasYBR ? handleGatedClick : undefined} style={!hasYBR ? { cursor: 'pointer' } : undefined}>
                 <div className="ybr-card-icon">{j.icon}</div>
                 <div className="ybr-card-body">
                   <span className="ybr-card-title">{j.label}</span>
@@ -164,7 +176,7 @@ export default function YellowBrickRoadPage() {
                 className="ybr-card-story"
                 to={j.storyPath}
                 title="Enter the story — Atlas guides you through the Ouroboros"
-                onClick={e => e.stopPropagation()}
+                onClick={e => { e.stopPropagation(); handleGatedClick(e); }}
               >
                 <img
                   src="/images/ouroboros-dragon.png"
@@ -177,6 +189,23 @@ export default function YellowBrickRoadPage() {
           </div>
         ))}
       </div>
+
+      {showGate && (
+        <div className="subscription-gate-overlay" onClick={() => setShowGate(false)}>
+          <div className="subscription-gate-popup" onClick={e => e.stopPropagation()}>
+            <h3 className="subscription-gate-title">Yellow Brick Road</h3>
+            <p className="subscription-gate-desc">The Yellow Brick Road is a guided, stage-by-stage journey through the monomyth. Enable the subscription in your profile to walk the path with Atlas.</p>
+            <div className="subscription-gate-actions">
+              <button className="subscription-gate-primary" onClick={() => { navigate('/profile#subscriptions'); setShowGate(false); }}>
+                Manage Membership
+              </button>
+              <button className="subscription-gate-secondary" onClick={() => setShowGate(false)}>
+                Not now
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

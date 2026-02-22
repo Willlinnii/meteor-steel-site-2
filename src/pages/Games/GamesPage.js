@@ -1,8 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useCoursework } from '../../coursework/CourseworkContext';
 import { useMultiplayer } from '../../multiplayer/MultiplayerContext';
 import { useAuth } from '../../auth/AuthContext';
+import { useProfile } from '../../profile/ProfileContext';
 import SnakesAndLaddersGame from '../../games/snakesAndLadders/SnakesAndLaddersGame';
 import RoyalGameOfUrGame from '../../games/royalGameOfUr/RoyalGameOfUrGame';
 import SenetGame from '../../games/senet/SenetGame';
@@ -66,7 +67,7 @@ const YELLOW_BRICK_ROADS = [
     id: 'yellow-brick-road',
     label: 'Cosmic Journey',
     description: 'Ascend through the planetary spheres, traverse the zodiac, and descend carrying what you\'ve gathered. 26 encounters. 3 levels each.',
-    externalPath: '/metals/yellow-brick-road',
+    externalPath: '/chronosphaera/yellow-brick-road',
     ouroborosPath: '/journey/cosmic',
   },
   {
@@ -96,7 +97,7 @@ const XR_EXPERIENCES = [
     id: 'celestial-3d',
     label: 'Celestial Wheels 3D',
     description: 'Step inside the planetary spheres. Orbit the Sun, stand at the center, or see live positions. VR headset and phone AR support.',
-    path: '/metals/vr',
+    path: '/chronosphaera/vr',
     features: 'VR · Phone AR · Fullscreen',
   },
   {
@@ -144,6 +145,9 @@ export default function GamesPage() {
   const { trackElement, isElementCompleted, courseworkMode } = useCoursework();
   const { user } = useAuth();
   const { activeMatches, getMatchesForGame } = useMultiplayer(); // eslint-disable-line no-unused-vars
+  const { hasSubscription } = useProfile();
+  const [showYbrGate, setShowYbrGate] = useState(false);
+  const hasYBR = hasSubscription('ybr');
 
   // Parse URL: /games/:gameId/:mode or /games/:gameId/online/:matchId
   const parts = splat ? splat.split('/').filter(Boolean) : [];
@@ -338,21 +342,38 @@ export default function GamesPage() {
       <h2 className="games-section-title">Yellow Brick Roads</h2>
       <div className="games-grid">
         {YELLOW_BRICK_ROADS.map(game => (
-          <div key={game.id} className="game-card featured">
-            <Link className="game-card-link" to={game.externalPath}>
-              <span className="game-card-title">{game.label}</span>
-              <span className="game-card-desc">{game.description}</span>
-            </Link>
+          <div key={game.id} className={`game-card featured${!hasYBR ? ' game-card-locked' : ''}`}>
+            {hasYBR ? (
+              <Link className="game-card-link" to={game.externalPath}>
+                <span className="game-card-title">{game.label}</span>
+                <span className="game-card-desc">{game.description}</span>
+              </Link>
+            ) : (
+              <div className="game-card-link" onClick={() => setShowYbrGate(true)} style={{ cursor: 'pointer' }}>
+                <span className="game-card-title">{game.label}</span>
+                <span className="game-card-desc">{game.description}</span>
+              </div>
+            )}
             {game.ouroborosPath && (
-              <a
-                className="game-card-ouroboros"
-                href={game.ouroborosPath}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={e => e.stopPropagation()}
-              >
-                Ouroboros
-              </a>
+              hasYBR ? (
+                <a
+                  className="game-card-ouroboros"
+                  href={game.ouroborosPath}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={e => e.stopPropagation()}
+                >
+                  Ouroboros
+                </a>
+              ) : (
+                <span
+                  className="game-card-ouroboros"
+                  onClick={e => { e.stopPropagation(); setShowYbrGate(true); }}
+                  style={{ cursor: 'pointer' }}
+                >
+                  Ouroboros
+                </span>
+              )
             )}
           </div>
         ))}
@@ -368,6 +389,23 @@ export default function GamesPage() {
           </Link>
         ))}
       </div>
+
+      {showYbrGate && (
+        <div className="subscription-gate-overlay" onClick={() => setShowYbrGate(false)}>
+          <div className="subscription-gate-popup" onClick={e => e.stopPropagation()}>
+            <h3 className="subscription-gate-title">Yellow Brick Road</h3>
+            <p className="subscription-gate-desc">The Yellow Brick Road is a guided, stage-by-stage journey through the monomyth. Enable the subscription in your profile to walk the path with Atlas.</p>
+            <div className="subscription-gate-actions">
+              <button className="subscription-gate-primary" onClick={() => { navigate('/profile#subscriptions'); setShowYbrGate(false); }}>
+                Manage Membership
+              </button>
+              <button className="subscription-gate-secondary" onClick={() => setShowYbrGate(false)}>
+                Not now
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

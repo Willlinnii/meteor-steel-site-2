@@ -54,6 +54,7 @@ const sevenMetalsPlanetaryCultures = require('../src/data/sevenMetalsPlanetaryCu
 const dayNight = require('../src/data/dayNight.json');
 const medicineWheelContent = require('../src/data/medicineWheelContent.json');
 const mythsEpisodes = require('../src/data/mythsEpisodes.json');
+const mythsSynthesis = require('../src/data/mythsSynthesis.json');
 const gameBookDataModule = require('../src/games/shared/gameBookData.js');
 const gameBookData = gameBookDataModule.default || gameBookDataModule;
 const yellowBrickRoad = require('../src/data/yellowBrickRoad.json');
@@ -548,6 +549,32 @@ function compactEpisodes() {
   return `## MYTHS: The Greatest Mysteries of Humanity — Episodes\n${show.title}: ${truncate(show.description, 150)}\n\n` + episodes.join('\n\n');
 }
 
+const MYTHOSPHAERA_INTRO = `## Mythosphaera — Comparative Mythology & Documentary Analysis
+You are now drawing from the Mythosphaera, the Mythouse's mythology documentary archive. Your expertise shifts to comparative mythology, cultural analysis, and documentary interview mode. You have access to synthesized insights from Will Linn's interviews for "Myths: The Greatest Mysteries of Humanity" — a 29-episode documentary series exploring humanity's deepest myths. Treat these synthesis essays as primary source material. You can discuss any episode's themes in depth, draw cross-episode thematic connections, and provide detailed cultural analysis. When a user asks about a specific myth or episode, draw on the full richness of these materials.`;
+
+function compactMythsSynthesis() {
+  const lines = [];
+  for (const [epId, epData] of Object.entries(mythsSynthesis)) {
+    const title = epId.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+    const sectionLines = (epData.sections || []).map(s => {
+      const firstSentence = s.text.split(/(?<=[.!?])\s+/)[0] || s.text.substring(0, 120);
+      return `- ${s.heading}: ${firstSentence}`;
+    });
+    lines.push(`### ${title}\n${sectionLines.join('\n')}`);
+  }
+  return `## MYTHS: Thematic Synthesis — All Episodes\n\n${lines.join('\n')}`;
+}
+
+function fullEpisodeSynthesis(episodeId) {
+  const epData = mythsSynthesis[episodeId];
+  if (!epData) return '';
+  const title = episodeId.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+  const sections = (epData.sections || []).map(s =>
+    `### ${s.heading}\n${s.text}`
+  );
+  return `## DEEP DIVE: ${title}\nFull synthesized analysis for this episode:\n\n${sections.join('\n\n')}`;
+}
+
 function compactGameBook() {
   const lines = [];
   for (const [gameId, game] of Object.entries(gameBookData)) {
@@ -611,7 +638,7 @@ function detectAreaFromMessage(messages) {
   return null;
 }
 
-function getAreaKnowledge(area) {
+function getAreaKnowledge(area, context) {
   switch (area) {
     case 'celestial-clocks':
       return [
@@ -669,8 +696,13 @@ function getAreaKnowledge(area) {
         compactNormalOther(),
       ].join('\n\n');
 
-    case 'mythology-channel':
-      return compactEpisodes();
+    case 'mythology-channel': {
+      const parts = [MYTHOSPHAERA_INTRO, compactMythsSynthesis()];
+      if (context?.episode) {
+        parts.push(fullEpisodeSynthesis(context.episode));
+      }
+      return parts.join('\n\n');
+    }
 
     case 'games':
       return compactGameBook();
@@ -967,14 +999,16 @@ ${NATAL_CHART_GUIDANCE}`;
   return cachedCore;
 }
 
-function getSystemPrompt(area) {
+function getSystemPrompt(area, context) {
   const core = getCorePrompt();
   if (!area) return core;
 
-  if (!cachedAreas[area]) {
-    cachedAreas[area] = getAreaKnowledge(area);
+  // Cache key includes context for episode-specific variants
+  const cacheKey = context?.episode ? `${area}:${context.episode}` : area;
+  if (!cachedAreas[cacheKey]) {
+    cachedAreas[cacheKey] = getAreaKnowledge(area, context);
   }
-  const areaData = cachedAreas[area];
+  const areaData = cachedAreas[cacheKey];
   if (!areaData) return core;
 
   return core + `\n\n---\nDEEP KNOWLEDGE — CURRENT AREA:\nThe user is currently browsing this area of the site. You have full detailed knowledge below. Draw on it for specific, precise answers.\n\n${areaData}\n---`;
@@ -1497,7 +1531,7 @@ module.exports = async function handler(req, res) {
     }
   }
 
-  const { messages, area, persona, mode, challengeStop, level, journeyId, stageId, gameMode, stageData, aspect, courseSummary, existingCredentials, existingNatalChart, qualifiedMentorTypes, uploadedDocument, tarotPhase, tarotCards, tarotIntention, culture, template, stageContent, targetStage, stageEntries, adjacentDrafts, requestDraft, drafts } = req.body || {};
+  const { messages, area, persona, mode, challengeStop, level, journeyId, stageId, gameMode, stageData, aspect, courseSummary, episodeContext, existingCredentials, existingNatalChart, qualifiedMentorTypes, uploadedDocument, tarotPhase, tarotCards, tarotIntention, culture, template, stageContent, targetStage, stageEntries, adjacentDrafts, requestDraft, drafts } = req.body || {};
 
   // --- Story Forge mode (narrative generation via OpenAI) ---
   if (mode === 'forge') {
@@ -2420,7 +2454,8 @@ IMPORTANT:
 
   // Determine system prompt: persona-specific or standard area-based
   const personaPrompt = persona ? getPersonaPrompt(persona) : null;
-  let systemPrompt = personaPrompt || getSystemPrompt(validArea);
+  const areaContext = episodeContext ? { episode: episodeContext } : undefined;
+  let systemPrompt = personaPrompt || getSystemPrompt(validArea, areaContext);
 
   // Append coursework context if available
   if (courseSummary && typeof courseSummary === 'string' && courseSummary.length > 0) {

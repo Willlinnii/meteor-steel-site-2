@@ -1,0 +1,119 @@
+.trail-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: #000;
+  display: flex;
+  flex-direction: column;
+}
+
+.trail-viewer {
+  flex: 1;
+  position: relative;
+  min-height: 0;
+}
+
+.trail-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: #8a8aa0;
+  font-family: 'Georgia', serif;
+  font-size: 0.9rem;
+}
+
+.trail-chrome {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  z-index: 10;
+}
+
+.trail-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  pointer-events: auto;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  font-size: 1.4rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(8px);
+  transition: background 0.2s;
+}
+
+.trail-close:hover {
+  background: rgba(0, 0, 0, 0.8);
+}
+
+.trail-info {
+  margin-top: auto;
+  padding: 16px 20px;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+  pointer-events: auto;
+}
+
+.trail-counter {
+  font-size: 0.72rem;
+  color: rgba(255, 255, 255, 0.5);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.trail-title {
+  font-family: 'Cinzel', serif;
+  font-size: 1.2rem;
+  color: #e8d5b5;
+  margin: 0 0 4px;
+  font-weight: 600;
+}
+
+.trail-desc {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0;
+  line-height: 1.4;
+  max-width: 500px;
+}
+
+.trail-nav {
+  display: flex;
+  gap: 8px;
+  padding: 0 20px 20px;
+  pointer-events: auto;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.trail-nav-btn {
+  flex: 1;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(0, 0, 0, 0.4);
+  color: #fff;
+  font-size: 1.1rem;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  transition: all 0.2s;
+}
+
+.trail-nav-btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.trail-nav-btn:disabled {
+  opacity: 0.3;
+  cursor: default;
+}

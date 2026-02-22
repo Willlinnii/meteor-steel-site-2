@@ -41,7 +41,7 @@ export default function ChatPanel() {
   const { trackElement, buildCourseSummary } = useCoursework();
   const { getConversation, saveConversation, loaded: writingsLoaded } = useWritings();
   const { profileData, loaded: profileLoaded, completeOnboarding } = useProfile();
-  const { area: areaOverride } = useAreaOverride();
+  const { area: areaOverride, meta: areaMeta } = useAreaOverride();
   const onboardingTriggered = useRef(false);
 
   // Load previous Atlas conversation on mount
@@ -64,7 +64,7 @@ export default function ChatPanel() {
       role: 'assistant',
       content:
         'Welcome to the Mythouse. Here, you can explore the mythic dimension — the layer of meaning that runs beneath every culture, every story, every star.\n\n' +
-        'Watch documentaries and original series from the [[Mythology Channel|/mythology-channel]]. Explore and interact with the mythic cosmos on the [[Chronosphaera|/metals/calendar]], or trace the hero\'s journey through the [[Monomyth|/]]. Generate stories in the [[Story Forge|/story-forge]] and reflect on your own mythic path. Play ancient [[games|/games]], browse the [[Library|/library]], or enter immersive realities through [[VR / XR|/xr]]. All is possible, and present, within the Mythouse.\n\n' +
+        'Watch documentaries and original series from the [[Mythology Channel|/mythology-channel]]. Explore and interact with the mythic cosmos on the [[Chronosphaera|/chronosphaera]], or trace the hero\'s journey through the [[Monomyth|/]]. Generate stories in the [[Story Forge|/story-forge]] and reflect on your own mythic path. Play ancient [[games|/games]], browse the [[Library|/library]], or enter immersive realities through [[VR / XR|/xr]]. All is possible, and present, within the Mythouse.\n\n' +
         'I am Atlas — your guide through this landscape. What would you like to explore?',
     }]);
     completeOnboarding();
@@ -83,7 +83,7 @@ export default function ChatPanel() {
     // Area override from page-level mode (e.g. monomyth/meteor-steel on celestial clocks)
     if (areaOverride) return areaOverride;
     const path = location.pathname;
-    if (path.startsWith('/metals')) return 'celestial-clocks';
+    if (path.startsWith('/chronosphaera') || path.startsWith('/metals')) return 'celestial-clocks';
     if (path === '/' || path === '/monomyth') return 'meteor-steel';
     if (path === '/fallen-starlight') return 'fallen-starlight';
     if (path === '/story-forge') return 'story-forge';
@@ -150,7 +150,7 @@ export default function ChatPanel() {
       const res = await apiFetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: updated, area, courseSummary }),
+        body: JSON.stringify({ messages: updated, area, courseSummary, episodeContext: areaMeta?.episode }),
       });
 
       const data = await res.json();

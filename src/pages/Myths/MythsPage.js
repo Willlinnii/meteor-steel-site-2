@@ -1,8 +1,11 @@
 import React, { useState, useCallback, useMemo, useRef, useEffect, lazy, Suspense } from 'react';
+import { useCoursework } from '../../coursework/CourseworkContext';
+import { useAreaOverride } from '../../App';
 import CircleNav from '../../components/CircleNav';
 import { ring1, ring2, ring3, allEpisodes, subtitle as seriesSubtitle, description as seriesDescription, rokuUrl } from '../../data/mythsSeriesData';
 import treasuresData from '../../data/treasuresData';
 import mythicEarthSites from '../../data/mythicEarthSites.json';
+import mythsSynthesis from '../../data/mythsSynthesis.json';
 import {
   CULTURES, ARCANA_POSITIONS,
   getArcanaForCulture, getArcanaPosition, getCrossReference,
@@ -213,6 +216,7 @@ function MotifItem({ entry, isExpanded, onToggle }) {
 }
 
 function MotifIndex() {
+  const { trackElement } = useCoursework();
   const [catData, setCatData] = useState({});   // { A: [...], B: [...] }
   const [loading, setLoading] = useState(false);
   const [activeCat, setActiveCat] = useState('A');
@@ -283,8 +287,9 @@ function MotifIndex() {
     setActiveCat(catId);
     setExpandedMotif(null);
     setSearchQuery('');
+    trackElement(`myths.motifs.category.${catId}`);
     if (listRef.current) listRef.current.scrollTop = 0;
-  }, []);
+  }, [trackElement]);
 
   // Load all categories for search
   const handleSearchFocus = useCallback(() => {
@@ -433,16 +438,21 @@ const TREASURE_TABS = [
 
 /* ── Treasures content (inlined from TreasuresPage) ── */
 function TreasuresContent({ currentEpisode, onSelectEpisode, viewToggle }) {
+  const { trackElement } = useCoursework();
   const [activeTab, setActiveTab] = useState('themes');
   const [activeTheme, setActiveTheme] = useState(null);
+  const [playlistActive, setPlaylistActive] = useState(false);
 
   const episodeData = treasuresData.episodes.find(ep => ep.id === currentEpisode);
   const isPlaceholder = episodeData && episodeData.themes.length === 0;
 
   const handleTabClick = useCallback((tabId) => {
     setActiveTab(tabId);
+    trackElement(`myths.treasures.tab.${tabId}`);
     if (tabId !== 'themes') setActiveTheme(null);
-  }, []);
+    // Activate playlist when Playlist tab is selected; other tabs leave it playing
+    if (tabId === 'playlist') setPlaylistActive(true);
+  }, [trackElement]);
 
   // Reset tab state when episode changes
   const prevEp = React.useRef(currentEpisode);
@@ -451,10 +461,12 @@ function TreasuresContent({ currentEpisode, onSelectEpisode, viewToggle }) {
       prevEp.current = currentEpisode;
       setActiveTab('themes');
       setActiveTheme(null);
+      setPlaylistActive(false);
     }
   }, [currentEpisode]);
 
-  const videoUrl = activeTab === 'playlist' && episodeData?.playlist ? episodeData.playlist : null;
+  // Playlist stays active across tab switches; only closed via the X button
+  const videoUrl = playlistActive && episodeData?.playlist ? episodeData.playlist : null;
 
   return (
     <>
@@ -468,7 +480,7 @@ function TreasuresContent({ currentEpisode, onSelectEpisode, viewToggle }) {
         centerLine3=""
         showAuthor={false}
         videoUrl={videoUrl}
-        onCloseVideo={() => setActiveTab('themes')}
+        onCloseVideo={() => { setPlaylistActive(false); setActiveTab('themes'); }}
       />
 
       <div className="treasures-subtitle">{treasuresData.subtitle}</div>
@@ -770,6 +782,7 @@ const TYPE_SYMBOLS = {
 
 /* ── Tarot Decks content ── */
 function TarotContent() {
+  const { trackElement } = useCoursework();
   const [activeCulture, setActiveCulture] = useState('tarot');
   const [expandedCard, setExpandedCard] = useState(null);
   const [arcanaView, setArcanaView] = useState('major');
@@ -815,7 +828,7 @@ function TarotContent() {
         <button
           className={`mc-tab${activeCulture === 'tarot' ? ' active' : ''}`}
           style={{ '--tab-color': 'var(--accent-gold)' }}
-          onClick={() => { setActiveCulture('tarot'); setExpandedCard(null); setMinorSuitFilter(null); }}
+          onClick={() => { setActiveCulture('tarot'); setExpandedCard(null); setMinorSuitFilter(null); trackElement('myths.tarot.culture.tarot'); }}
         >
           Tarot
           <span className="mc-tab-count">78</span>
@@ -824,7 +837,7 @@ function TarotContent() {
           <button
             key={c.key}
             className={`mc-tab${activeCulture === c.key ? ' active' : ''}`}
-            onClick={() => { setActiveCulture(c.key); setExpandedCard(null); setMinorSuitFilter(null); }}
+            onClick={() => { setActiveCulture(c.key); setExpandedCard(null); setMinorSuitFilter(null); trackElement(`myths.tarot.culture.${c.key}`); }}
           >
             {c.label}
             <span className="mc-tab-count">78</span>
@@ -1026,10 +1039,21 @@ function TarotContent() {
 
 /* ── Series content ── */
 function SeriesContent({ currentEpisode, onSelectEpisode, viewToggle }) {
+  const { trackElement } = useCoursework();
+  const { register } = useAreaOverride();
   const [activeEntry, setActiveEntry] = useState(null);
   const [videoUrl, setVideoUrl] = useState(null);
+  const [interviewMode, setInterviewMode] = useState(false);
+  const [expandedEntry, setExpandedEntry] = useState(null);
 
   const episodeData = allEpisodes.find(ep => ep.id === currentEpisode);
+  const synthesisData = mythsSynthesis[currentEpisode] || null;
+
+  // Register episode context for Atlas (area stays null — ChatPanel detects via pathname)
+  useEffect(() => {
+    register(null, { episode: currentEpisode });
+    return () => register(null, null);
+  }, [currentEpisode, register]);
 
   // Reset when episode changes
   const prevEp = React.useRef(currentEpisode);
@@ -1038,6 +1062,8 @@ function SeriesContent({ currentEpisode, onSelectEpisode, viewToggle }) {
       prevEp.current = currentEpisode;
       setActiveEntry(null);
       setVideoUrl(null);
+      setInterviewMode(false);
+      setExpandedEntry(null);
     }
   }, [currentEpisode]);
 
@@ -1113,36 +1139,85 @@ function SeriesContent({ currentEpisode, onSelectEpisode, viewToggle }) {
                 </div>
               ) : (
                 <div className="myths-interview">
-                  <div className="myths-interview-intro">
-                    From the interview with Will Linn for <em>Myths: The Greatest Mysteries of Humanity</em>.
+                  <div className="myths-mode-toggle">
+                    <button
+                      className={`myths-mode-btn${!interviewMode ? ' active' : ''}`}
+                      onClick={() => { setInterviewMode(false); trackElement(`myths.series.mode.synthesis`); }}
+                    >
+                      Synthesis
+                    </button>
+                    <button
+                      className={`myths-mode-btn${interviewMode ? ' active' : ''}`}
+                      onClick={() => { setInterviewMode(true); trackElement(`myths.series.mode.transcript`); }}
+                    >
+                      Interview Transcript
+                    </button>
                   </div>
 
-                  <div className="myths-theme-buttons">
-                    {episodeData.entries.map((entry, i) => (
-                      <button
-                        key={i}
-                        className={`myths-theme-btn${activeEntry === i ? ' active' : ''}`}
-                        onClick={() => setActiveEntry(activeEntry === i ? null : i)}
-                      >
-                        {deriveLabel(entry, i)}
-                      </button>
-                    ))}
-                  </div>
-
-                  {activeEntry !== null && episodeData.entries[activeEntry] && (
-                    <div className="myths-theme-content" key={activeEntry}>
-                      {episodeData.entries[activeEntry].question && (
-                        <div className="myths-theme-question">
-                          {episodeData.entries[activeEntry].question}
+                  {!interviewMode && synthesisData && (
+                    <div className="myths-synthesis">
+                      {synthesisData.sections.map((s, i) => (
+                        <div key={i} className="myths-synthesis-section">
+                          <h4 className="myths-synthesis-heading">{s.heading}</h4>
+                          <div className="myths-synthesis-body">
+                            {s.text.split('\n\n').map((p, j) => <p key={j}>{p}</p>)}
+                          </div>
                         </div>
-                      )}
-                      <div className="myths-theme-body">
-                        {episodeData.entries[activeEntry].text.split('\n\n').map((p, j) => (
-                          <p key={j}>{p}</p>
-                        ))}
-                      </div>
+                      ))}
                     </div>
                   )}
+
+                  {!interviewMode && !synthesisData && (
+                    <div className="myths-interview-intro">
+                      Synthesis coming soon for this episode.
+                    </div>
+                  )}
+
+                  {interviewMode && (() => {
+                    const storylineEntries = episodeData.entries.filter(e => !e.question);
+                    const questionEntries = episodeData.entries.filter(e => e.question);
+                    return (
+                      <div className="myths-transcript">
+                        <div className="myths-interview-intro">
+                          From the interview with Will Linn for <em>Myths: The Greatest Mysteries of Humanity</em>.
+                        </div>
+                        {storylineEntries.length > 0 && (
+                          <div className={`myths-transcript-entry${expandedEntry === 'storyline' ? ' expanded' : ''}`}>
+                            <button
+                              className="myths-transcript-question myths-transcript-storyline"
+                              onClick={() => setExpandedEntry(expandedEntry === 'storyline' ? null : 'storyline')}
+                            >
+                              <span className="myths-transcript-question-text">Storyline</span>
+                              <span className="myths-transcript-chevron">{expandedEntry === 'storyline' ? '\u25BE' : '\u25B8'}</span>
+                            </button>
+                            {expandedEntry === 'storyline' && (
+                              <div className="myths-transcript-answer">
+                                {storylineEntries.map((entry, i) =>
+                                  entry.text.split('\n\n').map((p, j) => <p key={`${i}-${j}`}>{p}</p>)
+                                )}
+                              </div>
+                            )}
+                          </div>
+                        )}
+                        {questionEntries.map((entry, i) => (
+                          <div key={i} className={`myths-transcript-entry${expandedEntry === i ? ' expanded' : ''}`}>
+                            <button
+                              className="myths-transcript-question"
+                              onClick={() => setExpandedEntry(expandedEntry === i ? null : i)}
+                            >
+                              <span className="myths-transcript-question-text">{entry.question}</span>
+                              <span className="myths-transcript-chevron">{expandedEntry === i ? '\u25BE' : '\u25B8'}</span>
+                            </button>
+                            {expandedEntry === i && (
+                              <div className="myths-transcript-answer">
+                                {entry.text.split('\n\n').map((p, j) => <p key={j}>{p}</p>)}
+                              </div>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    );
+                  })()}
                 </div>
               )}
             </>
@@ -1155,6 +1230,7 @@ function SeriesContent({ currentEpisode, onSelectEpisode, viewToggle }) {
 
 /* ── Combined Myths Page ── */
 function MythsPage() {
+  const { trackElement } = useCoursework();
   const [activeView, setActiveView] = useState('earth');
   const [seriesEpisode, setSeriesEpisode] = useState('overview');
   const [treasuresEpisode, setTreasuresEpisode] = useState('overview');
@@ -1162,9 +1238,12 @@ function MythsPage() {
   const [mythicEarthCategory, setMythicEarthCategory] = useState('sacred-site');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
+  useEffect(() => { trackElement('myths.page.visited'); }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
   const handleViewSwitch = useCallback((view) => {
     setActiveView(view);
-  }, []);
+    trackElement(`myths.view.${view}`);
+  }, [trackElement]);
 
   const viewToggle = (
     <div className="myths-view-toggle">
@@ -1202,7 +1281,7 @@ function MythsPage() {
                   key={cat.id}
                   className={`mythic-earth-cat-btn${mythicEarthCategory === cat.id ? ' active' : ''}`}
                   style={{ '--cat-color': cat.color }}
-                  onClick={() => { setMythicEarthCategory(cat.id); setSelectedMythicSite(null); }}
+                  onClick={() => { setMythicEarthCategory(cat.id); setSelectedMythicSite(null); trackElement(`myths.earth.category.${cat.id}`); }}
                 >
                   {cat.label}
                 </button>
@@ -1254,7 +1333,7 @@ function MythsPage() {
                   <button
                     key={site.id}
                     className="mythic-earth-site-card"
-                    onClick={() => setSelectedMythicSite(site)}
+                    onClick={() => { setSelectedMythicSite(site); trackElement(`myths.earth.site.${site.id}`); }}
                   >
                     <span className="site-card-name">{site.name}</span>
                     <span className="site-card-region">{site.region}</span>
@@ -1268,13 +1347,13 @@ function MythsPage() {
       ) : activeView === 'series' ? (
         <SeriesContent
           currentEpisode={seriesEpisode}
-          onSelectEpisode={setSeriesEpisode}
+          onSelectEpisode={(ep) => { setSeriesEpisode(ep); trackElement(`myths.series.episode.${ep}`); }}
           viewToggle={viewToggle}
         />
       ) : activeView === 'treasures' ? (
         <TreasuresContent
           currentEpisode={treasuresEpisode}
-          onSelectEpisode={setTreasuresEpisode}
+          onSelectEpisode={(ep) => { setTreasuresEpisode(ep); trackElement(`myths.treasures.episode.${ep}`); }}
           viewToggle={viewToggle}
         />
       ) : activeView === 'motifs' ? (

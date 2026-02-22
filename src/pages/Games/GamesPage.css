@@ -75,6 +75,15 @@
   background: rgba(201, 169, 97, 0.1);
 }
 
+.game-card-locked {
+  opacity: 0.45;
+  filter: grayscale(0.6);
+}
+
+.game-card-locked:hover {
+  background: rgba(26, 26, 36, 0.7);
+}
+
 .game-card-title {
   font-family: 'Cinzel', serif;
   color: var(--text-primary);

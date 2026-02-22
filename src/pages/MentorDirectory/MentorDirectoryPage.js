@@ -3,11 +3,13 @@ import { useProfile } from '../../profile/ProfileContext';
 import { useAuth } from '../../auth/AuthContext';
 import { canRequestMentor } from '../../profile/mentorPairingEngine';
 import { useMentorDirectory, FILTER_TABS } from '../Guild/useMentorDirectory';
+import { usePageTracking } from '../../coursework/CourseworkContext';
 
 export default function MentorDirectoryPage() {
   const { user } = useAuth();
   const { mentorPairings, requestMentor } = useProfile();
   const { mentors: filteredMentors, loading, activeFilter, setActiveFilter, hasMore, loadMore } = useMentorDirectory();
+  const { track } = usePageTracking('mentor-directory');
   const [requestingMentor, setRequestingMentor] = useState(null); // uid of mentor being requested
   const [requestMessage, setRequestMessage] = useState('');
   const [submitting, setSubmitting] = useState(false);
@@ -19,6 +21,7 @@ export default function MentorDirectoryPage() {
     setError(null);
     try {
       await requestMentor(mentorUid, requestMessage.trim() || null);
+      track('request');
       setRequestingMentor(null);
       setRequestMessage('');
     } catch (err) {
@@ -43,7 +46,7 @@ export default function MentorDirectoryPage() {
           <button
             key={tab.id}
             className={`mentor-filter-tab${activeFilter === tab.id ? ' active' : ''}`}
-            onClick={() => setActiveFilter(tab.id)}
+            onClick={() => { setActiveFilter(tab.id); track(`filter.${tab.id}`); }}
           >
             {tab.label}
           </button>

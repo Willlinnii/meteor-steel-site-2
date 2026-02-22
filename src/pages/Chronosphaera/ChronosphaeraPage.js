@@ -1,31 +1,31 @@
 import React, { useState, useMemo, useEffect, useRef, useCallback } from 'react';
-import OrbitalDiagram from '../../components/sevenMetals/OrbitalDiagram';
-import MetalDetailPanel from '../../components/sevenMetals/MetalDetailPanel';
-import CultureSelector from '../../components/sevenMetals/CultureSelector';
-import './SevenMetalsPage.css';
+import OrbitalDiagram from '../../components/chronosphaera/OrbitalDiagram';
+import MetalDetailPanel from '../../components/chronosphaera/MetalDetailPanel';
+import CultureSelector from '../../components/chronosphaera/CultureSelector';
+import './ChronosphaeraPage.css';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-import TarotCardContent from '../../components/sevenMetals/TarotCardContent';
+import TarotCardContent from '../../components/chronosphaera/TarotCardContent';
 import PersonaChatPanel from '../../components/PersonaChatPanel';
-import coreData from '../../data/sevenMetals.json';
-import deitiesData from '../../data/sevenMetalsDeities.json';
-import archetypesData from '../../data/sevenMetalsArchetypes.json';
-import artistsData from '../../data/sevenMetalsArtists.json';
-import hebrewData from '../../data/sevenMetalsHebrew.json';
-import modernData from '../../data/sevenMetalsModern.json';
-import sharedData from '../../data/sevenMetalsShared.json';
-import storiesData from '../../data/sevenMetalsStories.json';
-import theologyData from '../../data/sevenMetalsTheology.json';
-import zodiacData from '../../data/sevenMetalsZodiac.json';
-import cardinalsData from '../../data/sevenMetalsCardinals.json';
-import planetaryCultures from '../../data/sevenMetalsPlanetaryCultures.json';
-import elementsData from '../../data/sevenMetalsElements.json';
+import coreData from '../../data/chronosphaera.json';
+import deitiesData from '../../data/chronosphaeraDeities.json';
+import archetypesData from '../../data/chronosphaeraArchetypes.json';
+import artistsData from '../../data/chronosphaeraArtists.json';
+import hebrewData from '../../data/chronosphaeraHebrew.json';
+import modernData from '../../data/chronosphaeraModern.json';
+import sharedData from '../../data/chronosphaeraShared.json';
+import storiesData from '../../data/chronosphaeraStories.json';
+import theologyData from '../../data/chronosphaeraTheology.json';
+import zodiacData from '../../data/chronosphaeraZodiac.json';
+import cardinalsData from '../../data/chronosphaeraCardinals.json';
+import planetaryCultures from '../../data/chronosphaeraPlanetaryCultures.json';
+import elementsData from '../../data/chronosphaeraElements.json';
 import calendarData from '../../data/mythicCalendar.json';
 import wheelData from '../../data/medicineWheels.json';
 import wheelContent from '../../data/medicineWheelContent.json';
 import dayNightData from '../../data/dayNight.json';
-import useYellowBrickRoad from '../../components/sevenMetals/useYellowBrickRoad';
-import YellowBrickRoadPanel from '../../components/sevenMetals/YellowBrickRoadPanel';
+import useYellowBrickRoad from '../../components/chronosphaera/useYellowBrickRoad';
+import YellowBrickRoadPanel from '../../components/chronosphaera/YellowBrickRoadPanel';
 import StageContent from '../../components/monomyth/StageContent';
 import MeteorSteelContent from '../../components/meteorSteel/MeteorSteelContent';
 import { MONOMYTH_STAGES, THEORIST_TO_MODEL, CYCLE_TO_MODEL, getModelById, getCycleById } from '../../data/monomythConstants';
@@ -38,6 +38,7 @@ import fallenStarlightData from '../../data/fallenStarlight.json';
 import storyOfStoriesData from '../../data/storyOfStoriesData';
 import DevelopmentPanel from '../../components/DevelopmentPanel';
 import { useYBRHeader, useAreaOverride, useStoryForge } from '../../App';
+import { useProfile } from '../../profile/ProfileContext';
 
 const METEOR_STEEL_STAGES = [
   { id: 'golden-age', label: 'Golden Age' },
@@ -96,6 +97,10 @@ const WEEKDAYS = [
   { label: 'Sat', day: 'Saturday', planet: 'Saturn', color: '#c04040' },
 ];
 
+const CARDINALS = ['vernal-equinox', 'summer-solstice', 'autumnal-equinox', 'winter-solstice'];
+const ZODIAC_SIGNS = zodiacData.map(z => z.sign);
+const CONSTELLATION_IDS = Object.keys(constellationContent);
+
 const PLANET_PLAYLISTS = {
   Moon: 'https://www.youtube.com/playlist?list=PLX31T_KS3jtq-GwZQZtrFaqTbvs6QPiBR',
   Mercury: 'https://www.youtube.com/playlist?list=PLX31T_KS3jtqvqEVpF80i8C3BarI-r4v8',
@@ -145,7 +150,7 @@ const CULTURE_KEY_MAP = {
 };
 
 function CultureBlock({ cultureData }) {
-  if (!cultureData) return <p className="metals-empty">No data for this tradition.</p>;
+  if (!cultureData) return <p className="chrono-empty">No data for this tradition.</p>;
   return (
     <div className="culture-block">
       <h4>{cultureData.name}</h4>
@@ -160,7 +165,7 @@ function CultureBlock({ cultureData }) {
 
 function ZodiacContent({ sign, activeCulture }) {
   const z = zodiacData.find(d => d.sign === sign);
-  if (!z) return <p className="metals-empty">No data for {sign}.</p>;
+  if (!z) return <p className="chrono-empty">No data for {sign}.</p>;
 
   if (activeCulture === 'Tarot') {
     return (
@@ -215,7 +220,7 @@ function ZodiacContent({ sign, activeCulture }) {
 
 function CardinalContent({ cardinalId, activeCulture }) { // eslint-disable-line no-unused-vars
   const c = cardinalsData[cardinalId];
-  if (!c) return <p className="metals-empty">No data for this cardinal point.</p>;
+  if (!c) return <p className="chrono-empty">No data for this cardinal point.</p>;
 
   if (activeCulture === 'Tarot') {
     return (
@@ -267,7 +272,7 @@ function CardinalContent({ cardinalId, activeCulture }) { // eslint-disable-line
         </div>
       )}
       {!c.description && !c.mythology && !c.themes && !cultureEntry && (
-        <p className="metals-empty">{c.label} content coming soon.</p>
+        <p className="chrono-empty">{c.label} content coming soon.</p>
       )}
     </div>
   );
@@ -275,7 +280,7 @@ function CardinalContent({ cardinalId, activeCulture }) { // eslint-disable-line
 
 function MonthContent({ month, activeTab, onSelectTab }) {
   const m = calendarData.find(d => d.month === month);
-  if (!m) return <p className="metals-empty">No data for {month}.</p>;
+  if (!m) return <p className="chrono-empty">No data for {month}.</p>;
 
   // Build tab list: stone, flower, then each holiday
   const tabs = [];
@@ -356,7 +361,7 @@ function PlanetCultureContent({ planet, activeCulture }) {
 
 function DayNightContent({ side, activeCulture }) {
   const data = dayNightData[side];
-  if (!data) return <p className="metals-empty">No data for {side}.</p>;
+  if (!data) return <p className="chrono-empty">No data for {side}.</p>;
   const cultureKey = CULTURE_KEY_MAP[activeCulture];
   const cultureEntry = data.cultures?.[cultureKey];
 
@@ -413,7 +418,7 @@ function WheelAlignmentContent({ targetDir, activeWheelTab, onSelectWheelTab }) 
       }
     });
   }
-  if (alignments.length === 0) return <p className="metals-empty">No alignments found.</p>;
+  if (alignments.length === 0) return <p className="chrono-empty">No alignments found.</p>;
   const currentTabId = activeWheelTab && alignments.find(a => a.wheel.id === activeWheelTab) ? activeWheelTab : alignments[0].wheel.id;
   const current = alignments.find(a => a.wheel.id === currentTabId);
   return (
@@ -437,7 +442,7 @@ function WheelAlignmentContent({ targetDir, activeWheelTab, onSelectWheelTab }) 
               )}
             </div>
           ) : (
-            <p className="metals-empty">Content coming soon.</p>
+            <p className="chrono-empty">Content coming soon.</p>
           )}
         </>
       )}
@@ -445,9 +450,26 @@ function WheelAlignmentContent({ targetDir, activeWheelTab, onSelectWheelTab }) 
   );
 }
 
-export default function SevenMetalsPage() {
+function StageArrow({ items, currentId, onSelect, getId = x => x, getLabel = x => x }) {
+  const idx = items.findIndex(item => getId(item) === currentId);
+  if (idx < 0) return null;
+  const nextIdx = (idx + 1) % items.length;
+  const next = items[nextIdx];
+  return (
+    <span
+      className="chrono-heading-next"
+      onClick={(e) => { e.stopPropagation(); onSelect(getId(next)); }}
+      title={getLabel(next)}
+    >
+      →
+    </span>
+  );
+}
+
+export default function ChronosphaeraPage() {
   const location = useLocation();
   const navigate = useNavigate();
+  const { hasPurchase } = useProfile();
   const [selectedPlanet, setSelectedPlanet] = useState('Sun');
   const [hoveredPlanet, setHoveredPlanet] = useState(null);
   const [activeTab, setActiveTab] = useState('overview');
@@ -475,7 +497,7 @@ export default function SevenMetalsPage() {
   const [selectedConstellation, setSelectedConstellation] = useState(null);
   // Single mode enum replaces 8 separate boolean/enum state variables
   const [mode, setMode] = useState(() => {
-    if (location.pathname.endsWith('/medicine-wheel')) return 'medicine-wheel';
+    if (location.pathname.endsWith('/medicine-wheel') && hasPurchase('medicine-wheel')) return 'medicine-wheel';
     return 'default';
   });
   // Derived flags — same names for minimal render-logic changes
@@ -499,7 +521,7 @@ export default function SevenMetalsPage() {
     if (writingsLoaded && notesData.entries) {
       const relevant = {};
       Object.entries(notesData.entries).forEach(([key, val]) => {
-        if (key.startsWith('metals-')) relevant[key] = val;
+        if (key.startsWith('chronosphaera-')) relevant[key] = val;
       });
       if (Object.keys(relevant).length > 0) setDevEntries(prev => ({ ...relevant, ...prev }));
     }
@@ -517,7 +539,7 @@ export default function SevenMetalsPage() {
   }, [devEntries, writingsLoaded, saveNotes]);
 
   // Page visit tracking
-  useEffect(() => { trackElement('metals.page.visited'); }, [trackElement]);
+  useEffect(() => { trackElement('chronosphaera.page.visited'); }, [trackElement]);
 
   // Time tracking for current view
   const timeRef = useRef({ view: `planet.${selectedPlanet}.${activeTab}`, start: Date.now() });
@@ -529,12 +551,12 @@ export default function SevenMetalsPage() {
       : `planet.${selectedPlanet}.${activeTab}`;
     const prev = timeRef.current;
     const elapsed = Math.round((Date.now() - prev.start) / 1000);
-    if (elapsed > 0) trackTime(`metals.${prev.view}.time`, elapsed);
+    if (elapsed > 0) trackTime(`chronosphaera.${prev.view}.time`, elapsed);
     timeRef.current = { view, start: Date.now() };
     return () => {
       const cur = timeRef.current;
       const secs = Math.round((Date.now() - cur.start) / 1000);
-      if (secs > 0) trackTime(`metals.${cur.view}.time`, secs);
+      if (secs > 0) trackTime(`chronosphaera.${cur.view}.time`, secs);
     };
   }, [selectedPlanet, activeTab, selectedSign, selectedCardinal, selectedMonth, mode, trackTime]);
 
@@ -563,19 +585,64 @@ export default function SevenMetalsPage() {
   // Sync view state with URL on back/forward navigation
   useEffect(() => {
     const path = location.pathname;
-    if (path.endsWith('/medicine-wheel') && mode !== 'medicine-wheel') {
-      setMode('medicine-wheel');
-    } else if (!path.endsWith('/medicine-wheel') && mode === 'medicine-wheel') {
+    // Strip base to get the sub-path
+    const sub = path.replace(/^\/(chronosphaera|metals)/, '');
+
+    // Medicine wheel (gated by purchase)
+    if (sub === '/medicine-wheel' && mode !== 'medicine-wheel') {
+      if (hasPurchase('medicine-wheel')) {
+        setMode('medicine-wheel');
+      } else {
+        navigate('/chronosphaera', { replace: true });
+      }
+    } else if (sub !== '/medicine-wheel' && mode === 'medicine-wheel') {
       setMode('default');
     }
-    const cal = path.endsWith('/calendar');
-    setShowCalendar(cal);
-    if (!cal) { setClockMode(null); }
-    if (cal && !selectedMonth) {
+
+    // Calendar (12h default)
+    const isCal = sub === '/calendar' || sub === '/calendar-24';
+    setShowCalendar(isCal || sub === ''); // root chronosphaera also shows calendar
+    if (sub === '/calendar-24') { setClockMode('24h'); }
+    else if (sub === '/calendar') { setClockMode('12h'); }
+    else if (!isCal && sub !== '') { setClockMode(null); }
+    if ((isCal || sub === '') && !selectedMonth) {
       setSelectedMonth(MONTHS[new Date().getMonth()]);
       setActiveMonthTab('stone');
     }
-    if (path.endsWith('/yellow-brick-road') && !ybr.active) {
+
+    // Body modes
+    if (sub === '/body/chaldean' && mode !== 'chakra-chaldean') {
+      setMode('chakra-chaldean'); setSelectedPlanet('Sun'); setActiveTab('body'); setShowCalendar(false); setClockMode(null);
+    } else if (sub === '/body/heliocentric' && mode !== 'chakra-heliocentric') {
+      setMode('chakra-heliocentric'); setSelectedPlanet('Sun'); setActiveTab('body'); setShowCalendar(false); setClockMode(null);
+    } else if (sub === '/body/weekdays' && mode !== 'chakra-weekdays') {
+      setMode('chakra-weekdays'); setSelectedPlanet('Sun'); setActiveTab('body'); setShowCalendar(false); setClockMode(null);
+    }
+
+    // Monomyth / Meteor Steel
+    if (sub === '/monomyth' && mode !== 'monomyth') {
+      setMode('monomyth'); setClockMode('24h'); setShowCalendar(true);
+    } else if (sub === '/meteor-steel' && mode !== 'meteor-steel') {
+      setMode('meteor-steel'); setClockMode('24h'); setShowCalendar(true);
+    }
+
+    // Fallen Starlight / Story of Stories (gated by purchase)
+    if (sub === '/fallen-starlight' && mode !== 'fallen-starlight') {
+      if (hasPurchase('fallen-starlight')) {
+        setMode('fallen-starlight'); setClockMode('24h'); setShowCalendar(true);
+      } else {
+        navigate('/chronosphaera', { replace: true });
+      }
+    } else if (sub === '/story-of-stories' && mode !== 'story-of-stories') {
+      if (hasPurchase('story-of-stories')) {
+        setMode('story-of-stories'); setClockMode('24h'); setShowCalendar(true);
+      } else {
+        navigate('/chronosphaera', { replace: true });
+      }
+    }
+
+    // Yellow Brick Road
+    if (sub === '/yellow-brick-road' && !ybr.active) {
       setYbrAutoStart(true);
     }
   }, [location.pathname]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -583,10 +650,10 @@ export default function SevenMetalsPage() {
   const handleYBRToggle = useCallback(() => {
     if (ybr.active) {
       ybr.exitGame();
-      navigate('/metals');
+      navigate('/chronosphaera');
     } else {
       ybr.startGame();
-      navigate('/metals/yellow-brick-road');
+      navigate('/chronosphaera/yellow-brick-road');
     }
   }, [ybr, navigate]);
 
@@ -597,7 +664,7 @@ export default function SevenMetalsPage() {
       setMode('monomyth');
       setClockMode('24h');
       setShowCalendar(true);
-      if (mode === 'medicine-wheel') navigate('/metals');
+      navigate('/chronosphaera/monomyth');
     } else if (mode === 'monomyth') {
       // Toggle to meteor steel
       setMode('meteor-steel');
@@ -606,6 +673,7 @@ export default function SevenMetalsPage() {
       setMonomythWorld(null);
       setMeteorSteelTab('technology');
       setVideoUrl(null); setPersonaChatOpen(null);
+      navigate('/chronosphaera/meteor-steel');
     } else {
       // Toggle back to monomyth
       setMode('monomyth');
@@ -614,6 +682,7 @@ export default function SevenMetalsPage() {
       setMonomythWorld(null);
       setMonomythTab('overview');
       setVideoUrl(null); setPersonaChatOpen(null);
+      navigate('/chronosphaera/monomyth');
     }
   }, [mode, clearAllSelections, navigate]);
 
@@ -624,17 +693,19 @@ export default function SevenMetalsPage() {
       setMode('fallen-starlight');
       setClockMode('24h');
       setShowCalendar(true);
-      if (mode === 'medicine-wheel') navigate('/metals');
+      navigate('/chronosphaera/fallen-starlight');
     } else if (mode === 'fallen-starlight') {
       // Switch to Story of Stories
       setMode('story-of-stories');
       setSelectedStarlightStage(null);
       setStarlightSectionId(null);
+      navigate('/chronosphaera/story-of-stories');
     } else {
       // Back to Fallen Starlight
       setMode('fallen-starlight');
       setSelectedStarlightStage(null);
       setStarlightSectionId(null);
+      navigate('/chronosphaera/fallen-starlight');
     }
   }, [mode, clearAllSelections, navigate]);
 
@@ -643,7 +714,7 @@ export default function SevenMetalsPage() {
     if (!modelId) return;
     const model = getModelById(modelId);
     if (!model) return;
-    trackElement(`metals.monomyth.theorist.${theoristKey}`);
+    trackElement(`chronosphaera.monomyth.theorist.${theoristKey}`);
     setMonomythModel(prev => prev?.id === model.id ? null : model);
   }, [trackElement]);
 
@@ -652,12 +723,12 @@ export default function SevenMetalsPage() {
     if (!cycleId) return;
     const cycle = getCycleById(cycleId);
     if (!cycle) return;
-    trackElement(`metals.monomyth.cycle.${cycleKey}`);
+    trackElement(`chronosphaera.monomyth.cycle.${cycleKey}`);
     setMonomythModel(prev => prev?.id === cycle.id ? null : cycle);
   }, [trackElement]);
 
   const handleSelectCycleSegment = useCallback((stageId, cycleName) => {
-    trackElement(`metals.monomyth.cycleRing.${cycleName}.${stageId}`);
+    trackElement(`chronosphaera.monomyth.cycleRing.${cycleName}.${stageId}`);
     setSelectedMonomythStage(stageId);
     setSelectedPlanet(null);
     setMonomythTab('cycles');
@@ -783,7 +854,7 @@ export default function SevenMetalsPage() {
               className={`planet-weekday-btn${isSelected ? ' selected' : ''}`}
               style={{ borderColor: w.color, color: w.color }}
               onClick={() => {
-                trackElement(`metals.planet.${w.planet}`);
+                trackElement(`chronosphaera.planet.${w.planet}`);
                 setSelectedPlanet(w.planet);
                 setSelectedSign(null); setSelectedCardinal(null); setSelectedEarth(null);
                 setSelectedMonth(null); setVideoUrl(null); setPersonaChatOpen(null);
@@ -807,7 +878,7 @@ export default function SevenMetalsPage() {
     if (personaChatOpen === key) {
       setPersonaChatOpen(null);
     } else {
-      trackElement(`metals.persona-chat.${key}`);
+      trackElement(`chronosphaera.persona-chat.${key}`);
       setPersonaChatOpen(key);
       if (!personaChatHistory[key]) {
         setPersonaChatHistory(prev => ({ ...prev, [key]: [] }));
@@ -839,35 +910,35 @@ export default function SevenMetalsPage() {
   }
 
   return (
-    <div className="seven-metals-page">
-      <div className="metals-diagram-center">
+    <div className="chronosphaera-page">
+      <div className="chrono-diagram-center">
         <OrbitalDiagram
           tooltipData={tooltipData}
           selectedPlanet={selectedPlanet}
           hoveredPlanet={hoveredPlanet}
-          onSelectPlanet={(p) => { trackElement(`metals.planet.${p}`); setSelectedPlanet(p); setSelectedSign(null); setSelectedCardinal(null); setSelectedEarth(null); setSelectedMonth(null); setVideoUrl(null); setPersonaChatOpen(null); if (chakraViewMode) setActiveTab('body'); if (showMonomyth) { setSelectedMonomythStage(null); setMonomythModel(null); } setSelectedStarlightStage(null); setSelectedConstellation(null); }}
+          onSelectPlanet={(p) => { trackElement(`chronosphaera.planet.${p}`); setSelectedPlanet(p); setSelectedSign(null); setSelectedCardinal(null); setSelectedEarth(null); setSelectedMonth(null); setVideoUrl(null); setPersonaChatOpen(null); if (chakraViewMode) setActiveTab('body'); if (showMonomyth) { setSelectedMonomythStage(null); setMonomythModel(null); } setSelectedStarlightStage(null); setSelectedConstellation(null); }}
           selectedSign={selectedSign}
-          onSelectSign={(sign) => { trackElement(`metals.zodiac.${sign}`); setSelectedSign(sign); setSelectedCardinal(null); setSelectedEarth(null); setSelectedMonth(null); setVideoUrl(null); setPersonaChatOpen(null); setSelectedPlanet(null); setSelectedMonomythStage(null); setMonomythModel(null); setSelectedStarlightStage(null); setSelectedConstellation(null); }}
+          onSelectSign={(sign) => { trackElement(`chronosphaera.zodiac.${sign}`); setSelectedSign(sign); setSelectedCardinal(null); setSelectedEarth(null); setSelectedMonth(null); setVideoUrl(null); setPersonaChatOpen(null); setSelectedPlanet(null); setSelectedMonomythStage(null); setMonomythModel(null); setSelectedStarlightStage(null); setSelectedConstellation(null); }}
           selectedCardinal={selectedCardinal}
-          onSelectCardinal={(c) => { trackElement(`metals.cardinal.${c}`); setSelectedCardinal(c); setSelectedSign(null); setSelectedEarth(null); setSelectedMonth(null); setVideoUrl(null); setPersonaChatOpen(null); setSelectedPlanet(null); setSelectedMonomythStage(null); setMonomythModel(null); setActiveWheelTab(null); setSelectedStarlightStage(null); setSelectedConstellation(null); }}
+          onSelectCardinal={(c) => { trackElement(`chronosphaera.cardinal.${c}`); setSelectedCardinal(c); setSelectedSign(null); setSelectedEarth(null); setSelectedMonth(null); setVideoUrl(null); setPersonaChatOpen(null); setSelectedPlanet(null); setSelectedMonomythStage(null); setMonomythModel(null); setActiveWheelTab(null); setSelectedStarlightStage(null); setSelectedConstellation(null); }}
           selectedEarth={selectedEarth}
-          onSelectEarth={(e) => { trackElement(`metals.earth.${e}`); setSelectedEarth(e); setSelectedSign(null); setSelectedCardinal(null); setSelectedMonth(null); setVideoUrl(null); setPersonaChatOpen(null); setSelectedConstellation(null); }}
+          onSelectEarth={(e) => { trackElement(`chronosphaera.earth.${e}`); setSelectedEarth(e); setSelectedSign(null); setSelectedCardinal(null); setSelectedMonth(null); setVideoUrl(null); setPersonaChatOpen(null); setSelectedConstellation(null); }}
           showCalendar={showCalendar}
           onToggleCalendar={() => {
             const next = !showCalendar;
             setShowCalendar(next);
             if (next) {
-              trackElement('metals.calendar.opened');
+              trackElement('chronosphaera.calendar.opened');
               setSelectedMonth(MONTHS[new Date().getMonth()]);
               setActiveMonthTab('stone');
               setSelectedSign(null); setSelectedCardinal(null); setSelectedEarth(null);
             } else {
               setSelectedMonth(null);
             }
-            navigate(next ? '/metals/calendar' : '/metals');
+            navigate(next ? '/chronosphaera/calendar' : '/chronosphaera');
           }}
           selectedMonth={selectedMonth}
-          onSelectMonth={(m) => { if (m) trackElement(`metals.calendar.month.${m}`); setSelectedMonth(m); setActiveMonthTab('stone'); if (m) { setSelectedSign(null); setSelectedCardinal(null); setSelectedEarth(null); } }}
+          onSelectMonth={(m) => { if (m) trackElement(`chronosphaera.calendar.month.${m}`); setSelectedMonth(m); setActiveMonthTab('stone'); if (m) { setSelectedSign(null); setSelectedCardinal(null); setSelectedEarth(null); } }}
           clockMode={clockMode}
           onToggleClock={() => {
             const next = clockMode === '12h' ? '24h' : '12h';
@@ -877,21 +948,21 @@ export default function SevenMetalsPage() {
             setShowCalendar(true);
             setSelectedMonth(MONTHS[new Date().getMonth()]);
             setActiveMonthTab('stone');
-            if (mode === 'medicine-wheel') navigate('/metals');
+            navigate(next === '24h' ? '/chronosphaera/calendar-24' : '/chronosphaera/calendar');
           }}
           showMedicineWheel={showMedicineWheel}
           onToggleMedicineWheel={() => {
             clearAllSelections();
             if (mode !== 'medicine-wheel') {
               setMode('medicine-wheel');
-              trackElement('metals.medicine-wheel.opened');
+              trackElement('chronosphaera.medicine-wheel.opened');
               setShowCalendar(false);
               setClockMode(null);
-              navigate('/metals/medicine-wheel');
+              navigate('/chronosphaera/medicine-wheel');
             }
           }}
           selectedWheelItem={selectedWheelItem}
-          onSelectWheelItem={(item) => { if (item) trackElement(`metals.medicine-wheel.${item}`); setSelectedWheelItem(item); setActiveWheelTab(null); if (item) { setSelectedSign(null); setSelectedCardinal(null); setSelectedEarth(null); setSelectedMonth(null); } }}
+          onSelectWheelItem={(item) => { if (item) trackElement(`chronosphaera.medicine-wheel.${item}`); setSelectedWheelItem(item); setActiveWheelTab(null); if (item) { setSelectedSign(null); setSelectedCardinal(null); setSelectedEarth(null); setSelectedMonth(null); } }}
           chakraViewMode={chakraViewMode}
           onToggleChakraView={() => {
             const nextChakra = mode === 'chakra-chaldean' ? 'heliocentric'
@@ -903,7 +974,7 @@ export default function SevenMetalsPage() {
             setActiveTab('body');
             setShowCalendar(false);
             setClockMode(null);
-            if (mode === 'medicine-wheel') navigate('/metals');
+            navigate(`/chronosphaera/body/${nextChakra}`);
           }}
           videoUrl={videoUrl}
           onCloseVideo={() => setVideoUrl(null)}
@@ -918,7 +989,7 @@ export default function SevenMetalsPage() {
           monomythStages={showMeteorSteel ? METEOR_STEEL_STAGES : MONOMYTH_STAGES}
           selectedMonomythStage={selectedMonomythStage}
           onSelectMonomythStage={(id) => {
-            if (id) trackElement(`metals.monomyth.stage.${id}`);
+            if (id) trackElement(`chronosphaera.monomyth.stage.${id}`);
             if (showMeteorSteel) {
               setSelectedMonomythStage(selectedMonomythStage === id ? null : id);
               setMeteorSteelTab('technology');
@@ -953,7 +1024,7 @@ export default function SevenMetalsPage() {
           }}
           selectedConstellation={selectedConstellation}
           onSelectConstellation={(cid) => {
-            trackElement(`metals.constellation.${cid}`);
+            trackElement(`chronosphaera.constellation.${cid}`);
             setSelectedConstellation(selectedConstellation === cid ? null : cid);
             setSelectedPlanet(null);
             setSelectedSign(null);
@@ -969,7 +1040,7 @@ export default function SevenMetalsPage() {
         />
       </div>
 
-      <div key={`${mode}|${selectedPlanet}|${selectedSign}|${selectedCardinal}|${selectedEarth}|${selectedMonth}|${selectedMonomythStage}|${selectedStarlightStage}|${selectedConstellation}|${selectedWheelItem}`} className="metals-content-fade">
+      <div key={`${mode}|${selectedPlanet}|${selectedSign}|${selectedCardinal}|${selectedEarth}|${selectedMonth}|${selectedMonomythStage}|${selectedStarlightStage}|${selectedConstellation}|${selectedWheelItem}`} className="chrono-content-fade">
       {ybr.active ? (
         <YellowBrickRoadPanel
           currentStopIndex={ybr.currentStopIndex}
@@ -981,7 +1052,7 @@ export default function SevenMetalsPage() {
           onAdvanceFromEarth={ybr.advanceFromEarth}
           onRecordResult={ybr.recordChallengeResult}
           onAdvanceToNext={ybr.advanceToNextStop}
-          onExit={() => { ybr.exitGame(); navigate('/metals'); }}
+          onExit={() => { ybr.exitGame(); navigate('/chronosphaera'); }}
           isStopComplete={ybr.isStopComplete}
         />
       ) : showFallenStarlight ? (
@@ -989,9 +1060,12 @@ export default function SevenMetalsPage() {
           // STORY OF STORIES MODE
           selectedStarlightStage ? (
             <>
-              <h2 className="metals-heading">
-                {STORY_OF_STORIES_STAGES.find(s => s.id === selectedStarlightStage)?.label || selectedStarlightStage}
-                <span className="metals-sub">Story of Stories</span>
+              <h2 className="chrono-heading">
+                <span className="chrono-heading-title-row">
+                  {STORY_OF_STORIES_STAGES.find(s => s.id === selectedStarlightStage)?.label || selectedStarlightStage}
+                  <StageArrow items={STORY_OF_STORIES_STAGES} currentId={selectedStarlightStage} onSelect={(id) => { setSelectedStarlightStage(id); setStarlightSectionId(null); }} getId={s => s.id} getLabel={s => s.label} />
+                </span>
+                <span className="chrono-sub">Story of Stories</span>
               </h2>
               <div className="container">
                 <div id="content-container">
@@ -1006,7 +1080,7 @@ export default function SevenMetalsPage() {
                             <p key={i}>{p}</p>
                           ))
                         ) : (
-                          <p className="metals-empty">Content coming soon.</p>
+                          <p className="chrono-empty">Content coming soon.</p>
                         )}
                       </div>
                     </div>
@@ -1016,9 +1090,12 @@ export default function SevenMetalsPage() {
             </>
           ) : (
             <>
-              <h2 className="metals-heading">
-                Story of Stories
-                <span className="metals-sub">{storyOfStoriesData.subtitle}</span>
+              <h2 className="chrono-heading">
+                <span className="chrono-heading-title-row">
+                  Story of Stories
+                  <span className="chrono-heading-next" onClick={() => { setSelectedStarlightStage(STORY_OF_STORIES_STAGES[0].id); setStarlightSectionId(null); }} title={STORY_OF_STORIES_STAGES[0].label}>→</span>
+                </span>
+                <span className="chrono-sub">{storyOfStoriesData.subtitle}</span>
               </h2>
               <div className="container">
                 <div id="content-container">
@@ -1074,9 +1151,12 @@ export default function SevenMetalsPage() {
           // FALLEN STARLIGHT MODE
           selectedStarlightStage ? (
             <>
-              <h2 className="metals-heading">
-                {FALLEN_STARLIGHT_STAGES.find(s => s.id === selectedStarlightStage)?.label || selectedStarlightStage}
-                <span className="metals-sub">Fallen Starlight</span>
+              <h2 className="chrono-heading">
+                <span className="chrono-heading-title-row">
+                  {FALLEN_STARLIGHT_STAGES.find(s => s.id === selectedStarlightStage)?.label || selectedStarlightStage}
+                  <StageArrow items={FALLEN_STARLIGHT_STAGES} currentId={selectedStarlightStage} onSelect={(id) => { setSelectedStarlightStage(id); setStarlightSectionId(null); }} getId={s => s.id} getLabel={s => s.label} />
+                </span>
+                <span className="chrono-sub">Fallen Starlight</span>
               </h2>
               <div className="container">
                 <div id="content-container">
@@ -1091,7 +1171,7 @@ export default function SevenMetalsPage() {
                             line.trim() === '' ? <br key={i} /> : <p key={i}>{line}</p>
                           ))
                         ) : (
-                          <p className="metals-empty">Content coming soon.</p>
+                          <p className="chrono-empty">Content coming soon.</p>
                         )}
                       </div>
                     </div>
@@ -1112,9 +1192,12 @@ export default function SevenMetalsPage() {
             </>
           ) : (
             <>
-              <h2 className="metals-heading">
-                Fallen Starlight
-                <span className="metals-sub">The Revelation</span>
+              <h2 className="chrono-heading">
+                <span className="chrono-heading-title-row">
+                  Fallen Starlight
+                  <span className="chrono-heading-next" onClick={() => { setSelectedStarlightStage(FALLEN_STARLIGHT_STAGES[0].id); setStarlightSectionId(null); }} title={FALLEN_STARLIGHT_STAGES[0].label}>→</span>
+                </span>
+                <span className="chrono-sub">The Revelation</span>
               </h2>
               <div className="container">
                 <div id="content-container">
@@ -1141,9 +1224,12 @@ export default function SevenMetalsPage() {
           // METEOR STEEL MODE
           selectedSign ? (
             <>
-              <h2 className="metals-heading">
-                {selectedSign}
-                <span className="metals-sub">{zodiacData.find(z => z.sign === selectedSign)?.archetype || 'Zodiac'}</span>
+              <h2 className="chrono-heading">
+                <span className="chrono-heading-title-row">
+                  {selectedSign}
+                  <StageArrow items={ZODIAC_SIGNS} currentId={selectedSign} onSelect={setSelectedSign} />
+                </span>
+                <span className="chrono-sub">{zodiacData.find(z => z.sign === selectedSign)?.archetype || 'Zodiac'}</span>
               </h2>
               <div className="container">
                 <div id="content-container">
@@ -1183,9 +1269,12 @@ export default function SevenMetalsPage() {
             </>
           ) : selectedCardinal ? (
             <>
-              <h2 className="metals-heading">
-                {cardinalsData[selectedCardinal]?.label || selectedCardinal}
-                <span className="metals-sub">{MW_DIR_NAMES[CARDINAL_TO_MW_DIR[selectedCardinal]]} · Alignments Across All Wheels</span>
+              <h2 className="chrono-heading">
+                <span className="chrono-heading-title-row">
+                  {cardinalsData[selectedCardinal]?.label || selectedCardinal}
+                  <StageArrow items={CARDINALS} currentId={selectedCardinal} onSelect={setSelectedCardinal} getLabel={c => cardinalsData[c]?.label || c} />
+                </span>
+                <span className="chrono-sub">{MW_DIR_NAMES[CARDINAL_TO_MW_DIR[selectedCardinal]]} · Alignments Across All Wheels</span>
               </h2>
               <div className="container">
                 <div id="content-container">
@@ -1197,9 +1286,12 @@ export default function SevenMetalsPage() {
             </>
           ) : selectedPlanet && currentData ? (
             <>
-              <h2 className="metals-heading">
-                {currentData.core.planet} — {currentData.core.metal}
-                <span className="metals-sub">{currentData.core.sin} / {currentData.core.virtue}</span>
+              <h2 className="chrono-heading">
+                <span className="chrono-heading-title-row">
+                  {currentData.core.planet} — {currentData.core.metal}
+                  <StageArrow items={WEEKDAYS} currentId={selectedPlanet} onSelect={setSelectedPlanet} getId={w => w.planet} getLabel={w => w.planet} />
+                </span>
+                <span className="chrono-sub">{currentData.core.sin} / {currentData.core.virtue}</span>
               </h2>
               {renderPlanetWeekdayNav()}
               <div className="container">
@@ -1207,9 +1299,9 @@ export default function SevenMetalsPage() {
                   <MetalDetailPanel
                     data={currentData}
                     activeTab={activeTab}
-                    onSelectTab={(tab) => { trackElement(`metals.tab.${tab}.${selectedPlanet}`); setActiveTab(tab); }}
+                    onSelectTab={(tab) => { trackElement(`chronosphaera.tab.${tab}.${selectedPlanet}`); setActiveTab(tab); }}
                     activeCulture={activeCulture}
-                    onSelectCulture={(c) => { trackElement(`metals.culture.${c}`); setActiveCulture(c); }}
+                    onSelectCulture={(c) => { trackElement(`chronosphaera.culture.${c}`); setActiveCulture(c); }}
                     devEntries={devEntries}
                     setDevEntries={setDevEntries}
                     playlistUrl={PLANET_PLAYLISTS[selectedPlanet]}
@@ -1223,7 +1315,7 @@ export default function SevenMetalsPage() {
                     personaChatMessages={personaChatHistory[`planet:${selectedPlanet}`] || []}
                     setPersonaChatMessages={setCurrentPersonaMessages}
                     onClosePersonaChat={() => setPersonaChatOpen(null)}
-                    getTabClass={courseworkMode ? (tab) => isElementCompleted(`metals.tab.${tab}.${selectedPlanet}`) ? 'cw-completed' : 'cw-incomplete' : undefined}
+                    getTabClass={courseworkMode ? (tab) => isElementCompleted(`chronosphaera.tab.${tab}.${selectedPlanet}`) ? 'cw-completed' : 'cw-incomplete' : undefined}
                     onToggleYBR={handleYBRToggle}
                     ybrActive={ybr.active}
                   />
@@ -1238,9 +1330,12 @@ export default function SevenMetalsPage() {
             </>
           ) : selectedMonomythStage ? (
             <>
-              <h2 className="metals-heading">
-                {METEOR_STEEL_STAGES.find(s => s.id === selectedMonomythStage)?.label || selectedMonomythStage}
-                <span className="metals-sub">Meteor Steel</span>
+              <h2 className="chrono-heading">
+                <span className="chrono-heading-title-row">
+                  {METEOR_STEEL_STAGES.find(s => s.id === selectedMonomythStage)?.label || selectedMonomythStage}
+                  <StageArrow items={METEOR_STEEL_STAGES} currentId={selectedMonomythStage} onSelect={setSelectedMonomythStage} getId={s => s.id} getLabel={s => s.label} />
+                </span>
+                <span className="chrono-sub">Meteor Steel</span>
               </h2>
               <div className="container">
                 <div id="content-container">
@@ -1256,9 +1351,12 @@ export default function SevenMetalsPage() {
             </>
           ) : (
             <>
-              <h2 className="metals-heading">
-                Meteor Steel
-                <span className="metals-sub">The Journey of Iron from Sky to Sword</span>
+              <h2 className="chrono-heading">
+                <span className="chrono-heading-title-row">
+                  Meteor Steel
+                  <span className="chrono-heading-next" onClick={() => setSelectedMonomythStage(METEOR_STEEL_STAGES[0].id)} title={METEOR_STEEL_STAGES[0].label}>→</span>
+                </span>
+                <span className="chrono-sub">The Journey of Iron from Sky to Sword</span>
               </h2>
               <div className="container">
                 <div id="content-container">
@@ -1278,9 +1376,12 @@ export default function SevenMetalsPage() {
           // MONOMYTH MODE
           selectedSign ? (
             <>
-              <h2 className="metals-heading">
-                {selectedSign}
-                <span className="metals-sub">{zodiacData.find(z => z.sign === selectedSign)?.archetype || 'Zodiac'}</span>
+              <h2 className="chrono-heading">
+                <span className="chrono-heading-title-row">
+                  {selectedSign}
+                  <StageArrow items={ZODIAC_SIGNS} currentId={selectedSign} onSelect={setSelectedSign} />
+                </span>
+                <span className="chrono-sub">{zodiacData.find(z => z.sign === selectedSign)?.archetype || 'Zodiac'}</span>
               </h2>
               <div className="container">
                 <div id="content-container">
@@ -1320,9 +1421,12 @@ export default function SevenMetalsPage() {
             </>
           ) : selectedCardinal ? (
             <>
-              <h2 className="metals-heading">
-                {cardinalsData[selectedCardinal]?.label || selectedCardinal}
-                <span className="metals-sub">{MW_DIR_NAMES[CARDINAL_TO_MW_DIR[selectedCardinal]]} · Alignments Across All Wheels</span>
+              <h2 className="chrono-heading">
+                <span className="chrono-heading-title-row">
+                  {cardinalsData[selectedCardinal]?.label || selectedCardinal}
+                  <StageArrow items={CARDINALS} currentId={selectedCardinal} onSelect={setSelectedCardinal} getLabel={c => cardinalsData[c]?.label || c} />
+                </span>
+                <span className="chrono-sub">{MW_DIR_NAMES[CARDINAL_TO_MW_DIR[selectedCardinal]]} · Alignments Across All Wheels</span>
               </h2>
               <div className="container">
                 <div id="content-container">
@@ -1334,9 +1438,12 @@ export default function SevenMetalsPage() {
             </>
           ) : selectedPlanet && currentData ? (
             <>
-              <h2 className="metals-heading">
-                {currentData.core.planet} — {currentData.core.metal}
-                <span className="metals-sub">{currentData.core.sin} / {currentData.core.virtue}</span>
+              <h2 className="chrono-heading">
+                <span className="chrono-heading-title-row">
+                  {currentData.core.planet} — {currentData.core.metal}
+                  <StageArrow items={WEEKDAYS} currentId={selectedPlanet} onSelect={setSelectedPlanet} getId={w => w.planet} getLabel={w => w.planet} />
+                </span>
+                <span className="chrono-sub">{currentData.core.sin} / {currentData.core.virtue}</span>
               </h2>
               {renderPlanetWeekdayNav()}
               <div className="container">
@@ -1344,9 +1451,9 @@ export default function SevenMetalsPage() {
                   <MetalDetailPanel
                     data={currentData}
                     activeTab={activeTab}
-                    onSelectTab={(tab) => { trackElement(`metals.tab.${tab}.${selectedPlanet}`); setActiveTab(tab); }}
+                    onSelectTab={(tab) => { trackElement(`chronosphaera.tab.${tab}.${selectedPlanet}`); setActiveTab(tab); }}
                     activeCulture={activeCulture}
-                    onSelectCulture={(c) => { trackElement(`metals.culture.${c}`); setActiveCulture(c); }}
+                    onSelectCulture={(c) => { trackElement(`chronosphaera.culture.${c}`); setActiveCulture(c); }}
                     devEntries={devEntries}
                     setDevEntries={setDevEntries}
                     playlistUrl={PLANET_PLAYLISTS[selectedPlanet]}
@@ -1360,7 +1467,7 @@ export default function SevenMetalsPage() {
                     personaChatMessages={personaChatHistory[`planet:${selectedPlanet}`] || []}
                     setPersonaChatMessages={setCurrentPersonaMessages}
                     onClosePersonaChat={() => setPersonaChatOpen(null)}
-                    getTabClass={courseworkMode ? (tab) => isElementCompleted(`metals.tab.${tab}.${selectedPlanet}`) ? 'cw-completed' : 'cw-incomplete' : undefined}
+                    getTabClass={courseworkMode ? (tab) => isElementCompleted(`chronosphaera.tab.${tab}.${selectedPlanet}`) ? 'cw-completed' : 'cw-incomplete' : undefined}
                     onToggleYBR={handleYBRToggle}
                     ybrActive={ybr.active}
                   />
@@ -1375,16 +1482,19 @@ export default function SevenMetalsPage() {
             </>
           ) : selectedMonomythStage ? (
             <>
-              <h2 className="metals-heading">
-                {MONOMYTH_STAGES.find(s => s.id === selectedMonomythStage)?.label || selectedMonomythStage}
-                <span className="metals-sub">Hero's Journey</span>
+              <h2 className="chrono-heading">
+                <span className="chrono-heading-title-row">
+                  {MONOMYTH_STAGES.find(s => s.id === selectedMonomythStage)?.label || selectedMonomythStage}
+                  <StageArrow items={MONOMYTH_STAGES} currentId={selectedMonomythStage} onSelect={setSelectedMonomythStage} getId={s => s.id} getLabel={s => s.label} />
+                </span>
+                <span className="chrono-sub">Hero's Journey</span>
               </h2>
               <div className="container">
                 <div id="content-container">
                   <StageContent
                     stageId={selectedMonomythStage}
                     activeTab={monomythTab}
-                    onSelectTab={(tab) => { trackElement(`metals.monomyth.tab.${tab}.${selectedMonomythStage}`); setMonomythTab(tab); }}
+                    onSelectTab={(tab) => { trackElement(`chronosphaera.monomyth.tab.${tab}.${selectedMonomythStage}`); setMonomythTab(tab); }}
                     onSelectModel={handleSelectMonomythModel}
                     onSelectCycle={handleSelectMonomythCycle}
                     selectedModelId={monomythModel?.id}
@@ -1396,9 +1506,12 @@ export default function SevenMetalsPage() {
             </>
           ) : (
             <>
-              <h2 className="metals-heading">
-                Hero's Journey
-                <span className="metals-sub">& the Monomyth</span>
+              <h2 className="chrono-heading">
+                <span className="chrono-heading-title-row">
+                  Hero's Journey
+                  <span className="chrono-heading-next" onClick={() => setSelectedMonomythStage(MONOMYTH_STAGES[0].id)} title={MONOMYTH_STAGES[0].label}>→</span>
+                </span>
+                <span className="chrono-sub">& the Monomyth</span>
               </h2>
               <div className="container">
                 <div id="content-container">
@@ -1438,9 +1551,9 @@ export default function SevenMetalsPage() {
       ) : showMedicineWheel ? (
         wheelAlignmentData ? (
           <>
-            <h2 className="metals-heading">
+            <h2 className="chrono-heading">
               {wheelAlignmentData.heading}
-              <span className="metals-sub">{wheelAlignmentData.sub}</span>
+              <span className="chrono-sub">{wheelAlignmentData.sub}</span>
             </h2>
             <div className="container">
               <div id="content-container">
@@ -1452,9 +1565,9 @@ export default function SevenMetalsPage() {
           </>
         ) : wheelContentData ? (
           <>
-            <h2 className="metals-heading">
+            <h2 className="chrono-heading">
               {wheelContentData.pos.label}
-              <span className="metals-sub">{wheelContentData.wheel.title}</span>
+              <span className="chrono-sub">{wheelContentData.wheel.title}</span>
             </h2>
             <div className="container">
               <div id="content-container">
@@ -1473,7 +1586,7 @@ export default function SevenMetalsPage() {
                         )}
                       </div>
                     ) : (
-                      <p className="metals-empty">Content coming soon.</p>
+                      <p className="chrono-empty">Content coming soon.</p>
                     )}
                   </div>
                 </div>
@@ -1482,9 +1595,9 @@ export default function SevenMetalsPage() {
           </>
         ) : selectedWheelItem === 'meta:author' ? (
           <>
-            <h2 className="metals-heading">
+            <h2 className="chrono-heading">
               Hyemeyohsts Storm
-              <span className="metals-sub">Seven Arrows (1972) · Lightningbolt (1994)</span>
+              <span className="chrono-sub">Seven Arrows (1972) · Lightningbolt (1994)</span>
             </h2>
             <div className="container">
               <div id="content-container">
@@ -1506,9 +1619,9 @@ export default function SevenMetalsPage() {
           </>
         ) : (
           <>
-            <h2 className="metals-heading">
+            <h2 className="chrono-heading">
               The Medicine Wheel
-              <span className="metals-sub">Teachings of the Zero Chiefs</span>
+              <span className="chrono-sub">Teachings of the Zero Chiefs</span>
             </h2>
             <div className="container">
               <div id="content-container">
@@ -1539,8 +1652,11 @@ export default function SevenMetalsPage() {
               {new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
             </p>
           )}
-          <h2 className="metals-heading">
-            {selectedMonth}
+          <h2 className="chrono-heading">
+            <span className="chrono-heading-title-row">
+              {selectedMonth}
+              <StageArrow items={MONTHS} currentId={selectedMonth} onSelect={setSelectedMonth} />
+            </span>
           </h2>
           <div className="calendar-weekday-bar">
             <div className="calendar-weekday-buttons">
@@ -1573,9 +1689,12 @@ export default function SevenMetalsPage() {
         </>
       ) : selectedEarth === 'day' ? (
         <>
-          <h2 className="metals-heading">
-            Earth · Day
-            <span className="metals-sub">Daylight</span>
+          <h2 className="chrono-heading">
+            <span className="chrono-heading-title-row">
+              Earth · Day
+              <StageArrow items={['day','night']} currentId={selectedEarth} onSelect={setSelectedEarth} />
+            </span>
+            <span className="chrono-sub">Daylight</span>
           </h2>
           <div className="container">
             <div id="content-container">
@@ -1588,9 +1707,12 @@ export default function SevenMetalsPage() {
         </>
       ) : selectedEarth === 'night' ? (
         <>
-          <h2 className="metals-heading">
-            Earth · Night
-            <span className="metals-sub">Night Shadow</span>
+          <h2 className="chrono-heading">
+            <span className="chrono-heading-title-row">
+              Earth · Night
+              <StageArrow items={['day','night']} currentId={selectedEarth} onSelect={setSelectedEarth} />
+            </span>
+            <span className="chrono-sub">Night Shadow</span>
           </h2>
           <div className="container">
             <div id="content-container">
@@ -1603,9 +1725,12 @@ export default function SevenMetalsPage() {
         </>
       ) : selectedCardinal ? (
         <>
-          <h2 className="metals-heading">
-            {cardinalsData[selectedCardinal]?.label || selectedCardinal}
-            <span className="metals-sub">{MW_DIR_NAMES[CARDINAL_TO_MW_DIR[selectedCardinal]]} · Alignments Across All Wheels</span>
+          <h2 className="chrono-heading">
+            <span className="chrono-heading-title-row">
+              {cardinalsData[selectedCardinal]?.label || selectedCardinal}
+              <StageArrow items={CARDINALS} currentId={selectedCardinal} onSelect={setSelectedCardinal} getLabel={c => cardinalsData[c]?.label || c} />
+            </span>
+            <span className="chrono-sub">{MW_DIR_NAMES[CARDINAL_TO_MW_DIR[selectedCardinal]]} · Alignments Across All Wheels</span>
           </h2>
           <div className="container">
             <div id="content-container">
@@ -1617,9 +1742,12 @@ export default function SevenMetalsPage() {
         </>
       ) : selectedSign ? (
         <>
-          <h2 className="metals-heading">
-            {selectedSign}
-            <span className="metals-sub">{zodiacData.find(z => z.sign === selectedSign)?.archetype || 'Zodiac'}</span>
+          <h2 className="chrono-heading">
+            <span className="chrono-heading-title-row">
+              {selectedSign}
+              <StageArrow items={ZODIAC_SIGNS} currentId={selectedSign} onSelect={setSelectedSign} />
+            </span>
+            <span className="chrono-sub">{zodiacData.find(z => z.sign === selectedSign)?.archetype || 'Zodiac'}</span>
           </h2>
           <div className="container">
             <div id="content-container">
@@ -1667,9 +1795,12 @@ export default function SevenMetalsPage() {
         const defaultName = constellationContent[selectedConstellation].name;
         return (
         <>
-          <h2 className="metals-heading">
-            {cultureConst || defaultName}
-            <span className="metals-sub">{cultureConst && cultureConst !== defaultName ? defaultName : 'Constellation'}</span>
+          <h2 className="chrono-heading">
+            <span className="chrono-heading-title-row">
+              {cultureConst || defaultName}
+              <StageArrow items={CONSTELLATION_IDS} currentId={selectedConstellation} onSelect={setSelectedConstellation} getLabel={c => constellationContent[c]?.name || c} />
+            </span>
+            <span className="chrono-sub">{cultureConst && cultureConst !== defaultName ? defaultName : 'Constellation'}</span>
           </h2>
           <div className="container">
             <div id="content-container">
@@ -1696,9 +1827,12 @@ export default function SevenMetalsPage() {
         <>
           {currentData && (
             <>
-              <h2 className="metals-heading">
-                {currentData.core.planet} — {currentData.core.metal}
-                <span className="metals-sub">{currentData.core.sin} / {currentData.core.virtue}</span>
+              <h2 className="chrono-heading">
+                <span className="chrono-heading-title-row">
+                  {currentData.core.planet} — {currentData.core.metal}
+                  <StageArrow items={WEEKDAYS} currentId={selectedPlanet} onSelect={setSelectedPlanet} getId={w => w.planet} getLabel={w => w.planet} />
+                </span>
+                <span className="chrono-sub">{currentData.core.sin} / {currentData.core.virtue}</span>
               </h2>
               {renderPlanetWeekdayNav()}
             </>
@@ -1710,9 +1844,9 @@ export default function SevenMetalsPage() {
                   <MetalDetailPanel
                     data={currentData}
                     activeTab={activeTab}
-                    onSelectTab={(tab) => { trackElement(`metals.tab.${tab}.${selectedPlanet}`); setActiveTab(tab); }}
+                    onSelectTab={(tab) => { trackElement(`chronosphaera.tab.${tab}.${selectedPlanet}`); setActiveTab(tab); }}
                     activeCulture={activeCulture}
-                    onSelectCulture={(c) => { trackElement(`metals.culture.${c}`); setActiveCulture(c); }}
+                    onSelectCulture={(c) => { trackElement(`chronosphaera.culture.${c}`); setActiveCulture(c); }}
                     devEntries={devEntries}
                     setDevEntries={setDevEntries}
                     playlistUrl={PLANET_PLAYLISTS[selectedPlanet]}
@@ -1726,7 +1860,7 @@ export default function SevenMetalsPage() {
                     personaChatMessages={personaChatHistory[`planet:${selectedPlanet}`] || []}
                     setPersonaChatMessages={setCurrentPersonaMessages}
                     onClosePersonaChat={() => setPersonaChatOpen(null)}
-                    getTabClass={courseworkMode ? (tab) => isElementCompleted(`metals.tab.${tab}.${selectedPlanet}`) ? 'cw-completed' : 'cw-incomplete' : undefined}
+                    getTabClass={courseworkMode ? (tab) => isElementCompleted(`chronosphaera.tab.${tab}.${selectedPlanet}`) ? 'cw-completed' : 'cw-incomplete' : undefined}
                     onToggleYBR={handleYBRToggle}
                     ybrActive={ybr.active}
                   />
@@ -1738,7 +1872,7 @@ export default function SevenMetalsPage() {
                   )}
                 </>
               ) : (
-                <p className="metals-empty">Select a planet to explore its metal.</p>
+                <p className="chrono-empty">Select a planet to explore its metal.</p>
               )}
             </div>
           </div>

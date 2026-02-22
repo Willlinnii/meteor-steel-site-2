@@ -162,6 +162,17 @@
   line-height: 1.6;
 }
 
+/* ===== TRAIL ICON TAB ===== */
+
+.trail-icon-tab {
+  color: var(--text-secondary);
+}
+
+.trail-icon-tab:hover {
+  color: var(--accent-gold);
+  background: rgba(201, 169, 97, 0.08);
+}
+
 /* ===== PLAYLIST TAB ===== */
 
 .playlist-tab {
@@ -172,6 +183,64 @@
 .playlist-tab:hover {
   color: #f08030;
   background: rgba(224, 112, 32, 0.12);
+}
+
+/* ===== ICON TABS ===== */
+/* Always visible in the tab row. Base state matches other metal-tabs (accent-steel).
+   Active state lights up in each icon's signature color. */
+
+.monomyth-page .metal-tab.cw-icon-tab,
+.monomyth-page .metal-tab.forge-icon-tab,
+.monomyth-page .metal-tab.ybr-icon-tab {
+  padding: 6px 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent-steel);
+  border-color: var(--border-subtle);
+  background: var(--bg-medium);
+}
+
+/* — Coursework hat — */
+.monomyth-page .metal-tab.cw-icon-tab:hover {
+  color: var(--accent-gold);
+  background: rgba(201, 169, 97, 0.1);
+  border-color: rgba(201, 169, 97, 0.5);
+}
+
+.monomyth-page .metal-tab.cw-icon-tab.active {
+  color: var(--accent-gold);
+  border-color: var(--accent-gold);
+  background: rgba(201, 169, 97, 0.15);
+  box-shadow: 0 0 8px rgba(201, 169, 97, 0.2);
+}
+
+/* — Story Forge — */
+.monomyth-page .metal-tab.forge-icon-tab:hover {
+  color: var(--accent-ember);
+  background: rgba(196, 113, 58, 0.12);
+  border-color: rgba(196, 113, 58, 0.7);
+}
+
+.monomyth-page .metal-tab.forge-icon-tab.active {
+  color: var(--accent-ember);
+  border-color: var(--accent-ember);
+  background: rgba(196, 113, 58, 0.15);
+  box-shadow: 0 0 8px rgba(196, 113, 58, 0.2);
+}
+
+/* — Yellow Brick Road — */
+.monomyth-page .metal-tab.ybr-icon-tab:hover {
+  color: rgba(218, 165, 32, 0.95);
+  background: rgba(218, 165, 32, 0.1);
+  border-color: rgba(218, 165, 32, 0.7);
+}
+
+.monomyth-page .metal-tab.ybr-icon-tab.active {
+  color: rgba(218, 165, 32, 1);
+  border-color: rgba(218, 165, 32, 0.8);
+  background: rgba(218, 165, 32, 0.15);
+  box-shadow: 0 0 8px rgba(218, 165, 32, 0.25);
 }
 
 /* ===== WORLD CONTENT ===== */

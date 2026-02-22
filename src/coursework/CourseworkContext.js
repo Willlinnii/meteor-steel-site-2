@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react';
-import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
+import { doc, getDoc, setDoc, collection, getDocs, serverTimestamp } from 'firebase/firestore';
 import { db, firebaseConfigured } from '../auth/firebase';
 import { useAuth } from '../auth/AuthContext';
 import {
@@ -10,10 +10,6 @@ import {
 const CourseworkContext = createContext(null);
 
 const FLUSH_INTERVAL = 30000; // 30 seconds
-const PROGRESS_SECTIONS = [
-  'home', 'monomyth', 'metals', 'games', 'fallen-starlight',
-  'story-forge', 'atlas', 'mythology-channel', 'library', 'journeys',
-];
 
 export function useCoursework() {
   const ctx = useContext(CourseworkContext);
@@ -21,10 +17,34 @@ export function useCoursework() {
   return ctx;
 }
 
+/**
+ * One-liner page tracking hook. Tracks a page visit on mount and
+ * returns a scoped `track(suffix)` function for that prefix.
+ *
+ *   const { track } = usePageTracking('sacred-sites');
+ *   track('site.parthenon');  // → trackElement('sacred-sites.site.parthenon')
+ */
+export function usePageTracking(prefix) {
+  const ctx = useCoursework();
+  const { trackElement, trackTime, isElementCompleted } = ctx;
+
+  useEffect(() => {
+    trackElement(`${prefix}.page.visited`);
+  }, [prefix]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const track = useCallback((suffix, extra) => {
+    trackElement(`${prefix}.${suffix}`, extra);
+  }, [prefix, trackElement]);
+
+  return { track, trackElement, trackTime, isElementCompleted };
+}
+
 export function CourseworkProvider({ children }) {
   const { user } = useAuth();
   const [progress, setProgress] = useState({}); // { sectionId: { elements: { ... } } }
-  const [courseworkMode, setCourseworkMode] = useState(false);
+  const [courseworkMode, setCourseworkMode] = useState(() => {
+    try { return localStorage.getItem('mythouse_cw_mode') === '1'; } catch { return false; }
+  });
   const [completedCourses, setCompletedCourses] = useState(new Set());
   const [newlyCompleted, setNewlyCompleted] = useState(null); // course that just completed (for popup)
   const [loaded, setLoaded] = useState(false);
@@ -52,13 +72,9 @@ export function CourseworkProvider({ children }) {
     async function loadProgress() {
       const loaded = {};
       try {
-        for (const section of PROGRESS_SECTIONS) {
-          const ref = doc(db, 'users', user.uid, 'progress', section);
-          const snap = await getDoc(ref);
-          if (snap.exists()) {
-            loaded[section] = snap.data();
-          }
-        }
+        const progressCol = collection(db, 'users', user.uid, 'progress');
+        const snapshot = await getDocs(progressCol);
+        snapshot.forEach(d => { loaded[d.id] = d.data(); });
 
         // Load completed courses
         const certRef = doc(db, 'users', user.uid, 'meta', 'certificates');
@@ -203,7 +219,11 @@ export function CourseworkProvider({ children }) {
 
   // Toggle coursework visual mode
   const toggleCourseworkMode = useCallback(() => {
-    setCourseworkMode(prev => !prev);
+    setCourseworkMode(prev => {
+      const next = !prev;
+      try { localStorage.setItem('mythouse_cw_mode', next ? '1' : '0'); } catch {}
+      return next;
+    });
   }, []);
 
   // Check if an element is completed (for visual indicators)

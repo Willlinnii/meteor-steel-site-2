@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import DevelopmentPanel from '../DevelopmentPanel';
+import CrossStageModal from '../CrossStageModal';
 import { useStoryForge, useYBRMode } from '../../App';
 import steelProcess from '../../data/steelProcess.json';
 import figures from '../../data/figures.json';
@@ -21,7 +22,7 @@ const SECTION_TABS = [
 ];
 
 function TextContent({ text }) {
-  if (!text || !text.trim()) return <div className="metals-empty">Content to be added.</div>;
+  if (!text || !text.trim()) return <div className="chrono-empty">Content to be added.</div>;
   return (
     <div className="overview-text">
       {text.split('\n\n').map((p, i) => <p key={i}>{p}</p>)}
@@ -29,7 +30,7 @@ function TextContent({ text }) {
   );
 }
 
-function FigureCards({ figuresList, stage }) {
+function FigureCards({ figuresList, stage, onFigureClick }) {
   const available = figuresList.filter(f => f.stages[stage] && f.stages[stage].trim());
   const [activeFigure, setActiveFigure] = useState(available[0]?.id || null);
 
@@ -39,12 +40,12 @@ function FigureCards({ figuresList, stage }) {
     }
   }, [stage, available, activeFigure]);
 
-  if (available.length === 0) return <div className="metals-empty">No content available.</div>;
+  if (available.length === 0) return <div className="chrono-empty">No content available.</div>;
 
   if (available.length === 1) {
     const f = available[0];
     return (
-      <div className="figure-card">
+      <div className="figure-card mono-card-clickable" onClick={() => onFigureClick(f)}>
         <h4 className="figure-name">{f.name}</h4>
         <div className="figure-content">
           {f.stages[stage].split('\n\n').map((p, i) => <p key={i}>{p}</p>)}
@@ -62,7 +63,7 @@ function FigureCards({ figuresList, stage }) {
             onClick={() => setActiveFigure(f.id)}>{f.name}</button>
         ))}
       </div>
-      <div className="figure-card">
+      <div className="figure-card mono-card-clickable" onClick={() => onFigureClick(selected)}>
         <div className="figure-content">
           {selected.stages[stage].split('\n\n').map((p, i) => <p key={i}>{p}</p>)}
         </div>
@@ -77,9 +78,22 @@ const STAGE_LABELS = {
   'drawing': 'Draw', 'new-age': 'Age of Steel',
 };
 
+const MS_STAGES = Object.entries(STAGE_LABELS).map(([id, label]) => ({ id, label }));
+
 export default function MeteorSteelContent({ stageId, activeTab, onSelectTab, devEntries, setDevEntries, onToggleYBR, ybrActive }) {
+  const [crossStageData, setCrossStageData] = useState(null);
   const { forgeMode } = useStoryForge();
   const { ybrMode } = useYBRMode();
+
+  const handleFigureClick = (figure) => {
+    const entries = MS_STAGES.map(s => {
+      const text = figure.stages[s.id];
+      if (!text || !text.trim()) return null;
+      return { text };
+    });
+    setCrossStageData({ title: figure.name, entries });
+  };
+
   return (
     <div className="metal-detail-panel">
       {stageOverviews[stageId] && (
@@ -128,15 +142,25 @@ export default function MeteorSteelContent({ stageId, activeTab, onSelectTab, de
       <div className="metal-content-scroll">
         <div className="tab-content">
           {activeTab === 'technology' && <TextContent text={steelProcess[stageId]} />}
-          {activeTab === 'figures' && <FigureCards figuresList={figures} stage={stageId} />}
-          {activeTab === 'saviors' && <FigureCards figuresList={saviors} stage={stageId} />}
-          {activeTab === 'modern' && <FigureCards figuresList={modernFigures} stage={stageId} />}
+          {activeTab === 'figures' && <FigureCards figuresList={figures} stage={stageId} onFigureClick={handleFigureClick} />}
+          {activeTab === 'saviors' && <FigureCards figuresList={saviors} stage={stageId} onFigureClick={handleFigureClick} />}
+          {activeTab === 'modern' && <FigureCards figuresList={modernFigures} stage={stageId} onFigureClick={handleFigureClick} />}
           {activeTab === 'ufo' && <TextContent text={ufo[stageId]} />}
           {activeTab === 'monomyth' && <TextContent text={monomythProse[stageId]} />}
           {activeTab === 'synthesis' && <TextContent text={synthesis[stageId]} />}
           {activeTab === 'development' && forgeMode && <DevelopmentPanel stageLabel={STAGE_LABELS[stageId] || stageId} stageKey={stageId} entries={devEntries || {}} setEntries={setDevEntries || (() => {})} />}
         </div>
       </div>
+
+      {crossStageData && (
+        <CrossStageModal
+          title={crossStageData.title}
+          subtitle={crossStageData.subtitle}
+          stages={MS_STAGES}
+          entries={crossStageData.entries}
+          onClose={() => setCrossStageData(null)}
+        />
+      )}
     </div>
   );
 }

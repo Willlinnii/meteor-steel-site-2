@@ -17,12 +17,12 @@
 //     monomyth.theorists.forge.campbell
 //     games.senet.started
 //     games.senet.completed
-//     metals.sun.overview
+//     chronosphaera.sun.overview
 //     atlas.messages.monomyth (page-based)
 //     atlas.messages.voice.saturn (voice-based)
 
 const ALL_STAGES = ['golden-age', 'falling-star', 'impact-crater', 'forge', 'quenching', 'integration', 'drawing', 'new-age'];
-const MONOMYTH_TABS = ['overview', 'cycles', 'theorists', 'history', 'myths', 'films', 'development'];
+const MONOMYTH_TABS = ['overview', 'cycles', 'theorists', 'history', 'myths', 'films', 'development', 'test'];
 const PLANETS = ['Sun', 'Moon', 'Mercury', 'Venus', 'Mars', 'Jupiter', 'Saturn'];
 const ZODIAC_SIGNS = ['Aries', 'Taurus', 'Gemini', 'Cancer', 'Leo', 'Virgo', 'Libra', 'Scorpio', 'Sagittarius', 'Capricorn', 'Aquarius', 'Pisces'];
 const CARDINAL_POINTS = ['vernal-equinox', 'summer-solstice', 'autumnal-equinox', 'winter-solstice'];
@@ -40,6 +40,12 @@ export const COURSES = [
     name: 'Monomyth Explorer',
     description: 'Explore every major element of the Monomyth page — all tabs across all stages.',
     active: true,
+    page: '/monomyth',
+    tests: {
+      source: 'monomyth-explorer',   // key into COURSE_TESTS registry
+      sections: ALL_STAGES,           // which sections have tests
+      elementPrefix: 'monomyth.test', // element ID pattern for tracking
+    },
     requirements: [
       {
         id: 'all-tabs-all-stages',
@@ -105,32 +111,32 @@ export const COURSES = [
       {
         id: 'visit-all-planets',
         type: 'group_all',
-        elements: PLANETS.map(p => `metals.planet.${p}`),
+        elements: PLANETS.map(p => `chronosphaera.planet.${p}`),
         description: 'Visit all 7 planetary metals',
       },
       {
         id: 'visit-zodiac',
         type: 'group_pct',
         percent: 50,
-        elements: ZODIAC_SIGNS.map(z => `metals.zodiac.${z}`),
+        elements: ZODIAC_SIGNS.map(z => `chronosphaera.zodiac.${z}`),
         description: 'Explore at least 6 of the 12 zodiac signs',
       },
       {
         id: 'visit-cardinals',
         type: 'group_all',
-        elements: CARDINAL_POINTS.map(c => `metals.cardinal.${c}`),
+        elements: CARDINAL_POINTS.map(c => `chronosphaera.cardinal.${c}`),
         description: 'Visit all 4 cardinal points',
       },
       {
         id: 'open-calendar',
         type: 'element',
-        element: 'metals.calendar.opened',
+        element: 'chronosphaera.calendar.opened',
         description: 'Open the Mythic Calendar',
       },
       {
         id: 'open-medicine-wheel',
         type: 'element',
-        element: 'metals.medicine-wheel.opened',
+        element: 'chronosphaera.medicine-wheel.opened',
         description: 'Open the Medicine Wheel',
       },
     ],
