@@ -51,8 +51,7 @@ function chunkText(text, max) {
 
 /** Run a single Chatterbox prediction and return the audio URL. */
 async function generateChunk(text, voiceSampleUrl, apiToken) {
-  // Use the model-based endpoint (no version hash needed)
-  const createRes = await fetch('https://api.replicate.com/v1/models/resemble-ai/chatterbox-multilingual/predictions', {
+  const createRes = await fetch('https://api.replicate.com/v1/predictions', {
     method: 'POST',
     headers: {
       'Authorization': `Bearer ${apiToken}`,
@@ -60,6 +59,7 @@ async function generateChunk(text, voiceSampleUrl, apiToken) {
       'Prefer': 'wait',
     },
     body: JSON.stringify({
+      version: '9cfba4c265e685f840612be835424f8c33bdee685d7466ece7684b0d9d4c0b1c',
       input: {
         text: text,
         reference_audio: voiceSampleUrl,
