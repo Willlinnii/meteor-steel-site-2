@@ -17,6 +17,7 @@ import SevenMetalsPage from './pages/SevenMetals/SevenMetalsPage';
 import MonomythPage from './pages/Monomyth/MonomythPage';
 import MythologyChannelPage from './pages/MythologyChannel/MythologyChannelPage';
 import GamesPage from './pages/Games/GamesPage';
+import LEGAL_DOCUMENTS from './data/legalDocuments';
 import figures from './data/figures.json';
 import modernFigures from './data/modernFigures.json';
 import stageOverviews from './data/stageOverviews.json';
@@ -39,7 +40,7 @@ const YBRModeContext = createContext({ ybrMode: false });
 export const useYBRMode = () => useContext(YBRModeContext);
 
 // Area override context — pages can override Atlas's area detection (e.g. celestial-clocks → meteor-steel)
-const AreaOverrideContext = createContext({ area: null, register: () => {} });
+const AreaOverrideContext = createContext({ area: null, meta: null, register: () => {} });
 export const useAreaOverride = () => useContext(AreaOverrideContext);
 
 // XR mode context — global toggle for VR/AR features
@@ -1571,7 +1572,7 @@ function StoryForgeHome() {
 }
 
 const NAV_ITEMS = [
-  { path: '/metals/calendar', label: 'Chronosphaera' },
+  { path: '/chronosphaera', label: 'Chronosphaera' },
   { path: '/myths', label: 'Mythosphaera' },
   { path: '/mythology-channel', label: 'Mythology Channel' },
   { path: '/mythosophia', label: 'Mythosophia' },
@@ -1676,6 +1677,107 @@ const PURCHASES_META = {
   },
 };
 
+const STORE_SUBSCRIPTIONS = [
+  {
+    id: 'ybr', name: 'Yellow Brick Road',
+    icon: (
+      <svg viewBox="0 0 20 14" width="20" height="14" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinejoin="round">
+        <path d="M1,4 L7,1 L19,1 L13,4 Z" />
+        <path d="M1,4 L1,13 L13,13 L13,4" />
+        <path d="M13,4 L19,1 L19,10 L13,13" />
+        <line x1="7" y1="4" x2="7" y2="13" />
+        <line x1="1" y1="8.5" x2="13" y2="8.5" />
+        <line x1="4" y1="8.5" x2="4" y2="13" />
+        <line x1="10" y1="4" x2="10" y2="8.5" />
+      </svg>
+    ),
+    description: 'Interactive journey through the monomyth stages with Atlas as your guide.',
+    details: 'The Yellow Brick Road is a guided, stage-by-stage journey through the monomyth. Atlas walks alongside you as you encounter mythic figures at each threshold — gods, tricksters, mentors, and shadow guardians drawn from world mythology. Answer their challenges through conversation to advance along the path.',
+  },
+  {
+    id: 'forge', name: 'Story Forge',
+    icon: (
+      <svg viewBox="0 0 20 20" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M10,2 L10,11" />
+        <path d="M7,5 Q10,3 13,5" />
+        <path d="M6,11 L14,11" />
+        <path d="M5,11 L5,14 Q10,18 15,14 L15,11" />
+      </svg>
+    ),
+    description: 'Write your own story using mythic structure with AI collaboration.',
+    details: 'The Story Forge lets you craft your own personal myth using the eight stages of the monomyth as a framework. Write freely at each stage while an AI collaborator helps you develop themes, deepen character arcs, and weave in mythic resonance. Your stories are saved to your profile and can be revisited anytime.',
+  },
+  {
+    id: 'coursework', name: 'Coursework',
+    icon: (
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M2 12 L12 6 L22 12 L12 18 Z" />
+        <path d="M6 14 L6 19 C6 19 9 22 12 22 C15 22 18 19 18 19 L18 14" />
+        <line x1="22" y1="12" x2="22" y2="18" />
+      </svg>
+    ),
+    description: 'Track your progress through courses, earn ranks and certificates.',
+    details: 'Coursework tracks your exploration across the site and awards progress toward structured courses. Visit pages, interact with content, and complete activities to fill requirements. Finish courses to earn ranks and certificates displayed on your profile.',
+  },
+  {
+    id: 'xr', name: 'VR / XR',
+    icon: (
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="1" y="7" width="22" height="11" rx="3" />
+        <circle cx="8" cy="12.5" r="2.5" />
+        <circle cx="16" cy="12.5" r="2.5" />
+        <path d="M10.5 12.5 Q12 15 13.5 12.5" />
+      </svg>
+    ),
+    description: 'Immersive 3D and extended reality views of the celestial wheels.',
+    details: 'Enter the Chronosphaera in full 3D. Orbit through the planetary wheels, walk among constellations, and view the celestial machinery from within. Supports WebXR headsets for a fully immersive experience, or explore in 3D right in your browser.',
+  },
+];
+
+const STORE_PURCHASES = [
+  {
+    id: 'fallen-starlight', name: 'Fallen Starlight',
+    icon: (
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+        <path d="M12 6 L10.8 9.2 L7.5 9.2 L10.1 11.3 L9.1 14.5 L12 12.5 L14.9 14.5 L13.9 11.3 L16.5 9.2 L13.2 9.2 Z" fill="currentColor" stroke="none" />
+      </svg>
+    ),
+    description: 'The original revelation — tracing the descent of celestial fire through the seven planetary metals.',
+    details: 'Fallen Starlight overlays a mythic narrative layer onto the Chronosphaera — eight stages of the descent of light into matter, each aligned with a planetary metal and its archetypal story. Activate to explore the cosmic drama from within the celestial clock.',
+  },
+  {
+    id: 'story-of-stories', name: 'Story of Stories',
+    icon: (
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+        <circle cx="12" cy="10" r="4" stroke="currentColor" strokeWidth="1.8" fill="none" />
+      </svg>
+    ),
+    description: 'The meta-narrative — the stories that emerged from the fall of light into matter.',
+    details: 'Story of Stories is a companion layer to Fallen Starlight — the mythic tradition behind the seven metals, told through the Chronosphaera. It traces the stories that emerged as celestial fire descended into the material world.',
+  },
+  {
+    id: 'starlight-bundle', name: 'Starlight Bundle',
+    isBundle: true,
+    bundleItems: ['fallen-starlight', 'story-of-stories'],
+    icon: (
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M2 19.5A2.5 2.5 0 0 1 4.5 17H13" />
+        <path d="M4.5 4H13v16H4.5A2.5 2.5 0 0 1 2 17.5v-11A2.5 2.5 0 0 1 4.5 4z" />
+        <path d="M11 19.5A2.5 2.5 0 0 1 13.5 17H22" />
+        <path d="M13.5 2H22v20H13.5A2.5 2.5 0 0 1 11 19.5v-15A2.5 2.5 0 0 1 13.5 2z" />
+        <path d="M8 8 L7.4 9.6 L5.8 9.6 L7.1 10.6 L6.6 12.2 L8 11.2 L9.4 12.2 L8.9 10.6 L10.2 9.6 L8.6 9.6 Z" fill="currentColor" stroke="none" />
+        <circle cx="17.5" cy="10" r="2.5" stroke="currentColor" strokeWidth="1.4" fill="none" />
+      </svg>
+    ),
+    description: 'Both books together at a discounted price.',
+    details: 'Get both Fallen Starlight and Story of Stories together. Explore the full cosmic drama on the Chronosphaera — the fall of light into matter, and the stories that emerged from it.',
+  },
+];
+
 function SubscriptionGate({ gateInfo, onClose }) {
   const navigate = useNavigate();
   const isPurchase = gateInfo?.type === 'purchase';
@@ -1707,22 +1809,102 @@ function SubscriptionGate({ gateInfo, onClose }) {
   );
 }
 
+function StoreModal({ onClose, subscriptions, purchases, updateSubscription, updatePurchase, updatePurchases }) {
+  const [expanded, setExpanded] = useState(null);
+
+  useEffect(() => {
+    const handleKey = (e) => { if (e.key === 'Escape') onClose(); };
+    window.addEventListener('keydown', handleKey);
+    return () => window.removeEventListener('keydown', handleKey);
+  }, [onClose]);
+
+  const isSubActive = (id) => !!subscriptions[id];
+  const isPurchaseActive = (id) => !!purchases[id];
+
+  const handleActivateSub = (item) => { updateSubscription(item.id, true); };
+  const handleActivatePurchase = (item) => {
+    if (item.isBundle && item.bundleItems) {
+      const updates = { [item.id]: true };
+      item.bundleItems.forEach(bid => { updates[bid] = true; });
+      updatePurchases(updates);
+    } else {
+      updatePurchase(item.id, true);
+    }
+  };
+
+  const renderCard = (item, isActive, onActivate, type) => {
+    const isExp = expanded === `${type}-${item.id}`;
+    return (
+      <div
+        key={item.id}
+        className={`store-item-card${item.isBundle ? ' store-bundle' : ''}${isExp ? ' expanded' : ''}`}
+        onClick={() => setExpanded(isExp ? null : `${type}-${item.id}`)}
+      >
+        <div className="store-item-row">
+          <div className="store-item-icon">{item.icon}</div>
+          <div className="store-item-info">
+            <div className="store-item-name">
+              {item.name}
+              {item.isBundle && <span className="store-bundle-badge">Bundle</span>}
+            </div>
+            <div className="store-item-desc">{item.description}</div>
+          </div>
+          <div className="store-item-action">
+            {isActive ? (
+              <span className="store-item-active-badge">Active</span>
+            ) : (
+              <button className="store-item-activate" onClick={(e) => { e.stopPropagation(); onActivate(item); }}>
+                Activate
+              </button>
+            )}
+          </div>
+        </div>
+        {isExp && item.details && (
+          <div className="store-item-details cw-fade-in">{item.details}</div>
+        )}
+      </div>
+    );
+  };
+
+  return (
+    <div className="store-modal-overlay" onClick={onClose}>
+      <div className="store-modal-panel cw-panel-in" onClick={(e) => e.stopPropagation()}>
+        <div className="store-modal-header">
+          <h2 className="store-modal-title">Store</h2>
+          <button className="store-modal-close" onClick={onClose}>{'\u2715'}</button>
+        </div>
+        <div className="store-modal-body">
+          <div className="store-section">
+            <h3 className="store-section-title">Subscriptions</h3>
+            {STORE_SUBSCRIPTIONS.map(item => renderCard(item, isSubActive(item.id), handleActivateSub, 'sub'))}
+          </div>
+          <div className="store-section">
+            <h3 className="store-section-title">Purchases</h3>
+            {STORE_PURCHASES.map(item => renderCard(item, isPurchaseActive(item.id), handleActivatePurchase, 'pur'))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function SiteHeader() {
   const { user } = useAuth();
   const { courseworkMode, toggleCourseworkMode } = useCoursework();
   const { forgeMode, setForgeMode } = useStoryForge();
   const { ybrMode, setYbrMode } = useYBRMode();
   const { xrMode, setXrMode } = useXRMode();
-  const { hasSubscription, hasPurchase } = useProfile();
+  const { hasSubscription, hasPurchase, subscriptions, purchases, updateSubscription, updatePurchase, updatePurchases } = useProfile();
   const location = useLocation();
   const navigate = useNavigate();
   const [gatePopup, setGatePopup] = useState(null); // { type: 'subscription'|'purchase', id }
+  const [storeOpen, setStoreOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const show3D = location.pathname.startsWith('/metals') && location.pathname !== '/metals/vr';
+  const show3D = location.pathname.startsWith('/chronosphaera') && location.pathname !== '/chronosphaera/vr';
   return (
     <>
     <header className="site-header">
-      <Link to="/metals/calendar" className="site-header-logo">Mythouse</Link>
+      <Link to="/chronosphaera" className="site-header-logo">Mythouse</Link>
       {xrMode && <div id="xr-controls-slot" className="xr-controls-slot" />}
       {user && (
         <div className={`site-header-user${mobileMenuOpen ? ' mobile-expanded' : ''}`}>
@@ -1778,9 +1960,10 @@ function SiteHeader() {
             className={`coursework-toggle${courseworkMode ? ' active' : ''}`}
             onClick={() => {
               if (!courseworkMode && !hasSubscription('coursework')) { setGatePopup({ type: 'subscription', id: 'coursework' }); return; }
+              if (courseworkMode) { navigate('/profile'); return; }
               toggleCourseworkMode();
             }}
-            title={courseworkMode ? 'Coursework On' : 'Coursework'}
+            title={courseworkMode ? 'View Courses' : 'Coursework'}
           >
             <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
               <path d="M2 12 L12 6 L22 12 L12 18 Z" />
@@ -1792,7 +1975,7 @@ function SiteHeader() {
             className={`header-book-toggle${(hasPurchase('fallen-starlight') || hasPurchase('story-of-stories')) ? ' active' : ''}`}
             onClick={() => {
               if (!hasPurchase('fallen-starlight') && !hasPurchase('story-of-stories')) { setGatePopup({ type: 'purchase', id: 'fallen-starlight' }); return; }
-              navigate('/metals/calendar');
+              navigate('/chronosphaera');
             }}
             title={(hasPurchase('fallen-starlight') || hasPurchase('story-of-stories')) ? 'Fallen Starlight' : 'Unlock Fallen Starlight'}
           >
@@ -1823,6 +2006,20 @@ function SiteHeader() {
               <path d="M10.5 12.5 Q12 15 13.5 12.5" />
             </svg>
           </button>
+          <button
+            className="header-store-toggle"
+            onClick={() => setStoreOpen(true)}
+            title="Store"
+          >
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M3 9l1.5-5h15L21 9" />
+              <path d="M3 9h18v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9z" />
+              <path d="M7.5 9 C7.5 11 5.5 11 3 9" />
+              <path d="M7.5 9 C7.5 11 9.5 11 12 9" />
+              <path d="M16.5 9 C16.5 11 14.5 11 12 9" />
+              <path d="M16.5 9 C16.5 11 18.5 11 21 9" />
+            </svg>
+          </button>
           <Link to="/profile" className="site-header-profile" title="Profile">
             <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
               <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
@@ -1833,6 +2030,16 @@ function SiteHeader() {
       )}
     </header>
     {gatePopup && <SubscriptionGate gateInfo={gatePopup} onClose={() => setGatePopup(null)} />}
+    {storeOpen && (
+      <StoreModal
+        onClose={() => setStoreOpen(false)}
+        subscriptions={subscriptions}
+        purchases={purchases}
+        updateSubscription={updateSubscription}
+        updatePurchase={updatePurchase}
+        updatePurchases={updatePurchases}
+      />
+    )}
   </>
   );
 }
@@ -1913,12 +2120,94 @@ function CourseCompletionPopup() {
   );
 }
 
+function renderLegalDocumentInline(text) {
+  if (!text) return null;
+  return text.trim().split('\n').map((line, i) => {
+    const trimmed = line.trimEnd();
+    if (!trimmed) return <br key={i} />;
+    if (/^MYTHOUSE\s/.test(trimmed)) return <h3 key={i} className="mentor-contract-doc-title">{trimmed}</h3>;
+    if (/^\d+\.\s+[A-Z]/.test(trimmed)) return <h4 key={i} className="mentor-contract-doc-section">{trimmed}</h4>;
+    if (/^\d+\.\d+\s/.test(trimmed)) return <p key={i} className="mentor-contract-doc-subsection">{trimmed}</p>;
+    if (/^- /.test(trimmed)) return <li key={i} className="mentor-contract-doc-bullet">{trimmed.slice(2)}</li>;
+    if (/^Last Updated/.test(trimmed)) return <p key={i} className="mentor-contract-doc-date">{trimmed}</p>;
+    return <p key={i} className="mentor-contract-doc-para">{trimmed}</p>;
+  });
+}
+
+function MentorContractPopup() {
+  const { mentorData, loaded: profileLoaded, acceptMentorContract } = useProfile();
+  const [dismissed, setDismissed] = useState(false);
+
+  const show = profileLoaded && mentorData?.status === 'approved' && !mentorData?.mentorContractAccepted && !dismissed;
+
+  useEffect(() => {
+    if (show) {
+      document.body.style.overflow = 'hidden';
+      return () => { document.body.style.overflow = ''; };
+    }
+  }, [show]);
+
+  useEffect(() => {
+    if (!show) return;
+    const handleKey = (e) => { if (e.key === 'Escape') setDismissed(true); };
+    window.addEventListener('keydown', handleKey);
+    return () => window.removeEventListener('keydown', handleKey);
+  }, [show]);
+
+  if (!show) return null;
+
+  return (
+    <div className="mentor-contract-overlay" onClick={() => setDismissed(true)}>
+      <div className="mentor-contract-panel" onClick={e => e.stopPropagation()}>
+        <button className="mentor-contract-close" onClick={() => setDismissed(true)} aria-label="Close">&times;</button>
+        <h2 className="mentor-contract-heading">Mentor Agreement</h2>
+        <p className="mentor-contract-subtitle">Please review and accept the agreement below to proceed with your mentor activation.</p>
+        <div className="mentor-contract-body">
+          {renderLegalDocumentInline(LEGAL_DOCUMENTS['mentor-agreement'])}
+        </div>
+        <div className="mentor-contract-actions">
+          <button className="mentor-contract-accept-btn" onClick={acceptMentorContract}>I Accept</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+const LAST_PATH_KEY = 'mythouse_last_path';
+const LAST_PATH_MAX_AGE = 4 * 60 * 60 * 1000; // 4 hours
+
 function AppContent() {
   const location = useLocation();
+  const navigate = useNavigate();
   const isAtlas = location.pathname === '/atlas';
   const { courseworkMode } = useCoursework();
   const [ybrHeader, setYbrHeader] = useState({ active: false, toggle: null });
   const [areaOverride, setAreaOverride] = useState(null);
+
+  // Restore last path on mount (only if landing on home and path is recent)
+  const hasRestored = useRef(false);
+  useEffect(() => {
+    if (hasRestored.current) return;
+    hasRestored.current = true;
+    if (location.pathname !== '/') return; // only redirect from home
+    try {
+      const raw = localStorage.getItem(LAST_PATH_KEY);
+      if (!raw) return;
+      const { path, ts } = JSON.parse(raw);
+      if (path && path !== '/' && Date.now() - ts < LAST_PATH_MAX_AGE) {
+        navigate(path, { replace: true });
+      }
+    } catch { /* ignore corrupt data */ }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Save current path on every navigation
+  useEffect(() => {
+    try {
+      localStorage.setItem(LAST_PATH_KEY, JSON.stringify({ path: location.pathname, ts: Date.now() }));
+    } catch { /* storage full or unavailable */ }
+  }, [location.pathname]);
+  const [areaMeta, setAreaMeta] = useState(null);
+  const areaRegister = useCallback((area, meta) => { setAreaOverride(area); setAreaMeta(meta || null); }, []);
   const [forgeMode, setForgeMode] = useState(false);
   const [ybrMode, setYbrMode] = useState(false);
   const [xrMode, setXrMode] = useState(false);
@@ -1928,15 +2217,19 @@ function AppContent() {
     <YBRModeContext.Provider value={{ ybrMode, setYbrMode }}>
     <XRModeContext.Provider value={{ xrMode, setXrMode }}>
     <YBRHeaderContext.Provider value={{ ...ybrHeader, register: setYbrHeader }}>
-    <AreaOverrideContext.Provider value={{ area: areaOverride, register: setAreaOverride }}>
+    <AreaOverrideContext.Provider value={{ area: areaOverride, meta: areaMeta, register: areaRegister }}>
     <div className={`app${courseworkMode ? ' cw-mode' : ''}`}>
       <SiteHeader />
       <SiteNav />
       <CourseCompletionPopup />
+      <MentorContractPopup />
       <Routes>
         <Route path="/" element={<MeteorSteelHome />} />
-        <Route path="/metals/vr" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" />Loading 3D...</div>}><SevenMetalsVRPage /></Suspense>} />
-        <Route path="/metals/*" element={<SevenMetalsPage />} />
+        <Route path="/chronosphaera/vr" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" />Loading 3D...</div>}><SevenMetalsVRPage /></Suspense>} />
+        <Route path="/chronosphaera/*" element={<SevenMetalsPage />} />
+        {/* Redirects from old /metals paths */}
+        <Route path="/metals/vr" element={<Navigate to="/chronosphaera/vr" replace />} />
+        <Route path="/metals/*" element={<Navigate to="/chronosphaera" replace />} />
         <Route path="/fallen-starlight" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><FallenStarlightPage /></Suspense>} />
         <Route path="/story-forge" element={<StoryForgeHome />} />
         <Route path="/yellow-brick-road" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><YellowBrickRoadPage /></Suspense>} />

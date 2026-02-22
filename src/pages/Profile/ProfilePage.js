@@ -118,7 +118,7 @@ const PURCHASES = [
 export default function ProfilePage() {
   const { user, signOut } = useAuth();
   const { getCourseStates, completedCourses, allCourses } = useCoursework();
-  const { earnedRanks, highestRank, activeCredentials, hasProfile, loaded: profileLoaded, handle, natalChart, updateNatalChart, numerologyName, updateNumerologyName, subscriptions, updateSubscription, purchases, updatePurchase, updatePurchases, refreshProfile, mentorData, qualifiedMentorTypes, mentorEligible, mentorCoursesComplete, effectiveMentorStatus, pairingCategories, updateMentorBio, updateMentorCapacity, publishToDirectory, unpublishFromDirectory, respondToPairing, endPairing, photoURL, consultingData, consultingCategories, updateProfilePhoto, respondToConsulting, apiKeys, apiKeysLoaded, saveApiKey, removeApiKey, hasAnthropicKey, hasOpenaiKey } = useProfile();
+  const { earnedRanks, highestRank, activeCredentials, hasProfile, loaded: profileLoaded, handle, natalChart, updateNatalChart, numerologyName, updateNumerologyName, luckyNumber, updateLuckyNumber, subscriptions, updateSubscription, purchases, updatePurchase, updatePurchases, refreshProfile, mentorData, qualifiedMentorTypes, mentorEligible, mentorCoursesComplete, effectiveMentorStatus, pairingCategories, updateMentorBio, updateMentorCapacity, publishToDirectory, unpublishFromDirectory, respondToPairing, endPairing, photoURL, consultingData, consultingCategories, updateProfilePhoto, respondToConsulting, apiKeys, apiKeysLoaded, saveApiKey, removeApiKey, hasAnthropicKey, hasOpenaiKey } = useProfile();
   const { personalStories, loaded: writingsLoaded } = useWritings();
   const navigate = useNavigate();
   const location = useLocation();
@@ -457,6 +457,8 @@ export default function ProfilePage() {
         savedName={numerologyName}
         displayName={user?.displayName}
         onSave={updateNumerologyName}
+        luckyNumber={luckyNumber}
+        onSaveLucky={updateLuckyNumber}
       />
 
       {/* Ranks Section */}
@@ -800,22 +802,31 @@ function MentorSection({ effectiveMentorStatus, mentorEligible, qualifiedMentorT
         </div>
       )}
 
-      {effectiveMentorStatus === MENTOR_STATUS.APPROVED && display && !mentorCoursesComplete && (
+      {effectiveMentorStatus === MENTOR_STATUS.APPROVED && display && (
         <div className="mentor-status-card approved">
           <span className="mentor-badge-icon">{display.icon}</span>
           <div>
             <div className="mentor-badge-title">{display.title} — Approved</div>
-            <div className="profile-credential-details">Complete these courses to activate your mentor status:</div>
-            <ul className="mentor-course-checklist">
-              {courseChecklist.map(item => {
-                const course = allCourses.find(c => c.id === item.id);
-                return (
-                  <li key={item.id} className={item.complete ? 'done' : ''}>
-                    {item.complete ? '\u2713' : '\u25CB'} {course?.name || item.id}
-                  </li>
-                );
-              })}
-            </ul>
+            {!mentorData?.mentorContractAccepted && (
+              <div className="profile-credential-details" style={{ color: 'var(--accent-gold)', marginBottom: 8 }}>
+                Please review and accept the Mentor Agreement to continue.
+              </div>
+            )}
+            {!mentorCoursesComplete && (
+              <>
+                <div className="profile-credential-details">Complete these courses to activate your mentor status:</div>
+                <ul className="mentor-course-checklist">
+                  {courseChecklist.map(item => {
+                    const course = allCourses.find(c => c.id === item.id);
+                    return (
+                      <li key={item.id} className={item.complete ? 'done' : ''}>
+                        {item.complete ? '\u2713' : '\u25CB'} {course?.name || item.id}
+                      </li>
+                    );
+                  })}
+                </ul>
+              </>
+            )}
           </div>
         </div>
       )}
@@ -1104,9 +1115,11 @@ const PLANET_METALS = {
   Mars: 'Iron', Jupiter: 'Tin', Saturn: 'Lead',
 };
 
-function NumerologyDisplay({ savedName, displayName, onSave }) {
+function NumerologyDisplay({ savedName, displayName, onSave, luckyNumber, onSaveLucky }) {
   const [editing, setEditing] = useState(false);
   const [nameInput, setNameInput] = useState('');
+  const [editingLucky, setEditingLucky] = useState(false);
+  const [luckyInput, setLuckyInput] = useState('');
 
   const activeName = savedName || displayName || '';
   const result = activeName ? computeNumerology(activeName) : null;
@@ -1118,6 +1131,16 @@ function NumerologyDisplay({ savedName, displayName, onSave }) {
     setEditing(false);
     setNameInput('');
   };
+
+  const handleSaveLucky = () => {
+    const val = parseInt(luckyInput, 10);
+    if (isNaN(val) || val < 1) return;
+    onSaveLucky(val);
+    setEditingLucky(false);
+    setLuckyInput('');
+  };
+
+  const luckyMeaning = luckyNumber ? NUMBER_MEANINGS[luckyNumber] || NUMBER_MEANINGS[((luckyNumber - 1) % 9) + 1] : null;
 
   return (
     <div className="numerology-display">
@@ -1158,6 +1181,47 @@ function NumerologyDisplay({ savedName, displayName, onSave }) {
                 <div className="numerology-card-meaning">{NUMBER_MEANINGS[result[key]]}</div>
               </div>
             ))}
+            <div className="numerology-card numerology-card-lucky">
+              {luckyNumber && !editingLucky ? (
+                <>
+                  <div className="numerology-card-number">{luckyNumber}</div>
+                  <div className="numerology-card-label">Lucky Number</div>
+                  <div className="numerology-card-subtitle">Your personal talisman</div>
+                  <div className="numerology-card-meaning">{luckyMeaning}</div>
+                  <button className="numerology-lucky-edit" onClick={() => { setEditingLucky(true); setLuckyInput(String(luckyNumber)); }}>Change</button>
+                </>
+              ) : editingLucky ? (
+                <>
+                  <div className="numerology-card-label" style={{ marginBottom: 6 }}>Lucky Number</div>
+                  <div className="numerology-input-row" style={{ flexDirection: 'column', gap: 6 }}>
+                    <input
+                      className="numerology-input-field"
+                      type="number"
+                      min="1"
+                      value={luckyInput}
+                      onChange={e => setLuckyInput(e.target.value)}
+                      onKeyDown={e => e.key === 'Enter' && handleSaveLucky()}
+                      placeholder="Your number..."
+                      autoFocus
+                      style={{ textAlign: 'center' }}
+                    />
+                    <div style={{ display: 'flex', gap: 6, justifyContent: 'center' }}>
+                      <button className="numerology-calc-btn" onClick={handleSaveLucky} disabled={!luckyInput || isNaN(parseInt(luckyInput, 10))}>Save</button>
+                      <button className="numerology-cancel-btn" onClick={() => setEditingLucky(false)}>Cancel</button>
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="numerology-card-number" style={{ opacity: 0.3 }}>?</div>
+                  <div className="numerology-card-label">Lucky Number</div>
+                  <div className="numerology-card-subtitle" style={{ fontStyle: 'italic', opacity: 0.7 }}>
+                    Got a number that follows you around? One that keeps showing up, or just feels like yours?
+                  </div>
+                  <button className="numerology-lucky-edit" onClick={() => setEditingLucky(true)}>Add yours</button>
+                </>
+              )}
+            </div>
           </div>
         </>
       ) : (

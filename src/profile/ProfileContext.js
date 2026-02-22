@@ -562,6 +562,20 @@ export function ProfileProvider({ children }) {
     }
   }, [user]);
 
+  // Update lucky number
+  const updateLuckyNumber = useCallback(async (num) => {
+    if (!user || !firebaseConfigured || !db) return;
+
+    setProfileData(prev => ({ ...prev, luckyNumber: num }));
+
+    try {
+      const ref = doc(db, 'users', user.uid, 'meta', 'profile');
+      await setDoc(ref, { luckyNumber: num, updatedAt: serverTimestamp() }, { merge: true });
+    } catch (err) {
+      console.error('Failed to update lucky number:', err);
+    }
+  }, [user]);
+
   // Mark onboarding complete
   const completeOnboarding = useCallback(async () => {
     if (!user || !firebaseConfigured || !db) return;
@@ -662,6 +676,27 @@ export function ProfileProvider({ children }) {
     }
   }, [user]);
 
+  // Accept mentor contract (legal agreement gate before activation)
+  const acceptMentorContract = useCallback(async () => {
+    if (!user || !firebaseConfigured || !db) return;
+
+    const contractUpdate = { mentorContractAccepted: true, mentorContractAcceptedAt: Date.now() };
+
+    setProfileData(prev => ({
+      ...prev,
+      mentor: { ...(prev?.mentor || {}), ...contractUpdate },
+    }));
+
+    try {
+      const currentMentor = profileDataRef.current?.mentor || {};
+      const merged = { ...currentMentor, ...contractUpdate };
+      const ref = doc(db, 'users', user.uid, 'meta', 'profile');
+      await setDoc(ref, { mentor: merged, updatedAt: serverTimestamp() }, { merge: true });
+    } catch (err) {
+      console.error('Failed to accept mentor contract:', err);
+    }
+  }, [user]);
+
   // Update mentor status (partial update to mentor field)
   const updateMentorStatus = useCallback(async (statusUpdate) => {
     if (!user || !firebaseConfigured || !db) return;
@@ -702,6 +737,7 @@ export function ProfileProvider({ children }) {
 
   const natalChart = profileData?.natalChart || null;
   const numerologyName = profileData?.numerologyName || null;
+  const luckyNumber = profileData?.luckyNumber ?? null;
 
   const value = {
     profileData,
@@ -724,6 +760,8 @@ export function ProfileProvider({ children }) {
     updateNatalChart,
     numerologyName,
     updateNumerologyName,
+    luckyNumber,
+    updateLuckyNumber,
     completeOnboarding,
     refreshProfile,
     mentorData,
@@ -732,6 +770,7 @@ export function ProfileProvider({ children }) {
     mentorCoursesComplete,
     effectiveMentorStatus,
     submitMentorApplication,
+    acceptMentorContract,
     updateMentorStatus,
     mentorPairings,
     pairingCategories,

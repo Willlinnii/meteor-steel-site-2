@@ -135,7 +135,7 @@ export function isMentorCourseComplete(completedCourses) {
  */
 export function getEffectiveMentorStatus(mentorData, completedCourses) {
   if (!mentorData || !mentorData.status) return MENTOR_STATUS.NOT_QUALIFIED;
-  if (mentorData.status === MENTOR_STATUS.APPROVED && isMentorCourseComplete(completedCourses)) {
+  if (mentorData.status === MENTOR_STATUS.APPROVED && mentorData.mentorContractAccepted && isMentorCourseComplete(completedCourses)) {
     return MENTOR_STATUS.ACTIVE;
   }
   return mentorData.status;
