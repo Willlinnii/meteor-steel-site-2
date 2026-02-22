@@ -279,9 +279,9 @@ function LivingSection() {
         A real house became a community. The community became a story. The story became
         a place. And now the place is here — waiting for you to walk through it.
       </p>
-      <Link to="/home" className="starlight-cta">Enter Mythouse</Link>
+      <Link to="/chronosphaera" className="starlight-cta" onClick={() => window.scrollTo(0, 0)}>Enter Mythouse</Link>
       <br />
-      <Link to="/fallen-starlight" className="starlight-cta-secondary">Read the Story &rarr;</Link>
+      <Link to="/chronosphaera/fallen-starlight" className="starlight-cta-secondary" onClick={() => window.scrollTo(0, 0)}>Read the Story &rarr;</Link>
       <p className="starlight-living-closing">
         The only question left is yours.
       </p>
