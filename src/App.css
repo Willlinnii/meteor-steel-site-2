@@ -3143,6 +3143,29 @@ body {
   color: var(--text-secondary);
 }
 
+.profile-cert-download-btn {
+  background: transparent;
+  border: 1px solid rgba(201, 169, 97, 0.5);
+  color: var(--accent-gold);
+  font-family: 'Cinzel', serif;
+  font-size: 0.7rem;
+  padding: 5px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.profile-cert-download-btn:hover:not(:disabled) {
+  background: rgba(201, 169, 97, 0.15);
+  border-color: var(--accent-gold);
+}
+
+.profile-cert-download-btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
 .profile-empty {
   color: var(--text-secondary);
   font-size: 0.85rem;

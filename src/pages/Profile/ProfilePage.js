@@ -132,7 +132,7 @@ const PURCHASES = [
 
 export default function ProfilePage() {
   const { user, signOut } = useAuth();
-  const { getCourseStates, completedCourses, allCourses } = useCoursework();
+  const { getCourseStates, completedCourses, certificateData, allCourses } = useCoursework();
   const { earnedRanks, highestRank, activeCredentials, hasProfile, loaded: profileLoaded, handle, natalChart, updateNatalChart, numerologyName, updateNumerologyName, luckyNumber, updateLuckyNumber, subscriptions, updateSubscription, updateSubscriptions, purchases, updatePurchase, updatePurchases, refreshProfile, mentorData, qualifiedMentorTypes, mentorEligible, mentorCoursesComplete, effectiveMentorStatus, pairingCategories, updateMentorBio, updateMentorCapacity, publishToDirectory, unpublishFromDirectory, respondToPairing, endPairing, photoURL, consultingData, consultingCategories, updateProfilePhoto, respondToConsulting, apiKeys, apiKeysLoaded, saveApiKey, removeApiKey, hasAnthropicKey, hasOpenaiKey } = useProfile();
   const { personalStories, loaded: writingsLoaded } = useWritings();
   const navigate = useNavigate();
@@ -175,6 +175,30 @@ export default function ProfilePage() {
     try { await respondToConsulting(requestId, false); } catch {}
     setConsultingRespondingId(null);
   };
+
+  const [certDownloading, setCertDownloading] = useState(null); // courseId while generating
+
+  const handleDownloadCertificate = useCallback(async (course) => {
+    setCertDownloading(course.id);
+    try {
+      const [{ jsPDF }, { generateCertificate }] = await Promise.all([
+        import('jspdf'),
+        import('../../coursework/generateCertificate'),
+      ]);
+      const certInfo = certificateData[course.id];
+      generateCertificate(jsPDF, {
+        userName: user?.displayName || user?.email?.split('@')[0] || 'Traveler',
+        courseName: course.name,
+        courseDescription: course.description,
+        requirements: course.requirements,
+        completedAt: certInfo?.completedAt || Date.now(),
+        courseId: course.id,
+      });
+    } catch (err) {
+      console.error('Certificate generation failed:', err);
+    }
+    setCertDownloading(null);
+  }, [certificateData, user]);
 
   // Scroll to #subscriptions or #purchases when navigated with hash
   useEffect(() => {
@@ -536,7 +560,7 @@ export default function ProfilePage() {
           ))}
           {/* Completed courses */}
           {completed.map(course => (
-            <CourseCard key={course.id} course={course} status="completed" />
+            <CourseCard key={course.id} course={course} status="completed" onDownloadCert={handleDownloadCertificate} certDownloading={certDownloading} />
           ))}
           {/* Not started */}
           {notStarted.map(course => (
@@ -590,15 +614,28 @@ export default function ProfilePage() {
         </div>
       ) : (
         <div className="profile-cert-list">
-          {certificates.map(course => (
-            <div key={course.id} className="profile-cert-card">
-              <span className="profile-cert-icon">{'\u2728'}</span>
-              <div className="profile-cert-info">
-                <div className="profile-cert-name">{course.name}</div>
-                <div className="profile-cert-date">Certificate earned</div>
+          {certificates.map(course => {
+            const certInfo = certificateData[course.id];
+            const dateStr = certInfo?.completedAt
+              ? new Date(certInfo.completedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+              : 'Certificate earned';
+            return (
+              <div key={course.id} className="profile-cert-card">
+                <span className="profile-cert-icon">{'\u2728'}</span>
+                <div className="profile-cert-info">
+                  <div className="profile-cert-name">{course.name}</div>
+                  <div className="profile-cert-date">{dateStr}</div>
+                </div>
+                <button
+                  className="profile-cert-download-btn"
+                  disabled={certDownloading === course.id}
+                  onClick={() => handleDownloadCertificate(course)}
+                >
+                  {certDownloading === course.id ? 'Generating...' : 'Download PDF'}
+                </button>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
 
@@ -1077,7 +1114,7 @@ function MentorSection({ effectiveMentorStatus, mentorEligible, qualifiedMentorT
   );
 }
 
-function CourseCard({ course, status }) {
+function CourseCard({ course, status, onDownloadCert, certDownloading }) {
   const pct = Math.round(course.progress * 100);
 
   return (
@@ -1125,6 +1162,16 @@ function CourseCard({ course, status }) {
           );
         })}
       </ul>
+
+      {status === 'completed' && onDownloadCert && (
+        <button
+          className="profile-cert-download-btn"
+          disabled={certDownloading === course.id}
+          onClick={() => onDownloadCert(course)}
+        >
+          {certDownloading === course.id ? 'Generating...' : 'Download Certificate'}
+        </button>
+      )}
     </div>
   );
 }

@@ -46,6 +46,7 @@ export function CourseworkProvider({ children }) {
     try { return localStorage.getItem('mythouse_cw_mode') === '1'; } catch { return false; }
   });
   const [completedCourses, setCompletedCourses] = useState(new Set());
+  const [certificateData, setCertificateData] = useState({}); // { courseId: { completedAt, courseName } }
   const [newlyCompleted, setNewlyCompleted] = useState(null); // course that just completed (for popup)
   const [loaded, setLoaded] = useState(false);
 
@@ -79,11 +80,13 @@ export function CourseworkProvider({ children }) {
         // Load completed courses
         const certRef = doc(db, 'users', user.uid, 'meta', 'certificates');
         const certSnap = await getDoc(certRef);
-        const certs = certSnap.exists() ? new Set(Object.keys(certSnap.data().completed || {})) : new Set();
+        const certMap = certSnap.exists() ? (certSnap.data().completed || {}) : {};
+        const certs = new Set(Object.keys(certMap));
 
         if (!cancelled) {
           setProgress(loaded);
           setCompletedCourses(certs);
+          setCertificateData(certMap);
           setLoaded(true);
         }
       } catch (err) {
@@ -198,14 +201,16 @@ export function CourseworkProvider({ children }) {
       if (completedCourses.has(course.id)) continue;
       if (checkCourseCompletion(course, progress)) {
         // Course just completed!
+        const now = Date.now();
         setCompletedCourses(prev => new Set([...prev, course.id]));
+        setCertificateData(prev => ({ ...prev, [course.id]: { completedAt: now, courseName: course.name } }));
         setNewlyCompleted(course);
 
         // Persist certificate
         if (user && firebaseConfigured && db) {
           const certRef = doc(db, 'users', user.uid, 'meta', 'certificates');
           setDoc(certRef, {
-            completed: { [course.id]: { completedAt: Date.now(), courseName: course.name } },
+            completed: { [course.id]: { completedAt: now, courseName: course.name } },
           }, { merge: true }).catch(err => console.error('Failed to save certificate:', err));
         }
       }
@@ -278,6 +283,7 @@ export function CourseworkProvider({ children }) {
     getCourseStates,
     getTrackedElements,
     completedCourses,
+    certificateData,
     newlyCompleted,
     dismissCompletion,
     buildCourseSummary,
