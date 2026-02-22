@@ -1079,16 +1079,9 @@ function SubscribersSection() {
 
 // --- Services data ---
 const SERVICES = [
+  // ── Paid ──────────────────────────────────────────────
   {
-    name: 'Firebase',
-    url: 'https://firebase.google.com',
-    category: 'Database / Auth / Storage',
-    usedFor: 'User auth, Firestore DB, file storage',
-    paid: 'Free tier',
-    status: 'Active',
-    envVars: ['REACT_APP_FIREBASE_API_KEY', 'REACT_APP_FIREBASE_AUTH_DOMAIN', 'REACT_APP_FIREBASE_PROJECT_ID'],
-  },
-  {
+    id: 'anthropic',
     name: 'Anthropic Claude',
     url: 'https://console.anthropic.com',
     category: 'AI / LLM',
@@ -1098,6 +1091,7 @@ const SERVICES = [
     envVars: ['ANTHROPIC_API_KEY'],
   },
   {
+    id: 'openai',
     name: 'OpenAI',
     url: 'https://platform.openai.com',
     category: 'AI / LLM',
@@ -1107,6 +1101,48 @@ const SERVICES = [
     envVars: ['OPENAI_API_KEY'],
   },
   {
+    id: 'replicate',
+    name: 'Replicate',
+    url: 'https://replicate.com',
+    category: 'AI / TTS',
+    usedFor: 'Chatterbox voice synthesis for Atlas TTS',
+    paid: 'Paid',
+    status: 'Active',
+    envVars: ['REPLICATE_API_TOKEN'],
+  },
+  {
+    id: 'elevenlabs',
+    name: 'ElevenLabs',
+    url: 'https://elevenlabs.io',
+    category: 'AI / TTS',
+    usedFor: 'Text-to-speech voice generation',
+    paid: 'Paid',
+    status: 'Configured',
+    envVars: ['ELEVENLABS_API_KEY'],
+  },
+  {
+    id: 'hostinger',
+    name: 'Hostinger',
+    url: 'https://hostinger.com',
+    category: 'Domain / DNS',
+    usedFor: 'Domain registration & DNS management',
+    paid: 'Paid',
+    status: 'Active',
+    envVars: [],
+  },
+  // ── Free tier (subscription) ──────────────────────────
+  {
+    id: 'firebase',
+    name: 'Firebase',
+    url: 'https://firebase.google.com',
+    category: 'Database / Auth / Storage',
+    usedFor: 'User auth, Firestore DB, file storage',
+    paid: 'Free tier',
+    status: 'Active',
+    envVars: ['REACT_APP_FIREBASE_API_KEY', 'REACT_APP_FIREBASE_AUTH_DOMAIN', 'REACT_APP_FIREBASE_PROJECT_ID'],
+  },
+  {
+    id: 'vercel',
     name: 'Vercel',
     url: 'https://vercel.com',
     category: 'Hosting',
@@ -1116,15 +1152,7 @@ const SERVICES = [
     envVars: [],
   },
   {
-    name: 'Google OAuth',
-    url: 'https://console.cloud.google.com',
-    category: 'Authentication',
-    usedFor: 'Google sign-in',
-    paid: 'Free',
-    status: 'Active',
-    envVars: ['REACT_APP_FIREBASE_AUTH_DOMAIN'],
-  },
-  {
+    id: 'google_maps',
     name: 'Google Maps',
     url: 'https://console.cloud.google.com/google/maps-apis/home?project=mythouse-site',
     category: 'Mapping / 360 VR',
@@ -1132,8 +1160,32 @@ const SERVICES = [
     paid: 'Free tier',
     status: 'Active',
     envVars: ['REACT_APP_GOOGLE_MAPS_API_KEY'],
+    clientEnvCheck: 'REACT_APP_GOOGLE_MAPS_API_KEY',
   },
   {
+    id: 'arcgis',
+    name: 'ArcGIS',
+    url: 'https://arcgis.com',
+    category: 'Satellite Imagery',
+    usedFor: 'Globe imagery tiles',
+    paid: 'Free tier',
+    status: 'Active',
+    envVars: [],
+  },
+  // ── Free / Open Source ────────────────────────────────
+  {
+    id: 'google_oauth',
+    name: 'Google OAuth',
+    url: 'https://console.cloud.google.com',
+    category: 'Authentication',
+    usedFor: 'Google sign-in',
+    paid: 'Free',
+    status: 'Active',
+    envVars: ['REACT_APP_FIREBASE_AUTH_DOMAIN'],
+    clientEnvCheck: 'REACT_APP_FIREBASE_AUTH_DOMAIN',
+  },
+  {
+    id: 'cesium',
     name: 'Cesium.js',
     url: 'https://cesium.com',
     category: '3D Mapping',
@@ -1141,8 +1193,10 @@ const SERVICES = [
     paid: 'Free (OSS)',
     status: 'Active',
     envVars: ['REACT_APP_CESIUM_TOKEN'],
+    clientEnvCheck: 'REACT_APP_CESIUM_TOKEN',
   },
   {
+    id: 'threejs',
     name: 'Three.js',
     url: 'https://threejs.org',
     category: '3D Graphics',
@@ -1152,15 +1206,7 @@ const SERVICES = [
     envVars: [],
   },
   {
-    name: 'ArcGIS',
-    url: 'https://arcgis.com',
-    category: 'Satellite Imagery',
-    usedFor: 'Globe imagery tiles',
-    paid: 'Free tier',
-    status: 'Active',
-    envVars: [],
-  },
-  {
+    id: 'astronomy_engine',
     name: 'Astronomy Engine',
     url: 'https://github.com/cosinekitty/astronomy',
     category: 'Calculations',
@@ -1170,6 +1216,7 @@ const SERVICES = [
     envVars: [],
   },
   {
+    id: 'wikisource',
     name: 'Wikisource',
     url: 'https://wikisource.org',
     category: 'Text API',
@@ -1179,15 +1226,7 @@ const SERVICES = [
     envVars: [],
   },
   {
-    name: 'Hostinger',
-    url: 'https://hostinger.com',
-    category: 'Domain / DNS',
-    usedFor: 'Domain registration & DNS management',
-    paid: 'Paid',
-    status: 'Active',
-    envVars: [],
-  },
-  {
+    id: 'youtube',
     name: 'YouTube',
     url: 'https://youtube.com',
     category: 'Video',
@@ -1197,6 +1236,7 @@ const SERVICES = [
     envVars: [],
   },
   {
+    id: 'soundcloud',
     name: 'SoundCloud',
     url: 'https://soundcloud.com',
     category: 'Audio',
@@ -1206,6 +1246,7 @@ const SERVICES = [
     envVars: [],
   },
   {
+    id: 'openlibrary',
     name: 'Open Library',
     url: 'https://openlibrary.org',
     category: 'Book Data',
@@ -1215,6 +1256,7 @@ const SERVICES = [
     envVars: [],
   },
   {
+    id: 'worldtimeapi',
     name: 'WorldTimeAPI',
     url: 'https://worldtimeapi.org',
     category: 'Utilities',
@@ -1224,6 +1266,7 @@ const SERVICES = [
     envVars: [],
   },
   {
+    id: 'ipwho',
     name: 'IPWho',
     url: 'https://ipwho.is',
     category: 'Utilities',
@@ -1247,51 +1290,327 @@ const SERVICE_PAID_COLORS = {
   'Free (OSS)': '#7a7ab8',
 };
 
+const HEALTH_BADGE_CONFIG = {
+  live:           { color: '#5bd97a', border: '#5bd97a' },
+  error:          { color: '#d95b5b', border: '#d95b5b' },
+  not_configured: { color: '#d95b5b', border: '#d95b5b' },
+  bundled:        { color: '#6a6a7a', border: '#6a6a7a' },
+  no_api:         { color: '#6a6a7a', border: '#6a6a7a' },
+  checking:       { color: '#d9a55b', border: '#d9a55b' },
+};
+
+function HealthBadge({ result, svc }) {
+  if (!result) return null;
+
+  // Static / bundled packages
+  if (result.checkType === 'static') {
+    const cfg = HEALTH_BADGE_CONFIG.bundled;
+    return (
+      <span className="admin-health-badge" style={{ color: cfg.color, borderColor: cfg.border }}>
+        Bundled
+      </span>
+    );
+  }
+
+  // No API to ping
+  if (result.checkType === 'no_api') {
+    const cfg = HEALTH_BADGE_CONFIG.no_api;
+    return (
+      <span className="admin-health-badge" style={{ color: cfg.color, borderColor: cfg.border }}>
+        No API
+      </span>
+    );
+  }
+
+  // Client env — check on frontend since server can't see REACT_APP_* vars
+  if (result.checkType === 'client_env') {
+    const envKey = svc.clientEnvCheck;
+    const isSet = envKey && !!process.env[envKey];
+    const cfg = isSet ? HEALTH_BADGE_CONFIG.live : HEALTH_BADGE_CONFIG.not_configured;
+    return (
+      <span className="admin-health-badge" style={{ color: cfg.color, borderColor: cfg.border }}>
+        {isSet ? 'Configured' : 'Not configured'}
+      </span>
+    );
+  }
+
+  // Not configured (env var missing on server)
+  if (result.configured === false) {
+    const cfg = HEALTH_BADGE_CONFIG.not_configured;
+    return (
+      <span className="admin-health-badge" style={{ color: cfg.color, borderColor: cfg.border }} title={result.error}>
+        Not configured
+      </span>
+    );
+  }
+
+  // Live
+  if (result.live) {
+    const cfg = HEALTH_BADGE_CONFIG.live;
+    return (
+      <span className="admin-health-badge" style={{ color: cfg.color, borderColor: cfg.border }}>
+        Live ({result.latencyMs}ms)
+      </span>
+    );
+  }
+
+  // Error (configured but failed)
+  const cfg = HEALTH_BADGE_CONFIG.error;
+  return (
+    <span className="admin-health-badge" style={{ color: cfg.color, borderColor: cfg.border }} title={result.error}>
+      Error
+    </span>
+  );
+}
+
+function UsagePanel({ svcId, usage }) {
+  if (!usage) return null;
+
+  // Services that show nothing extra
+  const FREE_IDS = new Set([
+    'hostinger', 'arcgis', 'google_oauth', 'cesium', 'threejs',
+    'astronomy_engine', 'wikisource', 'youtube', 'soundcloud',
+    'openlibrary', 'worldtimeapi', 'ipwho',
+  ]);
+  if (FREE_IDS.has(svcId)) return null;
+
+  // Unavailable — show reason
+  if (usage.available === false) {
+    return (
+      <div className="admin-usage-panel">
+        <span className="admin-usage-unavailable">{usage.reason || usage.error || 'Unavailable'}</span>
+      </div>
+    );
+  }
+
+  // Anthropic / OpenAI — cost summary + model table
+  if (svcId === 'anthropic' || svcId === 'openai') {
+    return (
+      <div className="admin-usage-panel">
+        <div className="admin-usage-costs">
+          <div className="admin-usage-cost-item">
+            <span className="admin-usage-cost-label">30-day spend</span>
+            <span className="admin-usage-cost-value">${(usage.cost30d || 0).toFixed(2)}</span>
+          </div>
+          <div className="admin-usage-cost-item">
+            <span className="admin-usage-cost-label">Today</span>
+            <span className="admin-usage-cost-value">${(usage.todayCost || 0).toFixed(2)}</span>
+          </div>
+        </div>
+        {usage.topModels && usage.topModels.length > 0 && (
+          <table className="admin-usage-model-table">
+            <thead>
+              <tr>
+                <th>Model</th>
+                <th>Tokens</th>
+                {usage.topModels[0].cost != null && <th>Cost</th>}
+              </tr>
+            </thead>
+            <tbody>
+              {usage.topModels.map((m, i) => (
+                <tr key={i}>
+                  <td className="admin-usage-model-name">{m.model}</td>
+                  <td>{(m.tokens || 0).toLocaleString()}</td>
+                  {m.cost != null && <td>${m.cost.toFixed(2)}</td>}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+        {usage.error && <span className="admin-usage-error">{usage.error}</span>}
+      </div>
+    );
+  }
+
+  // ElevenLabs — character usage bar + tier
+  if (svcId === 'elevenlabs') {
+    const pct = usage.characterLimit > 0
+      ? Math.min(100, Math.round((usage.charactersUsed / usage.characterLimit) * 100))
+      : 0;
+    const barColor = pct > 90 ? '#d95b5b' : pct > 70 ? '#d9a55b' : '#5bd97a';
+    return (
+      <div className="admin-usage-panel">
+        <div className="admin-usage-bar-row">
+          <span className="admin-usage-bar-label">
+            Characters: {(usage.charactersUsed || 0).toLocaleString()} / {(usage.characterLimit || 0).toLocaleString()}
+          </span>
+          <span className="admin-usage-bar-pct">{pct}%</span>
+        </div>
+        <div className="admin-usage-bar">
+          <div className="admin-usage-bar-fill" style={{ width: `${pct}%`, background: barColor }} />
+        </div>
+        <div className="admin-usage-meta-row">
+          <span>Voices: {usage.voiceSlotsUsed}/{usage.voiceLimit}</span>
+          <span>Tier: {usage.tier}</span>
+          {usage.resetsAt && <span>Resets: {new Date(usage.resetsAt).toLocaleDateString()}</span>}
+        </div>
+        {usage.error && <span className="admin-usage-error">{usage.error}</span>}
+      </div>
+    );
+  }
+
+  // Vercel — charges summary
+  if (svcId === 'vercel') {
+    const charges = Array.isArray(usage.charges) ? usage.charges : [];
+    const total = charges.reduce((sum, c) => sum + (c.amount || c.total || 0), 0);
+    return (
+      <div className="admin-usage-panel">
+        <div className="admin-usage-costs">
+          <div className="admin-usage-cost-item">
+            <span className="admin-usage-cost-label">30-day charges</span>
+            <span className="admin-usage-cost-value">
+              {total > 0 ? `$${(total / 100).toFixed(2)}` : '$0.00'}
+            </span>
+          </div>
+          {charges.length > 0 && (
+            <div className="admin-usage-cost-item">
+              <span className="admin-usage-cost-label">Line items</span>
+              <span className="admin-usage-cost-value">{charges.length}</span>
+            </div>
+          )}
+        </div>
+        {usage.error && <span className="admin-usage-error">{usage.error}</span>}
+      </div>
+    );
+  }
+
+  return null;
+}
+
 function ServicesSection() {
+  const { user } = useAuth();
+  const [healthResults, setHealthResults] = useState(null);
+  const [checking, setChecking] = useState(false);
+  const [checkError, setCheckError] = useState(null);
+  const [usageResults, setUsageResults] = useState(null);
+  const [checkingUsage, setCheckingUsage] = useState(false);
+  const [usageError, setUsageError] = useState(null);
+
+  const runHealthCheck = useCallback(async () => {
+    if (!user) return;
+    setChecking(true);
+    setCheckError(null);
+    try {
+      const token = await user.getIdToken();
+      const res = await fetch('/api/health-check', {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data = await res.json();
+      // Index results by id for quick lookup
+      const map = {};
+      for (const r of data.results) map[r.id] = r;
+      setHealthResults(map);
+    } catch (err) {
+      setCheckError(err.message);
+    }
+    setChecking(false);
+  }, [user]);
+
+  const runUsageCheck = useCallback(async () => {
+    if (!user) return;
+    setCheckingUsage(true);
+    setUsageError(null);
+    try {
+      const token = await user.getIdToken();
+      const res = await fetch('/api/service-usage', {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data = await res.json();
+      setUsageResults(data.results || {});
+    } catch (err) {
+      setUsageError(err.message);
+    }
+    setCheckingUsage(false);
+  }, [user]);
+
   return (
     <div className="admin-services">
-      <h2 className="admin-services-title">SERVICES &amp; INTEGRATIONS</h2>
-      <p className="admin-services-subtitle">
-        External subscriptions, APIs, and third-party tools used by the site.
-      </p>
+      <div className="admin-services-header-row">
+        <div>
+          <h2 className="admin-services-title">SERVICES &amp; INTEGRATIONS</h2>
+          <p className="admin-services-subtitle">
+            External subscriptions, APIs, and third-party tools used by the site.
+          </p>
+        </div>
+        <div className="admin-services-btn-group">
+          <button
+            className="admin-health-check-btn"
+            onClick={runHealthCheck}
+            disabled={checking}
+          >
+            {checking ? 'Checking...' : 'Check All'}
+          </button>
+          <button
+            className="admin-health-check-btn admin-usage-check-btn"
+            onClick={runUsageCheck}
+            disabled={checkingUsage}
+          >
+            {checkingUsage ? 'Loading...' : 'Check Usage'}
+          </button>
+        </div>
+      </div>
+      {checkError && (
+        <p className="admin-health-error">Health check failed: {checkError}</p>
+      )}
+      {usageError && (
+        <p className="admin-health-error">Usage check failed: {usageError}</p>
+      )}
       <div className="admin-services-grid">
-        {SERVICES.map(svc => (
-          <div key={svc.name} className="admin-service-card">
-            <div className="admin-service-header">
-              <a
-                href={svc.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="admin-service-name"
-              >
-                {svc.name}
-              </a>
-              <span
-                className="admin-service-status"
-                style={{ color: SERVICE_STATUS_COLORS[svc.status] || '#6a6a7a', borderColor: SERVICE_STATUS_COLORS[svc.status] || '#6a6a7a' }}
-              >
-                {svc.status}
-              </span>
-            </div>
-            <span className="admin-service-category">{svc.category}</span>
-            <p className="admin-service-usage">{svc.usedFor}</p>
-            <div className="admin-service-footer">
-              <span
-                className="admin-service-paid"
-                style={{ color: SERVICE_PAID_COLORS[svc.paid] || '#8a8aa0', borderColor: SERVICE_PAID_COLORS[svc.paid] || '#8a8aa0' }}
-              >
-                {svc.paid}
-              </span>
-              {svc.envVars.length > 0 && (
-                <div className="admin-service-envvars">
-                  {svc.envVars.map(v => (
-                    <code key={v} className="admin-service-env">{v}</code>
-                  ))}
+        {SERVICES.map(svc => {
+          const result = healthResults ? healthResults[svc.id] : null;
+          const usage = usageResults ? usageResults[svc.id] : null;
+          return (
+            <div key={svc.id} className="admin-service-card">
+              <div className="admin-service-header">
+                <a
+                  href={svc.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="admin-service-name"
+                >
+                  {svc.name}
+                </a>
+                <div className="admin-service-badges">
+                  <span
+                    className="admin-service-status"
+                    style={{ color: SERVICE_STATUS_COLORS[svc.status] || '#6a6a7a', borderColor: SERVICE_STATUS_COLORS[svc.status] || '#6a6a7a' }}
+                  >
+                    {svc.status}
+                  </span>
+                  {checking && !result && (
+                    <span
+                      className="admin-health-badge"
+                      style={{ color: HEALTH_BADGE_CONFIG.checking.color, borderColor: HEALTH_BADGE_CONFIG.checking.border }}
+                    >
+                      ...
+                    </span>
+                  )}
+                  <HealthBadge result={result} svc={svc} />
                 </div>
-              )}
+              </div>
+              <span className="admin-service-category">{svc.category}</span>
+              <p className="admin-service-usage">{svc.usedFor}</p>
+              <div className="admin-service-footer">
+                <span
+                  className="admin-service-paid"
+                  style={{ color: SERVICE_PAID_COLORS[svc.paid] || '#8a8aa0', borderColor: SERVICE_PAID_COLORS[svc.paid] || '#8a8aa0' }}
+                >
+                  {svc.paid}
+                </span>
+                {svc.envVars.length > 0 && (
+                  <div className="admin-service-envvars">
+                    {svc.envVars.map(v => (
+                      <code key={v} className="admin-service-env">{v}</code>
+                    ))}
+                  </div>
+                )}
+              </div>
+              <UsagePanel svcId={svc.id} usage={usage} />
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );

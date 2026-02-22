@@ -1275,6 +1275,214 @@
   font-family: monospace;
 }
 
+/* --- Health check header + button --- */
+.admin-services-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.admin-services-header-row > div {
+  flex: 1;
+}
+
+.admin-services-header-row .admin-services-title {
+  margin-bottom: 6px;
+}
+
+.admin-services-header-row .admin-services-subtitle {
+  margin-bottom: 0;
+}
+
+.admin-health-check-btn {
+  background: rgba(196, 113, 58, 0.15);
+  border: 1px solid #c4713a;
+  color: #e8d5b5;
+  font-family: 'Cinzel', serif;
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  padding: 8px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.admin-health-check-btn:hover:not(:disabled) {
+  background: rgba(196, 113, 58, 0.3);
+}
+
+.admin-health-check-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.admin-health-error {
+  color: #d95b5b;
+  font-size: 0.8rem;
+  margin: -16px 0 16px;
+}
+
+/* --- Button group for Check All + Check Usage --- */
+.admin-services-btn-group {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.admin-usage-check-btn {
+  background: rgba(91, 141, 217, 0.15);
+  border-color: #5b8dd9;
+}
+
+.admin-usage-check-btn:hover:not(:disabled) {
+  background: rgba(91, 141, 217, 0.3);
+}
+
+/* --- Usage panel (inside service cards) --- */
+.admin-usage-panel {
+  margin-top: 8px;
+  padding: 10px 12px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid #2a2a3a;
+  border-radius: 6px;
+}
+
+.admin-usage-unavailable {
+  font-size: 0.75rem;
+  color: #6a6a7a;
+  font-style: italic;
+}
+
+.admin-usage-error {
+  display: block;
+  font-size: 0.72rem;
+  color: #d95b5b;
+  margin-top: 6px;
+}
+
+/* Cost summary row */
+.admin-usage-costs {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+
+.admin-usage-cost-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.admin-usage-cost-label {
+  font-size: 0.68rem;
+  color: #6a6a7a;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.admin-usage-cost-value {
+  font-size: 1rem;
+  color: #e8d5b5;
+  font-weight: 600;
+}
+
+/* Model breakdown table */
+.admin-usage-model-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.72rem;
+}
+
+.admin-usage-model-table th {
+  text-align: left;
+  color: #6a6a7a;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 4px 6px 4px 0;
+  border-bottom: 1px solid #2a2a3a;
+}
+
+.admin-usage-model-table td {
+  padding: 3px 6px 3px 0;
+  color: #b0b0c0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.admin-usage-model-name {
+  color: #c4c4c4;
+  font-family: monospace;
+  font-size: 0.68rem;
+  max-width: 140px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ElevenLabs usage bar */
+.admin-usage-bar-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.admin-usage-bar-label {
+  font-size: 0.75rem;
+  color: #b0b0c0;
+}
+
+.admin-usage-bar-pct {
+  font-size: 0.75rem;
+  color: #e8d5b5;
+  font-weight: 600;
+}
+
+.admin-usage-bar {
+  width: 100%;
+  height: 6px;
+  background: #1e1e2e;
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+
+.admin-usage-bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.4s ease;
+}
+
+.admin-usage-meta-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  font-size: 0.72rem;
+  color: #8a8aa0;
+}
+
+/* --- Badge row in card header --- */
+.admin-service-badges {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.admin-health-badge {
+  font-size: 0.6rem;
+  padding: 2px 7px;
+  border-radius: 4px;
+  border: 1px solid;
+  letter-spacing: 0.03em;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
 /* ===== IP REGISTRY ===== */
 .admin-ip-registry {
   padding: 24px;
