@@ -3,7 +3,7 @@
  * Accepts text + optional voiceId, returns audio URL.
  * Voice reference samples live in /public/voices/<voiceId>.mp3
  *
- * Chatterbox Turbo: ~2s latency, 6x faster than standard model.
+ * Chatterbox Multilingual: ~5s latency, high quality voice cloning.
  * Limit is 300 chars per call, so longer text is split into chunks.
  */
 
@@ -17,7 +17,7 @@ const VOICE_SAMPLES = {
 };
 
 const MAX_CHARS = 290; // Stay under 300 limit with margin
-const CHATTERBOX_TURBO = '95c87b883ff3e842a1643044dff67f9d204f70a80228f24ff64bffe4a4b917d4';
+const CHATTERBOX_VERSION = '9cfba4c265e685f840612be835424f8c33bdee685d7466ece7684b0d9d4c0b1c';
 
 /** Split text into chunks at sentence boundaries, respecting max length. */
 function chunkText(text, max) {
@@ -54,7 +54,7 @@ async function generateChunk(text, voiceSampleUrl, apiToken) {
       'Prefer': 'wait',
     },
     body: JSON.stringify({
-      version: CHATTERBOX_TURBO,
+      version: CHATTERBOX_VERSION,
       input: {
         text: text,
         reference_audio: voiceSampleUrl,
