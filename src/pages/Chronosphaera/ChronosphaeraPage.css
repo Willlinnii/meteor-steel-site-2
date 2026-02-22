@@ -1,7 +1,7 @@
 /* ===== SEVEN METALS PAGE ===== */
 
 .chronosphaera-page {
-  padding: 20px 20px 60px;
+  padding: 8px 20px 60px;
   max-width: 1400px;
   margin: 0 auto;
   position: relative;
@@ -43,8 +43,14 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 40px 20px 20px;
+  padding: 10px 20px 20px;
   overflow: visible;
+}
+
+@media (max-width: 600px) {
+  .chrono-diagram-center {
+    padding-top: 24px;
+  }
 }
 
 /* Minimal fade when content below the diagram changes */
@@ -61,6 +67,7 @@
 .orbital-svg {
   width: 684px;
   max-width: 90vw;
+  aspect-ratio: 1;
   display: block;
   margin: 0 auto;
 }
@@ -974,7 +981,7 @@
 
 @media (max-width: 600px) {
   .chronosphaera-page {
-    padding: 10px 10px 40px;
+    padding: 24px 10px 40px;
   }
 
   .orbital-svg {

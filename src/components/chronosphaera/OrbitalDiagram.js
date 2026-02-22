@@ -867,7 +867,7 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
       ref={wrapperRef}
       style={pinchStyle}
     >
-      <svg viewBox={(showMonomyth || showFallenStarlight) ? '-50 -50 800 800' : '0 0 700 700'} className="orbital-svg" role="img" aria-label={showMedicineWheel ? "Medicine wheel diagram" : showMonomyth ? "Celestial clock with monomyth ring" : showFallenStarlight ? "Celestial clock with starlight ring" : heliocentric ? "Heliocentric orbital diagram" : "Geocentric orbital diagram with zodiac"}>
+      <svg viewBox={(showMonomyth || showFallenStarlight) ? '-50 -50 800 800' : '0 0 700 700'} preserveAspectRatio="xMidYMid meet" className="orbital-svg" role="img" aria-label={showMedicineWheel ? "Medicine wheel diagram" : showMonomyth ? "Celestial clock with monomyth ring" : showFallenStarlight ? "Celestial clock with starlight ring" : heliocentric ? "Heliocentric orbital diagram" : "Geocentric orbital diagram with zodiac"}>
         {showMedicineWheel ? (
           <g className="medicine-wheel" onMouseMove={handleWheelMove} onMouseLeave={() => { hoveredRingRef.current = null; setHoveredRing(null); }}>
             {/* Quadrant background sectors */}
