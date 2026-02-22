@@ -19,18 +19,18 @@ const saviors = require('../src/data/saviors.json');
 const ufo = require('../src/data/ufo.json');
 const monomyth = require('../src/data/monomyth.json');
 const synthesis = require('../src/data/synthesis.json');
-// --- Seven Metals / Celestial Wheels ---
-const sevenMetals = require('../src/data/sevenMetals.json');
-const sevenMetalsZodiac = require('../src/data/sevenMetalsZodiac.json');
-const sevenMetalsHebrew = require('../src/data/sevenMetalsHebrew.json');
-const sevenMetalsCardinals = require('../src/data/sevenMetalsCardinals.json');
-const sevenMetalsElements = require('../src/data/sevenMetalsElements.json');
-const sevenMetalsShared = require('../src/data/sevenMetalsShared.json');
-const sevenMetalsTheology = require('../src/data/sevenMetalsTheology.json');
-const sevenMetalsArchetypes = require('../src/data/sevenMetalsArchetypes.json');
-const sevenMetalsModern = require('../src/data/sevenMetalsModern.json');
-const sevenMetalsStories = require('../src/data/sevenMetalsStories.json');
-const sevenMetalsArtists = require('../src/data/sevenMetalsArtists.json');
+// --- Chronosphaera (formerly Seven Metals) ---
+const sevenMetals = require('../src/data/chronosphaera.json');
+const sevenMetalsZodiac = require('../src/data/chronosphaeraZodiac.json');
+const sevenMetalsHebrew = require('../src/data/chronosphaeraHebrew.json');
+const sevenMetalsCardinals = require('../src/data/chronosphaeraCardinals.json');
+const sevenMetalsElements = require('../src/data/chronosphaeraElements.json');
+const sevenMetalsShared = require('../src/data/chronosphaeraShared.json');
+const sevenMetalsTheology = require('../src/data/chronosphaeraTheology.json');
+const sevenMetalsArchetypes = require('../src/data/chronosphaeraArchetypes.json');
+const sevenMetalsModern = require('../src/data/chronosphaeraModern.json');
+const sevenMetalsStories = require('../src/data/chronosphaeraStories.json');
+const sevenMetalsArtists = require('../src/data/chronosphaeraArtists.json');
 // --- Monomyth Extended ---
 const monomythFilms = require('../src/data/monomythFilms.json');
 // --- Calendar & Medicine Wheels ---
@@ -49,8 +49,8 @@ const monomythDepth = require('../src/data/monomythDepth.json');
 const monomythModels = require('../src/data/monomythModels.json');
 const monomythCycles = require('../src/data/monomythCycles.json');
 const normalOtherWorld = require('../src/data/normalOtherWorld.json');
-const sevenMetalsDeities = require('../src/data/sevenMetalsDeities.json');
-const sevenMetalsPlanetaryCultures = require('../src/data/sevenMetalsPlanetaryCultures.json');
+const sevenMetalsDeities = require('../src/data/chronosphaeraDeities.json');
+const sevenMetalsPlanetaryCultures = require('../src/data/chronosphaeraPlanetaryCultures.json');
 const dayNight = require('../src/data/dayNight.json');
 const medicineWheelContent = require('../src/data/medicineWheelContent.json');
 const mythsEpisodes = require('../src/data/mythsEpisodes.json');
