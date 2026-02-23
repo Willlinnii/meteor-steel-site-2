@@ -1,7 +1,9 @@
 /**
- * GET /api/service-usage
- * Admin-only endpoint — fetches billing & usage data from paid services.
- * Requires Authorization: Bearer <Firebase ID token> from the admin user.
+ * GET /api/admin
+ * Admin-only endpoint — supports multiple modes:
+ *   ?mode=usage   (default) — billing & usage data from paid services
+ *   ?mode=health  — health checks for all external services
+ *   ?mode=users   — list all Firebase Auth users
  */
 const admin = require('firebase-admin');
 const { ensureFirebaseAdmin } = require('./_lib/auth');
@@ -41,7 +43,6 @@ async function fetchAnthropic() {
   const startDate = daysAgo(30);
   const endDate = daysAgo(0);
 
-  // Fetch cost report and usage report in parallel
   const [costRes, usageRes] = await Promise.all([
     fetchWithTimeout(
       `https://api.anthropic.com/v1/organizations/cost_report?start_date=${startDate}&end_date=${endDate}&bucket_size=1d`,
@@ -60,7 +61,6 @@ async function fetchAnthropic() {
 
   const costData = await costRes.json();
 
-  // Sum costs
   let cost30d = 0;
   let todayCost = 0;
   const todayStr = endDate;
@@ -73,7 +73,6 @@ async function fetchAnthropic() {
     }
   }
 
-  // Model breakdown from usage report
   let topModels = [];
   if (usageRes.ok) {
     const usageData = await usageRes.json();
@@ -106,7 +105,6 @@ async function fetchOpenAI() {
   const headers = { Authorization: `Bearer ${key}` };
   const startTime = daysAgoUnix(30);
 
-  // Fetch costs and usage in parallel
   const [costRes, usageRes] = await Promise.all([
     fetchWithTimeout(
       `https://api.openai.com/v1/organization/costs?start_time=${startTime}&bucket_width=1d`,
@@ -125,13 +123,11 @@ async function fetchOpenAI() {
 
   const costData = await costRes.json();
 
-  // Sum costs
   let cost30d = 0;
   let todayCost = 0;
   const todayStart = daysAgoUnix(0);
   const buckets = costData.data || costData.buckets || [];
   for (const bucket of buckets) {
-    // OpenAI costs are in cents — convert to dollars
     const amount = (bucket.results || []).reduce((sum, r) => sum + (r.amount?.value || 0), 0) / 100;
     cost30d += amount;
     if (bucket.start_time >= todayStart) {
@@ -139,7 +135,6 @@ async function fetchOpenAI() {
     }
   }
 
-  // Model breakdown
   let topModels = [];
   if (usageRes.ok) {
     const usageData = await usageRes.json();
@@ -218,16 +213,20 @@ async function fetchVercel() {
   };
 }
 
+// ==========================================================
+// Main handler
+// ==========================================================
+
 module.exports = async (req, res) => {
   if (req.method !== 'GET') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  // --- Admin auth (same pattern as health-check.js) ---
   if (!ensureFirebaseAdmin()) {
     return res.status(500).json({ error: 'Server not configured.' });
   }
 
+  // Admin auth
   const authHeader = req.headers.authorization || '';
   if (!authHeader.startsWith('Bearer ')) {
     return res.status(401).json({ error: 'Unauthorized.' });
@@ -244,6 +243,11 @@ module.exports = async (req, res) => {
   }
 
   const mode = req.query.mode || 'usage';
+
+  // --- Users mode (merged from list-users.js) ---
+  if (mode === 'users') {
+    return handleListUsers(req, res);
+  }
 
   // --- Health check mode (merged from health-check.js) ---
   if (mode === 'health') {
@@ -280,6 +284,35 @@ module.exports = async (req, res) => {
 
   return res.status(200).json({ timestamp: Date.now(), results });
 };
+
+// ==========================================================
+// List users (originally api/list-users.js)
+// ==========================================================
+
+async function handleListUsers(req, res) {
+  try {
+    const users = [];
+    let nextPageToken;
+    do {
+      const result = await admin.auth().listUsers(1000, nextPageToken);
+      result.users.forEach(u => {
+        users.push({
+          uid: u.uid,
+          email: u.email || null,
+          displayName: u.displayName || null,
+          createdAt: u.metadata.creationTime || null,
+          lastSignIn: u.metadata.lastSignInTime || null,
+        });
+      });
+      nextPageToken = result.pageToken;
+    } while (nextPageToken);
+
+    return res.status(200).json({ users });
+  } catch (err) {
+    console.error('list-users error:', err);
+    return res.status(500).json({ error: 'Failed to list users' });
+  }
+}
 
 // ==========================================================
 // Health check logic (originally api/health-check.js)

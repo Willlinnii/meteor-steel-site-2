@@ -106,7 +106,7 @@ export default function MentorApplicationChat({ onComplete, qualifiedMentorTypes
 
         // Trigger automated Atlas screening
         try {
-          await apiFetch('/api/mentor-admin', {
+          await apiFetch('/api/mentor', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({

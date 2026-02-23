@@ -111,7 +111,7 @@ export default function ContactsPage() {
     async function loadMembers() {
       try {
         const token = await user.getIdToken();
-        const res = await fetch('/api/list-users', {
+        const res = await fetch('/api/admin?mode=users', {
           headers: { Authorization: `Bearer ${token}` },
         });
         if (!res.ok) throw new Error(`API ${res.status}`);

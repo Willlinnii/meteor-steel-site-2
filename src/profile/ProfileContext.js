@@ -327,7 +327,7 @@ export function ProfileProvider({ children }) {
     }));
     try {
       const token = await user.getIdToken();
-      const resp = await fetch('/api/mentor-management', {
+      const resp = await fetch('/api/mentor', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify({ action: 'update-bio', bio }),
@@ -355,7 +355,7 @@ export function ProfileProvider({ children }) {
     }));
     try {
       const token = await user.getIdToken();
-      const resp = await fetch('/api/mentor-management', {
+      const resp = await fetch('/api/mentor', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify({ action: 'update-capacity', capacity }),
@@ -382,7 +382,7 @@ export function ProfileProvider({ children }) {
     }));
     try {
       const token = await user.getIdToken();
-      const resp = await fetch('/api/mentor-management', {
+      const resp = await fetch('/api/mentor', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify({ action: 'publish' }),
@@ -409,7 +409,7 @@ export function ProfileProvider({ children }) {
     }));
     try {
       const token = await user.getIdToken();
-      const resp = await fetch('/api/mentor-management', {
+      const resp = await fetch('/api/mentor', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify({ action: 'unpublish' }),
@@ -432,7 +432,7 @@ export function ProfileProvider({ children }) {
     if (!user) return;
     try {
       const token = await user.getIdToken();
-      const resp = await fetch('/api/mentor-management', {
+      const resp = await fetch('/api/mentor', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify({ action: 'pairing-request', mentorUid, message: message || null }),
@@ -452,7 +452,7 @@ export function ProfileProvider({ children }) {
     if (!user) return;
     try {
       const token = await user.getIdToken();
-      const resp = await fetch('/api/mentor-management', {
+      const resp = await fetch('/api/mentor', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify({
@@ -475,7 +475,7 @@ export function ProfileProvider({ children }) {
     if (!user) return;
     try {
       const token = await user.getIdToken();
-      const resp = await fetch('/api/mentor-management', {
+      const resp = await fetch('/api/mentor', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify({ action: 'pairing-end', pairingId }),
@@ -547,7 +547,7 @@ export function ProfileProvider({ children }) {
     if (!user) return;
     try {
       const token = await user.getIdToken();
-      const resp = await fetch('/api/mentor-management', {
+      const resp = await fetch('/api/mentor', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify({ action: 'consulting-request', consultantUid, consultingType: consultingType || null, message: message || null }),
@@ -568,7 +568,7 @@ export function ProfileProvider({ children }) {
     if (!user) return;
     try {
       const token = await user.getIdToken();
-      const resp = await fetch('/api/mentor-management', {
+      const resp = await fetch('/api/mentor', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify({ action: accept ? 'consulting-accept' : 'consulting-decline', requestId }),

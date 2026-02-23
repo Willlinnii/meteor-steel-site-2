@@ -766,7 +766,7 @@ function MentorManagerSection() {
       if (action === 'reject' && rejectReason.trim()) {
         body.rejectionReason = rejectReason.trim();
       }
-      const res = await fetch('/api/mentor-admin', {
+      const res = await fetch('/api/mentor', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -1507,7 +1507,7 @@ function ServicesSection() {
     setCheckError(null);
     try {
       const token = await user.getIdToken();
-      const res = await fetch('/api/service-usage?mode=health', {
+      const res = await fetch('/api/admin?mode=health', {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -1528,7 +1528,7 @@ function ServicesSection() {
     setUsageError(null);
     try {
       const token = await user.getIdToken();
-      const res = await fetch('/api/service-usage', {
+      const res = await fetch('/api/admin', {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
