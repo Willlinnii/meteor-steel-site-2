@@ -8,6 +8,10 @@ function generateKey() {
   return 'myt_' + crypto.randomBytes(20).toString('hex');
 }
 
+function hashKey(key) {
+  return crypto.createHash('sha256').update(key).digest('hex');
+}
+
 module.exports = async (req, res) => {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
@@ -39,21 +43,38 @@ module.exports = async (req, res) => {
   }
 
   try {
-    const secretsRef = admin.firestore().doc(`users/${uid}/meta/secrets`);
+    const db = admin.firestore();
+    const secretsRef = db.doc(`users/${uid}/meta/secrets`);
+    const snap = await secretsRef.get();
+    const existing = snap.exists ? snap.data() : {};
 
     if (action === 'generate') {
-      // Check if key already exists
-      const snap = await secretsRef.get();
-      if (snap.exists && snap.data().mythouseApiKey) {
+      if (existing.mythouseApiKey) {
         return res.status(400).json({ error: 'API key already exists. Use regenerate to replace it.' });
       }
     }
 
+    // If regenerating, delete old reverse lookup entry
+    if (action === 'regenerate' && existing.mythouseApiKey) {
+      const oldHash = hashKey(existing.mythouseApiKey);
+      await db.doc(`api-keys/${oldHash}`).delete();
+    }
+
     const key = generateKey();
-    await secretsRef.set({
-      mythouseApiKey: key,
-      mythouseApiKeyCreatedAt: admin.firestore.FieldValue.serverTimestamp(),
-    }, { merge: true });
+    const keyHash = hashKey(key);
+
+    // Write user secret + reverse lookup in parallel
+    await Promise.all([
+      secretsRef.set({
+        mythouseApiKey: key,
+        mythouseApiKeyCreatedAt: admin.firestore.FieldValue.serverTimestamp(),
+      }, { merge: true }),
+      db.doc(`api-keys/${keyHash}`).set({
+        uid,
+        createdAt: admin.firestore.FieldValue.serverTimestamp(),
+        requestCount: 0,
+      }),
+    ]);
 
     return res.status(200).json({ ok: true, key });
   } catch (err) {

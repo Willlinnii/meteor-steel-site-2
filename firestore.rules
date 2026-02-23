@@ -39,6 +39,11 @@ service cloud.firestore {
       allow write: if false;
     }
 
+    // API keys reverse lookup — server-only (Admin SDK), no client access
+    match /api-keys/{keyHash} {
+      allow read, write: if false;
+    }
+
     // Handle uniqueness index — read-only for clients, written by server via Admin SDK
     match /handles/{handle} {
       allow read: if request.auth != null;
