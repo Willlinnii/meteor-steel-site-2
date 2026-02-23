@@ -22,9 +22,9 @@
     "three": "^0.182.0"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "CI=false react-scripts build",
-    "test": "react-scripts test",
+    "start": "react-app-rewired start",
+    "build": "CI=false react-app-rewired build",
+    "test": "react-app-rewired test",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -44,6 +44,7 @@
   },
   "proxy": "https://meteor-steel-site-2.vercel.app",
   "devDependencies": {
-    "mammoth": "^1.11.0"
+    "mammoth": "^1.11.0",
+    "react-app-rewired": "^2.2.1"
   }
 }
