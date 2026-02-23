@@ -8,7 +8,7 @@ const treasuresData = {
       id: 'templar-treasure',
       label: 'Templar\nTreasure',
       playlist: 'https://www.youtube.com/embed/videoseries?list=PLX31T_KS3jtq-b_PD3Vl-3wMsbWFgVCXM',
-      overview: '',
+      overview: `The Templar treasure is not one thing — it is a network. Behind the legend of fifty horse-drawn carts spirited out of Paris lies a deeper inheritance: the protocols of trust, the sacred geometry of cathedrals, the letters of credit that moved value across continents without moving gold. The Templars were the functional successors to the ancient temple-banks, and their real treasure was the operating system of transnational finance itself — a system that did not vanish when Philip IV raided the Temple, but dispersed into the infrastructure of the modern world.`,
       historicalCore: '',
       themes: [
         {
@@ -137,7 +137,7 @@ The Templars, in this reading, are not the holders of the Grail so much as its c
       id: 'czar-gold',
       label: 'Gold of\nthe Czars',
       playlist: 'https://www.youtube.com/embed/videoseries?list=PLX31T_KS3jtorgHzwFkK3-nbxnifYqw5n',
-      overview: '',
+      overview: `The czar's gold sits at the collision point between two civilizational operating systems — one that hardened value into permanent state reserve, and another, far older, that insists concentrated power must return to water. When the largest gold reserve on Earth sank into the deepest freshwater lake, the mythic resonance was not imposed from outside — it was structural. Lake Baikal had sustained human life through the last ice age. The terminal hoard of the newest empire met the oldest water, and discharge completed what retention began.`,
       historicalCore: '',
       themes: [
         {

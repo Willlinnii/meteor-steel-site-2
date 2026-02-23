@@ -1426,6 +1426,15 @@ function SeriesContent({ currentEpisode, onSelectEpisode, viewToggle }) {
           </div>
         )}
 
+        {/* Overview */}
+        {synthesisData && synthesisData.overview && (
+          <div className="series-detail-overview">
+            {synthesisData.overview.split('\n\n').map((p, i) => (
+              <p key={i}>{p}</p>
+            ))}
+          </div>
+        )}
+
         {/* Synthesis sections */}
         {synthesisData && (
           <div className="series-detail-section">
@@ -1596,6 +1605,13 @@ function SeriesContent({ currentEpisode, onSelectEpisode, viewToggle }) {
 
                   {!interviewMode && synthesisData && (
                     <div className="myths-synthesis">
+                      {synthesisData.overview && (
+                        <div className="myths-synthesis-overview">
+                          {synthesisData.overview.split('\n\n').map((p, i) => (
+                            <p key={i}>{p}</p>
+                          ))}
+                        </div>
+                      )}
                       {synthesisData.sections.map((s, i) => (
                         <div key={i} className="myths-synthesis-section">
                           <h4 className="myths-synthesis-heading">{s.heading}</h4>
@@ -1760,10 +1776,10 @@ function CosmologyCircle({ activeSection, onSelect }) {
   const mid = 'rgba(100,180,100,';     // green — threshold (yellow + blue blend)
 
   return (
-    <svg viewBox="0 0 350 200" className="cosmology-diagram" xmlns="http://www.w3.org/2000/svg">
+    <svg viewBox="60 5 230 195" className="cosmology-diagram" xmlns="http://www.w3.org/2000/svg">
       <defs>
-        <clipPath id="clip-top"><rect x="0" y="0" width="350" height="98" /></clipPath>
-        <clipPath id="clip-bottom"><rect x="0" y="122" width="350" height="80" /></clipPath>
+        <clipPath id="clip-top"><rect x="60" y="5" width="230" height="93" /></clipPath>
+        <clipPath id="clip-bottom"><rect x="60" y="122" width="230" height="78" /></clipPath>
       </defs>
       {/* Top half arc stroke */}
       <path d="M 90 110 A 85 85 0 0 1 260 110" fill="none"

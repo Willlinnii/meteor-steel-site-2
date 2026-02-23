@@ -249,6 +249,22 @@
   animation: myths-fade-in 0.4s ease;
 }
 
+.myths-synthesis-overview {
+  font-family: 'Crimson Pro', serif;
+  font-size: 1.18rem;
+  line-height: 1.9;
+  color: var(--text-primary);
+  margin-bottom: 32px;
+  padding: 0 0 24px;
+  border-bottom: 1px solid rgba(201, 169, 97, 0.18);
+}
+.myths-synthesis-overview p {
+  margin-bottom: 0.8em;
+}
+.myths-synthesis-overview p:last-child {
+  margin-bottom: 0;
+}
+
 .myths-synthesis-section {
   margin-bottom: 28px;
 }
@@ -2232,6 +2248,14 @@
 }
 
 /* ── Archetypes Panel ── */
+.archetypes-top-header {
+  margin-top: 24px;
+}
+@media (max-width: 600px) {
+  .archetypes-top-header {
+    margin-top: 18px;
+  }
+}
 .archetype-category-card {
   border-left: 3px solid var(--accent-gold);
 }
@@ -2392,6 +2416,19 @@
   margin: 0 0 24px;
   padding-left: 14px;
   border-left: 2px solid rgba(201, 169, 97, 0.25);
+}
+.series-detail-overview {
+  font-family: 'Crimson Pro', serif;
+  font-size: 1.08rem;
+  line-height: 1.8;
+  color: var(--text-primary);
+  margin: 0 0 24px;
+}
+.series-detail-overview p {
+  margin-bottom: 0.6em;
+}
+.series-detail-overview p:last-child {
+  margin-bottom: 0;
 }
 .series-detail-play {
   margin-bottom: 28px;
