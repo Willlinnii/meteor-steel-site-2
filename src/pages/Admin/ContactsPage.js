@@ -1,4 +1,6 @@
 import React, { useState, useMemo, useEffect, useCallback, useRef } from 'react';
+import { collection, getDocs, addDoc, doc, query, orderBy, serverTimestamp, writeBatch } from 'firebase/firestore';
+import { db, firebaseConfigured } from '../../auth/firebase';
 import { useAuth } from '../../auth/AuthContext';
 import SECRET_WEAPON_CAMPAIGN from '../../data/campaigns/secretWeapon';
 import AddContactForm from './AddContactForm';
@@ -134,31 +136,32 @@ export default function ContactsPage() {
     return () => { cancelled = true; };
   }, [user]);
 
-  // Load admin-added contacts from Firestore via API
+  // Load admin-added contacts from Firestore directly
   const refreshAdminContacts = useCallback(async () => {
-    if (!user) return;
+    if (!firebaseConfigured || !db) return;
     try {
-      const token = await user.getIdToken();
-      const res = await fetch('/api/admin-contacts', {
-        headers: { Authorization: `Bearer ${token}` },
+      const q = query(collection(db, 'admin-contacts'), orderBy('createdAt', 'desc'));
+      const snap = await getDocs(q);
+      const ac = [];
+      snap.forEach(d => {
+        const data = d.data();
+        ac.push({
+          ...data,
+          id: `admin-${d.id}`,
+          firestoreId: d.id,
+          createdAt: data.createdAt?.toDate?.()
+            ? data.createdAt.toDate().toISOString()
+            : data.createdAt || null,
+          updatedAt: data.updatedAt?.toDate?.()
+            ? data.updatedAt.toDate().toISOString()
+            : data.updatedAt || null,
+        });
       });
-      if (!res.ok) return;
-      const { contacts: ac } = await res.json();
-      setAdminContacts(ac.map(c => ({
-        ...c,
-        id: `admin-${c.id}`,
-        firestoreId: c.id,
-        createdAt: c.createdAt?._seconds
-          ? new Date(c.createdAt._seconds * 1000).toISOString()
-          : c.createdAt || null,
-        updatedAt: c.updatedAt?._seconds
-          ? new Date(c.updatedAt._seconds * 1000).toISOString()
-          : c.updatedAt || null,
-      })));
+      setAdminContacts(ac);
     } catch (err) {
       console.error('[ContactsPage] Failed to load admin contacts:', err);
     }
-  }, [user]);
+  }, []);
 
   useEffect(() => { refreshAdminContacts(); }, [refreshAdminContacts]);
 
@@ -195,35 +198,48 @@ export default function ContactsPage() {
     return set;
   }, [allContacts]);
 
-  // Save handlers
+  // Save handlers — direct Firestore writes
   const handleAddContact = useCallback(async (contactData) => {
-    const token = await user.getIdToken();
-    const res = await fetch('/api/admin-contacts', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-      body: JSON.stringify({ contacts: [contactData] }),
+    if (!firebaseConfigured || !db) return;
+    const col = collection(db, 'admin-contacts');
+    await addDoc(col, {
+      ...contactData,
+      source: 'manual',
+      importBatch: null,
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp(),
     });
-    if (res.ok) {
-      await refreshAdminContacts();
-      setShowAddForm(false);
-    }
-  }, [user, refreshAdminContacts]);
+    await refreshAdminContacts();
+    setShowAddForm(false);
+  }, [refreshAdminContacts]);
 
   const handleBulkImport = useCallback(async (contactsArray) => {
-    const token = await user.getIdToken();
+    if (!firebaseConfigured || !db) return;
     const batchId = `import-${Date.now()}`;
-    const tagged = contactsArray.map(c => ({ ...c, importBatch: batchId }));
     const CHUNK = 450;
-    for (let i = 0; i < tagged.length; i += CHUNK) {
-      const chunk = tagged.slice(i, i + CHUNK);
-      await fetch('/api/admin-contacts', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-        body: JSON.stringify({ contacts: chunk }),
-      });
+    for (let i = 0; i < contactsArray.length; i += CHUNK) {
+      const chunk = contactsArray.slice(i, i + CHUNK);
+      const batch = writeBatch(db);
+      for (const c of chunk) {
+        const ref = doc(collection(db, 'admin-contacts'));
+        batch.set(ref, {
+          firstName: c.firstName || '',
+          lastName: c.lastName || '',
+          emails: c.emails || [],
+          phones: c.phones || [],
+          company: c.company || '',
+          jobTitle: c.jobTitle || '',
+          notes: c.notes || '',
+          source: 'manual',
+          importBatch: batchId,
+          createdAt: serverTimestamp(),
+          updatedAt: serverTimestamp(),
+        });
+      }
+      await batch.commit();
     }
     await refreshAdminContacts();
-  }, [user, refreshAdminContacts]);
+  }, [refreshAdminContacts]);
 
   // Filtered + sorted contacts
   const filtered = useMemo(() => {
