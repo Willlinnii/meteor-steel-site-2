@@ -241,6 +241,29 @@
   cursor: not-allowed;
 }
 
+/* --- Form tag inputs (myth / symbol / holiday) --- */
+
+.curated-form-tags {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.curated-form-tag {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.curated-form-tag-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.72rem;
+  color: var(--accent-gold, #daa520);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
 /* --- Form help / instructions --- */
 
 .curated-form-help {
@@ -296,6 +319,10 @@
   }
 
   .curated-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .curated-form-tags {
     grid-template-columns: 1fr;
   }
 
