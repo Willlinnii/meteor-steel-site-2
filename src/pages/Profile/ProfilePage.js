@@ -14,7 +14,6 @@ import { checkAvailability, registerHandle } from '../../multiplayer/handleServi
 import { apiFetch } from '../../lib/chatApi';
 import { computeNumerology, NUMBER_MEANINGS, NUMBER_TYPES } from '../../profile/numerologyEngine';
 import FriendsSection from './FriendsSection';
-import StoryMatchingSection from './StoryMatchingSection';
 import StoryCardDeck from './StoryCardDeck';
 import { useStoryCardSync } from '../../storyCards/useStoryCardSync';
 
@@ -137,7 +136,7 @@ const PURCHASES = [
 export default function ProfilePage() {
   const { user, signOut } = useAuth();
   const { getCourseStates, completedCourses, certificateData, allCourses } = useCoursework();
-  const { earnedRanks, highestRank, activeCredentials, hasProfile, loaded: profileLoaded, handle, natalChart, updateNatalChart, numerologyName, updateNumerologyName, luckyNumber, updateLuckyNumber, subscriptions, updateSubscription, updateSubscriptions, purchases, updatePurchase, updatePurchases, refreshProfile, mentorData, qualifiedMentorTypes, mentorEligible, mentorCoursesComplete, effectiveMentorStatus, pairingCategories, updateMentorBio, updateMentorCapacity, publishToDirectory, unpublishFromDirectory, respondToPairing, endPairing, photoURL, consultingData, consultingCategories, updateProfilePhoto, respondToConsulting, apiKeys, apiKeysLoaded, saveApiKey, removeApiKey, hasAnthropicKey, hasOpenaiKey, social, updateSocial, pilgrimages, pilgrimagesLoaded, removePilgrimage, personalStory, savePersonalStory } = useProfile();
+  const { earnedRanks, highestRank, activeCredentials, hasProfile, loaded: profileLoaded, handle, natalChart, updateNatalChart, numerologyName, updateNumerologyName, luckyNumber, updateLuckyNumber, subscriptions, updateSubscription, updateSubscriptions, purchases, updatePurchase, updatePurchases, refreshProfile, mentorData, qualifiedMentorTypes, mentorEligible, mentorCoursesComplete, effectiveMentorStatus, pairingCategories, updateMentorBio, updateMentorCapacity, publishToDirectory, unpublishFromDirectory, respondToPairing, endPairing, photoURL, consultingData, consultingCategories, updateProfilePhoto, respondToConsulting, apiKeys, apiKeysLoaded, saveApiKey, removeApiKey, hasAnthropicKey, hasOpenaiKey, social, updateSocial, pilgrimages, pilgrimagesLoaded, removePilgrimage, personalStory, savePersonalStory, curatorApproved } = useProfile();
   const { personalStories, loaded: writingsLoaded } = useWritings();
   const { cards: storyCards, loaded: storyCardsLoaded } = useStoryCardSync();
   const navigate = useNavigate();
@@ -147,6 +146,7 @@ export default function ProfilePage() {
   const [showConsultingChat, setShowConsultingChat] = useState(false);
   const [photoUploading, setPhotoUploading] = useState(false);
   const [expandedCard, setExpandedCard] = useState(null); // 'ybr' | 'forge' | etc.
+  const [showSocial, setShowSocial] = useState(false);
   const [consultingRespondingId, setConsultingRespondingId] = useState(null);
 
   // Personal Story state
@@ -393,8 +393,7 @@ export default function ProfilePage() {
             />
           </div>
           <div className="profile-name">{displayName}</div>
-          <div className="profile-email">{user?.email}</div>
-          {/* Handle Section */}
+          {/* Handle Section (above email) */}
           {handle && !showHandleEdit ? (
             <div className="profile-handle">
               <span className="profile-handle-at">@{handle}</span>
@@ -435,6 +434,19 @@ export default function ProfilePage() {
               {handleStatus === 'save-error' && <div className="profile-handle-status error">Failed to save handle — check console</div>}
             </div>
           )}
+          <div className="profile-email">{user?.email}</div>
+          {/* Social handles display */}
+          {(() => {
+            const handles = [
+              social?.instagram && `ig: ${social.instagram}`,
+              social?.facebook && `fb: ${social.facebook}`,
+              social?.linkedin && `li: ${social.linkedin}`,
+              social?.youtube && `yt: ${social.youtube}`,
+            ].filter(Boolean);
+            return handles.length > 0 ? (
+              <div className="profile-card-social-handles">{handles.join(' · ')}</div>
+            ) : null;
+          })()}
         </div>
 
         {/* Profile Summary */}
@@ -495,98 +507,6 @@ export default function ProfilePage() {
           </div>
         )}
       </div>
-
-      {/* Credentials Section */}
-      <h2 id="section-credentials" className="profile-section-title">Credentials</h2>
-      {!profileLoaded && (
-        <div className="profile-empty">Loading credentials...</div>
-      )}
-      {profileLoaded && (showChat || !hasProfile) && (
-        <ProfileChat onComplete={() => setShowChat(false)} isUpdate={hasProfile} />
-      )}
-      {profileLoaded && hasProfile && !showChat && (
-        <>
-          <div className="profile-credential-list">
-            {activeCredentials.map(cred => (
-              <div key={cred.category} className="profile-credential-card">
-                <span className="profile-credential-icon">{cred.display.icon}</span>
-                <div className="profile-credential-info">
-                  <div className="profile-credential-name">{cred.display.name}</div>
-                  {cred.details && (
-                    <div className="profile-credential-details">{cred.details}</div>
-                  )}
-                </div>
-                <span className="profile-credential-level">L{cred.level}</span>
-              </div>
-            ))}
-          </div>
-          <button className="profile-update-btn" onClick={() => setShowChat(true)}>
-            Update Credentials
-          </button>
-        </>
-      )}
-
-      {/* Mentor Section */}
-      {profileLoaded && (
-        <MentorSection
-          effectiveMentorStatus={effectiveMentorStatus}
-          mentorEligible={mentorEligible}
-          qualifiedMentorTypes={qualifiedMentorTypes}
-          mentorData={mentorData}
-          mentorCoursesComplete={mentorCoursesComplete}
-          completedCourses={completedCourses}
-          allCourses={allCourses}
-          showMentorChat={showMentorChat}
-          setShowMentorChat={setShowMentorChat}
-          showConsultingChat={showConsultingChat}
-          setShowConsultingChat={setShowConsultingChat}
-          pairingCategories={pairingCategories}
-          updateMentorBio={updateMentorBio}
-          updateMentorCapacity={updateMentorCapacity}
-          publishToDirectory={publishToDirectory}
-          unpublishFromDirectory={unpublishFromDirectory}
-          respondToPairing={respondToPairing}
-          endPairing={endPairing}
-          consultingData={consultingData}
-          consultingCategories={consultingCategories}
-          onConsultingAccept={handleConsultingAccept}
-          onConsultingDecline={handleConsultingDecline}
-          consultingRespondingId={consultingRespondingId}
-        />
-      )}
-
-      {/* Certificates */}
-      <h2 className="profile-section-title">Certificates</h2>
-      {certificates.length === 0 ? (
-        <div className="profile-empty">
-          Complete a course to earn your first certificate.
-        </div>
-      ) : (
-        <div className="profile-cert-list">
-          {certificates.map(course => {
-            const certInfo = certificateData[course.id];
-            const dateStr = certInfo?.completedAt
-              ? new Date(certInfo.completedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
-              : 'Certificate earned';
-            return (
-              <div key={course.id} className="profile-cert-card">
-                <span className="profile-cert-icon">{'\u2728'}</span>
-                <div className="profile-cert-info">
-                  <div className="profile-cert-name">{course.name}</div>
-                  <div className="profile-cert-date">{dateStr}</div>
-                </div>
-                <button
-                  className="profile-cert-download-btn"
-                  disabled={certDownloading === course.id}
-                  onClick={() => handleDownloadCertificate(course)}
-                >
-                  {certDownloading === course.id ? 'Generating...' : 'Download PDF'}
-                </button>
-              </div>
-            );
-          })}
-        </div>
-      )}
 
       {/* My Story */}
       <h2 className="profile-section-title">My Story</h2>
@@ -662,6 +582,190 @@ export default function ProfilePage() {
 
       {/* My Story Cards (with Story Matching pop-down) */}
       <StoryCardDeck cards={storyCards} loaded={storyCardsLoaded} />
+
+      {/* Social Media Links (click-to-expand) */}
+      <h2
+        className="profile-section-title profile-section-toggle"
+        onClick={() => setShowSocial(v => !v)}
+        role="button"
+        tabIndex={0}
+        onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') setShowSocial(v => !v); }}
+      >
+        Social Media
+        <span className={`profile-section-chevron${showSocial ? ' open' : ''}`}>&#9662;</span>
+      </h2>
+      {showSocial && (
+        <div className="profile-social-links">
+          {[
+            { key: 'instagram', label: 'Instagram', placeholder: 'username' },
+            { key: 'facebook', label: 'Facebook', placeholder: 'username or profile URL' },
+            { key: 'linkedin', label: 'LinkedIn', placeholder: 'username or profile URL' },
+            { key: 'youtube', label: 'YouTube', placeholder: 'channel name or URL' },
+          ].map(p => (
+            <div key={p.key} className="profile-social-row">
+              <div className="profile-social-label">{p.label}</div>
+              <input
+                className="profile-social-input"
+                type="text"
+                placeholder={p.placeholder}
+                value={socialInputs[p.key]}
+                onChange={e => handleSocialChange(p.key, e.target.value)}
+              />
+            </div>
+          ))}
+          {socialDirty && (
+            <button
+              className="profile-social-save-btn"
+              disabled={socialSaving}
+              onClick={handleSocialSave}
+            >
+              {socialSaving ? 'Saving...' : 'Save Social Links'}
+            </button>
+          )}
+        </div>
+      )}
+
+      {/* Credentials Section */}
+      <h2 id="section-credentials" className="profile-section-title">Credentials</h2>
+      {!profileLoaded && (
+        <div className="profile-empty">Loading credentials...</div>
+      )}
+      {profileLoaded && (showChat || !hasProfile) && (
+        <ProfileChat onComplete={() => setShowChat(false)} isUpdate={hasProfile} />
+      )}
+      {profileLoaded && hasProfile && !showChat && (
+        <>
+          <div className="profile-credential-list">
+            {activeCredentials.map(cred => (
+              <div key={cred.category} className="profile-credential-card">
+                <span className="profile-credential-icon">{cred.display.icon}</span>
+                <div className="profile-credential-info">
+                  <div className="profile-credential-name">{cred.display.name}</div>
+                  {cred.details && (
+                    <div className="profile-credential-details">{cred.details}</div>
+                  )}
+                </div>
+                <span className="profile-credential-level">L{cred.level}</span>
+              </div>
+            ))}
+          </div>
+          <button className="profile-update-btn" onClick={() => setShowChat(true)}>
+            Update Credentials
+          </button>
+        </>
+      )}
+
+      {/* Curator Section */}
+      {profileLoaded && curatorApproved && (
+        <>
+          <h2 className="profile-section-title">Curator</h2>
+          <div className="profile-credential-card">
+            <span className="profile-credential-icon">{'\uD83D\uDDBC'}</span>
+            <div className="profile-credential-info">
+              <div className="profile-credential-name">Approved Curator</div>
+              <div className="profile-credential-details">You can contribute products to the Curated Collection</div>
+            </div>
+          </div>
+          <button className="profile-update-btn" onClick={() => navigate('/curated')}>
+            Go to Curated Collection
+          </button>
+        </>
+      )}
+
+      {/* Mentor Section */}
+      {profileLoaded && (
+        <MentorSection
+          effectiveMentorStatus={effectiveMentorStatus}
+          mentorEligible={mentorEligible}
+          qualifiedMentorTypes={qualifiedMentorTypes}
+          mentorData={mentorData}
+          mentorCoursesComplete={mentorCoursesComplete}
+          completedCourses={completedCourses}
+          allCourses={allCourses}
+          showMentorChat={showMentorChat}
+          setShowMentorChat={setShowMentorChat}
+          showConsultingChat={showConsultingChat}
+          setShowConsultingChat={setShowConsultingChat}
+          pairingCategories={pairingCategories}
+          updateMentorBio={updateMentorBio}
+          updateMentorCapacity={updateMentorCapacity}
+          publishToDirectory={publishToDirectory}
+          unpublishFromDirectory={unpublishFromDirectory}
+          respondToPairing={respondToPairing}
+          endPairing={endPairing}
+          consultingData={consultingData}
+          consultingCategories={consultingCategories}
+          onConsultingAccept={handleConsultingAccept}
+          onConsultingDecline={handleConsultingDecline}
+          consultingRespondingId={consultingRespondingId}
+        />
+      )}
+
+      {/* Certificates */}
+      <h2 className="profile-section-title">Certificates</h2>
+      {certificates.length === 0 ? (
+        <div className="profile-empty">
+          Complete a course to earn your first certificate.
+        </div>
+      ) : (
+        <div className="profile-cert-list">
+          {certificates.map(course => {
+            const certInfo = certificateData[course.id];
+            const dateStr = certInfo?.completedAt
+              ? new Date(certInfo.completedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+              : 'Certificate earned';
+            return (
+              <div key={course.id} className="profile-cert-card">
+                <span className="profile-cert-icon">{'\u2728'}</span>
+                <div className="profile-cert-info">
+                  <div className="profile-cert-name">{course.name}</div>
+                  <div className="profile-cert-date">{dateStr}</div>
+                </div>
+                <button
+                  className="profile-cert-download-btn"
+                  disabled={certDownloading === course.id}
+                  onClick={() => handleDownloadCertificate(course)}
+                >
+                  {certDownloading === course.id ? 'Generating...' : 'Download PDF'}
+                </button>
+              </div>
+            );
+          })}
+        </div>
+      )}
+
+      {/* Ranks Section */}
+      <h2 id="section-ranks" className="profile-section-title">Ranks</h2>
+      <div className="profile-rank-list">
+        {RANKS.map(rank => {
+          const earned = earnedRanks.some(r => r.id === rank.id);
+          const progress = rankProgress(rank, completedCourses);
+          const pct = Math.round(progress.fraction * 100);
+          const courseNames = rank.requiredCourses.map(id => {
+            const course = allCourses.find(c => c.id === id);
+            return course ? course.name : id;
+          });
+
+          return (
+            <div key={rank.id} className={`profile-rank-card${earned ? ' earned' : ''}`}>
+              <span className="profile-rank-icon">{rank.icon}</span>
+              <div className="profile-rank-info">
+                <div className="profile-rank-name">{rank.name}</div>
+                <div className="profile-rank-courses">
+                  {earned ? 'Earned' : `${progress.completed}/${progress.total} courses`} — {courseNames.join(', ')}
+                </div>
+                {!earned && (
+                  <div className="profile-rank-progress">
+                    <div className="profile-progress-bar">
+                      <div className="profile-progress-fill" style={{ width: `${pct}%` }} />
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          );
+        })}
+      </div>
 
       {/* Membership Add-Ons */}
       <h2 className="profile-section-title">Membership Add-Ons</h2>
@@ -761,39 +865,6 @@ export default function ProfilePage() {
         </div>
       </div>
 
-      {/* Ranks Section */}
-      <h2 id="section-ranks" className="profile-section-title">Ranks</h2>
-      <div className="profile-rank-list">
-        {RANKS.map(rank => {
-          const earned = earnedRanks.some(r => r.id === rank.id);
-          const progress = rankProgress(rank, completedCourses);
-          const pct = Math.round(progress.fraction * 100);
-          const courseNames = rank.requiredCourses.map(id => {
-            const course = allCourses.find(c => c.id === id);
-            return course ? course.name : id;
-          });
-
-          return (
-            <div key={rank.id} className={`profile-rank-card${earned ? ' earned' : ''}`}>
-              <span className="profile-rank-icon">{rank.icon}</span>
-              <div className="profile-rank-info">
-                <div className="profile-rank-name">{rank.name}</div>
-                <div className="profile-rank-courses">
-                  {earned ? 'Earned' : `${progress.completed}/${progress.total} courses`} — {courseNames.join(', ')}
-                </div>
-                {!earned && (
-                  <div className="profile-rank-progress">
-                    <div className="profile-progress-bar">
-                      <div className="profile-progress-fill" style={{ width: `${pct}%` }} />
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-          );
-        })}
-      </div>
-
       {/* Active Courses */}
       <h2 className="profile-section-title">Courses</h2>
       {activeCourses.length === 0 ? (
@@ -814,6 +885,9 @@ export default function ProfilePage() {
           ))}
         </div>
       )}
+
+      {/* Friends Section */}
+      <FriendsSection />
 
       {/* My Sacred Sites (Pilgrimages) */}
       <h2 className="profile-section-title">My Sacred Sites</h2>
@@ -852,40 +926,6 @@ export default function ProfilePage() {
           </div>
         );
       })()}
-
-      {/* Friends Section */}
-      <FriendsSection />
-
-      {/* Social Media Links */}
-      <h2 className="profile-section-title">Social Media</h2>
-      <div className="profile-social-links">
-        {[
-          { key: 'instagram', label: 'Instagram', placeholder: 'username' },
-          { key: 'facebook', label: 'Facebook', placeholder: 'username or profile URL' },
-          { key: 'linkedin', label: 'LinkedIn', placeholder: 'username or profile URL' },
-          { key: 'youtube', label: 'YouTube', placeholder: 'channel name or URL' },
-        ].map(p => (
-          <div key={p.key} className="profile-social-row">
-            <div className="profile-social-label">{p.label}</div>
-            <input
-              className="profile-social-input"
-              type="text"
-              placeholder={p.placeholder}
-              value={socialInputs[p.key]}
-              onChange={e => handleSocialChange(p.key, e.target.value)}
-            />
-          </div>
-        ))}
-        {socialDirty && (
-          <button
-            className="profile-social-save-btn"
-            disabled={socialSaving}
-            onClick={handleSocialSave}
-          >
-            {socialSaving ? 'Saving...' : 'Save Social Links'}
-          </button>
-        )}
-      </div>
 
       {/* AI Settings (BYOK) */}
       <h2 className="profile-section-title">AI Settings</h2>
