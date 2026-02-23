@@ -838,6 +838,9 @@ const { cards: storyCards, loaded: storyCardsLoaded } = useStoryCardSync();
                           <p className="profile-api-tier-desc">
                             Query the Mythouse knowledge graph. Build its intelligence into what you're creating.
                           </p>
+                          <a href="/secret-weapon-api" className="profile-api-learn-more" onClick={e => { e.preventDefault(); navigate('/secret-weapon-api'); }}>
+                            What flows through this key &rarr;
+                          </a>
                           {enabled && (
                             <div className="profile-api-key-row" style={{ borderBottom: 'none', paddingTop: 4 }}>
                               {hasMythouseKey ? (
@@ -902,11 +905,8 @@ const { cards: storyCards, loaded: storyCardsLoaded } = useStoryCardSync();
                                     )}
                                   </div>
                                   <div className="profile-api-key-snippet">
-                                    <code>x-api-key: {showMythouseKey ? mythouseApiKey : 'myt_...'}</code>
+                                    <code>Authorization: Bearer {showMythouseKey ? mythouseApiKey : 'myt_...'}</code>
                                   </div>
-                                  <a href="/secret-weapon-api" className="profile-api-learn-more" onClick={e => { e.preventDefault(); navigate('/secret-weapon-api'); }}>
-                                    What flows through this key &rarr;
-                                  </a>
                                 </div>
                               ) : (
                                 <button
