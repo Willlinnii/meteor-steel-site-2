@@ -1506,7 +1506,7 @@ function ServicesSection() {
     setCheckError(null);
     try {
       const token = await user.getIdToken();
-      const res = await fetch('/api/health-check', {
+      const res = await fetch('/api/service-usage?mode=health', {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);

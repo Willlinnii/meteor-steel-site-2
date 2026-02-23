@@ -243,7 +243,14 @@ module.exports = async (req, res) => {
     return res.status(401).json({ error: 'Invalid token.' });
   }
 
-  // --- Fetch all billing data in parallel ---
+  const mode = req.query.mode || 'usage';
+
+  // --- Health check mode (merged from health-check.js) ---
+  if (mode === 'health') {
+    return handleHealthCheck(req, res);
+  }
+
+  // --- Billing / usage mode (default) ---
   const fetchers = {
     anthropic: fetchAnthropic,
     openai: fetchOpenAI,
@@ -273,3 +280,136 @@ module.exports = async (req, res) => {
 
   return res.status(200).json({ timestamp: Date.now(), results });
 };
+
+// ==========================================================
+// Health check logic (originally api/health-check.js)
+// ==========================================================
+
+const HEALTH_TIMEOUT_MS = 5000;
+
+function healthFetchWithTimeout(url, opts = {}) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), HEALTH_TIMEOUT_MS);
+  return fetch(url, { ...opts, signal: controller.signal }).finally(() => clearTimeout(timer));
+}
+
+async function timed(fn) {
+  const start = Date.now();
+  try {
+    await fn();
+    return { live: true, latencyMs: Date.now() - start, error: null };
+  } catch (err) {
+    return { live: false, latencyMs: Date.now() - start, error: err.message || String(err) };
+  }
+}
+
+const healthChecks = {
+  anthropic: () => timed(async () => {
+    const key = process.env.ANTHROPIC_API_KEY;
+    if (!key) throw new Error('ANTHROPIC_API_KEY not set');
+    const res = await healthFetchWithTimeout('https://api.anthropic.com/v1/models', {
+      headers: { 'x-api-key': key, 'anthropic-version': '2023-06-01' },
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  }),
+  openai: () => timed(async () => {
+    const key = process.env.OPENAI_API_KEY;
+    if (!key) throw new Error('OPENAI_API_KEY not set');
+    const res = await healthFetchWithTimeout('https://api.openai.com/v1/models', {
+      headers: { Authorization: `Bearer ${key}` },
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  }),
+  replicate: () => timed(async () => {
+    const key = process.env.REPLICATE_API_TOKEN;
+    if (!key) throw new Error('REPLICATE_API_TOKEN not set');
+    const res = await healthFetchWithTimeout('https://api.replicate.com/v1/models', {
+      headers: { Authorization: `Bearer ${key}` },
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  }),
+  elevenlabs: () => timed(async () => {
+    const key = process.env.ELEVENLABS_API_KEY;
+    if (!key) throw new Error('ELEVENLABS_API_KEY not set');
+    const res = await healthFetchWithTimeout('https://api.elevenlabs.io/v1/voices', {
+      headers: { 'xi-api-key': key },
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  }),
+  firebase: () => timed(async () => {
+    if (!ensureFirebaseAdmin()) throw new Error('Service account key missing or invalid');
+  }),
+  vercel: () => timed(async () => {
+    const res = await healthFetchWithTimeout('https://vercel.com/api/www/status');
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  }),
+  arcgis: () => timed(async () => {
+    const res = await healthFetchWithTimeout('https://server.arcgisonline.com/arcgis/rest/info?f=json');
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  }),
+  wikisource: () => timed(async () => {
+    const res = await healthFetchWithTimeout('https://en.wikisource.org/w/api.php?action=query&meta=siteinfo&format=json');
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  }),
+  youtube: () => timed(async () => {
+    const res = await healthFetchWithTimeout('https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=dQw4w9WgXcQ&format=json');
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  }),
+  soundcloud: () => timed(async () => {
+    const res = await healthFetchWithTimeout('https://soundcloud.com/oembed?url=https://soundcloud.com/forss/flickermood&format=json');
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  }),
+  openlibrary: () => timed(async () => {
+    const res = await healthFetchWithTimeout('https://openlibrary.org/api/books?bibkeys=ISBN:0451526538&format=json');
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  }),
+  worldtimeapi: () => timed(async () => {
+    const res = await healthFetchWithTimeout('https://worldtimeapi.org/api/ip');
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  }),
+  ipwho: () => timed(async () => {
+    const res = await healthFetchWithTimeout('https://ipwho.is/');
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  }),
+};
+
+const HEALTH_CHECK_TYPES = {
+  anthropic: 'api_ping', openai: 'api_ping', replicate: 'api_ping', elevenlabs: 'api_ping',
+  firebase: 'admin_init', vercel: 'reachability', arcgis: 'reachability', wikisource: 'reachability',
+  youtube: 'reachability', soundcloud: 'reachability', openlibrary: 'reachability',
+  worldtimeapi: 'reachability', ipwho: 'reachability',
+};
+
+const HEALTH_STATIC_RESULTS = {
+  google_maps: { checkType: 'client_env', configured: null, live: null, latencyMs: null, error: null },
+  cesium: { checkType: 'client_env', configured: null, live: null, latencyMs: null, error: null },
+  google_oauth: { checkType: 'client_env', configured: null, live: null, latencyMs: null, error: null },
+  threejs: { checkType: 'static', configured: true, live: true, latencyMs: 0, error: null },
+  astronomy_engine: { checkType: 'static', configured: true, live: true, latencyMs: 0, error: null },
+  hostinger: { checkType: 'no_api', configured: null, live: null, latencyMs: null, error: null },
+};
+
+async function handleHealthCheck(req, res) {
+  const entries = Object.entries(healthChecks);
+  const settled = await Promise.allSettled(entries.map(([, fn]) => fn()));
+
+  const results = entries.map(([id], i) => {
+    const outcome = settled[i].status === 'fulfilled'
+      ? settled[i].value
+      : { live: false, latencyMs: null, error: settled[i].reason?.message || 'Unknown error' };
+    return {
+      id,
+      checkType: HEALTH_CHECK_TYPES[id],
+      configured: !outcome.error?.includes('not set'),
+      live: outcome.live,
+      latencyMs: outcome.latencyMs,
+      error: outcome.error,
+    };
+  });
+
+  for (const [id, data] of Object.entries(HEALTH_STATIC_RESULTS)) {
+    results.push({ id, ...data });
+  }
+
+  return res.status(200).json({ timestamp: Date.now(), results });
+}
