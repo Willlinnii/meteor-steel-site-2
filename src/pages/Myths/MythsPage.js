@@ -18,6 +18,7 @@ import {
 import { StreetViewEmbed, AddSiteForm } from '../MythicEarth/MythicEarthPage';
 import { useAuth } from '../../auth/AuthContext';
 import { useProfile } from '../../profile/ProfileContext';
+import MYTHIC_EARTH_TOURS from '../../data/mythicEarthTours';
 import '../Treasures/TreasuresPage.css';
 import ArchetypesPanel from '../../components/ArchetypesPanel';
 import './MythsPage.css';
@@ -25,9 +26,9 @@ import './MythsPage.css';
 const MythicEarthPage = lazy(() => import('../MythicEarth/MythicEarthPage'));
 
 const MYTHIC_EARTH_CATEGORIES = [
-  { id: 'sacred-site', label: 'Sacred Sites', color: '#c9a961' },
-  { id: 'mythic-location', label: 'Mythic Locations', color: '#c4713a' },
-  { id: 'literary-location', label: 'Literary Locations', color: '#8b9dc3' },
+  { id: 'sacred-site', label: 'Sacred', color: '#c9a961' },
+  { id: 'mythic-location', label: 'Mythic', color: '#c4713a' },
+  { id: 'literary-location', label: 'Literary', color: '#8b9dc3' },
   { id: 'temple', label: 'Temples', color: '#c47a5a' },
   { id: 'library', label: 'Libraries', color: '#a89060' },
 ];
@@ -1963,6 +1964,7 @@ function MythsPage() {
   );
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showMySitesAdd, setShowMySitesAdd] = useState(false);
+  const [activeTour, setActiveTour] = useState(null);
   const earthContentRef = useRef(null);
 
   const userSitesList = useMemo(
@@ -1983,6 +1985,11 @@ function MythsPage() {
   const allMySites = useMemo(
     () => [...savedCuratedSites, ...userSitesList],
     [savedCuratedSites, userSitesList]
+  );
+
+  const tourSiteIds = useMemo(
+    () => activeTour ? new Set(activeTour.siteIds) : null,
+    [activeTour]
   );
 
   useEffect(() => { trackElement('myths.page.visited'); }, []); // eslint-disable-line react-hooks/exhaustive-deps
@@ -2032,6 +2039,7 @@ function MythsPage() {
             <MythicEarthPage
               embedded
               externalFilters={activeEarthFilters}
+              externalTourSiteIds={tourSiteIds}
               onSiteSelect={(site) => {
                 setSelectedMythicSite(site);
                 if (site?.isTemple) setMythicEarthCategory('temple');
@@ -2057,12 +2065,25 @@ function MythsPage() {
                     });
                     setMythicEarthCategory(cat.id);
                     setSelectedMythicSite(null);
+                    setActiveTour(null);
                     trackElement(`myths.earth.category.${cat.id}`);
                   }}
                 >
                   {cat.label}
                 </button>
               ))}
+              <button
+                className={`mythic-earth-cat-btn${mythicEarthCategory === 'tours' ? ' active' : ''}`}
+                style={{ '--cat-color': '#b07acc' }}
+                onClick={() => {
+                  setMythicEarthCategory('tours');
+                  setSelectedMythicSite(null);
+                  setActiveTour(null);
+                  trackElement('myths.earth.category.tours');
+                }}
+              >
+                Tours
+              </button>
               {user && (
                 <button
                   className={`mythic-earth-cat-btn${mythicEarthCategory === 'my-sites' ? ' active' : ''}`}
@@ -2081,7 +2102,61 @@ function MythsPage() {
               )}
             </div>
 
-            {mythicEarthCategory === 'my-sites' && !selectedMythicSite ? (
+            {mythicEarthCategory === 'tours' && !activeTour && !selectedMythicSite ? (
+              <div className="mythic-earth-tour-panel">
+                <div className="mythic-earth-tour-header">
+                  <h3>Tours</h3>
+                  <p>Curated journeys across the mythic landscape — follow a story from site to site.</p>
+                </div>
+                <div className="mythic-earth-tour-grid">
+                  {MYTHIC_EARTH_TOURS.map(tour => (
+                    <button
+                      key={tour.id}
+                      className="mythic-earth-tour-card"
+                      style={{ '--tour-color': tour.color }}
+                      onClick={() => {
+                        setActiveTour(tour);
+                        setActiveEarthFilters(new Set(MYTHIC_EARTH_CATEGORIES.map(c => c.id)));
+                        trackElement(`myths.earth.tour.${tour.id}`);
+                      }}
+                    >
+                      <span className="tour-card-name">{tour.name}</span>
+                      <span className="tour-card-desc">{tour.description}</span>
+                      <span className="tour-card-count">{tour.siteIds.length} sites</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            ) : activeTour && !selectedMythicSite ? (
+              <div className="mythic-earth-tour-panel">
+                <button className="mythic-earth-back" onClick={() => setActiveTour(null)}>
+                  {'\u2190'} Back to Tours
+                </button>
+                <div className="mythic-earth-tour-header">
+                  <h3 style={{ color: activeTour.color }}>{activeTour.name}</h3>
+                  <p>{activeTour.description}</p>
+                </div>
+                <div className="mythic-earth-site-grid">
+                  {mythicEarthSites.filter(s => activeTour.siteIds.includes(s.id)).map(site => (
+                    <button
+                      key={site.id}
+                      className="mythic-earth-site-card"
+                      style={{ borderColor: `${activeTour.color}55` }}
+                      onClick={() => { setSelectedMythicSite(site); trackElement(`myths.earth.tour.${activeTour.id}.site.${site.id}`); }}
+                    >
+                      <span className="site-card-name">{site.name}</span>
+                      <span className="site-card-region">{site.region}</span>
+                      {site.tradition && <span className="site-card-tradition">{site.tradition}</span>}
+                    </button>
+                  ))}
+                  {activeTour.siteIds.filter(id => !mythicEarthSites.find(s => s.id === id)).length > 0 && (
+                    <p className="mythic-earth-tour-placeholder">
+                      {activeTour.siteIds.filter(id => !mythicEarthSites.find(s => s.id === id)).length} site(s) coming soon
+                    </p>
+                  )}
+                </div>
+              </div>
+            ) : mythicEarthCategory === 'my-sites' && !selectedMythicSite ? (
               <div className="mythic-earth-site-grid-wrapper">
                 {allMySites.length > 0 ? (
                   <div className="mythic-earth-site-grid">

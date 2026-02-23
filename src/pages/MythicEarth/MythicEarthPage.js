@@ -925,7 +925,7 @@ function AddSiteForm({ onAdd, onCancel }) {
   );
 }
 
-function MythicEarthPage({ embedded, onSiteSelect: onSiteSelectExternal, externalSite, externalFilters }) {
+function MythicEarthPage({ embedded, onSiteSelect: onSiteSelectExternal, externalSite, externalFilters, externalTourSiteIds }) {
   const { track } = usePageTracking('mythic-earth');
   const { xrMode } = useXRMode();
   const { user } = useAuth();
@@ -1233,8 +1233,8 @@ function MythicEarthPage({ embedded, onSiteSelect: onSiteSelectExternal, externa
             initialLocation={initialLocation}
             activeTab={activeTab}
             onSelectMovement={handleSelectMovement}
-            showPilgrimagesOnly={showPilgrimagesOnly}
-            pilgrimageIds={pilgrimageIdSet}
+            showPilgrimagesOnly={embedded && externalTourSiteIds ? true : showPilgrimagesOnly}
+            pilgrimageIds={embedded && externalTourSiteIds ? externalTourSiteIds : pilgrimageIdSet}
             extraSites={userSitesList}
           />
 

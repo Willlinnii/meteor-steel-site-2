@@ -166,7 +166,7 @@ export default function FeedPage() {
       <div className="feed-composer">
         <textarea
           className="feed-composer-input"
-          placeholder={`Share something with ${activeScope?.name || 'the community'}...`}
+          placeholder="Share your story with those who walk beside you..."
           value={text}
           onChange={e => setText(e.target.value)}
           rows={3}

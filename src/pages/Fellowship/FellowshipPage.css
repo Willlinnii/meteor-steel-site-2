@@ -9,8 +9,50 @@
   font-family: 'Cinzel', serif;
   color: var(--accent-gold);
   font-size: 1.5rem;
-  margin: 0 0 4px;
+  margin: 0 0 6px;
   text-align: center;
+}
+
+.fellowship-prompt {
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 1.05rem;
+  font-style: italic;
+  line-height: 1.5;
+  margin: 0 auto 4px;
+  max-width: 400px;
+}
+
+/* ===== TABS ===== */
+.fellowship-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+  margin: 12px 0 20px;
+  border-bottom: 1px solid var(--border-subtle);
+  padding-bottom: 0;
+}
+
+.fellowship-tab {
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: var(--text-secondary);
+  font-family: 'Cinzel', serif;
+  font-size: 0.9rem;
+  padding: 8px 20px;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+  margin-bottom: -1px;
+}
+
+.fellowship-tab:hover {
+  color: var(--text-primary);
+}
+
+.fellowship-tab.active {
+  color: var(--accent-gold);
+  border-bottom-color: var(--accent-gold);
 }
 
 .fellowship-subtitle {
