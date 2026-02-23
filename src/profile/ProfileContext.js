@@ -30,6 +30,21 @@ export function ProfileProvider({ children }) {
   const apiKeysRef = useRef(apiKeys);
   useEffect(() => { apiKeysRef.current = apiKeys; }, [apiKeys]);
 
+  // Pilgrimages (saved sacred sites from Mythic Earth)
+  const [pilgrimages, setPilgrimages] = useState({});
+  const [pilgrimagesLoaded, setPilgrimagesLoaded] = useState(false);
+  const pilgrimagesRef = useRef(pilgrimages);
+  useEffect(() => { pilgrimagesRef.current = pilgrimages; }, [pilgrimages]);
+
+  // User sites (custom pins on Mythic Earth globe)
+  const [userSites, setUserSites] = useState({});
+  const [userSitesLoaded, setUserSitesLoaded] = useState(false);
+  const userSitesRef = useRef(userSites);
+  useEffect(() => { userSitesRef.current = userSites; }, [userSites]);
+
+  // Saved curated site IDs (bookmarked to "My Sites")
+  const [savedSiteIds, setSavedSiteIds] = useState({});
+
   // Load profile from Firestore
   useEffect(() => {
     if (!user || !firebaseConfigured || !db) {
@@ -100,6 +115,64 @@ export function ProfileProvider({ children }) {
     return () => { cancelled = true; };
   }, [user]);
 
+  // Load pilgrimages from Firestore
+  useEffect(() => {
+    if (!user || !firebaseConfigured || !db) {
+      setPilgrimages({});
+      setPilgrimagesLoaded(false);
+      return;
+    }
+
+    let cancelled = false;
+
+    async function loadPilgrimages() {
+      try {
+        const ref = doc(db, 'users', user.uid, 'meta', 'pilgrimages');
+        const snap = await getDoc(ref);
+        if (!cancelled) {
+          setPilgrimages(snap.exists() ? (snap.data().sites || {}) : {});
+          setPilgrimagesLoaded(true);
+        }
+      } catch (err) {
+        console.error('Failed to load pilgrimages:', err);
+        if (!cancelled) setPilgrimagesLoaded(true);
+      }
+    }
+
+    loadPilgrimages();
+    return () => { cancelled = true; };
+  }, [user]);
+
+  // Load user sites from Firestore
+  useEffect(() => {
+    if (!user || !firebaseConfigured || !db) {
+      setUserSites({});
+      setUserSitesLoaded(false);
+      return;
+    }
+
+    let cancelled = false;
+
+    async function loadUserSites() {
+      try {
+        const ref = doc(db, 'users', user.uid, 'meta', 'userSites');
+        const snap = await getDoc(ref);
+        if (!cancelled) {
+          const data = snap.exists() ? snap.data() : {};
+          setUserSites(data.sites || {});
+          setSavedSiteIds(data.savedSiteIds || {});
+          setUserSitesLoaded(true);
+        }
+      } catch (err) {
+        console.error('Failed to load user sites:', err);
+        if (!cancelled) setUserSitesLoaded(true);
+      }
+    }
+
+    loadUserSites();
+    return () => { cancelled = true; };
+  }, [user]);
+
   // Compute ranks from completedCourses
   const earnedRanks = getEarnedRanks(completedCourses);
   const highestRank = getHighestRank(completedCourses);
@@ -128,6 +201,9 @@ export function ProfileProvider({ children }) {
 
   // Consulting data derived from profile
   const consultingData = profileData?.consulting || null;
+
+  // Curator approval derived from profile
+  const curatorApproved = profileData?.curatorApproved === true;
 
   // --- Consulting request subscriptions ---
   const [consultingRequests, setConsultingRequests] = useState([]);
@@ -507,6 +583,18 @@ export function ProfileProvider({ children }) {
     }
   }, [user]);
 
+  // Update curator approval status
+  const updateCuratorStatus = useCallback(async (approved) => {
+    if (!user || !firebaseConfigured || !db) return;
+    setProfileData(prev => ({ ...prev, curatorApproved: approved }));
+    try {
+      const ref = doc(db, 'users', user.uid, 'meta', 'profile');
+      await setDoc(ref, { curatorApproved: approved, updatedAt: serverTimestamp() }, { merge: true });
+    } catch (err) {
+      console.error('Failed to update curator status:', err);
+    }
+  }, [user]);
+
   // Update credentials (partial — merges into existing)
   const updateCredentials = useCallback(async (updates) => {
     if (!user || !firebaseConfigured || !db) return;
@@ -736,6 +824,135 @@ export function ProfileProvider({ children }) {
   const hasAnthropicKey = !!apiKeys.anthropicKey;
   const hasOpenaiKey = !!apiKeys.openaiKey;
 
+  // Social links
+  const social = profileData?.social || {};
+
+  const updateSocial = useCallback(async (socialData) => {
+    if (!user || !firebaseConfigured || !db) return;
+    setProfileData(prev => ({ ...prev, social: socialData }));
+    try {
+      const ref = doc(db, 'users', user.uid, 'meta', 'profile');
+      await setDoc(ref, { social: socialData, updatedAt: serverTimestamp() }, { merge: true });
+    } catch (err) {
+      console.error('Failed to update social links:', err);
+    }
+  }, [user]);
+
+  // Save personal story (raw + transmuted)
+  const savePersonalStory = useCallback(async (raw, transmuted) => {
+    if (!user || !firebaseConfigured || !db) return;
+    const storyData = { raw, transmuted, updatedAt: Date.now() };
+    setProfileData(prev => ({ ...prev, personalStory: storyData }));
+    try {
+      const ref = doc(db, 'users', user.uid, 'meta', 'profile');
+      await setDoc(ref, { personalStory: storyData, updatedAt: serverTimestamp() }, { merge: true });
+    } catch (err) {
+      console.error('Failed to save personal story:', err);
+    }
+  }, [user]);
+
+  // Add a sacred site to pilgrimages
+  const addPilgrimage = useCallback(async (site) => {
+    if (!user || !firebaseConfigured || !db) return;
+    const entry = {
+      siteId: site.id,
+      name: site.name,
+      category: site.category,
+      region: site.region,
+      lat: site.lat,
+      lng: site.lng,
+      tradition: site.tradition || null,
+      addedAt: Date.now(),
+    };
+    setPilgrimages(prev => ({ ...prev, [site.id]: entry }));
+    try {
+      const ref = doc(db, 'users', user.uid, 'meta', 'pilgrimages');
+      await setDoc(ref, { sites: { [site.id]: entry }, updatedAt: serverTimestamp() }, { merge: true });
+    } catch (err) {
+      console.error('Failed to add pilgrimage:', err);
+      setPilgrimages(prev => { const next = { ...prev }; delete next[site.id]; return next; });
+    }
+  }, [user]);
+
+  // Remove a sacred site from pilgrimages
+  const removePilgrimage = useCallback(async (siteId) => {
+    if (!user || !firebaseConfigured || !db) return;
+    const prev = pilgrimagesRef.current[siteId];
+    setPilgrimages(p => { const next = { ...p }; delete next[siteId]; return next; });
+    try {
+      const ref = doc(db, 'users', user.uid, 'meta', 'pilgrimages');
+      await setDoc(ref, { sites: { [siteId]: deleteField() }, updatedAt: serverTimestamp() }, { merge: true });
+    } catch (err) {
+      console.error('Failed to remove pilgrimage:', err);
+      if (prev) setPilgrimages(p => ({ ...p, [siteId]: prev }));
+    }
+  }, [user]);
+
+  // Add a custom user site to Mythic Earth
+  const addUserSite = useCallback(async (siteData) => {
+    if (!user || !firebaseConfigured || !db) return;
+    const id = `user-${user.uid.slice(0, 6)}-${Date.now()}`;
+    const entry = {
+      id,
+      name: siteData.name,
+      lat: siteData.lat,
+      lng: siteData.lng,
+      category: siteData.category,
+      description: siteData.description || '',
+      region: siteData.region || '',
+      isUserSite: true,
+      createdAt: Date.now(),
+    };
+    setUserSites(prev => ({ ...prev, [id]: entry }));
+    try {
+      const ref = doc(db, 'users', user.uid, 'meta', 'userSites');
+      await setDoc(ref, { sites: { [id]: entry }, updatedAt: serverTimestamp() }, { merge: true });
+    } catch (err) {
+      console.error('Failed to add user site:', err);
+      setUserSites(prev => { const next = { ...prev }; delete next[id]; return next; });
+    }
+  }, [user]);
+
+  // Remove a custom user site
+  const removeUserSite = useCallback(async (siteId) => {
+    if (!user || !firebaseConfigured || !db) return;
+    const prev = userSitesRef.current[siteId];
+    setUserSites(p => { const next = { ...p }; delete next[siteId]; return next; });
+    try {
+      const ref = doc(db, 'users', user.uid, 'meta', 'userSites');
+      await setDoc(ref, { sites: { [siteId]: deleteField() }, updatedAt: serverTimestamp() }, { merge: true });
+    } catch (err) {
+      console.error('Failed to remove user site:', err);
+      if (prev) setUserSites(p => ({ ...p, [siteId]: prev }));
+    }
+  }, [user]);
+
+  // Save a curated site to "My Sites" (bookmark by ID)
+  const saveSite = useCallback(async (siteId) => {
+    if (!user || !firebaseConfigured || !db) return;
+    setSavedSiteIds(prev => ({ ...prev, [siteId]: true }));
+    try {
+      const ref = doc(db, 'users', user.uid, 'meta', 'userSites');
+      await setDoc(ref, { savedSiteIds: { [siteId]: true }, updatedAt: serverTimestamp() }, { merge: true });
+    } catch (err) {
+      console.error('Failed to save site:', err);
+      setSavedSiteIds(prev => { const next = { ...prev }; delete next[siteId]; return next; });
+    }
+  }, [user]);
+
+  // Remove a curated site from "My Sites"
+  const unsaveSite = useCallback(async (siteId) => {
+    if (!user || !firebaseConfigured || !db) return;
+    setSavedSiteIds(prev => { const next = { ...prev }; delete next[siteId]; return next; });
+    try {
+      const ref = doc(db, 'users', user.uid, 'meta', 'userSites');
+      await setDoc(ref, { savedSiteIds: { [siteId]: deleteField() }, updatedAt: serverTimestamp() }, { merge: true });
+    } catch (err) {
+      console.error('Failed to unsave site:', err);
+      setSavedSiteIds(prev => ({ ...prev, [siteId]: true }));
+    }
+  }, [user]);
+
   // Handle from profile data
   const handle = profileData?.handle || null;
 
@@ -754,6 +971,7 @@ export function ProfileProvider({ children }) {
   const natalChart = profileData?.natalChart || null;
   const numerologyName = profileData?.numerologyName || null;
   const luckyNumber = profileData?.luckyNumber ?? null;
+  const personalStory = profileData?.personalStory || null;
 
   const value = {
     profileData,
@@ -812,6 +1030,23 @@ export function ProfileProvider({ children }) {
     removeApiKey,
     hasAnthropicKey,
     hasOpenaiKey,
+    social,
+    updateSocial,
+    pilgrimages,
+    pilgrimagesLoaded,
+    addPilgrimage,
+    removePilgrimage,
+    userSites,
+    userSitesLoaded,
+    addUserSite,
+    removeUserSite,
+    savedSiteIds,
+    saveSite,
+    unsaveSite,
+    personalStory,
+    savePersonalStory,
+    curatorApproved,
+    updateCuratorStatus,
   };
 
   return (

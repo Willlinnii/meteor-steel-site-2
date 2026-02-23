@@ -5,7 +5,7 @@ import useVoice, { SpeechRecognition } from '../hooks/useVoice';
 import { apiFetch } from '../lib/chatApi';
 
 export default function ProfileChat({ onComplete, isUpdate }) {
-  const { profileData, updateCredentials, updateNatalChart, completeOnboarding } = useProfile();
+  const { profileData, updateCredentials, updateNatalChart, updateCuratorStatus, completeOnboarding } = useProfile();
   const [chatOpen, setChatOpen] = useState(false);
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
@@ -72,6 +72,9 @@ export default function ProfileChat({ onComplete, isUpdate }) {
       if (data.natalChart) {
         await updateNatalChart(data.natalChart);
       }
+      if (data.curatorApproved !== undefined) {
+        await updateCuratorStatus(data.curatorApproved);
+      }
 
       const reply = data.reply || 'Welcome! Let\u2019s explore your background.';
       setMessages([
@@ -117,6 +120,9 @@ export default function ProfileChat({ onComplete, isUpdate }) {
       }
       if (data.natalChart) {
         await updateNatalChart(data.natalChart);
+      }
+      if (data.curatorApproved !== undefined) {
+        await updateCuratorStatus(data.curatorApproved);
       }
 
       const reply = data.reply || 'I see.';

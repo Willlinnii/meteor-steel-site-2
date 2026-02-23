@@ -26,6 +26,11 @@ service cloud.firestore {
       match /writings/{docId} {
         allow read, write: if request.auth != null && request.auth.uid == userId;
       }
+
+      match /story-cards/{cardId} {
+        allow read: if request.auth != null;
+        allow write: if request.auth != null && request.auth.uid == userId;
+      }
     }
 
     // Site-users collection — admin can read all, written by auth-sync server function
@@ -106,6 +111,140 @@ service cloud.firestore {
             || request.auth.uid == resource.data.requesterUid
             || request.auth.token.email == 'willlinnii@gmail.com');
       allow write: if false;
+    }
+
+    // Community feed (legacy top-level) — any authenticated user can read/create; only author can update/delete
+    match /feed/{postId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update, delete: if request.auth != null
+        && request.auth.uid == resource.data.createdBy;
+    }
+
+    // ===== Family groups =====
+    match /families/{familyId} {
+      // Members can read; any auth user can create; members can update
+      allow read: if request.auth != null
+        && request.auth.uid in resource.data.memberUids;
+      allow create: if request.auth != null;
+      allow update: if request.auth != null
+        && request.auth.uid in resource.data.memberUids;
+      allow delete: if false;
+
+      // Subcollections — only family members can read/write
+      match /traditions/{traditionId} {
+        allow read, create: if request.auth != null
+          && request.auth.uid in get(/databases/$(database)/documents/families/$(familyId)).data.memberUids;
+        allow update, delete: if request.auth != null
+          && request.auth.uid in get(/databases/$(database)/documents/families/$(familyId)).data.memberUids;
+      }
+
+      match /creations/{creationId} {
+        allow read, create: if request.auth != null
+          && request.auth.uid in get(/databases/$(database)/documents/families/$(familyId)).data.memberUids;
+        allow update, delete: if request.auth != null
+          && request.auth.uid in get(/databases/$(database)/documents/families/$(familyId)).data.memberUids;
+      }
+
+      match /storybook/{memberId} {
+        allow read, write: if request.auth != null
+          && request.auth.uid in get(/databases/$(database)/documents/families/$(familyId)).data.memberUids;
+      }
+
+      match /feed/{postId} {
+        allow read, create: if request.auth != null
+          && request.auth.uid in get(/databases/$(database)/documents/families/$(familyId)).data.memberUids;
+        allow update, delete: if request.auth != null
+          && request.auth.uid in get(/databases/$(database)/documents/families/$(familyId)).data.memberUids
+          && request.auth.uid == resource.data.createdBy;
+      }
+
+      match /genealogy/{personId} {
+        allow read, create: if request.auth != null
+          && request.auth.uid in get(/databases/$(database)/documents/families/$(familyId)).data.memberUids;
+        allow update, delete: if request.auth != null
+          && request.auth.uid in get(/databases/$(database)/documents/families/$(familyId)).data.memberUids;
+      }
+    }
+
+    // ===== Curated products (admin + approved curators) =====
+    match /curatedProducts/{productId} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null && request.auth.token.email == 'willlinnii@gmail.com';
+      allow create: if request.auth != null
+        && get(/databases/$(database)/documents/users/$(request.auth.uid)/meta/profile).data.curatorApproved == true
+        && request.resource.data.curatedBy == request.auth.uid;
+    }
+
+    // ===== Match profiles (story matching) =====
+    match /match-profiles/{userId} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null && request.auth.uid == userId;
+
+      match /comparisons/{otherUid} {
+        allow read: if request.auth != null && request.auth.uid == userId;
+        allow write: if false;
+      }
+    }
+
+    // ===== Fellowship posts (social feed) =====
+    match /fellowship-posts/{postId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null && request.auth.uid == request.resource.data.authorUid;
+      allow update, delete: if request.auth != null && request.auth.uid == resource.data.authorUid;
+    }
+
+    // ===== Friend requests (1-to-1) =====
+    match /friend-requests/{requestId} {
+      allow read: if request.auth != null
+        && (request.auth.uid == resource.data.senderUid
+            || request.auth.uid == resource.data.recipientUid);
+      allow create: if request.auth != null
+        && request.auth.uid == request.resource.data.senderUid;
+      allow update: if request.auth != null
+        && request.auth.uid == resource.data.recipientUid;
+      allow delete: if request.auth != null
+        && (request.auth.uid == resource.data.senderUid
+            || request.auth.uid == resource.data.recipientUid);
+    }
+
+    // ===== Friend groups =====
+    match /friendGroups/{groupId} {
+      // Members can read; any auth user can create; members can update
+      allow read: if request.auth != null
+        && request.auth.uid in resource.data.memberUids;
+      allow create: if request.auth != null;
+      allow update: if request.auth != null
+        && request.auth.uid in resource.data.memberUids;
+      allow delete: if false;
+
+      // Subcollections — only group members can read/write
+      match /traditions/{traditionId} {
+        allow read, create: if request.auth != null
+          && request.auth.uid in get(/databases/$(database)/documents/friendGroups/$(groupId)).data.memberUids;
+        allow update, delete: if request.auth != null
+          && request.auth.uid in get(/databases/$(database)/documents/friendGroups/$(groupId)).data.memberUids;
+      }
+
+      match /creations/{creationId} {
+        allow read, create: if request.auth != null
+          && request.auth.uid in get(/databases/$(database)/documents/friendGroups/$(groupId)).data.memberUids;
+        allow update, delete: if request.auth != null
+          && request.auth.uid in get(/databases/$(database)/documents/friendGroups/$(groupId)).data.memberUids;
+      }
+
+      match /storybook/{memberId} {
+        allow read, write: if request.auth != null
+          && request.auth.uid in get(/databases/$(database)/documents/friendGroups/$(groupId)).data.memberUids;
+      }
+
+      match /feed/{postId} {
+        allow read, create: if request.auth != null
+          && request.auth.uid in get(/databases/$(database)/documents/friendGroups/$(groupId)).data.memberUids;
+        allow update, delete: if request.auth != null
+          && request.auth.uid in get(/databases/$(database)/documents/friendGroups/$(groupId)).data.memberUids
+          && request.auth.uid == resource.data.createdBy;
+      }
     }
   }
 }

@@ -1,5 +1,6 @@
+const admin = require('firebase-admin');
 const { getAnthropicClient, getOpenAIClient, getUserKeys } = require('./_lib/llm');
-const { getUidFromRequest } = require('./_lib/auth');
+const { ensureFirebaseAdmin, getUidFromRequest } = require('./_lib/auth');
 const { computeNatalChart } = require('./_lib/natalChart');
 
 // Model config — centralized for easy swapping and future BYOK support
@@ -1371,7 +1372,7 @@ const UPDATE_PROFILE_TOOL = {
   input_schema: {
     type: 'object',
     properties: {
-      category: { type: 'string', enum: ['scholar', 'mediaVoice', 'storyteller', 'healer', 'adventurer'] },
+      category: { type: 'string', enum: ['scholar', 'mediaVoice', 'storyteller', 'healer', 'adventurer', 'curator'] },
       level: { type: 'integer', description: '1-4 depending on category' },
       details: { type: 'string', description: 'Brief summary of what the user shared that justifies this level' },
     },
@@ -1391,6 +1392,18 @@ const UPDATE_NATAL_CHART_TOOL = {
   },
 };
 
+const APPROVE_CURATOR_TOOL = {
+  name: 'approve_curator',
+  description: 'Grant curator permissions to add products to the Curated Collection. Call this when a level 2+ curator accepts the offer to contribute to the store.',
+  input_schema: {
+    type: 'object',
+    properties: {
+      approved: { type: 'boolean', description: 'Whether the user accepted curator permissions' },
+    },
+    required: ['approved'],
+  },
+};
+
 function buildProfileOnboardingPrompt(existingCredentials, existingNatalChart) {
   const existing = existingCredentials || {};
   const existingList = Object.entries(existing)
@@ -1400,7 +1413,7 @@ function buildProfileOnboardingPrompt(existingCredentials, existingNatalChart) {
 
   return `You are Atlas, the mythic companion of the Mythouse. You are having a conversation to learn about a member's professional background and lived experience — to understand who they are beyond their coursework.
 
-THERE ARE FIVE CREDENTIAL CATEGORIES. Go through them conversationally:
+THERE ARE SIX CREDENTIAL CATEGORIES. Go through them conversationally:
 
 1. **Scholar** — Academic credentials in mythology, depth psychology, philosophy, anthropology, or related fields.
    - Level 1: Has academic credentials (degree, certification, or equivalent study)
@@ -1426,6 +1439,17 @@ THERE ARE FIVE CREDENTIAL CATEGORIES. Go through them conversationally:
    - Level 1: Has traveled to mythic sites or engaged with myth in the field
    - Level 2: Research expeditions, archaeological digs, or led mythic coursework
    - Level 3: Has visited the Seven Wonders or equivalent mythic pilgrimage
+
+6. **Curator** — Curation, art dealing, resale, gallery work, space design.
+   - Level 1: Curates or sells things casually / hobby
+   - Level 2: Professional curator, gallery work, professional resale, space design
+   - Level 3: Established practice with significant portfolio or reputation
+
+## CURATOR PERMISSIONS
+If a user is assigned Curator level 2 or higher, offer them the ability to contribute products directly to the Mythouse Curated Collection (our community-curated store page).
+- Say something like: "As a professional curator, you're eligible to contribute directly to our Curated Collection — a community-curated store of treasures. Would you like me to activate those permissions for you?"
+- If they accept, call the approve_curator tool with approved=true.
+- If they decline, that's fine — move on. No pressure.
 
 INSTRUCTIONS:
 - Start by warmly asking which of these categories they identify with. List them briefly and invitingly.
@@ -1531,7 +1555,7 @@ module.exports = async function handler(req, res) {
     }
   }
 
-  const { messages, area, persona, mode, challengeStop, level, journeyId, stageId, gameMode, stageData, aspect, courseSummary, episodeContext, existingCredentials, existingNatalChart, qualifiedMentorTypes, uploadedDocument, tarotPhase, tarotCards, tarotIntention, culture, template, stageContent, targetStage, stageEntries, adjacentDrafts, requestDraft, drafts } = req.body || {};
+  const { messages, area, persona, mode, challengeStop, level, journeyId, stageId, gameMode, stageData, aspect, courseSummary, episodeContext, existingCredentials, existingNatalChart, qualifiedMentorTypes, uploadedDocument, tarotPhase, tarotCards, tarotIntention, culture, template, stageContent, targetStage, stageEntries, adjacentDrafts, requestDraft, drafts, completionType, completionData, currentSummary, currentFullStory } = req.body || {};
 
   // --- Story Forge mode (narrative generation via OpenAI) ---
   if (mode === 'forge') {
@@ -1910,6 +1934,203 @@ ${stageBlock}`;
     }
   }
 
+  // --- Story Match mode (AI-powered story card comparison between two users) ---
+  if (mode === 'story-match') {
+    if (!uid) {
+      return res.status(401).json({ error: 'Unauthorized.' });
+    }
+    if (!ensureFirebaseAdmin()) {
+      return res.status(500).json({ error: 'Server not configured.' });
+    }
+
+    const targetUid = req.body?.targetUid || req.body?.friendUid;
+    if (!targetUid || typeof targetUid !== 'string') {
+      return res.status(400).json({ error: 'targetUid is required.' });
+    }
+    if (targetUid === uid) {
+      return res.status(400).json({ error: 'Cannot match with yourself.' });
+    }
+
+    const CACHE_DAYS = 7;
+    const MAX_CARDS = 20;
+    const SUMMARY_CHARS = 150;
+    const firestore = admin.firestore();
+
+    try {
+      // Load both users' match-profiles to determine modes
+      const [myProfileSnap, targetProfileSnap] = await Promise.all([
+        firestore.doc(`match-profiles/${uid}`).get(),
+        firestore.doc(`match-profiles/${targetUid}`).get(),
+      ]);
+
+      if (!myProfileSnap.exists) {
+        return res.status(403).json({ error: 'You must enable matching first.' });
+      }
+      if (!targetProfileSnap.exists) {
+        return res.status(403).json({ error: 'Target user does not have matching enabled.' });
+      }
+
+      const myMode = myProfileSnap.data()?.mode || 'friends';
+
+      // Mode-aware authorization
+      if (myMode === 'friends') {
+        const friendReqs = firestore.collection('friend-requests');
+        const [sent, received] = await Promise.all([
+          friendReqs.where('senderUid', '==', uid).where('recipientUid', '==', targetUid).where('status', '==', 'accepted').limit(1).get(),
+          friendReqs.where('senderUid', '==', targetUid).where('recipientUid', '==', uid).where('status', '==', 'accepted').limit(1).get(),
+        ]);
+        if (sent.empty && received.empty) {
+          return res.status(403).json({ error: 'Not friends with this user.' });
+        }
+      } else if (myMode === 'family') {
+        const familiesSnap = await firestore.collection('families').where('memberUids', 'array-contains', uid).get();
+        let sharedFamily = false;
+        familiesSnap.forEach(d => { if ((d.data().memberUids || []).includes(targetUid)) sharedFamily = true; });
+        if (!sharedFamily) {
+          return res.status(403).json({ error: 'Not in the same family.' });
+        }
+      } else if (myMode === 'romantic') {
+        const targetMode = targetProfileSnap.data()?.mode || 'friends';
+        if (targetMode !== 'romantic' && targetMode !== 'new-friends') {
+          return res.status(403).json({ error: 'Target is not in a compatible mode.' });
+        }
+        const familiesSnap = await firestore.collection('families').where('memberUids', 'array-contains', uid).get();
+        let isFamily = false;
+        familiesSnap.forEach(d => { if ((d.data().memberUids || []).includes(targetUid)) isFamily = true; });
+        if (isFamily) {
+          return res.status(403).json({ error: 'Cannot romantically match with family members.' });
+        }
+      }
+      // new-friends mode: both users just need match-profiles (already verified above)
+
+      // Check cache
+      const cacheRef = firestore.doc(`match-profiles/${uid}/comparisons/${targetUid}`);
+      const cached = await cacheRef.get();
+      if (cached.exists) {
+        const data = cached.data();
+        const expiresAt = data.expiresAt?.toMillis?.() || 0;
+        if (expiresAt > Date.now()) {
+          return res.status(200).json(data);
+        }
+      }
+
+      // Fetch both users' story cards
+      const [myCardsSnap, theirCardsSnap] = await Promise.all([
+        firestore.collection(`users/${uid}/story-cards`).get(),
+        firestore.collection(`users/${targetUid}/story-cards`).get(),
+      ]);
+
+      const serialize = (snap) => {
+        const cards = [];
+        snap.forEach(d => {
+          const data = d.data();
+          cards.push({ title: data.title || '', category: data.category || '', summary: (data.summary || '').substring(0, SUMMARY_CHARS) });
+        });
+        return cards.slice(0, MAX_CARDS);
+      };
+
+      const myCards = serialize(myCardsSnap);
+      const theirCards = serialize(theirCardsSnap);
+
+      if (myCards.length === 0 || theirCards.length === 0) {
+        return res.status(200).json({
+          score: 0, summary: 'Not enough story cards to compare.', highlights: [],
+          computedAt: new Date().toISOString(), expiresAt: new Date(Date.now() + CACHE_DAYS * 86400000).toISOString(),
+        });
+      }
+
+      const matchPrompt = `Compare these two users' story card collections and find thematic connections, shared archetypes, and narrative patterns.
+
+User A's cards:
+${myCards.map(c => `- [${c.category}] ${c.title}: ${c.summary}`).join('\n')}
+
+User B's cards:
+${theirCards.map(c => `- [${c.category}] ${c.title}: ${c.summary}`).join('\n')}
+
+Respond with valid JSON only, no markdown:
+{
+  "score": <0-100 story resonance score>,
+  "summary": "<2-3 sentence narrative about their shared themes>",
+  "highlights": [
+    { "category": "<theme category>", "label": "<short label>", "detail": "<one sentence>" }
+  ]
+}`;
+
+      const anthropic = getAnthropicClient(userKeys.anthropicKey);
+      const response = await anthropic.messages.create({
+        model: MODELS.fast,
+        max_tokens: 500,
+        messages: [{ role: 'user', content: matchPrompt }],
+      });
+
+      const text = response.content?.[0]?.text || '{}';
+      let parsed;
+      try { parsed = JSON.parse(text); } catch { parsed = { score: 0, summary: 'Could not analyze stories.', highlights: [] }; }
+
+      const now = admin.firestore.Timestamp.now();
+      const expiresAt = admin.firestore.Timestamp.fromMillis(Date.now() + CACHE_DAYS * 86400000);
+
+      const result = {
+        score: Math.min(100, Math.max(0, parsed.score || 0)),
+        summary: (parsed.summary || '').substring(0, 500),
+        highlights: (parsed.highlights || []).slice(0, 5),
+        computedAt: now,
+        expiresAt,
+      };
+
+      await cacheRef.set(result);
+
+      return res.status(200).json({
+        ...result,
+        computedAt: now.toDate().toISOString(),
+        expiresAt: expiresAt.toDate().toISOString(),
+      });
+    } catch (err) {
+      console.error('Story match error:', err);
+      return res.status(500).json({ error: 'Failed to compute story match.' });
+    }
+  }
+
+  // --- Story Transmute mode (no messages needed — uses rawText directly) ---
+  if (mode === 'story-transmute') {
+    const { rawText } = req.body || {};
+    if (!rawText || typeof rawText !== 'string') {
+      return res.status(400).json({ error: 'rawText is required.' });
+    }
+
+    const transmutePrompt = `You are Atlas, the mythic guide of Mythouse. A member has shared raw biographical material — it could be a CV, resume, bio, about-me text, or personal introduction.
+
+Your task: Transmute this raw material into a compelling personal mythic narrative. This will appear on their profile as "My Story."
+
+GUIDELINES:
+- Preserve all key facts, achievements, roles, and personality
+- Transform dry professional language into vivid, warm storytelling
+- Weave in subtle mythological imagery without being heavy-handed
+- Write in third person
+- 200-500 words depending on the richness of the source material
+- The result should read like the opening chapter of someone's personal myth
+- Do not invent facts that aren't in the source material
+- Do not include headers or section labels — write flowing prose
+
+RAW MATERIAL:
+${rawText.slice(0, 8000)}`;
+
+    const anthropic = getAnthropicClient(userKeys.anthropicKey);
+    try {
+      const response = await anthropic.messages.create({
+        model: MODELS.quality,
+        system: transmutePrompt,
+        messages: [{ role: 'user', content: 'Please transmute my story.' }],
+        max_tokens: 2048,
+      });
+      const transmuted = response.content?.find(c => c.type === 'text')?.text || '';
+      return res.status(200).json({ transmuted });
+    } catch (err) {
+      console.error('Story Transmute API error:', err?.message, err?.status);
+      return res.status(500).json({ error: `Something went wrong: ${err?.message || 'Unknown error'}` });
+    }
+  }
+
   if (!Array.isArray(messages) || messages.length === 0) {
     return res.status(400).json({ error: 'Messages array is required.' });
   }
@@ -2212,13 +2433,14 @@ ${entriesBlock}`;
   // --- Profile Onboarding mode ---
   if (mode === 'profile-onboarding') {
     const profileSystemPrompt = buildProfileOnboardingPrompt(existingCredentials, existingNatalChart);
-    const profileTools = [UPDATE_PROFILE_TOOL, NATAL_CHART_TOOL, UPDATE_NATAL_CHART_TOOL];
+    const profileTools = [UPDATE_PROFILE_TOOL, NATAL_CHART_TOOL, UPDATE_NATAL_CHART_TOOL, APPROVE_CURATOR_TOOL];
 
     try {
       let currentMessages = [...trimmed];
       let reply = '';
       const credentialUpdates = {};
       let natalChartUpdate = null;
+      let curatorApproved = undefined;
 
       // Multi-turn tool loop (max 5 turns to prevent runaway)
       for (let turn = 0; turn < 5; turn++) {
@@ -2266,6 +2488,13 @@ ${entriesBlock}`;
               tool_use_id: tb.id,
               content: JSON.stringify({ success: true, message: 'Natal chart saved to profile.' }),
             });
+          } else if (tb.name === 'approve_curator' && tb.input) {
+            curatorApproved = !!tb.input.approved;
+            toolResults.push({
+              type: 'tool_result',
+              tool_use_id: tb.id,
+              content: JSON.stringify({ success: true, curatorApproved }),
+            });
           }
         }
 
@@ -2285,6 +2514,7 @@ ${entriesBlock}`;
       const result = { reply };
       if (Object.keys(credentialUpdates).length > 0) result.credentialUpdates = credentialUpdates;
       if (natalChartUpdate) result.natalChart = natalChartUpdate;
+      if (curatorApproved !== undefined) result.curatorApproved = curatorApproved;
       return res.status(200).json(result);
     } catch (err) {
       console.error('Profile Onboarding API error:', err?.message, err?.status);
@@ -2503,6 +2733,119 @@ IMPORTANT:
       return res.status(200).json(result);
     } catch (err) {
       console.error('Consulting Setup API error:', err?.message, err?.status);
+      return res.status(500).json({ error: `Something went wrong: ${err?.message || 'Unknown error'}` });
+    }
+  }
+
+  // --- Fellowship summary mode ---
+  if (mode === 'fellowship-summary') {
+    if (!completionType || !completionData) {
+      return res.status(400).json({ error: 'completionType and completionData are required.' });
+    }
+
+    const fellowshipSystemPrompt = `You are Atlas, a warm mythic storyteller who celebrates the achievements of fellow travelers on Mythouse, a site for modern mythology and personal growth.
+
+A user has just completed something significant. Write a celebration of their achievement in two parts:
+
+1. **summary** — A short (1-3 sentences) warm, mythic announcement suitable for a social feed. Use second person ("You"). Reference what they accomplished. Keep it vivid but concise.
+
+2. **fullStory** — A longer (2-4 paragraphs) poetic, mythic retelling of their journey/achievement. Draw on the completion data to make it personal and specific. Weave in mythological imagery naturally. This is the "expanded" version friends can click to read.
+
+Respond ONLY with valid JSON: {"summary": "...", "fullStory": "..."}
+
+Completion type: ${completionType}
+Completion data: ${JSON.stringify(completionData).slice(0, 6000)}`;
+
+    const anthropic = getAnthropicClient(userKeys.anthropicKey);
+    const modelToUse = MODELS.quality;
+
+    try {
+      const response = await anthropic.messages.create({
+        model: modelToUse,
+        system: fellowshipSystemPrompt,
+        messages: [{ role: 'user', content: 'Please write the celebration for this achievement.' }],
+        max_tokens: 1500,
+      });
+
+      const text = response.content?.find(c => c.type === 'text')?.text || '';
+      let parsed;
+      try {
+        // Try to extract JSON from the response
+        const jsonMatch = text.match(/\{[\s\S]*\}/);
+        parsed = JSON.parse(jsonMatch ? jsonMatch[0] : text);
+      } catch {
+        parsed = { summary: text.slice(0, 300), fullStory: text };
+      }
+
+      return res.status(200).json({ summary: parsed.summary || '', fullStory: parsed.fullStory || '' });
+    } catch (err) {
+      console.error('Fellowship summary API error:', err?.message, err?.status);
+      if (err.status === 401 && isByok) {
+        return res.status(401).json({ error: 'Your Anthropic API key is invalid or expired.', keyError: true });
+      }
+      return res.status(500).json({ error: `Something went wrong: ${err?.message || 'Unknown error'}` });
+    }
+  }
+
+  // --- Fellowship revise mode ---
+  if (mode === 'fellowship-revise') {
+    if (!currentSummary || !Array.isArray(messages) || messages.length === 0) {
+      return res.status(400).json({ error: 'currentSummary and messages are required.' });
+    }
+
+    const reviseSystemPrompt = `You are Atlas, helping a user revise their Fellowship post on Mythouse.
+
+Current summary: ${currentSummary}
+${currentFullStory ? `Current full story: ${currentFullStory}` : ''}
+
+The user wants to edit their post. Have a brief conversation to understand their changes, then produce the revised version. When you have enough information, respond with ONLY valid JSON: {"summary": "...", "fullStory": "..."}
+
+If the user hasn't given enough direction yet, respond conversationally (plain text, no JSON) to ask what they'd like to change.`;
+
+    const raw = messages.slice(-20).map((m) => ({
+      role: m.role === 'assistant' ? 'assistant' : 'user',
+      content: String(m.content || '').slice(0, 4000),
+    }));
+    const trimmed = [];
+    for (const msg of raw) {
+      if (trimmed.length > 0 && trimmed[trimmed.length - 1].role === msg.role) {
+        trimmed[trimmed.length - 1].content += '\n' + msg.content;
+      } else {
+        trimmed.push({ ...msg });
+      }
+    }
+    if (trimmed.length > 0 && trimmed[0].role !== 'user') {
+      trimmed.shift();
+    }
+
+    const anthropic = getAnthropicClient(userKeys.anthropicKey);
+    const modelToUse = isByok ? MODELS.quality : MODELS.fast;
+
+    try {
+      const response = await anthropic.messages.create({
+        model: modelToUse,
+        system: reviseSystemPrompt,
+        messages: trimmed,
+        max_tokens: 1500,
+      });
+
+      const text = response.content?.find(c => c.type === 'text')?.text || '';
+      // Check if the response contains JSON (revision complete) or plain text (still conversing)
+      const jsonMatch = text.match(/\{[\s\S]*"summary"[\s\S]*\}/);
+      if (jsonMatch) {
+        try {
+          const parsed = JSON.parse(jsonMatch[0]);
+          return res.status(200).json({ reply: text, revised: true, summary: parsed.summary, fullStory: parsed.fullStory || '' });
+        } catch {
+          // Fall through to plain text response
+        }
+      }
+      return res.status(200).json({ reply: text, revised: false });
+    } catch (err) {
+      console.error('Fellowship revise API error:', err?.message, err?.status);
+      if (err.status === 401 && isByok) {
+        return res.status(401).json({ error: 'Your Anthropic API key is invalid or expired.', keyError: true });
+      }
       return res.status(500).json({ error: `Something went wrong: ${err?.message || 'Unknown error'}` });
     }
   }

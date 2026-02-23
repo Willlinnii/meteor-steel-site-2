@@ -103,6 +103,16 @@ export const CREDENTIAL_CATEGORIES = {
       { level: 3, name: 'World Walker', description: 'Has visited the Seven Wonders or equivalent mythic pilgrimage' },
     ],
   },
+  curator: {
+    id: 'curator',
+    label: 'Curator',
+    icon: '\uD83D\uDDBC',
+    levels: [
+      { level: 1, name: 'Curator', description: 'Curates or sells things casually / hobby' },
+      { level: 2, name: 'Professional Curator', description: 'Professional curator, gallery work, professional resale, space design' },
+      { level: 3, name: 'Established Curator', description: 'Established practice with significant portfolio or reputation' },
+    ],
+  },
   guildMember: {
     id: 'guildMember',
     label: 'Guild Member',
