@@ -2,9 +2,16 @@ const MYTHIC_EARTH_TOURS = [
   {
     id: 'arthuriana',
     name: 'Arthuriana & the Grail',
-    description: 'Follow the trail of the Holy Grail from Glastonbury to Chartres — the sacred geography of the Arthurian romances.',
+    description: 'From Tintagel to Edinburgh — the castles, caves, hills and ruins that map the Matter of Britain onto the landscape.',
     color: '#c9a961',
-    siteIds: ['avalon', 'stonehenge', 'chartres', 'mont-saint-michel', 'glastonbury'],
+    siteIds: [
+      'tintagel-castle', 'tintagel-merlins-cave',
+      'cadbury-camelot', 'glastonbury-abbey', 'avalon', 'glastonbury-chalice-well',
+      'stonehenge', 'winchester-round-table',
+      'caerleon-amphitheatre', 'snowdonia-dinas-emrys', 'llangollen-valle-crucis',
+      'carlisle-castle', 'hadrians-wall', 'chesters-roman-fort',
+      'edinburgh-arthurs-seat', 'rosslyn-chapel', 'museum-of-london',
+    ],
   },
   {
     id: 'buddhas-path',

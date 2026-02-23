@@ -977,5 +977,189 @@
     "region": "Egypt",
     "tradition": "Hellenistic",
     "streetView": { "heading": 0, "pitch": 10 }
+  },
+  {
+    "id": "cadbury-camelot",
+    "name": "Cadbury Castle (Camelot)",
+    "lat": 51.0225,
+    "lng": -2.5283,
+    "category": "literary-location",
+    "tradition": "European",
+    "description": "Iron Age hillfort in Somerset long identified with Camelot. John Leland wrote in the 1540s that locals called it 'Camallate' and believed it to be Arthur's court. Excavations in the 1960s uncovered a major post-Roman refortification datable to the late 5th century — exactly the period assigned to a historical Arthur.",
+    "region": "England",
+    "streetView": { "heading": 90, "pitch": 10 }
+  },
+  {
+    "id": "caerleon-amphitheatre",
+    "name": "Caerleon Amphitheatre",
+    "lat": 51.6119,
+    "lng": -2.9525,
+    "category": "literary-location",
+    "tradition": "European",
+    "description": "Roman legionary amphitheatre at Isca Augusta in south Wales. Geoffrey of Monmouth placed Arthur's plenary court at the 'City of Legions' and the amphitheatre's round shape led later antiquaries to identify it as the original Round Table. The ruins sit beside the Roman baths and barracks of the Second Augustan Legion.",
+    "region": "Wales",
+    "streetView": { "heading": 180, "pitch": 10 }
+  },
+  {
+    "id": "snowdonia-dinas-emrys",
+    "name": "Snowdonia — Dinas Emrys",
+    "lat": 53.0133,
+    "lng": -4.0475,
+    "category": "literary-location",
+    "tradition": "European",
+    "description": "Rocky hilltop fortress in Snowdonia where, according to Nennius and Geoffrey of Monmouth, the boy Merlin (Ambrosius) revealed two dragons — red and white — fighting beneath Vortigern's collapsing tower. The red dragon became the symbol of Wales. Excavations confirmed a post-Roman occupation.",
+    "region": "Wales",
+    "streetView": { "heading": 270, "pitch": 15 }
+  },
+  {
+    "id": "llangollen-valle-crucis",
+    "name": "Llangollen — Valle Crucis Abbey",
+    "lat": 52.9773,
+    "lng": -3.1873,
+    "category": "literary-location",
+    "tradition": "European",
+    "description": "Cistercian abbey in the Dee valley near the Pillar of Eliseg, a 9th-century cross inscribed with a genealogy tracing the kings of Powys back to Vortigern and Magnus Maximus. Medieval Welsh poets gathered in Llangollen and the Dee valley features in the Mabinogion. The landscape is saturated with Arthurian and bardic memory.",
+    "region": "Wales",
+    "streetView": { "heading": 90, "pitch": 10 }
+  },
+  {
+    "id": "carlisle-castle",
+    "name": "Carlisle Castle",
+    "lat": 54.8966,
+    "lng": -2.9453,
+    "category": "literary-location",
+    "tradition": "European",
+    "description": "Border fortress identified in French and English romances as Arthur's northern court. In Chrétien de Troyes and the Vulgate Cycle, Arthur frequently holds court at 'Carduel' — Carlisle. The castle sits on the site of a Roman fort at the western end of Hadrian's Wall, linking it to the military frontier zone where a historical Arthur may have operated.",
+    "region": "England",
+    "streetView": { "heading": 180, "pitch": 10 }
+  },
+  {
+    "id": "chesters-roman-fort",
+    "name": "Chesters Roman Fort",
+    "lat": 55.0275,
+    "lng": -2.1328,
+    "category": "literary-location",
+    "tradition": "European",
+    "description": "Best-preserved Roman cavalry fort on Hadrian's Wall, at the crossing of the North Tyne. If Arthur was a post-Roman war leader defending Britain's northern frontier, forts like Chesters — with their cavalry barracks and bathhouse — would have been his operational bases. The Wall itself appears in Arthurian tradition as the boundary between civilization and the wild north.",
+    "region": "England",
+    "streetView": { "heading": 0, "pitch": 10 }
+  },
+  {
+    "id": "winchester-round-table",
+    "name": "Winchester — The Round Table",
+    "lat": 51.0612,
+    "lng": -1.3194,
+    "category": "literary-location",
+    "tradition": "European",
+    "description": "The Great Hall of Winchester Castle houses the Winchester Round Table, a massive painted oak table dating to the 13th century. Malory named Winchester as Camelot, and Edward I displayed the table as a relic of Arthur's court. Henry VIII had it repainted with a Tudor rose at its center. Winchester was the ancient capital of Wessex and England's rival to London.",
+    "region": "England",
+    "streetView": { "heading": 90, "pitch": 10 }
+  },
+  {
+    "id": "edinburgh-arthurs-seat",
+    "name": "Edinburgh — Arthur's Seat",
+    "lat": 55.9445,
+    "lng": -3.1615,
+    "category": "literary-location",
+    "tradition": "European",
+    "description": "Volcanic peak rising above Edinburgh, named for King Arthur since at least the 15th century. The hill's strategic position overlooking the Firth of Forth connects it to the northern Arthurian tradition in which Arthur fights Pictish and Saxon invaders across the Scottish lowlands. The nearby chapel ruin atop the crag adds to the site's mythic atmosphere.",
+    "region": "Scotland",
+    "streetView": { "heading": 180, "pitch": 20 }
+  },
+  {
+    "id": "glastonbury-abbey",
+    "name": "Glastonbury Abbey",
+    "lat": 51.1484,
+    "lng": -2.7146,
+    "category": "sacred-site",
+    "tradition": "European",
+    "description": "Ruins of the great abbey where, in 1191, monks claimed to have discovered the graves of Arthur and Guinevere — a cross inscribed 'HIC IACET SEPULTUS INCLITUS REX ARTHURIUS.' Whether genuine or a medieval publicity stunt, the discovery cemented Glastonbury's identity as Avalon. Joseph of Arimathea is also said to have brought the Holy Grail here.",
+    "region": "England",
+    "streetView": { "heading": 270, "pitch": 5 }
+  },
+  {
+    "id": "glastonbury-chalice-well",
+    "name": "Glastonbury — Chalice Well",
+    "lat": 51.1437,
+    "lng": -2.6962,
+    "category": "sacred-site",
+    "tradition": "European",
+    "description": "Iron-red spring at the foot of Glastonbury Tor, flowing continuously for at least two thousand years. Legend holds that Joseph of Arimathea hid the Holy Grail here, staining the water red. The well's cover bears the Vesica Piscis — two interlocking circles. The gardens remain a place of pilgrimage and contemplation.",
+    "region": "England",
+    "streetView": { "heading": 0, "pitch": 5 }
+  },
+  {
+    "id": "tintagel-castle",
+    "name": "Tintagel Castle Ruins",
+    "lat": 50.6684,
+    "lng": -4.7581,
+    "category": "literary-location",
+    "tradition": "European",
+    "description": "Ruined cliff-top castle on the north Cornish coast, built by Richard Earl of Cornwall in the 1230s on a site already associated with Arthur. Geoffrey of Monmouth named Tintagel as the place of Arthur's conception, where Uther Pendragon visited Igraine disguised by Merlin's magic. Excavations have revealed a wealthy post-Roman trading settlement beneath the medieval remains.",
+    "region": "England",
+    "streetView": { "heading": 270, "pitch": 15 }
+  },
+  {
+    "id": "tintagel-merlins-cave",
+    "name": "Tintagel — Merlin's Cave",
+    "lat": 50.6672,
+    "lng": -4.7570,
+    "category": "literary-location",
+    "tradition": "European",
+    "description": "Sea cave beneath Tintagel Castle, accessible at low tide. In Tennyson's Idylls of the King, Merlin finds the infant Arthur washed ashore here in a basket among the waves — 'And so the babe was brought to Merlin, who bore him to Sir Ector's hall.' The cave cuts entirely through the headland, and at certain tides the sea fills it with a hollow roar.",
+    "region": "England",
+    "streetView": { "heading": 180, "pitch": 10 },
+    "excerpt": "And down the wave and in the flame was borne\nA naked babe, and rode to Merlin's feet,\nWho stoopt and caught the babe, and cried \"The King!\nHere is an heir for Uther!\"\n\n— Alfred, Lord Tennyson, Idylls of the King, \"The Coming of Arthur\""
+  },
+  {
+    "id": "hadrians-wall",
+    "name": "Hadrian's Wall",
+    "lat": 55.0238,
+    "lng": -2.3604,
+    "category": "literary-location",
+    "tradition": "European",
+    "description": "The Roman frontier wall stretching 73 miles from coast to coast across northern England. In Arthurian tradition the Wall marks the boundary between the civilized south and the wild lands beyond. Nennius lists Arthur's battles along the northern frontier, and several — the River Dubglas, the Caledonian Wood — suggest campaigns in Wall country. The landscape of forts, milecastles, and crags is the most plausible setting for a historical Arthur.",
+    "region": "England",
+    "streetView": { "heading": 90, "pitch": 10 }
+  },
+  {
+    "id": "rosslyn-chapel",
+    "name": "Rosslyn Chapel",
+    "lat": 55.8554,
+    "lng": -3.1601,
+    "category": "sacred-site",
+    "tradition": "European",
+    "description": "Fifteenth-century chapel south of Edinburgh, built by William Sinclair, Earl of Orkney, and encrusted with the most extraordinary stone carving in Britain. Every surface teems with Green Men, angels, dragons, and botanical motifs — including plants from the Americas carved decades before Columbus sailed. The chapel has been linked to the Knights Templar, the Holy Grail, and Freemasonry. A carved 'Apprentice Pillar' supposedly conceals a sacred relic. Whether or not the Grail rests here, Rosslyn is a genuine stone encyclopedia of medieval esoteric symbolism.",
+    "region": "Scotland",
+    "streetView": { "heading": 180, "pitch": 10 }
+  },
+  {
+    "id": "museum-of-london",
+    "name": "Museum of London",
+    "lat": 51.5176,
+    "lng": -0.0967,
+    "category": "literary-location",
+    "tradition": "European",
+    "description": "Museum tracing London's history from prehistory to the present, built on the edge of the Roman and medieval city wall. Its collections include Roman Londinium artifacts, Saxon and medieval finds, and material bearing on Geoffrey of Monmouth's claim that London was founded by Brutus of Troy — 'New Troy,' or Trinovantum. The museum connects the mythic origins of Britain's capital to its archaeological reality.",
+    "region": "England",
+    "streetView": { "heading": 0, "pitch": 10 }
+  },
+  {
+    "id": "north-pole",
+    "name": "North Pole (Axis Mundi)",
+    "lat": 90.0,
+    "lng": 0.0,
+    "category": "mythic-location",
+    "description": "The geographic top of the world, identified across traditions as the supreme axis mundi. In Hindu cosmology it is Mount Meru, the pillar around which the heavens revolve. Greek myth placed Hyperborea here — a paradise beyond the north wind where Apollo dwelt in eternal light. Norse tradition set the World Tree Yggdrasil at the cosmic pole, and Iranian texts describe Mount Hara Berezaiti at the centre of the earth. The Pole Star directly overhead marks this spot as the still point around which the entire sky turns.",
+    "region": "Arctic"
+  },
+  {
+    "id": "dilmun",
+    "name": "Dilmun",
+    "lat": 25.2930,
+    "lng": 51.5310,
+    "category": "mythic-location",
+    "description": "The Sumerian paradise — a pure, clean, bright land where the sun rises. In the Epic of Gilgamesh, Dilmun is the garden of the gods where Utnapishtim dwells after surviving the Great Flood. The Enki and Ninhursag myth describes it as a place where there is no sickness, old age, or death, watered by Enki's sweet springs. Ancient Gulf civilisation flourished here as a trade hub linking Mesopotamia, the Indus Valley, and Arabia.",
+    "region": "Qatar"
   }
 ]
