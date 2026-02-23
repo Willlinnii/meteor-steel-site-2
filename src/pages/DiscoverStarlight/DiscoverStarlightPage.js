@@ -85,10 +85,11 @@ function WheelSection() {
         manuscript developed in dialogue with the people who carried the work.
       </p>
       <p>
-        And out of that dialogue, he found a solution no one else had tried. He grounded
-        the whole emergent mess in natural cycles — maximum and minimum life and light as
-        nadir and zenith — and watched the models snap together archetypally. Day, month,
-        year, life. A recurring gravity emerged — not a perfect template, but the alignments
+        And out of that dialogue, he started seeing the problem differently. Rather than
+        reconciling the models directly, he began tracking where they aligned on their
+        own — across cycles of renewal that mirrored each other from their maximums and
+        minimums. Day, month, year, life. A recurring gravity emerged in the reflections,
+        and an architecture became apparent. Not a perfect template, but the alignments
         that wanted to be made most. They varied by context, by land, by local belief,
         but the pull was consistent.
       </p>

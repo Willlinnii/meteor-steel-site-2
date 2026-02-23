@@ -10,6 +10,7 @@ import { serverTimestamp } from 'firebase/firestore';
 import campaignData from '../../data/campaigns/mythicYear.json';
 import SECRET_WEAPON_CAMPAIGN from '../../data/campaigns/secretWeapon';
 import LEGAL_DOCUMENTS from '../../data/legalDocuments';
+import TREASURED_CONVERSATIONS from '../../data/treasuredConversations';
 import './AdminPage.css';
 
 const ContactsPage = lazy(() => import('./ContactsPage'));
@@ -216,6 +217,9 @@ const SECTION_GROUPS = [
     { id: 'curated-products', label: 'Curated Products' },
     { id: '360-media', label: '360 Media' },
     { id: 'discover', label: 'Discover Page \u2197', href: '/discover' },
+  ]},
+  { group: null, children: [
+    { id: 'treasured', label: '\uD83D\uDC8E Treasured Conversations' },
   ]},
   { group: null, children: [
     { id: 'linngistics', label: 'Linngistics \u2197', href: 'https://linngistics.vercel.app/app/trip/p2sSsiQ8lOOmC9KcaoSx' },
@@ -5889,6 +5893,94 @@ function GlinterSection() {
   );
 }
 
+// --- Treasured Conversations ---
+function TreasuredConversationsSection() {
+  const [expandedId, setExpandedId] = useState(TREASURED_CONVERSATIONS[0]?.id || null);
+
+  const S = {
+    container: { maxWidth: 800, margin: '0 auto' },
+    header: { textAlign: 'center', marginBottom: 32 },
+    icon: { fontSize: '2.4rem', marginBottom: 8 },
+    title: { fontSize: '1.3rem', color: '#e0d0b0', fontWeight: 600, margin: 0 },
+    subtitle: { fontSize: '0.85rem', color: '#8a8a9a', marginTop: 6, fontStyle: 'italic' },
+    card: {
+      background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)',
+      border: '1px solid #2a2a4a',
+      borderRadius: 12,
+      marginBottom: 16,
+      overflow: 'hidden',
+    },
+    cardHeader: (isOpen) => ({
+      padding: '16px 20px',
+      cursor: 'pointer',
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      borderBottom: isOpen ? '1px solid #2a2a4a' : 'none',
+    }),
+    cardTitle: { fontSize: '1rem', color: '#d0c0a0', fontWeight: 600, margin: 0 },
+    cardDate: { fontSize: '0.75rem', color: '#6a6a7a' },
+    cardSubtitle: { fontSize: '0.8rem', color: '#8a8a9a', marginTop: 4, fontStyle: 'italic' },
+    exchange: (speaker) => ({
+      padding: speaker === 'context' ? '14px 24px' : '16px 24px',
+      borderBottom: '1px solid #1a1a3a',
+      background: speaker === 'context' ? 'rgba(255,255,255,0.02)' : 'transparent',
+    }),
+    speakerLabel: (speaker) => ({
+      fontSize: '0.7rem',
+      fontWeight: 700,
+      textTransform: 'uppercase',
+      letterSpacing: '0.08em',
+      marginBottom: 6,
+      color: speaker === 'will' ? '#c0a070' : speaker === 'claude' ? '#7090c0' : '#6a6a7a',
+    }),
+    exchangeText: (speaker) => ({
+      fontSize: '0.85rem',
+      color: speaker === 'context' ? '#7a7a8a' : '#c8c8d8',
+      lineHeight: 1.75,
+      whiteSpace: 'pre-line',
+      fontStyle: speaker === 'context' ? 'italic' : 'normal',
+    }),
+  };
+
+  return (
+    <div style={S.container}>
+      <div style={S.header}>
+        <div style={S.icon}>{'\uD83D\uDC8E'}</div>
+        <h2 style={S.title}>Treasured Conversations</h2>
+        <p style={S.subtitle}>Moments where the building stopped and the thinking got real</p>
+      </div>
+      {TREASURED_CONVERSATIONS.map(convo => {
+        const isOpen = expandedId === convo.id;
+        return (
+          <div key={convo.id} style={S.card}>
+            <div style={S.cardHeader(isOpen)} onClick={() => setExpandedId(isOpen ? null : convo.id)}>
+              <div>
+                <h3 style={S.cardTitle}>{convo.title}</h3>
+                <p style={S.cardSubtitle}>{convo.subtitle}</p>
+              </div>
+              <div>
+                <span style={S.cardDate}>{convo.date}</span>
+                <span style={{ marginLeft: 8, fontSize: '0.7rem', opacity: 0.5 }}>{isOpen ? '\u25B4' : '\u25BE'}</span>
+              </div>
+            </div>
+            {isOpen && convo.exchanges.map((ex, i) => (
+              <div key={i} style={S.exchange(ex.speaker)}>
+                {ex.speaker !== 'context' && (
+                  <div style={S.speakerLabel(ex.speaker)}>
+                    {ex.speaker === 'will' ? 'Will' : 'Claude'}
+                  </div>
+                )}
+                <div style={S.exchangeText(ex.speaker)}>{ex.text}</div>
+              </div>
+            ))}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
 function AdminPage() {
   const [activeSection, setActiveSection] = useState('plan');
   const [openGroup, setOpenGroup] = useState('Business');
@@ -5899,7 +5991,7 @@ function AdminPage() {
         {SECTION_GROUPS.map(({ group, children }) => {
           if (!group) {
             // Standalone items (no group header)
-            return children.map(s => (
+            return children.map(s => s.href ? (
               <a
                 key={s.id}
                 href={s.href}
@@ -5910,6 +6002,14 @@ function AdminPage() {
               >
                 {s.label}
               </a>
+            ) : (
+              <button
+                key={s.id}
+                className={`admin-section-tab admin-tab-standalone${activeSection === s.id ? ' active' : ''}`}
+                onClick={() => setActiveSection(s.id)}
+              >
+                {s.label}
+              </button>
             ));
           }
 
@@ -5971,6 +6071,7 @@ function AdminPage() {
       {activeSection === 'ip-registry' && <IPRegistrySection />}
       {activeSection === 'legal' && <LegalSection />}
       {activeSection === 'dev-tools' && <DevToolsSection />}
+      {activeSection === 'treasured' && <TreasuredConversationsSection />}
     </div>
   );
 }
