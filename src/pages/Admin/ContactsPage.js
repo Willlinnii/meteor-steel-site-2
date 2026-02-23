@@ -1,6 +1,16 @@
 import React, { useState, useMemo, useEffect, useCallback, useRef } from 'react';
 import { useAuth } from '../../auth/AuthContext';
+import SECRET_WEAPON_CAMPAIGN from '../../data/campaigns/secretWeapon';
+import AddContactForm from './AddContactForm';
+import ImportContactsPanel from './ImportContactsPanel';
 import './ContactsPage.css';
+
+// Build a Set of lowercase full names from the Secret Weapon campaign
+const SW_CONTACT_NAMES = new Set(
+  SECRET_WEAPON_CAMPAIGN.groups
+    .flatMap(g => g.contacts)
+    .map(c => c.name.toLowerCase())
+);
 
 const PAGE_SIZE = 50;
 
@@ -41,6 +51,8 @@ function formatDate(iso) {
 function sourceLabel(source) {
   if (source === 'constant_contact') return 'CC';
   if (source === 'both') return 'Both';
+  if (source === 'manual') return 'Manual';
+  if (source === 'site') return 'Site';
   return 'Wix';
 }
 
@@ -59,6 +71,9 @@ export default function ContactsPage() {
   const [selectedId, setSelectedId] = useState(null);
   const [siteMemberEmails, setSiteMemberEmails] = useState(new Set());
   const [siteMemberUsers, setSiteMemberUsers] = useState([]);
+  const [adminContacts, setAdminContacts] = useState([]);
+  const [showAddForm, setShowAddForm] = useState(false);
+  const [showImport, setShowImport] = useState(false);
   const searchTimer = useRef(null);
   const [debouncedSearch, setDebouncedSearch] = useState('');
 
@@ -119,6 +134,34 @@ export default function ContactsPage() {
     return () => { cancelled = true; };
   }, [user]);
 
+  // Load admin-added contacts from Firestore via API
+  const refreshAdminContacts = useCallback(async () => {
+    if (!user) return;
+    try {
+      const token = await user.getIdToken();
+      const res = await fetch('/api/admin-contacts', {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (!res.ok) return;
+      const { contacts: ac } = await res.json();
+      setAdminContacts(ac.map(c => ({
+        ...c,
+        id: `admin-${c.id}`,
+        firestoreId: c.id,
+        createdAt: c.createdAt?._seconds
+          ? new Date(c.createdAt._seconds * 1000).toISOString()
+          : c.createdAt || null,
+        updatedAt: c.updatedAt?._seconds
+          ? new Date(c.updatedAt._seconds * 1000).toISOString()
+          : c.updatedAt || null,
+      })));
+    } catch (err) {
+      console.error('[ContactsPage] Failed to load admin contacts:', err);
+    }
+  }, [user]);
+
+  useEffect(() => { refreshAdminContacts(); }, [refreshAdminContacts]);
+
   // Debounce search
   const handleSearch = useCallback((val) => {
     setSearch(val);
@@ -142,9 +185,49 @@ export default function ContactsPage() {
     setPage(0);
   }, []);
 
+  // Merge static + admin contacts
+  const allContacts = useMemo(() => [...contacts, ...adminContacts], [contacts, adminContacts]);
+
+  // All emails set for dedup checking
+  const allEmailsSet = useMemo(() => {
+    const set = new Set();
+    allContacts.forEach(c => (c.emails || []).forEach(e => set.add(e.toLowerCase())));
+    return set;
+  }, [allContacts]);
+
+  // Save handlers
+  const handleAddContact = useCallback(async (contactData) => {
+    const token = await user.getIdToken();
+    const res = await fetch('/api/admin-contacts', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ contacts: [contactData] }),
+    });
+    if (res.ok) {
+      await refreshAdminContacts();
+      setShowAddForm(false);
+    }
+  }, [user, refreshAdminContacts]);
+
+  const handleBulkImport = useCallback(async (contactsArray) => {
+    const token = await user.getIdToken();
+    const batchId = `import-${Date.now()}`;
+    const tagged = contactsArray.map(c => ({ ...c, importBatch: batchId }));
+    const CHUNK = 450;
+    for (let i = 0; i < tagged.length; i += CHUNK) {
+      const chunk = tagged.slice(i, i + CHUNK);
+      await fetch('/api/admin-contacts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ contacts: chunk }),
+      });
+    }
+    await refreshAdminContacts();
+  }, [user, refreshAdminContacts]);
+
   // Filtered + sorted contacts
   const filtered = useMemo(() => {
-    let list = contacts;
+    let list = allContacts;
 
     // Unified list filter (sources + consolidated groups + individual lists)
     if (listFilter === 'site_members') {
@@ -172,6 +255,13 @@ export default function ContactsPage() {
       list = list.filter(c => c.source === 'constant_contact');
     } else if (listFilter === 'both') {
       list = list.filter(c => c.source === 'both');
+    } else if (listFilter === 'manual') {
+      list = list.filter(c => c.source === 'manual');
+    } else if (listFilter === 'secret_weapon') {
+      list = list.filter(c => {
+        const full = `${(c.firstName || '').trim()} ${(c.lastName || '').trim()}`.trim().toLowerCase();
+        return SW_CONTACT_NAMES.has(full);
+      });
     } else if (LIST_GROUPS[listFilter]) {
       list = list.filter(c => matchesListGroup(c.cc?.emailLists || [], listFilter));
     } else if (listFilter !== 'all') {
@@ -232,14 +322,14 @@ export default function ContactsPage() {
     });
 
     return list;
-  }, [contacts, siteMemberEmails, siteMemberUsers, statusFilter, tagFilter, listFilter, debouncedSearch, sortKey, sortDir]);
+  }, [allContacts, contacts, siteMemberEmails, siteMemberUsers, statusFilter, tagFilter, listFilter, debouncedSearch, sortKey, sortDir]);
 
   // Pagination
   const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
   const pageContacts = filtered.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE);
 
   // Selected contact
-  const selected = selectedId != null ? contacts.find(c => c.id === selectedId) : null;
+  const selected = selectedId != null ? allContacts.find(c => c.id === selectedId) : null;
 
   // Reset page when filters change
   useEffect(() => { setPage(0); }, [statusFilter, tagFilter, listFilter]);
@@ -294,9 +384,11 @@ export default function ContactsPage() {
         >
           <option value="all">All{meta ? ` (${meta.totalContacts})` : ''}</option>
           <option value="site_members">Site Members{siteMemberEmails.size > 0 ? ` (${siteMemberEmails.size})` : ''}</option>
+          <option value="secret_weapon">Secret Weapon ({SW_CONTACT_NAMES.size})</option>
           <option value="wix">Wix{meta ? ` (${meta.sources.wix})` : ''}</option>
           <option value="constant_contact">CC{meta ? ` (${meta.sources.constant_contact})` : ''}</option>
           <option value="both">Both{meta ? ` (${meta.sources.both})` : ''}</option>
+          <option value="manual">Manual{adminContacts.length > 0 ? ` (${adminContacts.length})` : ''}</option>
           <option value="clicked">Clicked</option>
           <option value="writers_journey">Writer's Journey</option>
           <option value="myth_salon">Myth Salon</option>
@@ -328,17 +420,39 @@ export default function ContactsPage() {
             ))}
           </select>
         )}
+        <button className="contacts-add-btn" onClick={() => { setShowAddForm(f => !f); setShowImport(false); }}>
+          + Add
+        </button>
+        <button className="contacts-import-btn" onClick={() => { setShowImport(f => !f); setShowAddForm(false); }}>
+          Import
+        </button>
       </div>
+
+      {showAddForm && (
+        <AddContactForm
+          onSave={handleAddContact}
+          onCancel={() => setShowAddForm(false)}
+          existingEmails={allEmailsSet}
+        />
+      )}
+      {showImport && (
+        <ImportContactsPanel
+          onImport={handleBulkImport}
+          onCancel={() => setShowImport(false)}
+          existingEmails={allEmailsSet}
+        />
+      )}
 
       {/* Stats bar */}
       <div className="contacts-stats-bar">
         <span>
           Showing <span className="contacts-stats-highlight">{filtered.length}</span> of{' '}
-          <span className="contacts-stats-highlight">{contacts.length}</span> contacts
+          <span className="contacts-stats-highlight">{allContacts.length}</span> contacts
         </span>
         {meta && (
           <span>
             Wix: {meta.sources.wix} | CC: {meta.sources.constant_contact} | Both: {meta.sources.both}
+            {adminContacts.length > 0 && ` | Manual: ${adminContacts.length}`}
           </span>
         )}
         <button className="contacts-export-btn" onClick={exportCSV} disabled={filtered.length === 0}>

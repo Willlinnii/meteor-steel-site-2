@@ -304,6 +304,16 @@
   color: #8aff8a;
 }
 
+.contacts-source-badge.manual {
+  background: #1a2e3a;
+  color: #7ab8d4;
+}
+
+.contacts-source-badge.site {
+  background: #2a1a3a;
+  color: #b88ad4;
+}
+
 /* Detail panel */
 .contacts-detail {
   padding: 24px;
@@ -460,4 +470,155 @@
   height: 300px;
   color: #8a8aa0;
   font-size: 0.95rem;
+}
+
+/* Add / Import toolbar buttons */
+.contacts-add-btn,
+.contacts-import-btn {
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid #2a2a3a;
+  background: rgba(196, 113, 58, 0.12);
+  color: #c4713a;
+  font-family: inherit;
+  font-size: 0.78rem;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+
+.contacts-add-btn:hover,
+.contacts-import-btn:hover {
+  background: rgba(196, 113, 58, 0.22);
+  border-color: #c4713a;
+}
+
+/* Add/Import collapsible panel */
+.contacts-add-panel {
+  padding: 16px 20px;
+  background: #111118;
+  border-bottom: 1px solid #2a2a3a;
+}
+
+.contacts-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.contacts-form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.contacts-form-field.full-width {
+  grid-column: 1 / -1;
+}
+
+.contacts-form-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: #6a6a7a;
+}
+
+.contacts-form-input {
+  padding: 7px 12px;
+  background: #1a1a24;
+  border: 1px solid #2a2a3a;
+  border-radius: 6px;
+  color: #d4d4d4;
+  font-family: inherit;
+  font-size: 0.85rem;
+}
+
+.contacts-form-input:focus {
+  outline: none;
+  border-color: #c4713a;
+}
+
+.contacts-form-textarea {
+  resize: vertical;
+  min-height: 60px;
+}
+
+.contacts-form-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.contacts-form-btn-save {
+  padding: 6px 16px;
+  border-radius: 6px;
+  border: 1px solid #c4713a;
+  background: rgba(196, 113, 58, 0.15);
+  color: #c4713a;
+  font-family: inherit;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.contacts-form-btn-save:hover:not(:disabled) {
+  background: rgba(196, 113, 58, 0.3);
+}
+
+.contacts-form-btn-save:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.contacts-form-btn-cancel {
+  padding: 6px 16px;
+  border-radius: 6px;
+  border: 1px solid #2a2a3a;
+  background: transparent;
+  color: #6a6a7a;
+  font-family: inherit;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.contacts-form-btn-cancel:hover {
+  border-color: #4a4a5a;
+  color: #aaa;
+}
+
+.contacts-dup-warning {
+  color: #d9a55b;
+  font-size: 0.75rem;
+  margin-top: 2px;
+}
+
+/* Import preview table */
+.contacts-import-preview {
+  max-height: 280px;
+  overflow: auto;
+  margin: 12px 0;
+  border: 1px solid #2a2a3a;
+  border-radius: 6px;
+}
+
+.contacts-import-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.78rem;
+}
+
+.contacts-import-table th {
+  background: #14141c;
+  color: #8a8aa0;
+  padding: 6px 10px;
+  text-align: left;
+  position: sticky;
+  top: 0;
+}
+
+.contacts-import-table td {
+  padding: 4px 10px;
+  border-top: 1px solid #1e1e2e;
+  color: #d4d4d4;
 }

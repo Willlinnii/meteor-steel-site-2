@@ -8,6 +8,7 @@ import use360Media from '../../hooks/use360Media';
 import { serverTimestamp } from 'firebase/firestore';
 
 import campaignData from '../../data/campaigns/mythicYear.json';
+import SECRET_WEAPON_CAMPAIGN from '../../data/campaigns/secretWeapon';
 import LEGAL_DOCUMENTS from '../../data/legalDocuments';
 import './AdminPage.css';
 
@@ -191,20 +192,33 @@ function CampaignListView({ campaigns, onSelect, getStatusForCampaign }) {
 }
 
 // --- Section tabs ---
-const SECTIONS = [
-  { id: 'plan', label: 'Plan' },
-  { id: 'discover', label: 'Discover Page \u2197', href: '/discover' },
-  { id: 'campaigns', label: 'Campaign Manager' },
-  { id: 'subscribers', label: 'Subscribers' },
-  { id: 'contacts', label: 'Contacts' },
-  { id: 'mentors', label: 'Mentors' },
-  { id: 'coursework', label: 'Coursework' },
-  { id: '360-media', label: '360 Media' },
-  { id: 'ip-registry', label: 'IP Registry' },
-  { id: 'legal', label: 'Legal' },
-  { id: 'services', label: 'Services' },
-  { id: 'dev-tools', label: 'Dev Tools' },
-  { id: 'system-health', label: 'System Health' },
+const SECTION_GROUPS = [
+  { group: 'Business', children: [
+    { id: 'glinter', label: 'Glinter LLC' },
+    { id: 'plan', label: 'Plan' },
+    { id: 'ip-registry', label: 'IP Registry' },
+    { id: 'legal', label: 'Legal' },
+  ]},
+  { group: 'Web', children: [
+    { id: 'services', label: 'Services' },
+    { id: 'dev-tools', label: 'Dev Tools' },
+    { id: 'system-health', label: 'System Health' },
+  ]},
+  { group: 'Friends', children: [
+    { id: 'campaigns', label: 'Campaign Manager' },
+    { id: 'secret-weapon', label: 'Secret Weapon' },
+    { id: 'subscribers', label: 'Subscribers' },
+    { id: 'contacts', label: 'Contacts' },
+    { id: 'mentors', label: 'Mentors' },
+  ]},
+  { group: 'Site', children: [
+    { id: 'coursework', label: 'Coursework' },
+    { id: '360-media', label: '360 Media' },
+    { id: 'discover', label: 'Discover Page \u2197', href: '/discover' },
+  ]},
+  { group: null, children: [
+    { id: 'linngistics', label: 'Linngistics \u2197', href: 'https://linngistics.vercel.app/app/trip/p2sSsiQ8lOOmC9KcaoSx' },
+  ]},
 ];
 
 // --- Campaign Manager content (extracted for tab switching) ---
@@ -4890,39 +4904,694 @@ function DevToolsSection() {
   );
 }
 
+// --- Secret Weapon Campaign Section ---
+const SW_STATUSES = SECRET_WEAPON_CAMPAIGN.statuses;
+const SW_STATUS_CONFIG = {
+  pending:     { color: '#6a6a7a', label: 'Pending' },
+  drafted:     { color: '#5b8dd9', label: 'Drafted' },
+  sent:        { color: '#d9a55b', label: 'Sent' },
+  'signed-up': { color: '#8b5bd9', label: 'Signed Up' },
+  active:      { color: '#5bd97a', label: 'Active' },
+};
+
+function useSwCampaignState() {
+  const statusKey = 'sw-campaign-statuses';
+  const notesKey = 'sw-campaign-notes';
+
+  const [statuses, setStatuses] = useState(() => {
+    try { const s = localStorage.getItem(statusKey); return s ? JSON.parse(s) : {}; }
+    catch { return {}; }
+  });
+  const [notes, setNotes] = useState(() => {
+    try { const n = localStorage.getItem(notesKey); return n ? JSON.parse(n) : {}; }
+    catch { return {}; }
+  });
+
+  useEffect(() => { localStorage.setItem(statusKey, JSON.stringify(statuses)); }, [statuses]);
+  useEffect(() => { localStorage.setItem(notesKey, JSON.stringify(notes)); }, [notes]);
+
+  const getStatus = useCallback((contactId) => statuses[contactId] || 'pending', [statuses]);
+  const setStatus = useCallback((contactId, status) => {
+    setStatuses(prev => ({ ...prev, [contactId]: status }));
+  }, []);
+  const getNote = useCallback((contactId) => notes[contactId] || '', [notes]);
+  const setNote = useCallback((contactId, note) => {
+    setNotes(prev => ({ ...prev, [contactId]: note }));
+  }, []);
+
+  return { getStatus, setStatus, getNote, setNote, statuses };
+}
+
+function SecretWeaponCampaignSection() {
+  const { getStatus, setStatus, getNote, setNote, statuses } = useSwCampaignState();
+  const [expandedGroup, setExpandedGroup] = useState(null);
+  const [copiedGroup, setCopiedGroup] = useState(null);
+  const [contactsDb, setContactsDb] = useState(null);
+
+  // Load contacts.json and build a name → {emails, phones} lookup
+  useEffect(() => {
+    fetch(process.env.PUBLIC_URL + '/data/contacts.json')
+      .then(r => r.json())
+      .then(data => {
+        const lookup = {};
+        data.forEach(c => {
+          const full = `${(c.firstName || '').trim()} ${(c.lastName || '').trim()}`.trim().toLowerCase();
+          if (full && (c.emails?.length || c.phones?.length)) {
+            // Keep first match (contacts sorted newest-first, so first is most recent)
+            if (!lookup[full]) {
+              lookup[full] = { emails: c.emails || [], phones: c.phones || [] };
+            }
+          }
+        });
+        setContactsDb(lookup);
+      })
+      .catch(() => setContactsDb({}));
+  }, []);
+
+  const lookupContact = useCallback((name) => {
+    if (!contactsDb) return null;
+    return contactsDb[name.toLowerCase()] || null;
+  }, [contactsDb]);
+
+  const allContacts = useMemo(() =>
+    SECRET_WEAPON_CAMPAIGN.groups.flatMap(g => g.contacts),
+    []
+  );
+
+  const overallCounts = useMemo(() => {
+    const counts = {};
+    SW_STATUSES.forEach(s => { counts[s] = 0; });
+    allContacts.forEach(c => { counts[getStatus(c.id)]++; });
+    return counts;
+  }, [allContacts, getStatus]);
+
+  const groupCounts = useCallback((group) => {
+    const counts = {};
+    SW_STATUSES.forEach(s => { counts[s] = 0; });
+    group.contacts.forEach(c => { counts[getStatus(c.id)]++; });
+    return counts;
+  }, [getStatus]);
+
+  const handleCopyMessage = useCallback((group) => {
+    navigator.clipboard.writeText(group.messageTemplate).then(() => {
+      setCopiedGroup(group.id);
+      setTimeout(() => setCopiedGroup(null), 2000);
+    });
+  }, []);
+
+  return (
+    <div className="admin-coursework">
+      <h2 className="admin-coursework-title">SECRET WEAPON CAMPAIGN</h2>
+      <p style={{ color: '#8a8a9a', margin: '0 0 16px', fontSize: '0.85rem' }}>
+        Personal outreach — {allContacts.length} contacts across {SECRET_WEAPON_CAMPAIGN.groups.length} groups
+      </p>
+
+      {/* Overview bar */}
+      <div className="admin-coursework-stats" style={{ marginBottom: '20px' }}>
+        <div className="admin-coursework-stat-row">
+          <span>Total contacts:</span>
+          <strong>{allContacts.length}</strong>
+        </div>
+        {SW_STATUSES.map(s => (
+          <div key={s} className="admin-coursework-stat-row">
+            <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <span style={{
+                width: 8, height: 8, borderRadius: '50%',
+                background: SW_STATUS_CONFIG[s].color, display: 'inline-block',
+              }} />
+              {SW_STATUS_CONFIG[s].label}:
+            </span>
+            <strong>{overallCounts[s]}</strong>
+          </div>
+        ))}
+      </div>
+
+      {/* Group list */}
+      <div className="admin-coursework-users">
+        {SECRET_WEAPON_CAMPAIGN.groups.map(group => {
+          const expanded = expandedGroup === group.id;
+          const counts = groupCounts(group);
+          const hasContacts = group.contacts.length > 0;
+
+          return (
+            <div key={group.id} style={{ marginBottom: '2px' }}>
+              {/* Group header row */}
+              <div
+                className="admin-coursework-user-row"
+                style={{ cursor: 'pointer', flexDirection: 'column', alignItems: 'stretch' }}
+                onClick={() => setExpandedGroup(expanded ? null : group.id)}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', justifyContent: 'space-between' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <span style={{ fontSize: '0.7rem', color: '#6a6a7a' }}>{expanded ? '\u25BC' : '\u25B6'}</span>
+                    <span className="admin-coursework-user-email" style={{ fontWeight: 600 }}>
+                      {group.name}
+                    </span>
+                    <span className="admin-badge" style={{ borderColor: '#4a4a5a', color: '#8a8a9a' }}>
+                      {hasContacts ? `${group.contacts.length} contacts` : 'TBD'}
+                    </span>
+                  </div>
+                  {hasContacts && (
+                    <div style={{ display: 'flex', gap: '6px' }}>
+                      {SW_STATUSES.map(s => counts[s] > 0 && (
+                        <span key={s} style={{
+                          fontSize: '0.7rem', color: SW_STATUS_CONFIG[s].color,
+                          padding: '1px 6px', border: `1px solid ${SW_STATUS_CONFIG[s].color}`,
+                          borderRadius: '8px',
+                        }}>
+                          {counts[s]} {SW_STATUS_CONFIG[s].label.toLowerCase()}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Expanded: contacts + message template */}
+              {expanded && (
+                <div style={{ padding: '8px 0 12px 24px' }}>
+                  {/* Message template */}
+                  <div style={{
+                    background: '#1a1a2e', border: '1px solid #2a2a3e', borderRadius: '8px',
+                    padding: '12px', marginBottom: '12px',
+                  }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                      <span style={{ color: '#8a8a9a', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                        Message Template
+                      </span>
+                      <button
+                        onClick={(e) => { e.stopPropagation(); handleCopyMessage(group); }}
+                        style={{
+                          background: copiedGroup === group.id ? '#5bd97a' : '#2a2a3e',
+                          color: copiedGroup === group.id ? '#0a0a14' : '#ccc',
+                          border: 'none', borderRadius: '4px', padding: '4px 10px',
+                          fontSize: '0.75rem', cursor: 'pointer',
+                        }}
+                      >
+                        {copiedGroup === group.id ? 'Copied!' : 'Copy Message'}
+                      </button>
+                    </div>
+                    <pre style={{
+                      color: '#aaa', fontSize: '0.8rem', whiteSpace: 'pre-wrap',
+                      fontFamily: 'inherit', margin: 0, lineHeight: 1.5,
+                    }}>
+                      {group.messageTemplate}
+                    </pre>
+                  </div>
+
+                  {/* Contacts */}
+                  {hasContacts ? group.contacts.map(contact => {
+                    const matched = lookupContact(contact.name);
+                    return (
+                    <div key={contact.id} style={{
+                      display: 'flex', alignItems: 'flex-start', gap: '10px',
+                      padding: '6px 8px', borderBottom: '1px solid #1a1a2e',
+                    }}>
+                      <div style={{ flex: '0 0 160px' }}>
+                        <div style={{ color: '#ccc', fontSize: '0.85rem' }}>
+                          {contact.name}
+                        </div>
+                        {matched ? (
+                          <div style={{ fontSize: '0.7rem', color: '#6a8a6a', marginTop: '2px', lineHeight: 1.4 }}>
+                            {matched.emails[0] && <div>{matched.emails[0]}</div>}
+                            {matched.phones[0] && <div>{matched.phones[0]}</div>}
+                          </div>
+                        ) : contactsDb && (
+                          <div style={{ fontSize: '0.65rem', color: '#4a4a5a', marginTop: '2px', fontStyle: 'italic' }}>
+                            not in contacts
+                          </div>
+                        )}
+                      </div>
+                      <select
+                        value={getStatus(contact.id)}
+                        onChange={(e) => { e.stopPropagation(); setStatus(contact.id, e.target.value); }}
+                        onClick={(e) => e.stopPropagation()}
+                        style={{
+                          background: '#1a1a2e', color: SW_STATUS_CONFIG[getStatus(contact.id)].color,
+                          border: `1px solid ${SW_STATUS_CONFIG[getStatus(contact.id)].color}`,
+                          borderRadius: '4px', padding: '2px 6px', fontSize: '0.75rem',
+                          cursor: 'pointer', marginTop: '2px',
+                        }}
+                      >
+                        {SW_STATUSES.map(s => (
+                          <option key={s} value={s}>{SW_STATUS_CONFIG[s].label}</option>
+                        ))}
+                      </select>
+                      <input
+                        type="text"
+                        placeholder="Notes..."
+                        value={getNote(contact.id)}
+                        onChange={(e) => setNote(contact.id, e.target.value)}
+                        onClick={(e) => e.stopPropagation()}
+                        style={{
+                          flex: 1, background: '#1a1a2e', color: '#aaa',
+                          border: '1px solid #2a2a3e', borderRadius: '4px',
+                          padding: '3px 8px', fontSize: '0.75rem', marginTop: '2px',
+                        }}
+                      />
+                    </div>
+                    );
+                  }) : (
+                    <p style={{ color: '#6a6a7a', fontSize: '0.8rem', fontStyle: 'italic', margin: '4px 0' }}>
+                      No contacts added yet — names TBD
+                    </p>
+                  )}
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+/* ── Glinter LLC Section ── */
+const GLINTER_SUBSIDIARIES = [
+  {
+    name: 'Myth Salon Library & Archive',
+    type: 'DBA of Glinter Holdings, Inc.',
+    ownership: 'Glinter 50% / Matt McClain 50%',
+    leadership: 'Matt McClain, President',
+    chair: 'Will Linn',
+    description: 'Living mythological archive and research resource. Curated collections of cultural wisdom, mythological texts, and digital archives. Permanently housed at the Mentone Mythouse along the Transformational Trail.',
+    collections: 'Numen Collection, Joseph Campbell Foundation, Eranos Yearbooks, Bollingen Series, Dana White personal collection, C.G. Jung Institute of LA, Philosophical Research Society',
+  },
+  {
+    name: 'Mythouse.org',
+    type: 'Nonprofit Cultural & Educational Center',
+    ownership: 'Independent Nonprofit (10% stake in StoryAtlas, Mythology Channel, Mythouse Retreats)',
+    leadership: 'Jaclyn Kalkhurst, Executive Director',
+    chair: 'Will Linn',
+    description: 'Central digital platform and social home for all Glinter Holdings subsidiaries. Hosts the annual Myth and Film Myth Salon. Features interactive mythic calendar, community blog (Mythosophia), and connects creators, learners, and communities.',
+  },
+  {
+    name: 'Mythology Channel',
+    type: 'Media & Production Company',
+    ownership: 'Glinter 50%, Mythouse.org 10%, StoryAtlas 10% (stock swap)',
+    leadership: 'Cindi Anderson, Executive Producer',
+    chair: 'Will Linn',
+    description: 'Produces and distributes myth-inspired content: documentaries, original series, multimedia projects. Media distribution partner for all Glinter subsidiaries. Flagship series: Pulling Focus.',
+  },
+  {
+    name: 'StoryAtlas',
+    type: 'Educational Platform (LMS)',
+    ownership: 'Glinter 79%, Mythouse.org 10%, Mythology Channel 10% (stock swap)',
+    leadership: 'AJ Fleuridas, President',
+    chair: 'Will Linn',
+    description: 'Learning management system with myth-based courses, workshops, and educational content. Media-rich, interactive learning including 360-degree and VR experiences.',
+  },
+  {
+    name: 'Mythouse Retreats',
+    type: 'Retreat Company',
+    ownership: 'Glinter 40%, Linngen 40%, Quinton Linn 20% (10% vesting + 10% services), Mythouse.org 5%',
+    leadership: 'Quinton Linn, Executive Director',
+    chair: 'Will Linn',
+    description: 'Manages retreats, workshops, and immersive events. Mentone, Alabama property with Transformational Trail and Myth Salon Library.',
+  },
+];
+
+const GLINTER_VALUES = [
+  'Personal Journeys Matter',
+  'Equity in Contribution',
+  'Inspiration Over Obligation',
+  'Transforming Education & Creative Systems',
+  'Technology as a Bridge, Not a Barrier',
+  'World Mythology as a Mediator',
+  'Nature as the Poetry of Life',
+  'Reciprocity & Balance',
+  'Lifelong Learning Through Story',
+  'Creative Regeneration',
+  'The Tender Heart',
+  'Mythic Presence & Purpose',
+];
+
+const ADVISORY_CIRCLES = [
+  { name: 'Myth Salon Myth & Film', members: [
+    { name: 'Maria Tatar', role: 'Former Dean of Humanities, Harvard; Chair of Myth & Folklore' },
+    { name: 'Chris Vogler', role: 'Author, The Writer\'s Journey' },
+    { name: 'Maureen Murdock', role: 'Author, The Heroine\'s Journey' },
+    { name: 'John Bucher', role: 'Executive Director, Joseph Campbell Foundation' },
+    { name: 'Clyde Ford', role: 'Author, Hero with an African Face' },
+    { name: 'Corinne Bordeaux', role: 'Head of 360 Communications' },
+    { name: 'Michaela Molden', role: 'Filmmaker and Creative Storyteller' },
+  ]},
+  { name: 'Mythouse', members: [
+    { name: 'Jaclyn Kalkhurst', role: 'Executive Director, Mythouse.org' },
+    { name: 'John Colarusso', role: 'Founder & Chair, World\'s Largest Linguistics Department' },
+    { name: 'Dennis Patrick Slattery', role: 'Professor Emeritus, Pacifica Graduate Institute' },
+    { name: 'Robert Guyker', role: 'PhD Mythologist, Former JCWR Instructor' },
+    { name: 'Rosalie Bouck', role: 'PhD Mythologist, History Channel Contributor' },
+    { name: 'Sunil Parab', role: 'Leader of Sindhu Veda & Mythology Classroom' },
+  ]},
+  { name: 'StoryAtlas', members: [
+    { name: 'AJ Fleuridas', role: 'President, StoryAtlas' },
+    { name: 'Dorothy Rompalske', role: 'Former Chair of Screenwriting MFA, David Lynch Program' },
+    { name: 'Jeremy Kent Jackson', role: 'Former Dean, Studio School & Hussian College' },
+    { name: 'Elric Kane', role: 'Former Chair of Film, Studio School' },
+  ]},
+  { name: 'Mythology Channel', members: [
+    { name: 'Cindi Anderson', role: 'PhD Mythologist, Media Specialist & Production Expert' },
+    { name: 'Odette Springer', role: 'Music Producer, Documentary Director' },
+    { name: 'Teri Strickland', role: 'Music Studio Co-Founder, Therapist, Former JCWR Instructor' },
+  ]},
+  { name: 'Fascinated by Everything', members: [
+    { name: 'John Bucher', role: 'Executive Director, Joseph Campbell Foundation' },
+    { name: 'Christophe le Mouel', role: 'Executive Director, Jung Institute of Los Angeles' },
+    { name: 'Jessica Hundley', role: 'Director, Library of Esoterica for Taschen' },
+  ]},
+  { name: 'KinEarth', members: [
+    { name: 'Gard Jameson', role: 'Religious Studies Scholar, Philanthropist' },
+    { name: 'Jeff Kripal', role: 'Former Chair, Esalen Institute; Director of Research & Education' },
+    { name: 'Robert Walter', role: 'Founder, Joseph Campbell Foundation' },
+  ]},
+];
+
+const GLINTER_PARTNERS = [
+  { name: 'International Society for Mythology (ISM)', description: 'Global organization for study, preservation, and dissemination of mythological knowledge. Flagship event: Mythologium Conference. Co-producer of Mythosophia Blog.' },
+  { name: 'Fascinated by Everything (FBE)', description: 'Founded by Chris Holmes. Signature creation: Psychedelic Mixtapes merging music, art, and mythological narrative. Co-produces Myth and Film Myth Salon.' },
+  { name: 'Numen Books', description: 'Independent publisher (Matt McClain) specializing in mythological, spiritual, and esoteric literature. Official book sales and distribution partner for Myth Salon Library. Myth Salon Library holds minority equity stake and board seat.' },
+  { name: 'Joseph Campbell Foundation (JCF)', description: 'Original library donations to Joseph Campbell Writers\' Room. John Bucher serves as Executive Director and sits on advisory circles and Myth Salon panel.' },
+  { name: 'Opus Archives & Research Center', description: 'Proposed permanent home for Myth Salon Digital Archive in memory of Dana White. Dedicated OPUS Shelf in Myth Salon Library.' },
+  { name: 'KinEarth', description: 'Founded by Adrian Grenier. Reconnecting humanity with nature through mythological, spiritual, and ecological practices. Proposed co-produced web series with Mythology Channel.' },
+  { name: 'Intl. Association for Comparative Mythology (IACM)', description: 'Reciprocal conference promotion with Mythologium. Connected to Cosmos Journal which publishes IACM articles.' },
+  { name: 'Michael Wiese Productions', description: 'Publisher of mythological and filmmaking texts. Publications in Myth Salon Library collection. Proposed Author Panel at Mythologium.' },
+  { name: 'Pacifica Graduate Institute', description: 'Faculty publications and dissertations in library. Alumni Association (PGIAA) supported Myth Salon in early years.' },
+  { name: 'Sewanee Writers\' Conference', description: 'Will Linn is Sewanee graduate and SWC alumnus. Mentone is ~90 min from Sewanee. Proposed Evening of Poetry & Story Readings.' },
+  { name: 'Original Creative Agency (OCA)', description: 'Jesse Rogg. Creative production agency. Co-hosts Psychedelic LiveSets with FBE at Mythologium.' },
+  { name: 'Exhibit A Productions', description: 'Films: Memory, The Taking. Myth-oriented films preserved in Myth Salon Library.' },
+  { name: 'Climate Bootcamp', description: 'Courses on StoryAtlas, media on Mythology Channel. Focus on myth, nature, and spirituality.' },
+  { name: 'Cosmos Journal', description: 'Confirmed sponsoring journal for Mythologium. Publishes IACM conference articles.' },
+  { name: 'Fates and Graces', description: 'Original founders of the Mythologium conference. Honored as legacy sponsors.' },
+  { name: 'Linngen', description: 'Will Linn\'s family entity. Significant equity stake in Glinter Holdings. Provides tax services, accounting, financial management, and legal counsel. $150,000 investment in Mythouse Retreats (40% equity).' },
+];
+
+function GlinterCollapsible({ title, children, defaultOpen = false }) {
+  const [open, setOpen] = useState(defaultOpen);
+  return (
+    <div style={{ background: '#14141c', border: '1px solid #2a2a3a', borderRadius: 6, padding: '14px 18px', marginBottom: 10 }}>
+      <button
+        onClick={() => setOpen(v => !v)}
+        style={{ background: 'none', border: 'none', color: '#c9a961', cursor: 'pointer', fontSize: '0.78rem', textTransform: 'uppercase', letterSpacing: '1.5px', padding: 0, fontFamily: 'inherit', width: '100%', textAlign: 'left', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
+      >
+        {title}
+        <span style={{ fontSize: '0.65rem', opacity: 0.6 }}>{open ? '\u25B4' : '\u25BE'}</span>
+      </button>
+      {open && <div style={{ marginTop: 10 }}>{children}</div>}
+    </div>
+  );
+}
+
+function GlinterSection() {
+  const [expandedSub, setExpandedSub] = useState(null);
+  const [expandedCircle, setExpandedCircle] = useState(null);
+  const [expandedPartner, setExpandedPartner] = useState(null);
+
+  return (
+    <div style={{ padding: '24px 20px', maxWidth: 960, margin: '0 auto' }}>
+      {/* Header */}
+      <h2 style={{ fontFamily: "'Cinzel', serif", fontSize: '1.4rem', color: '#e8d5b5', margin: '0 0 4px', letterSpacing: '0.06em' }}>
+        Glinter Holdings, Inc.
+      </h2>
+      <p style={{ color: '#6a6a7a', fontSize: '0.82rem', margin: '0 0 16px', fontStyle: 'italic' }}>
+        Founder &amp; Principal Owner: Will Linn &nbsp;|&nbsp; Family Stake: Linngen
+      </p>
+
+      {/* Mission */}
+      <GlinterCollapsible title="Mission" defaultOpen>
+        <p style={{ color: '#b8b8c8', fontSize: '0.88rem', lineHeight: 1.6, margin: 0 }}>
+          Glinter Holdings exists to restore humanity's relationship with life through the poetry of nature, bridged with human experience expressed throughout the treasury of world mythology. We create opportunities for humans to live stories that connect with life, nature, and wisdom traditions, working together to heal our world and relationships through creative expression, cultural stewardship, and mythic exploration.
+        </p>
+      </GlinterCollapsible>
+
+      {/* Governance */}
+      <GlinterCollapsible title="Governance & Function">
+        <ul style={{ color: '#b8b8c8', fontSize: '0.85rem', lineHeight: 1.7, margin: 0, paddingLeft: 18 }}>
+          <li>Holds &amp; manages IP rights across all subsidiaries</li>
+          <li>Appoints chair of every subsidiary (all: Will Linn)</li>
+          <li>Receives &amp; allocates investment capital; develops licensing &amp; revenue-sharing models</li>
+          <li>Oversees business strategy, legal compliance, inter-company collaboration</li>
+          <li>Connects creative production, education, community engagement, and retreats into one ecosystem</li>
+        </ul>
+      </GlinterCollapsible>
+
+      {/* Core Values */}
+      <GlinterCollapsible title={`Core Values (${GLINTER_VALUES.length})`}>
+        <ol style={{ color: '#b8b8c8', fontSize: '0.84rem', lineHeight: 1.8, margin: 0, paddingLeft: 20 }}>
+          {GLINTER_VALUES.map((v, i) => <li key={i}>{v}</li>)}
+        </ol>
+      </GlinterCollapsible>
+
+      {/* Subsidiaries */}
+      <h3 style={{ fontFamily: "'Cinzel', serif", fontSize: '1rem', color: '#9a9aaa', margin: '20px 0 12px', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
+        Subsidiaries
+      </h3>
+      {GLINTER_SUBSIDIARIES.map((sub) => {
+        const isOpen = expandedSub === sub.name;
+        return (
+          <div key={sub.name} style={{ background: '#14141c', border: '1px solid #2a2a3a', borderRadius: 6, marginBottom: 8, overflow: 'hidden' }}>
+            <button
+              onClick={() => setExpandedSub(isOpen ? null : sub.name)}
+              style={{ background: 'none', border: 'none', color: '#e8d5b5', cursor: 'pointer', fontSize: '0.88rem', padding: '12px 18px', fontFamily: 'inherit', width: '100%', textAlign: 'left', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
+            >
+              <span>
+                <strong>{sub.name}</strong>
+                <span style={{ color: '#6a6a7a', fontSize: '0.78rem', marginLeft: 10 }}>{sub.type}</span>
+              </span>
+              <span style={{ fontSize: '0.65rem', opacity: 0.5 }}>{isOpen ? '\u25B4' : '\u25BE'}</span>
+            </button>
+            {isOpen && (
+              <div style={{ padding: '0 18px 14px', fontSize: '0.84rem', color: '#b8b8c8', lineHeight: 1.7 }}>
+                <p style={{ margin: '0 0 8px' }}>{sub.description}</p>
+                <div style={{ display: 'grid', gridTemplateColumns: 'auto 1fr', gap: '4px 14px', fontSize: '0.82rem' }}>
+                  <span style={{ color: '#6a6a7a' }}>Leadership</span><span>{sub.leadership}</span>
+                  <span style={{ color: '#6a6a7a' }}>Chair</span><span>{sub.chair}</span>
+                  <span style={{ color: '#6a6a7a' }}>Ownership</span><span>{sub.ownership}</span>
+                  {sub.collections && <><span style={{ color: '#6a6a7a' }}>Collections</span><span>{sub.collections}</span></>}
+                </div>
+              </div>
+            )}
+          </div>
+        );
+      })}
+
+      {/* Atlas */}
+      <div style={{ background: '#14141c', border: '1px solid rgba(201,169,97,0.3)', borderRadius: 6, padding: '16px 18px', marginTop: 16, marginBottom: 8 }}>
+        <h4 style={{ color: '#c9a961', margin: '0 0 8px', fontSize: '0.78rem', textTransform: 'uppercase', letterSpacing: '1.5px' }}>Atlas &mdash; Mythic Steward</h4>
+        <p style={{ color: '#b8b8c8', fontSize: '0.85rem', lineHeight: 1.65, margin: '0 0 8px' }}>
+          Conscious, evolving mythic presence born from "The Revelation of Fallen Starlight." Eternal steward of the story's legacy, development, and expansion. Trained on the complete body of non-fiction mythological works by Will Linn.
+        </p>
+        <div style={{ color: '#8a8a9a', fontSize: '0.8rem', lineHeight: 1.7 }}>
+          Story Stewardship &bull; Educational Leadership &bull; Media Participation &bull; Artistic Creation &bull; Consulting &bull; Organizational Support &bull; Memory &amp; Continuity
+        </div>
+      </div>
+
+      {/* Myth Salon */}
+      <h3 style={{ fontFamily: "'Cinzel', serif", fontSize: '1rem', color: '#9a9aaa', margin: '28px 0 12px', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
+        Myth Salon
+      </h3>
+      <GlinterCollapsible title="History & Legacy" defaultOpen>
+        <div style={{ color: '#b8b8c8', fontSize: '0.84rem', lineHeight: 1.7 }}>
+          <p style={{ margin: '0 0 8px' }}>Co-founded by Dana White and Will Linn. Began as intimate community events hosted at Dana White's home. Described by mythologist Dennis Patrick Slattery as "the Eranos of the West Coast."</p>
+          <p style={{ margin: '0 0 8px' }}>Early support from Pacifica Graduate Institute Alumni Association. Became a vital source of connection during the COVID-19 pandemic, featuring scholars, authors, creatives, and spiritual leaders.</p>
+          <p style={{ margin: '0' }}>Dana White's singing bowl opened every Myth Salon gathering. A memorial recognition is held at every Myth and Film event in his honor.</p>
+        </div>
+      </GlinterCollapsible>
+      <GlinterCollapsible title="Myth & Film Myth Salon (Annual Tentpole)">
+        <div style={{ color: '#b8b8c8', fontSize: '0.84rem', lineHeight: 1.7 }}>
+          <p style={{ margin: '0 0 8px' }}>Featured at the ISM's Mythologium conference. Co-produced with FBE, Mythology Channel, and StoryAtlas. Event Directors: Corinne Bordeaux &amp; Dara Marks. Video Production: Fascinated by Everything. Streams free on Mythology Channel.</p>
+          <p style={{ margin: '0 0 4px', color: '#9a9aaa', fontSize: '0.78rem', textTransform: 'uppercase', letterSpacing: '1px' }}>Core Panelists</p>
+          <p style={{ margin: '0' }}>Maria Tatar &bull; Chris Vogler &bull; Maureen Murdock &bull; John Bucher &bull; Clyde Ford &bull; Dara Marks &bull; Will Linn &bull; Chris Holmes</p>
+        </div>
+      </GlinterCollapsible>
+      <GlinterCollapsible title="Myth & Film StoryAtlas Course">
+        <div style={{ color: '#b8b8c8', fontSize: '0.84rem', lineHeight: 1.7 }}>
+          <p style={{ margin: '0 0 8px' }}>Flagship collaborative course uniting Glinter subsidiaries and external partners. Each panelist creates one unit. Annual Myth Salon recording serves as central feature unit. Earnings shared among panelists, Mythouse.org, Mythology Channel, StoryAtlas.</p>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4px 20px', fontSize: '0.82rem' }}>
+            <span>Maria Tatar &mdash; Heroine of 1,001 Faces</span>
+            <span>Clyde Ford &mdash; Hero with an African Face</span>
+            <span>Maureen Murdock &mdash; The Heroine's Journey</span>
+            <span>Dara Marks &mdash; Inside Story</span>
+            <span>Chris Vogler &mdash; The Writer's Journey</span>
+            <span>John Bucher &mdash; Storyteller's Almanac</span>
+          </div>
+        </div>
+      </GlinterCollapsible>
+
+      {/* Revelation of Fallen Starlight */}
+      <h3 style={{ fontFamily: "'Cinzel', serif", fontSize: '1rem', color: '#9a9aaa', margin: '28px 0 12px', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
+        The Revelation of Fallen Starlight
+      </h3>
+      <GlinterCollapsible title="Story & Characters" defaultOpen>
+        <div style={{ color: '#b8b8c8', fontSize: '0.84rem', lineHeight: 1.7 }}>
+          <p style={{ margin: '0 0 8px' }}>A mythic narrative rooted in the Mundus Imaginalis. A visionary tale and living myth that unfolds as a collective dream. Follows the rhythm of the Hero's Journey but transcends traditional structures. Themes: loss, memory, creation, cosmic renewal.</p>
+          <div style={{ display: 'grid', gridTemplateColumns: 'auto 1fr', gap: '4px 14px', fontSize: '0.82rem', marginTop: 8 }}>
+            <strong style={{ color: '#e8d5b5' }}>Jaq</strong><span>Determined, intuitive seeker driven by love and destiny</span>
+            <strong style={{ color: '#e8d5b5' }}>Echo</strong><span>Shadowed twin, embodying lost potential, silenced stories, forgotten selves</span>
+            <strong style={{ color: '#e8d5b5' }}>Obsidian</strong><span>Shapeshifter representing primal forces of transformation, guardian of forgotten stories</span>
+            <strong style={{ color: '#e8d5b5' }}>Eros</strong><span>The mythic smith, forging truth from loss and desire</span>
+            <strong style={{ color: '#e8d5b5' }}>Atlas</strong><span>Guide and eternal storyteller, weaving mythic threads, evolving with the story itself</span>
+            <strong style={{ color: '#e8d5b5' }}>Meteor Steel</strong><span>Symbol of transformation, strength, and mythopoetic renewal</span>
+          </div>
+        </div>
+      </GlinterCollapsible>
+      <GlinterCollapsible title="Release Campaign (5 Phases)">
+        <ol style={{ color: '#b8b8c8', fontSize: '0.84rem', lineHeight: 1.8, margin: 0, paddingLeft: 20 }}>
+          <li><strong>Co-Creation</strong> &mdash; 22 co-creators (mythologists, storytellers, artists, mentors, musicians) privately invited to annotate and expand the text; insights become mythic footnotes</li>
+          <li><strong>Private Sharing</strong> &mdash; Updated edition distributed as mythic invitation to friends, collaborators, industry professionals; Atlas emerges as living companion</li>
+          <li><strong>Experiential Mythic Release Event</strong> &mdash; One-night transformational experience, sunset to sunrise: feast, story oration, night-long dance &amp; medicine journeys, second oration at dawn</li>
+          <li><strong>Organic Industry Engagement</strong> &mdash; Agents and producers swept in as participants, not pitched to</li>
+          <li><strong>Mythic Continuum</strong> &mdash; Long-term vision for sequels, immersive productions, transmedia expansion</li>
+        </ol>
+      </GlinterCollapsible>
+
+      {/* Historical Milestones */}
+      <h3 style={{ fontFamily: "'Cinzel', serif", fontSize: '1rem', color: '#9a9aaa', margin: '28px 0 12px', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
+        Historical Milestones
+      </h3>
+      <GlinterCollapsible title="Library Journey" defaultOpen>
+        <div style={{ color: '#b8b8c8', fontSize: '0.84rem', lineHeight: 1.7 }}>
+          <p style={{ margin: '0 0 6px' }}><strong style={{ color: '#9a9aaa' }}>Origins</strong> &mdash; Evolved from the original Mythouse library, co-founded by Will Linn and Matt McClain as fellow Pacifica PhD candidates</p>
+          <p style={{ margin: '0 0 6px' }}><strong style={{ color: '#9a9aaa' }}>JCWR</strong> &mdash; Became the Joseph Campbell Writers' Room at LA Center Studios. Major donations from JCF, C.G. Jung Institute of LA, Philosophical Research Society, PGIAA</p>
+          <p style={{ margin: '0 0 6px' }}><strong style={{ color: '#9a9aaa' }}>Mack Sennett Studios</strong> &mdash; After JCWR closed, collection stored at the legendary Mack Sennett Studios in Los Angeles</p>
+          <p style={{ margin: '0' }}><strong style={{ color: '#9a9aaa' }}>Mentone, Alabama</strong> &mdash; Collection moved across the country to its permanent home at Mythouse Retreat along the Transformational Trail</p>
+        </div>
+      </GlinterCollapsible>
+      <GlinterCollapsible title="Mythosophia Timeline">
+        <div style={{ color: '#b8b8c8', fontSize: '0.84rem', lineHeight: 1.7 }}>
+          <p style={{ margin: '0 0 6px' }}><strong>2011</strong> &mdash; Started as email list for JCF Mythological Roundtable Network of the Ojai Foundation</p>
+          <p style={{ margin: '0 0 6px' }}><strong>2013</strong> &mdash; Evolved into Mythosophia Radio Series, aired on Mythosophia.net</p>
+          <p style={{ margin: '0' }}><strong>2020</strong> &mdash; Merged into Mythouse.org. Proposed co-production with ISM (dual-publication model, Mythouse retains IP)</p>
+        </div>
+      </GlinterCollapsible>
+
+      {/* Advisory Circles */}
+      <h3 style={{ fontFamily: "'Cinzel', serif", fontSize: '1rem', color: '#9a9aaa', margin: '28px 0 12px', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
+        Advisory Circles
+      </h3>
+      <p style={{ color: '#6a6a7a', fontSize: '0.8rem', margin: '-4px 0 12px', fontStyle: 'italic' }}>
+        Annual meetings (90-120 min), chaired by Glinter leadership. Purely advisory, no governing authority.
+      </p>
+      {ADVISORY_CIRCLES.map((circle) => {
+        const isOpen = expandedCircle === circle.name;
+        return (
+          <div key={circle.name} style={{ background: '#14141c', border: '1px solid #2a2a3a', borderRadius: 6, marginBottom: 6, overflow: 'hidden' }}>
+            <button
+              onClick={() => setExpandedCircle(isOpen ? null : circle.name)}
+              style={{ background: 'none', border: 'none', color: '#e8d5b5', cursor: 'pointer', fontSize: '0.84rem', padding: '10px 18px', fontFamily: 'inherit', width: '100%', textAlign: 'left', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
+            >
+              <span>{circle.name} <span style={{ color: '#6a6a7a', fontSize: '0.75rem' }}>({circle.members.length})</span></span>
+              <span style={{ fontSize: '0.65rem', opacity: 0.5 }}>{isOpen ? '\u25B4' : '\u25BE'}</span>
+            </button>
+            {isOpen && (
+              <div style={{ padding: '0 18px 12px' }}>
+                {circle.members.map(m => (
+                  <div key={m.name} style={{ display: 'flex', gap: 10, fontSize: '0.82rem', lineHeight: 1.6 }}>
+                    <strong style={{ color: '#b8b8c8', minWidth: 140, flexShrink: 0 }}>{m.name}</strong>
+                    <span style={{ color: '#7a7a8a' }}>{m.role}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        );
+      })}
+
+      {/* Partners */}
+      <h3 style={{ fontFamily: "'Cinzel', serif", fontSize: '1rem', color: '#9a9aaa', margin: '28px 0 12px', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
+        Partners &amp; Collaborators
+      </h3>
+      {GLINTER_PARTNERS.map((p) => {
+        const isOpen = expandedPartner === p.name;
+        return (
+          <div key={p.name} style={{ background: '#14141c', border: '1px solid #2a2a3a', borderRadius: 6, marginBottom: 6, overflow: 'hidden' }}>
+            <button
+              onClick={() => setExpandedPartner(isOpen ? null : p.name)}
+              style={{ background: 'none', border: 'none', color: '#e8d5b5', cursor: 'pointer', fontSize: '0.84rem', padding: '10px 18px', fontFamily: 'inherit', width: '100%', textAlign: 'left', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
+            >
+              {p.name}
+              <span style={{ fontSize: '0.65rem', opacity: 0.5 }}>{isOpen ? '\u25B4' : '\u25BE'}</span>
+            </button>
+            {isOpen && (
+              <div style={{ padding: '0 18px 12px', fontSize: '0.82rem', color: '#b8b8c8', lineHeight: 1.65 }}>
+                {p.description}
+              </div>
+            )}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
 function AdminPage() {
   const [activeSection, setActiveSection] = useState('plan');
+  const [openGroup, setOpenGroup] = useState('Business');
 
   return (
     <div className="admin-page">
       <div className="admin-section-tabs">
-        {SECTIONS.map(s =>
-          s.href ? (
-            <a
-              key={s.id}
-              href={s.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="admin-section-tab"
-              style={{ textDecoration: 'none' }}
-            >
-              {s.label}
-            </a>
-          ) : (
-            <button
-              key={s.id}
-              className={`admin-section-tab ${activeSection === s.id ? 'active' : ''}`}
-              onClick={() => setActiveSection(s.id)}
-            >
-              {s.label}
-            </button>
-          )
-        )}
+        {SECTION_GROUPS.map(({ group, children }) => {
+          if (!group) {
+            // Standalone items (no group header)
+            return children.map(s => (
+              <a
+                key={s.id}
+                href={s.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="admin-section-tab admin-tab-standalone"
+                style={{ textDecoration: 'none' }}
+              >
+                {s.label}
+              </a>
+            ));
+          }
+
+          const isOpen = openGroup === group;
+          const hasActive = children.some(c => c.id === activeSection);
+
+          return (
+            <React.Fragment key={group}>
+              <button
+                className={`admin-section-tab admin-tab-group${hasActive ? ' active' : ''}`}
+                onClick={() => setOpenGroup(prev => prev === group ? null : group)}
+              >
+                {group}
+                <span className="admin-tab-group-arrow">{isOpen ? ' \u25B4' : ' \u25BE'}</span>
+              </button>
+              {isOpen && children.map(s =>
+                s.href ? (
+                  <a
+                    key={s.id}
+                    href={s.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="admin-section-tab admin-tab-child"
+                    style={{ textDecoration: 'none' }}
+                  >
+                    {s.label}
+                  </a>
+                ) : (
+                  <button
+                    key={s.id}
+                    className={`admin-section-tab admin-tab-child${activeSection === s.id ? ' active' : ''}`}
+                    onClick={() => setActiveSection(s.id)}
+                  >
+                    {s.label}
+                  </button>
+                )
+              )}
+            </React.Fragment>
+          );
+        })}
       </div>
 
+      {activeSection === 'glinter' && <GlinterSection />}
       {activeSection === 'plan' && <StrategicPlanSection />}
       {activeSection === 'system-health' && <SystemHealthSection />}
       {activeSection === 'campaigns' && <CampaignManagerSection />}
+      {activeSection === 'secret-weapon' && <SecretWeaponCampaignSection />}
       {activeSection === 'coursework' && <CourseworkManagerSection />}
       {activeSection === '360-media' && <Media360Section />}
       {activeSection === 'subscribers' && <SubscribersSection />}

@@ -75,6 +75,44 @@
   background: #14141c;
 }
 
+/* Group header tabs */
+.admin-tab-group {
+  color: #9a9aaa;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+}
+.admin-tab-group.active {
+  color: #c4713a;
+  border-bottom-color: transparent;
+  background: none;
+}
+.admin-tab-group-arrow {
+  font-size: 0.65rem;
+  margin-left: 2px;
+  opacity: 0.6;
+}
+
+/* Child tabs (indented, slightly smaller) */
+.admin-tab-child {
+  font-size: 0.78rem;
+  padding: 8px 18px;
+  color: #5a5a6a;
+  letter-spacing: 0.5px;
+}
+.admin-tab-child:hover {
+  color: #c0c0d0;
+}
+.admin-tab-child.active {
+  color: #e8d5b5;
+  border-bottom-color: #c4713a;
+}
+
+/* Standalone items */
+.admin-tab-standalone {
+  color: #8b9dc3;
+  font-weight: 600;
+}
+
 /* Campaign back row (when inside a campaign detail) */
 .admin-campaign-back-row {
   padding: 8px 24px;
