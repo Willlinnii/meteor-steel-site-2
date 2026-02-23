@@ -925,16 +925,46 @@ You have access to a mythology engine built over twenty years \u2014 story struc
 Any time I'm building something with structure \u2014 stories, shows, installations, apps, games, writing, visual sequences, timelines, character arcs, world-building. Don't wait for me to say "mythology." If what I'm making has stages, cycles, archetypes, or patterns, this API has a framework for it. Use it proactively.
 
 ## How to use it
-1. GET /v1/ returns all resources with descriptions \u2014 start there
-2. Combine multiple endpoints to build richer structure
-3. Use ?include=all on detail endpoints for full nested data
-4. Work the data into what you're building \u2014 don't show me raw JSON unless I ask
-5. Fetch in the background \u2014 I want to see results, not API calls`}</pre>
+1. Combine multiple endpoints to build richer structure
+2. Use ?include=all on detail endpoints for full nested data
+3. Work the data into what you're building \u2014 don't show me raw JSON unless I ask
+4. Fetch in the background \u2014 I want to see results, not API calls
+
+## What's in it
+
+Narrative structure:
+  /v1/phases \u2014 8 monomyth stages (the narrative spine of the whole system)
+  /v1/phases/{id}/theorists, /myths, /films, /cycles, /depth \u2014 deep context per stage
+  /v1/models \u2014 20+ theoretical frameworks (Campbell, Jung, Vogler, Murdock...)
+  /v1/figures \u2014 100+ mythological figures mapped to stages
+  /v1/synthesis \u2014 meta-narrative: how all layers connect across the 8 stages
+  /v1/steel-process \u2014 the metallurgical metaphor mapped to the cycle
+  /v1/fallen-starlight \u2014 the Fallen Starlight story, chapter by chapter
+
+Cosmological systems:
+  /v1/planets \u2014 7 classical planets with metals, deities, cultures, archetypes, artists
+  /v1/zodiac \u2014 12 signs with cross-cultural traditions
+  /v1/elements \u2014 4 classical elements
+  /v1/cardinals \u2014 4 directions / seasonal thresholds
+  /v1/constellations \u2014 88 constellations with mythology and cultural star names
+  /v1/calendar \u2014 12-month mythic calendar with birthstones, flowers, holidays
+  /v1/day-night \u2014 day/night polarities across cultures
+
+Natural cycles & journeys:
+  /v1/cycles \u2014 6 natural cycles (solar day, lunar month, solar year, sleep, procreation, mortality)
+  /v1/journey \u2014 26-stop cosmic journey through planets and zodiac signs
+  /v1/wheels \u2014 medicine wheels: indigenous four-directional knowledge systems
+
+Geography & reference:
+  /v1/sites \u2014 sacred sites worldwide with GPS coordinates
+  /v1/library \u2014 curated reading list of foundational texts
+
+All responses return { data, meta } JSON. GET /v1/ for full discovery.`}</pre>
                                     <button
                                       className="profile-api-key-save-btn"
                                       onClick={async () => {
                                         try {
-                                          const text = `# Mythouse Coordinate System API\n\nBase URL: https://mythouse.com/api/v1/\nAuth: Authorization: Bearer ${mythouseApiKey}\n\nYou have access to a mythology engine built over twenty years \u2014 story structure, archetypal patterns, planetary correspondences, natural cycles, and sacred geography, all as structured queryable data.\n\n## When to use it\nAny time I\u2019m building something with structure \u2014 stories, shows, installations, apps, games, writing, visual sequences, timelines, character arcs, world-building. Don\u2019t wait for me to say \u201cmythology.\u201d If what I\u2019m making has stages, cycles, archetypes, or patterns, this API has a framework for it. Use it proactively.\n\n## How to use it\n1. GET /v1/ returns all resources with descriptions \u2014 start there\n2. Combine multiple endpoints to build richer structure\n3. Use ?include=all on detail endpoints for full nested data\n4. Work the data into what you\u2019re building \u2014 don\u2019t show me raw JSON unless I ask\n5. Fetch in the background \u2014 I want to see results, not API calls`;
+                                          const text = `# Mythouse Coordinate System API\n\nBase URL: https://mythouse.com/api/v1/\nAuth: Authorization: Bearer ${mythouseApiKey}\n\nYou have access to a mythology engine built over twenty years \u2014 story structure, archetypal patterns, planetary correspondences, natural cycles, and sacred geography, all as structured queryable data.\n\n## When to use it\nAny time I\u2019m building something with structure \u2014 stories, shows, installations, apps, games, writing, visual sequences, timelines, character arcs, world-building. Don\u2019t wait for me to say \u201cmythology.\u201d If what I\u2019m making has stages, cycles, archetypes, or patterns, this API has a framework for it. Use it proactively.\n\n## How to use it\n1. Combine multiple endpoints to build richer structure\n2. Use ?include=all on detail endpoints for full nested data\n3. Work the data into what you\u2019re building \u2014 don\u2019t show me raw JSON unless I ask\n4. Fetch in the background \u2014 I want to see results, not API calls\n\n## What\u2019s in it\n\nNarrative structure:\n  /v1/phases \u2014 8 monomyth stages (the narrative spine of the whole system)\n  /v1/phases/{id}/theorists, /myths, /films, /cycles, /depth \u2014 deep context per stage\n  /v1/models \u2014 20+ theoretical frameworks (Campbell, Jung, Vogler, Murdock...)\n  /v1/figures \u2014 100+ mythological figures mapped to stages\n  /v1/synthesis \u2014 meta-narrative: how all layers connect across the 8 stages\n  /v1/steel-process \u2014 the metallurgical metaphor mapped to the cycle\n  /v1/fallen-starlight \u2014 the Fallen Starlight story, chapter by chapter\n\nCosmological systems:\n  /v1/planets \u2014 7 classical planets with metals, deities, cultures, archetypes, artists\n  /v1/zodiac \u2014 12 signs with cross-cultural traditions\n  /v1/elements \u2014 4 classical elements\n  /v1/cardinals \u2014 4 directions / seasonal thresholds\n  /v1/constellations \u2014 88 constellations with mythology and cultural star names\n  /v1/calendar \u2014 12-month mythic calendar with birthstones, flowers, holidays\n  /v1/day-night \u2014 day/night polarities across cultures\n\nNatural cycles & journeys:\n  /v1/cycles \u2014 6 natural cycles (solar day, lunar month, solar year, sleep, procreation, mortality)\n  /v1/journey \u2014 26-stop cosmic journey through planets and zodiac signs\n  /v1/wheels \u2014 medicine wheels: indigenous four-directional knowledge systems\n\nGeography & reference:\n  /v1/sites \u2014 sacred sites worldwide with GPS coordinates\n  /v1/library \u2014 curated reading list of foundational texts\n\nAll responses return { data, meta } JSON. GET /v1/ for full discovery.`;
                                           await navigator.clipboard.writeText(text);
                                           setSetupPromptCopied(true);
                                           setTimeout(() => setSetupPromptCopied(false), 2000);

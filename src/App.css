@@ -3608,7 +3608,7 @@ body {
   color: var(--text-secondary);
   white-space: pre-wrap;
   word-wrap: break-word;
-  max-height: 280px;
+  max-height: 420px;
   overflow-y: auto;
 }
 .profile-api-setup-prompt .profile-api-key-save-btn {
