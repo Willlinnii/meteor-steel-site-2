@@ -1,10 +1,10 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useMemo } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../auth/AuthContext';
 import { useCoursework } from '../../coursework/CourseworkContext';
 import { useWritings } from '../../writings/WritingsContext';
 import { useProfile } from '../../profile/ProfileContext';
-import { RANKS, rankProgress } from '../../profile/profileEngine';
+import { RANKS, rankProgress, CREDENTIAL_CATEGORIES } from '../../profile/profileEngine';
 import ProfileChat from '../../profile/ProfileChat';
 import MentorApplicationChat from '../../profile/MentorApplicationChat';
 import ConsultingSetupChat from '../../profile/ConsultingSetupChat';
@@ -13,6 +13,10 @@ import { validatePhoto, uploadProfilePhoto } from '../../profile/photoUpload';
 import { checkAvailability, registerHandle } from '../../multiplayer/handleService';
 import { apiFetch } from '../../lib/chatApi';
 import { computeNumerology, NUMBER_MEANINGS, NUMBER_TYPES } from '../../profile/numerologyEngine';
+import FriendsSection from './FriendsSection';
+import StoryMatchingSection from './StoryMatchingSection';
+import StoryCardDeck from './StoryCardDeck';
+import { useStoryCardSync } from '../../storyCards/useStoryCardSync';
 
 const SUBSCRIPTIONS = [
   {
@@ -133,8 +137,9 @@ const PURCHASES = [
 export default function ProfilePage() {
   const { user, signOut } = useAuth();
   const { getCourseStates, completedCourses, certificateData, allCourses } = useCoursework();
-  const { earnedRanks, highestRank, activeCredentials, hasProfile, loaded: profileLoaded, handle, natalChart, updateNatalChart, numerologyName, updateNumerologyName, luckyNumber, updateLuckyNumber, subscriptions, updateSubscription, updateSubscriptions, purchases, updatePurchase, updatePurchases, refreshProfile, mentorData, qualifiedMentorTypes, mentorEligible, mentorCoursesComplete, effectiveMentorStatus, pairingCategories, updateMentorBio, updateMentorCapacity, publishToDirectory, unpublishFromDirectory, respondToPairing, endPairing, photoURL, consultingData, consultingCategories, updateProfilePhoto, respondToConsulting, apiKeys, apiKeysLoaded, saveApiKey, removeApiKey, hasAnthropicKey, hasOpenaiKey } = useProfile();
+  const { earnedRanks, highestRank, activeCredentials, hasProfile, loaded: profileLoaded, handle, natalChart, updateNatalChart, numerologyName, updateNumerologyName, luckyNumber, updateLuckyNumber, subscriptions, updateSubscription, updateSubscriptions, purchases, updatePurchase, updatePurchases, refreshProfile, mentorData, qualifiedMentorTypes, mentorEligible, mentorCoursesComplete, effectiveMentorStatus, pairingCategories, updateMentorBio, updateMentorCapacity, publishToDirectory, unpublishFromDirectory, respondToPairing, endPairing, photoURL, consultingData, consultingCategories, updateProfilePhoto, respondToConsulting, apiKeys, apiKeysLoaded, saveApiKey, removeApiKey, hasAnthropicKey, hasOpenaiKey, social, updateSocial, pilgrimages, pilgrimagesLoaded, removePilgrimage, personalStory, savePersonalStory } = useProfile();
   const { personalStories, loaded: writingsLoaded } = useWritings();
+  const { cards: storyCards, loaded: storyCardsLoaded } = useStoryCardSync();
   const navigate = useNavigate();
   const location = useLocation();
   const [showChat, setShowChat] = useState(false);
@@ -144,10 +149,72 @@ export default function ProfilePage() {
   const [expandedCard, setExpandedCard] = useState(null); // 'ybr' | 'forge' | etc.
   const [consultingRespondingId, setConsultingRespondingId] = useState(null);
 
+  // Personal Story state
+  const [storyInput, setStoryInput] = useState('');
+  const [storyEditing, setStoryEditing] = useState(false);
+  const [storyTransmuting, setStoryTransmuting] = useState(false);
+  const [storyView, setStoryView] = useState('transmuted');
+  const [storyError, setStoryError] = useState(null);
+
+  useEffect(() => {
+    if (personalStory?.raw) setStoryInput(personalStory.raw);
+  }, [personalStory?.raw]);
+
+  const handleTransmute = async () => {
+    if (!storyInput.trim()) return;
+    setStoryTransmuting(true);
+    setStoryError(null);
+    try {
+      const res = await apiFetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ mode: 'story-transmute', rawText: storyInput.trim() }),
+      });
+      const data = await res.json();
+      if (data.error) throw new Error(data.error);
+      await savePersonalStory(storyInput.trim(), data.transmuted);
+      setStoryEditing(false);
+      setStoryView('transmuted');
+    } catch (err) {
+      console.error('Transmute error:', err);
+      setStoryError(err.message || 'Failed to transmute story.');
+    } finally {
+      setStoryTransmuting(false);
+    }
+  };
+
   // BYOK API key input state
   const [anthropicKeyInput, setAnthropicKeyInput] = useState('');
   const [openaiKeyInput, setOpenaiKeyInput] = useState('');
   const [keySaving, setKeySaving] = useState(null); // 'anthropicKey' | 'openaiKey' | null
+
+  // Social media link state
+  const [socialInputs, setSocialInputs] = useState({ instagram: '', facebook: '', linkedin: '', youtube: '' });
+  const [socialSaving, setSocialSaving] = useState(false);
+  const [socialDirty, setSocialDirty] = useState(false);
+
+  useEffect(() => {
+    if (social) {
+      setSocialInputs({
+        instagram: social.instagram || '',
+        facebook: social.facebook || '',
+        linkedin: social.linkedin || '',
+        youtube: social.youtube || '',
+      });
+    }
+  }, [social]);
+
+  const handleSocialChange = (platform, value) => {
+    setSocialInputs(prev => ({ ...prev, [platform]: value }));
+    setSocialDirty(true);
+  };
+
+  const handleSocialSave = async () => {
+    setSocialSaving(true);
+    await updateSocial(socialInputs);
+    setSocialSaving(false);
+    setSocialDirty(false);
+  };
 
   const handlePhotoUpload = async (e) => {
     const file = e.target.files?.[0];
@@ -258,90 +325,343 @@ export default function ProfilePage() {
   const displayName = user?.displayName || user?.email?.split('@')[0] || 'Traveler';
   const initial = displayName.charAt(0).toUpperCase();
 
+  // Derive sun sign for basics card
+  const sunSign = natalChart?.planets?.find(p => p.name === 'Sun');
+  const sunSymbol = sunSign ? (ZODIAC_SYMBOLS[sunSign.sign] || '') : null;
+  const moonSign = natalChart?.planets?.find(p => p.name === 'Moon');
+  const risingSign = natalChart?.ascendant;
+
+  // Mentor display for basics card
+  const mentorDisplay = effectiveMentorStatus === 'active' ? getMentorDisplay(mentorData) : null;
+
+  // Build profile summary lines
+  const summaryLines = useMemo(() => {
+    const lines = [];
+    // Line 1: Highest rank + credential titles
+    const parts1 = [];
+    if (highestRank) parts1.push(highestRank.name);
+    if (activeCredentials.length > 0) {
+      parts1.push(activeCredentials.map(c => c.display.name).join(', '));
+    }
+    if (parts1.length > 0) lines.push(parts1.join(' \u2014 '));
+
+    // Line 2: Mentor + astrology
+    const parts2 = [];
+    if (effectiveMentorStatus === 'active' && mentorData?.type) {
+      const mt = MENTOR_TYPES[mentorData.type];
+      if (mt) parts2.push(mt.title);
+    }
+    const astro = [];
+    if (sunSign) astro.push(`${sunSign.sign} Sun`);
+    if (moonSign) astro.push(`${moonSign.sign} Moon`);
+    if (risingSign) astro.push(`${risingSign.sign} Rising`);
+    if (astro.length > 0) parts2.push(astro.join(', '));
+    if (parts2.length > 0) lines.push(parts2.join(' \u00B7 '));
+
+    // Line 3: Numerology + courses + pilgrimages
+    const parts3 = [];
+    if (luckyNumber != null) parts3.push(`Life Path ${luckyNumber}`);
+    if (completed.length > 0) parts3.push(`${completed.length} course${completed.length !== 1 ? 's' : ''} completed`);
+    const pilgCount = Object.keys(pilgrimages || {}).length;
+    if (pilgCount > 0) parts3.push(`${pilgCount} sacred site${pilgCount !== 1 ? 's' : ''} saved`);
+    if (parts3.length > 0) lines.push(parts3.join(' \u00B7 '));
+
+    return lines;
+  }, [highestRank, activeCredentials, effectiveMentorStatus, mentorData, sunSign, moonSign, risingSign, luckyNumber, completed.length, pilgrimages]);
+
   return (
     <div className="profile-page">
-      {/* Profile Header — with highest rank */}
-      <div className="profile-header">
-        <div className="profile-avatar" onClick={() => document.getElementById('photo-upload-input')?.click()} style={{ cursor: 'pointer', position: 'relative' }}>
-          {photoURL ? (
-            <img src={photoURL} alt="" className="profile-avatar-img" />
-          ) : (
-            initial
-          )}
-          {photoUploading && <span className="profile-avatar-loading" />}
-          <div className="profile-avatar-upload-overlay">
-            {photoUploading ? '' : '\uD83D\uDCF7'}
+      {/* ── Basics Card ── */}
+      <div className="profile-basics-card">
+        <div className="profile-header">
+          <div className="profile-avatar" onClick={() => document.getElementById('photo-upload-input')?.click()} style={{ cursor: 'pointer', position: 'relative' }}>
+            {photoURL ? (
+              <img src={photoURL} alt="" className="profile-avatar-img" />
+            ) : (
+              initial
+            )}
+            {photoUploading && <span className="profile-avatar-loading" />}
+            <div className="profile-avatar-upload-overlay">
+              {photoUploading ? '' : '\uD83D\uDCF7'}
+            </div>
+            <input
+              id="photo-upload-input"
+              type="file"
+              accept="image/jpeg,image/png,image/webp"
+              onChange={handlePhotoUpload}
+              style={{ display: 'none' }}
+            />
           </div>
-          <input
-            id="photo-upload-input"
-            type="file"
-            accept="image/jpeg,image/png,image/webp"
-            onChange={handlePhotoUpload}
-            style={{ display: 'none' }}
-          />
+          <div className="profile-name">{displayName}</div>
+          <div className="profile-email">{user?.email}</div>
+          {/* Handle Section */}
+          {handle && !showHandleEdit ? (
+            <div className="profile-handle">
+              <span className="profile-handle-at">@{handle}</span>
+              <button className="profile-handle-edit-btn" onClick={() => { setShowHandleEdit(true); setHandleInput(handle); }}>Change</button>
+            </div>
+          ) : (
+            <div className="profile-handle-setup">
+              {!handle && <div className="profile-handle-prompt">Set a handle for multiplayer</div>}
+              <div className="profile-handle-form">
+                <input
+                  className="profile-handle-input"
+                  type="text"
+                  placeholder="Choose a handle..."
+                  value={handleInput}
+                  maxLength={20}
+                  onChange={e => {
+                    const v = e.target.value;
+                    setHandleInput(v);
+                    checkHandle(v);
+                  }}
+                />
+                <button
+                  className="profile-handle-save-btn"
+                  disabled={handleStatus !== 'available' || handleSaving}
+                  onClick={saveHandle}
+                >
+                  {handleSaving ? 'Saving...' : 'Save'}
+                </button>
+                {showHandleEdit && (
+                  <button className="profile-handle-cancel-btn" onClick={() => { setShowHandleEdit(false); setHandleInput(''); setHandleStatus(null); }}>Cancel</button>
+                )}
+              </div>
+              {handleStatus === 'checking' && <div className="profile-handle-status">Checking...</div>}
+              {handleStatus === 'available' && <div className="profile-handle-status available">Available</div>}
+              {handleStatus === 'taken' && <div className="profile-handle-status taken">Already taken</div>}
+              {handleStatus === 'format' && <div className="profile-handle-status error">3-20 chars, letters/numbers/_/- only</div>}
+              {handleStatus === 'check-error' && <div className="profile-handle-status error">Could not check availability — check console</div>}
+              {handleStatus === 'save-error' && <div className="profile-handle-status error">Failed to save handle — check console</div>}
+            </div>
+          )}
         </div>
-        <div className="profile-name">{displayName}</div>
-        {highestRank && (
-          <div className="profile-rank-title">
-            {highestRank.icon} {highestRank.name}
+
+        {/* Profile Summary */}
+        {summaryLines.length > 0 && (
+          <div className="profile-summary">
+            {summaryLines.map((line, i) => (
+              <div key={i} className="profile-summary-line">{line}</div>
+            ))}
           </div>
         )}
-        <div className="profile-email">{user?.email}</div>
-        {/* Handle Section */}
-        {handle && !showHandleEdit ? (
-          <div className="profile-handle">
-            <span className="profile-handle-at">@{handle}</span>
-            <button className="profile-handle-edit-btn" onClick={() => { setShowHandleEdit(true); setHandleInput(handle); }}>Change</button>
-          </div>
-        ) : (
-          <div className="profile-handle-setup">
-            {!handle && <div className="profile-handle-prompt">Set a handle for multiplayer</div>}
-            <div className="profile-handle-form">
-              <input
-                className="profile-handle-input"
-                type="text"
-                placeholder="Choose a handle..."
-                value={handleInput}
-                maxLength={20}
-                onChange={e => {
-                  const v = e.target.value;
-                  setHandleInput(v);
-                  checkHandle(v);
-                }}
-              />
-              <button
-                className="profile-handle-save-btn"
-                disabled={handleStatus !== 'available' || handleSaving}
-                onClick={saveHandle}
-              >
-                {handleSaving ? 'Saving...' : 'Save'}
-              </button>
-              {showHandleEdit && (
-                <button className="profile-handle-cancel-btn" onClick={() => { setShowHandleEdit(false); setHandleInput(''); setHandleStatus(null); }}>Cancel</button>
-              )}
-            </div>
-            {handleStatus === 'checking' && <div className="profile-handle-status">Checking...</div>}
-            {handleStatus === 'available' && <div className="profile-handle-status available">Available</div>}
-            {handleStatus === 'taken' && <div className="profile-handle-status taken">Already taken</div>}
-            {handleStatus === 'format' && <div className="profile-handle-status error">3-20 chars, letters/numbers/_/- only</div>}
-            {handleStatus === 'check-error' && <div className="profile-handle-status error">Could not check availability — check console</div>}
-            {handleStatus === 'save-error' && <div className="profile-handle-status error">Failed to save handle — check console</div>}
+
+        {/* Admin shortcut */}
+        {user?.email === process.env.REACT_APP_ADMIN_EMAIL && (
+          <button className="profile-dragon-btn" onClick={() => navigate('/dragon')}>
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M12 2C6.5 2 4 6 4 9c0 2 .5 3 1.5 4L4 17l3-1.5c1 1.5 3 2.5 5 2.5s4-1 5-2.5l3 1.5-1.5-4c1-1 1.5-2 1.5-4 0-3-2.5-7-8-7z" />
+              <circle cx="9" cy="9" r="1" fill="currentColor" stroke="none" />
+              <circle cx="15" cy="9" r="1" fill="currentColor" stroke="none" />
+              <path d="M9 13c1 1 5 1 6 0" />
+            </svg>
+            Domain of the Dragon
+          </button>
+        )}
+
+        {/* ── Badges Row ── */}
+        {(earnedRanks.length > 0 || activeCredentials.length > 0 || sunSymbol || luckyNumber != null || mentorDisplay) && (
+          <div className="profile-badges-row">
+            {/* Rank badges */}
+            {earnedRanks.map(rank => (
+              <span key={rank.id} className="profile-badge" title={rank.name} onClick={() => document.getElementById('section-ranks')?.scrollIntoView({ behavior: 'smooth' })}>
+                {rank.icon}
+              </span>
+            ))}
+            {/* Credential badges */}
+            {activeCredentials.map(cred => (
+              <span key={cred.category} className="profile-badge credential" title={`${cred.display.name} (L${cred.level})`} onClick={() => document.getElementById('section-credentials')?.scrollIntoView({ behavior: 'smooth' })}>
+                {cred.display.icon}
+              </span>
+            ))}
+            {/* Mentor badge */}
+            {mentorDisplay && (
+              <span className="profile-badge mentor" title={mentorDisplay.title} onClick={() => document.getElementById('section-mentorship')?.scrollIntoView({ behavior: 'smooth' })}>
+                {mentorDisplay.icon}
+              </span>
+            )}
+            {/* Sun sign */}
+            {sunSymbol && (
+              <span className="profile-badge sun-sign" title={`Sun in ${sunSign.sign}`} onClick={() => document.getElementById('section-natal-chart')?.scrollIntoView({ behavior: 'smooth' })}>
+                {sunSymbol}
+              </span>
+            )}
+            {/* Lucky number */}
+            {luckyNumber != null && (
+              <span className="profile-badge lucky-number" title={`Lucky Number ${luckyNumber}`} onClick={() => document.getElementById('section-numerology')?.scrollIntoView({ behavior: 'smooth' })}>
+                {luckyNumber}
+              </span>
+            )}
           </div>
         )}
       </div>
 
-      {/* Admin shortcut */}
-      {user?.email === process.env.REACT_APP_ADMIN_EMAIL && (
-        <button className="profile-dragon-btn" onClick={() => navigate('/dragon')}>
-          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M12 2C6.5 2 4 6 4 9c0 2 .5 3 1.5 4L4 17l3-1.5c1 1.5 3 2.5 5 2.5s4-1 5-2.5l3 1.5-1.5-4c1-1 1.5-2 1.5-4 0-3-2.5-7-8-7z" />
-            <circle cx="9" cy="9" r="1" fill="currentColor" stroke="none" />
-            <circle cx="15" cy="9" r="1" fill="currentColor" stroke="none" />
-            <path d="M9 13c1 1 5 1 6 0" />
-          </svg>
-          Domain of the Dragon
-        </button>
+      {/* Credentials Section */}
+      <h2 id="section-credentials" className="profile-section-title">Credentials</h2>
+      {!profileLoaded && (
+        <div className="profile-empty">Loading credentials...</div>
       )}
+      {profileLoaded && (showChat || !hasProfile) && (
+        <ProfileChat onComplete={() => setShowChat(false)} isUpdate={hasProfile} />
+      )}
+      {profileLoaded && hasProfile && !showChat && (
+        <>
+          <div className="profile-credential-list">
+            {activeCredentials.map(cred => (
+              <div key={cred.category} className="profile-credential-card">
+                <span className="profile-credential-icon">{cred.display.icon}</span>
+                <div className="profile-credential-info">
+                  <div className="profile-credential-name">{cred.display.name}</div>
+                  {cred.details && (
+                    <div className="profile-credential-details">{cred.details}</div>
+                  )}
+                </div>
+                <span className="profile-credential-level">L{cred.level}</span>
+              </div>
+            ))}
+          </div>
+          <button className="profile-update-btn" onClick={() => setShowChat(true)}>
+            Update Credentials
+          </button>
+        </>
+      )}
+
+      {/* Mentor Section */}
+      {profileLoaded && (
+        <MentorSection
+          effectiveMentorStatus={effectiveMentorStatus}
+          mentorEligible={mentorEligible}
+          qualifiedMentorTypes={qualifiedMentorTypes}
+          mentorData={mentorData}
+          mentorCoursesComplete={mentorCoursesComplete}
+          completedCourses={completedCourses}
+          allCourses={allCourses}
+          showMentorChat={showMentorChat}
+          setShowMentorChat={setShowMentorChat}
+          showConsultingChat={showConsultingChat}
+          setShowConsultingChat={setShowConsultingChat}
+          pairingCategories={pairingCategories}
+          updateMentorBio={updateMentorBio}
+          updateMentorCapacity={updateMentorCapacity}
+          publishToDirectory={publishToDirectory}
+          unpublishFromDirectory={unpublishFromDirectory}
+          respondToPairing={respondToPairing}
+          endPairing={endPairing}
+          consultingData={consultingData}
+          consultingCategories={consultingCategories}
+          onConsultingAccept={handleConsultingAccept}
+          onConsultingDecline={handleConsultingDecline}
+          consultingRespondingId={consultingRespondingId}
+        />
+      )}
+
+      {/* Certificates */}
+      <h2 className="profile-section-title">Certificates</h2>
+      {certificates.length === 0 ? (
+        <div className="profile-empty">
+          Complete a course to earn your first certificate.
+        </div>
+      ) : (
+        <div className="profile-cert-list">
+          {certificates.map(course => {
+            const certInfo = certificateData[course.id];
+            const dateStr = certInfo?.completedAt
+              ? new Date(certInfo.completedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+              : 'Certificate earned';
+            return (
+              <div key={course.id} className="profile-cert-card">
+                <span className="profile-cert-icon">{'\u2728'}</span>
+                <div className="profile-cert-info">
+                  <div className="profile-cert-name">{course.name}</div>
+                  <div className="profile-cert-date">{dateStr}</div>
+                </div>
+                <button
+                  className="profile-cert-download-btn"
+                  disabled={certDownloading === course.id}
+                  onClick={() => handleDownloadCertificate(course)}
+                >
+                  {certDownloading === course.id ? 'Generating...' : 'Download PDF'}
+                </button>
+              </div>
+            );
+          })}
+        </div>
+      )}
+
+      {/* My Story */}
+      <h2 className="profile-section-title">My Story</h2>
+      {!storyEditing && personalStory?.transmuted ? (
+        <div className="profile-story-section">
+          <div className="profile-story-display">
+            {storyView === 'transmuted' ? personalStory.transmuted : personalStory.raw}
+          </div>
+          <div className="profile-story-actions">
+            <button
+              className="profile-story-toggle"
+              onClick={() => setStoryView(v => v === 'transmuted' ? 'original' : 'transmuted')}
+            >
+              {storyView === 'transmuted' ? 'View Original' : 'View Transmuted'}
+            </button>
+            <button
+              className="profile-update-btn"
+              onClick={() => { setStoryEditing(true); setStoryError(null); }}
+            >
+              Edit
+            </button>
+          </div>
+        </div>
+      ) : (
+        <div className="profile-story-section">
+          {!personalStory?.transmuted && !storyEditing && (
+            <div className="profile-empty">
+              Share your story — paste a bio, CV, or personal introduction and Atlas will transmute it into your personal myth.
+            </div>
+          )}
+          <textarea
+            className="profile-story-textarea"
+            placeholder="Paste your bio, CV, resume, or personal introduction here..."
+            value={storyInput}
+            onChange={e => setStoryInput(e.target.value)}
+            rows={8}
+          />
+          {storyError && <div className="profile-story-error">{storyError}</div>}
+          <div className="profile-story-actions">
+            <button
+              className="profile-story-transmute-btn"
+              disabled={storyTransmuting || !storyInput.trim()}
+              onClick={handleTransmute}
+            >
+              {storyTransmuting ? 'Transmuting...' : 'Transmute'}
+            </button>
+            {personalStory?.transmuted && (
+              <button
+                className="profile-update-btn"
+                onClick={() => { setStoryEditing(false); setStoryError(null); }}
+              >
+                Cancel
+              </button>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Natal Chart Section */}
+      <h2 id="section-natal-chart" className="profile-section-title">Natal Chart</h2>
+      {natalChart && <NatalChartDisplay chart={natalChart} />}
+      <NatalChartInput existingChart={natalChart} onSave={updateNatalChart} />
+
+      {/* Numerology Section */}
+      <h2 id="section-numerology" className="profile-section-title">Numerology</h2>
+      <NumerologyDisplay
+        savedName={numerologyName}
+        displayName={user?.displayName}
+        onSave={updateNumerologyName}
+        luckyNumber={luckyNumber}
+        onSaveLucky={updateLuckyNumber}
+      />
+
+      {/* My Story Cards (with Story Matching pop-down) */}
+      <StoryCardDeck cards={storyCards} loaded={storyCardsLoaded} />
 
       {/* Membership Add-Ons */}
       <h2 className="profile-section-title">Membership Add-Ons</h2>
@@ -441,82 +761,8 @@ export default function ProfilePage() {
         </div>
       </div>
 
-      {/* Credentials Section */}
-      <h2 className="profile-section-title">Credentials</h2>
-      {!profileLoaded && (
-        <div className="profile-empty">Loading credentials...</div>
-      )}
-      {profileLoaded && (showChat || !hasProfile) && (
-        <ProfileChat onComplete={() => setShowChat(false)} isUpdate={hasProfile} />
-      )}
-      {profileLoaded && hasProfile && !showChat && (
-        <>
-          <div className="profile-credential-list">
-            {activeCredentials.map(cred => (
-              <div key={cred.category} className="profile-credential-card">
-                <span className="profile-credential-icon">{cred.display.icon}</span>
-                <div className="profile-credential-info">
-                  <div className="profile-credential-name">{cred.display.name}</div>
-                  {cred.details && (
-                    <div className="profile-credential-details">{cred.details}</div>
-                  )}
-                </div>
-                <span className="profile-credential-level">L{cred.level}</span>
-              </div>
-            ))}
-          </div>
-          <button className="profile-update-btn" onClick={() => setShowChat(true)}>
-            Update Credentials
-          </button>
-        </>
-      )}
-
-      {/* Mentor Section */}
-      {profileLoaded && (
-        <MentorSection
-          effectiveMentorStatus={effectiveMentorStatus}
-          mentorEligible={mentorEligible}
-          qualifiedMentorTypes={qualifiedMentorTypes}
-          mentorData={mentorData}
-          mentorCoursesComplete={mentorCoursesComplete}
-          completedCourses={completedCourses}
-          allCourses={allCourses}
-          showMentorChat={showMentorChat}
-          setShowMentorChat={setShowMentorChat}
-          showConsultingChat={showConsultingChat}
-          setShowConsultingChat={setShowConsultingChat}
-          pairingCategories={pairingCategories}
-          updateMentorBio={updateMentorBio}
-          updateMentorCapacity={updateMentorCapacity}
-          publishToDirectory={publishToDirectory}
-          unpublishFromDirectory={unpublishFromDirectory}
-          respondToPairing={respondToPairing}
-          endPairing={endPairing}
-          consultingData={consultingData}
-          consultingCategories={consultingCategories}
-          onConsultingAccept={handleConsultingAccept}
-          onConsultingDecline={handleConsultingDecline}
-          consultingRespondingId={consultingRespondingId}
-        />
-      )}
-
-      {/* Natal Chart Section */}
-      <h2 className="profile-section-title">Natal Chart</h2>
-      {natalChart && <NatalChartDisplay chart={natalChart} />}
-      <NatalChartInput existingChart={natalChart} onSave={updateNatalChart} />
-
-      {/* Numerology Section */}
-      <h2 className="profile-section-title">Numerology</h2>
-      <NumerologyDisplay
-        savedName={numerologyName}
-        displayName={user?.displayName}
-        onSave={updateNumerologyName}
-        luckyNumber={luckyNumber}
-        onSaveLucky={updateLuckyNumber}
-      />
-
       {/* Ranks Section */}
-      <h2 className="profile-section-title">Ranks</h2>
+      <h2 id="section-ranks" className="profile-section-title">Ranks</h2>
       <div className="profile-rank-list">
         {RANKS.map(rank => {
           const earned = earnedRanks.some(r => r.id === rank.id);
@@ -569,75 +815,77 @@ export default function ProfilePage() {
         </div>
       )}
 
-      {/* My Stories */}
-      <h2 className="profile-section-title">My Stories</h2>
-      {writingsLoaded && (() => {
-        const stories = personalStories?.stories || {};
-        const storyEntries = Object.entries(stories).sort((a, b) => (b[1].updatedAt || 0) - (a[1].updatedAt || 0));
-        if (storyEntries.length === 0) {
+      {/* My Sacred Sites (Pilgrimages) */}
+      <h2 className="profile-section-title">My Sacred Sites</h2>
+      {pilgrimagesLoaded && (() => {
+        const entries = Object.values(pilgrimages || {}).sort((a, b) => (b.addedAt || 0) - (a.addedAt || 0));
+        const catLabels = { 'sacred-site': 'Sacred Site', 'mythic-location': 'Mythic Location', 'literary-location': 'Literary Location', temple: 'Temple', library: 'Library' };
+        if (entries.length === 0) {
           return (
             <div className="profile-empty">
-              No personal stories yet. Visit the <button className="profile-update-btn" style={{ display: 'inline', padding: '4px 12px', fontSize: '0.85em' }} onClick={() => navigate('/story-forge')}>Story Forge</button> to begin.
+              No sacred sites saved yet. Visit <button className="profile-update-btn" style={{ display: 'inline', padding: '4px 12px', fontSize: '0.85em' }} onClick={() => navigate('/mythic-earth')}>Mythic Earth</button> to begin your pilgrimage.
             </div>
           );
         }
         return (
           <div className="profile-course-list">
-            {storyEntries.map(([id, story]) => {
-              const stageCount = Object.values(story.stages || {}).filter(st => st.entries?.length > 0).length;
-              return (
-                <div key={id} className="profile-course-card" onClick={() => navigate('/story-forge')} style={{ cursor: 'pointer' }}>
-                  <div className="profile-course-header">
-                    <span className="profile-course-name">{story.name || 'Untitled Story'}</span>
-                    <span className="profile-course-badge in-progress">
-                      {stageCount}/8 stages
-                    </span>
-                  </div>
-                  <div className="profile-course-desc">
-                    {story.source === 'atlas-interview' ? 'Atlas Interview' : 'Manual'} {'\u00B7'} {story.updatedAt ? new Date(story.updatedAt).toLocaleDateString() : ''}
-                  </div>
-                  <div className="profile-progress-bar">
-                    <div className="profile-progress-fill" style={{ width: `${Math.round((stageCount / 8) * 100)}%` }} />
-                  </div>
+            {entries.map(site => (
+              <div key={site.siteId} className="profile-course-card" onClick={() => navigate('/mythic-earth')} style={{ cursor: 'pointer' }}>
+                <div className="profile-course-header">
+                  <span className="profile-course-name">{site.name}</span>
+                  <span className="profile-course-badge completed">
+                    {catLabels[site.category] || site.category}
+                  </span>
                 </div>
-              );
-            })}
+                <div className="profile-course-desc">
+                  {site.region}{site.tradition ? ` \u00B7 ${site.tradition}` : ''} {'\u00B7'} Added {new Date(site.addedAt).toLocaleDateString()}
+                </div>
+                <button
+                  className="profile-update-btn"
+                  style={{ marginTop: '6px', fontSize: '0.75rem', padding: '3px 10px' }}
+                  onClick={(e) => { e.stopPropagation(); removePilgrimage(site.siteId); }}
+                >
+                  Remove
+                </button>
+              </div>
+            ))}
           </div>
         );
       })()}
 
-      {/* Certificates */}
-      <h2 className="profile-section-title">Certificates</h2>
-      {certificates.length === 0 ? (
-        <div className="profile-empty">
-          Complete a course to earn your first certificate.
-        </div>
-      ) : (
-        <div className="profile-cert-list">
-          {certificates.map(course => {
-            const certInfo = certificateData[course.id];
-            const dateStr = certInfo?.completedAt
-              ? new Date(certInfo.completedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
-              : 'Certificate earned';
-            return (
-              <div key={course.id} className="profile-cert-card">
-                <span className="profile-cert-icon">{'\u2728'}</span>
-                <div className="profile-cert-info">
-                  <div className="profile-cert-name">{course.name}</div>
-                  <div className="profile-cert-date">{dateStr}</div>
-                </div>
-                <button
-                  className="profile-cert-download-btn"
-                  disabled={certDownloading === course.id}
-                  onClick={() => handleDownloadCertificate(course)}
-                >
-                  {certDownloading === course.id ? 'Generating...' : 'Download PDF'}
-                </button>
-              </div>
-            );
-          })}
-        </div>
-      )}
+      {/* Friends Section */}
+      <FriendsSection />
+
+      {/* Social Media Links */}
+      <h2 className="profile-section-title">Social Media</h2>
+      <div className="profile-social-links">
+        {[
+          { key: 'instagram', label: 'Instagram', placeholder: 'username' },
+          { key: 'facebook', label: 'Facebook', placeholder: 'username or profile URL' },
+          { key: 'linkedin', label: 'LinkedIn', placeholder: 'username or profile URL' },
+          { key: 'youtube', label: 'YouTube', placeholder: 'channel name or URL' },
+        ].map(p => (
+          <div key={p.key} className="profile-social-row">
+            <div className="profile-social-label">{p.label}</div>
+            <input
+              className="profile-social-input"
+              type="text"
+              placeholder={p.placeholder}
+              value={socialInputs[p.key]}
+              onChange={e => handleSocialChange(p.key, e.target.value)}
+            />
+          </div>
+        ))}
+        {socialDirty && (
+          <button
+            className="profile-social-save-btn"
+            disabled={socialSaving}
+            onClick={handleSocialSave}
+          >
+            {socialSaving ? 'Saving...' : 'Save Social Links'}
+          </button>
+        )}
+      </div>
 
       {/* AI Settings (BYOK) */}
       <h2 className="profile-section-title">AI Settings</h2>
@@ -810,7 +1058,7 @@ function MentorSection({ effectiveMentorStatus, mentorEligible, qualifiedMentorT
 
   return (
     <>
-      <h2 className="profile-section-title">Mentorship</h2>
+      <h2 id="section-mentorship" className="profile-section-title">Mentorship</h2>
 
       {effectiveMentorStatus === MENTOR_STATUS.NOT_QUALIFIED && !mentorEligible && (
         <div className="profile-empty">

@@ -1,0 +1,424 @@
+/* Story Matching Section — Profile Page */
+
+.story-matching-toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0;
+  margin-bottom: 8px;
+}
+
+.story-matching-toggle-label {
+  color: var(--text-primary, #d4d4d4);
+  font-size: 0.9rem;
+}
+
+.story-matching-toggle {
+  position: relative;
+  width: 44px;
+  height: 24px;
+  border-radius: 12px;
+  border: 1px solid var(--border-subtle, #2a2a3a);
+  background: var(--bg-light, #14141c);
+  cursor: pointer;
+  padding: 0;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.story-matching-toggle-on {
+  background: rgba(196, 113, 58, 0.3);
+  border-color: var(--accent-ember, #c4713a);
+}
+
+.story-matching-toggle-knob {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--text-secondary, #6a6a7a);
+  transition: transform 0.2s, background 0.2s;
+}
+
+.story-matching-toggle-on .story-matching-toggle-knob {
+  transform: translateX(20px);
+  background: var(--accent-ember, #c4713a);
+}
+
+/* Mode selector pills */
+
+.story-matching-modes {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+
+.story-matching-mode-btn {
+  padding: 5px 14px;
+  border-radius: 16px;
+  border: 1px solid var(--border-subtle, #2a2a3a);
+  background: transparent;
+  color: var(--text-secondary, #6a6a7a);
+  font-family: 'Cinzel', serif;
+  font-size: 0.75rem;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.story-matching-mode-btn:hover {
+  border-color: var(--accent-ember, #c4713a);
+  color: var(--text-primary, #d4d4d4);
+}
+
+.story-matching-mode-btn.active {
+  background: rgba(196, 113, 58, 0.2);
+  border-color: var(--accent-ember, #c4713a);
+  color: var(--accent-ember, #c4713a);
+  font-weight: 600;
+}
+
+/* Romantic exclude-friends checkbox */
+
+.story-matching-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-secondary, #6a6a7a);
+  font-size: 0.8rem;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+.story-matching-checkbox input[type="checkbox"] {
+  accent-color: var(--accent-ember, #c4713a);
+  width: 14px;
+  height: 14px;
+}
+
+/* Paired notice banner */
+
+.story-matching-paired-notice {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 14px;
+  margin-bottom: 12px;
+  border-radius: 8px;
+  background: rgba(212, 165, 90, 0.1);
+  border: 1px solid rgba(212, 165, 90, 0.25);
+  color: var(--accent-gold, #d4a55a);
+  font-size: 0.82rem;
+}
+
+.story-matching-unpair-btn {
+  padding: 3px 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(212, 165, 90, 0.3);
+  background: transparent;
+  color: var(--accent-gold, #d4a55a);
+  font-family: 'Cinzel', serif;
+  font-size: 0.7rem;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.story-matching-unpair-btn:hover {
+  background: rgba(212, 165, 90, 0.15);
+}
+
+.story-matching-privacy {
+  color: var(--text-secondary, #6a6a7a);
+  font-size: 0.78rem;
+  font-style: italic;
+  margin: 0 0 16px;
+}
+
+.story-matching-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.story-matching-empty,
+.story-matching-loading {
+  color: var(--text-secondary, #6a6a7a);
+  font-size: 0.85rem;
+  font-style: italic;
+  margin: 4px 0 12px;
+}
+
+/* Match Card */
+
+.match-card {
+  background: rgba(26, 26, 36, 0.7);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--border-subtle, #2a2a3a);
+  border-radius: 10px;
+  padding: 14px 16px;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.match-card:hover {
+  border-color: var(--accent-gold, #d4a55a);
+}
+
+.match-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.match-card-identity {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.match-card-header-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.match-card-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.match-card-avatar-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(212, 165, 90, 0.15);
+  color: var(--accent-gold, #d4a55a);
+  font-family: 'Cinzel', serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.match-card-handle {
+  color: var(--accent-gold, #d4a55a);
+  font-family: 'Cinzel', serif;
+  font-size: 0.9rem;
+  letter-spacing: 0.02em;
+}
+
+.match-card-score {
+  color: var(--accent-ember, #c4713a);
+  font-family: 'Cinzel', serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+/* Pair button */
+
+.match-card-pair-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px solid var(--border-subtle, #2a2a3a);
+  background: transparent;
+  color: var(--text-secondary, #6a6a7a);
+  font-size: 0.85rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  transition: border-color 0.15s, color 0.15s, background 0.15s;
+}
+
+.match-card-pair-btn:hover {
+  border-color: var(--accent-gold, #d4a55a);
+  color: var(--accent-gold, #d4a55a);
+  background: rgba(212, 165, 90, 0.1);
+}
+
+/* Paired badge */
+
+.match-card-paired-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  background: rgba(212, 165, 90, 0.15);
+  border: 1px solid rgba(212, 165, 90, 0.3);
+  color: var(--accent-gold, #d4a55a);
+  font-size: 0.65rem;
+  font-family: 'Cinzel', serif;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+}
+
+.match-card-paired-x {
+  background: none;
+  border: none;
+  color: var(--accent-gold, #d4a55a);
+  font-size: 0.85rem;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+  opacity: 0.7;
+  transition: opacity 0.15s;
+}
+
+.match-card-paired-x:hover {
+  opacity: 1;
+}
+
+/* Overlapping cards visual */
+
+.match-card-visual {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  margin: 8px 0 12px;
+  position: relative;
+  height: 60px;
+}
+
+.match-card-overlap-left,
+.match-card-overlap-right {
+  width: 80px;
+  height: 52px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.65rem;
+  color: var(--text-secondary, #8a8a9a);
+  border: 1px solid var(--border-subtle, #2a2a3a);
+}
+
+.match-card-overlap-left {
+  background: rgba(123, 104, 238, 0.12);
+  border-color: rgba(123, 104, 238, 0.3);
+  transform: rotate(-5deg) translateX(12px);
+  z-index: 1;
+}
+
+.match-card-overlap-right {
+  background: rgba(196, 113, 58, 0.12);
+  border-color: rgba(196, 113, 58, 0.3);
+  transform: rotate(5deg) translateX(-12px);
+  z-index: 1;
+}
+
+.match-card-overlap-label {
+  text-align: center;
+  line-height: 1.2;
+  font-family: 'Cinzel', serif;
+}
+
+.match-card-count {
+  opacity: 0.6;
+  font-size: 0.6rem;
+}
+
+.match-card-link-icon {
+  z-index: 2;
+  font-size: 1rem;
+  color: var(--accent-gold, #d4a55a);
+  margin: 0 -4px;
+}
+
+/* Highlight chips */
+
+.match-card-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+
+.match-card-chip {
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 0.68rem;
+  border: 1px solid var(--border-subtle, #2a2a3a);
+  color: var(--text-secondary, #8a8a9a);
+  white-space: nowrap;
+}
+
+/* Expanded detail */
+
+.match-card-detail {
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border-subtle, #1e1e2e);
+}
+
+.match-card-detail-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  color: var(--text-secondary, #8a8a9a);
+  margin-bottom: 4px;
+}
+
+.match-card-detail-label {
+  color: var(--text-primary, #d4d4d4);
+}
+
+/* Deep match (Layer 3) */
+
+.match-card-deep {
+  margin-top: 10px;
+  padding: 10px;
+  background: rgba(212, 165, 90, 0.06);
+  border-radius: 6px;
+  border: 1px solid rgba(212, 165, 90, 0.15);
+}
+
+.match-card-deep-summary {
+  color: var(--text-primary, #d4d4d4);
+  font-size: 0.82rem;
+  line-height: 1.5;
+  margin: 0 0 8px;
+  font-style: italic;
+}
+
+.match-card-deep-highlight {
+  font-size: 0.78rem;
+  color: var(--text-secondary, #8a8a9a);
+  margin-bottom: 3px;
+}
+
+.match-card-deep-label {
+  color: var(--accent-gold, #d4a55a);
+  font-weight: 600;
+}
+
+.match-card-deep-btn {
+  display: block;
+  width: 100%;
+  margin-top: 8px;
+  padding: 8px 16px;
+  border-radius: 6px;
+  border: 1px solid var(--accent-ember, #c4713a);
+  background: transparent;
+  color: var(--accent-ember, #c4713a);
+  font-family: 'Cinzel', serif;
+  font-size: 0.75rem;
+  letter-spacing: 0.03em;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.match-card-deep-btn:hover:not(:disabled) {
+  background: rgba(196, 113, 58, 0.15);
+}
+
+.match-card-deep-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
