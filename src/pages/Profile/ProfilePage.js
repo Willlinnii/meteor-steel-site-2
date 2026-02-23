@@ -912,7 +912,7 @@ const { cards: storyCards, loaded: storyCardsLoaded } = useStoryCardSync();
                                   <div className="profile-api-setup-prompt">
                                     <div className="profile-api-setup-header">
                                       <span className="profile-api-setup-label">Setup Prompt</span>
-                                      <span className="profile-api-setup-hint">Paste into CLAUDE.md or your first message</span>
+                                      <span className="profile-api-setup-hint">Paste into any AI tool's system prompt, project config, or first message</span>
                                     </div>
                                     <pre className="profile-api-setup-text">{`# Mythouse Coordinate System API
 
