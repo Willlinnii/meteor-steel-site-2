@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect, useCallback, useRef, lazy, Suspense } from 'react';
-import { collection, getDocs, query, orderBy, doc, setDoc, getDoc } from 'firebase/firestore';
+import { collection, getDocs, query, orderBy, doc, setDoc, getDoc, addDoc, deleteDoc, updateDoc } from 'firebase/firestore';
 import { db, firebaseConfigured } from '../../auth/firebase';
 import { useAuth } from '../../auth/AuthContext';
 import { COURSES, checkRequirement, requirementProgress } from '../../coursework/courseEngine';
@@ -213,6 +213,7 @@ const SECTION_GROUPS = [
   ]},
   { group: 'Site', children: [
     { id: 'coursework', label: 'Coursework' },
+    { id: 'curated-products', label: 'Curated Products' },
     { id: '360-media', label: '360 Media' },
     { id: 'discover', label: 'Discover Page \u2197', href: '/discover' },
   ]},
@@ -5302,6 +5303,158 @@ function GlinterCollapsible({ title, children, defaultOpen = false }) {
   );
 }
 
+// --- Curated Products Manager ---
+const CURATED_CATEGORIES = ['Books', 'Art', 'Tools', 'Music', 'Other'];
+const EMPTY_PRODUCT = { title: '', description: '', category: 'Books', imageUrl: '', buyUrl: '', storeName: '', sortOrder: 0, active: true };
+
+function CuratedProductsSection() {
+  const [products, setProducts] = useState([]);
+  const [loaded, setLoaded] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [editId, setEditId] = useState(null);
+  const [form, setForm] = useState({ ...EMPTY_PRODUCT });
+
+  const loadProducts = useCallback(async () => {
+    if (!firebaseConfigured || !db) return;
+    setLoading(true);
+    try {
+      const q = query(collection(db, 'curatedProducts'), orderBy('sortOrder', 'asc'));
+      const snap = await getDocs(q);
+      setProducts(snap.docs.map(d => ({ id: d.id, ...d.data() })));
+      setLoaded(true);
+    } catch (err) {
+      console.error('Failed to load curated products:', err);
+    }
+    setLoading(false);
+  }, []);
+
+  const resetForm = () => { setForm({ ...EMPTY_PRODUCT }); setEditId(null); };
+
+  const handleEdit = (product) => {
+    setEditId(product.id);
+    setForm({
+      title: product.title || '',
+      description: product.description || '',
+      category: product.category || 'Books',
+      imageUrl: product.imageUrl || '',
+      buyUrl: product.buyUrl || '',
+      storeName: product.storeName || '',
+      sortOrder: product.sortOrder ?? 0,
+      active: product.active !== false,
+    });
+  };
+
+  const handleSave = async () => {
+    if (!form.title.trim() || !form.buyUrl.trim()) { alert('Title and Buy URL are required.'); return; }
+    try {
+      const data = { ...form, sortOrder: Number(form.sortOrder) || 0, updatedAt: serverTimestamp() };
+      if (editId) {
+        await updateDoc(doc(db, 'curatedProducts', editId), data);
+      } else {
+        data.createdAt = serverTimestamp();
+        await addDoc(collection(db, 'curatedProducts'), data);
+      }
+      resetForm();
+      await loadProducts();
+    } catch (err) {
+      alert('Save failed: ' + err.message);
+    }
+  };
+
+  const handleDelete = async (id) => {
+    if (!window.confirm('Delete this product?')) return;
+    try {
+      await deleteDoc(doc(db, 'curatedProducts', id));
+      await loadProducts();
+    } catch (err) {
+      alert('Delete failed: ' + err.message);
+    }
+  };
+
+  return (
+    <div className="admin-coursework">
+      <h2 className="admin-coursework-title">CURATED PRODUCTS</h2>
+      <p style={{ color: '#8a8a9a', fontSize: '0.85rem', margin: '0 0 16px' }}>
+        Manage hand-picked product links displayed on the /curated page.
+      </p>
+
+      {!loaded ? (
+        <button className="admin-coursework-load-btn" onClick={loadProducts} disabled={loading}>
+          {loading ? 'Loading...' : 'Load Products'}
+        </button>
+      ) : (
+        <>
+          {/* Add / Edit form */}
+          <div style={{ background: '#14141c', border: '1px solid #2a2a3a', borderRadius: 10, padding: 20, marginBottom: 20 }}>
+            <h3 style={{ fontFamily: "'Cinzel', serif", fontSize: '1rem', color: '#daa520', margin: '0 0 14px' }}>
+              {editId ? 'Edit Product' : 'Add Product'}
+            </h3>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+              <input className="admin-coursework-select" placeholder="Title *" value={form.title} onChange={e => setForm(p => ({ ...p, title: e.target.value }))} style={{ gridColumn: '1 / -1' }} />
+              <textarea className="admin-coursework-select" placeholder="Description (1-3 sentences)" value={form.description} onChange={e => setForm(p => ({ ...p, description: e.target.value }))} rows={2} style={{ gridColumn: '1 / -1', resize: 'vertical' }} />
+              <select className="admin-coursework-select" value={form.category} onChange={e => setForm(p => ({ ...p, category: e.target.value }))}>
+                {CURATED_CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
+              </select>
+              <input className="admin-coursework-select" placeholder="Store Name" value={form.storeName} onChange={e => setForm(p => ({ ...p, storeName: e.target.value }))} />
+              <input className="admin-coursework-select" placeholder="Image URL" value={form.imageUrl} onChange={e => setForm(p => ({ ...p, imageUrl: e.target.value }))} style={{ gridColumn: '1 / -1' }} />
+              <input className="admin-coursework-select" placeholder="Buy URL *" value={form.buyUrl} onChange={e => setForm(p => ({ ...p, buyUrl: e.target.value }))} style={{ gridColumn: '1 / -1' }} />
+              <input className="admin-coursework-select" type="number" placeholder="Sort Order" value={form.sortOrder} onChange={e => setForm(p => ({ ...p, sortOrder: e.target.value }))} style={{ width: 120 }} />
+              <label style={{ display: 'flex', alignItems: 'center', gap: 8, color: '#b8b8c8', fontSize: '0.85rem' }}>
+                <input type="checkbox" checked={form.active} onChange={e => setForm(p => ({ ...p, active: e.target.checked }))} />
+                Active
+              </label>
+            </div>
+            <div style={{ display: 'flex', gap: 8, marginTop: 14 }}>
+              <button className="admin-coursework-load-btn" onClick={handleSave}>
+                {editId ? 'Update' : 'Add Product'}
+              </button>
+              {editId && (
+                <button className="admin-coursework-load-btn" onClick={resetForm} style={{ background: '#2a2a3a' }}>
+                  Cancel
+                </button>
+              )}
+            </div>
+          </div>
+
+          {/* Product list */}
+          <h3 style={{ fontFamily: "'Cinzel', serif", fontSize: '1rem', color: '#daa520', margin: '0 0 10px' }}>
+            Products ({products.length})
+          </h3>
+          {products.length === 0 ? (
+            <p style={{ color: '#6a6a7a', fontSize: '0.85rem' }}>No products yet. Add one above.</p>
+          ) : (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+              {products.map(p => (
+                <div key={p.id} style={{ display: 'flex', alignItems: 'center', gap: 12, background: '#14141c', border: '1px solid #2a2a3a', borderRadius: 8, padding: '10px 14px' }}>
+                  {p.imageUrl && (
+                    <img src={p.imageUrl} alt="" style={{ width: 48, height: 36, objectFit: 'cover', borderRadius: 4, flexShrink: 0 }} />
+                  )}
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ color: '#e0e0e8', fontSize: '0.9rem', fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{p.title}</div>
+                    <div style={{ display: 'flex', gap: 6, marginTop: 3 }}>
+                      <span style={{ fontSize: '0.7rem', padding: '1px 6px', borderRadius: 3, background: 'rgba(218,165,32,0.12)', color: '#daa520' }}>{p.category}</span>
+                      <span style={{ fontSize: '0.7rem', padding: '1px 6px', borderRadius: 3, background: p.active ? 'rgba(91,217,122,0.12)' : 'rgba(106,106,122,0.2)', color: p.active ? '#5bd97a' : '#6a6a7a' }}>
+                        {p.active ? 'Active' : 'Inactive'}
+                      </span>
+                      {p.storeName && <span style={{ fontSize: '0.7rem', color: '#6a6a7a' }}>{p.storeName}</span>}
+                    </div>
+                  </div>
+                  <button onClick={() => handleEdit(p)} style={{ background: 'none', border: '1px solid #2a2a3a', borderRadius: 6, color: '#8a8a9a', padding: '4px 10px', cursor: 'pointer', fontSize: '0.78rem' }}>Edit</button>
+                  <button onClick={() => handleDelete(p.id)} style={{ background: 'none', border: '1px solid rgba(217,91,91,0.3)', borderRadius: 6, color: '#d95b5b', padding: '4px 10px', cursor: 'pointer', fontSize: '0.78rem' }}>Del</button>
+                </div>
+              ))}
+            </div>
+          )}
+
+          <button className="admin-coursework-load-btn" onClick={loadProducts} style={{ marginTop: 16 }}>
+            Refresh
+          </button>
+        </>
+      )}
+    </div>
+  );
+}
+
 function GlinterSection() {
   const [expandedSub, setExpandedSub] = useState(null);
   const [expandedCircle, setExpandedCircle] = useState(null);
@@ -5593,6 +5746,7 @@ function AdminPage() {
       {activeSection === 'campaigns' && <CampaignManagerSection />}
       {activeSection === 'secret-weapon' && <SecretWeaponCampaignSection />}
       {activeSection === 'coursework' && <CourseworkManagerSection />}
+      {activeSection === 'curated-products' && <CuratedProductsSection />}
       {activeSection === '360-media' && <Media360Section />}
       {activeSection === 'subscribers' && <SubscribersSection />}
       {activeSection === 'mentors' && <MentorManagerSection />}

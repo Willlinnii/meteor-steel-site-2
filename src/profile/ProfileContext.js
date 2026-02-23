@@ -993,7 +993,6 @@ export function ProfileProvider({ children }) {
     updatePurchases,
     updateCredentials,
     updateNatalChart,
-    numerologyName,
     updateNumerologyName,
     luckyNumber,
     updateLuckyNumber,

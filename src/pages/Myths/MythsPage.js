@@ -14,7 +14,9 @@ import {
   getArcanaForCulture, getArcanaPosition, getCrossReference,
   buildMinorArcana, getSuitsForCulture,
 } from '../../games/mythouse/mythouseCardData';
-import { StreetViewEmbed } from '../MythicEarth/MythicEarthPage';
+import { StreetViewEmbed, AddSiteForm } from '../MythicEarth/MythicEarthPage';
+import { useAuth } from '../../auth/AuthContext';
+import { useProfile } from '../../profile/ProfileContext';
 import '../Treasures/TreasuresPage.css';
 import ArchetypesPanel from '../../components/ArchetypesPanel';
 import './MythsPage.css';
@@ -689,7 +691,9 @@ const RING_CIRCLES = [47, 39, 27, 16];
 const TREASURE_EPISODES = treasuresData.episodes.map(ep => ({ id: ep.id, label: ep.label }));
 
 const TREASURE_TABS = [
-  { id: 'themes', label: 'Themes' },
+  { id: 'overview', label: 'Overview' },
+  { id: 'historical-core', label: 'Historical Core' },
+  { id: 'myths', label: 'Myths' },
   { id: 'playlist', label: 'Playlist' },
   { id: 'references', label: 'References' },
   { id: 'music', label: 'Music & Media' },
@@ -699,7 +703,7 @@ const TREASURE_TABS = [
 /* ── Treasures content (inlined from TreasuresPage) ── */
 function TreasuresContent({ currentEpisode, onSelectEpisode, viewToggle }) {
   const { trackElement } = useCoursework();
-  const [activeTab, setActiveTab] = useState('themes');
+  const [activeTab, setActiveTab] = useState('overview');
   const [activeTheme, setActiveTheme] = useState(null);
   const [playlistActive, setPlaylistActive] = useState(false);
 
@@ -709,7 +713,7 @@ function TreasuresContent({ currentEpisode, onSelectEpisode, viewToggle }) {
   const handleTabClick = useCallback((tabId) => {
     setActiveTab(tabId);
     trackElement(`myths.treasures.tab.${tabId}`);
-    if (tabId !== 'themes') setActiveTheme(null);
+    if (tabId !== 'myths') setActiveTheme(null);
     // Activate playlist when Playlist tab is selected; other tabs leave it playing
     if (tabId === 'playlist') setPlaylistActive(true);
   }, [trackElement]);
@@ -719,7 +723,7 @@ function TreasuresContent({ currentEpisode, onSelectEpisode, viewToggle }) {
   React.useEffect(() => {
     if (prevEp.current !== currentEpisode) {
       prevEp.current = currentEpisode;
-      setActiveTab('themes');
+      setActiveTab('overview');
       setActiveTheme(null);
       setPlaylistActive(false);
     }
@@ -740,7 +744,7 @@ function TreasuresContent({ currentEpisode, onSelectEpisode, viewToggle }) {
         centerLine3=""
         showAuthor={false}
         videoUrl={videoUrl}
-        onCloseVideo={() => { setPlaylistActive(false); setActiveTab('themes'); }}
+        onCloseVideo={() => { setPlaylistActive(false); setActiveTab('overview'); }}
       />
 
       <div className="treasures-subtitle">{treasuresData.subtitle}</div>
@@ -748,7 +752,7 @@ function TreasuresContent({ currentEpisode, onSelectEpisode, viewToggle }) {
       {viewToggle}
 
       {episodeData && (
-        <h2 className="stage-heading">{episodeData.label}</h2>
+        <h2 className="stage-heading">{episodeData.label.replace(/\n/g, ' ')}</h2>
       )}
 
       <div className="container">
@@ -793,7 +797,35 @@ function TreasuresContent({ currentEpisode, onSelectEpisode, viewToggle }) {
                   </div>
 
                   <div className="treasures-content">
-                    {activeTab === 'themes' && (
+                    {activeTab === 'overview' && (
+                      <div className="treasures-overview">
+                        <div className="treasures-overview-text">
+                          {episodeData.overview ? (
+                            episodeData.overview.split('\n\n').map((p, i) => (
+                              <p key={i}>{p}</p>
+                            ))
+                          ) : (
+                            <p className="treasures-empty">Overview coming soon.</p>
+                          )}
+                        </div>
+                      </div>
+                    )}
+
+                    {activeTab === 'historical-core' && (
+                      <div className="treasures-historical-core">
+                        {episodeData.historicalCore ? (
+                          <div className="treasures-body">
+                            {episodeData.historicalCore.split('\n\n').map((p, i) => (
+                              <p key={i}>{p}</p>
+                            ))}
+                          </div>
+                        ) : (
+                          <p className="treasures-empty">Historical core coming soon.</p>
+                        )}
+                      </div>
+                    )}
+
+                    {activeTab === 'myths' && (
                       <div className="treasures-themes">
                         <div className="treasures-theme-buttons">
                           {episodeData.themes.map(theme => (
@@ -812,9 +844,13 @@ function TreasuresContent({ currentEpisode, onSelectEpisode, viewToggle }) {
                           return (
                             <div className="treasures-theme-content" key={theme.id}>
                               <div className="treasures-body">
-                                {theme.content.split('\n\n').map((p, i) => (
-                                  <p key={i}>{p}</p>
-                                ))}
+                                {theme.content ? (
+                                  theme.content.split('\n\n').map((p, i) => (
+                                    <p key={i}>{p}</p>
+                                  ))
+                                ) : (
+                                  <p className="treasures-empty">Research in development.</p>
+                                )}
                               </div>
                             </div>
                           );
@@ -1632,9 +1668,9 @@ function SeriesContent({ currentEpisode, onSelectEpisode, viewToggle }) {
 
 /* ── Cosmology View ── */
 const COSMOLOGY_SECTIONS = {
-  'normal-world': { ...worldData.normalWorld, accent: 'steel' },
+  'normal-world': { ...worldData.normalWorld, accent: 'upper' },
   'threshold': { ...worldData.threshold, accent: 'gold' },
-  'other-world': { ...worldData.otherWorld, accent: 'ember' },
+  'other-world': { ...worldData.otherWorld, accent: 'lower' },
 };
 
 function CosmologyView({ trackElement }) {
@@ -1687,6 +1723,8 @@ function CosmologyView({ trackElement }) {
         <CosmologyCircle activeSection={activeSection} onSelect={selectSection} />
       </div>
 
+      <h2 className="cosmology-mode-heading">Myths</h2>
+
       {/* Content panel */}
       <div className={`cosmology-content accent-${data.accent}`} ref={contentRef}>
         <h3 className="cosmology-content-title">{data.title}</h3>
@@ -1715,10 +1753,9 @@ function CosmologyView({ trackElement }) {
 /* ── Shared Cosmology Diagram ── */
 function CosmologyCircle({ activeSection, onSelect }) {
   const s = activeSection;
-  const steel = 'rgba(139,157,195,';
-  const gold = 'rgba(201,169,97,';
-  const ember = 'rgba(196,113,58,';
-  const blend = 'rgba(168,135,127,';
+  const upper = 'rgba(218,190,90,';   // warm yellow/gold — Normal World
+  const lower = 'rgba(70,110,180,';   // cool deep blue — Other World
+  const mid = 'rgba(100,180,100,';     // green — threshold (yellow + blue blend)
 
   return (
     <svg viewBox="0 0 350 200" className="cosmology-diagram" xmlns="http://www.w3.org/2000/svg">
@@ -1728,39 +1765,39 @@ function CosmologyCircle({ activeSection, onSelect }) {
       </defs>
       {/* Top half arc stroke */}
       <path d="M 90 110 A 85 85 0 0 1 260 110" fill="none"
-        stroke={s === 'normal-world' ? `${steel}0.8)` : `${steel}0.2)`} strokeWidth="1.2" pointerEvents="none" />
+        stroke={s === 'normal-world' ? `${upper}0.8)` : `${upper}0.2)`} strokeWidth="1.2" pointerEvents="none" />
       {/* Top half fill */}
       <path d="M 175 25 A 85 85 0 0 1 260 110 L 90 110 A 85 85 0 0 1 175 25 Z"
-        fill={s === 'normal-world' ? `${steel}0.28)` : `${steel}0.07)`} stroke="none"
+        fill={s === 'normal-world' ? `${upper}0.32)` : `${upper}0.08)`} stroke="none"
         clipPath="url(#clip-top)" className="cosmology-hit-area" onClick={() => onSelect('normal-world')} />
       {/* Bottom half arc stroke */}
       <path d="M 90 110 A 85 85 0 0 0 260 110" fill="none"
-        stroke={s === 'other-world' ? `${ember}0.8)` : `${ember}0.2)`} strokeWidth="1.2" pointerEvents="none" />
+        stroke={s === 'other-world' ? `${lower}0.8)` : `${lower}0.2)`} strokeWidth="1.2" pointerEvents="none" />
       {/* Bottom half fill */}
       <path d="M 90 110 A 85 85 0 0 0 260 110 Z"
-        fill={s === 'other-world' ? `${ember}0.28)` : `${ember}0.07)`} stroke="none"
+        fill={s === 'other-world' ? `${lower}0.35)` : `${lower}0.1)`} stroke="none"
         clipPath="url(#clip-bottom)" className="cosmology-hit-area" onClick={() => onSelect('other-world')} />
       {/* Threshold band */}
       <rect x="90" y="98" width="170" height="24" rx="2"
-        fill={s === 'threshold' ? `${blend}0.25)` : `${blend}0.08)`}
-        stroke={s === 'threshold' ? `${blend}0.8)` : `${blend}0.25)`} strokeWidth="1"
+        fill={s === 'threshold' ? `${mid}0.28)` : `${mid}0.08)`}
+        stroke={s === 'threshold' ? `${mid}0.8)` : `${mid}0.25)`} strokeWidth="1"
         className="cosmology-hit-area" onClick={() => onSelect('threshold')} />
       <text x="175" y="114.5" textAnchor="middle" pointerEvents="none"
-        fill={`${blend}${s === 'threshold' ? '1)' : '0.5)'}`}
+        fill={s === 'threshold' ? 'rgba(130,210,130,1)' : 'rgba(130,210,130,0.55)'}
         fontFamily="'Cinzel',serif" fontSize="10" fontWeight="600" letterSpacing="0.14em">THRESHOLD</text>
       {/* Normal World label */}
       <text x="175" y="64" textAnchor="middle" pointerEvents="none"
-        fill={`${steel}${s === 'normal-world' ? '0.6)' : '0.25)'}`} fontSize="8.5" fontStyle="italic">
+        fill={s === 'normal-world' ? 'rgba(245,225,130,0.75)' : 'rgba(245,225,130,0.3)'} fontSize="8.5" fontStyle="italic">
         Consciousness &#183; Ego &#183; Zenith</text>
       <text x="175" y="80" textAnchor="middle" pointerEvents="none"
-        fill={`${steel}${s === 'normal-world' ? '1)' : '0.4)'}`}
+        fill={s === 'normal-world' ? 'rgba(250,230,140,1)' : 'rgba(250,230,140,0.45)'}
         fontFamily="'Cinzel',serif" fontSize="13" fontWeight="600" letterSpacing="0.08em">NORMAL WORLD</text>
       {/* Other World label */}
       <text x="175" y="148" textAnchor="middle" pointerEvents="none"
-        fill={`${ember}${s === 'other-world' ? '1)' : '0.4)'}`}
+        fill={s === 'other-world' ? 'rgba(150,195,255,1)' : 'rgba(150,195,255,0.45)'}
         fontFamily="'Cinzel',serif" fontSize="13" fontWeight="600" letterSpacing="0.08em">OTHER WORLD</text>
       <text x="175" y="166" textAnchor="middle" pointerEvents="none"
-        fill={`${ember}${s === 'other-world' ? '0.6)' : '0.25)'}`} fontSize="8.5" fontStyle="italic">
+        fill={s === 'other-world' ? 'rgba(150,195,255,0.75)' : 'rgba(150,195,255,0.3)'} fontSize="8.5" fontStyle="italic">
         Unconscious &#183; Dream &#183; Nadir</text>
     </svg>
   );
@@ -1769,9 +1806,9 @@ function CosmologyCircle({ activeSection, onSelect }) {
 /* ── Cosmology Cycles View ── */
 const CYCLE_KEYS = ['Solar Day', 'Lunar Month', 'Solar Year', 'Wake & Sleep', 'Procreation', 'Mortality'];
 const CYCLE_SOURCES = {
-  'normal-world': { data: worldData.normalWorld, accent: 'steel' },
+  'normal-world': { data: worldData.normalWorld, accent: 'upper' },
   'threshold': { data: worldData.threshold, accent: 'gold' },
-  'other-world': { data: worldData.otherWorld, accent: 'ember' },
+  'other-world': { data: worldData.otherWorld, accent: 'lower' },
 };
 
 function CosmologyCycles({ trackElement }) {
@@ -1789,6 +1826,7 @@ function CosmologyCycles({ trackElement }) {
       <div className="cosmology-diagram-wrap">
         <CosmologyCircle activeSection={activeSection} onSelect={selectSection} />
       </div>
+      <h2 className="cosmology-mode-heading">Cycles</h2>
       <div className={`cosmology-content accent-${src.accent}`}>
         <h3 className="cosmology-content-title">{src.data.title}</h3>
         <p className="cosmology-content-subtitle">Natural Cycles</p>
@@ -1807,9 +1845,9 @@ function CosmologyCycles({ trackElement }) {
 
 /* ── Cosmology Theorists View ── */
 const THEORIST_SOURCES = {
-  'normal-world': { data: worldData.normalWorld, accent: 'steel' },
+  'normal-world': { data: worldData.normalWorld, accent: 'upper' },
   'threshold': { data: worldData.threshold, accent: 'gold' },
-  'other-world': { data: worldData.otherWorld, accent: 'ember' },
+  'other-world': { data: worldData.otherWorld, accent: 'lower' },
 };
 
 function CosmologyTheorists({ trackElement }) {
@@ -1827,6 +1865,7 @@ function CosmologyTheorists({ trackElement }) {
       <div className="cosmology-diagram-wrap">
         <CosmologyCircle activeSection={activeSection} onSelect={selectSection} />
       </div>
+      <h2 className="cosmology-mode-heading">Theorists</h2>
       <div className={`cosmology-content accent-${src.accent}`}>
         <h3 className="cosmology-content-title">{src.data.title}</h3>
         <p className="cosmology-content-subtitle">Theorists</p>
@@ -1845,9 +1884,9 @@ function CosmologyTheorists({ trackElement }) {
 
 /* ── Cosmology Films View ── */
 const FILM_SOURCES = {
-  'normal-world': { data: worldData.normalWorld, accent: 'steel' },
+  'normal-world': { data: worldData.normalWorld, accent: 'upper' },
   'threshold': { data: worldData.threshold, accent: 'gold' },
-  'other-world': { data: worldData.otherWorld, accent: 'ember' },
+  'other-world': { data: worldData.otherWorld, accent: 'lower' },
 };
 
 function CosmologyFilms({ trackElement }) {
@@ -1865,6 +1904,7 @@ function CosmologyFilms({ trackElement }) {
       <div className="cosmology-diagram-wrap">
         <CosmologyCircle activeSection={activeSection} onSelect={selectSection} />
       </div>
+      <h2 className="cosmology-mode-heading">Films</h2>
       <div className={`cosmology-content accent-${src.accent}`}>
         <h3 className="cosmology-content-title">{src.data.title}</h3>
         <p className="cosmology-content-subtitle">Films</p>
@@ -1888,6 +1928,8 @@ function CosmologyFilms({ trackElement }) {
 /* ── Combined Myths Page ── */
 function MythsPage() {
   const { trackElement } = useCoursework();
+  const { user } = useAuth();
+  const { userSites, addUserSite, removeUserSite, savedSiteIds, saveSite, unsaveSite } = useProfile();
   const [activeView, setActiveView] = useState('earth');
   const [seriesEpisode, setSeriesEpisode] = useState('overview');
   const [treasuresEpisode, setTreasuresEpisode] = useState('overview');
@@ -1897,8 +1939,37 @@ function MythsPage() {
     () => new Set(MYTHIC_EARTH_CATEGORIES.map(c => c.id))
   );
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [showMySitesAdd, setShowMySitesAdd] = useState(false);
+  const earthContentRef = useRef(null);
+
+  const userSitesList = useMemo(
+    () => Object.values(userSites || {}).sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0)),
+    [userSites]
+  );
+
+  const savedSiteIdSet = useMemo(
+    () => new Set(Object.keys(savedSiteIds || {})),
+    [savedSiteIds]
+  );
+
+  const savedCuratedSites = useMemo(
+    () => mythicEarthSites.filter(s => savedSiteIdSet.has(s.id)),
+    [savedSiteIdSet]
+  );
+
+  const allMySites = useMemo(
+    () => [...savedCuratedSites, ...userSitesList],
+    [savedCuratedSites, userSitesList]
+  );
 
   useEffect(() => { trackElement('myths.page.visited'); }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Auto-scroll to content area when a site is selected
+  useEffect(() => {
+    if (selectedMythicSite && earthContentRef.current) {
+      earthContentRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }, [selectedMythicSite]);
 
   const handleViewSwitch = useCallback((view) => {
     setActiveView(view);
@@ -1939,12 +2010,12 @@ function MythsPage() {
             />
           </Suspense>
 
-          <div className="mythic-earth-content-area">
+          <div className="mythic-earth-content-area" ref={earthContentRef}>
             <div className="mythic-earth-categories">
               {MYTHIC_EARTH_CATEGORIES.map(cat => (
                 <button
                   key={cat.id}
-                  className={`mythic-earth-cat-btn${activeEarthFilters.has(cat.id) ? ' active' : ''}`}
+                  className={`mythic-earth-cat-btn${activeEarthFilters.has(cat.id) ? ' active' : ''}${mythicEarthCategory === 'my-sites' ? '' : ''}`}
                   style={{ '--cat-color': cat.color }}
                   onClick={() => {
                     setActiveEarthFilters(prev => {
@@ -1961,33 +2032,108 @@ function MythsPage() {
                   {cat.label}
                 </button>
               ))}
+              {user && (
+                <button
+                  className={`mythic-earth-cat-btn${mythicEarthCategory === 'my-sites' ? ' active' : ''}`}
+                  style={{ '--cat-color': '#6bc5a0' }}
+                  onClick={() => {
+                    setMythicEarthCategory('my-sites');
+                    setSelectedMythicSite(null);
+                    trackElement('myths.earth.category.my-sites');
+                  }}
+                >
+                  My Sites
+                  {allMySites.length > 0 && (
+                    <span style={{ marginLeft: 6, fontSize: '0.65rem', opacity: 0.7 }}>({allMySites.length})</span>
+                  )}
+                </button>
+              )}
             </div>
 
-            {mythicEarthCategory === 'temple' || selectedMythicSite?.isTemple ? (
+            {mythicEarthCategory === 'my-sites' && !selectedMythicSite ? (
+              <div className="mythic-earth-site-grid-wrapper">
+                {allMySites.length > 0 ? (
+                  <div className="mythic-earth-site-grid">
+                    {allMySites.map(site => (
+                      <button
+                        key={site.id}
+                        className="mythic-earth-site-card"
+                        style={{ borderColor: site.isUserSite ? 'rgba(107,197,160,0.3)' : `${MYTHIC_EARTH_CATEGORIES.find(c => c.id === site.category)?.color || 'rgba(107,197,160,0.3)'}55` }}
+                        onClick={() => { setSelectedMythicSite(site); trackElement(`myths.earth.site.${site.id}`); }}
+                      >
+                        <span className="site-card-name">{site.name}</span>
+                        <span className="site-card-region">{site.region || 'Unknown'}</span>
+                      </button>
+                    ))}
+                  </div>
+                ) : (
+                  <p style={{ textAlign: 'center', color: 'var(--text-secondary)', fontFamily: "'Crimson Pro', serif", padding: '20px 0' }}>
+                    No sites yet. Save sites from their detail page, or add your own below.
+                  </p>
+                )}
+                {showMySitesAdd ? (
+                  <AddSiteForm
+                    onAdd={(data) => { addUserSite(data); setShowMySitesAdd(false); }}
+                    onCancel={() => setShowMySitesAdd(false)}
+                  />
+                ) : (
+                  <button
+                    className="mythic-earth-add-site-toggle"
+                    onClick={() => setShowMySitesAdd(true)}
+                  >
+                    + Add a Site
+                  </button>
+                )}
+              </div>
+            ) : mythicEarthCategory === 'temple' || selectedMythicSite?.isTemple ? (
               <TemplesPanel trackElement={trackElement} />
             ) : mythicEarthCategory === 'library' || selectedMythicSite?.isLibrary ? (
               <LibrariesPanel trackElement={trackElement} />
             ) : selectedMythicSite ? (
               <div className="mythic-earth-site-detail">
                 <button className="mythic-earth-back" onClick={() => setSelectedMythicSite(null)}>
-                  {'\u2190'} Back to {MYTHIC_EARTH_CATEGORIES.find(c => c.id === mythicEarthCategory)?.label}
+                  {'\u2190'} Back to {mythicEarthCategory === 'my-sites' ? 'My Sites' : (MYTHIC_EARTH_CATEGORIES.find(c => c.id === mythicEarthCategory)?.label || 'Sites')}
                 </button>
                 <h3>{selectedMythicSite.name}</h3>
                 <div className="mythic-earth-site-tags">
                   <span
                     className="mythic-earth-tag"
-                    style={{ background: MYTHIC_EARTH_CATEGORIES.find(c => c.id === selectedMythicSite.category)?.color }}
+                    style={{ background: selectedMythicSite.isUserSite ? '#6bc5a0' : (MYTHIC_EARTH_CATEGORIES.find(c => c.id === selectedMythicSite.category)?.color) }}
                   >
-                    {MYTHIC_EARTH_CATEGORIES.find(c => c.id === selectedMythicSite.category)?.label}
+                    {selectedMythicSite.isUserSite ? 'My Site' : (MYTHIC_EARTH_CATEGORIES.find(c => c.id === selectedMythicSite.category)?.label)}
                   </span>
                   {selectedMythicSite.tradition && (
                     <span className="mythic-earth-tag tradition">{selectedMythicSite.tradition}</span>
                   )}
                   <span className="mythic-earth-tag region">{selectedMythicSite.region}</span>
+                  {user && !selectedMythicSite.isUserSite && (
+                    <button
+                      className={`mythic-earth-tag mythic-earth-save-btn${savedSiteIdSet.has(selectedMythicSite.id) ? ' saved' : ''}`}
+                      onClick={() => {
+                        if (savedSiteIdSet.has(selectedMythicSite.id)) {
+                          unsaveSite(selectedMythicSite.id);
+                        } else {
+                          saveSite(selectedMythicSite.id);
+                        }
+                      }}
+                    >
+                      {savedSiteIdSet.has(selectedMythicSite.id) ? '\u2713 My Sites' : '+ My Sites'}
+                    </button>
+                  )}
                 </div>
+                {selectedMythicSite.isUserSite && (
+                  <div style={{ textAlign: 'center', margin: '12px 0' }}>
+                    <button
+                      className="mythic-earth-delete-site-btn"
+                      onClick={() => { removeUserSite(selectedMythicSite.id); setSelectedMythicSite(null); }}
+                    >
+                      Delete This Site
+                    </button>
+                  </div>
+                )}
                 <StreetViewEmbed site={selectedMythicSite} />
                 <div className="mythic-earth-site-text">
-                  {selectedMythicSite.description.split('\n\n').map((p, i) => <p key={i}>{p}</p>)}
+                  {(selectedMythicSite.description || '').split('\n\n').map((p, i) => <p key={i}>{p}</p>)}
                 </div>
                 {selectedMythicSite.excerpt && (
                   <div className="mythic-earth-excerpt-block">

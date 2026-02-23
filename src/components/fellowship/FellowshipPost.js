@@ -1,0 +1,109 @@
+import React, { useState } from 'react';
+import FELLOWSHIP_TYPES from '../../data/fellowshipTypes';
+
+function timeAgo(timestamp) {
+  if (!timestamp) return '';
+  const now = Date.now();
+  const ms = typeof timestamp === 'number' ? timestamp : timestamp.toMillis?.() || (timestamp.seconds ? timestamp.seconds * 1000 : 0);
+  if (!ms) return '';
+  const diff = now - ms;
+  const seconds = Math.floor(diff / 1000);
+  if (seconds < 60) return 'just now';
+  const minutes = Math.floor(seconds / 60);
+  if (minutes < 60) return `${minutes}m ago`;
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) return `${hours}h ago`;
+  const days = Math.floor(hours / 24);
+  if (days === 1) return 'yesterday';
+  if (days < 7) return `${days}d ago`;
+  const date = new Date(ms);
+  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+}
+
+export default function FellowshipPost({ post, currentUid, onDelete }) {
+  const [expanded, setExpanded] = useState(false);
+  const [confirming, setConfirming] = useState(false);
+
+  const isAuthor = post.authorUid === currentUid;
+  const typeDef = FELLOWSHIP_TYPES[post.completionType] || null;
+
+  return (
+    <div className="fellowship-post">
+      <div className="fellowship-post-header">
+        <div className="fellowship-post-avatar">
+          {post.authorPhotoURL ? (
+            <img src={post.authorPhotoURL} alt="" className="fellowship-post-avatar-img" />
+          ) : (
+            <span className="fellowship-post-avatar-initial">
+              {(post.authorHandle || post.authorName || '?').charAt(0).toUpperCase()}
+            </span>
+          )}
+        </div>
+        <div className="fellowship-post-meta">
+          <span className="fellowship-post-author">{post.authorHandle || post.authorName || 'Anonymous'}</span>
+          <span className="fellowship-post-time">{timeAgo(post.createdAt)}</span>
+        </div>
+        {isAuthor && (
+          <div className="fellowship-post-actions">
+            {confirming ? (
+              <>
+                <button className="fellowship-post-delete-confirm" onClick={() => { onDelete(post.id); setConfirming(false); }}>
+                  Delete
+                </button>
+                <button className="fellowship-post-delete-cancel" onClick={() => setConfirming(false)}>
+                  Cancel
+                </button>
+              </>
+            ) : (
+              <button className="fellowship-post-delete-btn" onClick={() => setConfirming(true)} title="Delete post">
+                &times;
+              </button>
+            )}
+          </div>
+        )}
+      </div>
+
+      {typeDef && (
+        <div className="fellowship-post-badge" style={{ color: typeDef.color, borderColor: typeDef.color }}>
+          <span className="fellowship-post-badge-icon">{typeDef.icon}</span>
+          <span className="fellowship-post-badge-label">{post.completionLabel || typeDef.label}</span>
+        </div>
+      )}
+
+      {post.summary && (
+        <div className="fellowship-post-summary">{post.summary}</div>
+      )}
+
+      {post.fullStory && (
+        <>
+          <button className="fellowship-post-expand" onClick={() => setExpanded(!expanded)}>
+            {expanded ? 'Collapse' : 'Read full story...'}
+          </button>
+          {expanded && (
+            <div className="fellowship-post-story">
+              {post.fullStory.split('\n').map((line, i) => (
+                line.trim() ? <p key={i}>{line}</p> : <br key={i} />
+              ))}
+            </div>
+          )}
+        </>
+      )}
+
+      {post.images?.length > 0 && (
+        <div className="fellowship-post-images">
+          {post.images.map((img, i) => (
+            <img key={i} src={img.url} alt={img.name || ''} className="fellowship-post-image" />
+          ))}
+        </div>
+      )}
+
+      {post.videoURL && (
+        <div className="fellowship-post-video">
+          <a href={post.videoURL} target="_blank" rel="noopener noreferrer">
+            Watch video
+          </a>
+        </div>
+      )}
+    </div>
+  );
+}

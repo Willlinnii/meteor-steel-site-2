@@ -2,9 +2,8 @@ import React, { useState, useCallback, useEffect, useMemo } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../auth/AuthContext';
 import { useCoursework } from '../../coursework/CourseworkContext';
-import { useWritings } from '../../writings/WritingsContext';
 import { useProfile } from '../../profile/ProfileContext';
-import { RANKS, rankProgress, CREDENTIAL_CATEGORIES } from '../../profile/profileEngine';
+import { RANKS, rankProgress } from '../../profile/profileEngine';
 import ProfileChat from '../../profile/ProfileChat';
 import MentorApplicationChat from '../../profile/MentorApplicationChat';
 import ConsultingSetupChat from '../../profile/ConsultingSetupChat';
@@ -136,9 +135,8 @@ const PURCHASES = [
 export default function ProfilePage() {
   const { user, signOut } = useAuth();
   const { getCourseStates, completedCourses, certificateData, allCourses } = useCoursework();
-  const { earnedRanks, highestRank, activeCredentials, hasProfile, loaded: profileLoaded, handle, natalChart, updateNatalChart, numerologyName, updateNumerologyName, luckyNumber, updateLuckyNumber, subscriptions, updateSubscription, updateSubscriptions, purchases, updatePurchase, updatePurchases, refreshProfile, mentorData, qualifiedMentorTypes, mentorEligible, mentorCoursesComplete, effectiveMentorStatus, pairingCategories, updateMentorBio, updateMentorCapacity, publishToDirectory, unpublishFromDirectory, respondToPairing, endPairing, photoURL, consultingData, consultingCategories, updateProfilePhoto, respondToConsulting, apiKeys, apiKeysLoaded, saveApiKey, removeApiKey, hasAnthropicKey, hasOpenaiKey, social, updateSocial, pilgrimages, pilgrimagesLoaded, removePilgrimage, personalStory, savePersonalStory, curatorApproved } = useProfile();
-  const { personalStories, loaded: writingsLoaded } = useWritings();
-  const { cards: storyCards, loaded: storyCardsLoaded } = useStoryCardSync();
+  const { earnedRanks, highestRank, activeCredentials, hasProfile, loaded: profileLoaded, handle, natalChart, updateNatalChart, numerologyName, updateNumerologyName, luckyNumber, updateLuckyNumber, subscriptions, updateSubscription, updateSubscriptions, purchases, updatePurchase, updatePurchases, refreshProfile, mentorData, qualifiedMentorTypes, mentorEligible, mentorCoursesComplete, effectiveMentorStatus, pairingCategories, updateMentorBio, updateMentorCapacity, publishToDirectory, unpublishFromDirectory, respondToPairing, endPairing, photoURL, consultingData, consultingCategories, updateProfilePhoto, respondToConsulting, apiKeys, saveApiKey, removeApiKey, hasAnthropicKey, hasOpenaiKey, social, updateSocial, pilgrimages, pilgrimagesLoaded, removePilgrimage, personalStory, savePersonalStory, curatorApproved } = useProfile();
+const { cards: storyCards, loaded: storyCardsLoaded } = useStoryCardSync();
   const navigate = useNavigate();
   const location = useLocation();
   const [showChat, setShowChat] = useState(false);

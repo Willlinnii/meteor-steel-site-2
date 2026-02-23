@@ -5,6 +5,14 @@
   padding-top: 40px;
 }
 
+/* Two-line labels on the treasure wheel */
+.treasures-page .circle-stage-label {
+  white-space: normal;
+  text-align: center;
+  line-height: 1.25;
+  max-width: 90px;
+}
+
 .treasures-subtitle {
   text-align: center;
   font-family: 'Cinzel', serif;

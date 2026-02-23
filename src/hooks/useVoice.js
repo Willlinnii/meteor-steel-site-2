@@ -32,7 +32,8 @@ async function speakAI(text, voiceId, audioRef, onEnd) {
     console.log('[Atlas Voice] TTS response status:', res.status);
 
     if (!res.ok) {
-      console.warn('[Atlas Voice] TTS API error, falling back to browser voice');
+      const errBody = await res.text().catch(() => '(no body)');
+      console.warn('[Atlas Voice] TTS API error:', res.status, errBody);
       speakBrowser(text, onEnd);
       return;
     }

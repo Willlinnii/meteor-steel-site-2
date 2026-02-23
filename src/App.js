@@ -5,6 +5,16 @@ import { CourseworkProvider, useCoursework } from './coursework/CourseworkContex
 import { WritingsProvider, useWritings } from './writings/WritingsContext';
 import { ProfileProvider, useProfile } from './profile/ProfileContext';
 import { MultiplayerProvider } from './multiplayer/MultiplayerContext';
+import { FamilyProvider } from './contexts/FamilyContext';
+import { FriendsProvider } from './contexts/FriendsContext';
+import { FriendRequestsProvider } from './contexts/FriendRequestsContext';
+import { FellowshipProvider } from './contexts/FellowshipContext';
+import ShareCompletionModal from './components/fellowship/ShareCompletionModal';
+import { ScopeProvider } from './contexts/ScopeContext';
+import { TraditionsProvider } from './contexts/TraditionsContext';
+import { CreationsProvider } from './contexts/CreationsContext';
+import { StoryBookProvider } from './contexts/StoryBookContext';
+import { GenealogyProvider } from './contexts/GenealogyContext';
 import LoginPage from './auth/LoginPage';
 import './App.css';
 import { apiFetch } from './lib/chatApi';
@@ -65,6 +75,10 @@ const GuildPage = lazy(() => import('./pages/Guild/GuildPage'));
 const SacredSites360Page = lazy(() => import('./pages/SacredSites360/SacredSites360Page'));
 const DiscoverPage = lazy(() => import('./pages/Discover/DiscoverPage'));
 const DiscoverStarlightPage = lazy(() => import('./pages/DiscoverStarlight/DiscoverStarlightPage'));
+const SecretWeaponPage = lazy(() => import('./pages/SecretWeapon/SecretWeaponPage'));
+const FeedPage = lazy(() => import('./pages/Feed/FeedPage'));
+const FellowshipPage = lazy(() => import('./pages/Fellowship/FellowshipPage'));
+const CuratedProductsPage = lazy(() => import('./pages/CuratedProducts/CuratedProductsPage'));
 
 const STAGES = [
   { id: 'golden-age', label: 'Golden Age' },
@@ -1189,7 +1203,7 @@ function StoryForgeHome() {
                           if (firstStage) handleSelectStage(firstStage.id);
                         }}>
                           <h4>{story.name || 'Untitled Story'}</h4>
-                          <p>{stageCount} of 8 stages {'\u00B7'} {story.source === 'atlas-interview' ? 'Atlas Interview' : 'Manual'}</p>
+                          <p>{stageCount} of 8 stages {'\u00B7'} {story.source === 'atlas-interview' ? 'Atlas Interview' : story.source === 'tarot-reading' ? 'Tarot Reading' : 'Manual'}</p>
                           <p style={{ fontSize: '0.8em', opacity: 0.6 }}>{story.updatedAt ? new Date(story.updatedAt).toLocaleDateString() : ''}</p>
                         </div>
                       );
@@ -1686,6 +1700,8 @@ const NAV_ITEMS = [
   { path: '/mythosophia', label: 'Mythosophia' },
   { path: '/atlas', label: 'Atlas' },
   { path: '/games', label: 'Game Room' },
+  { path: '/fellowship', label: 'Fellowship' },
+  { path: '/feed', label: 'Community' },
 ];
 
 const HIDDEN_NAV_ITEMS = [
@@ -1704,7 +1720,7 @@ function SiteNav() {
   ];
 
   // Label-only overrides: show in the toggle text but not in the dropdown
-  const LABEL_OVERRIDES = { '/profile': 'Profile', '/xr': 'VR / XR', '/mentors': 'Guild Directory', '/guild': 'Guild', '/dragon': 'Dragon', '/fallen-starlight': 'Fallen Starlight', '/story-of-stories': 'Story of Stories', '/monomyth': 'Monomyth', '/story-forge': 'Story Forge', '/yellow-brick-road': 'Yellow Brick Road', '/library': 'Library', '/home': 'Home', '/sacred-sites-360': 'Sacred Sites 360', '/mythic-earth': 'Mythic Earth' };
+  const LABEL_OVERRIDES = { '/profile': 'Profile', '/xr': 'VR / XR', '/mentors': 'Guild Directory', '/guild': 'Guild', '/dragon': 'Dragon', '/fallen-starlight': 'Fallen Starlight', '/story-of-stories': 'Story of Stories', '/monomyth': 'Monomyth', '/story-forge': 'Story Forge', '/yellow-brick-road': 'Yellow Brick Road', '/library': 'Library', '/home': 'Home', '/sacred-sites-360': 'Sacred Sites 360', '/mythic-earth': 'Mythic Earth', '/secret-weapon': 'Secret Weapon', '/fellowship': 'Fellowship', '/curated': 'Curated Collection' };
   const pathMatch = (navPath) => navPath === '/' ? location.pathname === '/' : location.pathname === navPath || location.pathname.startsWith(navPath + '/');
   const overrideLabel = LABEL_OVERRIDES[location.pathname]
     || (location.pathname.startsWith('/journey/') && 'Journey')
@@ -1811,122 +1827,6 @@ const PURCHASES_META = {
   },
 };
 
-const STORE_SUBSCRIPTIONS = [
-  {
-    id: 'master-key', name: 'Mythouse Master Key',
-    isBundle: true,
-    bundleSubscriptions: ['ybr', 'forge', 'coursework'],
-    bundlePurchases: ['starlight-bundle', 'fallen-starlight', 'story-of-stories'],
-    icon: (
-      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-        <circle cx="8" cy="15" r="5" />
-        <path d="M8 10V2" />
-        <path d="M11 5L8 2L5 5" />
-        <path d="M13 15h8" />
-        <path d="M18 12v6" />
-        <path d="M21 12v6" />
-      </svg>
-    ),
-    description: 'Everything Mythouse has to offer — all journeys, courses, stories, and the forge.',
-    details: 'The Master Key unlocks the full Mythouse experience: all Yellow Brick Road journeys, the Story Forge, full Coursework tracking (Monomyth Explorer, Celestial Clocks Explorer, Meteor Steel Initiate, Atlas Conversationalist, Mythic Gamer, Starlight Reader, Ouroboros Walker), and the complete Starlight Bundle (Fallen Starlight + Story of Stories).',
-  },
-  {
-    id: 'ybr', name: 'Yellow Brick Road',
-    icon: (
-      <svg viewBox="0 0 20 14" width="20" height="14" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinejoin="round">
-        <path d="M1,4 L7,1 L19,1 L13,4 Z" />
-        <path d="M1,4 L1,13 L13,13 L13,4" />
-        <path d="M13,4 L19,1 L19,10 L13,13" />
-        <line x1="7" y1="4" x2="7" y2="13" />
-        <line x1="1" y1="8.5" x2="13" y2="8.5" />
-        <line x1="4" y1="8.5" x2="4" y2="13" />
-        <line x1="10" y1="4" x2="10" y2="8.5" />
-      </svg>
-    ),
-    description: 'Interactive journey through the monomyth stages with Atlas as your guide.',
-    details: 'The Yellow Brick Road is a guided, stage-by-stage journey through the monomyth. Atlas walks alongside you as you encounter mythic figures at each threshold — gods, tricksters, mentors, and shadow guardians drawn from world mythology. Answer their challenges through conversation to advance along the path.',
-  },
-  {
-    id: 'forge', name: 'Story Forge',
-    icon: (
-      <svg viewBox="0 0 20 20" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M10,2 L10,11" />
-        <path d="M7,5 Q10,3 13,5" />
-        <path d="M6,11 L14,11" />
-        <path d="M5,11 L5,14 Q10,18 15,14 L15,11" />
-      </svg>
-    ),
-    description: 'Write your own story using mythic structure with AI collaboration.',
-    details: 'The Story Forge lets you craft your own personal myth using the eight stages of the monomyth as a framework. Write freely at each stage while an AI collaborator helps you develop themes, deepen character arcs, and weave in mythic resonance. Your stories are saved to your profile and can be revisited anytime.',
-  },
-  {
-    id: 'coursework', name: 'Coursework',
-    icon: (
-      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M2 12 L12 6 L22 12 L12 18 Z" />
-        <path d="M6 14 L6 19 C6 19 9 22 12 22 C15 22 18 19 18 19 L18 14" />
-        <line x1="22" y1="12" x2="22" y2="18" />
-      </svg>
-    ),
-    description: 'Track your progress through courses, earn ranks and certificates.',
-    details: 'Coursework tracks your exploration across the site and awards progress toward structured courses. Visit pages, interact with content, and complete activities to fill requirements. Finish courses to earn ranks and certificates displayed on your profile.',
-  },
-];
-
-const STORE_PURCHASES = [
-  {
-    id: 'fallen-starlight', name: 'Fallen Starlight',
-    icon: (
-      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
-        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
-        <path d="M12 6 L10.8 9.2 L7.5 9.2 L10.1 11.3 L9.1 14.5 L12 12.5 L14.9 14.5 L13.9 11.3 L16.5 9.2 L13.2 9.2 Z" fill="currentColor" stroke="none" />
-      </svg>
-    ),
-    description: 'The original revelation — tracing the descent of celestial fire through the seven planetary metals.',
-    details: 'Fallen Starlight overlays a mythic narrative layer onto the Chronosphaera — eight stages of the descent of light into matter, each aligned with a planetary metal and its archetypal story. Activate to explore the cosmic drama from within the celestial clock.',
-  },
-  {
-    id: 'story-of-stories', name: 'Story of Stories',
-    icon: (
-      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
-        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
-        <circle cx="12" cy="10" r="4" stroke="currentColor" strokeWidth="1.8" fill="none" />
-      </svg>
-    ),
-    description: 'The meta-narrative — the stories that emerged from the fall of light into matter.',
-    details: 'Story of Stories is a companion layer to Fallen Starlight — the mythic tradition behind the seven metals, told through the Chronosphaera. It traces the stories that emerged as celestial fire descended into the material world.',
-  },
-  {
-    id: 'medicine-wheel', name: 'Medicine Wheel',
-    icon: (
-      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M13 2 L5 14 L11 14 L11 22 L19 10 L13 10 Z" />
-      </svg>
-    ),
-    description: 'The medicine wheel — Hyemeyohsts Storm\'s teachings on the sacred hoop and the four directions.',
-    details: 'Activating the Medicine Wheel overlays the sacred hoop onto the Chronosphaera, mapping the four directions, their powers, and their animals onto the celestial clock. Based on the teachings of Hyemeyohsts Storm.',
-  },
-  {
-    id: 'starlight-bundle', name: 'Starlight Bundle',
-    isBundle: true,
-    bundleItems: ['fallen-starlight', 'story-of-stories'],
-    icon: (
-      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M2 19.5A2.5 2.5 0 0 1 4.5 17H13" />
-        <path d="M4.5 4H13v16H4.5A2.5 2.5 0 0 1 2 17.5v-11A2.5 2.5 0 0 1 4.5 4z" />
-        <path d="M11 19.5A2.5 2.5 0 0 1 13.5 17H22" />
-        <path d="M13.5 2H22v20H13.5A2.5 2.5 0 0 1 11 19.5v-15A2.5 2.5 0 0 1 13.5 2z" />
-        <path d="M8 8 L7.4 9.6 L5.8 9.6 L7.1 10.6 L6.6 12.2 L8 11.2 L9.4 12.2 L8.9 10.6 L10.2 9.6 L8.6 9.6 Z" fill="currentColor" stroke="none" />
-        <circle cx="17.5" cy="10" r="2.5" stroke="currentColor" strokeWidth="1.4" fill="none" />
-      </svg>
-    ),
-    description: 'Both books together at a discounted price.',
-    details: 'Get both Fallen Starlight and Story of Stories together. Explore the full cosmic drama on the Chronosphaera — the fall of light into matter, and the stories that emerged from it.',
-  },
-];
-
 const MASTER_KEY_INCLUDES = ['ybr', 'forge', 'coursework', 'fallen-starlight', 'story-of-stories'];
 
 function SubscriptionGate({ gateInfo, onClose }) {
@@ -1964,109 +1864,16 @@ function SubscriptionGate({ gateInfo, onClose }) {
   );
 }
 
-function StoreModal({ onClose, subscriptions, purchases, updateSubscription, updateSubscriptions, updatePurchase, updatePurchases }) {
-  const [expanded, setExpanded] = useState(null);
-
-  useEffect(() => {
-    const handleKey = (e) => { if (e.key === 'Escape') onClose(); };
-    window.addEventListener('keydown', handleKey);
-    return () => window.removeEventListener('keydown', handleKey);
-  }, [onClose]);
-
-  const isSubActive = (id) => !!subscriptions[id];
-  const isPurchaseActive = (id) => !!purchases[id];
-
-  const handleActivateSub = (item) => {
-    if (item.isBundle && item.bundleSubscriptions) {
-      const subUpdates = { [item.id]: true };
-      item.bundleSubscriptions.forEach(id => { subUpdates[id] = true; });
-      updateSubscriptions(subUpdates);
-      if (item.bundlePurchases) {
-        const purUpdates = {};
-        item.bundlePurchases.forEach(id => { purUpdates[id] = true; });
-        updatePurchases(purUpdates);
-      }
-    } else {
-      updateSubscription(item.id, true);
-    }
-  };
-  const handleActivatePurchase = (item) => {
-    if (item.isBundle && item.bundleItems) {
-      const updates = { [item.id]: true };
-      item.bundleItems.forEach(bid => { updates[bid] = true; });
-      updatePurchases(updates);
-    } else {
-      updatePurchase(item.id, true);
-    }
-  };
-
-  const renderCard = (item, isActive, onActivate, type) => {
-    const isExp = expanded === `${type}-${item.id}`;
-    return (
-      <div
-        key={item.id}
-        className={`store-item-card${item.isBundle ? ' store-bundle' : ''}${isExp ? ' expanded' : ''}`}
-        onClick={() => setExpanded(isExp ? null : `${type}-${item.id}`)}
-      >
-        <div className="store-item-row">
-          <div className="store-item-icon">{item.icon}</div>
-          <div className="store-item-info">
-            <div className="store-item-name">
-              {item.name}
-              {item.isBundle && <span className="store-bundle-badge">Bundle</span>}
-            </div>
-            <div className="store-item-desc">{item.description}</div>
-          </div>
-          <div className="store-item-action">
-            {isActive ? (
-              <span className="store-item-active-badge">Active</span>
-            ) : (
-              <button className="store-item-activate" onClick={(e) => { e.stopPropagation(); onActivate(item); }}>
-                Activate
-              </button>
-            )}
-          </div>
-        </div>
-        {isExp && item.details && (
-          <div className="store-item-details cw-fade-in">{item.details}</div>
-        )}
-      </div>
-    );
-  };
-
-  return (
-    <div className="store-modal-overlay" onClick={onClose}>
-      <div className="store-modal-panel cw-panel-in" onClick={(e) => e.stopPropagation()}>
-        <div className="store-modal-header">
-          <h2 className="store-modal-title">Store</h2>
-          <button className="store-modal-close" onClick={onClose}>{'\u2715'}</button>
-        </div>
-        <div className="store-modal-body">
-          <div className="store-section">
-            <h3 className="store-section-title">Subscriptions</h3>
-            {STORE_SUBSCRIPTIONS.map(item => renderCard(item, isSubActive(item.id), handleActivateSub, 'sub'))}
-          </div>
-          <div className="store-section">
-            <h3 className="store-section-title">Purchases</h3>
-            {STORE_PURCHASES.map(item => renderCard(item, isPurchaseActive(item.id), handleActivatePurchase, 'pur'))}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 function SiteHeader() {
   const { user } = useAuth();
   const { courseworkMode, toggleCourseworkMode } = useCoursework();
   const { forgeMode, setForgeMode } = useStoryForge();
   const { ybrMode, setYbrMode } = useYBRMode();
   const { xrMode, setXrMode } = useXRMode();
-  const { hasSubscription, hasPurchase, subscriptions, purchases, updateSubscription, updateSubscriptions, updatePurchase, updatePurchases } = useProfile();
+  const { hasSubscription, hasPurchase } = useProfile();
   const location = useLocation();
   const navigate = useNavigate();
   const [gatePopup, setGatePopup] = useState(null); // { type: 'subscription'|'purchase', id }
-  const [storeOpen, setStoreOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const show3D = location.pathname.startsWith('/chronosphaera') && location.pathname !== '/chronosphaera/vr';
   return (
@@ -2175,8 +1982,8 @@ function SiteHeader() {
           </button>
           <button
             className="header-store-toggle"
-            onClick={() => setStoreOpen(true)}
-            title="Store"
+            onClick={() => navigate('/curated')}
+            title="Curated Collection"
           >
             <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
               <path d="M3 9l1.5-5h15L21 9" />
@@ -2197,17 +2004,6 @@ function SiteHeader() {
       )}
     </header>
     {gatePopup && <SubscriptionGate gateInfo={gatePopup} onClose={() => setGatePopup(null)} />}
-    {storeOpen && (
-      <StoreModal
-        onClose={() => setStoreOpen(false)}
-        subscriptions={subscriptions}
-        purchases={purchases}
-        updateSubscription={updateSubscription}
-        updateSubscriptions={updateSubscriptions}
-        updatePurchase={updatePurchase}
-        updatePurchases={updatePurchases}
-      />
-    )}
   </>
   );
 }
@@ -2270,21 +2066,37 @@ function RequireAdmin({ children }) {
 
 function CourseCompletionPopup() {
   const { newlyCompleted, dismissCompletion } = useCoursework();
+  const [showShare, setShowShare] = useState(false);
   if (!newlyCompleted) return null;
   return (
-    <div className="course-completion-overlay" onClick={dismissCompletion}>
-      <div className="course-completion-panel" onClick={e => e.stopPropagation()}>
-        <span className="course-completion-star">{'\u2B50'}</span>
-        <h2 className="course-completion-title">Congratulations!</h2>
-        <p className="course-completion-name">
-          You have completed all the requirements of <strong>{newlyCompleted.name}</strong>.
-        </p>
-        <p className="course-completion-cert">
-          Your certificate is now available in your profile page.
-        </p>
-        <button className="course-completion-btn" onClick={dismissCompletion}>Continue</button>
+    <>
+      <div className="course-completion-overlay" onClick={dismissCompletion}>
+        <div className="course-completion-panel" onClick={e => e.stopPropagation()}>
+          <span className="course-completion-star">{'\u2B50'}</span>
+          <h2 className="course-completion-title">Congratulations!</h2>
+          <p className="course-completion-name">
+            You have completed all the requirements of <strong>{newlyCompleted.name}</strong>.
+          </p>
+          <p className="course-completion-cert">
+            Your certificate is now available in your profile page.
+          </p>
+          <div style={{ display: 'flex', gap: 8, justifyContent: 'center', flexWrap: 'wrap' }}>
+            <button className="course-completion-btn" onClick={dismissCompletion}>Continue</button>
+            <button className="fellowship-share-btn" onClick={() => setShowShare(true)}>Share with Fellows</button>
+          </div>
+        </div>
       </div>
-    </div>
+      {showShare && (
+        <ShareCompletionModal
+          completionType="course"
+          completionId={newlyCompleted.id}
+          completionLabel={newlyCompleted.name}
+          completionData={{ courseId: newlyCompleted.id, courseName: newlyCompleted.name }}
+          onClose={() => setShowShare(false)}
+          onPosted={dismissCompletion}
+        />
+      )}
+    </>
   );
 }
 
@@ -2444,6 +2256,12 @@ function AppContent() {
         <Route path="/guild" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><GuildPage /></Suspense>} />
         <Route path="/discover" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><DiscoverPage /></Suspense>} />
         <Route path="/discover/starlight" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><DiscoverStarlightPage /></Suspense>} />
+        <Route path="/secret-weapon" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><SecretWeaponPage /></Suspense>} />
+        <Route path="/fellowship" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><FellowshipPage /></Suspense>} />
+        <Route path="/curated" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><CuratedProductsPage /></Suspense>} />
+        <Route path="/feed" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><FeedPage /></Suspense>} />
+        {/* Redirect legacy /app routes to /feed */}
+        <Route path="/app/*" element={<Navigate to="/feed" replace />} />
         <Route path="/dragon/*" element={<RequireAdmin><Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" />Loading Admin...</div>}><AdminPage /></Suspense></RequireAdmin>} />
       </Routes>
       {!isAtlas && <SiteFooter />}
@@ -2473,17 +2291,35 @@ function App() {
   }
 
   return (
+    <FamilyProvider>
+    <FriendsProvider>
+    <FriendRequestsProvider>
+    <FellowshipProvider>
+    <ScopeProvider>
     <CourseworkProvider>
       <WritingsProvider>
         <ProfileProvider>
           <MultiplayerProvider>
+            <TraditionsProvider>
+            <CreationsProvider>
+            <StoryBookProvider>
+            <GenealogyProvider>
             <Routes>
               <Route path="*" element={<AppContent />} />
             </Routes>
+            </GenealogyProvider>
+            </StoryBookProvider>
+            </CreationsProvider>
+            </TraditionsProvider>
           </MultiplayerProvider>
         </ProfileProvider>
       </WritingsProvider>
     </CourseworkProvider>
+    </ScopeProvider>
+    </FellowshipProvider>
+    </FriendRequestsProvider>
+    </FriendsProvider>
+    </FamilyProvider>
   );
 }
 

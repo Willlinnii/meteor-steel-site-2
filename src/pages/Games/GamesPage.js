@@ -14,6 +14,7 @@ import MythouseGame from '../../games/mythouse/MythouseGame';
 import MythouseCards from '../../games/mythouse/MythouseCards';
 import GameLobby from '../../games/shared/GameLobby';
 import MultiplayerWrapper from '../../games/shared/MultiplayerWrapper';
+import ShareCompletionModal from '../../components/fellowship/ShareCompletionModal';
 import './GamesPage.css';
 
 const GAMES = [
@@ -150,6 +151,7 @@ export default function GamesPage() {
   const { activeMatches, getMatchesForGame } = useMultiplayer(); // eslint-disable-line no-unused-vars
   const { hasSubscription } = useProfile();
   const [showYbrGate, setShowYbrGate] = useState(false);
+  const [completedGame, setCompletedGame] = useState(null);
   const hasYBR = hasSubscription('ybr');
 
   // Parse URL: /games/:gameId/:mode or /games/:gameId/online/:matchId
@@ -177,9 +179,27 @@ export default function GamesPage() {
     // Track game completion if the game was actually finished (not just backed out)
     if (activeGame && result === 'completed') {
       trackElement(`games.${activeGame.id}.completed`);
+      setCompletedGame({ id: activeGame.id, name: activeGame.label || activeGame.id });
+      return;
     }
     navigate('/games');
   };
+
+  // Game completion share modal — check before rendering game components
+  if (completedGame) {
+    return (
+      <div className="games-page">
+        <ShareCompletionModal
+          completionType="game"
+          completionId={completedGame.id}
+          completionLabel={completedGame.name}
+          completionData={{ gameId: completedGame.id, gameName: completedGame.name }}
+          onClose={() => { setCompletedGame(null); navigate('/games'); }}
+          onPosted={() => { setCompletedGame(null); navigate('/games'); }}
+        />
+      </div>
+    );
+  }
 
   // Card deck entries (direct-launch with initial state)
   if (activeCardDeck) {

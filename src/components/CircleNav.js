@@ -435,7 +435,14 @@ export default function CircleNav({ stages, currentStage, onSelectStage, clockwi
                 className="circle-stage-label"
                 style={{ transform: `rotate(${s.labelRotation}deg)` }}
               >
-                {s.label}
+                {s.label.includes('\n')
+                  ? s.label.split('\n').map((line, i) => (
+                      <React.Fragment key={i}>
+                        {i > 0 && <br />}
+                        {line}
+                      </React.Fragment>
+                    ))
+                  : s.label}
               </span>
             </div>
           );

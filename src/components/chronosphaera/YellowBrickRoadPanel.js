@@ -1,6 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import challengeData from '../../data/yellowBrickRoad.json';
 import { apiFetch } from '../../lib/chatApi';
+import ShareCompletionModal from '../fellowship/ShareCompletionModal';
 
 const { challenges } = challengeData;
 
@@ -35,6 +36,7 @@ function EarthStartScreen({ onBegin }) {
 }
 
 function JourneyCompleteScreen({ completedStops, totalStops, onExit }) {
+  const [showShare, setShowShare] = useState(false);
   return (
     <div className="ybr-panel ybr-completion">
       <h2 className="ybr-title">Journey Complete</h2>
@@ -44,9 +46,22 @@ function JourneyCompleteScreen({ completedStops, totalStops, onExit }) {
         <p>You began on Earth. You return to Earth. But the Earth is different now, because you are.</p>
         <p className="ybr-summary">{completedStops} of {totalStops} encounters completed.</p>
       </div>
+      <button className="fellowship-share-btn" onClick={() => setShowShare(true)}>
+        Share with your Fellows?
+      </button>
       <button className="ybr-begin-btn" onClick={onExit}>
         Return to Celestial Clocks
       </button>
+      {showShare && (
+        <ShareCompletionModal
+          completionType="ybr"
+          completionId="yellow-brick-road"
+          completionLabel="Yellow Brick Road"
+          completionData={{ completedStops, totalStops }}
+          onClose={() => setShowShare(false)}
+          onPosted={() => setShowShare(false)}
+        />
+      )}
     </div>
   );
 }

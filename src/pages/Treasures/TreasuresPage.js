@@ -7,7 +7,9 @@ import './TreasuresPage.css';
 const EPISODES = data.episodes.map(ep => ({ id: ep.id, label: ep.label }));
 
 const TABS = [
-  { id: 'themes', label: 'Themes' },
+  { id: 'overview', label: 'Overview' },
+  { id: 'historical-core', label: 'Historical Core' },
+  { id: 'myths', label: 'Myths' },
   { id: 'playlist', label: 'Playlist' },
   { id: 'references', label: 'References' },
   { id: 'music', label: 'Music & Media' },
@@ -19,7 +21,7 @@ function TreasuresPage() {
 
   const [currentEpisode, setCurrentEpisode] = useState('overview');
   const [clockwise, setClockwise] = useState(false);
-  const [activeTab, setActiveTab] = useState('themes');
+  const [activeTab, setActiveTab] = useState('overview');
   const [activeTheme, setActiveTheme] = useState(null);
 
   const episodeData = data.episodes.find(ep => ep.id === currentEpisode);
@@ -27,14 +29,14 @@ function TreasuresPage() {
 
   const handleSelectEpisode = useCallback((stage) => {
     setCurrentEpisode(stage);
-    setActiveTab('themes');
+    setActiveTab('overview');
     setActiveTheme(null);
     track(`episode.${stage}`);
   }, [track]);
 
   const handleTabClick = useCallback((tabId) => {
     setActiveTab(tabId);
-    if (tabId !== 'themes') setActiveTheme(null);
+    if (tabId !== 'myths') setActiveTheme(null);
     track(`tab.${tabId}`);
   }, [track]);
 
@@ -59,7 +61,7 @@ function TreasuresPage() {
       <div className="treasures-subtitle">{data.subtitle}</div>
 
       {episodeData && (
-        <h2 className="stage-heading">{episodeData.label}</h2>
+        <h2 className="stage-heading">{episodeData.label.replace(/\n/g, ' ')}</h2>
       )}
 
       <div className="container">
@@ -104,7 +106,35 @@ function TreasuresPage() {
                   </div>
 
                   <div className="treasures-content">
-                    {activeTab === 'themes' && (
+                    {activeTab === 'overview' && (
+                      <div className="treasures-overview">
+                        <div className="treasures-overview-text">
+                          {episodeData.overview ? (
+                            episodeData.overview.split('\n\n').map((p, i) => (
+                              <p key={i}>{p}</p>
+                            ))
+                          ) : (
+                            <p className="treasures-empty">Overview coming soon.</p>
+                          )}
+                        </div>
+                      </div>
+                    )}
+
+                    {activeTab === 'historical-core' && (
+                      <div className="treasures-historical-core">
+                        {episodeData.historicalCore ? (
+                          <div className="treasures-body">
+                            {episodeData.historicalCore.split('\n\n').map((p, i) => (
+                              <p key={i}>{p}</p>
+                            ))}
+                          </div>
+                        ) : (
+                          <p className="treasures-empty">Historical core coming soon.</p>
+                        )}
+                      </div>
+                    )}
+
+                    {activeTab === 'myths' && (
                       <div className="treasures-themes">
                         <div className="treasures-theme-buttons">
                           {episodeData.themes.map(theme => (
@@ -123,9 +153,13 @@ function TreasuresPage() {
                           return (
                             <div className="treasures-theme-content" key={theme.id}>
                               <div className="treasures-body">
-                                {theme.content.split('\n\n').map((p, i) => (
-                                  <p key={i}>{p}</p>
-                                ))}
+                                {theme.content ? (
+                                  theme.content.split('\n\n').map((p, i) => (
+                                    <p key={i}>{p}</p>
+                                  ))
+                                ) : (
+                                  <p className="treasures-empty">Research in development.</p>
+                                )}
                               </div>
                             </div>
                           );

@@ -46,12 +46,12 @@ export default function StoryMatchingSection() {
 
   return (
     <>
-      <h2 className="profile-section-title">
+      <h3 className="profile-subsection-title" style={{ marginTop: '12px' }}>
         Story Matching
         {matchingEnabled && matches.length > 0 && (
           <span className="friends-badge">{matches.length}</span>
         )}
-      </h2>
+      </h3>
 
       <div className="story-matching-toggle-row">
         <span className="story-matching-toggle-label">

@@ -10,6 +10,7 @@ import { useCoursework } from '../../coursework/CourseworkContext';
 import { useWritings } from '../../writings/WritingsContext';
 import './OuroborosJourneyPage.css';
 import { apiFetch } from '../../lib/chatApi';
+import ShareCompletionModal from '../../components/fellowship/ShareCompletionModal';
 
 const { challenges } = challengeData;
 
@@ -229,6 +230,7 @@ export default function OuroborosJourneyPage() {
 
   /* ── Synthesis state ── */
   const [synthesizedStory, setSynthesizedStory] = useState(null);
+  const [showFellowshipShare, setShowFellowshipShare] = useState(false);
   const [synthesizing, setSynthesizing] = useState(false);
 
   /* ── Chat state ── */
@@ -558,7 +560,20 @@ export default function OuroborosJourneyPage() {
                   {!synthesizing && !synthesizedStory && (
                     <p>{def.completion}</p>
                   )}
+                  {!synthesizing && (
+                    <button className="fellowship-share-btn" onClick={() => setShowFellowshipShare(true)}>Share with your Fellows?</button>
+                  )}
                   <button className="ouro-btn" onClick={handleExit}>Return</button>
+                  {showFellowshipShare && (
+                    <ShareCompletionModal
+                      completionType="journey"
+                      completionId={`${journeyId}-${gameMode}`}
+                      completionLabel={def.title}
+                      completionData={{ journeyId, gameMode, synthesizedStory, stages: stages.map(s => s.label), title: def.title }}
+                      onClose={() => setShowFellowshipShare(false)}
+                      onPosted={() => setShowFellowshipShare(false)}
+                    />
+                  )}
                 </div>
               ) : (
                 <div className="ouro-screen ouro-done">

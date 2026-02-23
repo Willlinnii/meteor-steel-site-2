@@ -1491,6 +1491,85 @@
   border: 1px solid rgba(139, 157, 195, 0.25);
 }
 
+/* === Culture Carousel === */
+.mc-culture-carousel-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-bottom: 16px;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.mc-culture-carousel-arrow {
+  background: rgba(26, 26, 36, 0.7);
+  border: 1px solid var(--border-subtle);
+  color: var(--accent-gold);
+  font-size: 1.4rem;
+  line-height: 1;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  padding: 0;
+  transition: all 0.2s ease;
+}
+
+.mc-culture-carousel-arrow:hover {
+  border-color: var(--accent-gold);
+  background: rgba(201, 169, 97, 0.12);
+}
+
+.mc-culture-carousel {
+  display: flex;
+  overflow: hidden;
+  gap: 10px;
+  padding: 8px 4px;
+  cursor: grab;
+  -webkit-overflow-scrolling: touch;
+  mask-image: linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%);
+}
+
+.mc-culture-carousel:active {
+  cursor: grabbing;
+}
+
+.mc-culture-item {
+  flex-shrink: 0;
+  min-width: 110px;
+  padding: 8px 16px;
+  background: rgba(26, 26, 36, 0.8);
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  font-family: 'Cinzel', serif;
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.25s ease;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.mc-culture-item:hover {
+  border-color: var(--accent-gold);
+  color: var(--text-primary);
+}
+
+.mc-culture-item.active {
+  border-color: var(--accent-gold);
+  color: var(--accent-gold);
+  background: rgba(201, 169, 97, 0.12);
+  transform: scale(1.08);
+  box-shadow: 0 0 14px rgba(201, 169, 97, 0.2);
+}
+
 /* === Major/Minor sub-toggle === */
 .mc-sub-toggle {
   display: flex;
@@ -1649,6 +1728,96 @@
 
 .mc-tarot-card .mc-card-number {
   align-self: center;
+}
+
+/* === Waite source attribution === */
+.mc-waite-source {
+  color: var(--text-secondary);
+  font-size: 0.72rem;
+  font-style: italic;
+  margin: 8px 0 0;
+  opacity: 0.7;
+}
+
+/* === Voice / Audio controls in reading === */
+.mc-reading-top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.mc-voice-toggle {
+  background: none;
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.mc-voice-toggle.active {
+  color: var(--accent-gold);
+  border-color: var(--accent-gold);
+}
+
+.mc-voice-toggle:hover {
+  opacity: 0.8;
+}
+
+.mc-mic-btn {
+  background: none;
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.mc-mic-btn.recording {
+  color: #e55;
+  border-color: #e55;
+  animation: mcMicPulse 1s ease infinite;
+}
+
+.mc-mic-btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+@keyframes mcMicPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(229, 85, 85, 0.4); }
+  50% { box-shadow: 0 0 0 8px rgba(229, 85, 85, 0); }
+}
+
+.mc-reading-speaking {
+  font-size: 0.8rem;
+  opacity: 0.7;
+  font-style: italic;
+}
+
+.mc-speaking-icon {
+  display: inline-block;
+  animation: mcSpeakPulse 1.2s ease infinite;
+}
+
+@keyframes mcSpeakPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
 }
 
 /* === Detail overlay === */
@@ -1896,6 +2065,18 @@
     font-size: 0.68rem;
   }
 
+  .mc-culture-item {
+    min-width: 90px;
+    padding: 6px 12px;
+    font-size: 0.72rem;
+  }
+
+  .mc-culture-carousel-arrow {
+    width: 28px;
+    height: 28px;
+    font-size: 1.2rem;
+  }
+
   .mc-spread-card {
     width: 95px;
     height: 145px;
@@ -1922,6 +2103,44 @@
   .mc-draw-select {
     padding: 9px 28px 9px 10px;
     font-size: 0.75rem;
+  }
+
+  .mc-fan {
+    padding: 40px 8px 12px 30px;
+  }
+
+  .mc-fan > * {
+    margin-left: -24px;
+  }
+
+  .mc-fan-info {
+    padding: 10px 14px;
+    min-height: 50px;
+  }
+
+  .mc-fan-info-name {
+    font-size: 0.88rem;
+  }
+
+  .mc-fan-info-desc {
+    font-size: 0.75rem;
+  }
+
+  .mc-fan > .mc-card {
+    width: 130px;
+    min-width: 130px;
+    max-width: 130px;
+    height: 185px;
+    min-height: 185px;
+  }
+
+  .mc-fan > .mc-fan-featured,
+  .mc-fan > .mc-fan-featured + * {
+    margin-left: 8px;
+  }
+
+  .mc-toolbar {
+    gap: 8px;
   }
 
   .mythouse-setup-modes {
@@ -2348,15 +2567,309 @@
   font-weight: 600;
 }
 
-/* ===== CLOSED DECK LANDING ===== */
-.mc-closed-landing {
+/* ===== TOOLBAR (Fan/Open toggle + draw controls) ===== */
+.mc-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.mc-view-toggle {
+  display: flex;
+  gap: 0;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid var(--border-subtle);
+}
+
+.mc-view-btn {
+  padding: 6px 14px;
+  background: rgba(26, 26, 36, 0.7);
+  border: none;
+  color: var(--text-secondary);
+  font-family: 'Cinzel', serif;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.mc-view-btn:hover {
+  color: var(--text-primary);
+}
+
+.mc-view-btn.active {
+  background: rgba(201, 169, 97, 0.15);
+  color: var(--accent-gold);
+}
+
+/* ===== FAN LAYOUT ===== */
+.mc-fan {
+  display: flex;
+  overflow-x: auto;
+  padding: 44px 40px 12px;
+  gap: 0;
+  -webkit-overflow-scrolling: touch;
+  cursor: grab;
+  scrollbar-width: none;
+}
+
+.mc-fan::-webkit-scrollbar {
+  display: none;
+}
+
+.mc-fan:active {
+  cursor: grabbing;
+}
+
+.mc-fan > * {
+  flex-shrink: 0;
+  margin-left: -30px;
+  position: relative;
+  z-index: 1;
+  transition: transform 0.2s ease, margin 0.2s ease, z-index 0s;
+}
+
+.mc-fan > *:first-child {
+  margin-left: 0;
+}
+
+/* Spacer at end so last card is fully visible */
+.mc-fan::after {
+  content: '';
+  flex-shrink: 0;
+  width: 40px;
+}
+
+/* Constrain arcana cards to card proportions inside fan */
+.mc-fan > .mc-card {
+  width: 160px;
+  min-width: 160px;
+  max-width: 160px;
+  height: 220px;
+  min-height: 220px;
+  overflow: hidden;
+}
+
+.mc-fan > .mc-card .mc-card-brief {
+  -webkit-line-clamp: 2;
+}
+
+/* Tarot card images (Rider-Waite-Smith) */
+.mc-card.has-img,
+.mc-minor-card.has-img {
+  position: relative;
+  overflow: hidden;
+  padding: 0;
+}
+
+.mc-card-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.mc-card-img-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 20px 8px 6px;
+  background: linear-gradient(transparent, rgba(0,0,0,0.75));
+  border-radius: 0 0 10px 10px;
+  z-index: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 28px;
-  padding-top: 40px;
+  gap: 1px;
 }
 
+.mc-card-img-overlay .mc-card-number,
+.mc-card-img-overlay .mc-card-name {
+  color: #fff;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.7);
+  font-size: 0.72rem;
+}
+
+.mc-card-img-overlay .mc-card-name {
+  font-family: 'Cinzel', serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+
+.mc-card-img-overlay .mc-minor-name {
+  color: #fff;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.7);
+  font-family: 'Cinzel', serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+
+.mc-card-img-overlay .mc-minor-suit-label {
+  font-size: 0.62rem;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.7);
+}
+
+/* Detail overlay — tarot image */
+.mc-detail-img-wrap {
+  text-align: center;
+  margin-bottom: 14px;
+}
+
+.mc-detail-img {
+  max-width: 200px;
+  max-height: 340px;
+  border-radius: 10px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+}
+
+/* Featured card in fan — reveal all four edges */
+.mc-fan > .mc-fan-featured {
+  transform: translateY(-16px) scale(1.12);
+  z-index: 20;
+  border-color: var(--accent-gold);
+  box-shadow: 0 0 20px rgba(201, 169, 97, 0.3);
+  opacity: 1;
+  filter: none;
+  margin-left: 10px;
+}
+
+.mc-fan > .mc-fan-featured:first-child {
+  margin-left: 10px;
+}
+
+/* Card after the featured one pulls away to reveal the right edge */
+.mc-fan > .mc-fan-featured + * {
+  margin-left: 10px;
+}
+
+.mc-fan > *:not(.mc-fan-featured) {
+  opacity: 0.7;
+  filter: brightness(0.85);
+}
+
+.mc-fan > *:hover {
+  transform: translateY(-12px) scale(1.05);
+  z-index: 10;
+  opacity: 1;
+  filter: none;
+}
+
+.mc-fan > .mc-fan-featured:hover {
+  transform: translateY(-16px) scale(1.12);
+  z-index: 20;
+}
+
+/* Info panel below fan */
+.mc-fan-info {
+  min-height: 60px;
+  padding: 14px 20px;
+  margin-top: 8px;
+  border-top: 1px solid var(--border-subtle);
+  text-align: center;
+  animation: mcFanInfoFade 0.25s ease;
+}
+
+@keyframes mcFanInfoFade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.mc-fan-info-name {
+  font-family: 'Cinzel', serif;
+  color: var(--text-primary);
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.mc-fan-info-sub {
+  color: var(--text-secondary);
+  font-size: 0.82rem;
+  margin-top: 4px;
+}
+
+.mc-fan-info-desc {
+  color: var(--text-secondary);
+  font-size: 0.82rem;
+  line-height: 1.5;
+  margin-top: 8px;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.mc-fan-info-detail-link {
+  display: inline-block;
+  margin-top: 8px;
+  background: none;
+  border: none;
+  color: var(--accent-gold);
+  font-family: 'Cinzel', serif;
+  font-size: 0.78rem;
+  cursor: pointer;
+  padding: 2px 0;
+  border-bottom: 1px solid rgba(201, 169, 97, 0.3);
+  transition: all 0.2s ease;
+}
+
+.mc-fan-info-detail-link:hover {
+  border-bottom-color: var(--accent-gold);
+  color: var(--accent-gold);
+}
+
+/* Arrow navigation below fan */
+.mc-fan-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.mc-fan-nav-btn {
+  background: rgba(26, 26, 36, 0.7);
+  border: 1px solid var(--border-subtle);
+  color: var(--accent-gold);
+  font-size: 1.2rem;
+  line-height: 1;
+  width: 34px;
+  height: 30px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  padding: 0;
+}
+
+.mc-fan-nav-btn:hover:not(:disabled) {
+  border-color: var(--accent-gold);
+  background: rgba(201, 169, 97, 0.12);
+}
+
+.mc-fan-nav-btn:disabled {
+  opacity: 0.25;
+  cursor: default;
+}
+
+.mc-fan-nav-pos {
+  font-family: 'Cinzel', serif;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  min-width: 60px;
+  text-align: center;
+  letter-spacing: 0.04em;
+}
+
+/* ===== DRAWING STATE STACK (still used by reading animation) ===== */
 .mc-stack {
   position: relative;
   width: 160px;
@@ -2404,16 +2917,6 @@
   letter-spacing: 0.04em;
   text-align: center;
   padding: 0 12px;
-}
-
-.mc-stack-count {
-  color: var(--text-secondary);
-  font-size: 0.8rem;
-}
-
-.mc-closed-actions {
-  display: flex;
-  gap: 12px;
 }
 
 .card-deck-btn {
@@ -2700,6 +3203,23 @@
   border-color: var(--accent-gold);
 }
 
+/* Spread card with tarot image */
+.mc-spread-card-revealed.has-img {
+  position: relative;
+  overflow: hidden;
+  padding: 0;
+}
+
+.mc-spread-overlay {
+  padding: 14px 4px 5px;
+}
+
+.mc-spread-overlay .mc-spread-card-name {
+  color: #fff;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+  font-size: 0.68rem;
+}
+
 .mc-spread-symbol {
   font-size: 1.6rem;
   color: var(--accent-gold);
@@ -2766,46 +3286,6 @@
   border-top: 1px solid var(--border-subtle);
 }
 
-/* ===== FOLD DECK CARD ===== */
-.mc-fold-card {
-  background: rgba(26, 26, 36, 0.6) !important;
-  border: 1px dashed rgba(201, 169, 97, 0.35) !important;
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  transition: all 0.2s ease;
-}
-
-.mc-fold-card:hover {
-  border-color: var(--accent-gold) !important;
-  background: rgba(201, 169, 97, 0.08) !important;
-  transform: none !important;
-  box-shadow: none !important;
-}
-
-.mc-fold-icon {
-  font-size: 1.6rem;
-  color: var(--accent-gold);
-  opacity: 0.6;
-  line-height: 1;
-}
-
-.mc-fold-label {
-  font-family: 'Cinzel', serif;
-  font-size: 0.72rem;
-  font-weight: 600;
-  color: var(--accent-gold);
-  opacity: 0.7;
-  letter-spacing: 0.04em;
-}
-
-.mc-fold-card:hover .mc-fold-icon,
-.mc-fold-card:hover .mc-fold-label {
-  opacity: 1;
-}
 
 /* ===== ACTIVE MATCH GLOW ON GAME CARDS ===== */
 .game-card.has-match {

@@ -24,7 +24,7 @@ export function useStoryMatching() {
   const { journeySyntheses } = useWritings();
   const { friends } = useFriendRequests();
   const { families } = useFamily();
-  const { cards: storyCards, loaded: storyCardsLoaded } = useStoryCardSync();
+  const { cards: storyCards } = useStoryCardSync();
 
   const [loading, setLoading] = useState(true);
   const [poolProfiles, setPoolProfiles] = useState([]);
@@ -289,10 +289,10 @@ export function useStoryMatching() {
     setDeepMatchLoading(targetUid);
 
     try {
-      const res = await apiFetch('/api/story-match', {
+      const res = await apiFetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ targetUid, friendUid: targetUid }),
+        body: JSON.stringify({ mode: 'story-match', targetUid, friendUid: targetUid }),
       });
       if (!res.ok) {
         const err = await res.json();

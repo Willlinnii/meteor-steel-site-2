@@ -1,0 +1,172 @@
+/* Friends Section — Profile Page */
+
+.friends-subsection {
+  margin-bottom: 20px;
+}
+
+.friends-search-input {
+  width: 100%;
+  padding: 10px 14px;
+  background: var(--bg-light, #14141c);
+  border: 1px solid var(--border-subtle, #2a2a3a);
+  border-radius: 8px;
+  color: var(--text-primary, #d4d4d4);
+  font-family: inherit;
+  font-size: 0.9rem;
+  box-sizing: border-box;
+}
+
+.friends-search-input:focus {
+  outline: none;
+  border-color: var(--accent-ember, #c4713a);
+}
+
+.friends-search-input::placeholder {
+  color: var(--text-secondary, #6a6a7a);
+}
+
+.friends-status-text {
+  color: var(--text-secondary, #6a6a7a);
+  font-size: 0.8rem;
+  margin: 6px 0 0;
+}
+
+.friends-results {
+  margin-top: 8px;
+  border: 1px solid var(--border-subtle, #2a2a3a);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.friends-result-row,
+.friends-invite-row,
+.friends-list-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border-subtle, #1e1e2e);
+}
+
+.friends-result-row:last-child,
+.friends-invite-row:last-child,
+.friends-list-row:last-child {
+  border-bottom: none;
+}
+
+.friends-invite-row,
+.friends-list-row {
+  background: rgba(139, 157, 195, 0.04);
+  border-radius: 6px;
+  margin-bottom: 4px;
+}
+
+.friends-handle {
+  color: var(--accent-gold, #d4a55a);
+  font-family: 'Cinzel', serif;
+  font-size: 0.9rem;
+  letter-spacing: 0.02em;
+}
+
+.friends-invite-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.friends-action-btn {
+  padding: 4px 12px;
+  border-radius: 4px;
+  border: 1px solid var(--border-subtle, #2a2a3a);
+  background: transparent;
+  color: var(--text-secondary, #8a8a9a);
+  font-family: 'Cinzel', serif;
+  font-size: 0.7rem;
+  letter-spacing: 0.03em;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.friends-action-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.friends-send-btn {
+  border-color: var(--accent-ember, #c4713a);
+  color: var(--accent-ember, #c4713a);
+}
+
+.friends-send-btn:hover:not(:disabled) {
+  background: rgba(196, 113, 58, 0.15);
+}
+
+.friends-accept-btn {
+  border-color: #5bd97a;
+  color: #5bd97a;
+}
+
+.friends-accept-btn:hover {
+  background: rgba(91, 217, 122, 0.15);
+}
+
+.friends-decline-btn {
+  border-color: #d95b5b;
+  color: #d95b5b;
+}
+
+.friends-decline-btn:hover {
+  background: rgba(217, 91, 91, 0.15);
+}
+
+.friends-remove-btn {
+  border-color: transparent;
+  color: var(--text-secondary, #6a6a7a);
+  font-size: 0.65rem;
+}
+
+.friends-remove-btn:hover {
+  color: #d95b5b;
+  border-color: #d95b5b;
+}
+
+.friends-status-badge {
+  padding: 2px 10px;
+  border-radius: 10px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.friends-status-connected {
+  background: rgba(91, 217, 122, 0.12);
+  color: #5bd97a;
+}
+
+.friends-status-pending {
+  background: rgba(217, 165, 91, 0.12);
+  color: #d9a55b;
+}
+
+.friends-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 10px;
+  background: var(--accent-ember, #c4713a);
+  color: #fff;
+  font-size: 0.7rem;
+  font-family: inherit;
+  font-weight: 700;
+  margin-left: 8px;
+  vertical-align: middle;
+}
+
+.friends-empty {
+  color: var(--text-secondary, #6a6a7a);
+  font-size: 0.85rem;
+  font-style: italic;
+  margin: 4px 0 12px;
+}
