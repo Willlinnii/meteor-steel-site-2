@@ -2143,6 +2143,73 @@ function buildSkyNowNarrative(tropSign, sidSign) {
   return paragraphs;
 }
 
+const PLANET_TRANSIT_VOICE = {
+  Sun: { metal: 'gold', noun: 'conscious identity', verb: 'illuminates' },
+  Moon: { metal: 'silver', noun: 'emotional instinct', verb: 'stirs' },
+  Mercury: { metal: 'quicksilver', noun: 'perception and speech', verb: 'quickens' },
+  Venus: { metal: 'copper', noun: 'value and connection', verb: 'draws toward' },
+  Mars: { metal: 'iron', noun: 'will and action', verb: 'ignites' },
+  Jupiter: { metal: 'tin', noun: 'meaning and opportunity', verb: 'expands' },
+  Saturn: { metal: 'lead', noun: 'discipline and structure', verb: 'tests' },
+};
+
+function buildTransitNarrative(crossAspects) {
+  if (!crossAspects || crossAspects.length === 0) {
+    return ['The transit sky is quiet against your chart right now \u2014 no major cross-chart aspects forming between the current planets and your natal placements. These pauses have their own value. The sky is not pressing, not asking, not testing. It is giving your pattern room to breathe before the next weather system arrives.'];
+  }
+
+  const paragraphs = [];
+
+  // Sort by significance: conjunctions/oppositions first, then squares, then soft
+  const ASPECT_WEIGHT = { Conjunction: 0, Opposition: 1, Square: 2, Trine: 3, Sextile: 4 };
+  const sorted = [...crossAspects].sort((a, b) => (ASPECT_WEIGHT[a.aspect] ?? 5) - (ASPECT_WEIGHT[b.aspect] ?? 5) || a.orb - b.orb);
+
+  const hard = sorted.filter(a => ['Conjunction', 'Square', 'Opposition'].includes(a.aspect));
+  const soft = sorted.filter(a => ['Trine', 'Sextile'].includes(a.aspect));
+
+  // Opening \u2014 set the weather
+  let opening;
+  if (hard.length === 0 && soft.length > 0) {
+    opening = 'The sky is working with you right now, not against you. The current transits are flowing into your natal pattern through soft aspects \u2014 trines and sextiles that support without demanding. This is a window where the wind is at your back.';
+  } else if (hard.length > 0 && soft.length === 0) {
+    opening = 'The transit weather is pressing against your chart. Every active aspect right now carries friction \u2014 conjunctions that amplify, squares that challenge, oppositions that confront. This is not punishment. This is the sky asking you to respond, to grow, to make choices under pressure.';
+  } else if (hard.length > soft.length) {
+    opening = `The transit sky is active against your chart \u2014 more friction than flow right now. ${hard.length} hard aspect${hard.length > 1 ? 's' : ''} pressing, ${soft.length} soft one${soft.length > 1 ? 's' : ''} supporting. The weather is asking for engagement, not passivity.`;
+  } else {
+    opening = `The transit weather is mixed \u2014 ${soft.length} flowing aspect${soft.length > 1 ? 's' : ''} and ${hard.length} frictional one${hard.length > 1 ? 's' : ''}. Some support, some pressure. This is the usual dialogue between the moving sky and the pattern you were born with.`;
+  }
+  paragraphs.push(opening);
+
+  // Body \u2014 the loudest aspects
+  const top = sorted.slice(0, Math.min(3, sorted.length));
+  const lines = top.map(a => {
+    const tv = PLANET_TRANSIT_VOICE[a.transitPlanet] || {};
+    const nv = PLANET_TRANSIT_VOICE[a.natalPlanet] || {};
+
+    if (a.aspect === 'Conjunction') {
+      return `Transit ${a.transitPlanet} conjunct your natal ${a.natalPlanet}: ${tv.metal || 'the moving planet'} meeting ${nv.metal || 'your placement'} at the same degree. The sky\u2019s ${tv.noun || 'energy'} is merging directly with your own ${nv.noun || 'pattern'} \u2014 amplifying it, making it louder, harder to ignore.`;
+    } else if (a.aspect === 'Opposition') {
+      return `Transit ${a.transitPlanet} opposing your natal ${a.natalPlanet}: ${tv.metal || 'the sky'} facing ${nv.metal || 'your placement'} across the wheel. Oppositions are mirrors, not attacks. The sky\u2019s ${tv.noun || 'energy'} is showing you the other side of your own ${nv.noun || 'placement'} \u2014 the part you don\u2019t usually lead with.`;
+    } else if (a.aspect === 'Square') {
+      return `Transit ${a.transitPlanet} squaring your natal ${a.natalPlanet}: friction between the current ${tv.noun || 'energy'} and your natal ${nv.noun || 'placement'}. Squares build capacity through tension \u2014 the pressure is not something to escape but something to metabolize.`;
+    } else if (a.aspect === 'Trine') {
+      return `Transit ${a.transitPlanet} trine your natal ${a.natalPlanet}: the sky\u2019s ${tv.noun || 'energy'} flowing naturally into your ${nv.noun || 'pattern'}. Trines are support that arrives without being earned \u2014 use the ease, don\u2019t sleep through it.`;
+    } else {
+      return `Transit ${a.transitPlanet} sextile your natal ${a.natalPlanet}: a quiet opening between the current ${tv.noun || 'energy'} and your natal ${nv.noun || 'placement'}. Sextiles are invitations, not deliveries \u2014 they activate when you reach for them.`;
+    }
+  });
+  paragraphs.push(lines.join(' '));
+
+  // Closing
+  if (sorted.length > top.length) {
+    paragraphs.push(`${sorted.length - top.length} more aspect${sorted.length - top.length > 1 ? 's are' : ' is'} forming beneath the ones above \u2014 the full picture is richer than any summary. But the loudest transits set the weather, and the weather right now is: ${hard.length > soft.length ? 'engaged' : soft.length > hard.length ? 'supported' : 'in dialogue'}.`);
+  } else {
+    paragraphs.push('These are all the active transits to your chart right now. The sky writes a new sentence every day \u2014 come back and the pattern will have shifted.');
+  }
+
+  return paragraphs;
+}
+
 function NatalChartDisplay({ chart }) {
   const [natalMode, setNatalMode] = useState('tropical');
   const [expandedInfo, setExpandedInfo] = useState(null);
@@ -2175,6 +2242,7 @@ function NatalChartDisplay({ chart }) {
   const currentSidSun = liveSkyDual.find(p => p.name === 'Sun')?.sidSign || 'Unknown';
   const skyNowNarrative = liveSky ? buildSkyNowNarrative(currentTropSun, currentSidSun) : [];
   const crossAspects = liveSky ? findCrossAspects(chart.planets, liveSky.planets) : [];
+  const transitNarrative = crossAspects.length >= 0 && liveSky ? buildTransitNarrative(crossAspects) : [];
 
   const planets = isSidereal
     ? chart.planets?.map(p => {
@@ -2501,7 +2569,7 @@ function NatalChartDisplay({ chart }) {
             </div>
           </div>
         );
-      })() : chart ? (
+      })() : (
         <>
           {/* Big Three */}
           <div className="natal-big-three">
@@ -2558,7 +2626,8 @@ function NatalChartDisplay({ chart }) {
             </div>
           )}
         </>
-      ) : (
+      )}
+      </>) : (
         <>
           {/* Sky Now / Transits tabs */}
           <div className="natal-mode-tabs">
@@ -2695,6 +2764,16 @@ function NatalChartDisplay({ chart }) {
                         <span className="natal-transit-meaning"> &mdash; {TRANSIT_ASPECT_MEANING[a.aspect]}</span>
                       )}
                     </div>
+                  ))}
+                </div>
+              )}
+
+              {/* Transit narrative — Atlas reading */}
+              {transitNarrative.length > 0 && (
+                <div className="natal-synthesis-narrative">
+                  <div className="natal-synthesis-narrative-title">Your Transit Weather</div>
+                  {transitNarrative.map((para, i) => (
+                    <p key={i} className="natal-synthesis-narrative-para">{para}</p>
                   ))}
                 </div>
               )}
