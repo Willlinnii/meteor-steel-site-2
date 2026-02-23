@@ -155,6 +155,17 @@ function CuratedProductsPage() {
           >
             {submitting ? 'Adding...' : 'Add to Collection'}
           </button>
+          <div className="curated-form-help">
+            <p className="curated-form-help-title">How curation works</p>
+            <ul className="curated-form-help-list">
+              <li><strong>Title</strong> and <strong>Buy URL</strong> are required — everything else is optional but recommended.</li>
+              <li><strong>Buy URL</strong> is the link where someone can purchase or view the product (e.g. an Amazon, Etsy, or shop link).</li>
+              <li><strong>Image URL</strong> is a direct link to a product image. Right-click an image on the product page and copy the image address.</li>
+              <li><strong>Store name</strong> appears below the card as the source (e.g. "Amazon", "Etsy", "Artist's Shop").</li>
+              <li><strong>Category</strong> determines which filter tab the product appears under.</li>
+              <li>Your submission goes live immediately. An admin may edit or remove items to keep the collection cohesive.</li>
+            </ul>
+          </div>
         </form>
       )}
 

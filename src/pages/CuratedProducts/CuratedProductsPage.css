@@ -241,6 +241,34 @@
   cursor: not-allowed;
 }
 
+/* --- Form help / instructions --- */
+
+.curated-form-help {
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(218, 165, 32, 0.12);
+}
+
+.curated-form-help-title {
+  font-family: 'Cinzel', serif;
+  font-size: 0.82rem;
+  color: var(--accent-gold, #daa520);
+  margin: 0 0 8px;
+}
+
+.curated-form-help-list {
+  margin: 0;
+  padding-left: 18px;
+  list-style: disc;
+  font-size: 0.78rem;
+  color: var(--text-secondary, #8a8a9a);
+  line-height: 1.6;
+}
+
+.curated-form-help-list strong {
+  color: var(--text-primary, #e0e0e8);
+}
+
 /* --- States --- */
 
 .curated-loading,
