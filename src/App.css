@@ -3572,6 +3572,63 @@ body {
   color: var(--text-secondary);
   overflow-x: auto;
 }
+.profile-api-learn-more {
+  display: inline-block;
+  margin-top: 10px;
+  font-family: 'Cinzel', serif;
+  font-size: 0.78rem;
+  color: var(--accent-ember);
+  text-decoration: none;
+  letter-spacing: 0.08em;
+  transition: color 0.2s;
+  cursor: pointer;
+}
+.profile-api-learn-more:hover {
+  color: var(--accent-gold);
+}
+
+/* ===== PROFILE: API TIER PANELS ===== */
+.profile-api-tier {
+  background: rgba(26, 26, 36, 0.45);
+  border-left: 2px solid var(--accent-gold);
+  border-radius: 8px;
+  padding: 14px 16px;
+  margin-bottom: 12px;
+}
+.profile-api-tier-title {
+  font-family: 'Cinzel', serif;
+  font-size: 0.85rem;
+  font-variant: small-caps;
+  color: var(--accent-gold);
+  letter-spacing: 0.05em;
+  margin-bottom: 6px;
+}
+.profile-api-tier-desc {
+  font-size: 0.85rem;
+  line-height: 1.55;
+  color: var(--text-secondary);
+  margin: 0 0 6px;
+}
+.profile-api-tier.coming-soon .profile-api-tier-title {
+  opacity: 0.6;
+}
+.profile-api-tier.coming-soon .profile-api-tier-desc {
+  opacity: 0.6;
+}
+.profile-api-tier-badge {
+  display: inline-block;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.62rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: rgba(201, 169, 97, 0.15);
+  color: var(--accent-gold);
+  padding: 1px 6px;
+  border-radius: 4px;
+  margin-left: 8px;
+  vertical-align: middle;
+}
 
 /* ===== PROFILE: SIGN OUT ===== */
 .profile-signout-section {

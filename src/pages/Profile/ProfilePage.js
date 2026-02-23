@@ -831,91 +831,113 @@ const { cards: storyCards, loaded: storyCardsLoaded } = useStoryCardSync();
                     {sub.hasCustomContent && sub.id === 'developer-api' ? (
                       <>
                         <p className="profile-dev-api-pitch">{sub.details}</p>
-                        {enabled && (
-                          <div className="profile-api-key-row" style={{ borderBottom: 'none', paddingTop: 4 }}>
-                            {hasMythouseKey ? (
-                              <div style={{ width: '100%' }}>
-                                <div className="profile-api-key-saved" style={{ marginBottom: 8 }}>
-                                  <span className="profile-api-key-masked">
-                                    {showMythouseKey
-                                      ? mythouseApiKey
-                                      : `${mythouseApiKey.slice(0, 7)}${'•'.repeat(20)}${mythouseApiKey.slice(-4)}`}
-                                  </span>
-                                </div>
-                                <div className="profile-api-key-actions">
-                                  <button
-                                    className="profile-api-key-save-btn"
-                                    onClick={() => setShowMythouseKey(v => !v)}
-                                  >
-                                    {showMythouseKey ? 'Hide' : 'Show'}
-                                  </button>
-                                  <button
-                                    className="profile-api-key-save-btn"
-                                    onClick={async () => {
-                                      try {
-                                        await navigator.clipboard.writeText(mythouseApiKey);
-                                        setMythousCopyFeedback(true);
-                                        setTimeout(() => setMythousCopyFeedback(false), 2000);
-                                      } catch {}
-                                    }}
-                                  >
-                                    {mythousCopyFeedback ? 'Copied!' : 'Copy'}
-                                  </button>
-                                  {confirmRegen ? (
-                                    <>
+
+                        {/* Tier 1: Secret Weapon API */}
+                        <div className="profile-api-tier">
+                          <div className="profile-api-tier-title">Secret Weapon API</div>
+                          <p className="profile-api-tier-desc">
+                            Query the Mythouse knowledge graph. Build its intelligence into what you're creating.
+                          </p>
+                          {enabled && (
+                            <div className="profile-api-key-row" style={{ borderBottom: 'none', paddingTop: 4 }}>
+                              {hasMythouseKey ? (
+                                <div style={{ width: '100%' }}>
+                                  <div className="profile-api-key-saved" style={{ marginBottom: 8 }}>
+                                    <span className="profile-api-key-masked">
+                                      {showMythouseKey
+                                        ? mythouseApiKey
+                                        : `${mythouseApiKey.slice(0, 7)}${'•'.repeat(20)}${mythouseApiKey.slice(-4)}`}
+                                    </span>
+                                  </div>
+                                  <div className="profile-api-key-actions">
+                                    <button
+                                      className="profile-api-key-save-btn"
+                                      onClick={() => setShowMythouseKey(v => !v)}
+                                    >
+                                      {showMythouseKey ? 'Hide' : 'Show'}
+                                    </button>
+                                    <button
+                                      className="profile-api-key-save-btn"
+                                      onClick={async () => {
+                                        try {
+                                          await navigator.clipboard.writeText(mythouseApiKey);
+                                          setMythousCopyFeedback(true);
+                                          setTimeout(() => setMythousCopyFeedback(false), 2000);
+                                        } catch {}
+                                      }}
+                                    >
+                                      {mythousCopyFeedback ? 'Copied!' : 'Copy'}
+                                    </button>
+                                    {confirmRegen ? (
+                                      <>
+                                        <button
+                                          className="profile-api-key-remove-btn"
+                                          disabled={mythouseKeyLoading}
+                                          onClick={async () => {
+                                            setMythouseKeyLoading(true);
+                                            try {
+                                              await regenerateMythouseKey();
+                                              setShowMythouseKey(true);
+                                            } catch {}
+                                            setMythouseKeyLoading(false);
+                                            setConfirmRegen(false);
+                                          }}
+                                        >
+                                          {mythouseKeyLoading ? '...' : 'Confirm Regenerate'}
+                                        </button>
+                                        <button
+                                          className="profile-api-key-save-btn"
+                                          onClick={() => setConfirmRegen(false)}
+                                        >
+                                          Cancel
+                                        </button>
+                                      </>
+                                    ) : (
                                       <button
                                         className="profile-api-key-remove-btn"
-                                        disabled={mythouseKeyLoading}
-                                        onClick={async () => {
-                                          setMythouseKeyLoading(true);
-                                          try {
-                                            await regenerateMythouseKey();
-                                            setShowMythouseKey(true);
-                                          } catch {}
-                                          setMythouseKeyLoading(false);
-                                          setConfirmRegen(false);
-                                        }}
+                                        onClick={() => setConfirmRegen(true)}
                                       >
-                                        {mythouseKeyLoading ? '...' : 'Confirm Regenerate'}
+                                        Regenerate
                                       </button>
-                                      <button
-                                        className="profile-api-key-save-btn"
-                                        onClick={() => setConfirmRegen(false)}
-                                      >
-                                        Cancel
-                                      </button>
-                                    </>
-                                  ) : (
-                                    <button
-                                      className="profile-api-key-remove-btn"
-                                      onClick={() => setConfirmRegen(true)}
-                                    >
-                                      Regenerate
-                                    </button>
-                                  )}
+                                    )}
+                                  </div>
+                                  <div className="profile-api-key-snippet">
+                                    <code>x-api-key: {showMythouseKey ? mythouseApiKey : 'myt_...'}</code>
+                                  </div>
+                                  <a href="/secret-weapon-api" className="profile-api-learn-more" onClick={e => { e.preventDefault(); navigate('/secret-weapon-api'); }}>
+                                    What flows through this key &rarr;
+                                  </a>
                                 </div>
-                                <div className="profile-api-key-snippet">
-                                  <code>x-api-key: {showMythouseKey ? mythouseApiKey : 'myt_...'}</code>
-                                </div>
-                              </div>
-                            ) : (
-                              <button
-                                className="profile-api-key-save-btn"
-                                disabled={mythouseKeyLoading}
-                                onClick={async () => {
-                                  setMythouseKeyLoading(true);
-                                  try {
-                                    await generateMythouseKey();
-                                    setShowMythouseKey(true);
-                                  } catch {}
-                                  setMythouseKeyLoading(false);
-                                }}
-                              >
-                                {mythouseKeyLoading ? 'Generating...' : 'Generate API Key'}
-                              </button>
-                            )}
+                              ) : (
+                                <button
+                                  className="profile-api-key-save-btn"
+                                  disabled={mythouseKeyLoading}
+                                  onClick={async () => {
+                                    setMythouseKeyLoading(true);
+                                    try {
+                                      await generateMythouseKey();
+                                      setShowMythouseKey(true);
+                                    } catch {}
+                                    setMythouseKeyLoading(false);
+                                  }}
+                                >
+                                  {mythouseKeyLoading ? 'Generating...' : 'Generate API Key'}
+                                </button>
+                              )}
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Tier 2: Ambient Generation */}
+                        <div className="profile-api-tier coming-soon">
+                          <div className="profile-api-tier-title">
+                            Ambient Generation
+                            <span className="profile-api-tier-badge">Coming Soon</span>
                           </div>
-                        )}
+                          <p className="profile-api-tier-desc">
+                            Embed the full Mythouse Engine into your creations. Your users experience the mythic intelligence live — not just data, but the reasoning and connections behind it.
+                          </p>
+                        </div>
                       </>
                     ) : sub.details}
                   </div>
