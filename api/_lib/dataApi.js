@@ -189,11 +189,13 @@ function respond(res, statusCode, body, endpoint) {
       version: '1.0',
       endpoint: endpoint || '',
       timestamp: new Date().toISOString(),
+      license: 'Content accessed via this API may not be used to train foundation models. All rights reserved by Glinter LLC.',
     },
   };
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  res.setHeader('X-Robots-Tag', 'noai, noimageai');
   return res.status(statusCode).json(envelope);
 }
 

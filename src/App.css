@@ -3614,6 +3614,13 @@ body {
 .profile-api-setup-prompt .profile-api-key-save-btn {
   margin: 0 12px 10px;
 }
+.profile-api-terms {
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+  opacity: 0.8;
+  margin: 8px 0;
+  line-height: 1.5;
+}
 .profile-api-learn-more {
   display: inline-block;
   margin-top: 10px;

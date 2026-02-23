@@ -976,13 +976,15 @@ All responses return { data, meta } JSON. GET /v1/ for full discovery.`}</pre>
                                   </div>
                                 </div>
                               ) : (
-                                <button
-                                  className="profile-api-key-save-btn"
-                                  disabled={mythouseKeyLoading}
-                                  onClick={async () => {
-                                    setMythouseKeyLoading(true);
-                                    try {
-                                      await generateMythouseKey();
+                                <div>
+                                  <p className="profile-api-terms">By generating a key you agree: content accessed via this API may not be used to train foundation models. All rights reserved by Glinter LLC.</p>
+                                  <button
+                                    className="profile-api-key-save-btn"
+                                    disabled={mythouseKeyLoading}
+                                    onClick={async () => {
+                                      setMythouseKeyLoading(true);
+                                      try {
+                                        await generateMythouseKey();
                                       setShowMythouseKey(true);
                                     } catch {}
                                     setMythouseKeyLoading(false);
@@ -990,6 +992,7 @@ All responses return { data, meta } JSON. GET /v1/ for full discovery.`}</pre>
                                 >
                                   {mythouseKeyLoading ? 'Generating...' : 'Generate API Key'}
                                 </button>
+                                </div>
                               )}
                             </div>
                           )}
