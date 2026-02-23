@@ -80,6 +80,7 @@ const SacredSites360Page = lazy(() => import('./pages/SacredSites360/SacredSites
 const DiscoverPage = lazy(() => import('./pages/Discover/DiscoverPage'));
 const DiscoverStarlightPage = lazy(() => import('./pages/DiscoverStarlight/DiscoverStarlightPage'));
 const SecretWeaponPage = lazy(() => import('./pages/SecretWeapon/SecretWeaponPage'));
+const SecretWeaponAPIPage = lazy(() => import('./pages/SecretWeaponAPI/SecretWeaponAPIPage'));
 const FellowshipPage = lazy(() => import('./pages/Fellowship/FellowshipPage'));
 const CuratedProductsPage = lazy(() => import('./pages/CuratedProducts/CuratedProductsPage'));
 const MatchingPage = lazy(() => import('./pages/Matching/MatchingPage'));
@@ -1723,7 +1724,7 @@ function SiteNav() {
   ];
 
   // Label-only overrides: show in the toggle text but not in the dropdown
-  const LABEL_OVERRIDES = { '/profile': 'Profile', '/xr': 'VR / XR', '/mentors': 'Guild Directory', '/guild': 'Guild', '/dragon': 'Dragon', '/fallen-starlight': 'Fallen Starlight', '/story-of-stories': 'Story of Stories', '/monomyth': 'Monomyth', '/story-forge': 'Story Forge', '/yellow-brick-road': 'Yellow Brick Road', '/library': 'Library', '/home': 'Home', '/sacred-sites-360': 'Sacred Sites 360', '/mythic-earth': 'Mythic Earth', '/secret-weapon': 'Secret Weapon', '/fellowship': 'Fellowship', '/curated': 'Curated Collection' };
+  const LABEL_OVERRIDES = { '/profile': 'Profile', '/xr': 'VR / XR', '/mentors': 'Guild Directory', '/guild': 'Guild', '/dragon': 'Dragon', '/fallen-starlight': 'Fallen Starlight', '/story-of-stories': 'Story of Stories', '/monomyth': 'Monomyth', '/story-forge': 'Story Forge', '/yellow-brick-road': 'Yellow Brick Road', '/library': 'Library', '/home': 'Home', '/sacred-sites-360': 'Sacred Sites 360', '/mythic-earth': 'Mythic Earth', '/secret-weapon': 'Secret Weapon', '/secret-weapon-api': 'Secret Weapon API', '/fellowship': 'Fellowship', '/curated': 'Curated Collection' };
   const pathMatch = (navPath) => navPath === '/' ? location.pathname === '/' : location.pathname === navPath || location.pathname.startsWith(navPath + '/');
   const overrideLabel = LABEL_OVERRIDES[location.pathname]
     || (location.pathname.startsWith('/journey/') && 'Journey')
@@ -2256,6 +2257,7 @@ function AppContent() {
         <Route path="/discover" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><DiscoverPage /></Suspense>} />
         <Route path="/discover/starlight" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><DiscoverStarlightPage /></Suspense>} />
         <Route path="/secret-weapon" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><SecretWeaponPage /></Suspense>} />
+        <Route path="/secret-weapon-api" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><SecretWeaponAPIPage /></Suspense>} />
         <Route path="/fellowship" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><FellowshipPage /></Suspense>} />
         <Route path="/curated" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><CuratedProductsPage /></Suspense>} />
         <Route path="/matching" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><MatchingPage /></Suspense>} />

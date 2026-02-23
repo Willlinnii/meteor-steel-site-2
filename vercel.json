@@ -3,7 +3,8 @@
   "outputDirectory": "build",
   "framework": "create-react-app",
   "functions": {
-    "api/chat.js": { "maxDuration": 60 }
+    "api/chat.js": { "maxDuration": 60 },
+    "api/mythouse.js": { "maxDuration": 60 }
   },
   "rewrites": [
     { "source": "/api/v1/:path*", "destination": "/api/v1" },

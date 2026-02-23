@@ -157,7 +157,7 @@ function ArchetypesPanel({ trackElement, trackPrefix = 'myths' }) {
   // Level 1: Category grid
   return (
     <div className="libraries-panel">
-      <div className="alexandria-header libraries-header">
+      <div className="alexandria-header libraries-header archetypes-top-header">
         <h3>Archetypal Characters</h3>
         <p>Character archetypes and design principles from Jung, Campbell, Vogler, McKee, and Field — the recurring patterns that shape every story ever told.</p>
       </div>

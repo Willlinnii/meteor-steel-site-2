@@ -1,6 +1,7 @@
 const admin = require('firebase-admin');
 const crypto = require('crypto');
 const { ensureFirebaseAdmin } = require('./_lib/auth');
+const { getTierConfig } = require('./_lib/tierConfig');
 
 const VALID_ACTIONS = ['generate', 'regenerate'];
 
@@ -62,6 +63,14 @@ module.exports = async (req, res) => {
 
     const key = generateKey();
     const keyHash = hashKey(key);
+    const defaultTier = 'free';
+    const tierConfig = getTierConfig(defaultTier);
+
+    // Next monthly reset: first of next month
+    const nextReset = new Date();
+    nextReset.setMonth(nextReset.getMonth() + 1);
+    nextReset.setDate(1);
+    nextReset.setHours(0, 0, 0, 0);
 
     // Write user secret + reverse lookup in parallel
     await Promise.all([
@@ -73,6 +82,10 @@ module.exports = async (req, res) => {
         uid,
         createdAt: admin.firestore.FieldValue.serverTimestamp(),
         requestCount: 0,
+        tier: defaultTier,
+        monthlyRequests: 0,
+        monthlyLimit: tierConfig.monthlyLimit,
+        monthlyResetAt: admin.firestore.Timestamp.fromDate(nextReset),
       }),
     ]);
 

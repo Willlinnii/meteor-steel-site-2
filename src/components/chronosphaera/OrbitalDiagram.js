@@ -254,7 +254,7 @@ function ensureYTApi() {
   });
 }
 
-export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPlanet, hoveredPlanet, selectedSign, onSelectSign, selectedCardinal, onSelectCardinal, selectedEarth, onSelectEarth, showCalendar, onToggleCalendar, selectedMonth, onSelectMonth, showMedicineWheel, onToggleMedicineWheel, selectedWheelItem, onSelectWheelItem, chakraViewMode, onToggleChakraView, videoUrl, onCloseVideo, ybrActive, ybrCurrentStopIndex, ybrStopProgress, ybrJourneySequence, onToggleYBR, ybrAutoStart, clockMode, onToggleClock, showMonomyth, showMeteorSteel, monomythStages, selectedMonomythStage, onSelectMonomythStage, onToggleMonomyth, monomythModel, showCycles, onSelectCycleSegment, activeCulture, showFallenStarlight, showStoryOfStories, onToggleStarlight, starlightStages, selectedStarlightStage, onSelectStarlightStage, selectedConstellation, onSelectConstellation }) {
+export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPlanet, hoveredPlanet, selectedSign, onSelectSign, selectedCardinal, onSelectCardinal, selectedEarth, onSelectEarth, showCalendar, onToggleCalendar, selectedMonth, onSelectMonth, showMedicineWheel, onToggleMedicineWheel, selectedWheelItem, onSelectWheelItem, chakraViewMode, onToggleChakraView, onClickOrderLabel, videoUrl, onCloseVideo, ybrActive, ybrCurrentStopIndex, ybrStopProgress, ybrJourneySequence, onToggleYBR, ybrAutoStart, clockMode, onToggleClock, showMonomyth, showMeteorSteel, monomythStages, selectedMonomythStage, onSelectMonomythStage, onToggleMonomyth, monomythModel, showCycles, onSelectCycleSegment, activeCulture, showFallenStarlight, showStoryOfStories, onToggleStarlight, starlightStages, selectedStarlightStage, onSelectStarlightStage, selectedConstellation, onSelectConstellation }) {
   const wrapperRef = useRef(null);
   const [tooltip, setTooltip] = useState(null);
   const { hasPurchase } = useProfile();
@@ -2111,10 +2111,16 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
               );
             })}
 
-            {/* Mode label — above the month ring */}
-            <text x={CX} y={585} textAnchor="middle" fill="rgba(201,169,97,0.9)" fontSize="18" fontFamily="Cinzel, serif" fontWeight="600" letterSpacing="2">
-              {CHAKRA_MODE_LABELS[chakraViewMode]}
-            </text>
+            {/* Mode label — above the month ring (clickable) */}
+            <g style={{ cursor: 'pointer' }} onClick={onClickOrderLabel}>
+              <text x={CX} y={585} textAnchor="middle" fill="rgba(201,169,97,0.9)" fontSize="18" fontFamily="Cinzel, serif" fontWeight="600" letterSpacing="2"
+                style={{ textDecoration: 'underline', textDecorationColor: 'rgba(201,169,97,0.35)', textUnderlineOffset: '4px' }}>
+                {CHAKRA_MODE_LABELS[chakraViewMode]}
+              </text>
+              <text x={CX + (CHAKRA_MODE_LABELS[chakraViewMode].length * 5.5) + 12} y={585} textAnchor="middle" fill="rgba(201,169,97,0.5)" fontSize="12" fontFamily="sans-serif">
+                ▾
+              </text>
+            </g>
           </g>
         ) : (
           <>

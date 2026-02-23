@@ -1299,6 +1299,55 @@
   box-shadow: 0 0 10px rgba(155, 89, 182, 0.3);
 }
 
+/* ===== ORDER INFO PANEL (Chaldean / Heliocentric / Weekday descriptions) ===== */
+
+.order-info-panel {
+  max-width: 700px;
+  margin: 0 auto 20px;
+  padding: 20px 24px;
+  background: rgba(139, 157, 195, 0.03);
+  border-left: 3px solid rgba(201, 169, 97, 0.4);
+  animation: content-fade-in 150ms ease-out;
+}
+
+.order-info-panel h4 {
+  font-family: 'Cinzel', serif;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--accent-gold);
+  margin: 0 0 14px;
+  letter-spacing: 0.04em;
+}
+
+.order-info-panel .body-section {
+  margin-bottom: 12px;
+  padding: 10px 14px;
+  border-left: 2px solid rgba(201, 169, 97, 0.2);
+  background: rgba(201, 169, 97, 0.03);
+}
+
+.order-info-panel .body-section:last-child {
+  margin-bottom: 0;
+}
+
+.order-info-panel h5 {
+  font-family: 'Cinzel', serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--accent-fire);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin: 0 0 6px;
+}
+
+.order-info-panel p {
+  font-family: 'Crimson Pro', serif;
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: var(--text-primary);
+  margin: 0;
+}
+
 /* ===== VITRUVIAN FIGURE ===== */
 
 .vitruvian-figure {

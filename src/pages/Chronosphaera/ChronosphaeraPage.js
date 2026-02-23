@@ -99,6 +99,36 @@ const WEEKDAYS = [
   { label: 'Sat', day: 'Saturday', planet: 'Saturn', color: '#c04040' },
 ];
 
+const ORDER_DESCRIPTIONS = {
+  chaldean: {
+    title: 'The Chaldean Order',
+    sections: [
+      { heading: 'Saturn \u2192 Jupiter \u2192 Mars \u2192 Sun \u2192 Venus \u2192 Mercury \u2192 Moon',
+        text: 'The Babylonian astronomers ranked the planets by their apparent orbital period\u2014slowest to fastest as seen from Earth. The logic was geocentric: the slower a body appeared to move against the fixed stars, the further away it was believed to be. This gave us the foundational sequence on which all subsequent planetary systems were built.' },
+      { heading: 'The Foundation',
+        text: 'Every later ordering\u2014the weekday cycle, the heliocentric model, the chakra correspondences\u2014traces back to this single observation. The Chaldean sequence is not arbitrary; it is the direct record of how the sky appeared to careful watchers over centuries of naked-eye astronomy in Mesopotamia.' },
+    ],
+  },
+  weekdays: {
+    title: 'The Weekday Order',
+    sections: [
+      { heading: 'When Egypt Met Babylon',
+        text: 'When Rome conquered Egypt, Caesar reset the Roman year to 365 days to match the Egyptian calendar. A generation later, in Alexandria, the Egyptian division of the day into 24 hours met the Chaldean sequence of seven planets. Cycling the number seven through the number twenty-four\u2014assigning each hour of the day to the next planet in Chaldean sequence, then naming each day after the planet ruling its first hour\u2014transformed the Chaldean order into the weekday order we still use.' },
+      { heading: 'Three Calendars Converge',
+        text: 'This happened at the exact moment Christianity was spreading the seven-day week across the Roman world, with its emphasis on Sunday resurrection and Friday crucifixion, while the Hebrew Sabbath was already evoking the Chaldean planetary calendar. The convergence was total: Egyptian hours, Babylonian planets, Jewish weeks, and Christian meaning all collapsed into a single system that has survived two thousand years unchanged.' },
+    ],
+  },
+  heliocentric: {
+    title: 'The Heliocentric Order',
+    sections: [
+      { heading: 'The Copernican Collapse',
+        text: 'The Copernican revolution placed the Sun at the center and reordered the planets by actual distance, collapsing the geocentric model entirely. While most astrologers and esotericists continued working with the Chaldean order, Kepler broke ranks\u2014realigning all the esoteric equivalences (metals, chakras, archetypal qualities) with the heliocentric model.' },
+      { heading: 'A Philosophical Correction',
+        text: 'This was not merely an astronomical correction but a philosophical one: the Sun moved from fourth place to first, and Earth took its place among the planets rather than at the center. Kepler saw no reason to preserve a correspondence system built on a model he knew to be wrong. The heliocentric order is the one used on this page.' },
+    ],
+  },
+};
+
 const CARDINALS = ['vernal-equinox', 'summer-solstice', 'autumnal-equinox', 'winter-solstice'];
 const ZODIAC_SIGNS = zodiacData.map(z => z.sign);
 const CONSTELLATION_IDS = Object.keys(constellationContent);
@@ -497,6 +527,7 @@ export default function ChronosphaeraPage() {
   const [selectedStarlightStage, setSelectedStarlightStage] = useState(null);
   const [starlightSectionId, setStarlightSectionId] = useState(null);
   const [selectedConstellation, setSelectedConstellation] = useState(null);
+  const [showOrderInfo, setShowOrderInfo] = useState(false);
   // Single mode enum replaces 8 separate boolean/enum state variables
   const [mode, setMode] = useState(() => {
     if (location.pathname.endsWith('/medicine-wheel') && hasPurchase('medicine-wheel')) return 'medicine-wheel';
@@ -1005,8 +1036,10 @@ export default function ChronosphaeraPage() {
             setActiveTab('body');
             setShowCalendar(false);
             setClockMode(null);
+            setShowOrderInfo(false);
             navigate(`/chronosphaera/body/${nextChakra}`);
           }}
+          onClickOrderLabel={() => setShowOrderInfo(prev => !prev)}
           videoUrl={videoUrl}
           onCloseVideo={() => setVideoUrl(null)}
           ybrActive={ybr.active}
@@ -1332,6 +1365,17 @@ export default function ChronosphaeraPage() {
                 <span className="chrono-sub">{currentData.core.sin} / {currentData.core.virtue}</span>
               </h2>
               {renderPlanetWeekdayNav()}
+              {showOrderInfo && chakraViewMode && ORDER_DESCRIPTIONS[chakraViewMode] && (
+                <div className="order-info-panel">
+                  <h4>{ORDER_DESCRIPTIONS[chakraViewMode].title}</h4>
+                  {ORDER_DESCRIPTIONS[chakraViewMode].sections.map((s, i) => (
+                    <div key={i} className="body-section">
+                      <h5>{s.heading}</h5>
+                      <p>{s.text}</p>
+                    </div>
+                  ))}
+                </div>
+              )}
               <div className="container">
                 <div id="content-container">
                   <MetalDetailPanel
@@ -1484,6 +1528,17 @@ export default function ChronosphaeraPage() {
                 <span className="chrono-sub">{currentData.core.sin} / {currentData.core.virtue}</span>
               </h2>
               {renderPlanetWeekdayNav()}
+              {showOrderInfo && chakraViewMode && ORDER_DESCRIPTIONS[chakraViewMode] && (
+                <div className="order-info-panel">
+                  <h4>{ORDER_DESCRIPTIONS[chakraViewMode].title}</h4>
+                  {ORDER_DESCRIPTIONS[chakraViewMode].sections.map((s, i) => (
+                    <div key={i} className="body-section">
+                      <h5>{s.heading}</h5>
+                      <p>{s.text}</p>
+                    </div>
+                  ))}
+                </div>
+              )}
               <div className="container">
                 <div id="content-container">
                   <MetalDetailPanel
@@ -1874,6 +1929,17 @@ export default function ChronosphaeraPage() {
               </h2>
               {renderPlanetWeekdayNav()}
             </>
+          )}
+          {showOrderInfo && chakraViewMode && ORDER_DESCRIPTIONS[chakraViewMode] && (
+            <div className="order-info-panel">
+              <h4>{ORDER_DESCRIPTIONS[chakraViewMode].title}</h4>
+              {ORDER_DESCRIPTIONS[chakraViewMode].sections.map((s, i) => (
+                <div key={i} className="body-section">
+                  <h5>{s.heading}</h5>
+                  <p>{s.text}</p>
+                </div>
+              ))}
+            </div>
           )}
           <div className="container">
             <div id="content-container">

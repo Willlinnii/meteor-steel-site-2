@@ -163,7 +163,7 @@ export default function CircleNav({ stages, currentStage, onSelectStage, clockwi
             <circle key={`ring-${i}`} cx="50" cy="50" r={r} className={`ring ${i === 0 ? 'ring-outer' : 'ring-inner'}`} />
           ))}
           {worldZones && !listId && (
-            <line x1="12" y1="50" x2="88" y2="50" className="world-divider" />
+            <line x1="0" y1="50" x2="100" y2="50" className="world-divider" />
           )}
           {modelOverlay && !listId && (() => {
             const m = modelOverlay;
