@@ -94,7 +94,7 @@ export default function ChatPanel() {
     if (path === '/story-of-stories') return 'story-of-stories';
     if (path === '/mythic-earth') return 'mythic-earth';
     if (path === '/library') return 'library';
-    if (path === '/myths') return 'mythology-channel';
+    if (path.startsWith('/myths')) return 'mythology-channel';
     if (path === '/yellow-brick-road') return 'meteor-steel';
     return null;
   }

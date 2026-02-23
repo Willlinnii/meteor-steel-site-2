@@ -1,4 +1,5 @@
 import React, { useState, useCallback, useMemo, useRef, useEffect, lazy, Suspense } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useCoursework } from '../../coursework/CourseworkContext';
 import { useAreaOverride } from '../../App';
 import CircleNav from '../../components/CircleNav';
@@ -1925,12 +1926,34 @@ function CosmologyFilms({ trackElement }) {
   );
 }
 
+/* ── URL ↔ view mapping ── */
+const VIEW_PATHS = {
+  earth: 'earth',
+  series: 'series',
+  treasures: 'treasures',
+  motifs: 'motifs',
+  tarot: 'tarot',
+  cosmology: 'cosmology',
+  'cosmology-cycles': 'cosmology-cycles',
+  'cosmology-theorists': 'cosmology-theorists',
+  'cosmology-films': 'cosmology-films',
+  archetypes: 'archetypes',
+};
+const PATH_TO_VIEW = Object.fromEntries(Object.entries(VIEW_PATHS).map(([v, p]) => [p, v]));
+
+function viewFromPath(pathname) {
+  const sub = pathname.replace(/^\/myths\/?/, '').replace(/\/$/, '');
+  return PATH_TO_VIEW[sub] || 'earth';
+}
+
 /* ── Combined Myths Page ── */
 function MythsPage() {
+  const location = useLocation();
+  const navigate = useNavigate();
   const { trackElement } = useCoursework();
   const { user } = useAuth();
   const { userSites, addUserSite, removeUserSite, savedSiteIds, saveSite, unsaveSite } = useProfile();
-  const [activeView, setActiveView] = useState('earth');
+  const [activeView, setActiveView] = useState(() => viewFromPath(location.pathname));
   const [seriesEpisode, setSeriesEpisode] = useState('overview');
   const [treasuresEpisode, setTreasuresEpisode] = useState('overview');
   const [selectedMythicSite, setSelectedMythicSite] = useState(null);
@@ -1971,10 +1994,18 @@ function MythsPage() {
     }
   }, [selectedMythicSite]);
 
+  // Sync activeView when URL changes (back/forward navigation)
+  useEffect(() => {
+    const view = viewFromPath(location.pathname);
+    setActiveView(view);
+  }, [location.pathname]);
+
   const handleViewSwitch = useCallback((view) => {
     setActiveView(view);
     trackElement(`myths.view.${view}`);
-  }, [trackElement]);
+    const sub = VIEW_PATHS[view];
+    navigate(sub ? `/myths/${sub}` : '/myths', { replace: false });
+  }, [trackElement, navigate]);
 
   const viewToggle = (
     <div className="myths-view-toggle">
