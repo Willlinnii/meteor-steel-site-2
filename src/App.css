@@ -3621,6 +3621,16 @@ body {
   margin: 8px 0;
   line-height: 1.5;
 }
+.profile-api-setup-instructions {
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+  opacity: 0.85;
+  margin-top: 10px;
+  line-height: 1.6;
+}
+.profile-api-setup-instructions strong {
+  color: var(--text-primary);
+}
 .profile-api-learn-more {
   display: inline-block;
   margin-top: 10px;
@@ -4455,6 +4465,68 @@ body {
   margin-bottom: 20px;
 }
 
+.natal-chart-mode-toggle {
+  display: flex;
+  gap: 0;
+  margin-bottom: 16px;
+  background: rgba(201, 169, 97, 0.06);
+  border: 1px solid rgba(201, 169, 97, 0.18);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.natal-chart-mode-btn {
+  flex: 1;
+  background: none;
+  border: none;
+  padding: 10px 16px;
+  font-family: 'Cinzel', serif;
+  font-size: 0.78rem;
+  letter-spacing: 0.05em;
+  color: rgba(200, 200, 210, 0.45);
+  cursor: pointer;
+  transition: color 0.25s, background 0.25s;
+}
+
+.natal-chart-mode-btn:hover {
+  color: rgba(200, 200, 210, 0.7);
+}
+
+.natal-chart-mode-btn.active {
+  color: rgba(201, 169, 97, 0.95);
+  background: rgba(201, 169, 97, 0.12);
+}
+
+.natal-mode-tabs {
+  display: flex;
+  gap: 0;
+  margin-bottom: 14px;
+  border-bottom: 1px solid rgba(201, 169, 97, 0.15);
+}
+
+.natal-mode-tab {
+  background: none;
+  border: none;
+  padding: 8px 20px;
+  font-family: 'Cinzel', serif;
+  font-size: 0.82rem;
+  letter-spacing: 0.06em;
+  color: rgba(200, 200, 210, 0.45);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: color 0.25s, border-color 0.25s;
+  margin-bottom: -1px;
+}
+
+.natal-mode-tab:hover {
+  color: rgba(200, 200, 210, 0.7);
+}
+
+.natal-mode-tab.active {
+  color: rgba(201, 169, 97, 0.9);
+  border-bottom-color: rgba(201, 169, 97, 0.7);
+}
+
 .natal-big-three {
   display: flex;
   gap: 12px;
@@ -4569,6 +4641,583 @@ body {
   font-size: 0.75rem;
   color: var(--text-secondary);
   opacity: 0.7;
+}
+
+/* Chinese Zodiac Tab */
+.natal-chinese-tab {
+  text-align: center;
+}
+
+.natal-chinese-hero {
+  margin-bottom: 18px;
+}
+
+.natal-chinese-emoji {
+  font-size: 3.2rem;
+  line-height: 1.2;
+  margin-bottom: 6px;
+}
+
+.natal-chinese-hero > .natal-chinese-pillar {
+  font-family: 'Cinzel', serif;
+  font-size: 1.3rem;
+  color: var(--accent-gold);
+  letter-spacing: 0.06em;
+  margin-bottom: 2px;
+}
+
+.natal-chinese-polarity {
+  font-family: 'Crimson Pro', serif;
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  font-style: italic;
+  letter-spacing: 0.04em;
+}
+
+.natal-chinese-pillar-row {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.natal-chinese-pillar-card {
+  flex: 1;
+  background: rgba(180, 140, 80, 0.04);
+  border: 1px solid rgba(180, 140, 80, 0.18);
+  border-radius: 10px;
+  padding: 12px 10px;
+}
+
+.natal-chinese-pillar-char {
+  font-size: 2rem;
+  line-height: 1.2;
+  color: var(--accent-gold);
+  margin-bottom: 4px;
+}
+
+.natal-chinese-cards {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.natal-chinese-card {
+  flex: 1;
+  background: rgba(201, 169, 97, 0.06);
+  border: 1px solid rgba(201, 169, 97, 0.2);
+  border-radius: 10px;
+  padding: 14px 10px;
+}
+
+.natal-chinese-card-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+}
+
+.natal-chinese-card-emoji {
+  font-size: 1.6rem;
+  line-height: 1.2;
+  margin-bottom: 4px;
+}
+
+.natal-chinese-card-value {
+  font-family: 'Cinzel', serif;
+  font-size: 1.1rem;
+  color: var(--accent-gold);
+  margin-bottom: 8px;
+}
+
+.natal-chinese-card-detail {
+  font-family: 'Crimson Pro', serif;
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.natal-chinese-card-sub {
+  font-family: 'Crimson Pro', serif;
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+  margin-top: 8px;
+  opacity: 0.7;
+}
+
+.natal-chinese-lucky {
+  background: rgba(201, 169, 97, 0.05);
+  border: 1px solid rgba(201, 169, 97, 0.15);
+  border-radius: 10px;
+  padding: 14px;
+  margin-bottom: 16px;
+}
+
+.natal-chinese-lucky-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  margin-bottom: 10px;
+}
+
+.natal-chinese-lucky-grid {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.natal-chinese-lucky-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.natal-chinese-lucky-key {
+  font-family: 'Cinzel', serif;
+  font-size: 0.6rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  opacity: 0.6;
+}
+
+.natal-chinese-lucky-val {
+  font-family: 'Crimson Pro', serif;
+  font-size: 0.85rem;
+  color: rgba(201, 169, 97, 0.85);
+}
+
+.natal-chinese-compat {
+  background: rgba(100, 160, 170, 0.06);
+  border: 1px solid rgba(100, 160, 170, 0.2);
+  border-radius: 10px;
+  padding: 14px;
+  margin-bottom: 10px;
+}
+
+.natal-chinese-compat-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  margin-bottom: 10px;
+}
+
+.natal-chinese-compat-list {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.natal-chinese-compat-tag {
+  background: rgba(100, 160, 170, 0.1);
+  border: 1px solid rgba(100, 160, 170, 0.25);
+  border-radius: 16px;
+  padding: 5px 14px;
+  font-family: 'Crimson Pro', serif;
+  font-size: 0.8rem;
+  color: rgba(160, 200, 210, 0.85);
+}
+
+.natal-chinese-compat-clash {
+  margin-top: 10px;
+  font-family: 'Crimson Pro', serif;
+  font-size: 0.78rem;
+  color: rgba(200, 120, 100, 0.7);
+  font-style: italic;
+}
+
+/* Clickable info expansion */
+.natal-chinese-clickable {
+  cursor: pointer;
+  transition: border-color 0.25s, background 0.25s;
+}
+
+.natal-chinese-clickable:hover {
+  border-color: rgba(201, 169, 97, 0.4);
+}
+
+.natal-chinese-clickable.expanded {
+  border-color: rgba(201, 169, 97, 0.45);
+  background: rgba(201, 169, 97, 0.08);
+}
+
+.natal-chinese-compat.natal-chinese-clickable:hover {
+  border-color: rgba(100, 160, 170, 0.4);
+}
+
+.natal-chinese-compat.natal-chinese-clickable.expanded {
+  border-color: rgba(100, 160, 170, 0.45);
+  background: rgba(100, 160, 170, 0.08);
+}
+
+.natal-chinese-info-hint {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 1px solid rgba(201, 169, 97, 0.35);
+  font-size: 0.55rem;
+  color: rgba(201, 169, 97, 0.6);
+  margin-left: 4px;
+  vertical-align: middle;
+  font-style: normal;
+  font-family: 'Crimson Pro', serif;
+  transition: color 0.25s, border-color 0.25s;
+}
+
+.natal-chinese-clickable:hover .natal-chinese-info-hint {
+  color: rgba(201, 169, 97, 0.9);
+  border-color: rgba(201, 169, 97, 0.6);
+}
+
+.natal-chinese-info-text {
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(201, 169, 97, 0.12);
+  font-family: 'Crimson Pro', serif;
+  font-size: 0.78rem;
+  line-height: 1.65;
+  color: rgba(200, 200, 210, 0.75);
+  text-align: left;
+  animation: chineseInfoFade 0.3s ease;
+}
+
+@keyframes chineseInfoFade {
+  from { opacity: 0; max-height: 0; }
+  to { opacity: 1; max-height: 300px; }
+}
+
+/* ── Synthesis Tab ── */
+
+.natal-synthesis-tab {
+  text-align: center;
+}
+
+.natal-synthesis-wheels {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.natal-synthesis-wheel-card {
+  flex: 1;
+  background: rgba(201, 169, 97, 0.06);
+  border: 1px solid rgba(201, 169, 97, 0.2);
+  border-radius: 10px;
+  padding: 16px 12px 14px;
+  text-align: center;
+}
+
+.natal-synthesis-wheel-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+
+.natal-synthesis-wheel-subtitle {
+  font-style: italic;
+  font-size: 0.7rem;
+  color: var(--accent-gold);
+  opacity: 0.8;
+  margin-bottom: 6px;
+}
+
+.natal-synthesis-wheel-symbol {
+  font-size: 2.4rem;
+  line-height: 1.2;
+  margin-bottom: 4px;
+}
+
+.natal-synthesis-wheel-sign {
+  font-family: 'Cinzel', serif;
+  font-size: 1.15rem;
+  color: var(--accent-gold);
+  letter-spacing: 0.04em;
+  margin-bottom: 6px;
+}
+
+.natal-synthesis-wheel-archetype {
+  font-family: 'Crimson Pro', serif;
+  font-size: 0.88rem;
+  color: rgba(200, 200, 210, 0.85);
+  font-style: italic;
+  margin-bottom: 3px;
+}
+
+.natal-synthesis-wheel-detail {
+  font-family: 'Crimson Pro', serif;
+  font-size: 0.76rem;
+  color: var(--text-secondary);
+  margin-bottom: 2px;
+}
+
+.natal-synthesis-wheel-mood {
+  font-family: 'Crimson Pro', serif;
+  font-size: 0.72rem;
+  color: rgba(180, 160, 130, 0.7);
+  margin-top: 6px;
+}
+
+/* Precession Gap */
+
+.natal-synthesis-gap {
+  background: rgba(100, 140, 180, 0.06);
+  border: 1px solid rgba(100, 140, 180, 0.2);
+  border-radius: 10px;
+  padding: 16px 14px;
+  margin-bottom: 18px;
+  text-align: center;
+}
+
+.natal-synthesis-gap-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(140, 170, 200, 0.8);
+  margin-bottom: 8px;
+}
+
+.natal-synthesis-gap-degrees {
+  font-family: 'Cinzel', serif;
+  font-size: 1.4rem;
+  color: rgba(140, 170, 200, 0.9);
+  letter-spacing: 0.06em;
+  margin-bottom: 8px;
+}
+
+.natal-synthesis-gap-text {
+  font-family: 'Crimson Pro', serif;
+  font-size: 0.85rem;
+  color: rgba(200, 200, 210, 0.85);
+  margin-bottom: 8px;
+  line-height: 1.5;
+}
+
+.natal-synthesis-gap-note {
+  font-family: 'Crimson Pro', serif;
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  line-height: 1.55;
+  margin-bottom: 6px;
+}
+
+.natal-synthesis-gap-age {
+  font-family: 'Crimson Pro', serif;
+  font-size: 0.72rem;
+  color: rgba(160, 160, 170, 0.6);
+  font-style: italic;
+  margin-top: 6px;
+}
+
+/* Planetary Dual-Column Table */
+
+.natal-synthesis-planet-table {
+  margin-bottom: 18px;
+  border: 1px solid rgba(201, 169, 97, 0.15);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.natal-synthesis-table-header {
+  display: flex;
+  padding: 8px 10px;
+  background: rgba(201, 169, 97, 0.08);
+  border-bottom: 1px solid rgba(201, 169, 97, 0.15);
+}
+
+.natal-synthesis-table-header .natal-synthesis-table-planet,
+.natal-synthesis-table-header .natal-synthesis-table-col {
+  font-family: 'Cinzel', serif;
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.natal-synthesis-table-row {
+  display: flex;
+  padding: 6px 10px;
+  border-bottom: 1px solid rgba(201, 169, 97, 0.06);
+}
+
+.natal-synthesis-table-row:last-child {
+  border-bottom: none;
+}
+
+.natal-synthesis-table-planet {
+  flex: 1;
+  text-align: left;
+  font-family: 'Crimson Pro', serif;
+  font-size: 0.8rem;
+  color: rgba(200, 200, 210, 0.85);
+}
+
+.natal-synthesis-table-col {
+  flex: 1.2;
+  text-align: center;
+  font-family: 'Crimson Pro', serif;
+  font-size: 0.78rem;
+  color: rgba(200, 200, 210, 0.75);
+}
+
+/* Three Traditions Row */
+
+.natal-synthesis-traditions {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.natal-synthesis-tradition-card {
+  flex: 1;
+  background: rgba(201, 169, 97, 0.05);
+  border: 1px solid rgba(201, 169, 97, 0.18);
+  border-radius: 10px;
+  padding: 14px 10px;
+  text-align: center;
+}
+
+.natal-synthesis-tradition-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+
+.natal-synthesis-tradition-value {
+  font-family: 'Cinzel', serif;
+  font-size: 0.88rem;
+  color: var(--accent-gold);
+  letter-spacing: 0.04em;
+  margin-bottom: 4px;
+}
+
+.natal-synthesis-tradition-detail {
+  font-family: 'Crimson Pro', serif;
+  font-size: 0.74rem;
+  color: var(--text-secondary);
+  margin-bottom: 2px;
+}
+
+/* Unified Narrative Reading */
+
+.natal-synthesis-narrative {
+  background: rgba(201, 169, 97, 0.04);
+  border: 1px solid rgba(201, 169, 97, 0.12);
+  border-radius: 12px;
+  padding: 20px 18px;
+  text-align: left;
+}
+
+.natal-synthesis-narrative-title {
+  font-family: 'Cinzel', serif;
+  font-size: 0.85rem;
+  letter-spacing: 0.06em;
+  color: var(--accent-gold);
+  margin-bottom: 14px;
+  text-align: center;
+}
+
+.natal-synthesis-narrative-para {
+  font-family: 'Crimson Pro', serif;
+  font-size: 0.84rem;
+  line-height: 1.7;
+  color: rgba(200, 200, 210, 0.82);
+  margin-bottom: 14px;
+}
+
+.natal-synthesis-narrative-para:last-child {
+  margin-bottom: 0;
+}
+
+/* Synthesis responsive */
+@media (max-width: 520px) {
+  .natal-synthesis-wheels {
+    flex-direction: column;
+  }
+  .natal-synthesis-traditions {
+    flex-direction: column;
+  }
+  .natal-synthesis-table-col {
+    font-size: 0.7rem;
+  }
+}
+
+/* ===== PROFILE: LIVE SKY / TRANSITS ===== */
+
+.natal-sky-now-loading {
+  text-align: center;
+  padding: 32px 0;
+  font-family: 'Crimson Pro', serif;
+  font-size: 0.85rem;
+  color: rgba(200, 200, 210, 0.5);
+  font-style: italic;
+}
+
+.natal-transit-aspects {
+  margin-bottom: 18px;
+  background: rgba(201, 169, 97, 0.04);
+  border: 1px solid rgba(201, 169, 97, 0.12);
+  border-radius: 10px;
+  padding: 14px 16px;
+}
+
+.natal-transit-aspects-title {
+  font-family: 'Cinzel', serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  margin-bottom: 10px;
+}
+
+.natal-transit-aspect {
+  font-family: 'Crimson Pro', serif;
+  font-size: 0.82rem;
+  color: rgba(200, 200, 210, 0.8);
+  line-height: 1.6;
+  padding: 4px 0;
+  border-bottom: 1px solid rgba(201, 169, 97, 0.06);
+}
+
+.natal-transit-aspect:last-child {
+  border-bottom: none;
+}
+
+.natal-transit-orb {
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+  opacity: 0.7;
+}
+
+.natal-transit-meaning {
+  font-style: italic;
+  color: rgba(201, 169, 97, 0.7);
+  font-size: 0.78rem;
+}
+
+.natal-sky-now-timestamp {
+  text-align: center;
+  font-family: 'Crimson Pro', serif;
+  font-size: 0.68rem;
+  color: rgba(160, 160, 170, 0.4);
+  margin-top: 16px;
+  font-style: italic;
 }
 
 /* Natal Chart Input Form */
