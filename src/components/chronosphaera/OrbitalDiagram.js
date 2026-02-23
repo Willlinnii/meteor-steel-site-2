@@ -2620,7 +2620,7 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
         <button
           className="clock-toggle"
           onClick={() => { onToggleClock && onToggleClock(); }}
-          title={!clockMode ? 'Show 12h clock' : clockMode === '12h' ? 'Switch to 24h geocentric' : 'Hide clock'}
+          title={!clockMode ? 'Show 12-hour heliocentric clock' : clockMode === '12h' ? '12-hour heliocentric — click for 24-hour geocentric' : '24-hour geocentric — click for 12-hour heliocentric'}
         >
           <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
             <circle cx="12" cy="12" r="10" />
