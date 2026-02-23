@@ -63,7 +63,7 @@ module.exports = async (req, res) => {
 
     const key = generateKey();
     const keyHash = hashKey(key);
-    const defaultTier = 'free';
+    const defaultTier = 'call';
     const tierConfig = getTierConfig(defaultTier);
 
     // Next monthly reset: first of next month

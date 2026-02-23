@@ -51,7 +51,7 @@ async function validateApiKey(req) {
     }
 
     const data = doc.data();
-    const tier = data.tier || 'free';
+    const tier = data.tier || 'call';
     const tierConfig = getTierConfig(tier);
 
     // Check if monthly counter needs resetting
