@@ -348,11 +348,24 @@ export default function OuroborosJourneyPage() {
     setInputText('');
     setLoading(true);
 
+    const completedStageLabels = stages
+      .filter(s => journey.stopProgress[s.id]?.passed)
+      .map(s => s.label);
+    const journeyState = [
+      `Journey: ${def.label}`,
+      `Mode: ${gameMode || (isMultiLevel ? 'cosmic challenge' : 'riddle')}`,
+      `Current stage: ${stop.label} (${idx + 1}/${totalStages})`,
+      `Completed: ${journey.completedStops}/${journey.totalStops}`,
+      completedStageLabels.length > 0 ? `Passed: ${completedStageLabels.join(', ')}` : null,
+      isFusedJourney ? `Fused phase: ${fusedPhase === 0 ? 'monomyth' : 'steel'}` : null,
+      isMultiLevel ? `Cosmic level: ${cosmicLevel}` : null,
+    ].filter(Boolean).join('\n');
+
     try {
       const body = isMultiLevel
-        ? { messages: next, mode: 'ybr-challenge', challengeStop: stop.id, level: cosmicLevel, area: 'celestial-clocks' }
+        ? { messages: next, mode: 'ybr-challenge', challengeStop: stop.id, level: cosmicLevel, area: 'celestial-clocks', journeyState }
         : {
-            messages: next, mode: 'wheel-journey', journeyId, stageId: stop.id, gameMode: gameMode || 'riddle',
+            messages: next, mode: 'wheel-journey', journeyId, stageId: stop.id, gameMode: gameMode || 'riddle', journeyState,
             ...(isFusedJourney ? { aspect: fusedPhase === 0 ? 'monomyth' : 'steel' } : {}),
           };
 

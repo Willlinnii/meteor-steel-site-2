@@ -1555,7 +1555,7 @@ module.exports = async function handler(req, res) {
     }
   }
 
-  const { messages, area, persona, mode, challengeStop, level, journeyId, stageId, gameMode, stageData, aspect, courseSummary, episodeContext, situationalContext, existingCredentials, existingNatalChart, qualifiedMentorTypes, uploadedDocument, tarotPhase, tarotCards, tarotIntention, culture, template, stageContent, targetStage, stageEntries, adjacentDrafts, requestDraft, drafts, completionType, completionData, currentSummary, currentFullStory } = req.body || {};
+  const { messages, area, persona, mode, challengeStop, level, journeyId, stageId, gameMode, stageData, aspect, courseSummary, journeyState, episodeContext, situationalContext, existingCredentials, existingNatalChart, qualifiedMentorTypes, uploadedDocument, tarotPhase, tarotCards, tarotIntention, culture, template, stageContent, targetStage, stageEntries, adjacentDrafts, requestDraft, drafts, completionType, completionData, currentSummary, currentFullStory } = req.body || {};
 
   // --- Story Forge mode (narrative generation via OpenAI) ---
   if (mode === 'forge') {
@@ -2218,6 +2218,10 @@ ${rawText.slice(0, 8000)}`;
       );
     }
 
+    if (journeyState) {
+      systemPrompt += `\n\n--- JOURNEY PROGRESS ---\n${journeyState}\nUse this to acknowledge progress naturally. Don't lead with it — weave it in when relevant.`;
+    }
+
     try {
       const response = await anthropic.messages.create({
         model: MODELS.fast,
@@ -2257,11 +2261,15 @@ ${rawText.slice(0, 8000)}`;
     }
 
     const effectiveGameMode = gameMode || 'riddle';
-    const systemPrompt = (journeyId === 'fused' && aspect)
+    let systemPrompt = (journeyId === 'fused' && aspect)
                         ? buildFusedJourneyPrompt(stageId, aspect, effectiveGameMode)
                         : effectiveGameMode === 'story'   ? buildStoryModePrompt(journeyId, stageId)
                         : effectiveGameMode === 'personal' ? buildPersonalModePrompt(journeyId, stageId)
                         :                                    buildWheelJourneyPrompt(journeyId, stageId);
+
+    if (journeyState) {
+      systemPrompt += `\n\n--- JOURNEY PROGRESS ---\n${journeyState}\nUse this to acknowledge progress naturally. Don't lead with it — weave it in when relevant.`;
+    }
 
     try {
       const response = await anthropic.messages.create({
