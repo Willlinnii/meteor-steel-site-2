@@ -10,6 +10,7 @@ import starsSouth from '../../data/starsSouth.json';
 import constellationsData from '../../data/constellations.json';
 import zodiacCultureData from '../../data/chronosphaeraZodiac.json';
 import constellationCultures from '../../data/constellationCultures.json';
+import { CHAKRA_ORDERINGS, CHAKRA_MODE_LABELS } from '../../data/chronosphaeraBodyPositions';
 
 const BODY_MAP = {
   Moon: Body.Moon,
@@ -37,9 +38,16 @@ function getHeliocentricLongitude(planet) {
   return EclipticLongitude(Body[planet], new Date());
 }
 
-function lonToSignLabel(lon) {
-  const signIndex = Math.floor(lon / 30) % 12;
-  const deg = Math.floor(lon % 30);
+function getLahiriAyanamsa() {
+  const now = new Date();
+  const fracYear = now.getFullYear() + (now.getMonth() / 12) + (now.getDate() / 365.25);
+  return 23.853 + (fracYear - 2000) * 0.01397; // ~24.2° in 2026
+}
+
+function lonToSignLabel(lon, siderealOffset = 0) {
+  const adjLon = ((lon - siderealOffset) % 360 + 360) % 360;
+  const signIndex = Math.floor(adjLon / 30) % 12;
+  const deg = Math.floor(adjLon % 30);
   return `${deg}° ${SIGN_SYMBOLS[signIndex]}`;
 }
 
@@ -73,17 +81,7 @@ const CHAKRA_POSITIONS = [
   { label: 'Root',         x: 350, y: 295, color: '#c04040' },
 ];
 
-const CHAKRA_ORDERINGS = {
-  chaldean:     ['Saturn','Jupiter','Mars','Sun','Venus','Mercury','Moon'],
-  heliocentric: ['Sun','Mercury','Venus','Moon','Mars','Jupiter','Saturn'],
-  weekdays:     ['Sun','Moon','Mars','Mercury','Jupiter','Venus','Saturn'],
-};
-
-const CHAKRA_MODE_LABELS = {
-  chaldean: 'Chaldean Order',
-  heliocentric: 'Heliocentric Order',
-  weekdays: 'Weekday Order',
-};
+// CHAKRA_ORDERINGS and CHAKRA_MODE_LABELS imported from chronosphaeraBodyPositions.js
 
 // SVG path glyphs for zodiac signs (drawn in a ~16x16 viewBox, centered at 0,0)
 const ZODIAC_GLYPHS = {
@@ -254,7 +252,7 @@ function ensureYTApi() {
   });
 }
 
-export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPlanet, hoveredPlanet, selectedSign, onSelectSign, selectedCardinal, onSelectCardinal, selectedEarth, onSelectEarth, showCalendar, onToggleCalendar, selectedMonth, onSelectMonth, showMedicineWheel, onToggleMedicineWheel, selectedWheelItem, onSelectWheelItem, chakraViewMode, onToggleChakraView, onClickOrderLabel, videoUrl, onCloseVideo, ybrActive, ybrCurrentStopIndex, ybrStopProgress, ybrJourneySequence, onToggleYBR, ybrAutoStart, clockMode, onToggleClock, showMonomyth, showMeteorSteel, monomythStages, selectedMonomythStage, onSelectMonomythStage, onToggleMonomyth, monomythModel, showCycles, onSelectCycleSegment, activeCulture, showFallenStarlight, showStoryOfStories, onToggleStarlight, starlightStages, selectedStarlightStage, onSelectStarlightStage, selectedConstellation, onSelectConstellation }) {
+export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPlanet, hoveredPlanet, selectedSign, onSelectSign, selectedCardinal, onSelectCardinal, selectedEarth, onSelectEarth, showCalendar, onToggleCalendar, selectedMonth, onSelectMonth, showMedicineWheel, onToggleMedicineWheel, selectedWheelItem, onSelectWheelItem, chakraViewMode, onToggleChakraView, onClickOrderLabel, videoUrl, onCloseVideo, ybrActive, ybrCurrentStopIndex, ybrStopProgress, ybrJourneySequence, onToggleYBR, ybrAutoStart, clockMode, onToggleClock, showMonomyth, showMeteorSteel, monomythStages, selectedMonomythStage, onSelectMonomythStage, onToggleMonomyth, monomythModel, showCycles, onSelectCycleSegment, activeCulture, showFallenStarlight, showStoryOfStories, onToggleStarlight, starlightStages, selectedStarlightStage, onSelectStarlightStage, selectedConstellation, onSelectConstellation, zodiacMode }) {
   const wrapperRef = useRef(null);
   const [tooltip, setTooltip] = useState(null);
   const { hasPurchase } = useProfile();
@@ -751,7 +749,7 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
     const earthHelioLon = getHeliocentricLongitude('Earth');
     angles['Moon-helio'] = -(moonGeoLon - earthHelioLon);
     return angles;
-  }, [heliocentric]);
+  }, [heliocentric, clockTime]);
 
   const moonPhaseAngle = useMemo(() => MoonPhase(new Date()), []);
 
@@ -784,12 +782,13 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
 
   // Rotation for zodiac/month rings in 24h mode so Sun's sign aligns with hour hand
   const zodiacRotationDeg = useMemo(() => {
-    if (chakraViewMode || showMonomyth) return 0; // static zodiac in body/monomyth view
-    if (clockMode !== '24h') return 0;
+    const siderealOffset = zodiacMode === 'sidereal' ? -getLahiriAyanamsa() : 0;
+    if (chakraViewMode || showMonomyth) return siderealOffset;
+    if (clockMode !== '24h') return siderealOffset;
     const sunLon = getEclipticLongitude('Sun');
     const hDeg24 = clockTime.h * 15 + clockTime.m * 0.25 + 90;
-    return hDeg24 + sunLon;
-  }, [clockMode, clockTime, chakraViewMode, showMonomyth]);
+    return hDeg24 + sunLon + siderealOffset;
+  }, [clockMode, clockTime, chakraViewMode, showMonomyth, zodiacMode]);
 
   const starPositionsNorth = useMemo(() =>
     starsNorth.map(([ra, dec, mag]) => ({ ...starToSvg(ra, dec), r: starRadius(mag), o: starOpacity(mag) })), []
@@ -2373,7 +2372,7 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
                     fontSize="8"
                     fontFamily="Crimson Pro, serif"
                   >
-                    {lonToSignLabel(liveAngles[o.planet].lon)}
+                    {lonToSignLabel(liveAngles[o.planet].lon, zodiacMode === 'sidereal' ? getLahiriAyanamsa() : 0)}
                   </text>
                 </g>
               )}

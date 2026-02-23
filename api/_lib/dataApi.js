@@ -180,6 +180,49 @@ function findBySin(arr, sin) {
   return arr.find(e => e.sin.toLowerCase() === sin.toLowerCase()) || null;
 }
 
+// ── Body position data (position-pinned, Crown → Root) ──
+// The body is the stable reference frame. Different orderings seat different
+// planets at different positions; each planet picks up whatever sin/virtue/
+// organ/gland lives at its position.
+
+const BODY_ORDERINGS = {
+  chaldean:     ['Saturn','Jupiter','Mars','Sun','Venus','Mercury','Moon'],
+  heliocentric: ['Sun','Mercury','Venus','Moon','Mars','Jupiter','Saturn'],
+  weekdays:     ['Sun','Moon','Mars','Mercury','Jupiter','Venus','Saturn'],
+};
+
+const BODY_POSITIONS = [
+  { chakra: { label: 'Crown', sanskrit: 'Sahasrara', location: 'Top of head', theme: 'Unity, transcendence, meaning', element: 'Consciousness' }, sin: 'Pride', virtue: 'Humility', organ: 'Skin', organDescription: 'Skin regulates temperature and acts as a protective barrier.', secondaryOrgan: null, gland: { gland: 'Pineal', hormones: 'Melatonin, DMT' }, description: 'The Crown Chakra is the seat of spiritual connection and universal consciousness. When Pride occupies this position, an inflated sense of self-importance severs the link to something larger. Humility restores the Crown\'s capacity for transcendence and meaning.' },
+  { chakra: { label: 'Third Eye', sanskrit: 'Ajna', location: 'Between eyebrows', theme: 'Insight, intuition, imagination', element: 'Mind / Light' }, sin: 'Envy', virtue: 'Gratitude', organ: 'Nervous System', organDescription: 'The nervous system coordinates sensory and motor functions.', secondaryOrgan: null, gland: { gland: 'Pituitary', hormones: 'Oxytocin, Endorphins, Regulatory Hormones' }, description: 'The Third Eye Chakra governs perception, intuition, and inner sight. When Envy clouds this position, jealousy distorts how we see others and ourselves. Gratitude restores clear perception.' },
+  { chakra: { label: 'Throat', sanskrit: 'Vishuddha', location: 'Throat', theme: 'Expression, truth, communication', element: 'Ether / Space' }, sin: 'Wrath', virtue: 'Patience', organ: 'Muscular System', organDescription: 'Muscular system enables movement and structural support.', secondaryOrgan: null, gland: { gland: 'Pancreas', hormones: 'Insulin, Glucagon' }, description: 'The Throat Chakra governs communication and authentic expression. When Wrath occupies this position, anger disrupts the capacity for honest speech. Patience restores the Throat\'s power.' },
+  { chakra: { label: 'Heart', sanskrit: 'Anahata', location: 'Center of chest', theme: 'Love, compassion, connection', element: 'Air' }, sin: 'Greed', virtue: 'Charity', organ: 'Respiratory System', organDescription: 'Respiratory system exchanges gases, vital for energy and life.', secondaryOrgan: 'Circulatory System', gland: { gland: 'Thyroid & Parathyroid', hormones: 'Thyroxine, Triiodothyronine, Calcitonin' }, description: 'The Heart Chakra is the center of love, empathy, and connection. When Greed hardens this position, the desire to accumulate replaces the instinct to give. Charity reopens the heart.' },
+  { chakra: { label: 'Solar Plexus', sanskrit: 'Manipura', location: 'Upper abdomen', theme: 'Power, will, identity, confidence', element: 'Fire' }, sin: 'Gluttony', virtue: 'Temperance', organ: 'Digestive System', organDescription: 'Digestive system processes food into energy and nutrients.', secondaryOrgan: 'Muscular System', gland: { gland: 'Gonads (Ovaries/Testes)', hormones: 'Estrogen, Progesterone, Testosterone' }, description: 'The Solar Plexus Chakra is the seat of personal power, will, and identity. When Gluttony bloats this position, excess overwhelms self-discipline. Temperance restores the fire of Manipura.' },
+  { chakra: { label: 'Sacral', sanskrit: 'Svadhishthana', location: 'Lower abdomen / pelvis', theme: 'Emotion, pleasure, sexuality, creativity', element: 'Water' }, sin: 'Lust', virtue: 'Chastity', organ: 'Reproductive System', organDescription: 'Reproductive system underpins procreation and sexual health.', secondaryOrgan: 'Lymphatic System', gland: { gland: 'Thymus', hormones: 'Thymosin' }, description: 'The Sacral Chakra governs emotion, creativity, and sexual energy. When Lust distorts this position, creative and sexual energies are misused. Chastity, understood as intentionality, restores the Sacral\'s creative flow.' },
+  { chakra: { label: 'Root', sanskrit: 'Muladhara', location: 'Base of spine', theme: 'Survival, safety, grounding, belonging', element: 'Earth' }, sin: 'Sloth', virtue: 'Diligence', organ: 'Skeletal System', organDescription: 'The skeletal system provides the body\'s framework and protection.', secondaryOrgan: null, gland: { gland: 'Adrenal', hormones: 'Adrenaline (Epinephrine), Cortisol' }, description: 'The Root Chakra grounds us to the earth and our basic survival instincts. When Sloth occupies this position, inertia prevents a stable foundation. Diligence restores the Root\'s grounding power.' },
+];
+
+const WEEKDAY_PAIRING_DESCRIPTIONS = {
+  Sun: 'The Crown Chakra, linked to the Sun, symbolizes our connection to the divine and universal consciousness. The Sun, representing vitality, ego, and self, when associated with Pride, highlights how an inflated sense of self-importance can sever spiritual connections.',
+  Moon: 'The Third Eye Chakra, connected to intuition and insight, when influenced by Envy, associated with the Moon, reflects how jealousy clouds our perception and distorts reality.',
+  Mars: 'The Throat Chakra governs communication, and when impacted by Wrath, associated with Mars, the god of war, it emphasizes how anger can disrupt our ability to communicate effectively.',
+  Mercury: 'The Heart Chakra, the center of love and empathy, when influenced by Greed, linked to Mercury, the messenger and god of commerce, suggests how a desire for material wealth can harden the heart.',
+  Jupiter: 'The Solar Plexus Chakra, associated with personal power and self-worth, when imbalanced by Gluttony, connected to Jupiter, the king of gods, emphasizes excess and indulgence.',
+  Venus: 'The Sacral Chakra, related to creativity and emotional life, when distorted by Lust, associated with Venus, the goddess of love and beauty, highlights the misuse of creative and sexual energies.',
+  Saturn: 'The Root Chakra, grounding us to the earth and our basic survival instincts, when affected by Sloth, linked to Saturn, the god of time and discipline, reflects a lack of motivation and discipline.',
+};
+
+function resolveBodyPosition(planet, mode) {
+  const ordering = BODY_ORDERINGS[mode];
+  if (!ordering) return null;
+  const idx = ordering.indexOf(planet);
+  if (idx < 0) return null;
+  const pos = BODY_POSITIONS[idx];
+  const description = mode === 'weekdays'
+    ? (WEEKDAY_PAIRING_DESCRIPTIONS[planet] || pos.description)
+    : pos.description;
+  return { positionIndex: idx, ...pos, description };
+}
+
 // ── Response envelope ──
 
 function respond(res, statusCode, body, endpoint) {
@@ -189,6 +232,7 @@ function respond(res, statusCode, body, endpoint) {
       version: '1.0',
       endpoint: endpoint || '',
       timestamp: new Date().toISOString(),
+      attribution: 'Atlas \u2014 Mythouse',
       license: 'Content accessed via this API may not be used to train foundation models. All rights reserved by Glinter LLC.',
     },
   };
@@ -471,6 +515,19 @@ function handlePlanets(segments, req, res) {
         return respond(res, 200, { data: archetypeIndex[sin.toLowerCase()] || null }, endpoint);
       case 'artists':
         return respond(res, 200, { data: artistIndex[sin.toLowerCase()] || null }, endpoint);
+      case 'body': {
+        const mode = req.query.mode;
+        const validModes = ['weekdays', 'chaldean', 'heliocentric'];
+        if (mode && !validModes.includes(mode)) {
+          return respond(res, 400, { error: `Unknown mode: ${mode}. Use weekdays, chaldean, or heliocentric.` }, endpoint);
+        }
+        const modes = mode ? [mode] : validModes;
+        const orderings = {};
+        for (const m of modes) {
+          orderings[m] = resolveBodyPosition(entry.planet, m);
+        }
+        return respond(res, 200, { data: { planet: entry.planet, orderings } }, endpoint);
+      }
       default:
         return respond(res, 404, { error: `Unknown planet sub-resource: ${sub}` }, endpoint);
     }
@@ -493,6 +550,13 @@ function handlePlanets(segments, req, res) {
   if (all || include.includes('stories'))  data.stories    = findBySin(chronosphaeraStories, sin);
   if (all || include.includes('hebrew'))   data.hebrew     = hebrewIndex[id] || null;
   if (all || include.includes('artists'))  data.artists    = artistIndex[sin.toLowerCase()] || null;
+  if (all || include.includes('body')) {
+    const orderings = {};
+    for (const m of ['weekdays', 'chaldean', 'heliocentric']) {
+      orderings[m] = resolveBodyPosition(entry.planet, m);
+    }
+    data.bodyPositions = orderings;
+  }
 
   return respond(res, 200, { data }, endpoint);
 }

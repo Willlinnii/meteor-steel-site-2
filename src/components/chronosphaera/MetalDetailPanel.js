@@ -6,6 +6,7 @@ import TextBlock from './TextBlock';
 import DevelopmentPanel from '../DevelopmentPanel';
 import TarotCardContent from './TarotCardContent';
 import PersonaChatPanel from '../PersonaChatPanel';
+import SolarMagneticField from './SolarMagneticField';
 import { useStoryForge } from '../../App';
 
 const HINDU_GEMS = {
@@ -33,6 +34,7 @@ function OverviewTab({ data }) {
         <div className="overview-item"><span className="ov-label">Virtue</span><span className="ov-value">{m.virtue}</span></div>
         {gem && <div className="overview-item"><span className="ov-label">Stone</span><span className="ov-value">{gem}</span></div>}
       </div>
+      {m.planet === 'Sun' && <SolarMagneticField />}
       {m.astrology && <p className="astrology-note">{m.astrology}</p>}
       {m.deities && (
         <div className="quick-deities">
@@ -101,7 +103,8 @@ function SinsTab({ data }) {
   const s = data?.stories;
   const sinName = data?.core?.sin;
   const virtueName = data?.core?.virtue;
-  const chakra = PLANET_CHAKRA_DETAILS[data?.core?.planet];
+  const pos = data?._bodyPosition;
+  const chakra = pos ? pos.chakra : PLANET_CHAKRA_DETAILS[data?.core?.planet];
   if (!a && !m && !artists && !t && !s) return <p className="chrono-empty">No sin/virtue data available.</p>;
 
   const artistFields = [
@@ -119,7 +122,7 @@ function SinsTab({ data }) {
       {chakra && (
         <div className="archetype-section sin-chakra-context">
           <h5>{chakra.label} Chakra ({chakra.sanskrit})</h5>
-          <p>{chakra.description}</p>
+          <p>{pos ? pos.description : chakra.description}</p>
         </div>
       )}
       {a && (
@@ -319,8 +322,11 @@ function BodyTab({ data }) {
   if (!data?.core?.body) return <p className="chrono-empty">No body data available.</p>;
   const b = data.core.body;
   const planet = data.core.planet;
-  const chakra = PLANET_CHAKRA_DETAILS[planet];
-  const glandInfo = PLANET_GLANDS[planet];
+  const pos = data._bodyPosition;
+  // Use position-pinned data when in body mode, otherwise fall back to planet-keyed data
+  const chakra = pos ? pos.chakra : PLANET_CHAKRA_DETAILS[planet];
+  const glandInfo = pos ? pos.gland : PLANET_GLANDS[planet];
+  const description = pos ? pos.description : (PLANET_CHAKRA_DETAILS[planet]?.description || null);
   return (
     <div className="tab-content">
       {chakra && (
@@ -328,13 +334,13 @@ function BodyTab({ data }) {
           <h5>Chakra: {chakra.label}</h5>
           <p className="body-meta">{chakra.sanskrit} · {chakra.location} · {chakra.element}</p>
           <p className="body-meta">Theme: {chakra.theme}</p>
-          <p>{chakra.description}</p>
+          {description && <p>{description}</p>}
         </div>
       )}
-      {b.organ && (
+      {(pos ? pos.organ : b.organ) && (
         <div className="body-section">
-          <h5>Organ System: {b.organ}</h5>
-          {b.organDescription && <p>{b.organDescription}</p>}
+          <h5>Organ System: {pos ? pos.organ : b.organ}</h5>
+          {(pos ? pos.organDescription : b.organDescription) && <p>{pos ? pos.organDescription : b.organDescription}</p>}
         </div>
       )}
       {glandInfo && (
@@ -347,13 +353,14 @@ function BodyTab({ data }) {
   );
 }
 
-function HebrewTab({ data }) {
+function HebrewTab({ data, chakraViewMode }) {
   if (!data?.hebrew) return <p className="chrono-empty">No Hebrew data available.</p>;
   const h = data.hebrew;
+  const showCreation = !chakraViewMode || chakraViewMode === 'weekdays';
   return (
     <div className="tab-content">
-      {h.hebrewDay && <h4 className="hebrew-day">{h.hebrewDay}</h4>}
-      {h.creation && (
+      {showCreation && h.hebrewDay && <h4 className="hebrew-day">{h.hebrewDay}</h4>}
+      {showCreation && h.creation && (
         <div className="hebrew-section">
           <h5>Day {h.creation.dayNumber} of Creation</h5>
           <p>{h.creation.description}</p>
@@ -390,7 +397,7 @@ function SynthesisTab({ data }) {
   );
 }
 
-export default function MetalDetailPanel({ data, activeTab, onSelectTab, activeCulture, onSelectCulture, devEntries, setDevEntries, playlistUrl, videoActive, onToggleVideo, onTogglePersonaChat, personaChatActive, personaChatMessages, setPersonaChatMessages, onClosePersonaChat, getTabClass, onToggleYBR, ybrActive }) {
+export default function MetalDetailPanel({ data, activeTab, onSelectTab, activeCulture, onSelectCulture, devEntries, setDevEntries, playlistUrl, videoActive, onToggleVideo, onTogglePersonaChat, personaChatActive, personaChatMessages, setPersonaChatMessages, onClosePersonaChat, getTabClass, onToggleYBR, ybrActive, chakraViewMode }) {
   const { forgeMode } = useStoryForge();
   const showCultureSelector = activeTab === 'deities';
 
@@ -406,7 +413,7 @@ export default function MetalDetailPanel({ data, activeTab, onSelectTab, activeC
         {activeTab === 'sins' && <SinsTab data={data} />}
         {activeTab === 'day' && <DayTab data={data} />}
         {activeTab === 'body' && <BodyTab data={data} />}
-        {activeTab === 'hebrew' && <HebrewTab data={data} />}
+        {activeTab === 'hebrew' && <HebrewTab data={data} chakraViewMode={chakraViewMode} />}
         {activeTab === 'tarot' && <TarotCardContent correspondenceType="planet" correspondenceValue={data.core.planet} showMinorArcana={false} />}
         {activeTab === 'synthesis' && <SynthesisTab data={data} />}
         {activeTab === 'development' && forgeMode && (

@@ -40,6 +40,7 @@ import DevelopmentPanel from '../../components/DevelopmentPanel';
 import ChapterAudioPlayer, { CHAPTER_AUDIO } from '../../components/ChapterAudioPlayer';
 import { useYBRHeader, useStoryForge } from '../../App';
 import { useAtlasContext } from '../../contexts/AtlasContext';
+import resolveBodyPosition from '../../data/resolveBodyPosition';
 import { useProfile } from '../../profile/ProfileContext';
 
 const METEOR_STEEL_STAGES = [
@@ -511,6 +512,7 @@ export default function ChronosphaeraPage() {
   const [selectedEarth, setSelectedEarth] = useState(null);
   const [devEntries, setDevEntries] = useState({});
   const [clockMode, setClockMode] = useState('12h');
+  const [zodiacMode, setZodiacMode] = useState('tropical');
   const [showCalendar, setShowCalendar] = useState(() => location.pathname.endsWith('/calendar'));
   const [selectedMonth, setSelectedMonth] = useState(() => location.pathname.endsWith('/calendar') ? MONTHS[new Date().getMonth()] : null);
   const [activeMonthTab, setActiveMonthTab] = useState('stone');
@@ -903,7 +905,37 @@ export default function ChronosphaeraPage() {
     return map;
   }, []);
 
-  const currentData = mergedData[selectedPlanet] || null;
+  let currentData = mergedData[selectedPlanet] || null;
+
+  // In body mode, override position-pinned data (sin, virtue, body, gland)
+  // based on where the planet sits in the current ordering.
+  if (currentData && chakraViewMode) {
+    const pos = resolveBodyPosition(selectedPlanet, chakraViewMode);
+    if (pos) {
+      currentData = {
+        ...currentData,
+        core: {
+          ...currentData.core,
+          sin: pos.sin,
+          virtue: pos.virtue,
+          body: {
+            organ: pos.organ,
+            organDescription: pos.organDescription,
+            secondaryOrgan: pos.secondaryOrgan,
+            chakra: pos.chakra.label + ' Chakra',
+            chakraDescription: pos.description,
+          },
+        },
+        archetype: findBySin(archetypesData, pos.sin),
+        artists: findBySin(artistsData, pos.sin),
+        modern: findBySin(modernData, pos.sin),
+        stories: findBySin(storiesData, pos.sin),
+        theology: findBySin(theologyData, pos.sin),
+        _bodyPosition: pos,
+        _chakraViewMode: chakraViewMode,
+      };
+    }
+  }
 
   function renderPlanetWeekdayNav() {
     return (
@@ -1007,6 +1039,7 @@ export default function ChronosphaeraPage() {
             clearAllSelections();
             setMode('default');
             setClockMode(next);
+            setZodiacMode(next === '24h' ? 'sidereal' : 'tropical');
             setShowCalendar(true);
             setSelectedMonth(MONTHS[new Date().getMonth()]);
             setActiveMonthTab('stone');
@@ -1087,6 +1120,7 @@ export default function ChronosphaeraPage() {
             setSelectedConstellation(null);
           }}
           selectedConstellation={selectedConstellation}
+          zodiacMode={zodiacMode}
           onSelectConstellation={(cid) => {
             trackElement(`chronosphaera.constellation.${cid}`);
             setSelectedConstellation(selectedConstellation === cid ? null : cid);
@@ -1400,6 +1434,7 @@ export default function ChronosphaeraPage() {
                     getTabClass={courseworkMode ? (tab) => isElementCompleted(`chronosphaera.tab.${tab}.${selectedPlanet}`) ? 'cw-completed' : 'cw-incomplete' : undefined}
                     onToggleYBR={handleYBRToggle}
                     ybrActive={ybr.active}
+                    chakraViewMode={chakraViewMode}
                   />
                   {activeTab === 'overview' && (
                     <div className="planet-culture-wrapper">
@@ -1563,6 +1598,7 @@ export default function ChronosphaeraPage() {
                     getTabClass={courseworkMode ? (tab) => isElementCompleted(`chronosphaera.tab.${tab}.${selectedPlanet}`) ? 'cw-completed' : 'cw-incomplete' : undefined}
                     onToggleYBR={handleYBRToggle}
                     ybrActive={ybr.active}
+                    chakraViewMode={chakraViewMode}
                   />
                   {activeTab === 'overview' && (
                     <div className="planet-culture-wrapper">
@@ -1744,6 +1780,19 @@ export default function ChronosphaeraPage() {
             <p className="calendar-today-label calendar-today-above">
               {new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
             </p>
+          )}
+          {clockMode && (
+            <div className="zodiac-mode-switch">
+              <span className={zodiacMode === 'tropical' ? 'active' : ''}>Tropical</span>
+              <button
+                className={`zodiac-toggle-track ${zodiacMode}`}
+                onClick={() => setZodiacMode(z => z === 'tropical' ? 'sidereal' : 'tropical')}
+                title={zodiacMode === 'sidereal' ? 'Sidereal — aligned to actual constellations' : 'Tropical — aligned to equinoxes'}
+              >
+                <span className="zodiac-toggle-knob" />
+              </button>
+              <span className={zodiacMode === 'sidereal' ? 'active' : ''}>Sidereal</span>
+            </div>
           )}
           <h2 className="chrono-heading">
             <span className="chrono-heading-title-row">
@@ -1967,6 +2016,7 @@ export default function ChronosphaeraPage() {
                     getTabClass={courseworkMode ? (tab) => isElementCompleted(`chronosphaera.tab.${tab}.${selectedPlanet}`) ? 'cw-completed' : 'cw-incomplete' : undefined}
                     onToggleYBR={handleYBRToggle}
                     ybrActive={ybr.active}
+                    chakraViewMode={chakraViewMode}
                   />
                   {activeTab === 'overview' && (
                     <div className="planet-culture-wrapper">
