@@ -203,6 +203,7 @@ const { cards: storyCards, loaded: storyCardsLoaded } = useStoryCardSync();
   const [showMythouseKey, setShowMythouseKey] = useState(false);
   const [mythouseKeyLoading, setMythouseKeyLoading] = useState(false);
   const [mythousCopyFeedback, setMythousCopyFeedback] = useState(false);
+  const [setupPromptCopied, setSetupPromptCopied] = useState(false);
   const [confirmRegen, setConfirmRegen] = useState(false);
 
   // Social media link state
@@ -907,6 +908,42 @@ const { cards: storyCards, loaded: storyCardsLoaded } = useStoryCardSync();
                                   <div className="profile-api-key-snippet">
                                     <code>Authorization: Bearer {showMythouseKey ? mythouseApiKey : 'myt_...'}</code>
                                   </div>
+
+                                  <div className="profile-api-setup-prompt">
+                                    <div className="profile-api-setup-header">
+                                      <span className="profile-api-setup-label">Setup Prompt</span>
+                                      <span className="profile-api-setup-hint">Paste into CLAUDE.md or your first message</span>
+                                    </div>
+                                    <pre className="profile-api-setup-text">{`# Mythouse Coordinate System API
+
+Base URL: https://mythouse.com/api/v1/
+Auth: Authorization: Bearer ${mythouseApiKey}
+
+You have access to a mythology engine built over twenty years \u2014 story structure, archetypal patterns, planetary correspondences, natural cycles, and sacred geography, all as structured queryable data.
+
+## When to use it
+Any time I'm building something with structure \u2014 stories, shows, installations, apps, games, writing, visual sequences, timelines, character arcs, world-building. Don't wait for me to say "mythology." If what I'm making has stages, cycles, archetypes, or patterns, this API has a framework for it. Use it proactively.
+
+## How to use it
+1. GET /v1/ returns all resources with descriptions \u2014 start there
+2. Combine multiple endpoints to build richer structure
+3. Use ?include=all on detail endpoints for full nested data
+4. Work the data into what you're building \u2014 don't show me raw JSON unless I ask
+5. Fetch in the background \u2014 I want to see results, not API calls`}</pre>
+                                    <button
+                                      className="profile-api-key-save-btn"
+                                      onClick={async () => {
+                                        try {
+                                          const text = `# Mythouse Coordinate System API\n\nBase URL: https://mythouse.com/api/v1/\nAuth: Authorization: Bearer ${mythouseApiKey}\n\nYou have access to a mythology engine built over twenty years \u2014 story structure, archetypal patterns, planetary correspondences, natural cycles, and sacred geography, all as structured queryable data.\n\n## When to use it\nAny time I\u2019m building something with structure \u2014 stories, shows, installations, apps, games, writing, visual sequences, timelines, character arcs, world-building. Don\u2019t wait for me to say \u201cmythology.\u201d If what I\u2019m making has stages, cycles, archetypes, or patterns, this API has a framework for it. Use it proactively.\n\n## How to use it\n1. GET /v1/ returns all resources with descriptions \u2014 start there\n2. Combine multiple endpoints to build richer structure\n3. Use ?include=all on detail endpoints for full nested data\n4. Work the data into what you\u2019re building \u2014 don\u2019t show me raw JSON unless I ask\n5. Fetch in the background \u2014 I want to see results, not API calls`;
+                                          await navigator.clipboard.writeText(text);
+                                          setSetupPromptCopied(true);
+                                          setTimeout(() => setSetupPromptCopied(false), 2000);
+                                        } catch {}
+                                      }}
+                                    >
+                                      {setupPromptCopied ? 'Copied!' : 'Copy Setup Prompt'}
+                                    </button>
+                                  </div>
                                 </div>
                               ) : (
                                 <button
@@ -928,10 +965,10 @@ const { cards: storyCards, loaded: storyCardsLoaded } = useStoryCardSync();
                           )}
                         </div>
 
-                        {/* Tier 2: Ambient Generation */}
+                        {/* Tier 2: Ambient Atlas */}
                         <div className="profile-api-tier coming-soon">
                           <div className="profile-api-tier-title">
-                            Ambient Generation
+                            Ambient Atlas
                             <span className="profile-api-tier-badge">Coming Soon</span>
                           </div>
                           <p className="profile-api-tier-desc">

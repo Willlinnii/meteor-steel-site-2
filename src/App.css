@@ -3572,6 +3572,48 @@ body {
   color: var(--text-secondary);
   overflow-x: auto;
 }
+.profile-api-setup-prompt {
+  margin-top: 16px;
+  border: 1px solid rgba(196, 113, 58, 0.25);
+  border-radius: 8px;
+  overflow: hidden;
+  background: rgba(10, 10, 16, 0.6);
+}
+.profile-api-setup-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  background: rgba(196, 113, 58, 0.08);
+  border-bottom: 1px solid rgba(196, 113, 58, 0.15);
+}
+.profile-api-setup-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.78rem;
+  color: var(--accent-ember);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+}
+.profile-api-setup-hint {
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+  opacity: 0.7;
+}
+.profile-api-setup-text {
+  margin: 0;
+  padding: 12px 14px;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.7rem;
+  line-height: 1.5;
+  color: var(--text-secondary);
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  max-height: 280px;
+  overflow-y: auto;
+}
+.profile-api-setup-prompt .profile-api-key-save-btn {
+  margin: 0 12px 10px;
+}
 .profile-api-learn-more {
   display: inline-block;
   margin-top: 10px;

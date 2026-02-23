@@ -202,6 +202,7 @@ const SECTION_GROUPS = [
   ]},
   { group: 'Web', children: [
     { id: 'services', label: 'Services' },
+    { id: 'api-keys', label: 'API Keys' },
     { id: 'dev-tools', label: 'Dev Tools' },
     { id: 'system-health', label: 'System Health' },
   ]},
@@ -1494,6 +1495,177 @@ function UsagePanel({ svcId, usage }) {
   }
 
   return null;
+}
+
+// --- API Keys Section ---
+function APIKeysSection() {
+  const { user } = useAuth();
+  const [keys, setKeys] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [filter, setFilter] = useState('all');
+  const [sortBy, setSortBy] = useState('created');
+  const [actionLoading, setActionLoading] = useState(null);
+
+  const loadKeys = useCallback(async () => {
+    if (!user) return;
+    setLoading(true);
+    setError(null);
+    try {
+      const token = await user.getIdToken();
+      const res = await fetch('/api/admin?mode=api-keys', {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data = await res.json();
+      setKeys(data.keys || []);
+    } catch (err) {
+      setError(err.message);
+    }
+    setLoading(false);
+  }, [user]);
+
+  const handleAction = useCallback(async (action, keyHash) => {
+    if (!user) return;
+    if (action === 'revoke' && !window.confirm('Revoke this API key? The user will lose access immediately.')) return;
+    setActionLoading(keyHash);
+    try {
+      const token = await user.getIdToken();
+      const res = await fetch('/api/admin', {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action, keyHash }),
+      });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      if (action === 'revoke') {
+        setKeys(prev => prev.filter(k => k.keyHash !== keyHash));
+      } else if (action === 'reset-usage') {
+        setKeys(prev => prev.map(k => k.keyHash === keyHash ? { ...k, requestCount: 0 } : k));
+      }
+    } catch (err) {
+      alert(`Action failed: ${err.message}`);
+    }
+    setActionLoading(null);
+  }, [user]);
+
+  const filtered = useMemo(() => {
+    let result = [...keys];
+    if (filter === 'never-used') result = result.filter(k => !k.lastUsed);
+    else if (filter === 'heavy') result = result.filter(k => k.requestCount >= 100);
+
+    if (sortBy === 'most-used') result.sort((a, b) => b.requestCount - a.requestCount);
+    else if (sortBy === 'last-used') result.sort((a, b) => (b.lastUsed || 0) - (a.lastUsed || 0));
+    else result.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+
+    return result;
+  }, [keys, filter, sortBy]);
+
+  const totalRequests = keys.reduce((sum, k) => sum + k.requestCount, 0);
+  const neverUsed = keys.filter(k => !k.lastUsed).length;
+
+  function timeAgo(ts) {
+    if (!ts) return 'Never';
+    const diff = Date.now() - ts;
+    if (diff < 60000) return 'Just now';
+    if (diff < 3600000) return `${Math.floor(diff / 60000)}m ago`;
+    if (diff < 86400000) return `${Math.floor(diff / 3600000)}h ago`;
+    return `${Math.floor(diff / 86400000)}d ago`;
+  }
+
+  return (
+    <div className="admin-api-keys">
+      <h2 className="admin-coursework-title">API KEYS</h2>
+
+      <button className="admin-coursework-load-btn" onClick={loadKeys} disabled={loading}>
+        {loading ? 'Loading...' : keys.length > 0 ? 'Refresh' : 'Load API Keys'}
+      </button>
+
+      {error && <p className="admin-health-error">{error}</p>}
+
+      {keys.length > 0 && (
+        <>
+          <div className="admin-api-keys-summary">
+            <div className="admin-api-keys-stat">
+              <span className="admin-ip-stat-value">{keys.length}</span>
+              <span className="admin-ip-stat-label">Active Keys</span>
+            </div>
+            <div className="admin-api-keys-stat">
+              <span className="admin-ip-stat-value">{totalRequests.toLocaleString()}</span>
+              <span className="admin-ip-stat-label">Total Requests</span>
+            </div>
+            <div className="admin-api-keys-stat">
+              <span className="admin-ip-stat-value">{neverUsed}</span>
+              <span className="admin-ip-stat-label">Never Used</span>
+            </div>
+          </div>
+
+          <div className="admin-api-keys-controls">
+            <div className="admin-api-keys-filters">
+              <span className="admin-ip-filter-label">Filter:</span>
+              {[['all', 'All'], ['never-used', 'Never Used'], ['heavy', 'Heavy (100+)']].map(([val, label]) => (
+                <button
+                  key={val}
+                  className={`admin-ip-filter-btn${filter === val ? ' active' : ''}`}
+                  onClick={() => setFilter(val)}
+                >{label}</button>
+              ))}
+            </div>
+            <div className="admin-api-keys-filters">
+              <span className="admin-ip-filter-label">Sort:</span>
+              {[['created', 'Newest'], ['most-used', 'Most Used'], ['last-used', 'Last Active']].map(([val, label]) => (
+                <button
+                  key={val}
+                  className={`admin-ip-filter-btn${sortBy === val ? ' active' : ''}`}
+                  onClick={() => setSortBy(val)}
+                >{label}</button>
+              ))}
+            </div>
+          </div>
+
+          <div className="admin-api-keys-table">
+            <div className="admin-api-keys-header-row">
+              <span className="admin-api-keys-col owner">Owner</span>
+              <span className="admin-api-keys-col hash">Key Hash</span>
+              <span className="admin-api-keys-col date">Created</span>
+              <span className="admin-api-keys-col date">Last Used</span>
+              <span className="admin-api-keys-col count">Requests</span>
+              <span className="admin-api-keys-col actions">Actions</span>
+            </div>
+            {filtered.map(k => (
+              <div key={k.keyHash} className="admin-api-keys-row">
+                <span className="admin-api-keys-col owner">
+                  <span className="admin-api-keys-email">{k.email || k.uid || 'Unknown'}</span>
+                  {k.displayName && <span className="admin-api-keys-name">{k.displayName}</span>}
+                </span>
+                <span className="admin-api-keys-col hash">
+                  <code className="admin-api-keys-hash">{k.keyHash.slice(0, 8)}...</code>
+                </span>
+                <span className="admin-api-keys-col date">
+                  {k.createdAt ? new Date(k.createdAt).toLocaleDateString() : '—'}
+                </span>
+                <span className="admin-api-keys-col date">{timeAgo(k.lastUsed)}</span>
+                <span className="admin-api-keys-col count">{k.requestCount.toLocaleString()}</span>
+                <span className="admin-api-keys-col actions">
+                  <button
+                    className="admin-api-keys-reset-btn"
+                    onClick={() => handleAction('reset-usage', k.keyHash)}
+                    disabled={actionLoading === k.keyHash}
+                    title="Reset request count"
+                  >Reset</button>
+                  <button
+                    className="admin-api-keys-revoke-btn"
+                    onClick={() => handleAction('revoke', k.keyHash)}
+                    disabled={actionLoading === k.keyHash}
+                  >Revoke</button>
+                </span>
+              </div>
+            ))}
+          </div>
+          {filtered.length === 0 && <p className="admin-no-posts">No keys match the current filter.</p>}
+        </>
+      )}
+    </div>
+  );
 }
 
 function ServicesSection() {
@@ -6068,6 +6240,7 @@ function AdminPage() {
         </Suspense>
       )}
       {activeSection === 'services' && <ServicesSection />}
+      {activeSection === 'api-keys' && <APIKeysSection />}
       {activeSection === 'ip-registry' && <IPRegistrySection />}
       {activeSection === 'legal' && <LegalSection />}
       {activeSection === 'dev-tools' && <DevToolsSection />}

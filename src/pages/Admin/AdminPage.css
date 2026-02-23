@@ -2868,6 +2868,213 @@
   }
 }
 
+/* ===== API KEYS SECTION ===== */
+.admin-api-keys {
+  padding: 24px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.admin-api-keys-summary {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  padding: 14px 20px;
+  background: rgba(16, 16, 24, 0.7);
+  border: 1px solid #2a2a3a;
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+
+.admin-api-keys-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.admin-api-keys-controls {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.admin-api-keys-filters {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.admin-api-keys-table {
+  background: rgba(16, 16, 24, 0.7);
+  border: 1px solid #2a2a3a;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.admin-api-keys-header-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background: #14141c;
+  border-bottom: 1px solid #2a2a3a;
+  font-size: 0.68rem;
+  color: #6a6a7a;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.admin-api-keys-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  transition: background 0.15s;
+}
+
+.admin-api-keys-row:last-child {
+  border-bottom: none;
+}
+
+.admin-api-keys-row:hover {
+  background: rgba(196, 113, 58, 0.04);
+}
+
+.admin-api-keys-col {
+  font-size: 0.82rem;
+  color: #c4c4c4;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.admin-api-keys-col.owner {
+  flex: 2;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.admin-api-keys-col.hash {
+  flex: 1;
+  min-width: 80px;
+}
+
+.admin-api-keys-col.date {
+  flex: 1;
+  min-width: 70px;
+  font-size: 0.78rem;
+  color: #8a8aa0;
+}
+
+.admin-api-keys-col.count {
+  width: 70px;
+  flex-shrink: 0;
+  text-align: right;
+  font-weight: 600;
+  color: #e8d5b5;
+}
+
+.admin-api-keys-col.actions {
+  width: 130px;
+  flex-shrink: 0;
+  display: flex;
+  gap: 6px;
+  justify-content: flex-end;
+}
+
+.admin-api-keys-email {
+  font-size: 0.82rem;
+  color: #d4d4d4;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.admin-api-keys-name {
+  font-size: 0.7rem;
+  color: #6a6a7a;
+}
+
+.admin-api-keys-hash {
+  font-size: 0.72rem;
+  color: #8a8aa0;
+  background: rgba(255, 255, 255, 0.04);
+  padding: 2px 6px;
+  border-radius: 3px;
+}
+
+.admin-api-keys-reset-btn,
+.admin-api-keys-revoke-btn {
+  padding: 4px 10px;
+  border-radius: 5px;
+  font-family: inherit;
+  font-size: 0.72rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.admin-api-keys-reset-btn {
+  background: rgba(91, 141, 217, 0.12);
+  border: 1px solid #5b8dd9;
+  color: #5b8dd9;
+}
+
+.admin-api-keys-reset-btn:hover:not(:disabled) {
+  background: rgba(91, 141, 217, 0.25);
+}
+
+.admin-api-keys-revoke-btn {
+  background: rgba(217, 91, 91, 0.12);
+  border: 1px solid #d95b5b;
+  color: #d95b5b;
+}
+
+.admin-api-keys-revoke-btn:hover:not(:disabled) {
+  background: rgba(217, 91, 91, 0.25);
+}
+
+.admin-api-keys-reset-btn:disabled,
+.admin-api-keys-revoke-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+  .admin-api-keys {
+    padding: 16px 14px;
+  }
+  .admin-api-keys-header-row {
+    display: none;
+  }
+  .admin-api-keys-row {
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 12px 14px;
+  }
+  .admin-api-keys-col.owner {
+    flex: unset;
+    width: 100%;
+  }
+  .admin-api-keys-col.actions {
+    width: 100%;
+    justify-content: flex-start;
+  }
+  .admin-api-keys-controls {
+    flex-direction: column;
+    gap: 8px;
+  }
+  .admin-api-keys-summary {
+    gap: 12px;
+    justify-content: center;
+  }
+}
+
 /* --- Legal Section --- */
 .admin-legal {
   max-width: 900px;

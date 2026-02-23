@@ -1,9 +1,15 @@
 /**
  * GET /api/admin
  * Admin-only endpoint — supports multiple modes:
- *   ?mode=usage   (default) — billing & usage data from paid services
- *   ?mode=health  — health checks for all external services
- *   ?mode=users   — list all Firebase Auth users
+ *   ?mode=usage    (default) — billing & usage data from paid services
+ *   ?mode=health   — health checks for all external services
+ *   ?mode=users    — list all Firebase Auth users
+ *   ?mode=api-keys — list all API keys with owner info and usage stats
+ *
+ * POST /api/admin
+ * Admin actions:
+ *   { action: 'revoke', keyHash }    — revoke an API key
+ *   { action: 'reset-usage', keyHash } — reset request count to 0
  */
 const admin = require('firebase-admin');
 const { ensureFirebaseAdmin } = require('./_lib/auth');
@@ -218,7 +224,7 @@ async function fetchVercel() {
 // ==========================================================
 
 module.exports = async (req, res) => {
-  if (req.method !== 'GET') {
+  if (req.method !== 'GET' && req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
@@ -242,6 +248,11 @@ module.exports = async (req, res) => {
     return res.status(401).json({ error: 'Invalid token.' });
   }
 
+  // --- POST actions ---
+  if (req.method === 'POST') {
+    return handleAdminAction(req, res);
+  }
+
   const mode = req.query.mode || 'usage';
 
   // --- Users mode (merged from list-users.js) ---
@@ -252,6 +263,11 @@ module.exports = async (req, res) => {
   // --- Health check mode (merged from health-check.js) ---
   if (mode === 'health') {
     return handleHealthCheck(req, res);
+  }
+
+  // --- API keys mode ---
+  if (mode === 'api-keys') {
+    return handleApiKeys(req, res);
   }
 
   // --- Billing / usage mode (default) ---
@@ -445,4 +461,114 @@ async function handleHealthCheck(req, res) {
   }
 
   return res.status(200).json({ timestamp: Date.now(), results });
+}
+
+// ==========================================================
+// API Keys management
+// ==========================================================
+
+async function handleApiKeys(req, res) {
+  try {
+    const db = admin.firestore();
+    const keysSnap = await db.collection('api-keys').get();
+
+    if (keysSnap.empty) {
+      return res.status(200).json({ keys: [] });
+    }
+
+    // Collect unique UIDs and fetch user records in parallel
+    const uidSet = new Set();
+    const keyDocs = [];
+    keysSnap.forEach(doc => {
+      const data = doc.data();
+      keyDocs.push({ keyHash: doc.id, ...data });
+      if (data.uid) uidSet.add(data.uid);
+    });
+
+    const userMap = {};
+    const uidArray = Array.from(uidSet);
+    if (uidArray.length > 0) {
+      const userSnaps = await Promise.all(
+        uidArray.map(uid => db.doc(`users/${uid}`).get())
+      );
+      userSnaps.forEach((snap, i) => {
+        const data = snap.exists ? snap.data() : {};
+        userMap[uidArray[i]] = {
+          email: data.email || null,
+          displayName: data.displayName || null,
+        };
+      });
+    }
+
+    const keys = keyDocs.map(doc => {
+      const owner = userMap[doc.uid] || {};
+      return {
+        keyHash: doc.keyHash,
+        uid: doc.uid || null,
+        email: owner.email || null,
+        displayName: owner.displayName || null,
+        createdAt: doc.createdAt?._seconds ? doc.createdAt._seconds * 1000 : doc.createdAt || null,
+        lastUsed: doc.lastUsed?._seconds ? doc.lastUsed._seconds * 1000 : doc.lastUsed || null,
+        requestCount: doc.requestCount || 0,
+      };
+    });
+
+    return res.status(200).json({ keys });
+  } catch (err) {
+    console.error('api-keys error:', err);
+    return res.status(500).json({ error: 'Failed to list API keys' });
+  }
+}
+
+// ==========================================================
+// POST admin actions (revoke, reset-usage)
+// ==========================================================
+
+async function handleAdminAction(req, res) {
+  const { action, keyHash } = req.body || {};
+
+  if (!action || !keyHash) {
+    return res.status(400).json({ error: 'Missing action or keyHash' });
+  }
+
+  try {
+    const db = admin.firestore();
+    const keyRef = db.doc(`api-keys/${keyHash}`);
+    const keySnap = await keyRef.get();
+
+    if (!keySnap.exists) {
+      return res.status(404).json({ error: 'API key not found' });
+    }
+
+    const keyData = keySnap.data();
+
+    if (action === 'revoke') {
+      // Delete the reverse-lookup doc
+      await keyRef.delete();
+
+      // Clear the key from the user's secrets
+      if (keyData.uid) {
+        const secretsRef = db.doc(`users/${keyData.uid}/meta/secrets`);
+        const secretsSnap = await secretsRef.get();
+        if (secretsSnap.exists) {
+          await secretsRef.update({
+            mythouseApiKey: admin.firestore.FieldValue.delete(),
+            mythouseApiKeyCreatedAt: admin.firestore.FieldValue.delete(),
+          });
+        }
+      }
+
+      return res.status(200).json({ ok: true, action: 'revoke' });
+    }
+
+    if (action === 'reset-usage') {
+      await keyRef.update({ requestCount: 0 });
+      return res.status(200).json({ ok: true, action: 'reset-usage' });
+    }
+
+    return res.status(400).json({ error: `Unknown action: ${action}` });
+  } catch (err) {
+    console.error('admin action error:', err);
+    return res.status(500).json({ error: 'Admin action failed' });
+  }
 }
