@@ -8,7 +8,7 @@ import './CuratedProductsPage.css';
 const CATEGORIES = ['All', 'Books', 'Art', 'Tools', 'Music', 'Other'];
 const ADD_CATEGORIES = ['Books', 'Art', 'Tools', 'Music', 'Other'];
 
-const EMPTY_FORM = { title: '', description: '', category: 'Books', storeName: '', imageUrl: '', buyUrl: '' };
+const EMPTY_FORM = { title: '', description: '', category: 'Books', storeName: '', imageUrl: '', buyUrl: '', myth: '', symbol: '', holiday: '' };
 
 function CuratedProductsPage() {
   const { user } = useAuth();
@@ -52,7 +52,7 @@ function CuratedProductsPage() {
     if (!form.title.trim() || !form.buyUrl.trim() || !user) return;
     setSubmitting(true);
     try {
-      await addDoc(collection(db, 'curatedProducts'), {
+      const productData = {
         title: form.title.trim(),
         description: form.description.trim(),
         category: form.category,
@@ -63,7 +63,11 @@ function CuratedProductsPage() {
         active: true,
         curatedBy: user.uid,
         createdAt: serverTimestamp(),
-      });
+      };
+      if (form.myth.trim()) productData.myth = form.myth.trim();
+      if (form.symbol.trim()) productData.symbol = form.symbol.trim();
+      if (form.holiday.trim()) productData.holiday = form.holiday.trim();
+      await addDoc(collection(db, 'curatedProducts'), productData);
       setForm(EMPTY_FORM);
       setShowForm(false);
       await loadProducts();
@@ -148,6 +152,38 @@ function CuratedProductsPage() {
               onChange={e => handleFormChange('description', e.target.value)}
             />
           </div>
+          <div className="curated-form-tags">
+            <div className="curated-form-tag">
+              <label className="curated-form-tag-label">Myth</label>
+              <input
+                className="curated-form-input"
+                type="text"
+                placeholder="e.g. Orpheus, Inanna, Ragnarok"
+                value={form.myth}
+                onChange={e => handleFormChange('myth', e.target.value)}
+              />
+            </div>
+            <div className="curated-form-tag">
+              <label className="curated-form-tag-label">Symbol</label>
+              <input
+                className="curated-form-input"
+                type="text"
+                placeholder="e.g. Labyrinth, Serpent, Phoenix"
+                value={form.symbol}
+                onChange={e => handleFormChange('symbol', e.target.value)}
+              />
+            </div>
+            <div className="curated-form-tag">
+              <label className="curated-form-tag-label">Holiday</label>
+              <input
+                className="curated-form-input"
+                type="text"
+                placeholder="e.g. Samhain, Solstice, Diwali"
+                value={form.holiday}
+                onChange={e => handleFormChange('holiday', e.target.value)}
+              />
+            </div>
+          </div>
           <button
             className="curated-form-submit"
             type="submit"
@@ -163,6 +199,9 @@ function CuratedProductsPage() {
               <li><strong>Image URL</strong> is a direct link to a product image. Right-click an image on the product page and copy the image address.</li>
               <li><strong>Store name</strong> appears below the card as the source (e.g. "Amazon", "Etsy", "Artist's Shop").</li>
               <li><strong>Category</strong> determines which filter tab the product appears under.</li>
+              <li><strong>Myth</strong> — Tag the specific myth this product relates to (e.g. "Orpheus", "The Odyssey", "Inanna's Descent").</li>
+              <li><strong>Symbol</strong> — Tag the mythic symbol it embodies or depicts (e.g. "Labyrinth", "World Tree", "Phoenix").</li>
+              <li><strong>Holiday</strong> — Tag the holiday or seasonal celebration it connects to (e.g. "Samhain", "Winter Solstice", "Diwali").</li>
               <li>Your submission goes live immediately. An admin may edit or remove items to keep the collection cohesive.</li>
             </ul>
           </div>
