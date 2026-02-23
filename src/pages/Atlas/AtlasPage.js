@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import useVoice, { SpeechRecognition } from '../../hooks/useVoice';
 import { useCoursework } from '../../coursework/CourseworkContext';
 import { useWritings } from '../../writings/WritingsContext';
+import { useAtlasContext } from '../../contexts/AtlasContext';
 import './AtlasPage.css';
 import { apiFetch } from '../../lib/chatApi';
 
@@ -65,6 +66,7 @@ export default function AtlasPage() {
   const { voiceEnabled, recording, speaking, toggleVoice, startListening, stopListening, speak } = useVoice(setInput);
   const { trackElement, trackTime, buildCourseSummary } = useCoursework();
   const { getConversation, saveConversation, loaded: writingsLoaded } = useWritings();
+  const { buildAtlasContext } = useAtlasContext();
 
   // Load per-voice chat histories from persisted writings
   useEffect(() => {
@@ -149,7 +151,8 @@ export default function AtlasPage() {
     trackElement('atlas.messages.total');
 
     const courseSummary = buildCourseSummary('/atlas');
-    const body = { messages: updated, courseSummary };
+    const situationalContext = buildAtlasContext();
+    const body = { messages: updated, courseSummary, situationalContext };
     if (vid === 'atlas') {
       body.area = 'auto';
     } else {
@@ -172,7 +175,7 @@ export default function AtlasPage() {
     } finally {
       setLoading(false);
     }
-  }, [activeVoice, chatHistories, setMessages, speak, buildCourseSummary, trackElement]);
+  }, [activeVoice, chatHistories, setMessages, speak, buildCourseSummary, buildAtlasContext, trackElement]);
 
   // Auto-greeting for persona voices
   useEffect(() => {

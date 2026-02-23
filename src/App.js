@@ -9,6 +9,7 @@ import { FamilyProvider } from './contexts/FamilyContext';
 import { FriendsProvider } from './contexts/FriendsContext';
 import { FriendRequestsProvider } from './contexts/FriendRequestsContext';
 import { FellowshipProvider } from './contexts/FellowshipContext';
+import { AtlasContextProvider, useAtlasContext } from './contexts/AtlasContext';
 import ShareCompletionModal from './components/fellowship/ShareCompletionModal';
 import { ScopeProvider } from './contexts/ScopeContext';
 import { TraditionsProvider } from './contexts/TraditionsContext';
@@ -50,9 +51,11 @@ export const useStoryForge = () => useContext(StoryForgeContext);
 const YBRModeContext = createContext({ ybrMode: false });
 export const useYBRMode = () => useContext(YBRModeContext);
 
-// Area override context — pages can override Atlas's area detection (e.g. celestial-clocks → meteor-steel)
-const AreaOverrideContext = createContext({ area: null, meta: null, register: () => {} });
-export const useAreaOverride = () => useContext(AreaOverrideContext);
+// Area override — now backed by AtlasContext for backward compatibility
+export const useAreaOverride = () => {
+  const { area, meta, register } = useAtlasContext();
+  return { area, meta, register };
+};
 
 // XR mode context — global toggle for VR/AR features
 const XRModeContext = createContext({ xrMode: false });
@@ -2162,8 +2165,6 @@ function AppContent() {
   const isAtlas = location.pathname === '/atlas';
   const { courseworkMode } = useCoursework();
   const [ybrHeader, setYbrHeader] = useState({ active: false, toggle: null });
-  const [areaOverride, setAreaOverride] = useState(null);
-
   // Restore last path on mount (only if landing on home and path is recent)
   const hasRestored = useRef(false);
   useEffect(() => {
@@ -2186,8 +2187,6 @@ function AppContent() {
       localStorage.setItem(LAST_PATH_KEY, JSON.stringify({ path: location.pathname, ts: Date.now() }));
     } catch { /* storage full or unavailable */ }
   }, [location.pathname]);
-  const [areaMeta, setAreaMeta] = useState(null);
-  const areaRegister = useCallback((area, meta) => { setAreaOverride(area); setAreaMeta(meta || null); }, []);
   const [forgeMode, _setForgeMode] = useState(() => {
     try { return localStorage.getItem('mythouse_forge_mode') === '1'; } catch { return false; }
   });
@@ -2220,7 +2219,7 @@ function AppContent() {
     <YBRModeContext.Provider value={{ ybrMode, setYbrMode }}>
     <XRModeContext.Provider value={{ xrMode, setXrMode }}>
     <YBRHeaderContext.Provider value={{ ...ybrHeader, register: setYbrHeader }}>
-    <AreaOverrideContext.Provider value={{ area: areaOverride, meta: areaMeta, register: areaRegister }}>
+    <AtlasContextProvider>
     <div className={`app${courseworkMode ? ' cw-mode' : ''}`}>
       <SiteHeader />
       <SiteNav />
@@ -2249,8 +2248,8 @@ function AppContent() {
         <Route path="/journey/:journeyId" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" />Loading Journey...</div>}><OuroborosJourneyPage /></Suspense>} />
         <Route path="/library" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><MythSalonLibraryPage /></Suspense>} />
         <Route path="/story-of-stories" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><StoryOfStoriesPage /></Suspense>} />
-        <Route path="/treasures" element={<Navigate to="/myths" replace />} />
-        <Route path="/myths" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><MythsPage /></Suspense>} />
+        <Route path="/treasures" element={<Navigate to="/myths/treasures" replace />} />
+        <Route path="/myths/*" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><MythsPage /></Suspense>} />
         <Route path="/mythic-earth" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><MythicEarthPage /></Suspense>} />
         <Route path="/mentors" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><MentorDirectoryPage /></Suspense>} />
         <Route path="/guild" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><GuildPage /></Suspense>} />
@@ -2267,7 +2266,7 @@ function AppContent() {
       {!isAtlas && <SiteFooter />}
       {!isAtlas && <ChatPanel />}
     </div>
-    </AreaOverrideContext.Provider>
+    </AtlasContextProvider>
     </YBRHeaderContext.Provider>
     </XRModeContext.Provider>
     </YBRModeContext.Provider>

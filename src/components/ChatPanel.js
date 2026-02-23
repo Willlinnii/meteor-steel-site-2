@@ -5,6 +5,7 @@ import { useCoursework } from '../coursework/CourseworkContext';
 import { useWritings } from '../writings/WritingsContext';
 import { useProfile } from '../profile/ProfileContext';
 import { useAreaOverride } from '../App';
+import { useAtlasContext } from '../contexts/AtlasContext';
 import { apiFetch } from '../lib/chatApi';
 
 function parseAtlasMessage(text) {
@@ -42,6 +43,7 @@ export default function ChatPanel() {
   const { getConversation, saveConversation, loaded: writingsLoaded } = useWritings();
   const { profileData, loaded: profileLoaded, completeOnboarding } = useProfile();
   const { area: areaOverride, meta: areaMeta } = useAreaOverride();
+  const { buildAtlasContext } = useAtlasContext();
   const onboardingTriggered = useRef(false);
 
   // Load previous Atlas conversation on mount
@@ -147,10 +149,11 @@ export default function ChatPanel() {
 
     try {
       const courseSummary = buildCourseSummary(location.pathname);
+      const situationalContext = buildAtlasContext();
       const res = await apiFetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: updated, area, courseSummary, episodeContext: areaMeta?.episode }),
+        body: JSON.stringify({ messages: updated, area, courseSummary, episodeContext: areaMeta?.episode, situationalContext }),
       });
 
       const data = await res.json();

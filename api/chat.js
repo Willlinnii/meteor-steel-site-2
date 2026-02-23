@@ -1555,7 +1555,7 @@ module.exports = async function handler(req, res) {
     }
   }
 
-  const { messages, area, persona, mode, challengeStop, level, journeyId, stageId, gameMode, stageData, aspect, courseSummary, episodeContext, existingCredentials, existingNatalChart, qualifiedMentorTypes, uploadedDocument, tarotPhase, tarotCards, tarotIntention, culture, template, stageContent, targetStage, stageEntries, adjacentDrafts, requestDraft, drafts, completionType, completionData, currentSummary, currentFullStory } = req.body || {};
+  const { messages, area, persona, mode, challengeStop, level, journeyId, stageId, gameMode, stageData, aspect, courseSummary, episodeContext, situationalContext, existingCredentials, existingNatalChart, qualifiedMentorTypes, uploadedDocument, tarotPhase, tarotCards, tarotIntention, culture, template, stageContent, targetStage, stageEntries, adjacentDrafts, requestDraft, drafts, completionType, completionData, currentSummary, currentFullStory } = req.body || {};
 
   // --- Story Forge mode (narrative generation via OpenAI) ---
   if (mode === 'forge') {
@@ -2868,6 +2868,12 @@ COURSE ADVISOR GUIDELINES:
 - Connect the current conversation topic to relevant course requirements when it fits organically.
 - Never interrupt a mythic, emotional, or creative conversation just to mention courses.
 - If they have no courses active, do not mention coursework at all.`;
+  }
+
+  // Append situational awareness context if available (from AtlasContext on client)
+  if (situationalContext && typeof situationalContext === 'string' && situationalContext.length > 0) {
+    const truncated = situationalContext.slice(0, 2000);
+    systemPrompt += `\n\n${truncated}`;
   }
 
   // Mentor program awareness

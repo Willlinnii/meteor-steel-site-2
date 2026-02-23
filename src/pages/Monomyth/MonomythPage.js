@@ -11,6 +11,7 @@ import { getSectionQuestions } from '../../coursework/tests';
 import { useCoursework } from '../../coursework/CourseworkContext';
 import { useWritings } from '../../writings/WritingsContext';
 import { useYBRHeader, useStoryForge, useYBRMode } from '../../App';
+import { useAtlasContext } from '../../contexts/AtlasContext';
 import use360Media from '../../hooks/use360Media';
 import monomythProse from '../../data/monomyth.json';
 import stageOverviews from '../../data/stageOverviews.json';
@@ -524,6 +525,23 @@ export default function MonomythPage() {
       }
     };
   }, [activeTab, currentStage, trackTime]);
+
+  // Register Atlas situational context
+  const { setPageContext } = useAtlasContext();
+  useEffect(() => {
+    const stageLabel = currentStage === 'overview' ? null
+      : MONOMYTH_STAGES.find(s => s.id === currentStage)?.label || currentStage;
+    const visited = MONOMYTH_STAGES.filter(s => isElementCompleted(`monomyth.stages.${s.id}`)).map(s => s.label);
+
+    setPageContext({
+      area: 'meteor-steel',
+      focus: stageLabel
+        ? { type: 'stage', id: currentStage, label: stageLabel, tab: activeTab }
+        : { type: 'overview', id: null },
+      pageStatus: { visited, visitedLabels: visited, totalItems: MONOMYTH_STAGES.length },
+    });
+    return () => setPageContext(null);
+  }, [currentStage, activeTab, isElementCompleted, setPageContext]);
 
   // Track test completion
   useEffect(() => {

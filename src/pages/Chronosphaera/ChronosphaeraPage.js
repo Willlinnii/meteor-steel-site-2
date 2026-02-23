@@ -38,7 +38,8 @@ import fallenStarlightData from '../../data/fallenStarlight.json';
 import storyOfStoriesData from '../../data/storyOfStoriesData';
 import DevelopmentPanel from '../../components/DevelopmentPanel';
 import ChapterAudioPlayer, { CHAPTER_AUDIO } from '../../components/ChapterAudioPlayer';
-import { useYBRHeader, useAreaOverride, useStoryForge } from '../../App';
+import { useYBRHeader, useStoryForge } from '../../App';
+import { useAtlasContext } from '../../contexts/AtlasContext';
 import { useProfile } from '../../profile/ProfileContext';
 
 const METEOR_STEEL_STAGES = [
@@ -754,20 +755,43 @@ export default function ChronosphaeraPage() {
     return () => registerYBR({ active: false, toggle: null });
   }, [ybr.active, handleYBRToggle, registerYBR]);
 
-  // Register area override for Atlas context
-  const { register: registerArea } = useAreaOverride();
+  // Register rich Atlas situational context
+  const { setPageContext } = useAtlasContext();
   useEffect(() => {
-    if (mode === 'monomyth' || mode === 'meteor-steel') {
-      registerArea('meteor-steel');
-    } else if (mode === 'fallen-starlight') {
-      registerArea('fallen-starlight');
-    } else if (mode === 'story-of-stories') {
-      registerArea('story-of-stories');
-    } else {
-      registerArea(null); // default: celestial-clocks (from pathname)
+    const CHRONO_PLANETS = ['Sun','Moon','Mars','Mercury','Jupiter','Venus','Saturn'];
+    const area = (mode === 'monomyth' || mode === 'meteor-steel') ? 'meteor-steel'
+      : mode === 'fallen-starlight' ? 'fallen-starlight'
+      : mode === 'story-of-stories' ? 'story-of-stories'
+      : 'celestial-clocks';
+
+    // Determine focus
+    let focus = { type: 'overview', id: null };
+    if (selectedPlanet) {
+      focus = { type: 'planet', id: selectedPlanet, label: selectedPlanet, tab: activeTab };
+    } else if (selectedSign) {
+      focus = { type: 'zodiac', id: selectedSign, label: selectedSign };
+    } else if (selectedCardinal) {
+      focus = { type: 'cardinal', id: selectedCardinal, label: selectedCardinal };
+    } else if (selectedMonth) {
+      focus = { type: 'calendar', id: selectedMonth, label: `${selectedMonth} calendar` };
+    } else if (selectedMonomythStage) {
+      focus = { type: 'stage', id: selectedMonomythStage, label: selectedMonomythStage, tab: showMeteorSteel ? meteorSteelTab : monomythTab };
+    } else if (selectedConstellation) {
+      focus = { type: 'constellation', id: selectedConstellation, label: selectedConstellation };
     }
-    return () => registerArea(null);
-  }, [mode, registerArea]);
+
+    // Page status: which planets have been visited
+    const visited = CHRONO_PLANETS.filter(p => isElementCompleted(`chronosphaera.planet.${p}`));
+
+    setPageContext({
+      area,
+      focus,
+      pageStatus: { visited, visitedLabels: visited, totalItems: CHRONO_PLANETS.length },
+    });
+    return () => setPageContext(null);
+  }, [mode, selectedPlanet, activeTab, selectedSign, selectedCardinal, selectedMonth,
+      selectedMonomythStage, monomythTab, meteorSteelTab, showMeteorSteel, selectedConstellation,
+      isElementCompleted, setPageContext]);
 
   const tooltipData = useMemo(() => {
     const planets = {};
