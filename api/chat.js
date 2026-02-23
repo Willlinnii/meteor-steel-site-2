@@ -619,6 +619,270 @@ function compactConstellations() {
   return `## Constellations (${entries.length} major)\nZodiac constellations and prominent mythic constellations with cultural names across traditions (Greek, Roman, Norse, Babylonian, Vedic, Islamic, Medieval). You also know the other 58 modern constellations — ask if needed.\n\n` + entries.join('\n');
 }
 
+// --- User Dossier: compact formatters for Atlas memory ---
+
+function compactUserProfile(data) {
+  if (!data) return '';
+  const parts = [];
+  // Credentials
+  const creds = data.credentials;
+  if (creds && typeof creds === 'object') {
+    const credList = Object.entries(creds)
+      .filter(([, v]) => v && v.level)
+      .map(([k, v]) => `${k} (L${v.level})`)
+      .join(' | ');
+    if (credList) parts.push(`Credentials: ${credList}`);
+  }
+  // Natal chart
+  const chart = data.natalChart;
+  if (chart && typeof chart === 'object') {
+    const placements = [];
+    if (chart.sun) placements.push(`Sun in ${chart.sun}`);
+    if (chart.moon) placements.push(`Moon in ${chart.moon}`);
+    if (chart.mercury) placements.push(`Mercury in ${chart.mercury}`);
+    if (chart.venus) placements.push(`Venus in ${chart.venus}`);
+    if (chart.mars) placements.push(`Mars in ${chart.mars}`);
+    if (chart.jupiter) placements.push(`Jupiter in ${chart.jupiter}`);
+    if (chart.saturn) placements.push(`Saturn in ${chart.saturn}`);
+    if (placements.length) parts.push(`Natal Chart: ${placements.join(', ')}`);
+    if (chart.rising) parts.push(`Rising: ${chart.rising}`);
+    if (chart.chineseZodiac) parts.push(`Chinese: ${chart.chineseZodiac}`);
+  }
+  // Birth info
+  if (data.birthCity) parts.push(`Born in ${data.birthCity}`);
+  // Personal story
+  if (data.personalStory) {
+    parts.push(`Personal Story (transmuted): ${truncate(data.personalStory, 300)}`);
+  }
+  // Numerology
+  if (data.numerology) {
+    const numParts = [];
+    if (data.numerology.name) numParts.push(`name: ${data.numerology.name}`);
+    if (data.numerology.luckyNumber) numParts.push(`lucky number: ${data.numerology.luckyNumber}`);
+    if (numParts.length) parts.push(`Numerology ${numParts.join('. ')}`);
+  }
+  // Display name
+  if (data.displayName) parts.push(`Name: ${data.displayName}`);
+  if (!parts.length) return '';
+  return '## Who You Are\n' + parts.join('\n');
+}
+
+function compactConversationMemory(data) {
+  if (!data || !Array.isArray(data.summaries) || data.summaries.length === 0) return '';
+  const lines = data.summaries
+    .slice(-5)
+    .map(s => {
+      const date = s.createdAt?.toDate ? s.createdAt.toDate().toISOString().slice(0, 10) : 'recent';
+      return `[${date}] ${truncate(s.text, 200)}`;
+    });
+  return '## Our Previous Conversations\n' + lines.join('\n');
+}
+
+function compactStoryCardsForDossier(cards) {
+  if (!cards || cards.length === 0) return '';
+  const lines = cards.slice(0, 15).map(c => {
+    const cat = c.category || c.type || 'misc';
+    const title = c.title || c.name || 'Untitled';
+    const desc = c.description ? ` — ${truncate(c.description, 60)}` : '';
+    return `${cat}: ${title}${desc}`;
+  });
+  return '## Story Cards Earned\n' + lines.join('\n');
+}
+
+function compactCertificates(data) {
+  if (!data) return '';
+  const certs = data.completed || data.certificates || data;
+  if (!Array.isArray(certs) && typeof certs !== 'object') return '';
+  const entries = Array.isArray(certs) ? certs : Object.entries(certs).map(([k, v]) => ({ name: k, ...v }));
+  if (entries.length === 0) return '';
+  const lines = entries.map(c => {
+    const name = c.name || c.courseName || 'Course';
+    const date = c.completedAt?.toDate ? c.completedAt.toDate().toISOString().slice(0, 10) : (c.date || '');
+    return date ? `${name} (${date})` : name;
+  });
+  return '## Completed Courses\n' + lines.join('\n');
+}
+
+function compactPilgrimages(data) {
+  if (!data) return '';
+  const sites = data.sites || data.pilgrimages || data;
+  if (!Array.isArray(sites) && typeof sites !== 'object') return '';
+  const entries = Array.isArray(sites) ? sites : Object.entries(sites).map(([k, v]) => ({ id: k, ...v }));
+  if (entries.length === 0) return '';
+  const lines = entries.map(s => {
+    const parts = [s.name || s.id];
+    if (s.category) parts.push(s.category);
+    if (s.tradition) parts.push(s.tradition);
+    if (s.region) parts.push(s.region);
+    return parts.join(', ');
+  });
+  return '## Sacred Pilgrimages\n' + lines.join('\n');
+}
+
+function compactJourneySyntheses(data) {
+  if (!data) return '';
+  const journeys = data.syntheses || data;
+  if (typeof journeys !== 'object') return '';
+  const entries = Object.entries(journeys).filter(([, v]) => v && typeof v === 'string');
+  if (entries.length === 0) return '';
+  const lines = entries.map(([k, v]) => `${k}: ${truncate(v, 200)}`);
+  return '## Journey Syntheses\n' + lines.join('\n');
+}
+
+function compactPersonalStories(data) {
+  if (!data) return '';
+  const stories = data.stories || data;
+  if (!Array.isArray(stories) && typeof stories !== 'object') return '';
+  const entries = Array.isArray(stories) ? stories : Object.entries(stories).map(([k, v]) => ({ id: k, ...v }));
+  if (entries.length === 0) return '';
+  const lines = entries.map(s => {
+    const name = s.name || s.id || 'Untitled';
+    const stageCount = s.stages ? Object.keys(s.stages).length : (s.stageCount || '?');
+    const source = s.source || 'unknown';
+    return `"${name}" (${stageCount} stages, source: ${source})`;
+  });
+  return '## Personal Stories\n' + lines.join('\n');
+}
+
+function compactRecentPersonas(data) {
+  if (!data || typeof data !== 'object') return '';
+  // data is expected to be a map of persona names to message counts
+  const entries = Object.entries(data).filter(([, v]) => v > 0);
+  if (entries.length === 0) return '';
+  const lines = entries.map(([k, v]) => `${k}: ${v} messages`);
+  return '## Persona Conversations\n' + lines.join(' | ');
+}
+
+/**
+ * Build a compact user dossier from Firestore for Atlas context.
+ * Returns { text, raw } where raw contains the fetched data for downstream use.
+ */
+async function buildUserDossier(uid) {
+  if (!uid || !ensureFirebaseAdmin()) return null;
+  const db = admin.firestore();
+
+  // Batch 8 parallel reads
+  const [
+    profileSnap,
+    atlasMemorySnap,
+    certificatesSnap,
+    pilgrimagesSnap,
+    storyCardsSnap,
+    journeySynthesesSnap,
+    personalStoriesSnap,
+    conversationsSnap,
+  ] = await Promise.all([
+    db.doc(`users/${uid}/meta/profile`).get(),
+    db.doc(`users/${uid}/meta/atlas-memory`).get(),
+    db.doc(`users/${uid}/meta/certificates`).get(),
+    db.doc(`users/${uid}/meta/pilgrimages`).get(),
+    db.collection(`users/${uid}/story-cards`).limit(20).get(),
+    db.doc(`users/${uid}/writings/journeys`).get(),
+    db.doc(`users/${uid}/writings/personal-stories`).get(),
+    db.doc(`users/${uid}/writings/conversations`).get(),
+  ]);
+
+  const profileData = profileSnap.exists ? profileSnap.data() : null;
+  const atlasMemoryData = atlasMemorySnap.exists ? atlasMemorySnap.data() : null;
+  const certificatesData = certificatesSnap.exists ? certificatesSnap.data() : null;
+  const pilgrimagesData = pilgrimagesSnap.exists ? pilgrimagesSnap.data() : null;
+  const storyCards = [];
+  storyCardsSnap.forEach(doc => storyCards.push({ id: doc.id, ...doc.data() }));
+  const journeySynthesesData = journeySynthesesSnap.exists ? journeySynthesesSnap.data() : null;
+  const personalStoriesData = personalStoriesSnap.exists ? personalStoriesSnap.data() : null;
+  const conversationsData = conversationsSnap.exists ? conversationsSnap.data() : null;
+
+  // Build each section
+  const sections = [
+    compactUserProfile(profileData),
+    compactConversationMemory(atlasMemoryData),
+    compactStoryCardsForDossier(storyCards),
+    compactCertificates(certificatesData),
+    compactJourneySyntheses(journeySynthesesData),
+    compactPersonalStories(personalStoriesData),
+    compactPilgrimages(pilgrimagesData),
+    compactRecentPersonas(conversationsData?.personaCounts),
+  ].filter(Boolean);
+
+  if (sections.length === 0) return null;
+
+  return {
+    text: sections.join('\n\n'),
+    raw: { atlasMemoryData, conversationsData },
+  };
+}
+
+/**
+ * Check if conversation memory is stale and generate a new summary if needed.
+ * Runs inline — adds ~500ms only when triggered. Failure never breaks chat.
+ */
+async function maybeGenerateSummary(uid, conversationsData, atlasMemoryData, anthropic) {
+  try {
+    if (!uid || !conversationsData) return;
+    const messages = conversationsData.messages || conversationsData.history || [];
+    if (!Array.isArray(messages) || messages.length === 0) return;
+
+    // Count user messages
+    const userMessageCount = messages.filter(m => m.role === 'user').length;
+
+    const lastCount = atlasMemoryData?.lastSummarizedMessageCount || 0;
+    const lastTime = atlasMemoryData?.lastSummarizedAt?.toDate ? atlasMemoryData.lastSummarizedAt.toDate() : null;
+    const hoursSinceLast = lastTime ? (Date.now() - lastTime.getTime()) / 3600000 : Infinity;
+
+    // Only summarize if 10+ new user messages or 24+ hours since last summary
+    const newMessages = userMessageCount - lastCount;
+    if (newMessages < 10 && hoursSinceLast < 24) return;
+
+    // Take last 40 messages, truncate each to 500 chars
+    const recentMessages = messages.slice(-40).map(m => ({
+      role: m.role,
+      content: truncate(String(m.content || ''), 500),
+    }));
+
+    const summaryPrompt = `Summarize this conversation between a user and Atlas (a mythic guide). Focus on:
+- What topics were explored (mythology, astrology, personal stories, etc.)
+- Key personal revelations or connections the user made
+- Any emotional themes or breakthroughs
+- Specific myths, planets, stages, or archetypes discussed
+
+Write 2-3 sentences from Atlas's perspective, as if remembering the conversation. Be specific, not generic.`;
+
+    const response = await anthropic.messages.create({
+      model: MODELS.fast,
+      system: summaryPrompt,
+      messages: [
+        { role: 'user', content: recentMessages.map(m => `${m.role}: ${m.content}`).join('\n') },
+      ],
+      max_tokens: 300,
+    });
+
+    const summaryText = response.content?.find(c => c.type === 'text')?.text;
+    if (!summaryText) return;
+
+    const db = admin.firestore();
+    const memRef = db.doc(`users/${uid}/meta/atlas-memory`);
+
+    const existing = atlasMemoryData?.summaries || [];
+    const summaries = [
+      ...existing.slice(-4), // keep last 4 + new = 5 max
+      {
+        text: summaryText,
+        messageCount: userMessageCount,
+        createdAt: admin.firestore.Timestamp.now(),
+      },
+    ];
+
+    await memRef.set({
+      summaries,
+      lastSummarizedAt: admin.firestore.Timestamp.now(),
+      lastSummarizedMessageCount: userMessageCount,
+    }, { merge: true });
+  } catch (err) {
+    // Never break chat — just log
+    console.error('maybeGenerateSummary error (non-fatal):', err?.message);
+  }
+}
+
 // --- Area knowledge loaders ---
 
 const VALID_AREAS = ['celestial-clocks', 'meteor-steel', 'fallen-starlight', 'story-forge', 'mythology-channel', 'games', 'story-of-stories', 'mythic-earth', 'library'];
@@ -2158,6 +2422,10 @@ ${rawText.slice(0, 8000)}`;
   }
 
   const anthropic = getAnthropicClient(userKeys.anthropicKey);
+
+  // Start user dossier fetch early (runs in parallel with everything else)
+  const dossierPromise = uid ? buildUserDossier(uid).catch(() => null) : null;
+
   // Natal chart tool available on all pages — people ask about their chart from anywhere
   const tools = [NATAL_CHART_TOOL];
   // Mythic Earth highlight tool — only when on the globe page
@@ -2854,6 +3122,31 @@ If the user hasn't given enough direction yet, respond conversationally (plain t
   const personaPrompt = persona ? getPersonaPrompt(persona) : null;
   const areaContext = episodeContext ? { episode: episodeContext } : undefined;
   let systemPrompt = personaPrompt || getSystemPrompt(validArea, areaContext);
+
+  // Await user dossier and inject into system prompt
+  const dossierResult = dossierPromise ? await dossierPromise : null;
+  if (dossierResult?.text) {
+    systemPrompt += `\n\n--- WHO YOU'RE SPEAKING WITH ---
+You know this person. Below is what you remember about them.
+Use this naturally:
+- Reference their chart when astrology arises
+- Recall past conversations when relevant
+- Acknowledge credentials and journey progress
+- Connect their stories to what they're exploring
+Don't:
+- Dump everything at once
+- Say "my records show" — you simply KNOW them
+- Mention data unless it's relevant to the conversation
+
+${dossierResult.text}
+---`;
+
+    // Generate conversation summary if stale (non-blocking to chat)
+    if (dossierResult.raw) {
+      maybeGenerateSummary(uid, dossierResult.raw.conversationsData, dossierResult.raw.atlasMemoryData, anthropic)
+        .catch(() => {}); // fire-and-forget, never block chat
+    }
+  }
 
   // Append coursework context if available
   if (courseSummary && typeof courseSummary === 'string' && courseSummary.length > 0) {
