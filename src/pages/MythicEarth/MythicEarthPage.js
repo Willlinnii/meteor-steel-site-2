@@ -6,6 +6,7 @@ import {
   NearFarScalar, Cartesian2, LabelStyle,
   ImageryLayer as CesiumImageryLayer,
   ArcGisMapServerImageryProvider,
+  OpenStreetMapImageryProvider,
   BoundingSphere, Cartographic,
   Math as CesiumMath, HeadingPitchRoll,
 } from 'cesium';
@@ -20,12 +21,21 @@ import { usePageTracking } from '../../coursework/CourseworkContext';
 import './MythicEarthPage.css';
 
 import { apiFetch } from '../../lib/chatApi';
-/* ArcGIS World Imagery — high-res satellite tiles, free for display */
-const baseLayer = CesiumImageryLayer.fromProviderAsync(
-  ArcGisMapServerImageryProvider.fromUrl(
-    'https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer'
-  )
-);
+/* ArcGIS World Imagery with OpenStreetMap fallback */
+let baseLayer;
+try {
+  baseLayer = CesiumImageryLayer.fromProviderAsync(
+    ArcGisMapServerImageryProvider.fromUrl(
+      'https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer'
+    ).catch(() => new OpenStreetMapImageryProvider({
+      url: 'https://tile.openstreetmap.org/',
+    }))
+  );
+} catch {
+  baseLayer = new CesiumImageryLayer(new OpenStreetMapImageryProvider({
+    url: 'https://tile.openstreetmap.org/',
+  }));
+}
 
 const CATEGORIES = [
   { id: 'sacred-site', label: 'Sacred Sites', singular: 'Sacred Site', color: '#c9a961' },
