@@ -1,4 +1,4 @@
-const { route, respond } = require('../_lib/dataApi');
+const { route, respond } = require('./_lib/dataApi');
 
 module.exports = (req, res) => {
   // CORS preflight
@@ -13,6 +13,11 @@ module.exports = (req, res) => {
     return respond(res, 405, { error: 'Method not allowed' }, '/v1/');
   }
 
-  const segments = req.query.path || [];
+  // Extract path segments from URL: /api/v1/phases/forge → ['phases', 'forge']
+  const url = req.url.split('?')[0];
+  const prefix = '/api/v1';
+  const rest = url.startsWith(prefix) ? url.slice(prefix.length) : '';
+  const segments = rest.split('/').filter(Boolean);
+
   return route(segments, req, res);
 };
