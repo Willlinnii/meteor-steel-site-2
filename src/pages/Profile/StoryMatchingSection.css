@@ -422,3 +422,57 @@
   opacity: 0.5;
   cursor: not-allowed;
 }
+
+/* Condensed summary (Profile page) */
+
+.story-matching-summary {
+  padding: 12px 0;
+}
+
+.story-matching-summary-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.story-matching-summary-stat {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 0.78rem;
+  font-family: 'Cinzel', serif;
+  background: rgba(42, 42, 58, 0.5);
+  border: 1px solid var(--border-subtle, #2a2a3a);
+  color: var(--text-secondary, #8a8a9a);
+}
+
+.story-matching-summary-incoming {
+  border-color: var(--accent-ember, #c4713a);
+  color: var(--accent-ember, #c4713a);
+  background: rgba(196, 113, 58, 0.1);
+}
+
+.story-matching-summary-unread {
+  border-color: var(--accent-gold, #d4a55a);
+  color: var(--accent-gold, #d4a55a);
+  background: rgba(212, 165, 90, 0.1);
+}
+
+.story-matching-go-link {
+  display: inline-block;
+  padding: 8px 20px;
+  border-radius: 6px;
+  border: 1px solid var(--accent-ember, #c4713a);
+  background: rgba(196, 113, 58, 0.1);
+  color: var(--accent-ember, #c4713a);
+  font-family: 'Cinzel', serif;
+  font-size: 0.8rem;
+  letter-spacing: 0.03em;
+  text-decoration: none;
+  transition: background 0.15s;
+}
+
+.story-matching-go-link:hover {
+  background: rgba(196, 113, 58, 0.2);
+}

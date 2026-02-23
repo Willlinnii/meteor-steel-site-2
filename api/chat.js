@@ -1944,6 +1944,7 @@ ${stageBlock}`;
     }
 
     const targetUid = req.body?.targetUid || req.body?.friendUid;
+    const conversationId = req.body?.conversationId || null;
     if (!targetUid || typeof targetUid !== 'string') {
       return res.status(400).json({ error: 'targetUid is required.' });
     }
@@ -2079,6 +2080,33 @@ Respond with valid JSON only, no markdown:
       };
 
       await cacheRef.set(result);
+
+      // If conversationId provided, write the AI result as the opening message
+      if (conversationId && typeof conversationId === 'string') {
+        try {
+          const convRef = firestore.doc(`match-conversations/${conversationId}`);
+          const convSnap = await convRef.get();
+          if (convSnap.exists) {
+            const storyText = result.summary + (result.highlights?.length
+              ? '\n\n' + result.highlights.map(h => `${h.label}: ${h.detail}`).join('\n')
+              : '');
+            await firestore.collection(`match-conversations/${conversationId}/messages`).add({
+              senderUid: 'system',
+              senderHandle: 'Atlas',
+              text: storyText,
+              type: 'ai-match',
+              createdAt: admin.firestore.FieldValue.serverTimestamp(),
+            });
+            await convRef.update({
+              lastMessage: result.summary.substring(0, 100),
+              lastMessageAt: admin.firestore.FieldValue.serverTimestamp(),
+              lastMessageBy: 'system',
+            });
+          }
+        } catch (convErr) {
+          console.error('Failed to write AI match message to conversation:', convErr);
+        }
+      }
 
       return res.status(200).json({
         ...result,

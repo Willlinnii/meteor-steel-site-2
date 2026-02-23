@@ -8,6 +8,7 @@ import { MultiplayerProvider } from './multiplayer/MultiplayerContext';
 import { FamilyProvider } from './contexts/FamilyContext';
 import { FriendsProvider } from './contexts/FriendsContext';
 import { FriendRequestsProvider } from './contexts/FriendRequestsContext';
+import { MatchRequestsProvider } from './contexts/MatchRequestsContext';
 import { FellowshipProvider } from './contexts/FellowshipContext';
 import { AtlasContextProvider, useAtlasContext } from './contexts/AtlasContext';
 import ShareCompletionModal from './components/fellowship/ShareCompletionModal';
@@ -79,9 +80,9 @@ const SacredSites360Page = lazy(() => import('./pages/SacredSites360/SacredSites
 const DiscoverPage = lazy(() => import('./pages/Discover/DiscoverPage'));
 const DiscoverStarlightPage = lazy(() => import('./pages/DiscoverStarlight/DiscoverStarlightPage'));
 const SecretWeaponPage = lazy(() => import('./pages/SecretWeapon/SecretWeaponPage'));
-const FeedPage = lazy(() => import('./pages/Feed/FeedPage'));
 const FellowshipPage = lazy(() => import('./pages/Fellowship/FellowshipPage'));
 const CuratedProductsPage = lazy(() => import('./pages/CuratedProducts/CuratedProductsPage'));
+const MatchingPage = lazy(() => import('./pages/Matching/MatchingPage'));
 
 const STAGES = [
   { id: 'golden-age', label: 'Golden Age' },
@@ -1704,7 +1705,6 @@ const NAV_ITEMS = [
   { path: '/atlas', label: 'Atlas' },
   { path: '/games', label: 'Game Room' },
   { path: '/fellowship', label: 'Fellowship' },
-  { path: '/feed', label: 'Community' },
 ];
 
 const HIDDEN_NAV_ITEMS = [
@@ -2258,9 +2258,10 @@ function AppContent() {
         <Route path="/secret-weapon" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><SecretWeaponPage /></Suspense>} />
         <Route path="/fellowship" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><FellowshipPage /></Suspense>} />
         <Route path="/curated" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><CuratedProductsPage /></Suspense>} />
-        <Route path="/feed" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><FeedPage /></Suspense>} />
-        {/* Redirect legacy /app routes to /feed */}
-        <Route path="/app/*" element={<Navigate to="/feed" replace />} />
+        <Route path="/matching" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><MatchingPage /></Suspense>} />
+        <Route path="/feed" element={<Navigate to="/fellowship" replace />} />
+        {/* Redirect legacy /app routes to /fellowship */}
+        <Route path="/app/*" element={<Navigate to="/fellowship" replace />} />
         <Route path="/dragon/*" element={<RequireAdmin><Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" />Loading Admin...</div>}><AdminPage /></Suspense></RequireAdmin>} />
       </Routes>
       {!isAtlas && <SiteFooter />}
@@ -2298,6 +2299,7 @@ function App() {
     <CourseworkProvider>
       <WritingsProvider>
         <ProfileProvider>
+          <MatchRequestsProvider>
           <MultiplayerProvider>
             <TraditionsProvider>
             <CreationsProvider>
@@ -2311,6 +2313,7 @@ function App() {
             </CreationsProvider>
             </TraditionsProvider>
           </MultiplayerProvider>
+          </MatchRequestsProvider>
         </ProfileProvider>
       </WritingsProvider>
     </CourseworkProvider>

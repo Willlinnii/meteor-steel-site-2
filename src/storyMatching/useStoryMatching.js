@@ -8,6 +8,7 @@ import { useWritings } from '../writings/WritingsContext';
 import { useFriendRequests } from '../contexts/FriendRequestsContext';
 import { useFamily } from '../contexts/FamilyContext';
 import { useStoryCardSync } from '../storyCards/useStoryCardSync';
+import { useMatchRequests } from '../contexts/MatchRequestsContext';
 import { buildMatchProfile, computeQuickMatch } from './matchEngine';
 import { apiFetch } from '../lib/chatApi';
 
@@ -25,6 +26,7 @@ export function useStoryMatching() {
   const { friends } = useFriendRequests();
   const { families } = useFamily();
   const { cards: storyCards } = useStoryCardSync();
+  const { sendMatchRequest: sendRequest, connectedUids: matchConnectedUids, outgoingRequests, incomingRequests } = useMatchRequests();
 
   const [loading, setLoading] = useState(true);
   const [poolProfiles, setPoolProfiles] = useState([]);
@@ -316,6 +318,12 @@ export function useStoryMatching() {
     }
   }, [setPair, comparisons, requestDeepMatch]);
 
+  // Send a match request to another user
+  const sendMatchRequest = useCallback(async (targetUid, targetHandle, targetPhotoURL, quickScore) => {
+    if (!user) return;
+    await sendRequest(targetUid, targetHandle, targetPhotoURL, matchMode, quickScore);
+  }, [user, sendRequest, matchMode]);
+
   return {
     matchingEnabled,
     toggleMatching,
@@ -331,5 +339,9 @@ export function useStoryMatching() {
     requestDeepMatch,
     deepMatchLoading,
     loading,
+    sendMatchRequest,
+    matchConnectedUids,
+    outgoingRequests,
+    incomingRequests,
   };
 }
