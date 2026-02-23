@@ -820,6 +820,54 @@ export function ProfileProvider({ children }) {
     }
   }, [user]);
 
+  // Mythouse API key (from secrets doc)
+  const mythouseApiKey = apiKeys.mythouseApiKey || null;
+  const hasMythouseKey = !!mythouseApiKey;
+
+  const generateMythouseKey = useCallback(async () => {
+    if (!user) return null;
+    try {
+      const token = await user.getIdToken();
+      const resp = await fetch('/api/apikey', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ action: 'generate' }),
+      });
+      if (!resp.ok) {
+        const err = await resp.json();
+        throw new Error(err.error || 'Failed to generate key');
+      }
+      const data = await resp.json();
+      setApiKeys(k => ({ ...k, mythouseApiKey: data.key }));
+      return data.key;
+    } catch (err) {
+      console.error('Failed to generate Mythouse API key:', err);
+      throw err;
+    }
+  }, [user]);
+
+  const regenerateMythouseKey = useCallback(async () => {
+    if (!user) return null;
+    try {
+      const token = await user.getIdToken();
+      const resp = await fetch('/api/apikey', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ action: 'regenerate' }),
+      });
+      if (!resp.ok) {
+        const err = await resp.json();
+        throw new Error(err.error || 'Failed to regenerate key');
+      }
+      const data = await resp.json();
+      setApiKeys(k => ({ ...k, mythouseApiKey: data.key }));
+      return data.key;
+    } catch (err) {
+      console.error('Failed to regenerate Mythouse API key:', err);
+      throw err;
+    }
+  }, [user]);
+
   // BYOK derived values
   const hasAnthropicKey = !!apiKeys.anthropicKey;
   const hasOpenaiKey = !!apiKeys.openaiKey;
@@ -1029,6 +1077,10 @@ export function ProfileProvider({ children }) {
     removeApiKey,
     hasAnthropicKey,
     hasOpenaiKey,
+    mythouseApiKey,
+    hasMythouseKey,
+    generateMythouseKey,
+    regenerateMythouseKey,
     social,
     updateSocial,
     pilgrimages,

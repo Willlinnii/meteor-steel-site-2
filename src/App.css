@@ -308,8 +308,8 @@ body {
 .world-zone {
   position: absolute;
   left: 50%;
-  width: 76%;
-  height: 38%;
+  width: 100%;
+  height: 50%;
   transform: translateX(-50%);
   border-radius: 0;
   cursor: pointer;
@@ -318,11 +318,11 @@ body {
   background: transparent;
 }
 .world-zone-upper {
-  top: 12%;
+  top: 0;
   border-radius: 999px 999px 0 0;
 }
 .world-zone-lower {
-  bottom: 12%;
+  bottom: 0;
   border-radius: 0 0 999px 999px;
 }
 .world-zone-upper:hover {
@@ -347,7 +347,7 @@ body {
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  width: 76%;
+  width: 100%;
   height: 10%;
   z-index: 4;
   cursor: pointer;
@@ -1283,6 +1283,20 @@ body {
 
   .circle-stage.active .circle-stage-label {
     font-size: 0.72rem;
+  }
+
+  .world-zone {
+    width: 100%;
+    height: 50%;
+  }
+  .world-zone-upper {
+    top: 0;
+  }
+  .world-zone-lower {
+    bottom: 0;
+  }
+  .world-zone-threshold {
+    width: 100%;
   }
 
   .stage-heading {
@@ -3527,6 +3541,36 @@ body {
 .profile-api-key-save-btn:disabled {
   opacity: 0.4;
   cursor: default;
+}
+
+/* ===== PROFILE: DEVELOPER API ===== */
+.profile-dev-api-pitch {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  border-left: 2px solid var(--accent-gold);
+  padding-left: 14px;
+  margin: 8px 0 16px;
+}
+.profile-api-key-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+.profile-api-key-snippet {
+  margin-top: 8px;
+  padding: 8px 12px;
+  background: rgba(26, 26, 36, 0.7);
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  font-family: monospace;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  overflow-x: auto;
 }
 
 /* ===== PROFILE: SIGN OUT ===== */

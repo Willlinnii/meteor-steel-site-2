@@ -18,6 +18,19 @@ import { useStoryCardSync } from '../../storyCards/useStoryCardSync';
 
 const SUBSCRIPTIONS = [
   {
+    id: 'developer-api', name: 'Secret Weapon API',
+    icon: (
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <polyline points="16 18 22 12 16 6" />
+        <polyline points="8 6 2 12 8 18" />
+        <line x1="14" y1="4" x2="10" y2="20" />
+      </svg>
+    ),
+    description: 'Generate an API key to query the Mythouse knowledge graph programmatically.',
+    details: 'This site is the explorable inside of the API. Every planet, archetype, journey, and correspondence you can query through the API lives here. The more you explore, the more powerfully you\'ll use it.',
+    hasCustomContent: true,
+  },
+  {
     id: 'master-key', name: 'Mythouse Master Key',
     isBundle: true,
     bundleSubscriptions: ['ybr', 'forge', 'coursework'],
@@ -135,7 +148,7 @@ const PURCHASES = [
 export default function ProfilePage() {
   const { user, signOut } = useAuth();
   const { getCourseStates, completedCourses, certificateData, allCourses } = useCoursework();
-  const { earnedRanks, highestRank, activeCredentials, hasProfile, loaded: profileLoaded, handle, natalChart, updateNatalChart, numerologyName, updateNumerologyName, luckyNumber, updateLuckyNumber, subscriptions, updateSubscription, updateSubscriptions, purchases, updatePurchase, updatePurchases, refreshProfile, mentorData, qualifiedMentorTypes, mentorEligible, mentorCoursesComplete, effectiveMentorStatus, pairingCategories, updateMentorBio, updateMentorCapacity, publishToDirectory, unpublishFromDirectory, respondToPairing, endPairing, photoURL, consultingData, consultingCategories, updateProfilePhoto, respondToConsulting, apiKeys, saveApiKey, removeApiKey, hasAnthropicKey, hasOpenaiKey, social, updateSocial, pilgrimages, pilgrimagesLoaded, removePilgrimage, personalStory, savePersonalStory, curatorApproved } = useProfile();
+  const { earnedRanks, highestRank, activeCredentials, hasProfile, loaded: profileLoaded, handle, natalChart, updateNatalChart, numerologyName, updateNumerologyName, luckyNumber, updateLuckyNumber, subscriptions, updateSubscription, updateSubscriptions, purchases, updatePurchase, updatePurchases, refreshProfile, mentorData, qualifiedMentorTypes, mentorEligible, mentorCoursesComplete, effectiveMentorStatus, pairingCategories, updateMentorBio, updateMentorCapacity, publishToDirectory, unpublishFromDirectory, respondToPairing, endPairing, photoURL, consultingData, consultingCategories, updateProfilePhoto, respondToConsulting, apiKeys, saveApiKey, removeApiKey, hasAnthropicKey, hasOpenaiKey, mythouseApiKey, hasMythouseKey, generateMythouseKey, regenerateMythouseKey, social, updateSocial, pilgrimages, pilgrimagesLoaded, removePilgrimage, personalStory, savePersonalStory, curatorApproved } = useProfile();
 const { cards: storyCards, loaded: storyCardsLoaded } = useStoryCardSync();
   const navigate = useNavigate();
   const location = useLocation();
@@ -185,6 +198,12 @@ const { cards: storyCards, loaded: storyCardsLoaded } = useStoryCardSync();
   const [anthropicKeyInput, setAnthropicKeyInput] = useState('');
   const [openaiKeyInput, setOpenaiKeyInput] = useState('');
   const [keySaving, setKeySaving] = useState(null); // 'anthropicKey' | 'openaiKey' | null
+
+  // Mythouse API key state
+  const [showMythouseKey, setShowMythouseKey] = useState(false);
+  const [mythouseKeyLoading, setMythouseKeyLoading] = useState(false);
+  const [mythousCopyFeedback, setMythousCopyFeedback] = useState(false);
+  const [confirmRegen, setConfirmRegen] = useState(false);
 
   // Social media link state
   const [socialInputs, setSocialInputs] = useState({ instagram: '', facebook: '', linkedin: '', youtube: '' });
@@ -809,7 +828,96 @@ const { cards: storyCards, loaded: storyCardsLoaded } = useStoryCardSync();
                 </div>
                 {expanded && (
                   <div className="profile-subscription-details">
-                    {sub.details}
+                    {sub.hasCustomContent && sub.id === 'developer-api' ? (
+                      <>
+                        <p className="profile-dev-api-pitch">{sub.details}</p>
+                        {enabled && (
+                          <div className="profile-api-key-row" style={{ borderBottom: 'none', paddingTop: 4 }}>
+                            {hasMythouseKey ? (
+                              <div style={{ width: '100%' }}>
+                                <div className="profile-api-key-saved" style={{ marginBottom: 8 }}>
+                                  <span className="profile-api-key-masked">
+                                    {showMythouseKey
+                                      ? mythouseApiKey
+                                      : `${mythouseApiKey.slice(0, 7)}${'•'.repeat(20)}${mythouseApiKey.slice(-4)}`}
+                                  </span>
+                                </div>
+                                <div className="profile-api-key-actions">
+                                  <button
+                                    className="profile-api-key-save-btn"
+                                    onClick={() => setShowMythouseKey(v => !v)}
+                                  >
+                                    {showMythouseKey ? 'Hide' : 'Show'}
+                                  </button>
+                                  <button
+                                    className="profile-api-key-save-btn"
+                                    onClick={async () => {
+                                      try {
+                                        await navigator.clipboard.writeText(mythouseApiKey);
+                                        setMythousCopyFeedback(true);
+                                        setTimeout(() => setMythousCopyFeedback(false), 2000);
+                                      } catch {}
+                                    }}
+                                  >
+                                    {mythousCopyFeedback ? 'Copied!' : 'Copy'}
+                                  </button>
+                                  {confirmRegen ? (
+                                    <>
+                                      <button
+                                        className="profile-api-key-remove-btn"
+                                        disabled={mythouseKeyLoading}
+                                        onClick={async () => {
+                                          setMythouseKeyLoading(true);
+                                          try {
+                                            await regenerateMythouseKey();
+                                            setShowMythouseKey(true);
+                                          } catch {}
+                                          setMythouseKeyLoading(false);
+                                          setConfirmRegen(false);
+                                        }}
+                                      >
+                                        {mythouseKeyLoading ? '...' : 'Confirm Regenerate'}
+                                      </button>
+                                      <button
+                                        className="profile-api-key-save-btn"
+                                        onClick={() => setConfirmRegen(false)}
+                                      >
+                                        Cancel
+                                      </button>
+                                    </>
+                                  ) : (
+                                    <button
+                                      className="profile-api-key-remove-btn"
+                                      onClick={() => setConfirmRegen(true)}
+                                    >
+                                      Regenerate
+                                    </button>
+                                  )}
+                                </div>
+                                <div className="profile-api-key-snippet">
+                                  <code>x-api-key: {showMythouseKey ? mythouseApiKey : 'myt_...'}</code>
+                                </div>
+                              </div>
+                            ) : (
+                              <button
+                                className="profile-api-key-save-btn"
+                                disabled={mythouseKeyLoading}
+                                onClick={async () => {
+                                  setMythouseKeyLoading(true);
+                                  try {
+                                    await generateMythouseKey();
+                                    setShowMythouseKey(true);
+                                  } catch {}
+                                  setMythouseKeyLoading(false);
+                                }}
+                              >
+                                {mythouseKeyLoading ? 'Generating...' : 'Generate API Key'}
+                              </button>
+                            )}
+                          </div>
+                        )}
+                      </>
+                    ) : sub.details}
                   </div>
                 )}
               </div>
