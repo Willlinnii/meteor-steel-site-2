@@ -1,24 +1,22 @@
 const webpack = require('webpack');
 
 module.exports = function override(config) {
-  // Cesium 1.138+ uses import.meta which CRA's webpack config doesn't handle.
-  // Replace the standalone import.meta references so they don't crash at runtime.
+  // Cesium 1.138+ uses import.meta which breaks at runtime in non-module scripts.
+  // Use BannerPlugin to inject a polyfill at the top of the problematic chunk,
+  // and use module.parser to prevent webpack from choking on it during compilation.
+
   config.plugins.push(
     new webpack.DefinePlugin({
       CESIUM_BASE_URL: JSON.stringify('/cesium'),
     })
   );
 
-  // Tell webpack to treat import.meta as a global-like expression
-  // instead of failing on it in non-module scripts.
-  config.module = config.module || {};
-  config.module.parser = {
-    ...config.module.parser,
-    javascript: {
-      ...config.module.parser?.javascript,
-      importMeta: false,
-    },
-  };
+  // Add a loader that replaces `import.meta` with a safe object in cesium files
+  config.module.rules.push({
+    test: /\.js$/,
+    include: /node_modules[\\/](cesium|@cesium|@zip\.js|zustand)/,
+    loader: require.resolve('./import-meta-loader.js'),
+  });
 
   return config;
 };
