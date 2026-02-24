@@ -1334,6 +1334,20 @@ export default function ChronosphaeraPage() {
         {view3D && hasSubscription('monomyth') && (
           <div className="chrono-view3d-controls">
             <button
+              className="view3d-toggle"
+              onClick={() => setClockMode(cm => cm === '24h' ? '12h' : '24h')}
+              title={`Switch to ${clockMode === '24h' ? '12h heliocentric' : '24h geocentric'}`}
+            >
+              {clockMode === '24h' ? '24h' : '12h'}
+            </button>
+            <button
+              className="view3d-toggle"
+              onClick={() => setZodiacMode(zm => zm === 'sidereal' ? 'tropical' : 'sidereal')}
+              title={`Switch to ${zodiacMode === 'sidereal' ? 'tropical' : 'sidereal'}`}
+            >
+              {zodiacMode === 'sidereal' ? 'Sidereal' : 'Tropical'}
+            </button>
+            <button
               className="view3d-toggle active"
               onClick={() => handleToggle3D('vr')}
               title="Enter VR experience"
@@ -1352,6 +1366,8 @@ export default function ChronosphaeraPage() {
         {view3D ? (
           <Suspense fallback={<div className="chrono-3d-container chrono-3d-loading">Loading 3D...</div>}>
             <InlineScene3D
+              clockMode={clockMode}
+              zodiacMode={zodiacMode}
               selectedPlanet={selectedPlanet}
               onSelectPlanet={(p) => { trackElement(`chronosphaera.planet.${p}`); setSelectedPlanet(p); setSelectedSign(null); setSelectedCardinal(null); setSelectedEarth(null); setSelectedMonth(null); setVideoUrl(null); setPersonaChatOpen(null); if (chakraViewMode) setActiveTab('body'); if (showMonomyth) { setSelectedMonomythStage(null); setMonomythModel(null); } setSelectedStarlightStage(null); setSelectedConstellation(null); }}
               selectedSign={selectedSign}

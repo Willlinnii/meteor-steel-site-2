@@ -29,7 +29,7 @@ function lerpAngle(current, target, t) {
 }
 
 // Returns refs that are updated every frame — consumers must read inside useFrame
-export default function useOrbitalAnimation(mode) {
+export default function useOrbitalAnimation(mode, clockMode) {
   const anglesRef = useRef(null);
   const liveAnglesRef = useRef({});
   const moonPhaseRef = useRef(MoonPhase(new Date()));
@@ -51,7 +51,31 @@ export default function useOrbitalAnimation(mode) {
     const angles = anglesRef.current;
     const dt = Math.min(delta, 0.1);
 
-    if (mode === ORBITAL_MODES.LIVE) {
+    // Clock-driven modes override the orbital mode logic
+    if (clockMode === '24h') {
+      // 24h geocentric: Sun rides the hour hand, planets at real ecliptic offsets
+      const now = new Date();
+      const h = now.getHours();
+      const m = now.getMinutes();
+      const s = now.getSeconds() + now.getMilliseconds() / 1000;
+      // Sun clock angle: matches ClockHands3D convention
+      const sunClockDeg = h * 15 + m * 0.25 + s * (15 / 3600) + 90;
+      const sunClockRad = -sunClockDeg * DEG2RAD;
+      const sunLon = getEclipticLongitude('Sun');
+
+      for (const planet of Object.keys(BODY_MAP)) {
+        const planetLon = getEclipticLongitude(planet);
+        const target = sunClockRad + (sunLon - planetLon) * DEG2RAD;
+        angles[planet] = lerpAngle(angles[planet], target, LERP_SPEED * dt);
+      }
+      moonPhaseRef.current = MoonPhase(now);
+    } else if (clockMode === '12h') {
+      // 12h heliocentric: use heliocentric orbital speeds
+      HELIO_ORBITS_3D.forEach(o => {
+        angles[o.planet] = (angles[o.planet] || 0) - o.speed * DEG2RAD * dt;
+      });
+      angles['Moon-helio'] = (angles['Moon-helio'] || 0) - HELIO_MOON_3D.speed * DEG2RAD * dt;
+    } else if (mode === ORBITAL_MODES.LIVE) {
       for (const planet of Object.keys(BODY_MAP)) {
         const lon = getEclipticLongitude(planet);
         liveAnglesRef.current[planet] = -lon * DEG2RAD;

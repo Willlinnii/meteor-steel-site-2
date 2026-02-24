@@ -163,7 +163,7 @@ const GAME_BOOK = {
   'pachisi': {
     rules: [
       'Pachisi is played on a cross-shaped board with a 68-square circuit.',
-      'Each player has 4 pieces that start in the center (home base) and must travel the full circuit, then return up a home stretch of 7 squares.',
+      'Each player has 4 pieces that start off the board in a waiting area. Enter pieces with a grace roll (1, 6, or 25), then travel the full circuit and return up a home stretch of 7 squares.',
       'Roll cowrie shell dice: 6 shells produce values from 1 to 6 with special grace rolls on 6 and 1 (extra turn).',
       'Enter a piece onto the board or advance an existing piece by the amount rolled.',
       'Castle squares (marked positions) are safe — no captures can occur on them.',

@@ -73,6 +73,8 @@ export default function CelestialScene({
   onPanelLock,
   panelLockedRef: externalPanelLockedRef,
   orientationGranted,
+  clockMode,
+  zodiacMode,
 }) {
   const internalCamPosRef = useRef({ x: 0, y: 0, z: 0 });
   const internalPanelLockedRef = useRef(false);
@@ -106,6 +108,8 @@ export default function CelestialScene({
                 anglesRef={anglesRef}
                 panelLockedRef={panelLockedRef}
                 onPanelLock={onPanelLock}
+                clockMode={clockMode}
+                zodiacMode={zodiacMode}
               />
             </ARScaleWrapper>
             <ConditionalOrbitControls cameraAR={cameraAR} />

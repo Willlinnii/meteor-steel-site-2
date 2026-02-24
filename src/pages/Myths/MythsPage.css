@@ -2854,3 +2854,226 @@
     height: 5px;
   }
 }
+
+/* ── Pantheon Panel ── */
+.pantheon-panel {
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(139, 157, 195, 0.15);
+}
+
+.pantheon-group {
+  margin-bottom: 20px;
+}
+
+.pantheon-group-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin: 0 0 10px 0;
+}
+
+.pantheon-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 8px;
+}
+
+.pantheon-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  padding: 12px 14px;
+  background: rgba(139, 157, 195, 0.04);
+  border: 1px solid rgba(139, 157, 195, 0.1);
+  border-radius: 6px;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.15s, border-color 0.15s;
+  font-family: inherit;
+  color: inherit;
+}
+
+.pantheon-card:hover {
+  background: rgba(139, 157, 195, 0.1);
+  border-color: rgba(139, 157, 195, 0.25);
+}
+
+.pantheon-card.has-planet {
+  border-left: 3px solid #c9a961;
+}
+
+.pantheon-card-name {
+  font-family: 'Cinzel', serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.pantheon-card-title {
+  font-size: 0.8rem;
+  font-style: italic;
+  color: var(--text-secondary);
+  line-height: 1.3;
+}
+
+.pantheon-card-planet {
+  font-family: 'Cinzel', serif;
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: #c9a961;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
+/* Pantheon detail view */
+.pantheon-detail {
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(139, 157, 195, 0.15);
+}
+
+.pantheon-nav {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 16px;
+  font-family: 'Cinzel', serif;
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+}
+
+.pantheon-nav-back {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 0;
+  font-family: 'Cinzel', serif;
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  transition: color 0.15s;
+}
+
+.pantheon-nav-back:hover {
+  color: #c9a961;
+}
+
+.pantheon-nav-sep {
+  color: rgba(139, 157, 195, 0.3);
+}
+
+.pantheon-nav-current {
+  color: var(--text-primary);
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.pantheon-deity-name {
+  font-family: 'Cinzel', serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0 0 6px;
+}
+
+.pantheon-deity-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.pantheon-deity-title {
+  font-size: 1.05rem;
+  font-style: italic;
+  color: var(--text-secondary);
+}
+
+.pantheon-planet-badge {
+  font-family: 'Cinzel', serif;
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: #c9a961;
+  background: rgba(201, 169, 97, 0.08);
+  border: 1px solid rgba(201, 169, 97, 0.2);
+  padding: 3px 10px;
+  border-radius: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.pantheon-deity-description {
+  margin-bottom: 20px;
+  line-height: 1.75;
+  color: var(--text-primary);
+  font-size: 0.95rem;
+}
+
+.pantheon-deity-description p {
+  margin: 0 0 12px;
+}
+
+.pantheon-prev-next {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(139, 157, 195, 0.1);
+}
+
+.pantheon-prev-next-btn {
+  background: none;
+  border: 1px solid rgba(139, 157, 195, 0.15);
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-family: 'Cinzel', serif;
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  transition: color 0.15s, border-color 0.15s, background 0.15s;
+}
+
+.pantheon-prev-next-btn:hover {
+  color: var(--text-primary);
+  border-color: rgba(139, 157, 195, 0.3);
+  background: rgba(139, 157, 195, 0.04);
+}
+
+.pantheon-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.pantheon-field {
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--text-primary);
+}
+
+.pantheon-field-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.pantheon-field-value {
+  color: var(--text-primary);
+}
+
+@media (max-width: 600px) {
+  .pantheon-grid {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  }
+}

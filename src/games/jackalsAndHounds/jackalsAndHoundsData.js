@@ -5,14 +5,13 @@
 export const TRACK_LENGTH = 29;
 export const PIECES_PER_PLAYER = 5;
 
-// Bidirectional shortcuts: landing on either end teleports to the other
+// Forward-only shortcuts: landing on the start leaps you ahead
 export const SHORTCUTS = { 6: 12, 10: 18, 20: 24 };
 
-// Build a reverse lookup for shortcuts (bidirectional)
+// Forward-only shortcut map (no reverse — shortcuts always leap forward)
 export const SHORTCUT_MAP = {};
 Object.entries(SHORTCUTS).forEach(([from, to]) => {
   SHORTCUT_MAP[Number(from)] = Number(to);
-  SHORTCUT_MAP[Number(to)] = Number(from);
 });
 
 /**

@@ -1705,14 +1705,14 @@ function StoryForgeHome() {
 }
 
 const NAV_ITEMS = [
-  { path: '/', label: 'Creation Story' },
   { path: '/chronosphaera', label: 'Chronosphaera' },
   { path: '/myths', label: 'Mythosphaera' },
   { path: '/mythology-channel', label: 'Mythology Channel' },
   { path: '/mythosophia', label: 'Mythosophia' },
-  { path: '/atlas', label: 'Atlas' },
   { path: '/games', label: 'Game Room' },
   { path: '/fellowship', label: 'Fellowship' },
+  { path: '/atlas', label: 'Atlas' },
+  { path: '/', label: 'Creation Story' },
 ];
 
 const HIDDEN_NAV_ITEMS = [

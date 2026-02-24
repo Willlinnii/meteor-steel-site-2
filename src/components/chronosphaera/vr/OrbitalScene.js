@@ -4,7 +4,8 @@ import Planet3D from './Planet3D';
 import AnimatedPlanet from './AnimatedPlanet';
 import AnimatedMoonHelio from './AnimatedMoonHelio';
 import OrbitRing3D from './OrbitRing3D';
-import StarfieldBackground from './StarfieldBackground';
+import StarMap3D from './StarMap3D';
+import ClockHands3D from './ClockHands3D';
 import ZodiacSphere from './ZodiacSphere';
 import CardinalMarker3D from './CardinalMarker3D';
 import EarthDayNight3D from './EarthDayNight3D';
@@ -92,9 +93,11 @@ export default function OrbitalScene({
   anglesRef: externalAnglesRef,
   panelLockedRef,
   onPanelLock,
+  clockMode,
+  zodiacMode,
   children,
 }) {
-  const { anglesRef, moonPhaseRef } = useOrbitalAnimation(mode);
+  const { anglesRef, moonPhaseRef } = useOrbitalAnimation(mode, clockMode);
 
   // Expose angles to external ref (for mini-map)
   useFrame(() => {
@@ -116,8 +119,11 @@ export default function OrbitalScene({
       <ambientLight intensity={0.6} />
       <SunLight anglesRef={anglesRef} isHelio={isHelio} orbitRadius={sunOrbitR} />
 
-      {/* Stars — hidden in passthrough mode so only artifacts show over camera */}
-      {!arPassthrough && <StarfieldBackground cameraAR={cameraAR} />}
+      {/* Real star map — hidden in passthrough mode so only artifacts show over camera */}
+      {!arPassthrough && <StarMap3D cameraAR={cameraAR} />}
+
+      {/* Clock hands */}
+      {clockMode && <ClockHands3D clockMode={clockMode} />}
 
       {/* Zodiac ring */}
       <ZodiacSphere selectedSign={selectedSign} onSelectSign={onSelectSign} />

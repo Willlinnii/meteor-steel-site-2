@@ -91,12 +91,22 @@ function MehenGame({
     let msg = `${playerNames[player]} rolled ${diceValue}, moved piece to position ${newPos}`;
     const newLog = [...moveLog, msg];
 
-    // Landing on opponent's piece pushes them back 3
+    // Landing on opponent's piece sends them to nearest empty space behind
     if (newPos > 0 && newPos < TOTAL_SPACES) {
       for (let i = 0; i < PIECE_COUNT; i++) {
         if (newPieces[opponent][i] === newPos) {
-          newPieces[opponent][i] = Math.max(0, newPieces[opponent][i] - 3);
-          msg = `${playerNames[player]} bumped ${playerNames[opponent]}'s piece back!`;
+          // Find the nearest empty space behind (searching backward from newPos - 1)
+          let bumpDest = 0; // default to start
+          for (let s = newPos - 1; s >= 0; s--) {
+            const occupied = newPieces[0].some((p, idx) => p === s && !(idx === i && opponent === 0))
+              || newPieces[1].some((p, idx) => p === s && !(idx === i && opponent === 1));
+            if (!occupied || s === 0) {
+              bumpDest = s;
+              break;
+            }
+          }
+          newPieces[opponent][i] = bumpDest;
+          msg = `${playerNames[player]} bumped ${playerNames[opponent]}'s piece back to ${bumpDest}!`;
           newLog.push(msg);
         }
       }

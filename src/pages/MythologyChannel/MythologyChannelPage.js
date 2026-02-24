@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import mythsData from '../../data/mythsEpisodes.json';
 import mythsSynthesis from '../../data/mythsSynthesis.json';
+import SERIES_INFO from '../../data/mythologyChannelSeries';
 import { useCoursework } from '../../coursework/CourseworkContext';
 import './MythologyChannelPage.css';
 
@@ -297,6 +298,72 @@ function MythsTVDetailPage({ show, onBack, trackElement }) {
   );
 }
 
+/* ── Series Info Popup (second click / now-playing click) ── */
+function SeriesInfoPopup({ show, onClose, onExploreEpisodes, trackElement }) {
+  const info = SERIES_INFO[show.id];
+
+  useEffect(() => {
+    trackElement(`mythology-channel.popup.${show.id}`);
+  }, [show.id, trackElement]);
+
+  // Escape key
+  useEffect(() => {
+    const handleKey = (e) => { if (e.key === 'Escape') onClose(); };
+    window.addEventListener('keydown', handleKey);
+    return () => window.removeEventListener('keydown', handleKey);
+  }, [onClose]);
+
+  // Lock body scroll
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    return () => { document.body.style.overflow = ''; };
+  }, []);
+
+  if (!info) return null;
+
+  return (
+    <div className="series-popup-overlay" onClick={onClose}>
+      <div className="series-popup-modal" onClick={(e) => e.stopPropagation()}>
+        <button className="series-popup-close" onClick={onClose}>{'\u2715'}</button>
+        <h2 className="series-popup-title">{info.title}</h2>
+        {info.tagline && <p className="series-popup-tagline">{info.tagline}</p>}
+        <div className="series-popup-body">
+          {info.description.map((p, i) => <p key={i}>{p}</p>)}
+        </div>
+        {info.people.length > 0 && (
+          <div className="series-popup-people">
+            <h3 className="series-popup-people-heading">People</h3>
+            {info.people.map((person, i) => (
+              <div key={i} className="series-popup-person">
+                <span className="series-popup-person-name">{person.name}</span>
+                <span className="series-popup-person-role">{person.role}</span>
+              </div>
+            ))}
+          </div>
+        )}
+        <div className="series-popup-actions">
+          {info.hasDetailPage && (
+            <button className="series-popup-btn series-popup-btn-primary" onClick={onExploreEpisodes}>
+              Explore Episodes
+            </button>
+          )}
+          {info.links.map((link, i) => (
+            <a
+              key={i}
+              className="series-popup-btn"
+              href={link.url}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {link.label}
+            </a>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function MythsEpisodeContent({ episode }) {
   return (
     <div className="myths-episode-content">
@@ -333,6 +400,7 @@ export default function MythologyChannelPage() {
   const playerContainerRef = useRef(null);
 
   const [detailShow, setDetailShow] = useState(null);
+  const [popupShow, setPopupShow] = useState(null);
 
   const { trackElement, trackTime, isElementCompleted, courseworkMode } = useCoursework();
   const triggerZap = useCallback(() => setZapKey(k => k + 1), []);
@@ -431,9 +499,8 @@ export default function MythologyChannelPage() {
 
   const handleShowClick = (show) => {
     if (activeShow?.id === show.id) {
-      // Second click — open detail page
-      setDetailShow(show);
-      trackElement(`mythology-channel.detail.${show.id}`);
+      // Second click — open popup
+      setPopupShow(show);
     } else {
       trackElement(`mythology-channel.show.${show.id}`);
       setActiveShow(show);
@@ -532,8 +599,15 @@ export default function MythologyChannelPage() {
       </div>
 
       {activeShow && (
-        <div className="tv-now-playing">
+        <div
+          className="tv-now-playing tv-now-playing-clickable"
+          role="button"
+          tabIndex={0}
+          onClick={() => setPopupShow(activeShow)}
+          onKeyDown={(e) => { if (e.key === 'Enter') setPopupShow(activeShow); }}
+        >
           Now Playing: <strong>{activeShow.label}</strong>
+          <span className="tv-now-playing-info" title="Series info">{'\u24D8'}</span>
         </div>
       )}
 
@@ -600,6 +674,19 @@ export default function MythologyChannelPage() {
             </div>
           )}
         </div>
+      )}
+
+      {popupShow && SERIES_INFO[popupShow.id] && (
+        <SeriesInfoPopup
+          show={popupShow}
+          onClose={() => setPopupShow(null)}
+          onExploreEpisodes={() => {
+            setPopupShow(null);
+            setDetailShow(popupShow);
+            trackElement(`mythology-channel.detail.${popupShow.id}`);
+          }}
+          trackElement={trackElement}
+        />
       )}
     </div>
   );

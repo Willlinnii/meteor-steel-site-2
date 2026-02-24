@@ -4,7 +4,7 @@ import { createXRStore } from '@react-three/xr';
 import CelestialScene from '../../components/chronosphaera/vr/CelestialScene';
 import ARJoystick from '../../components/chronosphaera/vr/ARJoystick';
 import ARMiniMap from '../../components/chronosphaera/vr/ARMiniMap';
-import { ORBITAL_MODES, MODE_LABELS, MODE_SYMBOLS } from '../../components/chronosphaera/vr/constants3D';
+import { ORBITAL_MODES } from '../../components/chronosphaera/vr/constants3D';
 import '../../components/chronosphaera/vr/CelestialScene.css';
 import './ChronosphaeraPage.css';
 import { usePageTracking } from '../../coursework/CourseworkContext';
@@ -42,6 +42,7 @@ const CULTURE_KEY_MAP = {
   Tarot: 'tarot',
 };
 
+// eslint-disable-next-line no-unused-vars
 const MODE_ORDER = [
   ORBITAL_MODES.GEOCENTRIC,
   ORBITAL_MODES.HELIOCENTRIC,
@@ -207,7 +208,10 @@ export default function ChronosphaeraVRPage() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const [mode, setMode] = useState(ORBITAL_MODES.GEOCENTRIC);
+  const [clockMode, setClockMode] = useState('24h');        // '24h' | '12h'
+  const [zodiacMode, setZodiacMode] = useState('sidereal');  // 'sidereal' | 'tropical'
+  // Derive orbital mode from clockMode
+  const mode = clockMode === '24h' ? ORBITAL_MODES.GEOCENTRIC : ORBITAL_MODES.HELIOCENTRIC;
   const [selectedPlanet, setSelectedPlanet] = useState('Sun');
   const [selectedSign, setSelectedSign] = useState(null);
   const [selectedCardinal, setSelectedCardinal] = useState(null);
@@ -384,11 +388,15 @@ export default function ChronosphaeraVRPage() {
     return map;
   }, []);
 
-  const cycleMode = () => {
-    const idx = MODE_ORDER.indexOf(mode);
-    const nextMode = MODE_ORDER[(idx + 1) % MODE_ORDER.length];
-    track('mode.' + nextMode);
-    setMode(nextMode);
+  const toggleClockMode = () => {
+    const next = clockMode === '24h' ? '12h' : '24h';
+    track('clock.' + next);
+    setClockMode(next);
+  };
+  const toggleZodiacMode = () => {
+    const next = zodiacMode === 'sidereal' ? 'tropical' : 'sidereal';
+    track('zodiac-mode.' + next);
+    setZodiacMode(next);
   };
 
   const handleSelectPlanet = (p) => {
@@ -514,6 +522,8 @@ export default function ChronosphaeraVRPage() {
           onPanelLock={handlePanelLock}
           panelLockedRef={panelLockedExtRef}
           orientationGranted={orientationGranted}
+          clockMode={clockMode}
+          zodiacMode={zodiacMode}
         />
 
         {/* AR navigation overlays — hidden when full-screen panel is open */}
@@ -555,12 +565,15 @@ export default function ChronosphaeraVRPage() {
         </Link>
 
         <div className="celestial-mode-label">
-          {MODE_LABELS[mode]}
+          {clockMode === '24h' ? '24h Geocentric' : '12h Heliocentric'} &middot; {zodiacMode === 'sidereal' ? 'Sidereal' : 'Tropical'}
         </div>
 
         <div className="celestial-controls">
-          <button className="celestial-btn" onClick={cycleMode} title={`Current: ${MODE_LABELS[mode]}`}>
-            {MODE_SYMBOLS[mode]} Mode
+          <button className="celestial-btn" onClick={toggleClockMode} title={`Switch to ${clockMode === '24h' ? '12h' : '24h'} mode`}>
+            {clockMode === '24h' ? '24h' : '12h'}
+          </button>
+          <button className="celestial-btn" onClick={toggleZodiacMode} title={`Switch to ${zodiacMode === 'sidereal' ? 'tropical' : 'sidereal'}`}>
+            {zodiacMode === 'sidereal' ? 'Sidereal' : 'Tropical'}
           </button>
           <button className="celestial-btn" onClick={toggleFullscreen} title={isFullscreen ? 'Exit fullscreen' : 'Fullscreen immersive view'}>
             {isFullscreen ? 'Exit FS' : 'Fullscreen'}

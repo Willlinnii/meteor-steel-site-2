@@ -43,6 +43,22 @@ function isProtected(pieces, owner, pos) {
   return adj.some(p => pieces[owner].includes(p));
 }
 
+/** Check if path from `from` to `to` is blocked by an opponent blockade.
+ *  A blockade is two or more consecutive opponent pieces. */
+function isPathBlocked(pieces, playerIdx, from, to) {
+  const opp = 1 - playerIdx;
+  // Check each square between from (exclusive) and to (inclusive)
+  for (let pos = from + 1; pos <= Math.min(to, 30); pos++) {
+    if (pieces[opp].includes(pos)) {
+      // Check if the next square also has an opponent piece (consecutive = blockade)
+      const prevHasOpp = pos > 1 && pieces[opp].includes(pos - 1);
+      const nextHasOpp = pos < 30 && pieces[opp].includes(pos + 1);
+      if (prevHasOpp || nextHasOpp) return true;
+    }
+  }
+  return false;
+}
+
 /** Find the nearest open square to target (searching backwards from target,
  *  then forwards), excluding positions held by either player. */
 function nearestOpen(pieces, target) {
@@ -82,18 +98,23 @@ function getLegalMove(pieces, playerIdx, pos, roll) {
     return null;
   }
 
-  // Normal movement: dest > 30 means bearing off (if allowed)
+  // Overshoot: if dest > 30 and piece is not on 28/29/30, the move is illegal
+  // (pieces must actually reach the final squares to bear off)
   if (dest > 30) {
-    // pieces not on 28/29/30 can bear off if dest >= 31 (they pass/land on 30)
-    return { from: pos, to: BORNE_OFF, captures: false, capturedTo: null };
+    return null;
   }
 
   // Can't land on own piece
   if (ownPieceAt(pieces, playerIdx, dest)) return null;
 
+  // Can't pass through an opponent blockade (two+ consecutive opponent pieces)
+  if (isPathBlocked(pieces, playerIdx, pos, dest)) return null;
+
   // Opponent piece at dest?
   const opp = 1 - playerIdx;
   if (opponentPieceAt(pieces, playerIdx, dest)) {
+    // House of Beauty (26) is a safe square — no captures allowed
+    if (dest === 26) return null;
     // protected? can't capture
     if (isProtected(pieces, opp, dest)) return null;
     // capture: swap positions

@@ -2,6 +2,7 @@
   {
     "id": "delphi",
     "name": "Oracle of Delphi",
+    "mythicCenter": true,
     "era": "8th century BCE – 4th century CE",
     "lat": 38.4824,
     "lng": 22.501,
@@ -31,7 +32,8 @@
   {
     "id": "uluru",
     "name": "Uluru (Ayers Rock)",
-    "era": "mythic",
+    "mythicCenter": true,
+    "era": "nature",
     "lat": -25.3444,
     "lng": 131.0369,
     "category": "sacred-site",
@@ -45,6 +47,7 @@
   {
     "id": "varanasi",
     "name": "Varanasi (Kashi)",
+    "mythicCenter": true,
     "era": "c. 1200 BCE – present",
     "lat": 25.3176,
     "lng": 83.0064,
@@ -73,7 +76,9 @@
   {
     "id": "mt-olympus",
     "name": "Mount Olympus",
-    "era": "mythic",
+    "mythicCenter": true,
+    "pantheon": "olympian",
+    "era": "nature",
     "lat": 40.0859,
     "lng": 22.3583,
     "category": "mythic-location",
@@ -87,7 +92,8 @@
   {
     "id": "mt-sinai",
     "name": "Mount Sinai",
-    "era": "mythic",
+    "mythicCenter": true,
+    "era": "nature",
     "lat": 28.5394,
     "lng": 33.9753,
     "category": "sacred-site",
@@ -129,6 +135,7 @@
   {
     "id": "teotihuacan",
     "name": "Teotihuacan",
+    "mythicCenter": true,
     "era": "c. 100 BCE – 550 CE",
     "lat": 19.6925,
     "lng": -98.8438,
@@ -143,7 +150,9 @@
   {
     "id": "mt-kailash",
     "name": "Mount Kailash",
-    "era": "mythic",
+    "mythicCenter": true,
+    "pantheon": "hindu",
+    "era": "nature",
     "lat": 31.0672,
     "lng": 81.3119,
     "category": "sacred-site",
@@ -193,6 +202,7 @@
   {
     "id": "angkor-wat",
     "name": "Angkor Wat",
+    "mythicCenter": true,
     "era": "Early 12th century CE",
     "lat": 13.4125,
     "lng": 103.867,
@@ -240,7 +250,8 @@
   {
     "id": "mt-fuji",
     "name": "Mount Fuji",
-    "era": "mythic",
+    "pantheon": "shinto",
+    "era": "nature",
     "lat": 35.3606,
     "lng": 138.7274,
     "category": "sacred-site",
@@ -268,7 +279,7 @@
   {
     "id": "mt-ararat",
     "name": "Mount Ararat",
-    "era": "mythic",
+    "era": "nature",
     "lat": 39.7019,
     "lng": 44.2991,
     "category": "mythic-location",
@@ -316,7 +327,7 @@
   {
     "id": "mt-elbrus",
     "name": "Mount Elbrus",
-    "era": "mythic",
+    "era": "nature",
     "lat": 43.3499,
     "lng": 42.4453,
     "category": "mythic-location",
@@ -326,7 +337,7 @@
   {
     "id": "pillars-of-hercules",
     "name": "Pillars of Hercules",
-    "era": "mythic",
+    "era": "nature",
     "lat": 35.9838,
     "lng": -5.4955,
     "category": "mythic-location",
@@ -371,6 +382,7 @@
   {
     "id": "quran-mecca",
     "name": "Qur'an — Mecca",
+    "mythicCenter": true,
     "era": "c. 610–632 CE",
     "lat": 21.4225,
     "lng": 39.8262,
@@ -804,6 +816,7 @@
   {
     "id": "church-holy-sepulchre",
     "name": "Church of the Holy Sepulchre",
+    "mythicCenter": true,
     "era": "c. 326–335 CE",
     "lat": 31.7785,
     "lng": 35.2296,
@@ -818,6 +831,7 @@
   {
     "id": "dome-of-the-rock",
     "name": "Dome of the Rock",
+    "mythicCenter": true,
     "era": "691 CE",
     "lat": 31.7781,
     "lng": 35.2354,
@@ -1143,6 +1157,7 @@
   {
     "id": "potala-palace",
     "name": "Potala Palace",
+    "mythicCenter": true,
     "era": "c. 1645–1694 CE",
     "lat": 29.6578,
     "lng": 91.117,
@@ -1214,6 +1229,7 @@
   {
     "id": "temple-of-solomon",
     "name": "Temple of Solomon",
+    "mythicCenter": true,
     "era": "c. 957 BCE",
     "lat": 31.7781,
     "lng": 35.2354,
@@ -1229,6 +1245,7 @@
   {
     "id": "mahabodhi",
     "name": "Mahabodhi Temple",
+    "mythicCenter": true,
     "era": "c. 250 BCE",
     "lat": 24.6961,
     "lng": 84.9911,
@@ -1410,7 +1427,7 @@
   {
     "id": "glastonbury-chalice-well",
     "name": "Glastonbury — Chalice Well",
-    "era": "mythic",
+    "era": "nature",
     "lat": 51.1437,
     "lng": -2.6962,
     "category": "sacred-site",
@@ -1501,6 +1518,7 @@
   {
     "id": "north-pole",
     "name": "North Pole (Axis Mundi)",
+    "mythicCenter": true,
     "era": "mythic",
     "lat": 90,
     "lng": 0,
@@ -1775,5 +1793,673 @@
       "heading": 0,
       "pitch": 10
     }
+  },
+  {
+    "id": "nile-source",
+    "name": "Nile Source (Lake Victoria)",
+    "era": "nature",
+    "lat": -0.3476,
+    "lng": 32.6339,
+    "category": "sacred-site",
+    "description": "Africa's longest river begins here at Lake Victoria, then flows north 6,650 km through swamp, savanna, and desert — the only corridor of water in the Sahara. The annual flood deposited black silt across the valley floor. Every civilization along its banks — Nubia, Kush, Kemet — rose from that rhythm. The Egyptians called the flood Hapi and worshipped it as a god.",
+    "region": "Uganda"
+  },
+  {
+    "id": "ganges-source",
+    "name": "Ganges Source (Gaumukh)",
+    "era": "nature",
+    "lat": 30.9262,
+    "lng": 79.0842,
+    "category": "sacred-site",
+    "description": "The glacier mouth at 4,023 meters where the Ganges begins. In Hindu cosmology, the goddess Ganga descended from heaven and Shiva caught her in his hair to break the fall. The ice has been retreating for centuries, but the meltwater still feeds a billion people downstream.",
+    "region": "India",
+    "streetView": {
+      "heading": 0,
+      "pitch": 15
+    }
+  },
+  {
+    "id": "tigris-euphrates-confluence",
+    "name": "Tigris-Euphrates Confluence",
+    "era": "nature",
+    "lat": 31.0048,
+    "lng": 47.4378,
+    "category": "sacred-site",
+    "description": "Two rivers born in the mountains of eastern Turkey flow southeast for 1,800 km and merge into the Shatt al-Arab waterway before reaching the Persian Gulf. The marshlands at their junction are among the most fertile wetlands on Earth. Sumer, the world's first civilization, arose between them. Genesis placed the Garden of Eden at their source.",
+    "region": "Iraq"
+  },
+  {
+    "id": "mt-etna",
+    "name": "Mount Etna",
+    "era": "nature",
+    "lat": 37.7510,
+    "lng": 14.9934,
+    "category": "sacred-site",
+    "description": "Europe's tallest and most active volcano, erupting almost continuously for 500,000 years. The Greeks placed Hephaestus's forge inside it; the Romans imprisoned Typhon beneath it. Pindar, Aeschylus, and Virgil all wrote of its fire. The mountain was making smoke long before anyone invented gods to blame.",
+    "region": "Italy",
+    "streetView": {
+      "heading": 180,
+      "pitch": 25
+    }
+  },
+  {
+    "id": "kilauea",
+    "name": "Kilauea",
+    "pantheon": "hawaiian",
+    "era": "nature",
+    "lat": 19.4069,
+    "lng": -155.2834,
+    "category": "sacred-site",
+    "description": "One of the most active volcanoes on Earth, erupting nearly continuously since 1983. Lava flows from its caldera into the ocean, building new land in real time — the island of Hawaii is still being born. Native Hawaiians know the volcano as the home of Pele, goddess of fire. Offerings are still left at the crater rim.",
+    "region": "Hawaii",
+    "streetView": {
+      "heading": 220,
+      "pitch": 10
+    }
+  },
+  {
+    "id": "giants-causeway",
+    "name": "Giant's Causeway",
+    "era": "nature",
+    "lat": 55.2408,
+    "lng": -6.5116,
+    "category": "sacred-site",
+    "description": "40,000 interlocking basalt columns formed by an ancient volcanic eruption 60 million years ago. Irish legend says the giant Finn MacCool built it as a bridge to Scotland. The geometry is so precise it looks engineered — hexagonal pillars stepping down into the sea like a staircase for something larger than human.",
+    "region": "Northern Ireland",
+    "streetView": {
+      "heading": 0,
+      "pitch": 5
+    }
+  },
+  {
+    "id": "kata-tjuta",
+    "name": "Kata Tjuta (The Olgas)",
+    "era": "nature",
+    "lat": -25.3054,
+    "lng": 130.7360,
+    "category": "sacred-site",
+    "description": "Thirty-six rock domes rising from the red desert, companion formation to Uluru 25 km east. Sacred to the Anangu people — many of the Dreamtime stories here are restricted knowledge, not for outsiders. The highest dome, Mount Olga, stands 546 meters above the plain. The wind through the Valley of the Winds sounds like breath.",
+    "region": "Australia",
+    "streetView": {
+      "heading": 90,
+      "pitch": 10
+    }
+  },
+  {
+    "id": "delphi-gorge",
+    "name": "Delphi Gorge (Mount Parnassus)",
+    "era": "nature",
+    "lat": 38.4792,
+    "lng": 22.4864,
+    "category": "sacred-site",
+    "description": "The geological fissure in the rock of Parnassus that produced the vapors the Pythia breathed before prophesying. Before Apollo claimed the site, before the temple was built, before the oracle spoke — there was just a crack in the mountain, exhaling something from deep underground. The Earth spoke first.",
+    "region": "Greece",
+    "streetView": {
+      "heading": 180,
+      "pitch": 15
+    }
+  },
+  {
+    "id": "vesuvius",
+    "name": "Mount Vesuvius",
+    "era": "nature",
+    "lat": 40.8210,
+    "lng": 14.4260,
+    "category": "sacred-site",
+    "description": "A stratovolcano on the Bay of Naples, 1,281 meters high, the only active volcano on mainland Europe. Its fertile slopes drew dense settlement — vineyards, orchards, cities. On August 24, 79 CE, it buried Pompeii and Herculaneum under six meters of ash in eighteen hours. Pliny the Elder sailed toward the eruption and died. His nephew watched from across the bay and wrote the first detailed eyewitness account of a volcanic eruption in Western literature.",
+    "region": "Italy",
+    "streetView": {
+      "heading": 200,
+      "pitch": 15
+    }
+  },
+  {
+    "id": "popocatepetl",
+    "name": "Popocatépetl",
+    "pantheon": "aztec",
+    "era": "nature",
+    "lat": 19.0225,
+    "lng": -98.6278,
+    "category": "sacred-site",
+    "description": "An active stratovolcano rising 5,426 meters above central Mexico, visible from Mexico City on clear days. Its name is Nahuatl for 'Smoking Mountain' — it has erupted more than twenty times since the Spanish arrived. The Aztecs told of a warrior, Popocatépetl, who carried his dead lover Iztaccíhuatl to the mountaintop and knelt beside her, smoking with grief forever. The neighboring peak is her sleeping silhouette.",
+    "region": "Mexico",
+    "streetView": {
+      "heading": 0,
+      "pitch": 20
+    }
+  },
+  {
+    "id": "kilimanjaro",
+    "name": "Mount Kilimanjaro",
+    "era": "nature",
+    "lat": -3.0674,
+    "lng": 37.3556,
+    "category": "sacred-site",
+    "description": "A dormant volcanic massif in Tanzania, the highest freestanding mountain on Earth at 5,895 meters. Three volcanic cones — Kibo, Mawenzi, and Shira — fused over millions of years. Its equatorial glaciers are retreating rapidly. The Chagga people believe the summit is the dwelling place of God. Hemingway opened a story with a frozen leopard found near the top and never explained what it was seeking at that altitude.",
+    "region": "Tanzania",
+    "streetView": {
+      "heading": 180,
+      "pitch": 20
+    }
+  },
+  {
+    "id": "everest",
+    "name": "Mount Everest (Chomolungma)",
+    "era": "nature",
+    "lat": 27.9881,
+    "lng": 86.9250,
+    "category": "sacred-site",
+    "description": "The highest point on Earth at 8,849 meters, still rising as the Indian plate pushes into Asia. Tibetans call it Chomolungma — 'Goddess Mother of the World.' The Sherpa consider the summit sacred and leave offerings there. When George Mallory was asked why he wanted to climb it, he reportedly said, 'Because it's there' — then disappeared into cloud near the top in 1924. His body was found 75 years later, 300 meters below the summit.",
+    "region": "Nepal / Tibet",
+    "streetView": {
+      "heading": 0,
+      "pitch": 30
+    }
+  },
+  {
+    "id": "tongariro",
+    "name": "Tongariro",
+    "pantheon": "maori",
+    "era": "nature",
+    "lat": -39.1578,
+    "lng": 175.6425,
+    "category": "sacred-site",
+    "description": "A volcanic complex in New Zealand's North Island with emerald crater lakes, active fumaroles, and lava flows as recent as 1897. Sacred to the Ngāti Tūwharetoa people — paramount chief Te Heuheu Tukino IV gifted the mountains to the nation in 1887 to protect them, creating one of the world's first national parks. Peter Jackson later used the neighboring volcano Ruapehu as Mount Doom.",
+    "region": "New Zealand",
+    "streetView": {
+      "heading": 180,
+      "pitch": 15
+    }
+  },
+  {
+    "id": "krakatoa",
+    "name": "Krakatoa (Anak Krakatau)",
+    "era": "nature",
+    "lat": -6.1021,
+    "lng": 105.4230,
+    "category": "sacred-site",
+    "description": "A volcanic island in the Sunda Strait between Java and Sumatra. In 1883 it produced the loudest sound in recorded history — heard 4,800 km away in Alice Springs. The eruption ejected 25 cubic km of rock, generated 30-meter tsunamis, and lowered global temperatures by 1.2°C for five years. The original island destroyed itself. Anak Krakatau — 'Child of Krakatoa' — emerged from the caldera in 1927 and is still growing.",
+    "region": "Indonesia"
+  },
+  {
+    "id": "santorini-caldera",
+    "name": "Santorini Caldera",
+    "era": "nature",
+    "lat": 36.4040,
+    "lng": 25.3960,
+    "category": "sacred-site",
+    "description": "A flooded volcanic caldera in the Aegean Sea, 11 km across. Around 1600 BCE, the Minoan eruption — one of the largest in human history — blew the center of the island into the sea. The resulting tsunami devastated Crete and may have ended Minoan civilization. Some scholars believe Plato's Atlantis was a cultural memory of this event: an advanced island nation destroyed overnight by the sea.",
+    "region": "Greece",
+    "streetView": {
+      "heading": 270,
+      "pitch": 10
+    }
+  },
+  {
+    "id": "devils-tower",
+    "name": "Devil's Tower (Bear Lodge)",
+    "era": "nature",
+    "lat": 44.5902,
+    "lng": -104.7146,
+    "category": "sacred-site",
+    "description": "A 264-meter monolith of phonolite porphyry rising from the Wyoming prairie — the exposed core of an ancient volcanic intrusion, its sides scored with massive hexagonal columns. Sacred to the Lakota, Cheyenne, and Kiowa, who call it Bear Lodge. The Kiowa story: seven sisters fled a giant bear onto a rock that rose to save them. The bear's claw marks became the columns. The sisters became the Pleiades.",
+    "region": "United States",
+    "streetView": {
+      "heading": 180,
+      "pitch": 25
+    }
+  },
+  {
+    "id": "table-mountain",
+    "name": "Table Mountain",
+    "era": "nature",
+    "lat": -33.9625,
+    "lng": 18.4039,
+    "category": "sacred-site",
+    "description": "A flat-topped sandstone massif overlooking Cape Town, 1,085 meters high, with rock over 600 million years old — among the oldest exposed surfaces on Earth. Orographic clouds spill over the rim like a white tablecloth. The Khoekhoe people called it Hoerikwaggo, 'Mountain in the Sea.' It was the first landmark sailors saw when rounding the Cape of Good Hope — the point where the Atlantic and Indian Oceans meet.",
+    "region": "South Africa",
+    "streetView": {
+      "heading": 0,
+      "pitch": 20
+    }
+  },
+  {
+    "id": "denali",
+    "name": "Denali",
+    "era": "nature",
+    "lat": 63.0695,
+    "lng": -151.0074,
+    "category": "sacred-site",
+    "description": "The highest peak in North America at 6,190 meters, rising from a base elevation of only 600 meters — the tallest mountain face on Earth from base to summit. The Koyukon Athabaskan name means 'the Great One.' Its mass generates its own weather systems. On clear days the mountain is visible from 200 km away. The Athabaskan people tracked the movement of caribou herds by watching how clouds formed around the peak.",
+    "region": "United States"
+  },
+  {
+    "id": "amazon-river",
+    "name": "Amazon River",
+    "era": "nature",
+    "lat": -3.1316,
+    "lng": -59.9853,
+    "category": "sacred-site",
+    "description": "The largest river by volume on Earth, discharging more water than the next seven largest rivers combined. It drains 40% of South America through a basin that holds one-third of all species on the planet. Where the Rio Negro meets the Solimões near Manaus, black and tan waters run side by side for six kilometers before mixing. The Tupi people called it Paraná Guasu — 'Great River.' Spanish explorers renamed it after the warrior women they claimed attacked from the banks.",
+    "region": "Brazil",
+    "streetView": {
+      "heading": 90,
+      "pitch": 0
+    }
+  },
+  {
+    "id": "yellow-river",
+    "name": "Yellow River (Huang He)",
+    "era": "nature",
+    "lat": 35.0500,
+    "lng": 110.2667,
+    "category": "sacred-site",
+    "description": "China's second-longest river, 5,464 km, carrying more sediment than any other river on Earth — the loess gives it its yellow color and built the North China Plain over millennia. It has changed course catastrophically at least twenty-six times in recorded history, earning the name 'China's Sorrow.' Yet the earliest Chinese civilizations — Yangshao, Longshan, Shang — all arose along its banks. The river that destroyed the most also created the most.",
+    "region": "China"
+  },
+  {
+    "id": "jordan-river",
+    "name": "Jordan River",
+    "era": "nature",
+    "lat": 31.7597,
+    "lng": 35.5505,
+    "category": "sacred-site",
+    "description": "A 251 km river flowing from the slopes of Mount Hermon down through the Sea of Galilee to the Dead Sea — the lowest river endpoint on Earth, 430 meters below sea level. It drops through the Great Rift Valley, the same tectonic scar that runs from Lebanon to Mozambique. The Israelites crossed it into the Promised Land. John the Baptist immersed Jesus in its waters. Three religions mark it as a threshold between exile and home.",
+    "region": "Israel / Jordan",
+    "streetView": {
+      "heading": 90,
+      "pitch": 0
+    }
+  },
+  {
+    "id": "danube",
+    "name": "Danube (Iron Gates)",
+    "era": "nature",
+    "lat": 44.6725,
+    "lng": 22.2986,
+    "category": "sacred-site",
+    "description": "Europe's second-longest river, 2,850 km, flowing through ten countries from the Black Forest to the Black Sea. At the Iron Gates gorge on the Serbian-Romanian border, the river narrows between 300-meter cliffs — the deepest river gorge in Europe. The Lepenski Vir settlement on its banks is 9,000 years old. Strauss composed a waltz for it. The Romans built Trajan's Bridge across it. No other river has touched more distinct cultures.",
+    "region": "Serbia / Romania",
+    "streetView": {
+      "heading": 0,
+      "pitch": 10
+    }
+  },
+  {
+    "id": "mississippi-river",
+    "name": "Mississippi River",
+    "era": "nature",
+    "lat": 47.2372,
+    "lng": -95.2057,
+    "category": "sacred-site",
+    "description": "The central artery of North America, 3,766 km from Lake Itasca in Minnesota to the Gulf of Mexico, draining 31 US states and two Canadian provinces. The Ojibwe name Misi-ziibi means 'Great River.' The river built the Mississippi Delta — 25,000 square km of new land from carried sediment. The mound-building cultures at Cahokia used the river as their highway. Mark Twain learned to read its currents as a steamboat pilot and later mapped the American character through its stories.",
+    "region": "United States"
+  },
+  {
+    "id": "lake-baikal",
+    "name": "Lake Baikal",
+    "era": "nature",
+    "lat": 53.5587,
+    "lng": 108.1650,
+    "category": "sacred-site",
+    "description": "The deepest lake on Earth at 1,642 meters and the oldest at 25 million years, holding 20% of the world's unfrozen surface fresh water. Over 2,500 species live here, two-thirds found nowhere else — including the nerpa, the world's only freshwater seal. The Buryat people call it 'Sacred Sea' and believe a dragon lives in its depths. In winter the ice is so clear you can see 40 meters down.",
+    "region": "Russia",
+    "streetView": {
+      "heading": 0,
+      "pitch": 5
+    }
+  },
+  {
+    "id": "lake-titicaca",
+    "name": "Lake Titicaca",
+    "pantheon": "inca",
+    "era": "nature",
+    "lat": -15.7500,
+    "lng": -69.3500,
+    "category": "sacred-site",
+    "description": "The highest navigable lake in the world at 3,812 meters in the Andes, straddling Peru and Bolivia. Its deep blue water — 281 meters at the deepest point — sits in a basin formed by tectonic uplift. The Inca believed the sun god Inti was born on the Island of the Sun in its center. The Uros people still live on floating islands made of totora reeds, rebuilt continuously as the bottom layers decay into the lake.",
+    "region": "Peru / Bolivia"
+  },
+  {
+    "id": "dead-sea",
+    "name": "Dead Sea",
+    "era": "nature",
+    "lat": 31.5000,
+    "lng": 35.5000,
+    "category": "sacred-site",
+    "description": "The lowest point on Earth's surface, 430 meters below sea level, sitting in the Great Rift Valley. Its water is 34% salt — nearly ten times the ocean — so dense that the human body cannot sink. Nothing larger than microbes survives in it. The shores are receding at a meter per year. Lot's wife supposedly looked back toward Sodom and turned to salt. The Dead Sea Scrolls were found in caves along its northwest shore.",
+    "region": "Israel / Jordan",
+    "streetView": {
+      "heading": 90,
+      "pitch": 5
+    }
+  },
+  {
+    "id": "crater-lake",
+    "name": "Crater Lake",
+    "era": "nature",
+    "lat": 42.9446,
+    "lng": -122.1090,
+    "category": "sacred-site",
+    "description": "The deepest lake in the United States at 594 meters, filling the caldera of Mount Mazama, which collapsed in a catastrophic eruption around 5700 BCE. No rivers feed it — only rain and snowmelt, making it one of the clearest bodies of water on Earth. The Klamath people witnessed the eruption and passed the story down: a battle between Llao, spirit of the underworld, and Skell, spirit of the sky. The mountain fell. Water filled the wound.",
+    "region": "United States",
+    "streetView": {
+      "heading": 180,
+      "pitch": 10
+    }
+  },
+  {
+    "id": "niagara-falls",
+    "name": "Niagara Falls",
+    "era": "nature",
+    "lat": 43.0828,
+    "lng": -79.0742,
+    "category": "sacred-site",
+    "description": "Three waterfalls on the Niagara River between Ontario and New York, moving six million cubic feet of water per minute over a 51-meter drop. The falls formed about 12,000 years ago when glaciers retreated and Lake Erie drained over the Niagara Escarpment. They erode upstream at roughly a meter per year. The Haudenosaunee (Iroquois) told of a maiden who went over the falls and was caught by the thunder god Heno, who lived behind the curtain of water.",
+    "region": "United States / Canada",
+    "streetView": {
+      "heading": 180,
+      "pitch": 10
+    }
+  },
+  {
+    "id": "victoria-falls",
+    "name": "Victoria Falls (Mosi-oa-Tunya)",
+    "era": "nature",
+    "lat": -17.9243,
+    "lng": 25.8572,
+    "category": "sacred-site",
+    "description": "The Zambezi River, 1.7 km wide, drops 108 meters into a narrow gorge — the largest curtain of falling water on Earth. The spray rises 400 meters and is visible from 50 km away. The Kololo name Mosi-oa-Tunya means 'The Smoke That Thunders.' David Livingstone was the first European to see it, in 1855, and called it 'the most wonderful sight I had witnessed in Africa.' The Tonga people who lived nearby had been listening to it for centuries.",
+    "region": "Zambia / Zimbabwe",
+    "streetView": {
+      "heading": 0,
+      "pitch": 10
+    }
+  },
+  {
+    "id": "iguazu-falls",
+    "name": "Iguazu Falls",
+    "era": "nature",
+    "lat": -25.6953,
+    "lng": -54.4367,
+    "category": "sacred-site",
+    "description": "A system of 275 individual falls spread across 2.7 km of the Iguazu River on the Argentina-Brazil border. The main cataract, Garganta del Diablo (Devil's Throat), is a U-shaped chasm 82 meters high where the mist creates permanent rainbows. The Guaraní tell of a god who wanted to marry a woman named Naipí. When she fled downriver with her mortal lover, the god sliced the river in rage, creating the falls and trapping the lovers forever.",
+    "region": "Argentina / Brazil",
+    "streetView": {
+      "heading": 180,
+      "pitch": 15
+    }
+  },
+  {
+    "id": "grand-canyon",
+    "name": "Grand Canyon",
+    "era": "nature",
+    "lat": 36.1069,
+    "lng": -112.1129,
+    "category": "sacred-site",
+    "description": "A 446 km gorge cut by the Colorado River through nearly two billion years of exposed rock — one-third of Earth's history visible in layered strata. At its deepest, the inner gorge drops 1,857 meters from rim to river. The Havasupai people have lived at its bottom for over 800 years, calling themselves 'people of the blue-green water' for the turquoise creek that falls through their village. John Wesley Powell's 1869 expedition through its rapids remains one of the great exploration narratives.",
+    "region": "United States",
+    "streetView": {
+      "heading": 0,
+      "pitch": -10
+    }
+  },
+  {
+    "id": "ha-long-bay",
+    "name": "Ha Long Bay",
+    "era": "nature",
+    "lat": 20.9101,
+    "lng": 107.1839,
+    "category": "sacred-site",
+    "description": "Nearly 2,000 limestone karst islands and pillars rising from emerald water in the Gulf of Tonkin, carved over 20 million years by dissolution and erosion. Many are hollow, containing grottoes with stalactites. The Vietnamese name means 'Descending Dragon' — legend says a dragon sent by the gods spat jewels that became the islands, forming a barrier to protect Vietnam from invaders by sea.",
+    "region": "Vietnam",
+    "streetView": {
+      "heading": 180,
+      "pitch": 5
+    }
+  },
+  {
+    "id": "cappadocia",
+    "name": "Cappadocia",
+    "era": "nature",
+    "lat": 38.6431,
+    "lng": 34.8283,
+    "category": "sacred-site",
+    "description": "Volcanic tuff deposits tens of meters thick, eroded over millions of years into thousands of pointed spires, mushroom rocks, and 'fairy chimneys' across the central Anatolian plateau. The soft rock is easily carved. Early Christians hollowed entire underground cities — Derinkuyu reaches eight stories deep, sheltering 20,000 people. Churches with frescoes were carved inside the cones. The geology that made the landscape strange also made it habitable.",
+    "region": "Turkey",
+    "streetView": {
+      "heading": 0,
+      "pitch": 10
+    }
+  },
+  {
+    "id": "tassili-najjer",
+    "name": "Tassili n'Ajjer",
+    "era": "nature",
+    "lat": 25.5000,
+    "lng": 9.0000,
+    "category": "sacred-site",
+    "description": "A sandstone plateau in the central Sahara, 72,000 square km of eroded rock forests, natural arches, and deep canyons — sculpted by wind and water when the Sahara was green. Over 15,000 rock paintings and engravings, some 12,000 years old, show giraffes, hippos, cattle, and swimmers in a landscape now utterly dry. The art is a record of climate change observed in real time by the people who lived through it.",
+    "region": "Algeria"
+  },
+  {
+    "id": "mammoth-cave",
+    "name": "Mammoth Cave",
+    "era": "nature",
+    "lat": 37.1862,
+    "lng": -86.1005,
+    "category": "sacred-site",
+    "description": "The longest known cave system on Earth — over 680 km of surveyed passages carved by water through 330-million-year-old limestone. New passages are still being discovered. Indigenous peoples explored it with reed torches over 4,000 years ago; their mummified remains and footprints are still inside. Enslaved people were later forced to give tours by torchlight. The cave's total length exceeds the next three longest caves combined.",
+    "region": "United States"
+  },
+  {
+    "id": "fingals-cave",
+    "name": "Fingal's Cave",
+    "era": "nature",
+    "lat": 56.4313,
+    "lng": -6.3414,
+    "category": "sacred-site",
+    "description": "A sea cave on the uninhabited island of Staffa in the Scottish Hebrides, formed from hexagonally jointed basalt columns — the same volcanic formation as the Giant's Causeway, 130 km to the south. The cave is 72 meters deep and 20 meters high. Waves enter and produce an eerie resonance. Felix Mendelssohn visited in 1829 and wrote the Hebrides Overture from the sound. The Gaelic name is Uamh-Binn — 'Cave of Melody.'",
+    "region": "Scotland",
+    "streetView": {
+      "heading": 90,
+      "pitch": 5
+    }
+  },
+  {
+    "id": "sacred-cenote",
+    "name": "Sacred Cenote (Chichén Itzá)",
+    "era": "nature",
+    "lat": 20.6910,
+    "lng": -88.5690,
+    "category": "sacred-site",
+    "description": "A natural sinkhole 60 meters in diameter and 27 meters deep, formed when the limestone ceiling of an underground river collapsed. The Yucatán Peninsula is riddled with cenotes — they were the only source of fresh water in a land with no surface rivers. The Maya considered them entrances to Xibalba, the underworld. Dredging of the Sacred Cenote at Chichén Itzá has recovered jade, gold, pottery, and human remains — offerings dropped into the water for over a thousand years.",
+    "region": "Mexico",
+    "streetView": {
+      "heading": 0,
+      "pitch": 20
+    }
+  },
+  {
+    "id": "yellowstone",
+    "name": "Yellowstone",
+    "era": "nature",
+    "lat": 44.4280,
+    "lng": -110.5885,
+    "category": "sacred-site",
+    "description": "A supervolcano caldera 72 km wide sitting atop a mantle plume that has erupted catastrophically three times in 2.1 million years. It contains two-thirds of the world's geysers — Old Faithful erupts roughly every 90 minutes — along with hot springs, mud pots, and fumaroles across 9,000 square km. The Crow, Shoshone, and Bannock peoples used its thermal features for millennia. When the first white explorers described what they saw, nobody believed them.",
+    "region": "United States",
+    "streetView": {
+      "heading": 0,
+      "pitch": 5
+    }
+  },
+  {
+    "id": "pamukkale",
+    "name": "Pamukkale",
+    "era": "nature",
+    "lat": 37.9204,
+    "lng": 29.1213,
+    "category": "sacred-site",
+    "description": "Terraces of white travertine cascading down a hillside in southwestern Turkey, deposited over millennia by calcium-rich thermal springs at 36°C. The name means 'Cotton Castle' in Turkish. The Greeks built the spa city of Hierapolis directly above the springs. Beneath the Temple of Apollo, a cave called the Plutonium emitted volcanic CO2 so concentrated it killed animals on contact — the priests claimed it was the breath of the god of death.",
+    "region": "Turkey",
+    "streetView": {
+      "heading": 180,
+      "pitch": 10
+    }
+  },
+  {
+    "id": "great-barrier-reef",
+    "name": "Great Barrier Reef",
+    "era": "nature",
+    "lat": -18.2871,
+    "lng": 147.6992,
+    "category": "sacred-site",
+    "description": "The largest living structure on Earth — 2,300 km of coral reef off Queensland, visible from space. Built by billions of tiny polyps over 500,000 years, it supports 1,500 species of fish, 400 types of coral, and 4,000 species of mollusk. The Aboriginal and Torres Strait Islander peoples have fished its waters for over 60,000 years. Their oral histories include accounts of sea level rise at the end of the last ice age — stories that match the geological record.",
+    "region": "Australia"
+  },
+  {
+    "id": "thingvellir",
+    "name": "Þingvellir",
+    "era": "nature",
+    "lat": 64.2559,
+    "lng": -21.1290,
+    "category": "sacred-site",
+    "description": "A rift valley in southwestern Iceland where the North American and Eurasian tectonic plates pull apart at two centimeters per year — the seam of the world, visible and walkable. The Almannagjá gorge drops between basalt walls into a flat plain beside Þingvallavatn, Iceland's largest lake. In 930 CE the Icelandic settlers chose this place for the Althing, the world's oldest surviving parliament. The Lögrétta (law council) met on a raised rock in the rift. Disputes were settled, outlaws declared, and in the year 1000 the Lawspeaker stood here and decided Iceland would convert to Christianity — then walked home past the waterfall Öxarárfoss. The rift still widens. The parliament still meets.",
+    "region": "Iceland",
+    "pantheon": "norse",
+    "streetView": {
+      "heading": 90,
+      "pitch": 5
+    }
+  },
+  {
+    "id": "skellig-michael",
+    "name": "Skellig Michael",
+    "era": "nature",
+    "lat": 51.7700,
+    "lng": -10.5390,
+    "category": "sacred-site",
+    "description": "A jagged pyramidal rock rising 218 meters from the North Atlantic, 12 km off the Kerry coast. Two peaks connected by a narrow saddle, battered by storms for millions of years. In the 6th century, monks climbed the 618 stone steps to the summit and built beehive huts where they lived for 600 years — one of the most extreme acts of religious devotion in history. Gannets and puffins still nest on the cliffs. The rock was the final scene in Star Wars: The Force Awakens.",
+    "region": "Ireland",
+    "streetView": {
+      "heading": 270,
+      "pitch": 15
+    }
+  },
+  {
+    "id": "cusco",
+    "name": "Cusco (Qosqo)",
+    "mythicCenter": true,
+    "era": "c. 1200–1533 CE",
+    "lat": -13.5170,
+    "lng": -71.9785,
+    "category": "sacred-site",
+    "description": "The Quechua name means 'navel.' The Inca Empire — Tawantinsuyu, 'the four quarters together' — radiated from this city in the four cardinal directions, making Cusco the literal hub of the known world. Forty-one ceque lines extended outward from the Coricancha (Temple of the Sun) to 328 huacas across the landscape, one of the most geometrically precise sacred geographies ever constructed. The Intihuatana stones — 'hitching posts of the sun' — were designed to anchor the sun to the earth at this center point. The Spanish built their cathedral directly on top of the Coricancha's foundations. The walls held.",
+    "region": "Peru",
+    "streetView": {
+      "heading": 0,
+      "pitch": 10
+    }
+  },
+  {
+    "id": "rome-capitoline",
+    "name": "Rome (Capitoline Hill)",
+    "mythicCenter": true,
+    "era": "c. 753 BCE – present",
+    "lat": 41.8931,
+    "lng": 12.4828,
+    "category": "sacred-site",
+    "description": "Caput mundi — 'head of the world.' The mundus, a ritual pit on the Palatine Hill covered by the lapis manalis, was the literal navel of the city and a passage to the underworld, opened three times a year to allow the dead to walk among the living. The Capitoline Hill held the Temple of Jupiter Optimus Maximus, the religious center of an empire that defined itself as universal. When Christianity absorbed Rome, the axis transferred: St. Peter's Basilica was built over Peter's tomb, and the Vatican became the center of Catholic Christendom. Few sites have maintained world-center status across such a fundamental religious transition.",
+    "region": "Italy",
+    "streetView": {
+      "heading": 180,
+      "pitch": 10
+    }
+  },
+  {
+    "id": "mount-tai",
+    "name": "Mount Tai (Taishan)",
+    "mythicCenter": true,
+    "pantheon": "chinese",
+    "era": "c. 219 BCE – present",
+    "lat": 36.2521,
+    "lng": 117.1009,
+    "category": "sacred-site",
+    "description": "The most sacred of China's Five Great Mountains, 1,545 meters, associated with sunrise, birth, and renewal — the direction from which cosmic energy enters the world. For over two millennia it was the site of the Feng and Shan sacrifices, the most solemn rites in Chinese religion, performed only by emperors who had unified the realm to announce their mandate to Heaven and Earth. Only six emperors in all of Chinese history were deemed worthy. Confucius stood on its summit and declared 'the world is small.' The 7,000-step path to the top has been climbed by pilgrims for three thousand years. 'As stable as Mount Tai' remains a Chinese proverb for permanence itself.",
+    "region": "China",
+    "streetView": {
+      "heading": 0,
+      "pitch": 20
+    }
+  },
+  {
+    "id": "ile-ife",
+    "name": "Ile-Ife",
+    "mythicCenter": true,
+    "pantheon": "yoruba",
+    "era": "c. 500–1400 CE",
+    "lat": 7.4800,
+    "lng": 4.5600,
+    "category": "sacred-site",
+    "description": "The Yoruba omphalos — the place where the world was created. In Yoruba cosmogony, Oduduwa descended from heaven on a chain carrying a calabash of earth, a cockerel, and a palm nut. He poured the earth onto the primordial waters; the cockerel scratched it outward, creating land; the palm nut grew into the tree of life. The name Ile-Ife means 'place of spreading' — the navel from which the earth expanded. The remarkable Ife bronze and terracotta heads from the 12th–14th century attest to a civilization that understood itself as the origin point of humanity. The Ooni of Ife remains the spiritual head of Yoruba religion. The diaspora traditions — Candomblé, Santería, Vodou — carry this cosmology worldwide.",
+    "region": "Nigeria"
+  },
+  {
+    "id": "puri-jagannath",
+    "name": "Puri (Jagannath Temple)",
+    "mythicCenter": true,
+    "era": "c. 12th century CE",
+    "lat": 19.8048,
+    "lng": 85.8182,
+    "category": "temple",
+    "isTemple": true,
+    "description": "One of the four Char Dham — the cardinal sacred sites that define India's sacred geography: Puri east, Rameshwaram south, Dwarka west, Badrinath north. The Jagannath Temple is the eastern axis of this mandala. The annual Rath Yatra chariot festival moves the deity through the streets on a massive wooden chariot — the English word 'juggernaut' comes from Jagannath, meaning 'Lord of the Universe.' The Nilachakra wheel atop the temple's tower is visible far out to sea and served as a navigational axis for sailors. The deity is explicitly universal rather than local — the temple claims to be the center not of a region but of all existence.",
+    "region": "India",
+    "streetView": {
+      "heading": 90,
+      "pitch": 15
+    }
+  },
+  {
+    "id": "externsteine",
+    "name": "Externsteine",
+    "mythicCenter": true,
+    "era": "mythic",
+    "lat": 51.8680,
+    "lng": 8.9170,
+    "category": "sacred-site",
+    "description": "Five sandstone pillars rising from the Teutoburg Forest floor, the most dramatic natural rock formation in northern Germany. A chapel carved into the summit has a circular window aligned to the summer solstice sunrise. A 12th-century relief carved into the rock depicts the Descent from the Cross with a bent Irminsul — the Saxon world-tree, the pillar holding up the sky — beneath the cross, widely interpreted as Christianity triumphing over the Germanic axis mundi at the very site where it stood. Charlemagne destroyed the Irminsul at nearby Eresburg in 772 CE. If this was its location, Externsteine was the axis mundi of pre-Christian northern Europe — the place where Yggdrasil was understood to stand.",
+    "region": "Germany",
+    "streetView": {
+      "heading": 0,
+      "pitch": 20
+    }
+  },
+  {
+    "id": "axum",
+    "name": "Axum (Aksum)",
+    "mythicCenter": true,
+    "era": "c. 100–940 CE",
+    "lat": 14.1308,
+    "lng": 38.7205,
+    "category": "sacred-site",
+    "description": "Capital of the Aksumite Empire, one of the four great powers of the ancient world alongside Rome, Persia, and China. The towering stelae — the tallest standing obelisk is 24 meters — marked royal tombs and served as vertical axes connecting the dead kings to the heavens. The Church of Our Lady Mary of Zion claims to house the Ark of the Covenant, brought from Jerusalem by Menelik I, son of Solomon and the Queen of Sheba. Every Ethiopian Orthodox church contains a tabot — a replica of the Ark's tablets — making Axum the origin point of a sacred replication that extends across an entire nation's religious architecture.",
+    "region": "Ethiopia",
+    "streetView": {
+      "heading": 180,
+      "pitch": 10
+    }
+  },
+  {
+    "id": "benin-city",
+    "name": "Benin City",
+    "mythicCenter": true,
+    "era": "c. 1180–1897 CE",
+    "lat": 6.3350,
+    "lng": 5.6270,
+    "category": "sacred-site",
+    "description": "Center of the Edo Kingdom, surrounded by a network of earthen walls and moats that extended over 16,000 km — four times the length of the Great Wall of China, the largest earthwork in the world. The Oba's palace was the cosmic center of the Edo world, where the divine king mediated between the human realm and the spirit world. Benin's bronze plaques — over a thousand, cast by the lost-wax method — recorded court history, ritual, and cosmology on the palace walls. When the British sacked the city in 1897 and looted the bronzes, they were stunned by the sophistication. The bronzes are still being returned.",
+    "region": "Nigeria"
   }
 ]

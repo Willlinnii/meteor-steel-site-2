@@ -2,6 +2,7 @@ import React, { useRef, useCallback, useEffect, useMemo } from 'react';
 
 /* ── Age Definitions ── */
 export const MYTHIC_AGES = [
+  { id: 'nature', label: 'Nature', startYear: -13000, endYear: -10000, color: '#5b8a72' },
   { id: 'stone',        label: 'Stone',        startYear: -10000, endYear: -5000, color: '#a89070' },
   { id: 'gold',         label: 'Gold',         startYear: -5000,  endYear: -4500, color: '#d4af37' },
   { id: 'copper',       label: 'Copper',       startYear: -4500,  endYear: -4000, color: '#b87333' },
@@ -11,7 +12,7 @@ export const MYTHIC_AGES = [
   { id: 'iron',         label: 'Iron',         startYear: -1200,  endYear: 2026,  color: '#8b9dc3' },
 ];
 
-export const TIMELINE_MIN = -10000;
+export const TIMELINE_MIN = -13000;
 export const TIMELINE_MAX = 2026;
 const TIMELINE_SPAN = TIMELINE_MAX - TIMELINE_MIN; // 12026
 
@@ -181,7 +182,7 @@ export default function MythicAgesTimeline({ rangeStart, rangeEnd, onRangeChange
 
   return (
     <div className="mythic-ages-timeline">
-      <span className="mythic-ages-label">10,000 BCE</span>
+      <span className="mythic-ages-label">{formatYear(TIMELINE_MIN)}</span>
       <div className="mythic-ages-bar" ref={barRef} onClick={onBarClick}>
         {/* Age segments */}
         {MYTHIC_AGES.map(age => {

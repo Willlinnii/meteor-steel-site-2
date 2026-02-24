@@ -64,7 +64,8 @@ function drawSnakes() {
   return Object.entries(SNAKES).map(([from, to]) => {
     const a = squareToSVG(Number(from));
     const b = squareToSVG(Number(to));
-    const midX = (a.x + b.x) / 2 + (Math.random() > 0.5 ? 20 : -20);
+    // Deterministic curve direction based on starting square (no Math.random)
+    const midX = (a.x + b.x) / 2 + (Number(from) % 2 === 0 ? 20 : -20);
     const midY = (a.y + b.y) / 2;
     return (
       <g key={`s-${from}`}>

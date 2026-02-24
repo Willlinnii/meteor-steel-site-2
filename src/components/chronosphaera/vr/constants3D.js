@@ -35,7 +35,14 @@ export const HELIO_ORBITS_3D = [
 export const HELIO_MOON_3D = { radius: 0.9, speed: 13.37 };
 
 export const ZODIAC_RADIUS = 15.0;
+export const WALL_HEIGHT = 4;
 export const EARTH_RADIUS = 0.4;
+
+export const ZODIAC_CONSTELLATION_MAP = {
+  Aries: 'Ari', Taurus: 'Tau', Gemini: 'Gem', Cancer: 'Cnc',
+  Leo: 'Leo', Virgo: 'Vir', Libra: 'Lib', Scorpio: 'Sco',
+  Sagittarius: 'Sgr', Capricorn: 'Cap', Aquarius: 'Aqr', Pisces: 'Psc',
+};
 
 export const ZODIAC = [
   { sign: 'Aries',       symbol: '\u2648' },
@@ -68,6 +75,15 @@ export const ORBITAL_MODES = {
 };
 
 export const ALIGN_ANGLE = -90;
+
+// Celestial sphere for real star map (within camera far=200)
+export const STAR_SPHERE_RADIUS = 80;
+
+// Clock hand dimensions (in world units, lying in XZ plane)
+export const CLOCK_HAND_HOUR   = { length: 10,   width: 0.08, color: '#c9a961' };
+export const CLOCK_HAND_MINUTE = { length: 13,   width: 0.06, color: '#c9a961' };
+export const CLOCK_HAND_SECOND = { length: 14.5, width: 0.03, color: '#dc8241' };
+export const CLOCK_MARKER_RADIUS = 16; // just outside zodiac wall
 
 // Stage ring constants (SVG px / 20 ≈ world units)
 export const STAGE_RING_RADIUS = 17.4;

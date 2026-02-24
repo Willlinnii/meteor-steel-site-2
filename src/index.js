@@ -12,3 +12,10 @@ root.render(
     </AuthProvider>
   </BrowserRouter>
 );
+
+// Register service worker for PWA support
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/service-worker.js').catch(() => {});
+  });
+}

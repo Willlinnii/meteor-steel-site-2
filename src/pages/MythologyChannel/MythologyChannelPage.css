@@ -790,3 +790,246 @@
     grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
   }
 }
+
+/* ══════ Series Info Popup ══════ */
+
+.series-popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.75);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  animation: series-popup-fade-in 0.15s ease-out;
+}
+
+@keyframes series-popup-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.series-popup-modal {
+  position: relative;
+  background: rgba(10, 10, 24, 0.97);
+  border: 1px solid var(--border-subtle);
+  max-width: 600px;
+  width: 100%;
+  max-height: 80vh;
+  overflow-y: auto;
+  padding: 28px 24px;
+  animation: series-popup-slide-in 0.2s ease-out;
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent-steel) var(--bg-dark);
+}
+
+@keyframes series-popup-slide-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.series-popup-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: none;
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  font-size: 1rem;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.series-popup-close:hover {
+  color: var(--text-primary);
+  border-color: var(--accent-gold);
+  background: rgba(201, 169, 97, 0.08);
+}
+
+.series-popup-title {
+  font-family: 'Cinzel', serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--accent-gold);
+  margin: 0 0 6px;
+  padding-right: 36px;
+}
+
+.series-popup-tagline {
+  font-family: 'Crimson Pro', serif;
+  font-size: 0.95rem;
+  font-style: italic;
+  color: var(--text-secondary);
+  margin: 0 0 20px;
+  padding-left: 14px;
+  border-left: 3px solid rgba(201, 169, 97, 0.3);
+}
+
+.series-popup-body {
+  margin: 0 0 20px;
+}
+
+.series-popup-body p {
+  font-family: 'Crimson Pro', serif;
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: var(--text-primary);
+  margin: 0 0 12px;
+}
+
+.series-popup-body p:last-child {
+  margin-bottom: 0;
+}
+
+.series-popup-people {
+  border-top: 1px solid var(--border-subtle);
+  padding-top: 16px;
+  margin-bottom: 20px;
+}
+
+.series-popup-people-heading {
+  font-family: 'Cinzel', serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--accent-ember);
+  margin: 0 0 10px;
+}
+
+.series-popup-person {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.series-popup-person:last-child {
+  margin-bottom: 0;
+}
+
+.series-popup-person-name {
+  font-family: 'Crimson Pro', serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--accent-fire);
+}
+
+.series-popup-person-role {
+  font-family: 'Crimson Pro', serif;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.series-popup-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  padding-top: 8px;
+}
+
+.series-popup-btn {
+  display: inline-block;
+  font-family: 'Cinzel', serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  text-align: center;
+  color: var(--accent-gold);
+  background: none;
+  border: 1px solid var(--accent-gold);
+  padding: 10px 24px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.series-popup-btn:hover {
+  background: rgba(201, 169, 97, 0.12);
+  box-shadow: 0 0 12px rgba(201, 169, 97, 0.25);
+}
+
+.series-popup-btn-primary {
+  color: var(--accent-ember);
+  border-color: var(--accent-ember);
+}
+
+.series-popup-btn-primary:hover {
+  background: rgba(196, 113, 58, 0.15);
+  box-shadow: 0 0 12px rgba(196, 113, 58, 0.3);
+}
+
+/* ── Now Playing clickable ── */
+
+.tv-now-playing-clickable {
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.tv-now-playing-clickable:hover {
+  color: var(--text-primary);
+}
+
+.tv-now-playing-clickable:hover strong {
+  text-decoration: underline;
+}
+
+.tv-now-playing-info {
+  font-size: 0.65rem;
+  margin-left: 6px;
+  opacity: 0.5;
+  transition: opacity 0.2s ease;
+}
+
+.tv-now-playing-clickable:hover .tv-now-playing-info {
+  opacity: 1;
+}
+
+/* ── Popup responsive ── */
+
+@media (max-width: 600px) {
+  .series-popup-overlay {
+    padding: 10px;
+  }
+
+  .series-popup-modal {
+    padding: 20px 16px;
+    max-height: 85vh;
+  }
+
+  .series-popup-title {
+    font-size: 1.15rem;
+  }
+
+  .series-popup-tagline {
+    font-size: 0.85rem;
+  }
+
+  .series-popup-body p {
+    font-size: 0.95rem;
+  }
+
+  .series-popup-person {
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .series-popup-actions {
+    flex-direction: column;
+  }
+
+  .series-popup-btn {
+    width: 100%;
+  }
+}

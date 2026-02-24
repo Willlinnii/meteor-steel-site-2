@@ -23,7 +23,10 @@ import mythicEarthMovements from '../../data/mythicEarthMovements.json';
 import MythicAgesTimeline, { parseEraString } from '../../components/MythicAgesTimeline';
 import '../Treasures/TreasuresPage.css';
 import ArchetypesPanel from '../../components/ArchetypesPanel';
+import olympianPantheon from '../../data/olympianPantheon.json';
 import './MythsPage.css';
+
+const PANTHEONS = { olympian: olympianPantheon };
 
 const MythicEarthPage = lazy(() => import('../MythicEarth/MythicEarthPage'));
 
@@ -1973,6 +1976,110 @@ function viewFromPath(pathname) {
   return PATH_TO_VIEW[sub] || 'earth';
 }
 
+/* ── Pantheon Panel ── */
+function PantheonField({ label, value }) {
+  if (!value) return null;
+  const display = Array.isArray(value) ? value.join(', ') : value;
+  if (!display) return null;
+  return (
+    <div className="pantheon-field">
+      <span className="pantheon-field-label">{label}:</span>{' '}
+      <span className="pantheon-field-value">{display}</span>
+    </div>
+  );
+}
+
+function PantheonPanel({ pantheonId, selectedDeity, onSelectDeity }) {
+  const pantheon = PANTHEONS[pantheonId];
+  if (!pantheon) return null;
+
+  const groups = [
+    { key: 'olympian', label: 'The Twelve Olympians' },
+    { key: 'titan', label: 'Titans' },
+    { key: 'other', label: 'Other Figures' },
+  ];
+
+  if (selectedDeity) {
+    const d = selectedDeity;
+    // Find prev/next within the same group
+    const groupDeities = pantheon.deities.filter(dd => dd.group === d.group);
+    const idx = groupDeities.findIndex(dd => dd.id === d.id);
+    const prev = idx > 0 ? groupDeities[idx - 1] : null;
+    const next = idx < groupDeities.length - 1 ? groupDeities[idx + 1] : null;
+    return (
+      <div className="pantheon-detail">
+        <nav className="pantheon-nav">
+          <button className="pantheon-nav-back" onClick={() => onSelectDeity(null)}>
+            {pantheon.name}
+          </button>
+          <span className="pantheon-nav-sep">/</span>
+          <span className="pantheon-nav-current">{d.name}</span>
+        </nav>
+        <h3 className="pantheon-deity-name">{d.name}</h3>
+        <div className="pantheon-deity-meta">
+          <span className="pantheon-deity-title">{d.title}</span>
+          {d.planet && <span className="pantheon-planet-badge">{d.planet}</span>}
+        </div>
+        {d.description && (
+          <div className="pantheon-deity-description">
+            {d.description.split('\n\n').map((p, i) => <p key={i}>{p}</p>)}
+          </div>
+        )}
+        <div className="pantheon-fields">
+          <PantheonField label="Animals" value={d.animals} />
+          <PantheonField label="Colors" value={d.colors} />
+          <PantheonField label="Metals" value={d.metals} />
+          <PantheonField label="Weapons" value={d.weapons} />
+          <PantheonField label="Vegetation" value={d.vegetation} />
+          <PantheonField label="Consorts" value={d.consorts} />
+          <PantheonField label="Birth" value={d.birthCreation} />
+          <PantheonField label="Day" value={d.dayTime} />
+          <PantheonField label="Holidays" value={d.holidays} />
+        </div>
+        <div className="pantheon-prev-next">
+          {prev ? (
+            <button className="pantheon-prev-next-btn" onClick={() => onSelectDeity(prev)}>
+              &larr; {prev.name}
+            </button>
+          ) : <span />}
+          {next ? (
+            <button className="pantheon-prev-next-btn" onClick={() => onSelectDeity(next)}>
+              {next.name} &rarr;
+            </button>
+          ) : <span />}
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="pantheon-panel">
+      {groups.map(g => {
+        const deities = pantheon.deities.filter(d => d.group === g.key);
+        if (deities.length === 0) return null;
+        return (
+          <div key={g.key} className="pantheon-group">
+            <h4 className="pantheon-group-label">{g.label}</h4>
+            <div className="pantheon-grid">
+              {deities.map(d => (
+                <button
+                  key={d.id}
+                  className={`pantheon-card${d.planet ? ' has-planet' : ''}`}
+                  onClick={() => onSelectDeity(d)}
+                >
+                  <span className="pantheon-card-name">{d.name}</span>
+                  <span className="pantheon-card-title">{d.title}</span>
+                  {d.planet && <span className="pantheon-card-planet">{d.planet}</span>}
+                </button>
+              ))}
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
 /* ── Combined Myths Page ── */
 function MythsPage() {
   const location = useLocation();
@@ -1984,6 +2091,7 @@ function MythsPage() {
   const [seriesEpisode, setSeriesEpisode] = useState('overview');
   const [treasuresEpisode, setTreasuresEpisode] = useState('overview');
   const [selectedMythicSite, setSelectedMythicSite] = useState(null);
+  const [selectedPantheonDeity, setSelectedPantheonDeity] = useState(null);
   const [mythicEarthCategory, setMythicEarthCategory] = useState('sacred-site');
   const [activeEarthFilters, setActiveEarthFilters] = useState(
     () => new Set(MYTHIC_EARTH_CATEGORIES.map(c => c.id))
@@ -2018,7 +2126,7 @@ function MythsPage() {
     [activeTour]
   );
 
-  const [timelineRange, setTimelineRange] = useState([-10000, 2026]);
+  const [timelineRange, setTimelineRange] = useState([-13000, 2026]);
 
   const timelinePins = useMemo(() => {
     const pins = [];
@@ -2260,7 +2368,7 @@ function MythsPage() {
               <LibrariesPanel trackElement={trackElement} timelineRange={timelineRange} />
             ) : selectedMythicSite ? (
               <div className="mythic-earth-site-detail">
-                <button className="mythic-earth-back" onClick={() => setSelectedMythicSite(null)}>
+                <button className="mythic-earth-back" onClick={() => { setSelectedMythicSite(null); setSelectedPantheonDeity(null); }}>
                   {'\u2190'} Back to {mythicEarthCategory === 'my-sites' ? 'My Sites' : (MYTHIC_EARTH_CATEGORIES.find(c => c.id === mythicEarthCategory)?.label || 'Sites')}
                 </button>
                 <h3>{selectedMythicSite.name}</h3>
@@ -2275,7 +2383,7 @@ function MythsPage() {
                     <span className="mythic-earth-tag tradition">{selectedMythicSite.tradition}</span>
                   )}
                   <span className="mythic-earth-tag region">{selectedMythicSite.region}</span>
-                  {selectedMythicSite.era && selectedMythicSite.era !== 'mythic' && (
+                  {selectedMythicSite.era && selectedMythicSite.era !== 'mythic' && selectedMythicSite.era !== 'nature' && (
                     <span className="mythic-earth-tag era">{selectedMythicSite.era}</span>
                   )}
                   {user && !selectedMythicSite.isUserSite && (
@@ -2323,6 +2431,14 @@ function MythsPage() {
                     </a>
                   </div>
                 ) : null}
+
+                {selectedMythicSite.pantheon && (
+                  <PantheonPanel
+                    pantheonId={selectedMythicSite.pantheon}
+                    selectedDeity={selectedPantheonDeity}
+                    onSelectDeity={setSelectedPantheonDeity}
+                  />
+                )}
               </div>
             ) : (
               <div className="mythic-earth-site-grid">
@@ -2340,7 +2456,7 @@ function MythsPage() {
                     <span className="site-card-name">{site.name}</span>
                     <span className="site-card-region">{site.region}</span>
                     {site.tradition && <span className="site-card-tradition">{site.tradition}</span>}
-                    {site.era && site.era !== 'mythic' && <span className="site-card-era">{site.era}</span>}
+                    {site.era && site.era !== 'mythic' && site.era !== 'nature' && <span className="site-card-era">{site.era}</span>}
                   </button>
                 ))}
               </div>

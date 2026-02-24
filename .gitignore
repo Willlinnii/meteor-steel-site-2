@@ -23,3 +23,10 @@ yarn-debug.log*
 yarn-error.log*
 .vercel
 .env*.local
+
+# Capacitor native build artifacts
+ios/App/Pods
+ios/App/App/public
+android/app/src/main/assets/public
+android/.gradle
+android/app/build

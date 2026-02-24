@@ -55,10 +55,16 @@ export default function ModeAwareScene({
   // Chakra props
   orderLabel,
   chakraOrdering,
+  // Clock/zodiac mode props
+  clockMode,
+  zodiacMode,
 }) {
+  // Derive orbital mode from clockMode when present
+  const derivedMode = clockMode === '12h' ? 'heliocentric' : 'geocentric';
+
   // Common orbital props
   const orbitalProps = {
-    mode: 'geocentric',
+    mode: derivedMode,
     selectedPlanet,
     onSelectPlanet,
     selectedSign,
@@ -67,6 +73,8 @@ export default function ModeAwareScene({
     onSelectCardinal,
     selectedEarth,
     onSelectEarth,
+    clockMode,
+    zodiacMode,
   };
 
   // Medicine wheel mode — dedicated 3D scene
