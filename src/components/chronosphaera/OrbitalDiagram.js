@@ -257,7 +257,7 @@ function ensureYTApi() {
   });
 }
 
-export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPlanet, hoveredPlanet, selectedSign, onSelectSign, selectedCardinal, onSelectCardinal, selectedEarth, onSelectEarth, showCalendar, onToggleCalendar, selectedMonth, onSelectMonth, showMedicineWheel, selectedWheelItem, onSelectWheelItem, chakraViewMode, onToggleBodyWheel, onClickOrderLabel, orderLabel, videoUrl, onCloseVideo, ybrActive, ybrCurrentStopIndex, ybrStopProgress, ybrJourneySequence, onToggleYBR, ybrAutoStart, clockMode, onToggleClock, compassHeading, compassSupported, compassDenied, onRequestCompass, onStopCompass, seasonalSign, seasonalMonth, seasonalStageIndex, showMonomyth, showMeteorSteel, monomythStages, selectedMonomythStage, onSelectMonomythStage, onToggleMonomyth, monomythModel, showCycles, onSelectCycleSegment, activeCulture, showFallenStarlight, showStoryOfStories, onToggleStarlight, starlightStages, selectedStarlightStage, onSelectStarlightStage, selectedConstellation, onSelectConstellation, zodiacMode, onSelectBeyondRing, beyondRings, activeBeyondRing }) {
+export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPlanet, hoveredPlanet, selectedSign, onSelectSign, selectedCardinal, onSelectCardinal, selectedEarth, onSelectEarth, showCalendar, onToggleCalendar, selectedMonth, onSelectMonth, showMedicineWheel, selectedWheelItem, onSelectWheelItem, chakraViewMode, onToggleBodyWheel, onClickOrderLabel, orderLabel, videoUrl, onCloseVideo, ybrActive, ybrCurrentStopIndex, ybrStopProgress, ybrJourneySequence, onToggleYBR, ybrAutoStart, clockMode, onToggleClock, compassHeading, compassSupported, compassDenied, onRequestCompass, onStopCompass, seasonalSign, seasonalMonth, seasonalStageIndex, showMonomyth, showMeteorSteel, monomythStages, selectedMonomythStage, onSelectMonomythStage, onToggleMonomyth, monomythModel, showCycles, onSelectCycleSegment, activeCulture, showFallenStarlight, showStoryOfStories, onToggleStarlight, starlightStages, selectedStarlightStage, onSelectStarlightStage, selectedConstellation, onSelectConstellation, zodiacMode, onSelectBeyondRing, beyondRings, activeBeyondRing, view3D, onToggle3D, hasMonomythSubscription }) {
   const wrapperRef = useRef(null);
   const [tooltip, setTooltip] = useState(null);
   const { hasPurchase, hasSubscription } = useProfile();
@@ -2982,9 +2982,11 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
             }}
             title={showMedicineWheel ? 'Medicine wheel — click for body view' : chakraViewMode ? 'Body view — click for medicine wheel' : 'Show body viewer'}
           >
-            {chakraViewMode && !showMedicineWheel ? (
+            {showMedicineWheel ? (
               <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M13 2 L5 14 L11 14 L11 22 L19 10 L13 10 Z" />
+                <circle cx="12" cy="12" r="9" />
+                <line x1="12" y1="3" x2="12" y2="21" />
+                <line x1="3" y1="12" x2="21" y2="12" />
               </svg>
             ) : (
               <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" stroke="none">
@@ -3074,6 +3076,44 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
             </svg>
           )}
         </button>
+
+        {hasMonomythSubscription && (
+          <button
+            className={`view3d-toggle${view3D ? ' active' : ''}`}
+            onClick={() => onToggle3D && onToggle3D(view3D ? 'ar' : '3d')}
+            title={view3D ? 'Enter AR — phone camera view' : 'Switch to 3D view'}
+          >
+            {view3D ? (
+              /* AR phone icon */
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="5" y="2" width="14" height="20" rx="2" />
+                <circle cx="12" cy="17" r="1.5" fill="currentColor" stroke="none" />
+                <path d="M9 6h6M9 9h6" />
+              </svg>
+            ) : (
+              /* 3D cube icon */
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12 2L2 7l10 5 10-5-10-5z" />
+                <path d="M2 17l10 5 10-5" />
+                <path d="M2 12l10 5 10-5" />
+                <path d="M12 12v10" />
+              </svg>
+            )}
+          </button>
+        )}
+        {view3D && (
+          <button
+            className="back2d-toggle"
+            onClick={() => onToggle3D && onToggle3D(false)}
+            title="Return to 2D view"
+          >
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+              <rect x="3" y="3" width="18" height="18" rx="2" />
+              <path d="M3 9h18" />
+              <path d="M9 3v18" />
+            </svg>
+          </button>
+        )}
 
       </div>
       {starlightGateId && (

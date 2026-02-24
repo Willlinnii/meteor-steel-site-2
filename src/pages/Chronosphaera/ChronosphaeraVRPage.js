@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { createXRStore } from '@react-three/xr';
 import CelestialScene from '../../components/chronosphaera/vr/CelestialScene';
 import ARJoystick from '../../components/chronosphaera/vr/ARJoystick';
@@ -204,6 +204,8 @@ function PlanetCultureContent({ planet, activeCulture }) {
 
 export default function ChronosphaeraVRPage() {
   const { track } = usePageTracking('chronosphaera-vr');
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const [mode, setMode] = useState(ORBITAL_MODES.GEOCENTRIC);
   const [selectedPlanet, setSelectedPlanet] = useState('Sun');
@@ -326,6 +328,17 @@ export default function ChronosphaeraVRPage() {
     setArPanelLocked(false);
     panelLockedExtRef.current = false;
   }, []);
+
+  // Auto-start camera AR when arriving from 3D button
+  const autoARTriggered = useRef(false);
+  useEffect(() => {
+    if (location.state?.autoAR && !autoARTriggered.current) {
+      autoARTriggered.current = true;
+      // Small delay to let mount settle before requesting permissions
+      const t = setTimeout(() => startCameraAR(), 300);
+      return () => clearTimeout(t);
+    }
+  }, [location.state, startCameraAR]);
 
   // AR navigation state
   const joystickRef = useRef({ x: 0, y: 0 });
@@ -590,6 +603,12 @@ export default function ChronosphaeraVRPage() {
               Show Panel
             </button>
           )}
+          <button className="celestial-btn" onClick={() => navigate('/chronosphaera?view=3d')} title="Return to inline 3D view">
+            3D
+          </button>
+          <button className="celestial-btn" onClick={() => navigate('/chronosphaera')} title="Return to 2D view">
+            2D
+          </button>
         </div>
 
         {gyroDenied && (

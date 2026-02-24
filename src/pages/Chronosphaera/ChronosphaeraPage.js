@@ -590,7 +590,10 @@ export default function ChronosphaeraPage() {
   const [selectedBeyondRing, setSelectedBeyondRing] = useState(null); // 'fixedStars' | 'worldSoul' | 'nous' | 'source' | null
   const [showOrderInfo, setShowOrderInfo] = useState(false);
   const [columnSequencePopup, setColumnSequencePopup] = useState(null);
-  const [view3D, setView3D] = useState(false);
+  const [view3D, setView3D] = useState(() => {
+    const params = new URLSearchParams(location.search);
+    return params.get('view') === '3d';
+  });
   // Single mode enum replaces 8 separate boolean/enum state variables
   const [mode, setMode] = useState(() => {
     if (location.pathname.endsWith('/medicine-wheel') && hasPurchase('medicine-wheel')) return 'medicine-wheel';
@@ -685,6 +688,7 @@ export default function ChronosphaeraPage() {
 
   // Helper: reset all selection state when switching modes
   const clearAllSelections = useCallback(() => {
+    perspective.setActivePerspective('mythouse');
     setSelectedPlanet(null);
     setSelectedSign(null);
     setSelectedCardinal(null);
@@ -704,7 +708,7 @@ export default function ChronosphaeraPage() {
     setActiveWheelTab(null);
     setVideoUrl(null);
     setPersonaChatOpen(null);
-  }, []);
+  }, [perspective.setActivePerspective]);
 
   const handleSelectBeyondRing = useCallback((ringId) => {
     trackElement(`chronosphaera.beyond.${ringId}`);
@@ -1036,6 +1040,17 @@ export default function ChronosphaeraPage() {
     }
   }, [mode, clearAllSelections, navigate]);
 
+  const handleToggle3D = useCallback((value) => {
+    if (value === 'ar') {
+      // Navigate to VR page — auto-start camera AR
+      navigate('/chronosphaera/vr', { state: { autoAR: true } });
+    } else if (value === '3d') {
+      setView3D(true);
+    } else {
+      setView3D(false);
+    }
+  }, [navigate]);
+
   const handleSelectMonomythModel = useCallback((theoristKey) => {
     const modelId = THEORIST_TO_MODEL[theoristKey];
     if (!modelId) return;
@@ -1312,26 +1327,6 @@ export default function ChronosphaeraPage() {
   return (
     <div className={`chronosphaera-page chrono-${ambient.mode}`}>
       <div className="chrono-diagram-center">
-        {hasSubscription('monomyth') && (
-          <div className="chrono-3d-toggle-group">
-            <button
-              className="chrono-3d-toggle"
-              onClick={() => setView3D(v => !v)}
-              title={view3D ? 'Switch to 2D' : 'Switch to 3D'}
-            >
-              {view3D ? '2D' : '3D'}
-            </button>
-            {view3D && (
-              <button
-                className="chrono-3d-toggle chrono-vr-enter"
-                onClick={() => navigate('/chronosphaera/vr')}
-                title="Enter immersive VR/AR experience"
-              >
-                Enter VR
-              </button>
-            )}
-          </div>
-        )}
         {view3D ? (
           <Suspense fallback={<div className="chrono-3d-container chrono-3d-loading">Loading 3D...</div>}>
             <InlineScene3D
@@ -1512,6 +1507,9 @@ export default function ChronosphaeraPage() {
                 ? handleSelectBeyondRing
                 : undefined
             }
+            view3D={view3D}
+            onToggle3D={handleToggle3D}
+            hasMonomythSubscription={hasSubscription('monomyth')}
           />
         )}
       </div>
