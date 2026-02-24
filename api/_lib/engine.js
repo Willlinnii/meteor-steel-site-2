@@ -67,6 +67,13 @@ const gameBookData = gameBookDataModule.default || gameBookDataModule;
 // --- Yellow Brick Road ---
 const yellowBrickRoad = require('../../src/data/yellowBrickRoad.json');
 
+// --- Source Vault (author's original research) ---
+const vaultIndex = require('../../src/vault/_index.json');
+const vaultCharts = {};
+for (const c of vaultIndex.charts) {
+  vaultCharts[c.id] = require('../../src/vault/' + c.file);
+}
+
 // --- Mythic Earth ---
 const mythicEarthSites = require('../../src/data/mythicEarthSites.json');
 
@@ -602,6 +609,35 @@ function compactConstellations() {
   return `## Constellations (${entries.length} major)\nZodiac constellations and prominent mythic constellations with cultural names across traditions (Greek, Roman, Norse, Babylonian, Vedic, Islamic, Medieval). You also know the other 58 modern constellations — ask if needed.\n\n` + entries.join('\n');
 }
 
+// ── Source Vault compact formatters ──
+
+const VAULT_HEADER = '## Source Vault — Author\'s Original Research\nThese are primary source material, not AI-generated.\n';
+
+function compactVaultCharts() {
+  const populated = Object.entries(vaultCharts)
+    .filter(([, chart]) => {
+      const planets = Object.values(chart.correspondences || {});
+      return planets.some(p => Object.keys(p).length > 0);
+    });
+  if (populated.length === 0) return '';
+  return VAULT_HEADER + '### Planetary Tradition Charts\n' + populated.map(([id, chart]) => {
+    const planets = Object.entries(chart.correspondences)
+      .filter(([, p]) => Object.keys(p).length > 0)
+      .map(([planet, data]) => `  ${planet}: ${Object.entries(data).map(([k, v]) => `${k}=${v}`).join(', ')}`)
+      .join('\n');
+    const commentary = (chart.authorCommentary || [])
+      .map(c => `  — ${truncate(c.text, 200)}`)
+      .join('\n');
+    return `${chart.tradition} (${chart.period}, ${chart.order} order):\n${planets}${commentary ? '\n' + commentary : ''}`;
+  }).join('\n\n');
+}
+
+function compactVaultEntries(topic) {
+  // Future: reads entry files from vault/{topic}/ directories
+  // For now, returns empty since no entries have been populated yet
+  return '';
+}
+
 // ── Area knowledge loaders ──
 
 const VALID_AREAS = ['celestial-clocks', 'meteor-steel', 'fallen-starlight', 'story-forge', 'mythology-channel', 'games', 'story-of-stories', 'mythic-earth', 'library'];
@@ -701,8 +737,9 @@ function getAreaKnowledge(area, context) {
         compactWheels(),
         compactMedicineWheelContent(),
         compactConstellations(),
+        compactVaultCharts(),
         NATAL_CHART_GUIDANCE,
-      ].join('\n\n');
+      ].filter(Boolean).join('\n\n');
 
     case 'meteor-steel':
       return [
@@ -711,6 +748,7 @@ function getAreaKnowledge(area, context) {
         compactFigures('Modern Figures', modernFigures),
         compactStages('Stage Overviews', stageOverviews),
         compactStages('Steel Process', steelProcess),
+        compactVaultEntries('meteor-steel'),
         compactStages('UFO Mythology', ufo),
         compactStages('Monomyth', monomyth),
         compactStages('Synthesis', synthesis),
@@ -722,7 +760,7 @@ function getAreaKnowledge(area, context) {
         compactModels(),
         compactCycles(),
         compactNormalOther(),
-      ].join('\n\n');
+      ].filter(Boolean).join('\n\n');
 
     case 'fallen-starlight':
       return compactFallenStarlight();
@@ -972,6 +1010,12 @@ module.exports = {
   PLANET_TONES,
   NATAL_CHART_GUIDANCE,
   loadCoreSummary,
+
+  // Vault
+  vaultIndex,
+  vaultCharts,
+  compactVaultCharts,
+  compactVaultEntries,
 
   // Data re-exports (for chat.js and mythouse.js)
   monomyth,

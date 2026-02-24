@@ -1,0 +1,19 @@
+{
+  "tradition": "Rosicrucian",
+  "sourceText": "Fama Fraternitatis; Chymical Wedding; Cosmo-Conception (Heindel)",
+  "period": "1614-1909",
+  "origin": "tradition",
+  "entered": "2026-02-23",
+  "method": "transcribed",
+  "order": "evolutionary",
+  "correspondences": {
+    "Sun":     {},
+    "Moon":    {},
+    "Mercury": {},
+    "Venus":   {},
+    "Mars":    {},
+    "Jupiter": {},
+    "Saturn":  {}
+  },
+  "authorCommentary": []
+}

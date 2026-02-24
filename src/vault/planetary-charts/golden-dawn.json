@@ -1,0 +1,19 @@
+{
+  "tradition": "Golden Dawn",
+  "sourceText": "777 (Crowley); Golden Dawn Knowledge Lectures",
+  "period": "1888-1900s",
+  "origin": "tradition",
+  "entered": "2026-02-23",
+  "method": "transcribed",
+  "order": "sephirotic",
+  "correspondences": {
+    "Sun":     {},
+    "Moon":    {},
+    "Mercury": {},
+    "Venus":   {},
+    "Mars":    {},
+    "Jupiter": {},
+    "Saturn":  {}
+  },
+  "authorCommentary": []
+}

@@ -1,0 +1,19 @@
+{
+  "tradition": "Johannes Kepler",
+  "sourceText": "Harmonices Mundi; Mysterium Cosmographicum",
+  "period": "1596-1619",
+  "origin": "tradition",
+  "entered": "2026-02-23",
+  "method": "transcribed",
+  "order": "heliocentric",
+  "correspondences": {
+    "Sun":     {},
+    "Moon":    {},
+    "Mercury": {},
+    "Venus":   {},
+    "Mars":    {},
+    "Jupiter": {},
+    "Saturn":  {}
+  },
+  "authorCommentary": []
+}

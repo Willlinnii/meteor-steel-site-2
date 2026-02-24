@@ -1,0 +1,19 @@
+{
+  "tradition": "Manly P. Hall",
+  "sourceText": "The Secret Teachings of All Ages",
+  "period": "1928",
+  "origin": "tradition",
+  "entered": "2026-02-23",
+  "method": "transcribed",
+  "order": "chaldean",
+  "correspondences": {
+    "Sun":     {},
+    "Moon":    {},
+    "Mercury": {},
+    "Venus":   {},
+    "Mars":    {},
+    "Jupiter": {},
+    "Saturn":  {}
+  },
+  "authorCommentary": []
+}

@@ -1,0 +1,19 @@
+{
+  "tradition": "Paracelsus",
+  "sourceText": "De Natura Rerum; Archidoxis; Liber Azoth",
+  "period": "1493-1541",
+  "origin": "tradition",
+  "entered": "2026-02-23",
+  "method": "transcribed",
+  "order": "alchemical",
+  "correspondences": {
+    "Sun":     {},
+    "Moon":    {},
+    "Mercury": {},
+    "Venus":   {},
+    "Mars":    {},
+    "Jupiter": {},
+    "Saturn":  {}
+  },
+  "authorCommentary": []
+}

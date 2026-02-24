@@ -1,0 +1,19 @@
+{
+  "tradition": "Kabbalah",
+  "sourceText": "Sefer Yetzirah; Zohar; Tree of Life tradition",
+  "period": "2nd-13th century CE",
+  "origin": "tradition",
+  "entered": "2026-02-23",
+  "method": "transcribed",
+  "order": "sephirotic",
+  "correspondences": {
+    "Sun":     {},
+    "Moon":    {},
+    "Mercury": {},
+    "Venus":   {},
+    "Mars":    {},
+    "Jupiter": {},
+    "Saturn":  {}
+  },
+  "authorCommentary": []
+}

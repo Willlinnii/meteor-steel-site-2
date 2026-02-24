@@ -1,0 +1,19 @@
+{
+  "tradition": "J.R.R. Tolkien",
+  "sourceText": "The Silmarillion; Ainulindalë; Valaquenta",
+  "period": "1914-1973",
+  "origin": "tradition",
+  "entered": "2026-02-23",
+  "method": "transcribed",
+  "order": "valarian",
+  "correspondences": {
+    "Sun":     {},
+    "Moon":    {},
+    "Mercury": {},
+    "Venus":   {},
+    "Mars":    {},
+    "Jupiter": {},
+    "Saturn":  {}
+  },
+  "authorCommentary": []
+}

@@ -1,0 +1,28 @@
+{
+  "_doc": "Source Vault — File Registry. Every vault file is listed here for programmatic discovery.",
+  "version": "1.0.0",
+  "created": "2026-02-23",
+
+  "charts": [
+    { "id": "corpus-hermeticum",     "file": "planetary-charts/corpus-hermeticum.json",     "tradition": "Corpus Hermeticum" },
+    { "id": "steiner",               "file": "planetary-charts/steiner.json",               "tradition": "Rudolf Steiner" },
+    { "id": "dante",                 "file": "planetary-charts/dante.json",                 "tradition": "Dante Alighieri" },
+    { "id": "leadbeater-theosophy",  "file": "planetary-charts/leadbeater-theosophy.json",  "tradition": "Leadbeater / Theosophy" },
+    { "id": "kabbalah",              "file": "planetary-charts/kabbalah.json",              "tradition": "Kabbalah" },
+    { "id": "golden-dawn",           "file": "planetary-charts/golden-dawn.json",           "tradition": "Golden Dawn" },
+    { "id": "vedic",                 "file": "planetary-charts/vedic.json",                 "tradition": "Vedic / Jyotish" },
+    { "id": "kepler",                "file": "planetary-charts/kepler.json",                "tradition": "Johannes Kepler" },
+    { "id": "plato",                 "file": "planetary-charts/plato.json",                 "tradition": "Plato" },
+    { "id": "tolkien",               "file": "planetary-charts/tolkien.json",               "tradition": "J.R.R. Tolkien" },
+    { "id": "manly-p-hall",          "file": "planetary-charts/manly-p-hall.json",          "tradition": "Manly P. Hall" },
+    { "id": "paracelsus",            "file": "planetary-charts/paracelsus.json",            "tradition": "Paracelsus" },
+    { "id": "rosicrucian",           "file": "planetary-charts/rosicrucian.json",           "tradition": "Rosicrucian" }
+  ],
+
+  "topics": [
+    { "id": "meteor-steel",    "dir": "meteor-steel/",    "description": "Original meteor steel theory notes" },
+    { "id": "seven-metals",    "dir": "seven-metals/",    "description": "Per-planet observations and correspondences" },
+    { "id": "monomyth",        "dir": "monomyth/",        "description": "Theorist notes, cycle observations" },
+    { "id": "observations",    "dir": "observations/",    "description": "General research notes" }
+  ]
+}

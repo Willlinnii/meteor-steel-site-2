@@ -1,0 +1,19 @@
+{
+  "tradition": "Plato",
+  "sourceText": "Timaeus; Republic (Allegory of the Cave, Allegory of Er)",
+  "period": "4th century BCE",
+  "origin": "tradition",
+  "entered": "2026-02-23",
+  "method": "transcribed",
+  "order": "chaldean",
+  "correspondences": {
+    "Sun":     {},
+    "Moon":    {},
+    "Mercury": {},
+    "Venus":   {},
+    "Mars":    {},
+    "Jupiter": {},
+    "Saturn":  {}
+  },
+  "authorCommentary": []
+}

@@ -1,0 +1,19 @@
+{
+  "tradition": "Corpus Hermeticum",
+  "sourceText": "Poimandres; Asclepius",
+  "period": "1st-3rd century CE",
+  "origin": "tradition",
+  "entered": "2026-02-23",
+  "method": "transcribed",
+  "order": "weekday",
+  "correspondences": {
+    "Sun":     {},
+    "Moon":    {},
+    "Mercury": {},
+    "Venus":   {},
+    "Mars":    {},
+    "Jupiter": {},
+    "Saturn":  {}
+  },
+  "authorCommentary": []
+}

@@ -52,6 +52,13 @@ const constellationCultures = require('../../src/data/constellationCultures.json
 const mythicEarthSites   = require('../../src/data/mythicEarthSites.json');
 const mythSalonLibrary   = require('../../src/data/mythSalonLibrary.json');
 
+// --- Source Vault (author's original research) ---
+const vaultIndex  = require('../../src/vault/_index.json');
+const vaultCharts = {};
+for (const c of vaultIndex.charts) {
+  vaultCharts[c.id] = require('../../src/vault/' + c.file);
+}
+
 // ── Constants ──
 
 const PHASES = [
@@ -273,6 +280,8 @@ function handleRoot(req, res) {
         // Geography & reference
         sites:            '/v1/sites — sacred sites worldwide with coordinates',
         library:          '/v1/library — curated reading list of foundational texts',
+        // Source vault
+        vault:            '/v1/vault — author\'s original research: planetary tradition charts, observations, notes',
       },
     },
   }, '/v1/');
@@ -831,6 +840,53 @@ function handleLibrary(segments, req, res) {
   return respond(res, 200, { data: shelf }, endpoint);
 }
 
+// ─── VAULT ───
+
+function handleVault(segments, req, res) {
+  const endpoint = '/v1/vault' + (segments.length ? '/' + segments.join('/') : '');
+
+  if (segments.length === 0) {
+    return respond(res, 200, {
+      data: {
+        description: 'Source Vault — Author\'s original research. Primary source material, not AI-generated.',
+        charts: vaultIndex.charts.map(c => ({
+          id: c.id,
+          tradition: c.tradition,
+          href: `/v1/vault/charts/${c.id}`,
+        })),
+        topics: vaultIndex.topics.map(t => ({
+          id: t.id,
+          description: t.description,
+        })),
+      },
+    }, endpoint);
+  }
+
+  const [sub, ...rest] = segments;
+
+  if (sub === 'charts') {
+    if (rest.length === 0) {
+      const data = vaultIndex.charts.map(c => ({
+        id: c.id,
+        tradition: c.tradition,
+        period: vaultCharts[c.id]?.period,
+        order: vaultCharts[c.id]?.order,
+        populated: Object.values(vaultCharts[c.id]?.correspondences || {}).some(p => Object.keys(p).length > 0),
+      }));
+      return respond(res, 200, { data }, endpoint);
+    }
+
+    const chartId = rest[0];
+    const chart = vaultCharts[chartId];
+    if (!chart) {
+      return respond(res, 404, { error: `Unknown chart: ${chartId}` }, endpoint);
+    }
+    return respond(res, 200, { data: chart }, endpoint);
+  }
+
+  return respond(res, 404, { error: `Unknown vault resource: ${sub}` }, endpoint);
+}
+
 // ── Router ──
 
 function route(segments, req, res) {
@@ -861,6 +917,8 @@ function route(segments, req, res) {
     // Geography & reference
     case 'sites':            return handleSites(rest, req, res);
     case 'library':          return handleLibrary(rest, req, res);
+    // Source vault
+    case 'vault':            return handleVault(rest, req, res);
     default:
       return respond(res, 404, { error: `Unknown resource: ${resource}` }, '/v1/' + segments.join('/'));
   }

@@ -1,0 +1,38 @@
+{
+  "_doc": "Source Vault — Reference Schema. Author's original research, transcriptions, and observations. Nothing AI-generated belongs in this directory.",
+
+  "entrySchema": {
+    "id":         "string — unique ID, e.g. 'pc-hermeticum-001' or 'obs-mars-body-001'",
+    "text":       "string — exact words as spoken or written",
+    "origin":     "enum — 'author' | 'tradition' | 'dictation'",
+    "source":     "string — citation, e.g. 'Corpus Hermeticum, Poimandres I.25'",
+    "topic":      "string — vault subdirectory, e.g. 'planetary-charts', 'monomyth'",
+    "subtopic":   "string — file or tradition slug, e.g. 'corpus-hermeticum'",
+    "tags":       "string[] — freeform tags for search",
+    "entered":    "string — ISO date, e.g. '2026-02-23'",
+    "method":     "enum — 'transcribed' | 'dictation' | 'typed' | 'extracted'",
+    "context":    "string | null — optional note about why this matters",
+    "linkedData": "string[] — references to src/data/ files this entry relates to"
+  },
+
+  "chartSchema": {
+    "tradition":        "string — display name, e.g. 'Corpus Hermeticum'",
+    "sourceText":       "string — primary source text(s)",
+    "period":           "string — historical period, e.g. '1st-3rd century CE'",
+    "origin":           "enum — 'tradition' | 'author'",
+    "entered":          "string — ISO date",
+    "method":           "enum — 'transcribed' | 'dictation' | 'typed' | 'extracted'",
+    "order":            "string — ordering system used, e.g. 'weekday', 'chaldean', 'sephirotic'",
+    "correspondences":  {
+      "_doc": "Object keyed by planet name (Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn). Columns vary per tradition.",
+      "Sun":     "{ metal, day, ... }",
+      "Moon":    "{ metal, day, ... }",
+      "Mercury": "{ metal, day, ... }",
+      "Venus":   "{ metal, day, ... }",
+      "Mars":    "{ metal, day, ... }",
+      "Jupiter": "{ metal, day, ... }",
+      "Saturn":  "{ metal, day, ... }"
+    },
+    "authorCommentary": "array — entries following entrySchema for inline author notes"
+  }
+}

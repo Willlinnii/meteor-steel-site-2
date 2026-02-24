@@ -1,0 +1,19 @@
+{
+  "tradition": "Dante Alighieri",
+  "sourceText": "Paradiso (Divine Comedy)",
+  "period": "1320",
+  "origin": "tradition",
+  "entered": "2026-02-23",
+  "method": "transcribed",
+  "order": "ascending",
+  "correspondences": {
+    "Sun":     {},
+    "Moon":    {},
+    "Mercury": {},
+    "Venus":   {},
+    "Mars":    {},
+    "Jupiter": {},
+    "Saturn":  {}
+  },
+  "authorCommentary": []
+}

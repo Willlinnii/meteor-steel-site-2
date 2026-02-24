@@ -1,0 +1,19 @@
+{
+  "tradition": "Vedic / Jyotish",
+  "sourceText": "Brihat Parashara Hora Shastra; Surya Siddhanta",
+  "period": "1st millennium BCE onward",
+  "origin": "tradition",
+  "entered": "2026-02-23",
+  "method": "transcribed",
+  "order": "weekday",
+  "correspondences": {
+    "Sun":     {},
+    "Moon":    {},
+    "Mercury": {},
+    "Venus":   {},
+    "Mars":    {},
+    "Jupiter": {},
+    "Saturn":  {}
+  },
+  "authorCommentary": []
+}
