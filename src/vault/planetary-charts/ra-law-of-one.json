@@ -1,0 +1,55 @@
+{
+  "tradition": "Ra / Law of One",
+  "sourceText": "The Ra Material (The Law of One), Sessions 1–106",
+  "period": "1981–1984",
+  "origin": "channeled",
+  "entered": "2026-02-23",
+  "method": "dictation",
+  "order": "ascending",
+  "note": "Seven densities of consciousness as described by Ra through Don Elkins, Carla Rueckert, and Jim McCarty. Not a planetary system — these are evolutionary densities of awareness.",
+  "correspondences": {
+    "First Density": {
+      "number": 1,
+      "description": "Beingness and bare awareness — the elements of earth, air, water, and fire. Stability, foundation, and awareness.",
+      "energyCenter": "Red ray",
+      "distortion": "Fear of survival and disconnection from reality"
+    },
+    "Second Density": {
+      "number": 2,
+      "description": "Growth and movement — growth and response. Plants, animals, and life. Development, will, instinct, social cooperation, and environmental stimuli.",
+      "energyCenter": "Orange ray",
+      "distortion": "Issues with intimacy, personal boundaries, and trauma"
+    },
+    "Third Density": {
+      "number": 3,
+      "description": "Self-awareness and choice — self-consciousness and polarity. Humans. The crossroads: service to others (positive) or service to self (negative). The veil of confusion, forgetting, and free will.",
+      "energyCenter": "Yellow ray",
+      "distortion": "Power struggles, identity confusion, and social distortion"
+    },
+    "Fourth Density": {
+      "number": 4,
+      "description": "Love and understanding — unconditional, universal love. Harmonized beings beyond ego. The healers.",
+      "energyCenter": "Green ray",
+      "distortion": "Closed heart, judgment, and conditional love"
+    },
+    "Fifth Density": {
+      "number": 5,
+      "description": "Wisdom and light — individualized inwardness, discernment, and incarnation in 3D. Sages and seers as teachers.",
+      "energyCenter": "Blue ray",
+      "distortion": "Inauthenticity, repression, and poor communication"
+    },
+    "Sixth Density": {
+      "number": 6,
+      "description": "Unity — love, wisdom, and completion. Balance of love and wisdom. Unity beings like Ra. Integration of duality.",
+      "energyCenter": "Indigo ray",
+      "distortion": "Distorted perception, spiritual pride, and false unity"
+    },
+    "Seventh Density": {
+      "number": 7,
+      "description": "Gateway to the infinite — the Creator as Self. Dissolution, universal consciousness, void and pure light.",
+      "energyCenter": "Violet ray",
+      "distortion": null
+    }
+  },
+  "authorCommentary": []
+}

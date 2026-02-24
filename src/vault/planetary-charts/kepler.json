@@ -1,19 +1,93 @@
 {
   "tradition": "Johannes Kepler",
-  "sourceText": "Harmonices Mundi; Mysterium Cosmographicum",
-  "period": "1596-1619",
+  "sourceText": "Harmonices Mundi (1619); Mysterium Cosmographicum (1596)",
+  "period": "1596–1619",
   "origin": "tradition",
   "entered": "2026-02-23",
-  "method": "transcribed",
+  "method": "dictation",
   "order": "heliocentric",
+  "note": "Kepler's heliocentric cosmology. The Sun sits at the center as divine architect — planets radiate outward. Each planet carries a musical interval (from Harmonices Mundi), a Platonic solid (from Mysterium Cosmographicum, nested between orbital spheres), a temperament, and an elemental correspondence. Earth replaces the Moon as a planetary body; the Moon orbits Earth and its silver correspondence passes to this level.",
   "correspondences": {
-    "Sun":     {},
-    "Moon":    {},
-    "Mercury": {},
-    "Venus":   {},
-    "Mars":    {},
-    "Jupiter": {},
-    "Saturn":  {}
+    "Sun": {
+      "number": 1,
+      "classicalPlanet": "Sun",
+      "description": "Divine architect, father, central source of light and life — permeates all, fertile cause",
+      "musicalInterval": null,
+      "platonicSolid": null,
+      "metal": "Gold",
+      "element": null,
+      "temperament": "Balanced"
+    },
+    "Mercury": {
+      "number": 2,
+      "classicalPlanet": "Mercury",
+      "description": "Fleetness, shrewdness, and communication",
+      "musicalInterval": "Major tenth (12:5)",
+      "platonicSolid": "Octahedron",
+      "metal": "Mercury",
+      "element": "Air",
+      "temperament": "Sanguine — flickering mind, changeable, clever, cheerful, optimistic, and social"
+    },
+    "Venus": {
+      "number": 3,
+      "classicalPlanet": "Venus",
+      "description": "Near-perfect circle, harmonious",
+      "musicalInterval": "Minor semitone (25:24)",
+      "platonicSolid": "Icosahedron",
+      "metal": "Copper",
+      "element": "Water",
+      "temperament": "Phlegmatic — gentle, smooth orbit, calm, balanced, reliable, and steady"
+    },
+    "Earth": {
+      "number": 4,
+      "classicalPlanet": null,
+      "description": "Intellectual soul, celestial harmony, and awakened spiritual resonance",
+      "musicalInterval": "Major semitone (16:15)",
+      "platonicSolid": "Dodecahedron",
+      "metal": "Silver (Moon orbits Earth)",
+      "element": "Water",
+      "temperament": "Balanced mix — reference point, must integrate all"
+    },
+    "Mars": {
+      "number": 5,
+      "classicalPlanet": "Mars",
+      "description": "Assertive, forceful, energetic, and vigorous orbital motion",
+      "musicalInterval": "Perfect fifth (3:2)",
+      "platonicSolid": "Tetrahedron",
+      "metal": "Iron",
+      "element": "Fire",
+      "temperament": "Choleric — vigorous motion, assertive, ambitious, and intense"
+    },
+    "Jupiter": {
+      "number": 6,
+      "classicalPlanet": "Jupiter",
+      "description": "Majestic, expansive, wise, and full of gravitas",
+      "musicalInterval": "Minor third (6:5)",
+      "platonicSolid": "Cube",
+      "metal": "Tin",
+      "element": "Air and Fire",
+      "temperament": "Sanguine — majestic and noble"
+    },
+    "Saturn": {
+      "number": 7,
+      "classicalPlanet": "Saturn",
+      "description": "The oldest, the slowest, the most solemn, the deepest — elder voice, time and gravity",
+      "musicalInterval": "Major third (5:4)",
+      "platonicSolid": null,
+      "metal": "Lead",
+      "element": "Earth",
+      "temperament": "Melancholic — introspective, slow motion, deep tone, heavy and distinct"
+    },
+    "Stars": {
+      "number": 8,
+      "classicalPlanet": null,
+      "description": "The fixed stars — beyond the planetary spheres",
+      "musicalInterval": null,
+      "platonicSolid": null,
+      "metal": null,
+      "element": null,
+      "temperament": null
+    }
   },
   "authorCommentary": []
 }

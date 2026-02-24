@@ -7,6 +7,7 @@ import DevelopmentPanel from '../DevelopmentPanel';
 import TarotCardContent from './TarotCardContent';
 import PersonaChatPanel from '../PersonaChatPanel';
 import SolarMagneticField from './SolarMagneticField';
+import PerspectiveTabContent from './PerspectiveTabContent';
 import { useStoryForge } from '../../App';
 
 const HINDU_GEMS = {
@@ -397,32 +398,45 @@ function SynthesisTab({ data }) {
   );
 }
 
-export default function MetalDetailPanel({ data, activeTab, onSelectTab, activeCulture, onSelectCulture, devEntries, setDevEntries, playlistUrl, videoActive, onToggleVideo, onTogglePersonaChat, personaChatActive, personaChatMessages, setPersonaChatMessages, onClosePersonaChat, getTabClass, onToggleYBR, ybrActive, chakraViewMode }) {
+export default function MetalDetailPanel({ data, activeTab, onSelectTab, activeCulture, onSelectCulture, devEntries, setDevEntries, playlistUrl, videoActive, onToggleVideo, onTogglePersonaChat, personaChatActive, personaChatMessages, setPersonaChatMessages, onClosePersonaChat, getTabClass, onToggleYBR, ybrActive, chakraViewMode, activePerspective, perspectiveData, perspectiveTabs, activeTradition, perspectiveLabel, onSelectPerspective, populatedPerspectives, onColumnClick }) {
   const { forgeMode } = useStoryForge();
-  const showCultureSelector = activeTab === 'deities';
+  const isVaultPerspective = activePerspective && activePerspective !== 'mythouse';
+  const showCultureSelector = !isVaultPerspective && activeTab === 'deities';
 
   return (
     <div className="metal-detail-panel">
-      <MetalContentTabs activeTab={activeTab} onSelectTab={onSelectTab} playlistUrl={playlistUrl} videoActive={videoActive} onToggleVideo={onToggleVideo} onTogglePersonaChat={onTogglePersonaChat} personaChatActive={personaChatActive} getTabClass={getTabClass} onToggleYBR={onToggleYBR} ybrActive={ybrActive} />
+      <MetalContentTabs activeTab={activeTab} onSelectTab={onSelectTab} playlistUrl={playlistUrl} videoActive={videoActive} onToggleVideo={onToggleVideo} onTogglePersonaChat={onTogglePersonaChat} personaChatActive={personaChatActive} getTabClass={!isVaultPerspective ? getTabClass : undefined} onToggleYBR={onToggleYBR} ybrActive={ybrActive} perspectiveLabel={perspectiveLabel} onSelectPerspective={onSelectPerspective} activePerspective={activePerspective} populatedPerspectives={populatedPerspectives} tabs={isVaultPerspective ? perspectiveTabs : undefined} />
       {showCultureSelector && (
         <CultureSelector activeCulture={activeCulture} onSelectCulture={onSelectCulture} />
       )}
       <div className="metal-content-scroll">
-        {activeTab === 'overview' && <OverviewTab data={data} />}
-        {activeTab === 'deities' && <DeitiesTab data={data} activeCulture={activeCulture} />}
-        {activeTab === 'sins' && <SinsTab data={data} />}
-        {activeTab === 'day' && <DayTab data={data} />}
-        {activeTab === 'body' && <BodyTab data={data} />}
-        {activeTab === 'hebrew' && <HebrewTab data={data} chakraViewMode={chakraViewMode} />}
-        {activeTab === 'tarot' && <TarotCardContent correspondenceType="planet" correspondenceValue={data.core.planet} showMinorArcana={false} />}
-        {activeTab === 'synthesis' && <SynthesisTab data={data} />}
-        {activeTab === 'development' && forgeMode && (
-          <DevelopmentPanel
-            stageLabel={`${data.core.planet} — ${data.core.metal}`}
-            stageKey={`chronosphaera-${data.core.planet}`}
-            entries={devEntries}
-            setEntries={setDevEntries}
+        {isVaultPerspective ? (
+          <PerspectiveTabContent
+            columnKey={activeTab}
+            perspectiveData={perspectiveData}
+            activeTradition={activeTradition}
+            onColumnClick={onColumnClick}
+            planet={data?.core?.planet}
           />
+        ) : (
+          <>
+            {activeTab === 'overview' && <OverviewTab data={data} />}
+            {activeTab === 'deities' && <DeitiesTab data={data} activeCulture={activeCulture} />}
+            {activeTab === 'sins' && <SinsTab data={data} />}
+            {activeTab === 'day' && <DayTab data={data} />}
+            {activeTab === 'body' && <BodyTab data={data} />}
+            {activeTab === 'hebrew' && <HebrewTab data={data} chakraViewMode={chakraViewMode} />}
+            {activeTab === 'tarot' && <TarotCardContent correspondenceType="planet" correspondenceValue={data.core.planet} showMinorArcana={false} />}
+            {activeTab === 'synthesis' && <SynthesisTab data={data} />}
+            {activeTab === 'development' && forgeMode && (
+              <DevelopmentPanel
+                stageLabel={`${data.core.planet} — ${data.core.metal}`}
+                stageKey={`chronosphaera-${data.core.planet}`}
+                entries={devEntries}
+                setEntries={setDevEntries}
+              />
+            )}
+          </>
         )}
       </div>
       {personaChatActive && (

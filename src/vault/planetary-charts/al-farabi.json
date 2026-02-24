@@ -1,0 +1,122 @@
+{
+  "tradition": "Al-Farabi",
+  "sourceText": "Ara Ahl al-Madina al-Fadila (The Virtuous City); Kitab al-Siyasa al-Madaniyya",
+  "period": "c. 870–950 CE",
+  "origin": "tradition",
+  "entered": "2026-02-23",
+  "method": "dictation",
+  "order": "descending",
+  "note": "Islamic Neoplatonic emanation hierarchy. Four emanation levels: (1) God, (2) First through Ninth Intellects generating the celestial spheres, (3) Tenth/Active Intellect, (4) Material/sublunary world. Each intellect emanates from the one above by contemplating both itself and the First Cause. The material world divides into three levels of human attainment. Arabic planet names: Zuhal (Saturn), Mushtari (Jupiter), Mirrikh (Mars), Shams (Sun), Zuhrah (Venus), 'Utarid (Mercury), Qamar (Moon).",
+  "correspondences": {
+    "God": {
+      "number": 1,
+      "classicalPlanet": null,
+      "emanationLevel": 1,
+      "arabicName": null,
+      "description": "Unified, uncaused source — beyond unity and multiplicity, from whom all else proceeds by necessary emanation"
+    },
+    "First Intellect": {
+      "number": 2,
+      "classicalPlanet": null,
+      "emanationLevel": 2,
+      "arabicName": null,
+      "description": "Emanates directly from God — generates the first heaven (outermost sphere)"
+    },
+    "Second Intellect — Stars": {
+      "number": 3,
+      "classicalPlanet": null,
+      "emanationLevel": 2,
+      "arabicName": null,
+      "description": "Arises from the First Intellect — generates the sphere of the fixed stars"
+    },
+    "Third Intellect — Saturn": {
+      "number": 4,
+      "classicalPlanet": "Saturn",
+      "metal": "Lead",
+      "emanationLevel": 2,
+      "arabicName": "Zuhal",
+      "description": "Emanates from the Second Intellect — three contemplating two, generating the sphere of Saturn"
+    },
+    "Fourth Intellect — Jupiter": {
+      "number": 5,
+      "classicalPlanet": "Jupiter",
+      "metal": "Tin",
+      "emanationLevel": 2,
+      "arabicName": "Mushtari",
+      "description": "From the Third contemplating the Second — generates the sphere of Jupiter"
+    },
+    "Fifth Intellect — Mars": {
+      "number": 6,
+      "classicalPlanet": "Mars",
+      "metal": "Iron",
+      "emanationLevel": 2,
+      "arabicName": "Mirrikh",
+      "description": "From the Fourth contemplating the Third — generates the sphere of Mars"
+    },
+    "Sixth Intellect — Sun": {
+      "number": 7,
+      "classicalPlanet": "Sun",
+      "metal": "Gold",
+      "emanationLevel": 2,
+      "arabicName": "Shams",
+      "description": "From the Fifth contemplating the Fourth — generates the sphere of the Sun"
+    },
+    "Seventh Intellect — Venus": {
+      "number": 8,
+      "classicalPlanet": "Venus",
+      "metal": "Copper",
+      "emanationLevel": 2,
+      "arabicName": "Zuhrah",
+      "description": "From the Sixth contemplating the Fifth — generates the sphere of Venus"
+    },
+    "Eighth Intellect — Mercury": {
+      "number": 9,
+      "classicalPlanet": "Mercury",
+      "metal": "Mercury",
+      "emanationLevel": 2,
+      "arabicName": "'Utarid",
+      "description": "From the Seventh contemplating the Sixth — generates the sphere of Mercury"
+    },
+    "Ninth Intellect — Moon": {
+      "number": 10,
+      "classicalPlanet": "Moon",
+      "metal": "Silver",
+      "emanationLevel": 2,
+      "arabicName": "Qamar",
+      "description": "From the Eighth contemplating the Seventh — generates the sphere of the Moon"
+    },
+    "Tenth Intellect — Active Agent": {
+      "number": 11,
+      "classicalPlanet": null,
+      "emanationLevel": 3,
+      "arabicName": "Al-'Aql al-Fa''al",
+      "description": "Emanates from the Moon sphere — restores intelligibles to the sublunary world like light to sight, the Philosopher King and Prophet Philosopher arise here",
+      "figures": "Philosopher King, Prophet Philosopher"
+    },
+    "Material World — Acquired": {
+      "number": 12,
+      "classicalPlanet": null,
+      "emanationLevel": 4,
+      "arabicName": null,
+      "description": "Highest attainment in the sublunary realm — philosophers, sages, and scholars who align with the Active Intellect",
+      "figures": "Philosophers, Sages, Scholars"
+    },
+    "Material World — Actual": {
+      "number": 13,
+      "classicalPlanet": null,
+      "emanationLevel": 4,
+      "arabicName": null,
+      "description": "Middle attainment — judges, poets, theologians, and teachers who work with received knowledge",
+      "figures": "Judges, Poets, Theologians, Teachers"
+    },
+    "Material World — Potential": {
+      "number": 14,
+      "classicalPlanet": null,
+      "emanationLevel": 4,
+      "arabicName": null,
+      "description": "Lowest attainment — the masses, guided by story, law, and spiritual instruction rather than direct philosophy",
+      "figures": "The Masses"
+    }
+  },
+  "authorCommentary": []
+}

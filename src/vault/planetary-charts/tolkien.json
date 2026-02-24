@@ -1,19 +1,101 @@
 {
   "tradition": "J.R.R. Tolkien",
-  "sourceText": "The Silmarillion; Ainulindalë; Valaquenta",
-  "period": "1914-1973",
+  "sourceText": "The Silmarillion (Ainulindalë, Valaquenta); Morgoth's Ring (HoME X)",
+  "period": "1914–1973",
   "origin": "tradition",
   "entered": "2026-02-23",
-  "method": "transcribed",
-  "order": "valarian",
+  "method": "dictation",
+  "order": "chaldean",
+  "note": "Tolkien's cosmogony is modeled on Neoplatonic emanation: Eru (the One) creates the Ainur, whose Music becomes Arda. The Elvish planet names are canonical (Morgoth's Ring). The Valar-to-planet mapping is interpretive — based on thematic parallels between each Vala's domain and classical planetary archetypes. Tolkien never published an explicit alignment, though his deep knowledge of medieval cosmology makes the resonances unmistakable. Arda (the created world) occupies the Sun/center. Earth at position 8 represents Melkor's fallen domain. Mars could also be Oromë (the Huntsman); Tulkas chosen for stronger martial resonance.",
   "correspondences": {
-    "Sun":     {},
-    "Moon":    {},
-    "Mercury": {},
-    "Venus":   {},
-    "Mars":    {},
-    "Jupiter": {},
-    "Saturn":  {}
+    "Saturn": {
+      "number": 1,
+      "classicalPlanet": "Saturn",
+      "metal": "Lead",
+      "vala": "Aulë",
+      "elvishName": "Lumbar",
+      "title": "The Smith",
+      "governs": "Earth, stone, metals, gems, craftsmanship",
+      "domain": "Maker of the substance of Arda — he wrought the mountains, the great lamps, and taught the Noldor their craft. His impatience led him to create the Dwarves in secret.",
+      "kindred": "Spouse of Yavanna. Father of the Dwarves. Teacher of the Noldor, including Fëanor and Sauron (who was once his Maia)."
+    },
+    "Jupiter": {
+      "number": 2,
+      "classicalPlanet": "Jupiter",
+      "metal": "Tin",
+      "vala": "Manwë",
+      "elvishName": "Alcarinquë",
+      "title": "Súlimo, Elder King",
+      "governs": "Air, wind, clouds, birds, the breath of Arda",
+      "domain": "Greatest in authority among the Valar, dearest to Eru. He dwells on Taniquetil, highest of mountains, and understands most clearly the will of Ilúvatar.",
+      "kindred": "Spouse of Varda. Brother of Melkor. The Eagles of Manwë are his servants and messengers."
+    },
+    "Mars": {
+      "number": 3,
+      "classicalPlanet": "Mars",
+      "metal": "Iron",
+      "vala": "Tulkas",
+      "elvishName": "Carnil",
+      "title": "Astaldo, the Valiant",
+      "governs": "Strength, combat, sport, prowess",
+      "domain": "Greatest in strength and deeds of prowess. He came last to Arda to aid the Valar against Melkor. He laughs in sport and in war, needs no weapon, and wrestled Melkor to the ground.",
+      "kindred": "Spouse of Nessa the Dancer. His anger was the last thing Melkor saw before captivity."
+    },
+    "Sun": {
+      "number": 4,
+      "classicalPlanet": "Sun",
+      "metal": "Gold",
+      "vala": "Arda — the Quenya word for 'realm,' the name Tolkien gave to the entire created world that the Valar shaped from the Vision of the Music",
+      "elvishName": "Anar — the Quenya name for the Sun, the vessel that carries the last golden fruit of Laurelin (one of the Two Trees of Valinor) across the sky, guided by the Maia Arien",
+      "title": "The Created World",
+      "governs": "The stage of the drama — the Music of the Ainur made manifest",
+      "domain": "Arda is not a Vala but the world itself — the physical realization of the Great Music that the Ainur sang before Eru. The Valar entered into it to prepare it for the coming of Elves and Men. Melkor's discord marred its substance from the beginning.",
+      "gold": "Gold in Tolkien is sacred light and its corruption at once. Laurelin the Golden Tree lit Valinor before Sun or Moon existed — its last fruit became Anar, the Sun. Galadriel's hair was said to have captured the light of Laurelin, and Fëanor asked three times for a strand; she refused. The Silmarils held that same golden light trapped in crystal — the most hallowed objects ever made, yet the Oath to recover them destroyed Fëanor's house and drenched three ages in blood. The One Ring is plain gold, unmarked until heated — Sauron poured his will to dominate into it, and it corrupts every bearer. Dragon-sickness is the spell that Smaug's gold-hoard casts over Thorin: he breaks faith with allies, hoards what he cannot use, and nearly starts a war over a single stone. Vilya, mightiest of the Three Elven Rings, is gold set with sapphire — worn by Elrond to preserve Rivendell. Gold is always the test: divine light shared freely, or divine light seized and hoarded.",
+      "kindred": "Home of the Children of Ilúvatar — Elves (the Firstborn) and Men (the Followers)."
+    },
+    "Venus": {
+      "number": 5,
+      "classicalPlanet": "Venus",
+      "metal": "Copper",
+      "vala": "Varda",
+      "elvishName": "Eärendil (Gil-Estel)",
+      "title": "Elentári, Queen of the Stars",
+      "governs": "Stars, light, the heavens",
+      "domain": "She kindled the great stars before the Elves awoke, so that their first sight was starlight. Most revered of the Valar by the Elves, who call upon her name above all others.",
+      "kindred": "Spouse of Manwë. In her face the light of Ilúvatar still shines. Eärendil bears her star, the Silmaril, across the sky."
+    },
+    "Mercury": {
+      "number": 6,
+      "classicalPlanet": "Mercury",
+      "metal": "Mercury",
+      "vala": "Lórien (Irmo)",
+      "elvishName": "Elemmírë",
+      "title": "Master of Visions and Dreams",
+      "governs": "Dreams, visions, rest, desire",
+      "domain": "Younger brother of Mandos. He dwells in the gardens of Lórien in Valinor, where the weary and grieving come for rest and counsel. His fountains refresh all who drink.",
+      "kindred": "Spouse of Estë the Healer. Brother of Mandos and Nienna. Olórin (Gandalf) dwelt long in his gardens."
+    },
+    "Moon": {
+      "number": 7,
+      "classicalPlanet": "Moon",
+      "metal": "Silver",
+      "vala": "Nienna",
+      "elvishName": "Ithil (Rána)",
+      "title": "Lady of Mercy",
+      "governs": "Grief, mourning, endurance, pity",
+      "domain": "She mourns for every wound Arda has suffered in the marring of Melkor. Her grief turns to wisdom. She dwells alone on the western borders of the world, near the Halls of Mandos.",
+      "kindred": "Sister of Mandos and Irmo. She taught Olórin (Gandalf) pity and patience — the gifts he carried into Middle-earth."
+    },
+    "Earth": {
+      "number": 8,
+      "classicalPlanet": null,
+      "vala": "Melkor (Morgoth)",
+      "elvishName": null,
+      "title": "Morgoth Bauglir — the Black Foe of the World",
+      "governs": "Discord, domination, cold, fire, the marring of Arda",
+      "domain": "Mightiest of the Ainur, who introduced discord into the Great Music and claimed Arda as his own. Named Morgoth by Fëanor after the theft of the Silmarils. His desire to possess and dominate marred the substance of the world itself.",
+      "kindred": "Brother of Manwë. Master of Sauron, lord of Balrogs, father of dragons and orcs. Ungoliant was his ally and almost his end."
+    }
   },
   "authorCommentary": []
 }

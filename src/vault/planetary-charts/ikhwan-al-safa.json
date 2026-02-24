@@ -1,0 +1,67 @@
+{
+  "tradition": "Ikhwan al-Safa (Brothers of Purity)",
+  "sourceText": "Rasa'il Ikhwan al-Safa (Epistles of the Brethren of Purity)",
+  "period": "10th century CE",
+  "origin": "tradition",
+  "entered": "2026-02-23",
+  "method": "dictation",
+  "order": "descending",
+  "note": "Nine-level Neoplatonic emanation hierarchy from 10th-century Basra. The planets reside collectively at level 7 (World of Spheres) rather than distributing across individual levels. Influenced by Plotinus but expanded from his three hypostases to nine members.",
+  "correspondences": {
+    "God the Creator": {
+      "number": 1,
+      "classicalPlanet": null,
+      "arabicName": "Al-Bari'",
+      "description": "Origin of all, beyond being — the First and only Eternal Being, from whom all else emanates by will alone"
+    },
+    "Universal Intellect": {
+      "number": 2,
+      "classicalPlanet": null,
+      "arabicName": "Al-'Aql",
+      "description": "First emanation — contains all forms and intelligible archetypes, one in number as God is One"
+    },
+    "Universal Soul": {
+      "number": 3,
+      "classicalPlanet": null,
+      "arabicName": "Al-Nafs al-Kulliyya",
+      "description": "Animates all reality — a simple essence emanating from the Intellect, manifests through the Sun"
+    },
+    "Prime Matter": {
+      "number": 4,
+      "classicalPlanet": null,
+      "arabicName": "Al-Hayula al-Ula",
+      "description": "Pure potentiality — spiritual substance, material substrate dependent on Intellect and Soul to receive forms"
+    },
+    "Nature": {
+      "number": 5,
+      "classicalPlanet": null,
+      "arabicName": "Al-Tabi'at",
+      "description": "Active organizing principle — energy diffused through all bodies, cause of motion, life, and change"
+    },
+    "Universal Body": {
+      "number": 6,
+      "classicalPlanet": null,
+      "arabicName": "Al-Jism al-Mutlaq",
+      "description": "All corporeal physical substance — prime matter acquiring spatial extension and physical properties"
+    },
+    "World of Spheres": {
+      "number": 7,
+      "classicalPlanet": null,
+      "arabicName": null,
+      "description": "Intellect-animated planetary and stellar spheres — Saturn, Jupiter, Mars, Sun, Venus, Mercury, Moon, composed of ether and immune to corruption"
+    },
+    "Four Elements": {
+      "number": 8,
+      "classicalPlanet": null,
+      "arabicName": null,
+      "description": "Earthbound material realm — fire, air, water, earth, subject to generation and corruption beneath the lunar sphere"
+    },
+    "Three Kingdoms": {
+      "number": 9,
+      "classicalPlanet": null,
+      "arabicName": null,
+      "description": "Mineral, plant, and animal — the composite beings of the sublunary world, formed from proportional mixtures of the four elements"
+    }
+  },
+  "authorCommentary": []
+}

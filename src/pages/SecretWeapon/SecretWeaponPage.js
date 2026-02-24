@@ -240,6 +240,8 @@ function EnterSection() {
       </p>
       <Link to="/chronosphaera" className="weapon-cta" onClick={() => window.scrollTo(0, 0)}>Enter the Mythouse</Link>
       <br />
+      <Link to="/secret-weapon-api" className="weapon-cta-secondary" onClick={() => window.scrollTo(0, 0)}>Take It With You &mdash; The API &rarr;</Link>
+      <br />
       <Link to="/discover/starlight" className="weapon-cta-secondary" onClick={() => window.scrollTo(0, 0)}>Read the Creation Story &rarr;</Link>
       <p className="weapon-enter-closing">
         The Mythouse remembers where you have been. It is ready when you are.

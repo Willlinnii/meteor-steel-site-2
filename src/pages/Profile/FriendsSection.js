@@ -82,7 +82,7 @@ export default function FriendsSection() {
         <input
           className="friends-search-input"
           type="text"
-          placeholder="Search by @handle..."
+          placeholder="Search by handle, email, or name..."
           value={searchQuery}
           onChange={e => handleSearch(e.target.value)}
         />
@@ -97,7 +97,10 @@ export default function FriendsSection() {
               const isPending = pendingOutUids.has(r.uid);
               return (
                 <div key={r.uid} className="friends-result-row">
-                  <span className="friends-handle">@{r.handle}</span>
+                  <span className="friends-handle">
+                    @{r.handle}
+                    {r.email && <span className="friends-email"> ({r.email})</span>}
+                  </span>
                   {isFriend ? (
                     <span className="friends-status-badge friends-status-connected">Friends</span>
                   ) : isPending ? (

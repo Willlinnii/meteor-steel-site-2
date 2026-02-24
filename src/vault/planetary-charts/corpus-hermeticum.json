@@ -1,19 +1,47 @@
 {
   "tradition": "Corpus Hermeticum",
-  "sourceText": "Poimandres; Asclepius",
+  "sourceText": "Poimandres (CH I.24-26); Asclepius",
   "period": "1st-3rd century CE",
   "origin": "tradition",
   "entered": "2026-02-23",
-  "method": "transcribed",
-  "order": "weekday",
+  "method": "dictation",
+  "order": "chaldean",
   "correspondences": {
-    "Sun":     {},
-    "Moon":    {},
-    "Mercury": {},
-    "Venus":   {},
-    "Mars":    {},
-    "Jupiter": {},
-    "Saturn":  {}
+    "Sun": {
+      "metal": "Gold",
+      "vice": "Presumption, egoism, vanity, self-glory",
+      "functionInDescent": "The false center of radiant pride"
+    },
+    "Moon": {
+      "metal": "Silver",
+      "vice": "Increase and decrease, attachment to change, flux, illusion, growth and loss",
+      "functionInDescent": "The soul's entry into time cycles"
+    },
+    "Mars": {
+      "metal": "Iron",
+      "vice": "Rashness, anger, violence, impulse and will",
+      "functionInDescent": "Unrefined assertiveness"
+    },
+    "Mercury": {
+      "metal": "Mercury",
+      "vice": "Deceit, cunning, intellectual pride, and trickery",
+      "functionInDescent": "Misuse of mind or false cleverness"
+    },
+    "Jupiter": {
+      "metal": "Tin",
+      "vice": "Evil purpose, ambition, manipulation, and hunger to rule",
+      "functionInDescent": "Corrupted moral order"
+    },
+    "Venus": {
+      "metal": "Copper",
+      "vice": "Desire, sensuality, craving, and lust",
+      "functionInDescent": "Soul's binary binding to pleasure"
+    },
+    "Saturn": {
+      "metal": "Lead",
+      "vice": "Falsehood, spiritual blindness, and ultimate illusion",
+      "functionInDescent": "The final veil, root of forgetfulness"
+    }
   },
   "authorCommentary": []
 }

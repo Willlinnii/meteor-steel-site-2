@@ -8,6 +8,7 @@
     { "id": "steiner",               "file": "planetary-charts/steiner.json",               "tradition": "Rudolf Steiner" },
     { "id": "dante",                 "file": "planetary-charts/dante.json",                 "tradition": "Dante Alighieri" },
     { "id": "leadbeater-theosophy",  "file": "planetary-charts/leadbeater-theosophy.json",  "tradition": "Leadbeater / Theosophy" },
+    { "id": "besant-theosophy",     "file": "planetary-charts/besant-theosophy.json",     "tradition": "Annie Besant / Theosophy" },
     { "id": "kabbalah",              "file": "planetary-charts/kabbalah.json",              "tradition": "Kabbalah" },
     { "id": "golden-dawn",           "file": "planetary-charts/golden-dawn.json",           "tradition": "Golden Dawn" },
     { "id": "vedic",                 "file": "planetary-charts/vedic.json",                 "tradition": "Vedic / Jyotish" },
@@ -16,7 +17,17 @@
     { "id": "tolkien",               "file": "planetary-charts/tolkien.json",               "tradition": "J.R.R. Tolkien" },
     { "id": "manly-p-hall",          "file": "planetary-charts/manly-p-hall.json",          "tradition": "Manly P. Hall" },
     { "id": "paracelsus",            "file": "planetary-charts/paracelsus.json",            "tradition": "Paracelsus" },
-    { "id": "rosicrucian",           "file": "planetary-charts/rosicrucian.json",           "tradition": "Rosicrucian" }
+    { "id": "rosicrucian",           "file": "planetary-charts/rosicrucian.json",           "tradition": "Rosicrucian" },
+    { "id": "blavatsky",            "file": "planetary-charts/blavatsky.json",            "tradition": "H.P. Blavatsky / Theosophy" },
+    { "id": "john-dee",             "file": "planetary-charts/john-dee.json",             "tradition": "John Dee" },
+    { "id": "pythagorean",          "file": "planetary-charts/pythagorean.json",          "tradition": "Pythagorean" },
+    { "id": "ra-law-of-one",        "file": "planetary-charts/ra-law-of-one.json",        "tradition": "Ra / Law of One" },
+    { "id": "perennial-philosophy", "file": "planetary-charts/perennial-philosophy.json", "tradition": "Perennial Philosophy" },
+    { "id": "neoplatonist",         "file": "planetary-charts/neoplatonist.json",         "tradition": "Neoplatonist" },
+    { "id": "ficino",               "file": "planetary-charts/ficino.json",               "tradition": "Marsilio Ficino" },
+    { "id": "norse",                "file": "planetary-charts/norse.json",                "tradition": "Norse / Yggdrasil" },
+    { "id": "ikhwan-al-safa",      "file": "planetary-charts/ikhwan-al-safa.json",      "tradition": "Ikhwan al-Safa (Brothers of Purity)" },
+    { "id": "al-farabi",            "file": "planetary-charts/al-farabi.json",            "tradition": "Al-Farabi" }
   ],
 
   "topics": [

@@ -1,19 +1,69 @@
 {
   "tradition": "Manly P. Hall",
-  "sourceText": "The Secret Teachings of All Ages",
-  "period": "1928",
+  "sourceText": "The Secret Teachings of All Ages; The Philosophy of Astrology; Astrological Keywords",
+  "period": "1928–1971",
   "origin": "tradition",
   "entered": "2026-02-23",
-  "method": "transcribed",
+  "method": "research",
   "order": "chaldean",
+  "note": "Hall's synthesis as a self-identified Rosicrucian Christian, shaped by Blavatsky and Max Heindel's Rosicrucian Cosmo-Conception. His distinctive contribution is compiling the Neoplatonic seven souls (the qualities the soul acquires descending through the planetary spheres) alongside standard Western esoteric correspondences into a single unified framework. He said of Blavatsky: 'Take away her contribution and all modern occultism falls like a house of cards.'",
   "correspondences": {
-    "Sun":     {},
-    "Moon":    {},
-    "Mercury": {},
-    "Venus":   {},
-    "Mars":    {},
-    "Jupiter": {},
-    "Saturn":  {}
+    "Saturn": {
+      "number": 1,
+      "classicalPlanet": "Saturn",
+      "metal": "Lead",
+      "soul": "Contemplative Soul",
+      "descentQuality": "Reason and intellect — the soul acquires the power of contemplation and abstract thought",
+      "keyword": "Restriction, discipline, time, karma"
+    },
+    "Jupiter": {
+      "number": 2,
+      "classicalPlanet": "Jupiter",
+      "metal": "Tin",
+      "soul": "Reasonable Soul",
+      "descentQuality": "Judgment and governance — the soul acquires the power to order, administer, and rule wisely",
+      "keyword": "Expansion, benevolence, wisdom, law"
+    },
+    "Mars": {
+      "number": 3,
+      "classicalPlanet": "Mars",
+      "metal": "Iron",
+      "soul": "Impulsive Soul",
+      "descentQuality": "Courage and spiritedness — the soul acquires the capacity for action, aggression, and will",
+      "keyword": "Energy, courage, conflict, desire"
+    },
+    "Sun": {
+      "number": 4,
+      "classicalPlanet": "Sun",
+      "metal": "Gold",
+      "soul": "Vitative Soul",
+      "descentQuality": "Life and consciousness — the soul acquires vitality, the spark of individual awareness",
+      "keyword": "Vitality, consciousness, will, selfhood"
+    },
+    "Venus": {
+      "number": 5,
+      "classicalPlanet": "Venus",
+      "metal": "Copper",
+      "soul": "Amative Soul",
+      "descentQuality": "Love and attraction — the soul acquires the power to desire, unite, and create through relationship",
+      "keyword": "Love, harmony, beauty, attraction"
+    },
+    "Mercury": {
+      "number": 6,
+      "classicalPlanet": "Mercury",
+      "metal": "Mercury",
+      "soul": "Intellectual Soul",
+      "descentQuality": "Speech and communication — the soul acquires the faculty of language, analysis, and exchange",
+      "keyword": "Intelligence, communication, adaptability, commerce"
+    },
+    "Moon": {
+      "number": 7,
+      "classicalPlanet": "Moon",
+      "metal": "Silver",
+      "soul": "Vegetative Soul",
+      "descentQuality": "Generation and instinct — the soul acquires the power of physical reproduction and bodily growth",
+      "keyword": "Imagination, instinct, generation, cycles"
+    }
   },
   "authorCommentary": []
 }

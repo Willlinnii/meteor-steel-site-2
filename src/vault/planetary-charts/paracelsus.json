@@ -4,16 +4,72 @@
   "period": "1493-1541",
   "origin": "tradition",
   "entered": "2026-02-23",
-  "method": "transcribed",
-  "order": "alchemical",
+  "method": "dictation",
+  "order": "chaldean",
+  "inheritsFrom": "corpus-hermeticum",
   "correspondences": {
-    "Sun":     {},
-    "Moon":    {},
-    "Mercury": {},
-    "Venus":   {},
-    "Mars":    {},
-    "Jupiter": {},
-    "Saturn":  {}
+    "Sun": {
+      "metal": "Gold",
+      "vice": "Presumption, egoism, vanity, self-glory",
+      "functionInDescent": "The false center of radiant pride",
+      "organ": "Heart",
+      "element": "Fire",
+      "function": "Vitality, center, and illumination",
+      "imbalance": "Egoism, spiritual blindness"
+    },
+    "Moon": {
+      "metal": "Silver",
+      "vice": "Increase and decrease, attachment to change, flux, illusion, growth and loss",
+      "functionInDescent": "The soul's entry into time cycles",
+      "organ": "Brain",
+      "element": "Water",
+      "function": "Rhythm, cycles, imagination, and reflection",
+      "imbalance": "Illusion, mood swings, hysteria, and restlessness"
+    },
+    "Mars": {
+      "metal": "Iron",
+      "vice": "Rashness, anger, violence, impulse and will",
+      "functionInDescent": "Unrefined assertiveness",
+      "organ": "Gallbladder / Blood",
+      "element": "Fire",
+      "function": "Strength, fire, courage, and action",
+      "imbalance": "Violence, anger, fever, and inflammation"
+    },
+    "Mercury": {
+      "metal": "Mercury",
+      "vice": "Deceit, cunning, intellectual pride, and trickery",
+      "functionInDescent": "Misuse of mind or false cleverness",
+      "organ": "Lungs",
+      "function": "Breath, exchange, and thought",
+      "imbalance": "Deceit, trickery, nervousness, and instability"
+    },
+    "Jupiter": {
+      "metal": "Tin",
+      "vice": "Evil purpose, ambition, manipulation, and hunger to rule",
+      "functionInDescent": "Corrupted moral order",
+      "organ": "Liver",
+      "element": "Air",
+      "function": "Expansion, generosity, assimilation, and growth",
+      "imbalance": "Arrogance, pride, overindulgence, and overgrowth"
+    },
+    "Venus": {
+      "metal": "Copper",
+      "vice": "Desire, sensuality, craving, and lust",
+      "functionInDescent": "Soul's binary binding to pleasure",
+      "organ": "Kidneys",
+      "element": "Water",
+      "function": "Harmony, fertility, sensuality, bonding, and pleasure",
+      "imbalance": "Lust, sensual excess, and emotional weakness"
+    },
+    "Saturn": {
+      "metal": "Lead",
+      "vice": "Falsehood, spiritual blindness, and ultimate illusion",
+      "functionInDescent": "The final veil, root of forgetfulness",
+      "organ": "Spleen",
+      "element": "Earth",
+      "function": "Structure, contraction, boundary, and melancholy",
+      "imbalance": "Melancholy, fear, and withdrawal"
+    }
   },
   "authorCommentary": []
 }

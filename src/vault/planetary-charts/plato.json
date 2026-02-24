@@ -1,19 +1,111 @@
 {
   "tradition": "Plato",
-  "sourceText": "Timaeus; Republic (Allegory of the Cave, Allegory of Er)",
+  "sourceText": "Republic (Allegory of the Cave, Book VII; Myth of Er, Book X); Timaeus",
   "period": "4th century BCE",
   "origin": "tradition",
   "entered": "2026-02-23",
-  "method": "transcribed",
-  "order": "chaldean",
+  "method": "dictation",
+  "order": "ascending",
+  "note": "Three Platonic cosmological models compared level by level. The Cave allegory describes the ascent from illusion to truth in three stages. The Myth of Er maps the soul's postmortem journey through the planetary spheres. The Timaeus describes the Demiurge's construction of the cosmos. Not all levels appear in all three works.",
   "correspondences": {
-    "Sun":     {},
-    "Moon":    {},
-    "Mercury": {},
-    "Venus":   {},
-    "Mars":    {},
-    "Jupiter": {},
-    "Saturn":  {}
+    "Material World": {
+      "number": 1,
+      "classicalPlanet": null,
+      "cave": "Prisoners bound in the cave, seeing only shadows on the wall",
+      "mythOfEr": "The material world — death on the battlefield, the meadow of judgment",
+      "timaeus": "Body, material — the receptacle (Chora), the realm of becoming"
+    },
+    "Turning / Axis": {
+      "number": 2,
+      "classicalPlanet": null,
+      "cave": "The turning — unshackling, first glimpse of the fire casting the shadows",
+      "mythOfEr": "The rainbow and the spindle of Necessity — the axis of the cosmos",
+      "timaeus": null
+    },
+    "Moon": {
+      "number": 3,
+      "classicalPlanet": "Moon",
+      "metal": "Silver",
+      "cave": null,
+      "mythOfEr": "Moon — first planetary sphere",
+      "timaeus": "Moon — first circle of the mixture"
+    },
+    "Mercury": {
+      "number": 4,
+      "classicalPlanet": "Mercury",
+      "metal": "Mercury",
+      "cave": null,
+      "mythOfEr": "Mercury",
+      "timaeus": "Mercury"
+    },
+    "Venus": {
+      "number": 5,
+      "classicalPlanet": "Venus",
+      "metal": "Copper",
+      "cave": null,
+      "mythOfEr": "Venus",
+      "timaeus": "Venus"
+    },
+    "Sun": {
+      "number": 6,
+      "classicalPlanet": "Sun",
+      "metal": "Gold",
+      "cave": "Ascent into daylight — seeing reflected images, then the Sun itself",
+      "mythOfEr": "Sun — the central fire",
+      "timaeus": "Sun — center of the planetary circles"
+    },
+    "Mars": {
+      "number": 7,
+      "classicalPlanet": "Mars",
+      "metal": "Iron",
+      "cave": null,
+      "mythOfEr": "Mars",
+      "timaeus": "Mars"
+    },
+    "Jupiter": {
+      "number": 8,
+      "classicalPlanet": "Jupiter",
+      "metal": "Tin",
+      "cave": null,
+      "mythOfEr": "Jupiter",
+      "timaeus": "Jupiter"
+    },
+    "Saturn": {
+      "number": 9,
+      "classicalPlanet": "Saturn",
+      "metal": "Lead",
+      "cave": null,
+      "mythOfEr": "Saturn — outermost planetary sphere",
+      "timaeus": "Saturn — outermost planetary circle"
+    },
+    "Fixed Stars": {
+      "number": 10,
+      "classicalPlanet": null,
+      "cave": null,
+      "mythOfEr": "The fixed stars — the firmament",
+      "timaeus": "Fixed stars — the circle of the Same"
+    },
+    "World Soul": {
+      "number": 11,
+      "classicalPlanet": null,
+      "cave": null,
+      "mythOfEr": "The World Soul — Anima Mundi, the living cosmos",
+      "timaeus": "World Soul — the rational living creature that enfolds all"
+    },
+    "Forms / Nous": {
+      "number": 12,
+      "classicalPlanet": null,
+      "cave": "The Form of the Good — the Sun as metaphor, the source of all truth and illumination",
+      "mythOfEr": "Ideas, Forms, Nous — the archetypal realm beyond the spheres",
+      "timaeus": "Forms, Ideas, the Demiurge — the rational principle, the craftsman god"
+    },
+    "The One / The Good": {
+      "number": 13,
+      "classicalPlanet": null,
+      "cave": null,
+      "mythOfEr": "The One — the Good, Love, Beauty, Harmony",
+      "timaeus": "The undivided source — beyond being, the ground of all reality"
+    }
   },
   "authorCommentary": []
 }

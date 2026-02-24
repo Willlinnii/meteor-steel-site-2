@@ -102,23 +102,49 @@ async function handleSearch(req, res) {
     const uid = decoded.uid;
     const db = admin.firestore();
 
-    // Prefix search on handles collection (doc IDs are lowercased handles)
+    const resultsMap = new Map(); // uid -> { handle, uid }
+
+    // 1) Prefix search on handles collection (doc IDs are lowercased handles)
     const end = query.slice(0, -1) + String.fromCharCode(query.charCodeAt(query.length - 1) + 1);
-    const snap = await db.collection('handles')
+    const handleSnap = await db.collection('handles')
       .where(admin.firestore.FieldPath.documentId(), '>=', query)
       .where(admin.firestore.FieldPath.documentId(), '<', end)
       .limit(11)
       .get();
 
-    const results = [];
-    snap.forEach(doc => {
+    handleSnap.forEach(doc => {
       const data = doc.data();
       if (data.uid !== uid) {
-        results.push({ handle: data.handle, uid: data.uid });
+        resultsMap.set(data.uid, { handle: data.handle, uid: data.uid });
       }
     });
 
-    return res.status(200).json({ results: results.slice(0, 10) });
+    // 2) Also search site-users by email prefix and display name
+    //    site-users has: email, displayName, provider, tags
+    const siteSnap = await db.collection('site-users').get();
+    const profileLookups = [];
+    siteSnap.forEach(doc => {
+      if (doc.id === uid || resultsMap.has(doc.id)) return;
+      const data = doc.data();
+      const email = (data.email || '').toLowerCase();
+      const name = (data.displayName || '').toLowerCase();
+      if (email.includes(query) || name.includes(query)) {
+        profileLookups.push(
+          db.doc(`users/${doc.id}/meta/profile`).get().then(profileSnap => {
+            const handle = profileSnap.exists && profileSnap.data().handle;
+            resultsMap.set(doc.id, {
+              handle: handle || data.displayName || data.email,
+              uid: doc.id,
+              email: data.email,
+            });
+          })
+        );
+      }
+    });
+    await Promise.all(profileLookups);
+
+    const results = Array.from(resultsMap.values()).slice(0, 10);
+    return res.status(200).json({ results });
   } catch (err) {
     console.error('search-handles error:', err);
     return res.status(500).json({ error: 'Search failed' });

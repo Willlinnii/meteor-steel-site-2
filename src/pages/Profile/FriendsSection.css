@@ -68,6 +68,13 @@
   letter-spacing: 0.02em;
 }
 
+.friends-email {
+  color: var(--text-secondary, #6a6a7a);
+  font-family: inherit;
+  font-size: 0.75rem;
+  letter-spacing: 0;
+}
+
 .friends-invite-actions {
   display: flex;
   gap: 6px;

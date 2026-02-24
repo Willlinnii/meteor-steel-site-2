@@ -305,9 +305,14 @@
 .planet-weekday-nav {
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-end;
   gap: 6px;
-  margin: 0.4rem 0 1rem;
+  margin: 0.4rem 0 0;
+}
+
+.planet-weekday-arc {
+  padding-top: 32px;
+  margin-bottom: -0.2rem;
 }
 
 .planet-weekday-btn {
@@ -360,6 +365,20 @@
 
 .zodiac-sign.active text {
   fill: #f0c040 !important;
+}
+
+/* ===== STAR SPHERE RING ===== */
+
+.star-sphere-ring {
+  transition: stroke 0.3s ease;
+}
+
+.star-sphere-ring:hover {
+  stroke: rgba(201, 169, 97, 0.25) !important;
+}
+
+.star-sphere-ring.active {
+  stroke: rgba(201, 169, 97, 0.18) !important;
 }
 
 /* ===== CARDINAL POINTS ===== */
@@ -1855,6 +1874,14 @@
   background: rgba(232, 131, 90, 0.06);
 }
 
+.tarot-card-image {
+  display: block;
+  max-width: 220px;
+  margin: 0 auto 14px;
+  border-radius: 6px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+}
+
 .tarot-culture-grid {
   display: flex;
   flex-direction: column;
@@ -2642,4 +2669,482 @@
   .mythic-earth-site-detail h3 {
     font-size: 1.2rem;
   }
+}
+
+/* ===== SIDEREAL / TROPICAL TOGGLE ===== */
+
+.zodiac-mode-switch {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin: 6px 0 2px;
+}
+
+.zodiac-mode-switch span {
+  font-family: 'Cinzel', serif;
+  font-variant: small-caps;
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  color: rgba(100, 160, 170, 0.5);
+  transition: color 0.3s;
+  user-select: none;
+}
+
+.zodiac-mode-switch span.active {
+  color: rgba(201, 169, 97, 0.9);
+}
+
+.zodiac-toggle-track {
+  position: relative;
+  width: 44px;
+  height: 22px;
+  border-radius: 11px;
+  border: 1px solid rgba(100, 160, 170, 0.3);
+  background: rgba(15, 15, 35, 0.8);
+  cursor: pointer;
+  padding: 0;
+  transition: border-color 0.3s, background 0.3s;
+}
+
+.zodiac-toggle-track:hover {
+  border-color: rgba(201, 169, 97, 0.5);
+}
+
+.zodiac-toggle-knob {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: rgba(100, 160, 170, 0.7);
+  transition: transform 0.3s, background 0.3s;
+}
+
+.zodiac-toggle-track.sidereal .zodiac-toggle-knob {
+  transform: translateX(22px);
+  background: rgba(201, 169, 97, 0.9);
+}
+
+.zodiac-toggle-track.tropical .zodiac-toggle-knob {
+  transform: translateX(0);
+}
+
+/* ── Perspective Cycling Button ── */
+
+.perspective-cycle-tab {
+  font-size: 0.68rem;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  border: 1px solid rgba(100, 160, 170, 0.2);
+  border-radius: 4px;
+  padding: 3px 8px;
+  color: rgba(139, 157, 195, 0.65);
+  transition: color 0.2s, border-color 0.2s, background 0.2s;
+}
+
+.perspective-cycle-tab:hover {
+  color: rgba(201, 169, 97, 0.85);
+  border-color: rgba(201, 169, 97, 0.4);
+}
+
+.perspective-cycle-tab.perspective-active {
+  color: rgba(201, 169, 97, 1);
+  border-color: rgba(201, 169, 97, 0.5);
+  background: rgba(201, 169, 97, 0.08);
+}
+
+/* ── Perspective Tab Content (reuses overview-grid / body-section) ── */
+
+.perspective-epoch-line {
+  font-size: 0.78rem;
+  color: rgba(139, 157, 195, 0.7);
+  margin-bottom: 10px;
+}
+
+.perspective-clickable {
+  cursor: pointer;
+  transition: background 0.15s;
+  border-radius: 4px;
+}
+
+.perspective-clickable:hover {
+  background: rgba(201, 169, 97, 0.06);
+}
+
+.perspective-source-block {
+  margin-top: 18px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(100, 160, 170, 0.1);
+}
+
+/* ── Column Sequence Popup ── */
+
+.column-sequence-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.15s ease-out;
+}
+
+.column-sequence-popup {
+  background: rgba(12, 12, 30, 0.98);
+  border: 1px solid rgba(100, 160, 170, 0.3);
+  border-radius: 10px;
+  width: 90%;
+  max-width: 420px;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
+}
+
+.column-sequence-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 14px 16px 10px;
+  border-bottom: 1px solid rgba(100, 160, 170, 0.15);
+}
+
+.column-sequence-title {
+  font-size: 0.95rem;
+  color: rgba(201, 169, 97, 0.9);
+  margin: 0;
+}
+
+.column-sequence-tradition {
+  font-size: 0.72rem;
+  color: rgba(139, 157, 195, 0.6);
+  margin: 2px 0 0;
+}
+
+.column-sequence-order {
+  display: inline-block;
+  font-size: 0.6rem;
+  color: rgba(100, 160, 170, 0.7);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-top: 4px;
+  padding: 2px 6px;
+  border: 1px solid rgba(100, 160, 170, 0.2);
+  border-radius: 3px;
+  background: rgba(100, 160, 170, 0.05);
+}
+
+.column-sequence-close {
+  background: none;
+  border: none;
+  color: rgba(220, 220, 235, 0.5);
+  font-size: 1.4rem;
+  cursor: pointer;
+  padding: 0 4px;
+  line-height: 1;
+}
+
+.column-sequence-close:hover {
+  color: rgba(220, 220, 235, 0.9);
+}
+
+.column-sequence-body {
+  padding: 8px 0;
+}
+
+.column-sequence-row {
+  display: flex;
+  gap: 12px;
+  padding: 8px 16px;
+  transition: background 0.15s;
+}
+
+.column-sequence-row:hover {
+  background: rgba(100, 160, 170, 0.06);
+}
+
+.column-sequence-row.active {
+  background: rgba(201, 169, 97, 0.08);
+}
+
+.column-sequence-row.active .column-sequence-planet {
+  color: rgba(201, 169, 97, 1);
+}
+
+.column-sequence-planet {
+  flex: 0 0 140px;
+  font-size: 0.82rem;
+  color: rgba(201, 169, 97, 0.7);
+  font-weight: 500;
+}
+
+.column-sequence-value {
+  flex: 1;
+  font-size: 0.82rem;
+  color: rgba(220, 220, 235, 0.85);
+  line-height: 1.4;
+}
+
+/* ── Tree of Life (Kabbalah popup) ── */
+
+.tol-popup {
+  background: rgba(12, 12, 30, 0.98);
+  border: 1px solid rgba(100, 160, 170, 0.3);
+  border-radius: 10px;
+  width: 94%;
+  max-width: 460px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
+}
+
+.tol-container {
+  position: relative;
+  width: 100%;
+  height: 540px;
+  padding: 10px 0;
+}
+
+.tol-pillar {
+  position: absolute;
+  top: -2px;
+  transform: translateX(-50%);
+  font-size: 0.55rem;
+  color: rgba(139, 157, 195, 0.35);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.tol-paths {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.tol-paths line {
+  stroke: rgba(100, 160, 170, 0.12);
+  stroke-width: 1;
+}
+
+.tol-node {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  width: 28%;
+  max-width: 120px;
+  padding: 6px 8px;
+  background: rgba(12, 12, 30, 0.92);
+  border: 1px solid rgba(100, 160, 170, 0.2);
+  border-radius: 8px;
+  z-index: 1;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.tol-node.active {
+  border-color: rgba(201, 169, 97, 0.7);
+  background: rgba(201, 169, 97, 0.1);
+  box-shadow: 0 0 12px rgba(201, 169, 97, 0.15);
+}
+
+.tol-name {
+  display: block;
+  font-size: 0.7rem;
+  color: rgba(201, 169, 97, 0.9);
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.tol-meaning {
+  display: block;
+  font-size: 0.55rem;
+  color: rgba(139, 157, 195, 0.5);
+  line-height: 1.2;
+}
+
+.tol-planet {
+  display: block;
+  font-size: 0.52rem;
+  color: rgba(139, 157, 195, 0.35);
+  margin-bottom: 2px;
+}
+
+.tol-value {
+  display: block;
+  font-size: 0.62rem;
+  color: rgba(220, 220, 235, 0.85);
+  line-height: 1.3;
+  margin-top: 2px;
+}
+
+.tol-node.active .tol-name {
+  color: rgba(201, 169, 97, 1);
+}
+
+.tol-node.active .tol-value {
+  color: rgba(220, 220, 235, 1);
+}
+
+@media (max-width: 420px) {
+  .tol-container {
+    height: 480px;
+  }
+  .tol-node {
+    width: 30%;
+    padding: 4px 5px;
+  }
+  .tol-name {
+    font-size: 0.62rem;
+  }
+  .tol-value {
+    font-size: 0.55rem;
+  }
+  .tol-meaning, .tol-planet {
+    display: none;
+  }
+}
+
+/* ── Perspective Picker Dropdown ── */
+
+.perspective-picker {
+  position: relative;
+  display: inline-block;
+}
+
+.perspective-cycle-tab .perspective-chevron {
+  display: inline-block;
+  font-size: 0.55rem;
+  margin-left: 4px;
+  transition: transform 0.2s;
+  vertical-align: middle;
+}
+
+.perspective-cycle-tab .perspective-chevron.open {
+  transform: rotate(180deg);
+}
+
+.perspective-cycle-tab.perspective-open {
+  color: rgba(201, 169, 97, 1);
+  border-color: rgba(201, 169, 97, 0.5);
+}
+
+.perspective-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  z-index: 120;
+  min-width: 220px;
+  max-height: 360px;
+  overflow-y: auto;
+  background: rgba(12, 12, 30, 0.98);
+  border: 1px solid rgba(100, 160, 170, 0.3);
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  padding: 6px 0;
+  animation: fadeIn 0.15s ease-out;
+}
+
+.perspective-divider {
+  height: 1px;
+  background: rgba(100, 160, 170, 0.15);
+  margin: 4px 10px;
+}
+
+.perspective-era-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  padding: 7px 12px;
+  background: none;
+  border: none;
+  color: rgba(139, 157, 195, 0.85);
+  font-size: 0.7rem;
+  font-family: inherit;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  transition: color 0.15s, background 0.15s;
+}
+
+.perspective-era-header:hover {
+  color: rgba(201, 169, 97, 0.9);
+  background: rgba(201, 169, 97, 0.04);
+}
+
+.perspective-era-header .era-chevron {
+  font-size: 0.5rem;
+  transition: transform 0.2s;
+}
+
+.perspective-era-header .era-chevron.open {
+  transform: rotate(180deg);
+}
+
+.perspective-era-period {
+  margin-left: auto;
+  font-size: 0.58rem;
+  opacity: 0.5;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.perspective-era-list {
+  padding: 2px 0 4px 0;
+}
+
+.perspective-tradition {
+  display: block;
+  width: 100%;
+  padding: 6px 12px 6px 28px;
+  background: none;
+  border: none;
+  color: rgba(180, 190, 210, 0.9);
+  font-size: 0.72rem;
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: color 0.15s, background 0.15s;
+}
+
+.perspective-tradition:hover {
+  color: rgba(201, 169, 97, 1);
+  background: rgba(201, 169, 97, 0.06);
+}
+
+.perspective-tradition.active {
+  color: rgba(201, 169, 97, 1);
+  background: rgba(201, 169, 97, 0.1);
+}
+
+/* Mythouse item at top — no indent */
+.perspective-dropdown > .perspective-tradition {
+  padding-left: 12px;
+  font-weight: 500;
+}
+
+@media (max-width: 600px) {
+  .perspective-dropdown {
+    min-width: 180px;
+    max-height: 300px;
+    left: 0;
+    right: auto;
+  }
+  .perspective-tradition {
+    padding: 8px 12px 8px 24px;
+  }
+  .perspective-era-header {
+    padding: 8px 10px;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }

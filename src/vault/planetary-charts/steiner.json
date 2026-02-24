@@ -4,16 +4,78 @@
   "period": "1904-1925",
   "origin": "tradition",
   "entered": "2026-02-23",
-  "method": "transcribed",
+  "method": "dictation",
   "order": "evolutionary",
+  "note": "Steiner's own cosmological sequence — not Chaldean or weekday. Replaces Mars and Mercury with Earth and Vulcan. Keys are his epoch names, not standard classical planets. Consciousness, kingdom, and element are laterally connected to epochs (same axis). Steiner's metal-planet correspondences exist in his medical work but are on a separate axis (classical planets, not epochs).",
   "correspondences": {
-    "Sun":     {},
-    "Moon":    {},
-    "Mercury": {},
-    "Venus":   {},
-    "Mars":    {},
-    "Jupiter": {},
-    "Saturn":  {}
+    "Old Saturn": {
+      "number": 1,
+      "classicalPlanet": "Saturn",
+      "metal": "Lead",
+      "vehicle": "Physical Body / Earthly Matter",
+      "level": "Mineral",
+      "consciousness": "Trance / deep unconsciousness (mineral consciousness)",
+      "kingdom": "Mineral (as warmth substance)",
+      "element": "Warmth / Fire"
+    },
+    "Old Sun": {
+      "number": 2,
+      "classicalPlanet": "Sun",
+      "metal": "Gold",
+      "vehicle": "Etheric / Life Force",
+      "level": "Living body, energy, and water",
+      "consciousness": "Dreamless sleep (plant consciousness)",
+      "kingdom": "Plant",
+      "element": "Air / Light"
+    },
+    "Old Moon": {
+      "number": 3,
+      "classicalPlanet": "Moon",
+      "metal": "Silver",
+      "vehicle": "Astral Body",
+      "level": "Emotions, feeling, dreaming",
+      "consciousness": "Dream consciousness / picture consciousness",
+      "kingdom": "Animal",
+      "element": "Water"
+    },
+    "Earth": {
+      "number": 4,
+      "classicalPlanet": null,
+      "vehicle": "Ego / Spiritual Self",
+      "level": "Freedom, spirituality, and self-freedom",
+      "consciousness": "Waking consciousness / self-awareness",
+      "kingdom": "Human (ego-bearing)",
+      "element": "Earth / Solid"
+    },
+    "Future Jupiter": {
+      "number": 5,
+      "classicalPlanet": "Jupiter",
+      "metal": "Tin",
+      "vehicle": "Spirit Self / Manas",
+      "level": null,
+      "consciousness": "Conscious imagination (psychic)",
+      "kingdom": null,
+      "element": null
+    },
+    "Future Venus": {
+      "number": 6,
+      "classicalPlanet": "Venus",
+      "metal": "Copper",
+      "vehicle": "Life Spirit / Buddhi",
+      "level": "Initiation",
+      "consciousness": "Conscious inspiration",
+      "kingdom": null,
+      "element": null
+    },
+    "Future Vulcan": {
+      "number": 7,
+      "classicalPlanet": null,
+      "vehicle": "Spirit Man / Atman",
+      "level": "Divine unity",
+      "consciousness": "Conscious intuition",
+      "kingdom": null,
+      "element": null
+    }
   },
   "authorCommentary": []
 }

@@ -4,16 +4,87 @@
   "period": "1910-1927",
   "origin": "tradition",
   "entered": "2026-02-23",
-  "method": "transcribed",
-  "order": "theosophical",
+  "method": "dictation",
+  "order": "chaldean",
+  "note": "Theosophical variant of Chaldean order — swaps Mercury and Venus from standard Chaldean",
   "correspondences": {
-    "Sun":     {},
-    "Moon":    {},
-    "Mercury": {},
-    "Venus":   {},
-    "Mars":    {},
-    "Jupiter": {},
-    "Saturn":  {}
+    "Saturn": {
+      "number": 1,
+      "metal": "Lead",
+      "chakra": "Root",
+      "vehicle": "Physical Body / Etheric Vehicle",
+      "plane": "Physical/Dense — sensory experience and incarnation",
+      "initiation": "First — mystery of physical material, instincts, impurity",
+      "christianInitiation": "Birth of Christ — body mystery",
+      "sense": "Physical senses",
+      "devicStage": "Elemental, nature spirits"
+    },
+    "Jupiter": {
+      "number": 2,
+      "metal": "Tin",
+      "chakra": "Sacral",
+      "vehicle": "Astral Body / Emotional Vehicle",
+      "plane": "Astral/Emotional — desires, dreams, personal attachments",
+      "initiation": "Second — purification of emotion, love without attachment, and service",
+      "christianInitiation": "Baptism — emotional mastery, purification",
+      "sense": "Astral clairvoyance — emotion sensing, aura, dreamlike perceptions",
+      "devicStage": "Astral Devas — emotional, unstable, reactive, tied to human thought and emotion"
+    },
+    "Mars": {
+      "number": 3,
+      "metal": "Iron",
+      "chakra": "Solar Plexus",
+      "vehicle": "Mental Body / Lower Mind",
+      "plane": "Mental/Lower Causal — thought, reason, imagination, and ideas",
+      "initiation": "Third — mastery of mind, soul consciousness, alignment with abstract thinking",
+      "christianInitiation": "Transfiguration — mortal soul awakening",
+      "sense": "Telepathy — thought-form, symbol and perception, symbolic thought",
+      "devicStage": "Building Devas — builders of forms on mental planes, work with karma and thought-forms in elemental substance"
+    },
+    "Sun": {
+      "number": 4,
+      "metal": "Gold",
+      "chakra": "Heart",
+      "vehicle": "Buddhic Body / Intuition",
+      "plane": "Buddhic/Intuitional — love, wisdom, unity consciousness, direct knowing",
+      "initiation": "Fourth — ego death, heart awakening, unity consciousness, and sacrifice",
+      "christianInitiation": "Crucifixion",
+      "sense": "Intuition and direct knowing",
+      "devicStage": "Angelic Devas — Devas of harmony and wisdom, agents of love, intuition, unity, group karma, compassion, and spiritual ecology"
+    },
+    "Mercury": {
+      "number": 5,
+      "metal": "Mercury",
+      "chakra": "Throat",
+      "vehicle": "Atmic Body / Spiritual Will",
+      "plane": "Atmic/Spiritual — universal purpose",
+      "initiation": "Fifth — the true adept, divine will embodied, conscious co-creator with evolution",
+      "christianInitiation": "Resurrection, ego death",
+      "sense": "Spiritual vision — seeing through directly, surrender to law, sensing purpose, seeing spiritual will",
+      "devicStage": "Planetary Devas — Lords of karma, embodiment of divine will and law, patterns and design of evolution"
+    },
+    "Venus": {
+      "number": 6,
+      "metal": "Copper",
+      "chakra": "Brow",
+      "vehicle": "Monadic",
+      "plane": "Monadic — archetypal causes and pure will",
+      "initiation": "Sixth — liberation from individual karma, planetary service, beyond scale, beyond identity",
+      "christianInitiation": "Renunciation — alignment, adeptship",
+      "sense": "Contact with pure archetypal vision",
+      "devicStage": "Cosmic/Solar Devas — serve as vehicles of planetary purpose, above duality, cycles of great choice"
+    },
+    "Moon": {
+      "number": 7,
+      "metal": "Silver",
+      "chakra": "Crown",
+      "vehicle": "Adi / Divine Spark",
+      "plane": "Adi/Divine",
+      "initiation": "Seventh — union with the divine source, cosmic consciousness, Nirvana",
+      "christianInitiation": "Ascension — Nirvana, divine union",
+      "sense": null,
+      "devicStage": null
+    }
   },
   "authorCommentary": []
 }

@@ -1,0 +1,48 @@
+{
+  "tradition": "John Dee",
+  "sourceText": "Heptarchia Mystica; De Heptarchia Mystica; Five Books of Mystery",
+  "period": "1582–1589",
+  "origin": "tradition",
+  "entered": "2026-02-23",
+  "method": "dictation",
+  "order": "chaldean",
+  "note": "Dee's angelic planetary correspondences from his Enochian workings. The angel assignments are consistent with the Kabbalah and the Golden Dawn.",
+  "correspondences": {
+    "Saturn": {
+      "number": 1,
+      "angel": "Cassiel",
+      "metal": "Lead"
+    },
+    "Jupiter": {
+      "number": 2,
+      "angel": "Zadkiel",
+      "metal": "Tin"
+    },
+    "Mars": {
+      "number": 3,
+      "angel": "Samael",
+      "metal": "Iron"
+    },
+    "Sun": {
+      "number": 4,
+      "angel": "Michael",
+      "metal": "Gold"
+    },
+    "Venus": {
+      "number": 5,
+      "angel": "Anael",
+      "metal": "Copper"
+    },
+    "Mercury": {
+      "number": 6,
+      "angel": "Raphael",
+      "metal": "Quicksilver"
+    },
+    "Moon": {
+      "number": 7,
+      "angel": "Gabriel",
+      "metal": "Silver"
+    }
+  },
+  "authorCommentary": []
+}

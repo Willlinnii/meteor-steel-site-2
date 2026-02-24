@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect, useMemo } from 'react';
+import React, { useState, useCallback, useEffect, useMemo, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../auth/AuthContext';
 import { useCoursework } from '../../coursework/CourseworkContext';
@@ -591,7 +591,7 @@ const { cards: storyCards, loaded: storyCardsLoaded } = useStoryCardSync();
 
       {/* Natal Chart Section */}
       <h2 id="section-natal-chart" className="profile-section-title">Natal Chart</h2>
-      {natalChart && <NatalChartDisplay chart={natalChart} />}
+      <NatalChartDisplay chart={natalChart} />
       <NatalChartInput existingChart={natalChart} onSave={updateNatalChart} />
 
       {/* Numerology Section */}
@@ -2211,12 +2211,14 @@ function buildTransitNarrative(crossAspects) {
 }
 
 function NatalChartDisplay({ chart }) {
+  const hasBirthData = chart?.planets?.length > 0;
   const [natalMode, setNatalMode] = useState('tropical');
   const [expandedInfo, setExpandedInfo] = useState(null);
-  const [chartMode, setChartMode] = useState('birth');
+  const [chartMode, setChartMode] = useState('live');
   const [liveSky, setLiveSky] = useState(null);
-  const [liveMode, setLiveMode] = useState('sky-now');
-  const birthYear = chart.birthData?.year || 2000;
+  const [liveMode, setLiveMode] = useState(hasBirthData ? 'transits' : 'sky-now');
+  const hadBirthDataOnMount = useRef(hasBirthData);
+  const birthYear = chart?.birthData?.year || 2000;
   const isSidereal = natalMode === 'sidereal';
 
   const handleLiveToggle = useCallback(async () => {
@@ -2232,6 +2234,20 @@ function NatalChartDisplay({ chart }) {
     }
   }, [liveSky]);
 
+  // Auto-fetch sky data on mount (defaults to live view)
+  useEffect(() => {
+    handleLiveToggle();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // When birth data first appears, switch to transits
+  useEffect(() => {
+    if (!hadBirthDataOnMount.current && chart?.planets?.length > 0) {
+      setLiveMode('transits');
+      hadBirthDataOnMount.current = true;
+    }
+  }, [chart]);
+
   // Live sky derived data
   const currentYear = new Date().getFullYear();
   const liveSkyDual = liveSky ? liveSky.planets.map(p => {
@@ -2241,19 +2257,19 @@ function NatalChartDisplay({ chart }) {
   const currentTropSun = liveSky?.planets?.find(p => p.name === 'Sun')?.sign || 'Unknown';
   const currentSidSun = liveSkyDual.find(p => p.name === 'Sun')?.sidSign || 'Unknown';
   const skyNowNarrative = liveSky ? buildSkyNowNarrative(currentTropSun, currentSidSun) : [];
-  const crossAspects = liveSky ? findCrossAspects(chart.planets, liveSky.planets) : [];
+  const crossAspects = liveSky && chart?.planets ? findCrossAspects(chart.planets, liveSky.planets) : [];
   const transitNarrative = crossAspects.length >= 0 && liveSky ? buildTransitNarrative(crossAspects) : [];
 
   const planets = isSidereal
-    ? chart.planets?.map(p => {
+    ? chart?.planets?.map(p => {
         const s = toSiderealSign(p.longitude, birthYear);
         return { ...p, sign: s.sign, degree: s.degree };
       })
-    : chart.planets;
+    : chart?.planets;
 
-  const asc = isSidereal && chart.ascendant
+  const asc = isSidereal && chart?.ascendant
     ? { ...chart.ascendant, ...toSiderealSign(chart.ascendant.longitude, birthYear) }
-    : chart.ascendant;
+    : chart?.ascendant;
 
   const sun = planets?.find(p => p.name === 'Sun');
   const moon = planets?.find(p => p.name === 'Moon');
@@ -2262,7 +2278,7 @@ function NatalChartDisplay({ chart }) {
     <div className="natal-chart-display">
       {/* Birth Chart / Sky Now toggle */}
       <div className="natal-chart-mode-toggle">
-        <button className={`natal-chart-mode-btn${chartMode === 'birth' ? ' active' : ''}`} onClick={() => setChartMode('birth')}>My Birth Chart</button>
+        {hasBirthData && <button className={`natal-chart-mode-btn${chartMode === 'birth' ? ' active' : ''}`} onClick={() => setChartMode('birth')}>My Birth Chart</button>}
         <button className={`natal-chart-mode-btn${chartMode === 'live' ? ' active' : ''}`} onClick={handleLiveToggle}>The Sky Right Now</button>
       </div>
 
@@ -2635,10 +2651,10 @@ function NatalChartDisplay({ chart }) {
               className={`natal-mode-tab${liveMode === 'sky-now' ? ' active' : ''}`}
               onClick={() => setLiveMode('sky-now')}
             >Sky Now</button>
-            <button
+            {hasBirthData && <button
               className={`natal-mode-tab${liveMode === 'transits' ? ' active' : ''}`}
               onClick={() => setLiveMode('transits')}
-            >Transits</button>
+            >Transits</button>}
           </div>
 
           {!liveSky ? (
@@ -2735,7 +2751,7 @@ function NatalChartDisplay({ chart }) {
                   <span className="natal-synthesis-table-col">Natal</span>
                   <span className="natal-synthesis-table-col">Transit</span>
                 </div>
-                {chart.planets?.map(p => {
+                {chart?.planets?.map(p => {
                   const transit = liveSky.planets.find(t => t.name === p.name);
                   return (
                     <div key={p.name} className="natal-synthesis-table-row">

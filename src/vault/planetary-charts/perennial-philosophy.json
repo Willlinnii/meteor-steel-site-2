@@ -1,0 +1,43 @@
+{
+  "tradition": "Perennial Philosophy",
+  "sourceText": "Aldous Huxley, The Perennial Philosophy; drawing on Vedanta, Neoplatonism, and mystical traditions",
+  "period": "1945 (synthesis of ancient traditions)",
+  "origin": "tradition",
+  "entered": "2026-02-23",
+  "method": "dictation",
+  "order": "ascending",
+  "note": "Five levels of reality, not seven. A distillation of the common metaphysical structure across traditions. No planetary correspondences — these are ontological planes.",
+  "correspondences": {
+    "Sthula Sharira": {
+      "number": 1,
+      "level": "Corporeal / Physical",
+      "description": "Physical reality",
+      "sanskritPrinciple": "Sthula Sharira"
+    },
+    "Prana": {
+      "number": 2,
+      "level": "Vital / Etheric",
+      "description": "The vital force",
+      "sanskritPrinciple": "Prana"
+    },
+    "Manas": {
+      "number": 3,
+      "level": "Subtle / Psychic Realm",
+      "description": "Mind-soul",
+      "sanskritPrinciple": "Manas"
+    },
+    "Buddhi": {
+      "number": 4,
+      "level": "Logos / First Emanation",
+      "description": "The intellectual principle",
+      "sanskritPrinciple": "Buddhi"
+    },
+    "Atman": {
+      "number": 5,
+      "level": "Absolute / Supreme Principle",
+      "description": "The Self",
+      "sanskritPrinciple": "Atman"
+    }
+  },
+  "authorCommentary": []
+}

@@ -1,0 +1,23 @@
+{
+  "tradition": "Pythagorean",
+  "sourceText": "Pythagorean tradition; Nicomachus of Gerasa, Introduction to Arithmetic; Iamblichus, The Theology of Arithmetic",
+  "period": "6th century BCE – 2nd century CE",
+  "origin": "tradition",
+  "entered": "2026-02-23",
+  "method": "dictation",
+  "order": "ascending",
+  "note": "The Pythagorean decad. These are numerical archetypes, not planetary correspondences. The Pythagoreans did not name the planets in this system.",
+  "correspondences": {
+    "Monad": { "number": 1 },
+    "Dyad": { "number": 2 },
+    "Triad": { "number": 3 },
+    "Tetrad": { "number": 4 },
+    "Pentad": { "number": 5 },
+    "Hexad": { "number": 6 },
+    "Heptad": { "number": 7 },
+    "Octad": { "number": 8 },
+    "Ennead": { "number": 9 },
+    "Decad": { "number": 10 }
+  },
+  "authorCommentary": []
+}

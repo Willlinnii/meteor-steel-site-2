@@ -26,6 +26,7 @@ const SUIT_CULTURE_LABELS = { tarot: 'Tarot', ...CULTURE_LABELS };
 
 function ArcanaCard({ position, cards }) {
   const numeral = ROMAN_NUMERALS[position.number] || String(position.number);
+  const imgSrc = `/images/tarot/major-${String(position.number).padStart(2, '0')}.jpg`;
   return (
     <div className="tarot-arcana-block">
       <div className="tarot-position-header">
@@ -33,6 +34,12 @@ function ArcanaCard({ position, cards }) {
         <span className="tarot-name">{position.tarot}</span>
         <span className="tarot-correspondence">{position.correspondence}</span>
       </div>
+      <img
+        src={imgSrc}
+        alt={position.tarot}
+        className="tarot-card-image"
+        loading="lazy"
+      />
       <div className="tarot-culture-grid">
         {cards.map(card => (
           <div key={card.culture} className="tarot-culture-card">

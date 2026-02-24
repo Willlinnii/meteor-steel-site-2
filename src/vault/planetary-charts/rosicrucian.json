@@ -1,19 +1,69 @@
 {
   "tradition": "Rosicrucian",
-  "sourceText": "Fama Fraternitatis; Chymical Wedding; Cosmo-Conception (Heindel)",
-  "period": "1614-1909",
+  "sourceText": "Rosarium Philosophorum; Fama Fraternitatis; Chymical Wedding of Christian Rosenkreutz",
+  "period": "1614–17th century",
   "origin": "tradition",
   "entered": "2026-02-23",
-  "method": "transcribed",
-  "order": "evolutionary",
+  "method": "dictation",
+  "order": "chaldean",
+  "note": "The seven alchemical stages of the Great Work mapped to planets in Chaldean order. Each stage represents both a laboratory process and an inner transformation. The sequence moves from calcination (burning to prima materia) through to the crystallization of the Philosopher's Stone.",
   "correspondences": {
-    "Sun":     {},
-    "Moon":    {},
-    "Mercury": {},
-    "Venus":   {},
-    "Mars":    {},
-    "Jupiter": {},
-    "Saturn":  {}
+    "Saturn": {
+      "number": 1,
+      "classicalPlanet": "Saturn",
+      "stage": "Calcination",
+      "alchemicalPhase": "Nigredo (Blackening)",
+      "description": "Smelting to prima materia — burning away ego, attachments, and false structures to ash",
+      "metal": "Lead"
+    },
+    "Jupiter": {
+      "number": 2,
+      "classicalPlanet": "Jupiter",
+      "stage": "Dissolution",
+      "alchemicalPhase": "Albedo (Whitening)",
+      "description": "Dissolving with water — liquefaction, the unconscious floods in, old structures wash away",
+      "metal": "Tin"
+    },
+    "Mars": {
+      "number": 3,
+      "classicalPlanet": "Mars",
+      "stage": "Separation",
+      "alchemicalPhase": "Separatio",
+      "description": "Extracting the essential — analysis, cutting, dissecting, sorting what matters from what does not",
+      "metal": "Iron"
+    },
+    "Sun": {
+      "number": 4,
+      "classicalPlanet": "Sun",
+      "stage": "Conjunction",
+      "alchemicalPhase": "Coniunctio",
+      "description": "Union of opposites — the sacred marriage of conscious and unconscious",
+      "metal": "Gold"
+    },
+    "Venus": {
+      "number": 5,
+      "classicalPlanet": "Venus",
+      "stage": "Fermentation",
+      "alchemicalPhase": "Putrefaction and Rebirth",
+      "description": "Putrefaction, fermentation, rebirth, and soul awakening — the old self decays so the new can grow",
+      "metal": "Copper"
+    },
+    "Mercury": {
+      "number": 6,
+      "classicalPlanet": "Mercury",
+      "stage": "Distillation",
+      "alchemicalPhase": "Distillatio",
+      "description": "Purifying and elevating essence through vapor — repeated cycles of refining",
+      "metal": "Quicksilver"
+    },
+    "Moon": {
+      "number": 7,
+      "classicalPlanet": "Moon",
+      "stage": "Coagulation",
+      "alchemicalPhase": "Philosopher's Stone",
+      "description": "Crystallizing the Philosopher's Stone — final solidification of the perfected substance",
+      "metal": "Silver"
+    }
   },
   "authorCommentary": []
 }

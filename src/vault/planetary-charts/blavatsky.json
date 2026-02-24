@@ -1,0 +1,76 @@
+{
+  "tradition": "H.P. Blavatsky",
+  "sourceText": "The Secret Doctrine; The Key to Theosophy; Isis Unveiled",
+  "period": "1877–1891",
+  "origin": "tradition",
+  "entered": "2026-02-23",
+  "method": "dictation",
+  "order": "chaldean",
+  "note": "Blavatsky's seven principles of human and cosmic constitution. Numbered 1 (densest) to 7 (most subtle). Planet mapping follows Theosophical Chaldean order (same as Besant and Leadbeater).",
+  "correspondences": {
+    "Sthula Sharira": {
+      "number": 1,
+      "classicalPlanet": "Saturn",
+      "metal": "Lead",
+      "humanAspect": "Body — the physical vehicle",
+      "cosmicAspect": "Earth",
+      "color": null,
+      "seat": "Seat of animal life"
+    },
+    "Prana": {
+      "number": 2,
+      "classicalPlanet": "Jupiter",
+      "metal": "Tin",
+      "humanAspect": "Life Essence — prana and vitality",
+      "cosmicAspect": "Life essence and energy",
+      "color": "Orange",
+      "seat": null
+    },
+    "Linga Sharira": {
+      "number": 3,
+      "classicalPlanet": "Mars",
+      "metal": "Iron",
+      "humanAspect": "Astral Body — the astral double",
+      "cosmicAspect": "Astral ideation, reflection, and the terrestrial",
+      "color": null,
+      "seat": null
+    },
+    "Kama Rupa": {
+      "number": 4,
+      "classicalPlanet": "Sun",
+      "metal": "Gold",
+      "humanAspect": "Animal Soul — desire body",
+      "cosmicAspect": "Cosmic, even chaotic, energy",
+      "color": "Red",
+      "seat": null
+    },
+    "Manas": {
+      "number": 5,
+      "classicalPlanet": "Mercury",
+      "metal": "Mercury",
+      "humanAspect": "Human Soul — mind (Manas)",
+      "cosmicAspect": "Universal cosmic intelligence",
+      "color": null,
+      "seat": null
+    },
+    "Buddhi": {
+      "number": 6,
+      "classicalPlanet": "Venus",
+      "metal": "Copper",
+      "humanAspect": "Spiritual Soul",
+      "cosmicAspect": "Universal ideation (latent)",
+      "color": "Yellow",
+      "seat": null
+    },
+    "Atman": {
+      "number": 7,
+      "classicalPlanet": "Moon",
+      "metal": "Silver",
+      "humanAspect": "Universal Spirit — Atman",
+      "cosmicAspect": "Unmanifested Logos — First Logos",
+      "color": null,
+      "seat": null
+    }
+  },
+  "authorCommentary": []
+}

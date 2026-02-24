@@ -1,0 +1,55 @@
+{
+  "tradition": "Annie Besant / Theosophy",
+  "sourceText": "The Ancient Wisdom; A Study in Consciousness; Man and His Bodies",
+  "period": "1893-1933",
+  "origin": "tradition",
+  "entered": "2026-02-23",
+  "method": "dictation",
+  "order": "chaldean",
+  "note": "Same Theosophical Chaldean order as Leadbeater — Saturn(1) through Moon(7), Mercury and Venus swapped from standard Chaldean",
+  "correspondences": {
+    "Saturn": {
+      "number": 1,
+      "metal": "Lead",
+      "vehicle": "Physical Body (Dense)",
+      "plane": "Physical"
+    },
+    "Jupiter": {
+      "number": 2,
+      "metal": "Tin",
+      "vehicle": "Etheric Double",
+      "plane": "Astral"
+    },
+    "Mars": {
+      "number": 3,
+      "metal": "Iron",
+      "vehicle": "Prana / Vitality",
+      "plane": "Mental"
+    },
+    "Sun": {
+      "number": 4,
+      "metal": "Gold",
+      "vehicle": "Kama / Desire",
+      "plane": "Buddhic"
+    },
+    "Mercury": {
+      "number": 5,
+      "metal": "Mercury",
+      "vehicle": "Manas / Mind",
+      "plane": "Atmic / Nirvanic"
+    },
+    "Venus": {
+      "number": 6,
+      "metal": "Copper",
+      "vehicle": "Buddhi / Spiritual Soul",
+      "plane": "Anupadaka / Monadic"
+    },
+    "Moon": {
+      "number": 7,
+      "metal": "Silver",
+      "vehicle": "Atma / Spirit / Inner Higher Ego",
+      "plane": "Adi / Unmanifest Source"
+    }
+  },
+  "authorCommentary": []
+}

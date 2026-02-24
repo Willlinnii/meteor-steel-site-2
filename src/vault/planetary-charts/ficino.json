@@ -1,0 +1,97 @@
+{
+  "tradition": "Marsilio Ficino",
+  "sourceText": "De Vita (Three Books on Life); Platonic Theology; De Amore",
+  "period": "1433–1499",
+  "origin": "tradition",
+  "entered": "2026-02-23",
+  "method": "dictation",
+  "order": "ascending",
+  "note": "Ficino's Neoplatonic cosmology. Eleven levels from the sublunary material realm through the planetary spheres to The One. Ficino synthesized Plato, Plotinus, and Hermeticism into a unified system of celestial influence and spiritual ascent.",
+  "correspondences": {
+    "Sublunary": {
+      "number": 1,
+      "classicalPlanet": null,
+      "description": "The material realm, physical elements",
+      "element": "Earth, Water, Air, Fire (the four elements)",
+      "deity": "Demeter / Gaia"
+    },
+    "Moon": {
+      "number": 2,
+      "classicalPlanet": "Moon",
+      "metal": "Silver",
+      "description": "Emotions, rhythms, and fluidity",
+      "element": "Silver",
+      "deity": "Artemis / Selene / Luna"
+    },
+    "Mercury": {
+      "number": 3,
+      "classicalPlanet": "Mercury",
+      "metal": "Mercury",
+      "description": "Communication, mind, agility, and reasoning",
+      "element": "Mercury",
+      "deity": "Hermes"
+    },
+    "Venus": {
+      "number": 4,
+      "classicalPlanet": "Venus",
+      "metal": "Copper",
+      "description": "Love and harmony, aesthetic attention, aesthetic attraction",
+      "element": "Copper",
+      "deity": "Aphrodite"
+    },
+    "Sun": {
+      "number": 5,
+      "classicalPlanet": "Sun",
+      "metal": "Gold",
+      "description": "Vitality, illumination of intellect, and your vital core",
+      "element": "Gold",
+      "deity": "Apollo"
+    },
+    "Mars": {
+      "number": 6,
+      "classicalPlanet": "Mars",
+      "metal": "Iron",
+      "description": "Courage, assertiveness, action, and the drive to overcome",
+      "element": "Iron",
+      "deity": "Ares"
+    },
+    "Jupiter": {
+      "number": 7,
+      "classicalPlanet": "Jupiter",
+      "metal": "Tin",
+      "description": "Wisdom, justice, and expansion",
+      "element": "Tin",
+      "deity": "Zeus"
+    },
+    "Saturn": {
+      "number": 8,
+      "classicalPlanet": "Saturn",
+      "metal": "Lead",
+      "description": "Contemplation and introspection",
+      "element": "Lead",
+      "deity": "Kronos"
+    },
+    "Anima Mundi": {
+      "number": 9,
+      "classicalPlanet": null,
+      "description": "Animating reality — order and harmony",
+      "element": "Animating principle",
+      "deity": "The Universal Soul / Animating Spirit"
+    },
+    "Nous": {
+      "number": 10,
+      "classicalPlanet": null,
+      "description": "The archetypal realm",
+      "element": "Archetypal principle",
+      "deity": "Pure Intelligence"
+    },
+    "The One": {
+      "number": 11,
+      "classicalPlanet": null,
+      "description": "Transcendent reality — unity, the divine source",
+      "element": "Source",
+      "deity": null
+    }
+  },
+  "authorCommentary": []
+}

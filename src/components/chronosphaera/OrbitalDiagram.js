@@ -136,6 +136,10 @@ const ZODIAC_OUTER_R = 340;
 const ZODIAC_TEXT_R = 320;
 const CARDINAL_R = (ZODIAC_INNER_R + ZODIAC_OUTER_R) / 2; // midpoint of band
 const MAX_STAR_R = 295; // just inside zodiac inner ring
+const STAR_SPHERE_INNER = ZODIAC_OUTER_R + 1; // just outside zodiac band
+const STAR_SPHERE_OUTER = ZODIAC_OUTER_R + 1 + Math.round((ZODIAC_OUTER_R - ZODIAC_INNER_R) / 3);
+const STAR_SPHERE_MID = (STAR_SPHERE_INNER + STAR_SPHERE_OUTER) / 2;
+const STAR_SPHERE_WIDTH = STAR_SPHERE_OUTER - STAR_SPHERE_INNER;
 
 // Build an SVG arc path for text to follow
 function arcPath(cx, cy, r, startDeg, endDeg, sweep) {
@@ -252,11 +256,30 @@ function ensureYTApi() {
   });
 }
 
-export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPlanet, hoveredPlanet, selectedSign, onSelectSign, selectedCardinal, onSelectCardinal, selectedEarth, onSelectEarth, showCalendar, onToggleCalendar, selectedMonth, onSelectMonth, showMedicineWheel, onToggleMedicineWheel, selectedWheelItem, onSelectWheelItem, chakraViewMode, onToggleChakraView, onClickOrderLabel, videoUrl, onCloseVideo, ybrActive, ybrCurrentStopIndex, ybrStopProgress, ybrJourneySequence, onToggleYBR, ybrAutoStart, clockMode, onToggleClock, showMonomyth, showMeteorSteel, monomythStages, selectedMonomythStage, onSelectMonomythStage, onToggleMonomyth, monomythModel, showCycles, onSelectCycleSegment, activeCulture, showFallenStarlight, showStoryOfStories, onToggleStarlight, starlightStages, selectedStarlightStage, onSelectStarlightStage, selectedConstellation, onSelectConstellation, zodiacMode }) {
+export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPlanet, hoveredPlanet, selectedSign, onSelectSign, selectedCardinal, onSelectCardinal, selectedEarth, onSelectEarth, showCalendar, onToggleCalendar, selectedMonth, onSelectMonth, showMedicineWheel, onToggleMedicineWheel, selectedWheelItem, onSelectWheelItem, chakraViewMode, onToggleChakraView, onClickOrderLabel, videoUrl, onCloseVideo, ybrActive, ybrCurrentStopIndex, ybrStopProgress, ybrJourneySequence, onToggleYBR, ybrAutoStart, clockMode, onToggleClock, showMonomyth, showMeteorSteel, monomythStages, selectedMonomythStage, onSelectMonomythStage, onToggleMonomyth, monomythModel, showCycles, onSelectCycleSegment, activeCulture, showFallenStarlight, showStoryOfStories, onToggleStarlight, starlightStages, selectedStarlightStage, onSelectStarlightStage, selectedConstellation, onSelectConstellation, zodiacMode, onSelectStarSphere, starSphereActive }) {
   const wrapperRef = useRef(null);
   const [tooltip, setTooltip] = useState(null);
   const { hasPurchase } = useProfile();
   const navigate = useNavigate();
+  const [starSphereHover, setStarSphereHover] = useState(false);
+
+  // Pre-generate star positions for the star sphere ring (narrow band outside zodiac)
+  const starBeltDots = useMemo(() => {
+    const dots = [];
+    let seed = 42;
+    const rand = () => { seed = (seed * 16807 + 0) % 2147483647; return seed / 2147483647; };
+    for (let i = 0; i < 80; i++) {
+      const angle = rand() * Math.PI * 2;
+      const r = STAR_SPHERE_INNER + rand() * STAR_SPHERE_WIDTH;
+      dots.push({
+        x: CX + r * Math.cos(angle),
+        y: CY + r * Math.sin(angle),
+        r: 0.3 + rand() * 0.9,
+        a: 0.3 + rand() * 0.7,
+      });
+    }
+    return dots;
+  }, []);
   const [starlightGateId, setStarlightGateId] = useState(null); // null, 'fallen-starlight', or 'story-of-stories'
   const [medicineWheelGateId, setMedicineWheelGateId] = useState(null);
   const hasFallenStarlight = hasPurchase('fallen-starlight');
@@ -1274,6 +1297,7 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
         <circle cx={CX} cy={CY} r={ZODIAC_INNER_R} fill="none" stroke="rgba(201, 169, 97, 0.18)" strokeWidth="0.8" />
         <circle cx={CX} cy={CY} r={ZODIAC_OUTER_R} fill="none" stroke="rgba(201, 169, 97, 0.18)" strokeWidth="0.8" />
 
+
         {/* 12 divider lines between signs (every 30°, aligned with equinox/solstice) */}
         {ZODIAC.map((_, i) => {
           const angle = -(i * 30);
@@ -1427,6 +1451,38 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
         })}
 
         </g>{/* end zodiac/month rotated group */}
+
+        {/* Star sphere — narrow ring just outside the zodiac band */}
+        {onSelectStarSphere && (
+          <g>
+            {/* Border circles for the star sphere ring */}
+            <circle cx={CX} cy={CY} r={STAR_SPHERE_INNER} fill="none"
+              stroke={(starSphereHover || starSphereActive) ? 'rgba(255, 255, 240, 0.35)' : 'rgba(255, 255, 240, 0.08)'}
+              strokeWidth="0.6" style={{ transition: 'stroke 0.3s' }} />
+            <circle cx={CX} cy={CY} r={STAR_SPHERE_OUTER} fill="none"
+              stroke={(starSphereHover || starSphereActive) ? 'rgba(255, 255, 240, 0.35)' : 'rgba(255, 255, 240, 0.08)'}
+              strokeWidth="0.6" style={{ transition: 'stroke 0.3s' }} />
+            {/* Star dots — always faintly visible, brighten on hover */}
+            {starBeltDots.map((s, i) => (
+              <circle key={`star-${i}`} cx={s.x} cy={s.y} r={s.r}
+                fill={`rgba(255, 255, 240, ${(starSphereHover || starSphereActive) ? s.a : s.a * 0.25})`}
+                style={{ transition: 'fill 0.3s', pointerEvents: 'none' }} />
+            ))}
+            {/* Clickable hit target */}
+            <circle
+              cx={CX} cy={CY}
+              r={STAR_SPHERE_MID}
+              fill="none"
+              stroke="rgba(255, 255, 240, 0.01)"
+              strokeWidth={STAR_SPHERE_WIDTH}
+              style={{ cursor: 'pointer' }}
+              onClick={(e) => { e.stopPropagation(); onSelectStarSphere(); }}
+              onMouseEnter={(e) => { setStarSphereHover(true); handleTooltipEnter('starSphere', 'Sphere of Fixed Stars', e); }}
+              onMouseMove={handleTooltipMove}
+              onMouseLeave={() => { setStarSphereHover(false); handleTooltipLeave(); }}
+            />
+          </g>
+        )}
 
         {/* Monomyth outer ring — 8 stages counter-clockwise, Surface at noon (top), Nadir at midnight (bottom) */}
         {showMonomyth && monomythStages && (() => {
@@ -2661,7 +2717,8 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
             !chakraViewMode ? 'Show chakra body viewer (Chaldean)' :
             chakraViewMode === 'chaldean' ? 'Chaldean Order — click for Heliocentric' :
             chakraViewMode === 'heliocentric' ? 'Heliocentric Order — click for Weekday' :
-            'Weekday Order — click to exit'
+            chakraViewMode === 'weekdays' ? 'Weekday Order — click for Evolutionary' :
+            'Evolutionary Order — click for Chaldean'
           }
         >
           <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" stroke="none">

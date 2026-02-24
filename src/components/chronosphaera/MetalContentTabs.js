@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { useStoryForge, useYBRMode } from '../../App';
+import { ERA_GROUPS } from './usePerspective';
 
 const TABS = [
   { id: 'overview',  label: 'Overview' },
@@ -12,12 +13,128 @@ const TABS = [
   { id: 'synthesis', label: 'Synthesis' },
 ];
 
-export default function MetalContentTabs({ activeTab, onSelectTab, playlistUrl, videoActive, onToggleVideo, onTogglePersonaChat, personaChatActive, getTabClass, onToggleYBR, ybrActive }) {
+function PerspectivePicker({ activePerspective, onSelectPerspective, populatedPerspectives, perspectiveLabel }) {
+  const [panelOpen, setPanelOpen] = useState(false);
+  const [expandedEra, setExpandedEra] = useState(null);
+  const wrapperRef = useRef(null);
+  const isMythouse = !activePerspective || activePerspective === 'mythouse';
+
+  // Build set of populated IDs for fast lookup
+  const populatedIds = React.useMemo(
+    () => new Set((populatedPerspectives || []).map(p => p.id)),
+    [populatedPerspectives]
+  );
+
+  // Build id→tradition label map from populated perspectives
+  const labelMap = React.useMemo(() => {
+    const m = {};
+    for (const p of (populatedPerspectives || [])) m[p.id] = p.tradition;
+    return m;
+  }, [populatedPerspectives]);
+
+  // Auto-expand the era containing the active tradition when panel opens
+  useEffect(() => {
+    if (panelOpen && !isMythouse) {
+      const era = ERA_GROUPS.find(g => g.traditions.includes(activePerspective));
+      if (era) setExpandedEra(era.id);
+    }
+  }, [panelOpen, activePerspective, isMythouse]);
+
+  // Close on outside click
+  useEffect(() => {
+    if (!panelOpen) return;
+    function handleMouseDown(e) {
+      if (wrapperRef.current && !wrapperRef.current.contains(e.target)) {
+        setPanelOpen(false);
+      }
+    }
+    document.addEventListener('mousedown', handleMouseDown);
+    return () => document.removeEventListener('mousedown', handleMouseDown);
+  }, [panelOpen]);
+
+  const togglePanel = useCallback(() => {
+    setPanelOpen(prev => !prev);
+  }, []);
+
+  const handleEraClick = useCallback((eraId) => {
+    setExpandedEra(prev => prev === eraId ? null : eraId);
+  }, []);
+
+  const handleSelect = useCallback((id) => {
+    onSelectPerspective(id);
+    setPanelOpen(false);
+  }, [onSelectPerspective]);
+
+  return (
+    <div className="perspective-picker" ref={wrapperRef}>
+      <button
+        className={`metal-tab perspective-cycle-tab${!isMythouse ? ' perspective-active' : ''}${panelOpen ? ' perspective-open' : ''}`}
+        onClick={togglePanel}
+        title="Choose tradition lens"
+      >
+        {perspectiveLabel || 'Mythouse'}
+        <span className={`perspective-chevron${panelOpen ? ' open' : ''}`}>&#9662;</span>
+      </button>
+      {panelOpen && (
+        <div className="perspective-dropdown">
+          <button
+            className={`perspective-tradition${isMythouse ? ' active' : ''}`}
+            onClick={() => handleSelect('mythouse')}
+          >
+            Mythouse
+          </button>
+          <div className="perspective-divider" />
+          {ERA_GROUPS.map(era => {
+            const visibleTraditions = era.traditions.filter(id => populatedIds.has(id));
+            if (visibleTraditions.length === 0) return null;
+            const isExpanded = expandedEra === era.id;
+            return (
+              <div key={era.id} className="perspective-era">
+                <button
+                  className={`perspective-era-header${isExpanded ? ' expanded' : ''}`}
+                  onClick={() => handleEraClick(era.id)}
+                >
+                  <span className={`perspective-chevron era-chevron${isExpanded ? ' open' : ''}`}>&#9662;</span>
+                  <span className="perspective-era-label">{era.label}</span>
+                  <span className="perspective-era-period">{era.period}</span>
+                </button>
+                {isExpanded && (
+                  <div className="perspective-era-list">
+                    {visibleTraditions.map(id => (
+                      <button
+                        key={id}
+                        className={`perspective-tradition${activePerspective === id ? ' active' : ''}`}
+                        onClick={() => handleSelect(id)}
+                      >
+                        {labelMap[id] || id}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default function MetalContentTabs({ activeTab, onSelectTab, playlistUrl, videoActive, onToggleVideo, onTogglePersonaChat, personaChatActive, getTabClass, onToggleYBR, ybrActive, perspectiveLabel, onSelectPerspective, activePerspective, populatedPerspectives, tabs }) {
   const { forgeMode } = useStoryForge();
   const { ybrMode } = useYBRMode();
+  const displayTabs = tabs || TABS;
   return (
     <div className="metal-tabs">
-      {TABS.map(t => (
+      {onSelectPerspective && (
+        <PerspectivePicker
+          activePerspective={activePerspective}
+          onSelectPerspective={onSelectPerspective}
+          populatedPerspectives={populatedPerspectives}
+          perspectiveLabel={perspectiveLabel}
+        />
+      )}
+      {displayTabs.map(t => (
         <button
           key={t.id}
           className={`metal-tab${activeTab === t.id ? ' active' : ''} ${getTabClass ? getTabClass(t.id) : ''}`}

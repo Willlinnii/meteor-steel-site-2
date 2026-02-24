@@ -192,3 +192,157 @@
   opacity: 0.4;
   cursor: not-allowed;
 }
+
+/* ── History toggle button ── */
+
+.atlas-history-toggle {
+  background: none;
+  border: 1px solid rgba(196, 113, 58, 0.25);
+  color: rgba(196, 113, 58, 0.6);
+  font-size: 0.9rem;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  line-height: 1;
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+}
+
+.atlas-history-toggle:hover {
+  border-color: rgba(196, 113, 58, 0.6);
+  color: rgba(196, 113, 58, 0.8);
+}
+
+/* ── Sidebar backdrop ── */
+
+.atlas-sidebar-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 200;
+}
+
+/* ── Sidebar panel ── */
+
+.atlas-sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 280px;
+  max-width: 80vw;
+  background: var(--bg-dark, #1a1410);
+  border-right: 1px solid rgba(196, 113, 58, 0.3);
+  display: flex;
+  flex-direction: column;
+  z-index: 201;
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
+}
+
+.atlas-sidebar.open {
+  transform: translateX(0);
+}
+
+.atlas-sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 16px 12px;
+  border-bottom: 1px solid rgba(196, 113, 58, 0.25);
+  flex-shrink: 0;
+}
+
+.atlas-sidebar-title {
+  font-family: 'Cinzel', serif;
+  font-size: 0.95rem;
+  color: var(--ember, #c4713a);
+}
+
+.atlas-sidebar-close {
+  background: none;
+  border: none;
+  color: var(--text-muted, #8a7e6e);
+  font-size: 1.4rem;
+  cursor: pointer;
+  padding: 0 4px;
+  line-height: 1;
+  transition: color 0.2s;
+}
+
+.atlas-sidebar-close:hover {
+  color: var(--text-main, #e8dcc8);
+}
+
+.atlas-sidebar-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px 0;
+}
+
+.atlas-sidebar-empty {
+  text-align: center;
+  font-style: italic;
+  color: var(--text-muted, #8a7e6e);
+  padding: 32px 16px;
+  font-size: 0.9rem;
+}
+
+.atlas-sidebar-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  background: none;
+  border: none;
+  border-left: 3px solid transparent;
+  padding: 10px 16px 10px 13px;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.atlas-sidebar-item:hover {
+  background: rgba(196, 113, 58, 0.08);
+}
+
+.atlas-sidebar-item.active {
+  border-left-color: var(--ember, #c4713a);
+}
+
+.atlas-sidebar-item-name {
+  font-family: 'Cinzel', serif;
+  font-size: 0.85rem;
+  color: var(--text-main, #e8dcc8);
+  line-height: 1.3;
+}
+
+.atlas-sidebar-item.active .atlas-sidebar-item-name {
+  color: var(--ember, #c4713a);
+}
+
+.atlas-sidebar-item-group {
+  font-family: 'Cinzel', serif;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted, #8a7e6e);
+  margin-top: 1px;
+}
+
+.atlas-sidebar-item-snippet {
+  font-family: 'EB Garamond', 'Garamond', serif;
+  font-size: 0.82rem;
+  color: var(--text-muted, #8a7e6e);
+  margin-top: 4px;
+  line-height: 1.35;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}

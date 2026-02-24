@@ -1,19 +1,139 @@
 {
   "tradition": "Dante Alighieri",
-  "sourceText": "Paradiso (Divine Comedy)",
+  "sourceText": "The Divine Comedy (Inferno, Purgatorio, Paradiso)",
   "period": "1320",
   "origin": "tradition",
   "entered": "2026-02-23",
   "method": "transcribed",
   "order": "ascending",
+  "note": "The same seven planets repeat three times across the register — as descent (Hell), purgation (Purgatory), and ascent (Paradise). Only Paradise names the planets explicitly. The other two emerge when Dante's sins are mapped through their planetary correspondences.",
   "correspondences": {
-    "Sun":     {},
-    "Moon":    {},
-    "Mercury": {},
-    "Venus":   {},
-    "Mars":    {},
-    "Jupiter": {},
-    "Saturn":  {}
+    "Moon": {
+      "number": 1,
+      "metal": "Silver",
+      "paradise": "First Heaven — souls who broke sacred vows. Deficient in constancy of faith.",
+      "paradiseVirtue": "Faith",
+      "purgatory": "Second Terrace — Envy (Invidia). Eyes sewn shut with iron wire.",
+      "purgatoryTerrace": 2,
+      "purgatoryVirtue": "Generosity / Kindness",
+      "hell": "Sixth Circle — Heresy. Entombed in flaming sepulchres.",
+      "hellCircle": 6,
+      "hellNote": "Satan's fall is simultaneously the original envy and the original heresy: 'I will be like the Most High.' The Moon reflects the Sun's light but can never be its source. Heresy is the hinge of Hell — where appetite becomes intention."
+    },
+    "Mercury": {
+      "number": 2,
+      "metal": "Mercury",
+      "paradise": "Second Heaven — souls who did good for fame and honor rather than God alone.",
+      "paradiseVirtue": "Just Ambition / Hope",
+      "purgatory": "Fifth Terrace — Avarice (Avaritia). Bound face-down to the earth.",
+      "purgatoryTerrace": 5,
+      "purgatoryVirtue": "Generosity / Poverty of Spirit",
+      "hell": "Fourth Circle — Avarice and Prodigality. Pushing great weights in endless circles.",
+      "hellCircle": 4
+    },
+    "Venus": {
+      "number": 3,
+      "metal": "Copper",
+      "paradise": "Third Heaven — souls whose love was excessive but redirected toward God.",
+      "paradiseVirtue": "Love / Charity",
+      "purgatory": "Seventh Terrace — Lust (Luxuria). Walking through refining fire.",
+      "purgatoryTerrace": 7,
+      "purgatoryVirtue": "Chastity",
+      "hell": "Second Circle — Lust. Swept in an eternal storm, never at rest.",
+      "hellCircle": 2
+    },
+    "Sun": {
+      "number": 4,
+      "metal": "Gold",
+      "paradise": "Fourth Heaven — the great theologians and doctors of the Church. Twin rings of light.",
+      "paradiseVirtue": "Wisdom / Prudence",
+      "purgatory": "First Terrace — Pride (Superbia). Bent double under crushing stones.",
+      "purgatoryTerrace": 1,
+      "purgatoryVirtue": "Humility",
+      "hell": "Seventh Circle — Violence (three rings: against others, self, God/nature).",
+      "hellCircle": 7,
+      "hellNote": "Violence as the Sun's shadow: sovereignty that becomes domination. The self asserting itself over others through force."
+    },
+    "Mars": {
+      "number": 5,
+      "metal": "Iron",
+      "paradise": "Fifth Heaven — the warriors of faith. Souls form a luminous cross.",
+      "paradiseVirtue": "Fortitude / Courage",
+      "purgatory": "Third Terrace — Wrath (Ira). Blinded by acrid smoke.",
+      "purgatoryTerrace": 3,
+      "purgatoryVirtue": "Meekness / Patience",
+      "hell": "Fifth Circle — Wrath and Sullenness. Fighting on the surface; sullen gurgling beneath the Styx.",
+      "hellCircle": 5
+    },
+    "Jupiter": {
+      "number": 6,
+      "metal": "Tin",
+      "paradise": "Sixth Heaven — the just rulers. Souls spell out DILIGITE IUSTITIAM and form an eagle.",
+      "paradiseVirtue": "Justice",
+      "purgatory": "Sixth Terrace — Gluttony (Gula). Starving before unreachable fruit trees.",
+      "purgatoryTerrace": 6,
+      "purgatoryVirtue": "Temperance / Abstinence",
+      "hell": "Third Circle — Gluttony. Lying in freezing rain and filth, gnawed by Cerberus.",
+      "hellCircle": 3
+    },
+    "Saturn": {
+      "number": 7,
+      "metal": "Lead",
+      "paradise": "Seventh Heaven — the contemplatives. A golden ladder rises beyond sight.",
+      "paradiseVirtue": "Temperance / Contemplation",
+      "purgatory": "Fourth Terrace — Sloth (Acedia). Running ceaselessly to make up for spiritual laziness.",
+      "purgatoryTerrace": 4,
+      "purgatoryVirtue": "Zeal / Diligence",
+      "purgatoryNote": "The hinge sin. Saturn/Saturday/Sabbath at the exact center of purgation — separating the spiritual sins (pride, envy, wrath) from the carnal sins (avarice, gluttony, lust).",
+      "hell": "First Circle — Limbo. No torment, only sighing in darkness without hope.",
+      "hellCircle": 1,
+      "hellNote": "Limbo as spiritual sloth: not laziness but the failure to engage. Virtuous pagans who lived well but never acted on faith."
+    }
   },
-  "authorCommentary": []
+  "beyondTheSeven": {
+    "fixedStars": {
+      "paradise": "Eighth Heaven — the Triumph of Christ. The theological virtues tested: Faith, Hope, Love.",
+      "hell": "Eighth Circle (Malebolge) — Fraud. Ten concentric pouches of deliberate deception.",
+      "note": "Beyond the seven planetary sins. Fraud is reason turned against others — intellect weaponized."
+    },
+    "primumMobile": {
+      "paradise": "Ninth Heaven — the Angelic Orders. The divine love that moves all things.",
+      "hell": "Ninth Circle (Cocytus) — Treachery. Four frozen zones. Satan at the center.",
+      "note": "The deepest sin mirrors the highest heaven. Treachery is the perversion of divine love into absolute betrayal."
+    },
+    "empyrean": {
+      "paradise": "Tenth Heaven — the Empyrean. God's presence. The Beatific Vision. The Celestial Rose.",
+      "note": "Beyond motion, beyond matter. No hellish counterpart — evil has no ultimate ground."
+    }
+  },
+  "threeOrders": {
+    "paradise": {
+      "label": "Ascending Chaldean",
+      "sequence": ["Moon", "Mercury", "Venus", "Sun", "Mars", "Jupiter", "Saturn"],
+      "note": "Planets explicit. The soul ascends from Earth through the spheres toward God."
+    },
+    "purgatory": {
+      "label": "Weekday Order — Saturn Centered",
+      "sequence": ["Sun", "Moon", "Mars", "Saturn", "Mercury", "Jupiter", "Venus"],
+      "weekdays": ["Sunday", "Monday", "Tuesday", "Saturday", "Wednesday", "Thursday", "Friday"],
+      "note": "The Gregorian sin order (Pride through Lust) mapped through Mythouse correspondences. Saturday/Sabbath at the center — the day of rest as the pivot between spiritual and carnal sins."
+    },
+    "hell": {
+      "label": "Weekday Order Reversed",
+      "sequence": ["Saturn", "Venus", "Jupiter", "Mercury", "Mars", "Moon", "Sun"],
+      "weekdays": ["Saturday", "Friday", "Thursday", "Wednesday", "Tuesday", "Monday", "Sunday"],
+      "note": "The weekday order running backward. Descent from the surface (Saturn/Sloth/Limbo) to the bottom (Sun/Pride/Violence). Circles 8–9 extend beyond the seven."
+    }
+  },
+  "authorCommentary": [
+    "The same seven repeat three times across the register, like three octaves of the same scale.",
+    "Paradise makes the ascending Chaldean order explicit — Moon through Saturn — with a virtue at each sphere.",
+    "Purgatory uses the standard Gregorian sin ordering (Pride through Lust). Reverse-engineered through the Mythouse sin-planet mapping, this yields the weekday order with Saturn/Saturday at the center — the Sabbath as the hinge between spiritual and carnal sins.",
+    "Hell arranges its circles such that the sins, mapped to their corresponding planets, produce the weekday order in reverse — descending from Saturday (Limbo/Sloth) to Sunday (Violence/Pride).",
+    "Circle 6 (Heresy) maps to Moon/Envy through Satan's fall: 'I will be like the Most High' is the original envy and the original heresy in a single act. The Moon reflects the Sun but can never be its source.",
+    "Violence (Circle 7) maps to Sun/Pride — sovereignty's shadow. The self that should illuminate instead dominates.",
+    "Both Purgatory and Hell have a hinge sin at the structural center: Sloth/Saturn in Purgatory (terrace 4 of 7), Heresy/Moon in Hell (circle 6 of 9). Both mark where passive sin becomes active choice.",
+    "Circles 8–9 (Fraud, Treachery) and Heavens 8–9 (Fixed Stars, Primum Mobile) form a 7+2 structure in both realms — the planetary framework bookended by two transcendent levels.",
+    "Dante did not name planets in Hell or Purgatory. The planetary orders emerge only when his sin sequences are read through the Mythouse correspondences. The Chaldean order he made explicit in Paradise is the generating pattern from which the weekday order derives — and that weekday order, transformed, structures the other two realms."
+  ]
 }

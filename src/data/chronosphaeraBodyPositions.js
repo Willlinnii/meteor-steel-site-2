@@ -6,17 +6,19 @@
  * pick up whatever data lives at their current position.
  */
 
-// The 3 planet orderings (Crown → Root, index 0 → 6)
+// The 4 planet orderings (Crown → Root, index 0 → 6)
 export const CHAKRA_ORDERINGS = {
-  chaldean:     ['Saturn','Jupiter','Mars','Sun','Venus','Mercury','Moon'],
-  heliocentric: ['Sun','Mercury','Venus','Moon','Mars','Jupiter','Saturn'],
-  weekdays:     ['Sun','Moon','Mars','Mercury','Jupiter','Venus','Saturn'],
+  chaldean:      ['Saturn','Jupiter','Mars','Sun','Venus','Mercury','Moon'],
+  heliocentric:  ['Saturn','Jupiter','Mars','Moon','Venus','Mercury','Sun'],
+  weekdays:      ['Sun','Moon','Mars','Mercury','Jupiter','Venus','Saturn'],
+  evolutionary:  ['Saturn','Sun','Moon','Mars','Mercury','Jupiter','Venus'],
 };
 
 export const CHAKRA_MODE_LABELS = {
   chaldean: 'Chaldean Order',
   heliocentric: 'Heliocentric Order',
   weekdays: 'Weekday Order',
+  evolutionary: 'Evolutionary Order',
 };
 
 // Position-pinned data: index 0 = Crown, index 6 = Root.

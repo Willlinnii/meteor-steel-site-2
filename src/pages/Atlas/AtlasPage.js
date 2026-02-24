@@ -59,6 +59,7 @@ export default function AtlasPage() {
   const [chatHistories, setChatHistories] = useState({});
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
   const greetingSent = useRef({});
@@ -122,6 +123,20 @@ export default function AtlasPage() {
       if (secs > 0) trackTime(`atlas.voice.${cur.voice}.time`, secs);
     };
   }, [activeVoice, trackTime]);
+
+  const conversationList = useMemo(() => {
+    return VOICES
+      .filter(v => chatHistories[v.id]?.length > 0)
+      .map(v => {
+        const hist = chatHistories[v.id];
+        const previewMsg = [...hist].reverse().find(m => m.role === 'assistant') || hist[hist.length - 1];
+        const snippet = previewMsg.content.length > 80
+          ? previewMsg.content.substring(0, 80) + '\u2026'
+          : previewMsg.content;
+        return { voiceId: v.id, label: v.label, group: v.group, messageCount: hist.length, snippet };
+      })
+      .sort((a, b) => b.messageCount - a.messageCount);
+  }, [chatHistories]);
 
   const emptyMessages = useMemo(() => [], []);
   const messages = chatHistories[activeVoice] || emptyMessages;
@@ -206,6 +221,19 @@ export default function AtlasPage() {
     setActiveVoice(e.target.value);
   }
 
+  function handleSidebarSelect(voiceId) {
+    trackElement(`atlas.voice.${voiceId}.selected`);
+    setActiveVoice(voiceId);
+    setSidebarOpen(false);
+  }
+
+  useEffect(() => {
+    if (!sidebarOpen) return;
+    const handleEsc = (e) => { if (e.key === 'Escape') setSidebarOpen(false); };
+    document.addEventListener('keydown', handleEsc);
+    return () => document.removeEventListener('keydown', handleEsc);
+  }, [sidebarOpen]);
+
   function renderMessage(msg, i) {
     const segments = parseAtlasMessage(msg.content);
     return (
@@ -230,7 +258,34 @@ export default function AtlasPage() {
 
   return (
     <div className="atlas-page">
+      {sidebarOpen && <div className="atlas-sidebar-backdrop" onClick={() => setSidebarOpen(false)} />}
+      <div className={`atlas-sidebar${sidebarOpen ? ' open' : ''}`}>
+        <div className="atlas-sidebar-header">
+          <span className="atlas-sidebar-title">Conversations</span>
+          <button className="atlas-sidebar-close" onClick={() => setSidebarOpen(false)}>&times;</button>
+        </div>
+        <div className="atlas-sidebar-list">
+          {conversationList.length === 0 && (
+            <div className="atlas-sidebar-empty">No conversations yet.</div>
+          )}
+          {conversationList.map(item => (
+            <button
+              key={item.voiceId}
+              className={`atlas-sidebar-item${item.voiceId === activeVoice ? ' active' : ''}`}
+              onClick={() => handleSidebarSelect(item.voiceId)}
+            >
+              <span className="atlas-sidebar-item-name">{item.label}</span>
+              <span className="atlas-sidebar-item-group">{item.group}</span>
+              <span className="atlas-sidebar-item-snippet">{item.snippet}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+
       <div className="atlas-topbar">
+        <button className="atlas-history-toggle" onClick={() => setSidebarOpen(p => !p)} title="Conversation history">
+          &#9776;
+        </button>
         <select className="atlas-voice-select" value={activeVoice} onChange={handleVoiceChange}>
           {GROUPS.map(group => (
             <optgroup key={group} label={group}>

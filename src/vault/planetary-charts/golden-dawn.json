@@ -1,19 +1,83 @@
 {
   "tradition": "Golden Dawn",
-  "sourceText": "777 (Crowley); Golden Dawn Knowledge Lectures",
-  "period": "1888-1900s",
+  "sourceText": "777 (Crowley); Golden Dawn Knowledge Lectures; Regardie, The Golden Dawn",
+  "period": "1888–1900s",
   "origin": "tradition",
   "entered": "2026-02-23",
-  "method": "transcribed",
-  "order": "sephirotic",
+  "method": "dictation",
+  "order": "chaldean",
+  "note": "The Golden Dawn synthesis: alchemical stages from the Rosicrucian tradition combined with the seven liberal arts and Kabbalistic angel correspondences. The liberal arts represent the intellectual curriculum of ascent — each planet governs a mode of knowing.",
   "correspondences": {
-    "Sun":     {},
-    "Moon":    {},
-    "Mercury": {},
-    "Venus":   {},
-    "Mars":    {},
-    "Jupiter": {},
-    "Saturn":  {}
+    "Saturn": {
+      "number": 1,
+      "classicalPlanet": "Saturn",
+      "stage": "Calcination",
+      "alchemicalPhase": "Nigredo (Blackening)",
+      "liberalArt": "Astronomy",
+      "angel": "Cassiel",
+      "description": "Burning away, structure, and the contemplation of celestial order",
+      "metal": "Lead"
+    },
+    "Jupiter": {
+      "number": 2,
+      "classicalPlanet": "Jupiter",
+      "stage": "Dissolution",
+      "alchemicalPhase": "Albedo (Whitening)",
+      "liberalArt": "Geometry",
+      "angel": "Zadkiel",
+      "description": "Dissolving into flow, expansion, and the knowledge of spatial form",
+      "metal": "Tin"
+    },
+    "Mars": {
+      "number": 3,
+      "classicalPlanet": "Mars",
+      "stage": "Separation",
+      "alchemicalPhase": "Separatio",
+      "liberalArt": "Music",
+      "angel": "Samael",
+      "description": "Cutting and sorting, strength, and the harmony born of tension",
+      "metal": "Iron"
+    },
+    "Sun": {
+      "number": 4,
+      "classicalPlanet": "Sun",
+      "stage": "Conjunction",
+      "alchemicalPhase": "Coniunctio",
+      "liberalArt": "Arithmetic",
+      "angel": "Michael",
+      "description": "The sacred marriage, illumination, and the science of number",
+      "metal": "Gold"
+    },
+    "Venus": {
+      "number": 5,
+      "classicalPlanet": "Venus",
+      "stage": "Fermentation",
+      "alchemicalPhase": "Putrefaction and Rebirth",
+      "liberalArt": "Rhetoric",
+      "angel": "Anael",
+      "description": "Death and rebirth, beauty, and the art of persuasion",
+      "metal": "Copper"
+    },
+    "Mercury": {
+      "number": 6,
+      "classicalPlanet": "Mercury",
+      "stage": "Distillation",
+      "alchemicalPhase": "Distillatio",
+      "liberalArt": "Logic / Dialectic",
+      "angel": "Raphael",
+      "description": "Purification, communication, and the discipline of reasoning",
+      "metal": "Quicksilver"
+    },
+    "Moon": {
+      "number": 7,
+      "classicalPlanet": "Moon",
+      "stage": "Coagulation",
+      "alchemicalPhase": "Philosopher's Stone",
+      "liberalArt": "Grammar",
+      "angel": "Gabriel",
+      "description": "Final integration, the foundation of language, and the completed Stone",
+      "metal": "Silver"
+    }
   },
   "authorCommentary": []
 }

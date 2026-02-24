@@ -1,19 +1,92 @@
 {
-  "tradition": "Vedic / Jyotish",
-  "sourceText": "Brihat Parashara Hora Shastra; Surya Siddhanta",
-  "period": "1st millennium BCE onward",
+  "tradition": "Vedic / Seven Lokas",
+  "sourceText": "Vishnu Purana; Brihat Parashara Hora Shastra; Surya Siddhanta",
+  "period": "7th–10th century CE (codified)",
   "origin": "tradition",
   "entered": "2026-02-23",
-  "method": "transcribed",
-  "order": "weekday",
+  "method": "dictation",
+  "order": "ascending",
+  "note": "Two parallel systems: the Seven Lokas (planes of existence ascending from Earth to Brahma's realm) and the Navagraha (nine planetary bodies with their deities, archetypes, and gemstones). Rahu and Ketu are the shadow planets — the lunar nodes — placed below the seven classical correspondences.",
   "correspondences": {
-    "Sun":     {},
-    "Moon":    {},
-    "Mercury": {},
-    "Venus":   {},
-    "Mars":    {},
-    "Jupiter": {},
-    "Saturn":  {}
+    "Rahu / Ketu": {
+      "number": 1,
+      "classicalPlanet": null,
+      "navagraha": "Rahu (North Node) and Ketu (South Node)",
+      "god": "Rahu: Durga / Ketu: Ganesha",
+      "archetype": "Rahu: obsession, worldly desire, illusion / Ketu: liberation, detachment, past lives",
+      "stone": "Rahu: Hessonite Garnet (Gomed) / Ketu: Cat's Eye (Lehsunia)",
+      "loka": "Patala — the netherworlds, below the seven lokas"
+    },
+    "Saturn": {
+      "number": 2,
+      "classicalPlanet": "Saturn",
+      "metal": "Lead",
+      "navagraha": "Shani",
+      "god": "Shani Deva (son of Surya and Chhaya)",
+      "archetype": "Discipline, karma, suffering, endurance, the taskmaster",
+      "stone": "Blue Sapphire (Neelam)",
+      "loka": "Bhu-loka — the Earth plane, the physical world"
+    },
+    "Venus": {
+      "number": 3,
+      "classicalPlanet": "Venus",
+      "metal": "Copper",
+      "navagraha": "Shukra",
+      "god": "Shukra Acharya (guru of the Asuras)",
+      "archetype": "Beauty, pleasure, love, art, material wealth, the poet",
+      "stone": "Diamond (Heera)",
+      "loka": "Bhuvar-loka — the atmospheric plane, the astral realm"
+    },
+    "Jupiter": {
+      "number": 4,
+      "classicalPlanet": "Jupiter",
+      "metal": "Tin",
+      "navagraha": "Brihaspati",
+      "god": "Brihaspati (guru of the Devas)",
+      "archetype": "Wisdom, expansion, teaching, dharma, the priest-sage",
+      "stone": "Yellow Sapphire (Pukhraj)",
+      "loka": "Svar-loka — the celestial plane, heaven of the gods"
+    },
+    "Mercury": {
+      "number": 5,
+      "classicalPlanet": "Mercury",
+      "metal": "Mercury",
+      "navagraha": "Budha",
+      "god": "Budha (son of Chandra and Tara)",
+      "archetype": "Intellect, communication, trade, adaptability, the messenger",
+      "stone": "Emerald (Panna)",
+      "loka": "Mahar-loka — the plane of great saints and sages"
+    },
+    "Mars": {
+      "number": 6,
+      "classicalPlanet": "Mars",
+      "metal": "Iron",
+      "navagraha": "Mangala",
+      "god": "Mangala / Kartikeya (son of Shiva)",
+      "archetype": "Courage, war, energy, action, the warrior",
+      "stone": "Red Coral (Moonga)",
+      "loka": "Jana-loka — the plane of the mind-born sons of Brahma"
+    },
+    "Moon": {
+      "number": 7,
+      "classicalPlanet": "Moon",
+      "metal": "Silver",
+      "navagraha": "Chandra",
+      "god": "Chandra / Soma (the Moon god)",
+      "archetype": "Mind, emotions, intuition, nurturing, the queen",
+      "stone": "Pearl (Moti)",
+      "loka": "Tapo-loka — the plane of austerity and tapas"
+    },
+    "Sun": {
+      "number": 8,
+      "classicalPlanet": "Sun",
+      "metal": "Gold",
+      "navagraha": "Surya",
+      "god": "Surya Deva (the Sun god, father of Manu)",
+      "archetype": "Soul, authority, vitality, truth, the king",
+      "stone": "Ruby (Manikya)",
+      "loka": "Satya-loka (Brahma-loka) — the plane of truth, Brahma's realm"
+    }
   },
   "authorCommentary": []
 }
