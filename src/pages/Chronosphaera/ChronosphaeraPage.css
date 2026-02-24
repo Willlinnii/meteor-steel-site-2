@@ -111,6 +111,9 @@
   color: #8bb8e8;
   border-color: rgba(139, 157, 195, 0.6);
   box-shadow: 0 0 12px rgba(139, 157, 195, 0.4);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
 }
 
 .back2d-toggle {
@@ -118,7 +121,9 @@
   background: none;
   border: 1px solid rgba(201, 169, 97, 0.4);
   color: rgba(201, 169, 97, 0.8);
-  font-size: 1.2rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
   width: 40px;
   height: 40px;
   border-radius: 50%;

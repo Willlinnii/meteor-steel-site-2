@@ -1041,9 +1041,8 @@ export default function ChronosphaeraPage() {
   }, [mode, clearAllSelections, navigate]);
 
   const handleToggle3D = useCallback((value) => {
-    if (value === 'ar') {
-      // Navigate to VR page — auto-start camera AR
-      navigate('/chronosphaera/vr', { state: { autoAR: true } });
+    if (value === 'vr') {
+      navigate('/chronosphaera/vr');
     } else if (value === '3d') {
       setView3D(true);
     } else {
@@ -1327,41 +1326,22 @@ export default function ChronosphaeraPage() {
   return (
     <div className={`chronosphaera-page chrono-${ambient.mode}`}>
       <div className="chrono-diagram-center">
-        {hasSubscription('monomyth') && (
+        {view3D && hasSubscription('monomyth') && (
           <div className="chrono-view3d-controls">
             <button
-              className={`view3d-toggle${view3D ? ' active' : ''}`}
-              onClick={() => handleToggle3D(view3D ? 'ar' : '3d')}
-              title={view3D ? 'Enter AR — phone camera view' : 'Switch to 3D view'}
+              className="view3d-toggle active"
+              onClick={() => handleToggle3D('vr')}
+              title="Enter VR experience"
             >
-              {view3D ? (
-                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-                  <rect x="5" y="2" width="14" height="20" rx="2" />
-                  <circle cx="12" cy="17" r="1.5" fill="currentColor" stroke="none" />
-                  <path d="M9 6h6M9 9h6" />
-                </svg>
-              ) : (
-                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M12 2L2 7l10 5 10-5-10-5z" />
-                  <path d="M2 17l10 5 10-5" />
-                  <path d="M2 12l10 5 10-5" />
-                  <path d="M12 12v10" />
-                </svg>
-              )}
+              VR
             </button>
-            {view3D && (
-              <button
-                className="back2d-toggle"
-                onClick={() => handleToggle3D(false)}
-                title="Return to 2D view"
-              >
-                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-                  <rect x="3" y="3" width="18" height="18" rx="2" />
-                  <path d="M3 9h18" />
-                  <path d="M9 3v18" />
-                </svg>
-              </button>
-            )}
+            <button
+              className="back2d-toggle"
+              onClick={() => handleToggle3D(false)}
+              title="Return to 2D view"
+            >
+              2D
+            </button>
           </div>
         )}
         {view3D ? (
@@ -1544,6 +1524,7 @@ export default function ChronosphaeraPage() {
                 ? handleSelectBeyondRing
                 : undefined
             }
+            onToggle3D={handleToggle3D}
           />
         )}
       </div>
