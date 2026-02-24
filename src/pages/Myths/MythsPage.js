@@ -2022,13 +2022,12 @@ function MythsPage() {
 
   const timelinePins = useMemo(() => {
     const pins = [];
-    ancientTemples.forEach(t => {
-      const era = parseEraString(t.era);
-      if (era) pins.push({ id: `temple-${t.id}`, name: t.name, ...era, type: 'temple', color: '#c47a5a' });
-    });
-    ancientLibraries.forEach(l => {
-      const era = parseEraString(l.era);
-      if (era) pins.push({ id: `library-${l.id}`, name: l.name, ...era, type: 'library', color: '#a89060' });
+    mythicEarthSites.forEach(s => {
+      const era = parseEraString(s.era);
+      if (era) {
+        const catDef = MYTHIC_EARTH_CATEGORIES.find(c => c.id === s.category);
+        pins.push({ id: `site-${s.id}`, name: s.name, ...era, type: s.category, color: catDef?.color || '#c9a961' });
+      }
     });
     mythicEarthMovements.forEach(m => {
       const era = parseEraString(m.founded);
@@ -2154,16 +2153,12 @@ function MythsPage() {
                 onRangeChange={(s, e) => setTimelineRange([s, e])}
                 pins={timelinePins}
                 onPinClick={(pin) => {
-                  if (pin.type === 'temple') {
-                    setMythicEarthCategory('temple');
-                    const temple = ancientTemples.find(t => `temple-${t.id}` === pin.id);
-                    if (temple) setSelectedMythicSite({ ...temple, isTemple: true });
-                  } else if (pin.type === 'library') {
-                    setMythicEarthCategory('library');
-                    const lib = ancientLibraries.find(l => `library-${l.id}` === pin.id);
-                    if (lib) setSelectedMythicSite({ ...lib, isLibrary: true });
-                  } else if (pin.type === 'movement') {
-                    // Scroll movement into view if visible
+                  if (pin.type === 'movement') return; // movements don't have detail views
+                  const site = mythicEarthSites.find(s => `site-${s.id}` === pin.id);
+                  if (site) {
+                    setMythicEarthCategory(site.category);
+                    setSelectedMythicSite(site.isTemple ? { ...site, isTemple: true } : site.isLibrary ? { ...site, isLibrary: true } : site);
+                    trackElement(`myths.earth.pin.${site.id}`);
                   }
                 }}
               />
@@ -2279,6 +2274,9 @@ function MythsPage() {
                     <span className="mythic-earth-tag tradition">{selectedMythicSite.tradition}</span>
                   )}
                   <span className="mythic-earth-tag region">{selectedMythicSite.region}</span>
+                  {selectedMythicSite.era && selectedMythicSite.era !== 'mythic' && (
+                    <span className="mythic-earth-tag era">{selectedMythicSite.era}</span>
+                  )}
                   {user && !selectedMythicSite.isUserSite && (
                     <button
                       className={`mythic-earth-tag mythic-earth-save-btn${savedSiteIdSet.has(selectedMythicSite.id) ? ' saved' : ''}`}
@@ -2327,7 +2325,12 @@ function MythsPage() {
               </div>
             ) : (
               <div className="mythic-earth-site-grid">
-                {mythicEarthSites.filter(s => s.category === mythicEarthCategory).map(site => (
+                {mythicEarthSites.filter(s => {
+                  if (s.category !== mythicEarthCategory) return false;
+                  const era = parseEraString(s.era);
+                  if (!era) return true; // mythic/undated always show
+                  return era.endYear >= timelineRange[0] && era.startYear <= timelineRange[1];
+                }).map(site => (
                   <button
                     key={site.id}
                     className="mythic-earth-site-card"
@@ -2336,6 +2339,7 @@ function MythsPage() {
                     <span className="site-card-name">{site.name}</span>
                     <span className="site-card-region">{site.region}</span>
                     {site.tradition && <span className="site-card-tradition">{site.tradition}</span>}
+                    {site.era && site.era !== 'mythic' && <span className="site-card-era">{site.era}</span>}
                   </button>
                 ))}
               </div>

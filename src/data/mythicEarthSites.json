@@ -2,124 +2,172 @@
   {
     "id": "delphi",
     "name": "Oracle of Delphi",
+    "era": "8th century BCE – 4th century CE",
     "lat": 38.4824,
-    "lng": 22.5010,
+    "lng": 22.501,
     "category": "temple",
     "isTemple": true,
     "description": "Ancient Greek sanctuary sacred to Apollo, home of the Pythia oracle who spoke prophecy from volcanic fumes at the navel of the world.",
     "region": "Greece",
-    "streetView": { "heading": 220, "pitch": 10 }
+    "streetView": {
+      "heading": 220,
+      "pitch": 10
+    }
   },
   {
     "id": "giza",
     "name": "Great Pyramid of Giza",
+    "era": "c. 2560 BCE",
     "lat": 29.9792,
     "lng": 31.1342,
     "category": "sacred-site",
     "description": "Tomb of Pharaoh Khufu, last surviving Wonder of the Ancient World. Gateway between the living and the dead in Egyptian cosmology.",
     "region": "Egypt",
-    "streetView": { "heading": 180, "pitch": 20 }
+    "streetView": {
+      "heading": 180,
+      "pitch": 20
+    }
   },
   {
     "id": "uluru",
     "name": "Uluru (Ayers Rock)",
+    "era": "mythic",
     "lat": -25.3444,
     "lng": 131.0369,
     "category": "sacred-site",
     "description": "Sacred sandstone monolith central to Anangu Dreamtime. Songlines converge here, marking it as a place of ancestral creation.",
     "region": "Australia",
-    "streetView": { "heading": 0, "pitch": 10 }
+    "streetView": {
+      "heading": 0,
+      "pitch": 10
+    }
   },
   {
     "id": "varanasi",
     "name": "Varanasi (Kashi)",
+    "era": "c. 1200 BCE – present",
     "lat": 25.3176,
     "lng": 83.0064,
     "category": "sacred-site",
     "description": "City of Light on the Ganges, one of the oldest continuously inhabited cities. Sacred to Shiva, where cremation grants liberation from the cycle of rebirth.",
     "region": "India",
-    "streetView": { "heading": 90, "pitch": 0 }
+    "streetView": {
+      "heading": 90,
+      "pitch": 0
+    }
   },
   {
     "id": "eleusis",
     "name": "Eleusis",
+    "era": "c. 1500 BCE – 392 CE",
     "lat": 38.0413,
     "lng": 23.5413,
     "category": "sacred-site",
     "description": "Site of the Eleusinian Mysteries, the most famous secret rites of ancient Greece. Initiates experienced the myth of Persephone's descent and return.",
     "region": "Greece",
-    "streetView": { "heading": 0, "pitch": 5 }
+    "streetView": {
+      "heading": 0,
+      "pitch": 5
+    }
   },
   {
     "id": "mt-olympus",
     "name": "Mount Olympus",
+    "era": "mythic",
     "lat": 40.0859,
     "lng": 22.3583,
     "category": "mythic-location",
     "description": "Highest mountain in Greece, mythological home of the twelve Olympian gods ruled by Zeus.",
     "region": "Greece",
-    "streetView": { "heading": 180, "pitch": 15 }
+    "streetView": {
+      "heading": 180,
+      "pitch": 15
+    }
   },
   {
     "id": "mt-sinai",
     "name": "Mount Sinai",
+    "era": "mythic",
     "lat": 28.5394,
     "lng": 33.9753,
     "category": "sacred-site",
     "description": "Mountain where Moses received the Ten Commandments from God. Sacred axis mundi connecting heaven and earth in Abrahamic tradition.",
     "region": "Egypt",
-    "streetView": { "heading": 270, "pitch": 20 }
+    "streetView": {
+      "heading": 270,
+      "pitch": 20
+    }
   },
   {
     "id": "newgrange",
     "name": "Newgrange",
+    "era": "c. 3200 BCE",
     "lat": 53.6947,
     "lng": -6.4755,
     "category": "sacred-site",
     "description": "Neolithic passage tomb older than Stonehenge and the pyramids. At winter solstice, sunlight penetrates the passage to illuminate the inner chamber.",
     "region": "Ireland",
-    "streetView": { "heading": 90, "pitch": 5 }
+    "streetView": {
+      "heading": 90,
+      "pitch": 5
+    }
   },
   {
     "id": "troy",
     "name": "Troy (Hisarlik)",
+    "era": "c. 3000–500 BCE",
     "lat": 39.9575,
     "lng": 26.2389,
     "category": "mythic-location",
     "description": "Archaeological site of ancient Troy, setting of Homer's Iliad. Where Achilles, Hector, and the Trojan Horse shaped Western storytelling.",
     "region": "Turkey",
-    "streetView": { "heading": 90, "pitch": 5 }
+    "streetView": {
+      "heading": 90,
+      "pitch": 5
+    }
   },
   {
     "id": "teotihuacan",
     "name": "Teotihuacan",
+    "era": "c. 100 BCE – 550 CE",
     "lat": 19.6925,
     "lng": -98.8438,
     "category": "sacred-site",
     "description": "City of the Gods in central Mexico. The Pyramid of the Sun and Moon aligned with cosmic forces, where the fifth sun was born through divine sacrifice.",
     "region": "Mexico",
-    "streetView": { "heading": 0, "pitch": 15 }
+    "streetView": {
+      "heading": 0,
+      "pitch": 15
+    }
   },
   {
     "id": "mt-kailash",
     "name": "Mount Kailash",
+    "era": "mythic",
     "lat": 31.0672,
     "lng": 81.3119,
     "category": "sacred-site",
     "description": "Unclimbed peak sacred to four religions — Hinduism, Buddhism, Jainism, and Bon. Abode of Shiva and cosmic axis of the world.",
     "region": "Tibet",
-    "streetView": { "heading": 180, "pitch": 20 }
+    "streetView": {
+      "heading": 180,
+      "pitch": 20
+    }
   },
   {
     "id": "avalon",
     "name": "Glastonbury Tor (Avalon)",
+    "era": "12th century – 15th century CE",
     "lat": 51.1442,
     "lng": -2.6987,
     "category": "literary-location",
     "tradition": "European",
     "description": "Hill identified with the legendary Isle of Avalon, where King Arthur was taken after his final battle. The Tor rises from the Somerset levels like an otherworldly island.",
     "region": "England",
-    "streetView": { "heading": 0, "pitch": 20 },
+    "streetView": {
+      "heading": 0,
+      "pitch": 20
+    },
     "readUrl": "https://sacred-texts.com/neu/arthur/index.htm",
     "wikisourcePage": "Le_Morte_d'Arthur",
     "excerpt": "And when they were at the water side, even fast by the bank hoved a little barge with many fair ladies in it, and among them all was a queen, and all they had black hoods, and all they wept and shrieked when they saw King Arthur.\n\n\"Now put me into the barge,\" said the king. And so he did softly; and there received him three queens with great mourning; and so they set them down, and in one of their laps King Arthur laid his head.\n\nAnd then that queen said: \"Ah, dear brother, why have ye tarried so long from me? Alas, this wound on your head hath caught over-much cold.\" And so then they rowed from the land, and Sir Bedivere beheld all those ladies go from him. Then Sir Bedivere cried: \"Ah my lord Arthur, what shall become of me, now ye go from me and leave me here alone among mine enemies?\"\n\n\"Comfort thyself,\" said the king, \"and do as well as thou mayest, for in me is no trust for to trust in; for I will into the vale of Avilion to heal me of my grievous wound: and if thou hear never more of me, pray for my soul.\"\n\n— Sir Thomas Malory, Le Morte d'Arthur, Book XXI"
@@ -127,13 +175,17 @@
   {
     "id": "ithaca",
     "name": "Ithaca",
+    "era": "8th century BCE",
     "lat": 38.3659,
     "lng": 20.7181,
     "category": "literary-location",
     "tradition": "Greek",
     "description": "Homeland of Odysseus in Homer's Odyssey. The island he spent ten years trying to reach after the fall of Troy — symbol of the longing for return.",
     "region": "Greece",
-    "streetView": { "heading": 180, "pitch": 10 },
+    "streetView": {
+      "heading": 180,
+      "pitch": 10
+    },
     "readUrl": "https://sacred-texts.com/cla/homer/ody/index.htm",
     "wikisourcePage": "The_Odyssey_(Butler)",
     "excerpt": "Tell me, O Muse, of that ingenious hero who travelled far and wide after he had sacked the famous town of Troy. Many cities did he visit, and many were the nations with whose manners and customs he was acquainted; moreover he suffered much by sea while trying to save his own life and bring his men safely home; but do what he might he could not save his men, for they perished through their own sheer folly in eating the cattle of the Sun-god Hyperion; so the god prevented them from ever reaching home. Tell me, too, about all these things, O daughter of Jove, from whatsoever source you may know them.\n\nSo now all who had escaped death in battle or by shipwreck had got safely home except Ulysses, and he, though he was longing to return to his wife and country, was detained by the goddess Calypso, who had got him into a large cave and wanted to marry him.\n\n— Homer, The Odyssey, Book I (trans. Samuel Butler)"
@@ -141,24 +193,32 @@
   {
     "id": "angkor-wat",
     "name": "Angkor Wat",
+    "era": "Early 12th century CE",
     "lat": 13.4125,
-    "lng": 103.8670,
+    "lng": 103.867,
     "category": "temple",
     "isTemple": true,
     "description": "Largest religious monument in the world, originally Hindu, later Buddhist. A stone mandala representing Mount Meru, cosmic center of the universe.",
     "region": "Cambodia",
-    "streetView": { "heading": 90, "pitch": 10 }
+    "streetView": {
+      "heading": 90,
+      "pitch": 10
+    }
   },
   {
     "id": "delphi-sibyl",
     "name": "Cumae (Sibyl's Cave)",
+    "era": "c. 29–19 BCE",
     "lat": 40.8487,
     "lng": 14.0539,
     "category": "literary-location",
     "tradition": "Roman",
     "description": "Entrance to the Underworld in Virgil's Aeneid. The Cumaean Sibyl guided Aeneas into Hades to meet his father's shade and learn Rome's destiny.",
     "region": "Italy",
-    "streetView": { "heading": 90, "pitch": 5 },
+    "streetView": {
+      "heading": 90,
+      "pitch": 5
+    },
     "readUrl": "https://sacred-texts.com/cla/virgil/aen/index.htm",
     "wikisourcePage": "The_Works_of_Virgil_(Dryden)/Aeneid",
     "excerpt": "There was a deep cave hewn from the flank of Cumae's rock, vast and gaping wide, guarded by the dark lake and the gloom of forests. No birds could wing their way safely overhead, so foul the breath that poured from those black jaws up to the vault of heaven.\n\nThe Sibyl cried: \"Now is the time to ask your destinies! The god! Behold, the god!\" And as she spoke before the doors, her face, her color changed; her hair streamed wild; her breast heaved and her heart swelled with frenzy; she seemed taller, her voice no longer mortal, for the god breathed upon her, ever nearer.\n\n\"Trojan Aeneas, the descent to Avernus is easy. Night and day the door of dark Dis stands open. But to retrace your steps and escape to the upper air — that is the task, that is the labor.\"\n\n— Virgil, The Aeneid, Book VI (trans. John Dryden)"
@@ -166,46 +226,63 @@
   {
     "id": "stonehenge",
     "name": "Stonehenge",
+    "era": "c. 3000–1500 BCE",
     "lat": 51.1789,
     "lng": -1.8262,
     "category": "sacred-site",
     "description": "Prehistoric stone circle aligned to the solstices. Geoffrey of Monmouth attributed its creation to Merlin's magic, transported from Ireland by giants.",
     "region": "England",
-    "streetView": { "heading": 0, "pitch": 5 }
+    "streetView": {
+      "heading": 0,
+      "pitch": 5
+    }
   },
   {
     "id": "mt-fuji",
     "name": "Mount Fuji",
+    "era": "mythic",
     "lat": 35.3606,
     "lng": 138.7274,
     "category": "sacred-site",
     "description": "Sacred volcanic peak in Shinto tradition, dwelling place of the goddess Konohanasakuya-hime. Symbol of immortality and transcendence in Japanese culture.",
     "region": "Japan",
-    "streetView": { "heading": 180, "pitch": 20 }
+    "streetView": {
+      "heading": 180,
+      "pitch": 20
+    }
   },
   {
     "id": "chaco-canyon",
     "name": "Chaco Canyon",
+    "era": "c. 850–1250 CE",
     "lat": 36.0604,
     "lng": -107.9614,
     "category": "sacred-site",
     "description": "Ancient Puebloan ceremonial center aligned with solar and lunar cycles. Great kivas served as portals for emergence myths connecting underworld to sky.",
     "region": "New Mexico, USA",
-    "streetView": { "heading": 90, "pitch": 5 }
+    "streetView": {
+      "heading": 90,
+      "pitch": 5
+    }
   },
   {
     "id": "mt-ararat",
     "name": "Mount Ararat",
+    "era": "mythic",
     "lat": 39.7019,
     "lng": 44.2991,
     "category": "mythic-location",
     "description": "Traditional resting place of Noah's Ark after the Great Flood. The mountain where humanity began again after divine destruction.",
     "region": "Turkey",
-    "streetView": { "heading": 0, "pitch": 20 }
+    "streetView": {
+      "heading": 0,
+      "pitch": 20
+    }
   },
   {
     "id": "lascaux",
     "name": "Lascaux Cave",
+    "era": "c. 17000 BCE",
     "lat": 45.0544,
     "lng": 1.1686,
     "category": "sacred-site",
@@ -215,6 +292,7 @@
   {
     "id": "caral-supe",
     "name": "Caral-Supe",
+    "era": "c. 3000–1800 BCE",
     "lat": -10.8926,
     "lng": -77.5203,
     "category": "sacred-site",
@@ -224,16 +302,21 @@
   {
     "id": "catalhoyuk",
     "name": "Çatalhöyük",
+    "era": "c. 7500–5700 BCE",
     "lat": 37.6661,
     "lng": 32.8281,
     "category": "sacred-site",
     "description": "Neolithic proto-city dating to 7500 BCE, one of the earliest large human settlements. Homes contained shrines with bull horns and goddess figurines — evidence of humanity's first mythic imagination taking architectural form.",
     "region": "Turkey",
-    "streetView": { "heading": 0, "pitch": 5 }
+    "streetView": {
+      "heading": 0,
+      "pitch": 5
+    }
   },
   {
     "id": "mt-elbrus",
     "name": "Mount Elbrus",
+    "era": "mythic",
     "lat": 43.3499,
     "lng": 42.4453,
     "category": "mythic-location",
@@ -243,16 +326,21 @@
   {
     "id": "pillars-of-hercules",
     "name": "Pillars of Hercules",
+    "era": "mythic",
     "lat": 35.9838,
     "lng": -5.4955,
     "category": "mythic-location",
     "description": "The Strait of Gibraltar, marked by the Rock of Gibraltar and Jebel Musa. Hercules split a mountain during his tenth labor, creating the gateway between the known world and the Atlantic unknown. Plato placed Atlantis just beyond.",
     "region": "Gibraltar / Morocco",
-    "streetView": { "heading": 180, "pitch": 10 }
+    "streetView": {
+      "heading": 180,
+      "pitch": 10
+    }
   },
   {
     "id": "talmud-sura",
     "name": "Babylonian Talmud — Sura",
+    "era": "c. 219–500 CE",
     "lat": 32.07,
     "lng": 44.99,
     "category": "literary-location",
@@ -265,13 +353,17 @@
   {
     "id": "new-testament-jerusalem",
     "name": "New Testament — Jerusalem",
+    "era": "c. 30–100 CE",
     "lat": 31.7683,
     "lng": 35.2137,
     "category": "literary-location",
     "tradition": "Abrahamic",
     "description": "The city where Christ's passion, crucifixion, and resurrection took place. The Gospels and Epistles emerged from the early Christian communities rooted in this holy city.",
     "region": "Israel / Palestine",
-    "streetView": { "heading": 0, "pitch": 10 },
+    "streetView": {
+      "heading": 0,
+      "pitch": 10
+    },
     "readUrl": "https://sacred-texts.com/bib/kjv/index.htm",
     "wikisourcePage": "Bible_(King_James)",
     "excerpt": "In the beginning was the Word, and the Word was with God, and the Word was God. The same was in the beginning with God. All things were made by him; and without him was not any thing made that was made. In him was life; and the life was the light of men. And the light shineth in darkness; and the darkness comprehended it not.\n\nThere was a man sent from God, whose name was John. The same came for a witness, to bear witness of the Light, that all men through him might believe. He was not that Light, but was sent to bear witness of that Light. That was the true Light, which lighteth every man that cometh into the world.\n\nHe was in the world, and the world was made by him, and the world knew him not. He came unto his own, and his own received him not. But as many as received him, to them gave he power to become the sons of God, even to them that believe on his name.\n\nAnd the Word was made flesh, and dwelt among us, and we beheld his glory, the glory as of the only begotten of the Father, full of grace and truth.\n\n— Gospel of John 1:1–14 (KJV)"
@@ -279,6 +371,7 @@
   {
     "id": "quran-mecca",
     "name": "Qur'an — Mecca",
+    "era": "c. 610–632 CE",
     "lat": 21.4225,
     "lng": 39.8262,
     "category": "literary-location",
@@ -292,6 +385,7 @@
   {
     "id": "book-of-mormon-manchester",
     "name": "Book of Mormon — Manchester, NY",
+    "era": "1827–1830 CE",
     "lat": 42.9701,
     "lng": -77.2303,
     "category": "literary-location",
@@ -305,6 +399,7 @@
   {
     "id": "rigveda-punjab",
     "name": "Rigveda — Sapta Sindhu",
+    "era": "c. 1500–1200 BCE",
     "lat": 31.5,
     "lng": 72.5,
     "category": "literary-location",
@@ -318,6 +413,7 @@
   {
     "id": "upanishads-kuru",
     "name": "Upanishads — Kuru-Panchala",
+    "era": "c. 800–200 BCE",
     "lat": 28.95,
     "lng": 78.15,
     "category": "literary-location",
@@ -330,6 +426,7 @@
   {
     "id": "mahabharata-kurukshetra",
     "name": "Mahabharata — Kurukshetra",
+    "era": "c. 400 BCE – 400 CE",
     "lat": 29.9695,
     "lng": 76.8783,
     "category": "literary-location",
@@ -343,6 +440,7 @@
   {
     "id": "ramayana-ayodhya",
     "name": "Ramayana — Ayodhya",
+    "era": "c. 500–100 BCE",
     "lat": 26.7922,
     "lng": 82.1998,
     "category": "literary-location",
@@ -356,6 +454,7 @@
   {
     "id": "bhagavad-gita-kurukshetra",
     "name": "Bhagavad Gita — Kurukshetra",
+    "era": "c. 200 BCE – 200 CE",
     "lat": 29.98,
     "lng": 76.87,
     "category": "literary-location",
@@ -369,6 +468,7 @@
   {
     "id": "pali-canon-aluvihara",
     "name": "Pali Canon — Aluvihara",
+    "era": "c. 29 BCE",
     "lat": 7.5156,
     "lng": 80.6032,
     "category": "literary-location",
@@ -382,6 +482,7 @@
   {
     "id": "lotus-sutra-gandhara",
     "name": "Lotus Sutra — Gandhara",
+    "era": "1st century BCE – 2nd century CE",
     "lat": 34.2,
     "lng": 71.8,
     "category": "literary-location",
@@ -394,6 +495,7 @@
   {
     "id": "tibetan-book-dead-samye",
     "name": "Tibetan Book of the Dead — Samye",
+    "era": "8th century CE",
     "lat": 29.3289,
     "lng": 91.5064,
     "category": "literary-location",
@@ -406,8 +508,9 @@
   {
     "id": "tao-te-ching-hangu",
     "name": "Tao Te Ching — Hangu Pass",
+    "era": "c. 4th century BCE",
     "lat": 34.52,
-    "lng": 110.30,
+    "lng": 110.3,
     "category": "literary-location",
     "tradition": "East Asian",
     "description": "Legend holds that Laozi, departing civilization on a water buffalo, was stopped at this mountain pass by a gatekeeper and asked to write down his wisdom. The result was the 5,000 characters of the Tao Te Ching.",
@@ -419,6 +522,7 @@
   {
     "id": "analects-qufu",
     "name": "Analects — Qufu",
+    "era": "c. 475–221 BCE",
     "lat": 35.5969,
     "lng": 116.9913,
     "category": "literary-location",
@@ -432,6 +536,7 @@
   {
     "id": "kojiki-nara",
     "name": "Kojiki — Nara",
+    "era": "712 CE",
     "lat": 34.6851,
     "lng": 135.8048,
     "category": "literary-location",
@@ -445,8 +550,9 @@
   {
     "id": "avesta-bactria",
     "name": "Avesta — Bactria",
+    "era": "c. 1500–500 BCE",
     "lat": 36.75,
-    "lng": 66.90,
+    "lng": 66.9,
     "category": "literary-location",
     "tradition": "Iranian",
     "description": "Region where Zoroaster is believed to have composed the Gathas, the oldest hymns of the Avesta. His vision of cosmic struggle between Ahura Mazda and Angra Mainyu shaped all subsequent dualistic theology.",
@@ -458,6 +564,7 @@
   {
     "id": "gilgamesh-uruk",
     "name": "Epic of Gilgamesh — Uruk",
+    "era": "c. 2100 BCE",
     "lat": 31.3225,
     "lng": 45.6375,
     "category": "literary-location",
@@ -471,6 +578,7 @@
   {
     "id": "enuma-elish-babylon",
     "name": "Enuma Elish — Babylon",
+    "era": "c. 12th century BCE",
     "lat": 32.5363,
     "lng": 44.4209,
     "category": "literary-location",
@@ -483,6 +591,7 @@
   {
     "id": "popol-vuh-chichicastenango",
     "name": "Popol Vuh — Chichicastenango",
+    "era": "c. 1554–1558 CE",
     "lat": 14.9433,
     "lng": -91.1117,
     "category": "literary-location",
@@ -495,13 +604,17 @@
   {
     "id": "guru-granth-sahib-amritsar",
     "name": "Guru Granth Sahib — Amritsar",
-    "lat": 31.6200,
+    "era": "1604 CE",
+    "lat": 31.62,
     "lng": 74.8765,
     "category": "literary-location",
     "tradition": "Sikh",
     "description": "The Golden Temple houses the Guru Granth Sahib, the living guru of Sikhism. Compiled by Guru Arjan in 1604, it contains hymns from Sikh gurus, Hindu saints, and Sufi poets — a scripture of radical inclusion.",
     "region": "Punjab, India",
-    "streetView": { "heading": 0, "pitch": 10 },
+    "streetView": {
+      "heading": 0,
+      "pitch": 10
+    },
     "readUrl": "https://sacred-texts.com/skh/granth/index.htm",
     "wikisourcePage": "The_Sikh_Religion",
     "excerpt": "There is One God. His Name is Truth. He is the Creator. He is without fear. He is without hate. He is timeless and without form. He is beyond death — the enlightened, self-existent.\n\nBy the Guru's grace He is known.\n\nHe was True in the beginning. He was True when the ages commenced. He is True now. And Nanak says He shall be True forever.\n\nBy thinking, He cannot be reduced to thought, even by thinking hundreds of thousands of times. By remaining silent, inner silence is not obtained, even by remaining lovingly absorbed deep within. The hunger of the hungry is not appeased, even by piling up loads of worldly goods. Hundreds of thousands of clever tricks, but not even one of them will go along with you in the end.\n\nSo how can you become truthful? And how can the veil of illusion be torn away? O Nanak, it is written that you shall obey the Hukam of His Command, and walk in the Way of His Will.\n\n— Japji Sahib, Mul Mantar and Pauri 1 (Guru Nanak)"
@@ -509,6 +622,7 @@
   {
     "id": "agamas-pataliputra",
     "name": "Jain Agamas — Pataliputra",
+    "era": "c. 3rd century BCE",
     "lat": 25.6093,
     "lng": 85.1376,
     "category": "literary-location",
@@ -521,454 +635,631 @@
   {
     "id": "parthenon",
     "name": "The Parthenon",
+    "era": "447–432 BCE",
     "lat": 37.9715,
     "lng": 23.7267,
     "category": "temple",
     "isTemple": true,
     "description": "Temple dedicated to Athena on the Athenian Acropolis, masterpiece of Classical Greek architecture. For nearly 2,500 years it has stood as a symbol of democracy, civilization, and the Western pursuit of ideal form.",
     "region": "Greece",
-    "streetView": { "heading": 150, "pitch": 15 }
+    "streetView": {
+      "heading": 150,
+      "pitch": 15
+    }
   },
   {
     "id": "hagia-sophia",
     "name": "Hagia Sophia",
+    "era": "537 CE",
     "lat": 41.0086,
     "lng": 28.9802,
     "category": "sacred-site",
     "description": "For nearly a thousand years the largest cathedral in the world, then an Ottoman mosque, now a mosque again. Its massive dome seemed to float on light, inspiring awe across civilizations and faiths.",
     "region": "Turkey",
-    "streetView": { "heading": 270, "pitch": 15 }
+    "streetView": {
+      "heading": 270,
+      "pitch": 15
+    }
   },
   {
     "id": "vatican-st-peters",
     "name": "St. Peter's Basilica",
+    "era": "1506–1626 CE",
     "lat": 41.9022,
     "lng": 12.4539,
     "category": "sacred-site",
     "description": "The largest church in the world, built over the tomb of the apostle Peter. Michelangelo's dome crowns the spiritual center of Roman Catholicism and 1.3 billion faithful.",
     "region": "Italy",
-    "streetView": { "heading": 90, "pitch": 20 }
+    "streetView": {
+      "heading": 90,
+      "pitch": 20
+    }
   },
   {
     "id": "chartres",
     "name": "Chartres Cathedral",
+    "era": "c. 1194–1220 CE",
     "lat": 48.4477,
     "lng": 1.4878,
     "category": "sacred-site",
     "description": "Gothic masterpiece renowned for its stained glass and labyrinth. Pilgrims have walked its sacred geometry since the 12th century, seeking transformation through light and stone.",
     "region": "France",
-    "streetView": { "heading": 180, "pitch": 15 }
+    "streetView": {
+      "heading": 180,
+      "pitch": 15
+    }
   },
   {
     "id": "mont-saint-michel",
     "name": "Mont-Saint-Michel",
+    "era": "c. 708–1523 CE",
     "lat": 48.6361,
     "lng": -1.5115,
     "category": "sacred-site",
     "description": "Island abbey rising from tidal flats off the Normandy coast. A place of pilgrimage since the 8th century, where the archangel Michael appeared to the bishop of Avranches in a dream.",
     "region": "France",
-    "streetView": { "heading": 90, "pitch": 20 }
+    "streetView": {
+      "heading": 90,
+      "pitch": 20
+    }
   },
   {
     "id": "meteora",
     "name": "Meteora Monasteries",
+    "era": "14th century CE",
     "lat": 39.7217,
     "lng": 21.6306,
     "category": "sacred-site",
     "description": "Orthodox monasteries perched atop immense natural sandstone pillars in central Greece. Monks first ascended these 'columns of the sky' in the 14th century, seeking God in radical solitude above the world.",
     "region": "Greece",
-    "streetView": { "heading": 0, "pitch": 25 }
+    "streetView": {
+      "heading": 0,
+      "pitch": 25
+    }
   },
   {
     "id": "santiago-compostela",
     "name": "Santiago de Compostela",
+    "era": "c. 829 CE",
     "lat": 42.8805,
     "lng": -8.5446,
     "category": "sacred-site",
     "description": "Destination of the Camino de Santiago, the great medieval pilgrimage route. The cathedral houses the reputed relics of the apostle James, drawing hundreds of thousands of pilgrims each year.",
     "region": "Spain",
-    "streetView": { "heading": 0, "pitch": 10 }
+    "streetView": {
+      "heading": 0,
+      "pitch": 10
+    }
   },
   {
     "id": "avebury",
     "name": "Avebury Stone Circle",
+    "era": "c. 2850 BCE",
     "lat": 51.4288,
     "lng": -1.8544,
     "category": "sacred-site",
     "description": "The largest stone circle in the world, older and far larger than Stonehenge. The village of Avebury sits within the circle, where Neolithic people gathered for rituals we can only imagine.",
     "region": "England",
-    "streetView": { "heading": 90, "pitch": 5 }
+    "streetView": {
+      "heading": 90,
+      "pitch": 5
+    }
   },
   {
     "id": "carnac",
     "name": "Carnac Stones",
+    "era": "c. 4500–3300 BCE",
     "lat": 47.5949,
     "lng": -3.0738,
     "category": "sacred-site",
     "description": "Over 3,000 megalithic standing stones arranged in rows stretching for miles across the Breton landscape. Erected between 4500 and 3300 BCE, their purpose remains one of prehistory's great mysteries.",
     "region": "France",
-    "streetView": { "heading": 270, "pitch": 5 }
+    "streetView": {
+      "heading": 270,
+      "pitch": 5
+    }
   },
   {
     "id": "petra",
     "name": "Petra",
+    "era": "c. 312 BCE – 106 CE",
     "lat": 30.3285,
     "lng": 35.4444,
     "category": "sacred-site",
     "description": "The Rose-Red City carved into desert cliffs by the Nabataeans. Its Treasury, tombs, and temples blend Hellenistic architecture with Arabian sacred traditions in one of the ancient world's most stunning sites.",
     "region": "Jordan",
-    "streetView": { "heading": 180, "pitch": 15 }
+    "streetView": {
+      "heading": 180,
+      "pitch": 15
+    }
   },
   {
     "id": "baalbek",
     "name": "Baalbek",
+    "era": "1st century BCE – 3rd century CE",
     "lat": 34.0069,
     "lng": 36.2039,
     "category": "sacred-site",
     "description": "Colossal Roman temple complex built atop far older foundations. The Temple of Jupiter contains the largest hewn stones in the ancient world — megalithic blocks weighing over 800 tons each.",
     "region": "Lebanon",
-    "streetView": { "heading": 90, "pitch": 10 }
+    "streetView": {
+      "heading": 90,
+      "pitch": 10
+    }
   },
   {
     "id": "western-wall",
     "name": "Western Wall",
+    "era": "c. 19 BCE",
     "lat": 31.7767,
     "lng": 35.2345,
     "category": "sacred-site",
     "description": "Last remnant of the Second Temple's retaining wall, the holiest site where Jews are permitted to pray. For two millennia, the faithful have pressed their prayers into its ancient stones.",
     "region": "Israel / Palestine",
-    "streetView": { "heading": 90, "pitch": 10 }
+    "streetView": {
+      "heading": 90,
+      "pitch": 10
+    }
   },
   {
     "id": "church-holy-sepulchre",
     "name": "Church of the Holy Sepulchre",
+    "era": "c. 326–335 CE",
     "lat": 31.7785,
     "lng": 35.2296,
     "category": "sacred-site",
     "description": "Built over the sites of Christ's crucifixion and burial, this church has been the holiest site in Christendom since the 4th century. Six denominations share custody of its sacred spaces.",
     "region": "Israel / Palestine",
-    "streetView": { "heading": 180, "pitch": 10 }
+    "streetView": {
+      "heading": 180,
+      "pitch": 10
+    }
   },
   {
     "id": "dome-of-the-rock",
     "name": "Dome of the Rock",
+    "era": "691 CE",
     "lat": 31.7781,
     "lng": 35.2354,
     "category": "sacred-site",
     "description": "Golden-domed shrine on the Temple Mount, built over the Foundation Stone where Abraham offered Isaac and Muhammad ascended to heaven. Sacred to Judaism, Christianity, and Islam alike.",
     "region": "Israel / Palestine",
-    "streetView": { "heading": 0, "pitch": 15 }
+    "streetView": {
+      "heading": 0,
+      "pitch": 15
+    }
   },
   {
     "id": "borobudur",
     "name": "Borobudur",
+    "era": "c. 800 CE",
     "lat": -7.6079,
     "lng": 110.2038,
     "category": "temple",
     "isTemple": true,
     "description": "The world's largest Buddhist temple, a massive stone mandala rising from the Javanese jungle. Its nine platforms and 72 bell-shaped stupas trace the pilgrim's path from desire through form to formlessness.",
     "region": "Indonesia",
-    "streetView": { "heading": 0, "pitch": 15 }
+    "streetView": {
+      "heading": 0,
+      "pitch": 15
+    }
   },
   {
     "id": "prambanan",
     "name": "Prambanan",
-    "lat": -7.7520,
+    "era": "c. 850 CE",
+    "lat": -7.752,
     "lng": 110.4914,
     "category": "sacred-site",
     "description": "Largest Hindu temple complex in Indonesia, dedicated to the Trimurti — Brahma, Vishnu, and Shiva. Its towering spires and relief carvings of the Ramayana rival anything in India itself.",
     "region": "Indonesia",
-    "streetView": { "heading": 90, "pitch": 15 }
+    "streetView": {
+      "heading": 90,
+      "pitch": 15
+    }
   },
   {
     "id": "bagan",
     "name": "Bagan",
+    "era": "c. 849–1297 CE",
     "lat": 21.1717,
     "lng": 94.8585,
     "category": "sacred-site",
     "description": "Ancient city of over 2,000 Buddhist temples, pagodas, and monasteries spread across the plains of Myanmar. Between the 9th and 13th centuries, kings built a forest of sacred spires visible to the horizon.",
     "region": "Myanmar",
-    "streetView": { "heading": 90, "pitch": 10 }
+    "streetView": {
+      "heading": 90,
+      "pitch": 10
+    }
   },
   {
     "id": "boudhanath",
     "name": "Boudhanath Stupa",
+    "era": "c. 5th century CE",
     "lat": 27.7215,
-    "lng": 85.3620,
+    "lng": 85.362,
     "category": "sacred-site",
     "description": "One of the largest spherical stupas in the world, its all-seeing Buddha eyes gaze in the four cardinal directions. The spiritual heart of Tibetan Buddhism in Nepal.",
     "region": "Nepal",
-    "streetView": { "heading": 180, "pitch": 15 }
+    "streetView": {
+      "heading": 180,
+      "pitch": 15
+    }
   },
   {
     "id": "hampi",
     "name": "Hampi",
-    "lat": 15.3350,
-    "lng": 76.4600,
+    "era": "c. 1336–1565 CE",
+    "lat": 15.335,
+    "lng": 76.46,
     "category": "sacred-site",
     "description": "Ruins of Vijayanagara, once one of the largest cities in the world. Its temples, carved chariots, and sacred bazaars sprawl across a surreal boulder-strewn landscape along the Tungabhadra River.",
     "region": "India",
-    "streetView": { "heading": 0, "pitch": 10 }
+    "streetView": {
+      "heading": 0,
+      "pitch": 10
+    }
   },
   {
     "id": "ellora",
     "name": "Ellora Caves",
+    "era": "c. 600–1000 CE",
     "lat": 20.0258,
-    "lng": 75.1780,
+    "lng": 75.178,
     "category": "sacred-site",
     "description": "34 rock-cut caves spanning Buddhist, Hindu, and Jain traditions, carved between the 6th and 11th centuries. The Kailasa temple was hewn from a single basalt cliff — more stone removed than the Great Pyramid.",
     "region": "India",
-    "streetView": { "heading": 0, "pitch": 10 }
+    "streetView": {
+      "heading": 0,
+      "pitch": 10
+    }
   },
   {
     "id": "ajanta",
     "name": "Ajanta Caves",
+    "era": "c. 2nd century BCE – 5th century CE",
     "lat": 20.5519,
     "lng": 75.7033,
     "category": "sacred-site",
     "description": "30 Buddhist cave temples cut into a horseshoe-shaped cliff, abandoned and lost to the jungle for a thousand years. Their murals, rediscovered in 1819, are among the greatest surviving masterpieces of ancient art.",
     "region": "India",
-    "streetView": { "heading": 90, "pitch": 5 }
+    "streetView": {
+      "heading": 90,
+      "pitch": 5
+    }
   },
   {
     "id": "karnak",
     "name": "Karnak Temple",
+    "era": "c. 2055 BCE – 100 CE",
     "lat": 25.7188,
     "lng": 32.6573,
     "category": "temple",
     "isTemple": true,
     "description": "Vast temple complex dedicated to Amun-Ra, built and expanded over 2,000 years by thirty pharaohs. Its Hypostyle Hall of 134 massive columns is the largest religious building ever constructed.",
     "region": "Egypt",
-    "streetView": { "heading": 90, "pitch": 10 }
+    "streetView": {
+      "heading": 90,
+      "pitch": 10
+    }
   },
   {
     "id": "abu-simbel",
     "name": "Abu Simbel",
+    "era": "c. 1264–1244 BCE",
     "lat": 22.3369,
     "lng": 31.6256,
     "category": "sacred-site",
     "description": "Twin rock temples carved by Ramesses II, guarded by four colossal seated pharaohs. Twice a year, sunlight penetrates 200 feet to illuminate the gods in the innermost sanctuary.",
     "region": "Egypt",
-    "streetView": { "heading": 270, "pitch": 15 }
+    "streetView": {
+      "heading": 270,
+      "pitch": 15
+    }
   },
   {
     "id": "valley-of-kings",
     "name": "Valley of the Kings",
+    "era": "c. 1539–1075 BCE",
     "lat": 25.7402,
     "lng": 32.6014,
     "category": "sacred-site",
     "description": "Royal necropolis on the Nile's west bank where pharaohs of the New Kingdom were buried in hidden rock-cut tombs. Tutankhamun, Ramesses the Great, and Hatshepsut all rest beneath these desert cliffs.",
     "region": "Egypt",
-    "streetView": { "heading": 180, "pitch": 10 }
+    "streetView": {
+      "heading": 180,
+      "pitch": 10
+    }
   },
   {
     "id": "lalibela",
     "name": "Lalibela",
+    "era": "c. 12th–13th century CE",
     "lat": 12.0319,
     "lng": 39.0472,
     "category": "sacred-site",
     "description": "Eleven medieval rock-hewn churches carved downward into volcanic rock in the Ethiopian highlands. King Lalibela built a New Jerusalem here, and its churches remain active sites of Ethiopian Orthodox worship.",
     "region": "Ethiopia",
-    "streetView": { "heading": 0, "pitch": 10 }
+    "streetView": {
+      "heading": 0,
+      "pitch": 10
+    }
   },
   {
     "id": "machu-picchu",
     "name": "Machu Picchu",
+    "era": "c. 1450 CE",
     "lat": -13.1631,
-    "lng": -72.5450,
+    "lng": -72.545,
     "category": "sacred-site",
     "description": "Inca citadel set high in the Andes above the Urubamba River valley. Its temples, terraces, and Intihuatana stone align with astronomical events, marking it as a place where earth touched sky.",
     "region": "Peru",
-    "streetView": { "heading": 0, "pitch": 15 }
+    "streetView": {
+      "heading": 0,
+      "pitch": 15
+    }
   },
   {
     "id": "chichen-itza",
     "name": "Chichen Itza",
+    "era": "c. 600–1200 CE",
     "lat": 20.6843,
     "lng": -88.5678,
     "category": "sacred-site",
     "description": "Great Maya city dominated by the pyramid of Kukulkan, where a feathered serpent of shadow descends the staircase at each equinox. Its observatory, ball court, and cenote of sacrifice made it a cosmic center.",
     "region": "Mexico",
-    "streetView": { "heading": 0, "pitch": 15 }
+    "streetView": {
+      "heading": 0,
+      "pitch": 15
+    }
   },
   {
     "id": "tulum",
     "name": "Tulum",
+    "era": "c. 1200–1521 CE",
     "lat": 20.2145,
     "lng": -87.4291,
     "category": "sacred-site",
     "description": "Walled Maya city perched on Caribbean sea cliffs, one of the last cities built and inhabited by the Maya. Its Castillo temple watched over trade routes and the rising sun.",
     "region": "Mexico",
-    "streetView": { "heading": 90, "pitch": 10 }
+    "streetView": {
+      "heading": 90,
+      "pitch": 10
+    }
   },
   {
     "id": "tikal",
     "name": "Tikal",
-    "lat": 17.2220,
+    "era": "c. 200–900 CE",
+    "lat": 17.222,
     "lng": -89.6237,
     "category": "sacred-site",
     "description": "One of the largest Maya cities, its pyramids rise above the Guatemalan rainforest canopy. For over a thousand years, Tikal was a superpower of the Classic Maya world.",
     "region": "Guatemala",
-    "streetView": { "heading": 180, "pitch": 20 }
+    "streetView": {
+      "heading": 180,
+      "pitch": 20
+    }
   },
   {
     "id": "easter-island",
     "name": "Rapa Nui (Easter Island)",
+    "era": "c. 1250–1500 CE",
     "lat": -27.1127,
     "lng": -109.3497,
     "category": "sacred-site",
     "description": "Remote Pacific island where the Rapa Nui people carved and erected nearly 900 monumental moai statues. These stone ancestors watched over the living, their backs to the sea, facing inland to protect the people.",
     "region": "Chile",
-    "streetView": { "heading": 270, "pitch": 5 }
+    "streetView": {
+      "heading": 270,
+      "pitch": 5
+    }
   },
   {
     "id": "sigiriya",
     "name": "Sigiriya",
-    "lat": 7.9570,
+    "era": "c. 477–495 CE",
+    "lat": 7.957,
     "lng": 80.7603,
     "category": "sacred-site",
     "description": "Ancient rock fortress and palace rising 200 meters above the Sri Lankan jungle. A 5th-century king built his citadel atop this volcanic plug, entering through the jaws of a colossal stone lion.",
     "region": "Sri Lanka",
-    "streetView": { "heading": 0, "pitch": 25 }
+    "streetView": {
+      "heading": 0,
+      "pitch": 25
+    }
   },
   {
     "id": "persepolis",
     "name": "Persepolis",
+    "era": "c. 515–330 BCE",
     "lat": 29.9352,
     "lng": 52.8914,
     "category": "sacred-site",
     "description": "Ceremonial capital of the Achaemenid Empire, where Darius and Xerxes held court. Delegations from every corner of the known world climbed its great staircase to honor the King of Kings at the New Year.",
     "region": "Iran",
-    "streetView": { "heading": 0, "pitch": 10 }
+    "streetView": {
+      "heading": 0,
+      "pitch": 10
+    }
   },
   {
     "id": "gobekli-tepe",
     "name": "Gobekli Tepe",
+    "era": "c. 9500–8000 BCE",
     "lat": 37.2231,
     "lng": 38.9225,
     "category": "sacred-site",
     "description": "The oldest known temple complex in the world, built around 9500 BCE — 7,000 years before Stonehenge. Hunter-gatherers carved massive T-shaped pillars with animal reliefs, suggesting that worship preceded civilization.",
     "region": "Turkey",
-    "streetView": { "heading": 90, "pitch": 10 }
+    "streetView": {
+      "heading": 90,
+      "pitch": 10
+    }
   },
   {
     "id": "ephesus",
     "name": "Ephesus",
+    "era": "c. 550 BCE – 4th century CE",
     "lat": 37.9394,
     "lng": 27.3417,
     "category": "sacred-site",
     "description": "Ancient Greek city and site of the Temple of Artemis, one of the Seven Wonders. Later a center of early Christianity where Paul preached and the Gospel of John may have been written.",
     "region": "Turkey",
-    "streetView": { "heading": 180, "pitch": 10 }
+    "streetView": {
+      "heading": 180,
+      "pitch": 10
+    }
   },
   {
     "id": "meiji-shrine",
     "name": "Meiji Shrine",
+    "era": "1920 CE",
     "lat": 35.6764,
     "lng": 139.6993,
     "category": "sacred-site",
     "description": "Shinto shrine in the heart of Tokyo dedicated to Emperor Meiji and Empress Shoken. A 70-hectare forest of 120,000 donated trees surrounds its torii gate, creating a sanctuary of stillness in the world's largest city.",
     "region": "Japan",
-    "streetView": { "heading": 0, "pitch": 5 }
+    "streetView": {
+      "heading": 0,
+      "pitch": 5
+    }
   },
   {
     "id": "ise-grand-shrine",
     "name": "Ise Grand Shrine",
+    "era": "4 BCE (traditionally)",
     "lat": 34.4554,
     "lng": 136.7254,
     "category": "temple",
     "isTemple": true,
     "description": "The most sacred Shinto shrine in Japan, dedicated to the sun goddess Amaterasu. Rebuilt every 20 years in an unbroken tradition stretching back to the 7th century, embodying Shinto's embrace of impermanence and renewal.",
     "region": "Japan",
-    "streetView": { "heading": 0, "pitch": 5 }
+    "streetView": {
+      "heading": 0,
+      "pitch": 5
+    }
   },
   {
     "id": "potala-palace",
     "name": "Potala Palace",
+    "era": "c. 1645–1694 CE",
     "lat": 29.6578,
-    "lng": 91.1170,
+    "lng": 91.117,
     "category": "sacred-site",
     "description": "Towering palace-fortress in Lhasa, winter residence of the Dalai Lamas for centuries. Its white and red walls contain over a thousand rooms of chapels, tombs, and sacred art spanning Tibetan Buddhist civilization.",
     "region": "Tibet",
-    "streetView": { "heading": 0, "pitch": 15 }
+    "streetView": {
+      "heading": 0,
+      "pitch": 15
+    }
   },
   {
     "id": "temple-of-heaven",
     "name": "Temple of Heaven",
+    "era": "1420 CE",
     "lat": 39.8822,
     "lng": 116.4066,
     "category": "temple",
     "isTemple": true,
     "description": "Imperial altar complex in Beijing where Ming and Qing emperors performed annual rituals to pray for good harvests. Its circular Hall of Prayer embodies the ancient Chinese belief in a round heaven and square earth.",
     "region": "China",
-    "streetView": { "heading": 0, "pitch": 15 }
+    "streetView": {
+      "heading": 0,
+      "pitch": 15
+    }
   },
   {
     "id": "great-zimbabwe",
     "name": "Great Zimbabwe",
+    "era": "c. 1100–1450 CE",
     "lat": -20.2712,
     "lng": 30.9338,
     "category": "sacred-site",
     "description": "Medieval stone city and capital of the Kingdom of Zimbabwe, built without mortar between the 11th and 15th centuries. Its Great Enclosure is the largest ancient structure south of the Sahara.",
     "region": "Zimbabwe",
-    "streetView": { "heading": 90, "pitch": 5 }
+    "streetView": {
+      "heading": 90,
+      "pitch": 5
+    }
   },
   {
     "id": "serpent-mound",
     "name": "Serpent Mound",
+    "era": "c. 320 BCE – 1070 CE",
     "lat": 39.0253,
     "lng": -83.4303,
     "category": "sacred-site",
     "description": "A 1,348-foot effigy mound in the shape of an uncoiling serpent, the largest effigy mound in the world. Built by ancient Native Americans along a cryptoexplosion structure, aligned to solstice sunset.",
     "region": "Ohio, USA",
-    "streetView": { "heading": 90, "pitch": 10 }
+    "streetView": {
+      "heading": 90,
+      "pitch": 10
+    }
   },
   {
     "id": "cahokia",
     "name": "Cahokia Mounds",
+    "era": "c. 600–1400 CE",
     "lat": 38.6553,
     "lng": -90.0625,
     "category": "sacred-site",
     "description": "Pre-Columbian city larger than London in 1250 CE, center of Mississippian civilization. Monks Mound, the largest earthwork in the Americas, anchored a metropolis of 20,000 people aligned to the stars.",
     "region": "Illinois, USA",
-    "streetView": { "heading": 0, "pitch": 10 }
+    "streetView": {
+      "heading": 0,
+      "pitch": 10
+    }
   },
   {
     "id": "temple-of-solomon",
     "name": "Temple of Solomon",
+    "era": "c. 957 BCE",
     "lat": 31.7781,
     "lng": 35.2354,
     "category": "temple",
     "isTemple": true,
     "description": "The First Temple, built by King Solomon around 957 BCE as the dwelling place of the Ark of the Covenant. The divine presence rested in the Holy of Holies between the wings of two golden cherubim, making it the spiritual center of ancient Israel.",
     "region": "Israel / Palestine",
-    "streetView": { "heading": 0, "pitch": 15 }
+    "streetView": {
+      "heading": 0,
+      "pitch": 15
+    }
   },
   {
     "id": "mahabodhi",
     "name": "Mahabodhi Temple",
+    "era": "c. 250 BCE",
     "lat": 24.6961,
     "lng": 84.9911,
     "category": "temple",
     "isTemple": true,
     "description": "Where Siddhartha Gautama attained enlightenment under the Bodhi Tree around 528 BCE. Emperor Ashoka built the first shrine here in the 3rd century BCE; the current 55-meter tower dates from the Gupta period. The most sacred site in Buddhism.",
     "region": "India",
-    "streetView": { "heading": 0, "pitch": 15 }
+    "streetView": {
+      "heading": 0,
+      "pitch": 15
+    }
   },
   {
     "id": "brihadeeswarar",
     "name": "Brihadeeswarar Temple",
+    "era": "1010 CE",
     "lat": 10.7828,
     "lng": 79.1318,
     "category": "temple",
     "isTemple": true,
     "description": "The crown jewel of Chola architecture, completed in 1010 CE by Rajaraja Chola I. Its 66-meter vimana tower, capped with a single 80-ton granite block, houses a massive Shiva lingam. A UNESCO World Heritage masterpiece of Dravidian temple building.",
     "region": "India",
-    "streetView": { "heading": 0, "pitch": 15 }
+    "streetView": {
+      "heading": 0,
+      "pitch": 15
+    }
   },
   {
     "id": "library-of-alexandria",
     "name": "Library of Alexandria",
+    "era": "3rd century BCE – 7th century CE",
     "lat": 31.2001,
     "lng": 29.9187,
     "category": "library",
@@ -976,179 +1267,243 @@
     "description": "The ancient Library of Alexandria was the greatest repository of knowledge in the classical world. Founded in the 3rd century BCE under Ptolemy I Soter, it held hundreds of thousands of scrolls spanning philosophy, science, mathematics, medicine, astronomy, literature, and theology. Scholars from across the Mediterranean gathered here — Euclid, Eratosthenes, Callimachus, Apollonius, Aristarchus, Hero, Ptolemy. Its destruction, gradual rather than singular, remains one of the most symbolic losses in human history. What follows is a curated collection of texts connected to the Library — works written, copied, studied, or housed within its walls.",
     "region": "Egypt",
     "tradition": "Hellenistic",
-    "streetView": { "heading": 0, "pitch": 10 }
+    "streetView": {
+      "heading": 0,
+      "pitch": 10
+    }
   },
   {
     "id": "cadbury-camelot",
     "name": "Cadbury Castle (Camelot)",
+    "era": "12th century – 15th century CE",
     "lat": 51.0225,
     "lng": -2.5283,
     "category": "literary-location",
     "tradition": "European",
     "description": "Iron Age hillfort in Somerset long identified with Camelot. John Leland wrote in the 1540s that locals called it 'Camallate' and believed it to be Arthur's court. Excavations in the 1960s uncovered a major post-Roman refortification datable to the late 5th century — exactly the period assigned to a historical Arthur.",
     "region": "England",
-    "streetView": { "heading": 90, "pitch": 10 }
+    "streetView": {
+      "heading": 90,
+      "pitch": 10
+    }
   },
   {
     "id": "caerleon-amphitheatre",
     "name": "Caerleon Amphitheatre",
+    "era": "12th century – 15th century CE",
     "lat": 51.6119,
     "lng": -2.9525,
     "category": "literary-location",
     "tradition": "European",
     "description": "Roman legionary amphitheatre at Isca Augusta in south Wales. Geoffrey of Monmouth placed Arthur's plenary court at the 'City of Legions' and the amphitheatre's round shape led later antiquaries to identify it as the original Round Table. The ruins sit beside the Roman baths and barracks of the Second Augustan Legion.",
     "region": "Wales",
-    "streetView": { "heading": 180, "pitch": 10 }
+    "streetView": {
+      "heading": 180,
+      "pitch": 10
+    }
   },
   {
     "id": "snowdonia-dinas-emrys",
     "name": "Snowdonia — Dinas Emrys",
+    "era": "12th century – 15th century CE",
     "lat": 53.0133,
     "lng": -4.0475,
     "category": "literary-location",
     "tradition": "European",
     "description": "Rocky hilltop fortress in Snowdonia where, according to Nennius and Geoffrey of Monmouth, the boy Merlin (Ambrosius) revealed two dragons — red and white — fighting beneath Vortigern's collapsing tower. The red dragon became the symbol of Wales. Excavations confirmed a post-Roman occupation.",
     "region": "Wales",
-    "streetView": { "heading": 270, "pitch": 15 }
+    "streetView": {
+      "heading": 270,
+      "pitch": 15
+    }
   },
   {
     "id": "llangollen-valle-crucis",
     "name": "Llangollen — Valle Crucis Abbey",
+    "era": "12th century – 15th century CE",
     "lat": 52.9773,
     "lng": -3.1873,
     "category": "literary-location",
     "tradition": "European",
     "description": "Cistercian abbey in the Dee valley near the Pillar of Eliseg, a 9th-century cross inscribed with a genealogy tracing the kings of Powys back to Vortigern and Magnus Maximus. Medieval Welsh poets gathered in Llangollen and the Dee valley features in the Mabinogion. The landscape is saturated with Arthurian and bardic memory.",
     "region": "Wales",
-    "streetView": { "heading": 90, "pitch": 10 }
+    "streetView": {
+      "heading": 90,
+      "pitch": 10
+    }
   },
   {
     "id": "carlisle-castle",
     "name": "Carlisle Castle",
+    "era": "12th century – 15th century CE",
     "lat": 54.8966,
     "lng": -2.9453,
     "category": "literary-location",
     "tradition": "European",
     "description": "Border fortress identified in French and English romances as Arthur's northern court. In Chrétien de Troyes and the Vulgate Cycle, Arthur frequently holds court at 'Carduel' — Carlisle. The castle sits on the site of a Roman fort at the western end of Hadrian's Wall, linking it to the military frontier zone where a historical Arthur may have operated.",
     "region": "England",
-    "streetView": { "heading": 180, "pitch": 10 }
+    "streetView": {
+      "heading": 180,
+      "pitch": 10
+    }
   },
   {
     "id": "chesters-roman-fort",
     "name": "Chesters Roman Fort",
+    "era": "12th century – 15th century CE",
     "lat": 55.0275,
     "lng": -2.1328,
     "category": "literary-location",
     "tradition": "European",
     "description": "Best-preserved Roman cavalry fort on Hadrian's Wall, at the crossing of the North Tyne. If Arthur was a post-Roman war leader defending Britain's northern frontier, forts like Chesters — with their cavalry barracks and bathhouse — would have been his operational bases. The Wall itself appears in Arthurian tradition as the boundary between civilization and the wild north.",
     "region": "England",
-    "streetView": { "heading": 0, "pitch": 10 }
+    "streetView": {
+      "heading": 0,
+      "pitch": 10
+    }
   },
   {
     "id": "winchester-round-table",
     "name": "Winchester — The Round Table",
+    "era": "12th century – 15th century CE",
     "lat": 51.0612,
     "lng": -1.3194,
     "category": "literary-location",
     "tradition": "European",
     "description": "The Great Hall of Winchester Castle houses the Winchester Round Table, a massive painted oak table dating to the 13th century. Malory named Winchester as Camelot, and Edward I displayed the table as a relic of Arthur's court. Henry VIII had it repainted with a Tudor rose at its center. Winchester was the ancient capital of Wessex and England's rival to London.",
     "region": "England",
-    "streetView": { "heading": 90, "pitch": 10 }
+    "streetView": {
+      "heading": 90,
+      "pitch": 10
+    }
   },
   {
     "id": "edinburgh-arthurs-seat",
     "name": "Edinburgh — Arthur's Seat",
+    "era": "12th century – 15th century CE",
     "lat": 55.9445,
     "lng": -3.1615,
     "category": "literary-location",
     "tradition": "European",
     "description": "Volcanic peak rising above Edinburgh, named for King Arthur since at least the 15th century. The hill's strategic position overlooking the Firth of Forth connects it to the northern Arthurian tradition in which Arthur fights Pictish and Saxon invaders across the Scottish lowlands. The nearby chapel ruin atop the crag adds to the site's mythic atmosphere.",
     "region": "Scotland",
-    "streetView": { "heading": 180, "pitch": 20 }
+    "streetView": {
+      "heading": 180,
+      "pitch": 20
+    }
   },
   {
     "id": "glastonbury-abbey",
     "name": "Glastonbury Abbey",
+    "era": "c. 7th century CE",
     "lat": 51.1484,
     "lng": -2.7146,
     "category": "sacred-site",
     "tradition": "European",
     "description": "Ruins of the great abbey where, in 1191, monks claimed to have discovered the graves of Arthur and Guinevere — a cross inscribed 'HIC IACET SEPULTUS INCLITUS REX ARTHURIUS.' Whether genuine or a medieval publicity stunt, the discovery cemented Glastonbury's identity as Avalon. Joseph of Arimathea is also said to have brought the Holy Grail here.",
     "region": "England",
-    "streetView": { "heading": 270, "pitch": 5 }
+    "streetView": {
+      "heading": 270,
+      "pitch": 5
+    }
   },
   {
     "id": "glastonbury-chalice-well",
     "name": "Glastonbury — Chalice Well",
+    "era": "mythic",
     "lat": 51.1437,
     "lng": -2.6962,
     "category": "sacred-site",
     "tradition": "European",
     "description": "Iron-red spring at the foot of Glastonbury Tor, flowing continuously for at least two thousand years. Legend holds that Joseph of Arimathea hid the Holy Grail here, staining the water red. The well's cover bears the Vesica Piscis — two interlocking circles. The gardens remain a place of pilgrimage and contemplation.",
     "region": "England",
-    "streetView": { "heading": 0, "pitch": 5 }
+    "streetView": {
+      "heading": 0,
+      "pitch": 5
+    }
   },
   {
     "id": "tintagel-castle",
     "name": "Tintagel Castle Ruins",
+    "era": "12th century – 15th century CE",
     "lat": 50.6684,
     "lng": -4.7581,
     "category": "literary-location",
     "tradition": "European",
     "description": "Ruined cliff-top castle on the north Cornish coast, built by Richard Earl of Cornwall in the 1230s on a site already associated with Arthur. Geoffrey of Monmouth named Tintagel as the place of Arthur's conception, where Uther Pendragon visited Igraine disguised by Merlin's magic. Excavations have revealed a wealthy post-Roman trading settlement beneath the medieval remains.",
     "region": "England",
-    "streetView": { "heading": 270, "pitch": 15 }
+    "streetView": {
+      "heading": 270,
+      "pitch": 15
+    }
   },
   {
     "id": "tintagel-merlins-cave",
     "name": "Tintagel — Merlin's Cave",
+    "era": "12th century – 15th century CE",
     "lat": 50.6672,
-    "lng": -4.7570,
+    "lng": -4.757,
     "category": "literary-location",
     "tradition": "European",
     "description": "Sea cave beneath Tintagel Castle, accessible at low tide. In Tennyson's Idylls of the King, Merlin finds the infant Arthur washed ashore here in a basket among the waves — 'And so the babe was brought to Merlin, who bore him to Sir Ector's hall.' The cave cuts entirely through the headland, and at certain tides the sea fills it with a hollow roar.",
     "region": "England",
-    "streetView": { "heading": 180, "pitch": 10 },
+    "streetView": {
+      "heading": 180,
+      "pitch": 10
+    },
     "excerpt": "And down the wave and in the flame was borne\nA naked babe, and rode to Merlin's feet,\nWho stoopt and caught the babe, and cried \"The King!\nHere is an heir for Uther!\"\n\n— Alfred, Lord Tennyson, Idylls of the King, \"The Coming of Arthur\""
   },
   {
     "id": "hadrians-wall",
     "name": "Hadrian's Wall",
+    "era": "12th century – 15th century CE",
     "lat": 55.0238,
     "lng": -2.3604,
     "category": "literary-location",
     "tradition": "European",
     "description": "The Roman frontier wall stretching 73 miles from coast to coast across northern England. In Arthurian tradition the Wall marks the boundary between the civilized south and the wild lands beyond. Nennius lists Arthur's battles along the northern frontier, and several — the River Dubglas, the Caledonian Wood — suggest campaigns in Wall country. The landscape of forts, milecastles, and crags is the most plausible setting for a historical Arthur.",
     "region": "England",
-    "streetView": { "heading": 90, "pitch": 10 }
+    "streetView": {
+      "heading": 90,
+      "pitch": 10
+    }
   },
   {
     "id": "rosslyn-chapel",
     "name": "Rosslyn Chapel",
+    "era": "1446–1484 CE",
     "lat": 55.8554,
     "lng": -3.1601,
     "category": "sacred-site",
     "tradition": "European",
     "description": "Fifteenth-century chapel south of Edinburgh, built by William Sinclair, Earl of Orkney, and encrusted with the most extraordinary stone carving in Britain. Every surface teems with Green Men, angels, dragons, and botanical motifs — including plants from the Americas carved decades before Columbus sailed. The chapel has been linked to the Knights Templar, the Holy Grail, and Freemasonry. A carved 'Apprentice Pillar' supposedly conceals a sacred relic. Whether or not the Grail rests here, Rosslyn is a genuine stone encyclopedia of medieval esoteric symbolism.",
     "region": "Scotland",
-    "streetView": { "heading": 180, "pitch": 10 }
+    "streetView": {
+      "heading": 180,
+      "pitch": 10
+    }
   },
   {
     "id": "museum-of-london",
     "name": "Museum of London",
+    "era": "12th century – 15th century CE",
     "lat": 51.5176,
     "lng": -0.0967,
     "category": "literary-location",
     "tradition": "European",
     "description": "Museum tracing London's history from prehistory to the present, built on the edge of the Roman and medieval city wall. Its collections include Roman Londinium artifacts, Saxon and medieval finds, and material bearing on Geoffrey of Monmouth's claim that London was founded by Brutus of Troy — 'New Troy,' or Trinovantum. The museum connects the mythic origins of Britain's capital to its archaeological reality.",
     "region": "England",
-    "streetView": { "heading": 0, "pitch": 10 }
+    "streetView": {
+      "heading": 0,
+      "pitch": 10
+    }
   },
   {
     "id": "north-pole",
     "name": "North Pole (Axis Mundi)",
-    "lat": 90.0,
-    "lng": 0.0,
+    "era": "mythic",
+    "lat": 90,
+    "lng": 0,
     "category": "mythic-location",
     "description": "The geographic top of the world, identified across traditions as the supreme axis mundi. In Hindu cosmology it is Mount Meru, the pillar around which the heavens revolve. Greek myth placed Hyperborea here — a paradise beyond the north wind where Apollo dwelt in eternal light. Norse tradition set the World Tree Yggdrasil at the cosmic pole, and Iranian texts describe Mount Hara Berezaiti at the centre of the earth. The Pole Star directly overhead marks this spot as the still point around which the entire sky turns.",
     "region": "Arctic"
@@ -1156,8 +1511,9 @@
   {
     "id": "dilmun",
     "name": "Dilmun",
-    "lat": 25.2930,
-    "lng": 51.5310,
+    "era": "c. 3000–600 BCE",
+    "lat": 25.293,
+    "lng": 51.531,
     "category": "mythic-location",
     "description": "The Sumerian paradise — a pure, clean, bright land where the sun rises. In the Epic of Gilgamesh, Dilmun is the garden of the gods where Utnapishtim dwells after surviving the Great Flood. The Enki and Ninhursag myth describes it as a place where there is no sickness, old age, or death, watered by Enki's sweet springs. Ancient Gulf civilisation flourished here as a trade hub linking Mesopotamia, the Indus Valley, and Arabia.",
     "region": "Qatar"

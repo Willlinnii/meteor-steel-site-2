@@ -898,6 +898,13 @@
   opacity: 0.7;
 }
 
+.site-card-era {
+  font-family: 'Crimson Pro', serif;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  opacity: 0.6;
+}
+
 .mythic-earth-site-detail {
   border: 1px solid var(--border-subtle);
   background: var(--bg-medium);
@@ -956,6 +963,12 @@
 .mythic-earth-tag.region {
   background: rgba(139, 157, 195, 0.2);
   color: var(--accent-steel);
+}
+
+.mythic-earth-tag.era {
+  background: rgba(168, 144, 96, 0.2);
+  color: var(--text-secondary);
+  font-family: 'Crimson Pro', serif;
 }
 
 .mythic-earth-tag.mythic-earth-save-btn {
