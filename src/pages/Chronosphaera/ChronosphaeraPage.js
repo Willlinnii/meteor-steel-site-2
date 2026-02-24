@@ -1042,7 +1042,12 @@ export default function ChronosphaeraPage() {
 
   const handleToggle3D = useCallback((value) => {
     if (value === 'vr') {
-      navigate('/chronosphaera/vr');
+      const isMobile = /Mobi|Android|iPad|iPhone|iPod/i.test(navigator.userAgent);
+      if (!isMobile) {
+        alert('VR/AR mode is available on mobile devices — open this page on your phone or tablet.');
+        return;
+      }
+      navigate('/chronosphaera/vr', { state: { autoAR: true } });
     } else if (value === '3d') {
       setView3D(true);
     } else {
