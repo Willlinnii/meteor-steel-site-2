@@ -64,10 +64,10 @@ export default function useMultiplayerGame(matchId) {
       try {
         const token = await firebaseAuth?.currentUser?.getIdToken();
         if (!token) return;
-        await fetch('/api/cleanup-match', {
+        await fetch('/api/guild', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ token, matchId }),
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+          body: JSON.stringify({ action: 'cleanup-match', matchId }),
         });
       } catch (err) {
         // Non-critical — chat cleanup is best-effort

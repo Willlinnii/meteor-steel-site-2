@@ -1951,7 +1951,13 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
               ))}
 
               {/* Sun at its orbital radius — conceptually the hour hand tip (hidden when cycles active) */}
-              {!showCycles && (<>
+              {!showCycles && (<g
+                style={{ cursor: 'pointer' }}
+                onClick={() => onSelectPlanet('Sun')}
+                onMouseEnter={(e) => handleTooltipEnter('planet', 'Sun', e)}
+                onMouseMove={handleTooltipMove}
+                onMouseLeave={handleTooltipLeave}
+              >
               <radialGradient id="sun-clock-glow" cx="50%" cy="50%" r="50%">
                 <stop offset="0%" stopColor="#f0c040" stopOpacity="0.5" />
                 <stop offset="100%" stopColor="#f0a020" stopOpacity="0" />
@@ -1968,9 +1974,24 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
                     fill="#f0c040" opacity="0.55" />
                 );
               })}
-              <circle cx={sunTipX} cy={sunTipY} r={16} fill="#f0c040" fillOpacity="0.85"
-                stroke="#f0c040" strokeWidth="0.8" />
-              </>)}
+              <circle cx={sunTipX} cy={sunTipY} r={16} fill="#f0c040"
+                fillOpacity={selectedPlanet === 'Sun' || hoveredPlanet === 'Sun' ? 0.95 : 0.85}
+                stroke="#f0c040" strokeWidth={selectedPlanet === 'Sun' || hoveredPlanet === 'Sun' ? 2 : 0.8}
+                filter={selectedPlanet === 'Sun' || hoveredPlanet === 'Sun' ? 'url(#glow-Sun)' : undefined} />
+              {selectedPlanet === 'Sun' && (
+                <circle cx={sunTipX} cy={sunTipY} r="22" fill="none" stroke="#f0c040" strokeWidth="1" opacity="0.4">
+                  <animate attributeName="r" values="20;24;20" dur="2s" repeatCount="indefinite" />
+                  <animate attributeName="opacity" values="0.4;0.15;0.4" dur="2s" repeatCount="indefinite" />
+                </circle>
+              )}
+              <text x={sunTipX} y={sunTipY + 28} textAnchor="middle"
+                fill={selectedPlanet === 'Sun' || hoveredPlanet === 'Sun' ? '#f0c040' : '#a8a8b8'}
+                fontSize={selectedPlanet === 'Sun' || hoveredPlanet === 'Sun' ? '11' : '10'}
+                fontFamily="Cinzel, serif"
+                fontWeight={selectedPlanet === 'Sun' || hoveredPlanet === 'Sun' ? '700' : '400'}>
+                Sun
+              </text>
+              </g>)}
 
               {/* Horizon line from sunrise to sunset */}
               {sunriseSunset && (() => {

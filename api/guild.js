@@ -61,7 +61,7 @@ module.exports = async (req, res) => {
   }
 
   const { action } = req.body || {};
-  const validActions = ['create-post', 'create-reply', 'vote', 'delete-post', 'delete-reply', 'pin-post'];
+  const validActions = ['create-post', 'create-reply', 'vote', 'delete-post', 'delete-reply', 'pin-post', 'cleanup-match'];
 
   if (!validActions.includes(action)) {
     return res.status(400).json({ error: `Invalid action. Must be one of: ${validActions.join(', ')}` });
@@ -70,6 +70,36 @@ module.exports = async (req, res) => {
   const db = admin.firestore();
   const now = admin.firestore.FieldValue.serverTimestamp();
   const isAdmin = email === ADMIN_EMAIL;
+
+  // --- CLEANUP MATCH (chat subcollection) ---
+  if (action === 'cleanup-match') {
+    const { matchId } = req.body;
+    if (!matchId) {
+      return res.status(400).json({ error: 'matchId is required.' });
+    }
+    try {
+      const matchRef = db.collection('matches').doc(matchId);
+      const matchDoc = await matchRef.get();
+      if (!matchDoc.exists) {
+        return res.status(404).json({ error: 'Match not found' });
+      }
+      const matchData = matchDoc.data();
+      if (!matchData.playerUids.includes(uid)) {
+        return res.status(403).json({ error: 'Not a participant' });
+      }
+      if (matchData.status !== 'completed' && matchData.status !== 'forfeited') {
+        return res.status(400).json({ error: 'Match is not completed' });
+      }
+      const chatSnap = await matchRef.collection('chat').get();
+      const batch = db.batch();
+      chatSnap.forEach(doc => batch.delete(doc.ref));
+      await batch.commit();
+      return res.status(200).json({ ok: true, deleted: chatSnap.size });
+    } catch (err) {
+      console.error('cleanup-match error:', err);
+      return res.status(500).json({ error: 'Cleanup failed' });
+    }
+  }
 
   // Helper: verify user is an active mentor (approved + required courses complete)
   async function verifyMentor() {

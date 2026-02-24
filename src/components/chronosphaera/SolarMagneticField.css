@@ -1,0 +1,159 @@
+.solar-mag {
+  margin: 1.2rem 0 0.8rem;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.solar-mag:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.solar-mag-collapsed {
+  padding: 0.7rem 1rem;
+}
+
+.solar-mag-open {
+  padding: 0.7rem 1rem 1rem;
+}
+
+/* ── Header (always visible) ── */
+.solar-mag-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  user-select: none;
+}
+
+.solar-mag-header-text {
+  font-size: 0.82rem;
+  color: rgba(255, 255, 255, 0.55);
+  flex: 1;
+}
+
+.solar-mag-header-text strong {
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 600;
+}
+
+.solar-mag-chevron {
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.3);
+  transition: transform 0.2s;
+}
+
+.solar-mag-chevron-open {
+  transform: rotate(180deg);
+}
+
+/* ── Dot indicator ── */
+.solar-mag-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.solar-mag-dot.aligned {
+  background: #4fc3f7;
+  box-shadow: 0 0 6px rgba(79, 195, 247, 0.5);
+  animation: solar-pulse-cool 3s ease-in-out infinite;
+}
+
+.solar-mag-dot.opposing {
+  background: #ff8a65;
+  box-shadow: 0 0 6px rgba(255, 138, 101, 0.5);
+  animation: solar-pulse-warm 2s ease-in-out infinite;
+}
+
+.solar-mag-dot.neutral {
+  background: #aaa;
+  box-shadow: 0 0 4px rgba(170, 170, 170, 0.3);
+  animation: solar-pulse-cool 4s ease-in-out infinite;
+}
+
+@keyframes solar-pulse-cool {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.55; }
+}
+
+@keyframes solar-pulse-warm {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* ── Expanded body ── */
+.solar-mag-body {
+  margin-top: 0.8rem;
+  cursor: default;
+}
+
+/* ── Alignment explanation ── */
+.solar-mag-alignment {
+  margin-bottom: 0.9rem;
+}
+
+.solar-mag-alignment-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.85);
+  margin-bottom: 0.4rem;
+}
+
+.solar-mag-alignment-detail {
+  font-size: 0.78rem;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.5);
+  margin: 0;
+}
+
+/* ── Live readings ── */
+.solar-mag-readings {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.2rem;
+  margin-bottom: 0.9rem;
+}
+
+.solar-mag-reading {
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.solar-mag-reading .smr-label {
+  color: rgba(255, 255, 255, 0.35);
+  margin-right: 0.3rem;
+}
+
+.solar-mag-reading .smr-value {
+  color: rgba(255, 255, 255, 0.7);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Cycle context ── */
+.solar-mag-cycle {
+  font-size: 0.78rem;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.4);
+  margin: 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  padding-top: 0.7rem;
+}
+
+.solar-mag-cycle p {
+  margin: 0 0 0.35rem;
+}
+
+.solar-mag-cycle p:last-child {
+  margin-bottom: 0;
+}
+
+/* ── Loading ── */
+.solar-mag-loading {
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.3);
+  font-style: italic;
+  margin: 0;
+}
