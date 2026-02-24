@@ -121,6 +121,16 @@ export const CREDENTIAL_CATEGORIES = {
       { level: 1, name: 'Guild Member', description: 'Active mentor in the Mythouse Guild' },
     ],
   },
+  consultant: {
+    id: 'consultant',
+    label: 'Consultant',
+    icon: '\uD83D\uDD25',
+    levels: [
+      { level: 1, name: 'Consultant', description: 'Completed core coursework and intake training' },
+      { level: 2, name: 'Practitioner', description: 'Completed practitioner cohort with supervised engagements' },
+      { level: 3, name: 'Senior Practitioner', description: 'Full certification — can train other practitioners' },
+    ],
+  },
 };
 
 // --- RANK FUNCTIONS ---

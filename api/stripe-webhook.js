@@ -152,6 +152,24 @@ async function handleCheckoutCompleted(session, stripe) {
 
   await profileRef.set(updates, { merge: true });
   console.log(`Activated ${itemId} for user ${uid}`);
+
+  // Link consulting payments to engagement if engagementId present in metadata
+  const engagementId = session.metadata?.engagementId;
+  if (engagementId && itemId.startsWith('consulting-')) {
+    try {
+      const engRef = admin.firestore().doc(`consulting-engagements/${engagementId}`);
+      const engSnap = await engRef.get();
+      if (engSnap.exists) {
+        await engRef.update({
+          stripePaymentIds: admin.firestore.FieldValue.arrayUnion(session.payment_intent || session.id),
+          updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+        });
+        console.log(`Linked payment to engagement ${engagementId}`);
+      }
+    } catch (err) {
+      console.error('Failed to link payment to engagement:', err.message);
+    }
+  }
 }
 
 /**

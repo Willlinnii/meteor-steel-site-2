@@ -1,0 +1,394 @@
+/* Dashboard layout */
+.consulting-dash {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.consulting-dash-header {
+  margin-bottom: 32px;
+}
+
+.consulting-dash-title {
+  font-family: 'Cinzel', serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--accent-ember);
+  margin: 0 0 4px 0;
+}
+
+.consulting-dash-archetype {
+  font-family: 'Cinzel', serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent-gold);
+  margin: 0 0 8px 0;
+}
+
+.consulting-dash-status {
+  font-family: 'Cinzel', serif;
+  font-size: 0.7rem;
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 3px 10px;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+/* Intake narrative */
+.consulting-dash-intake {
+  margin-bottom: 36px;
+  padding: 20px;
+  background: rgba(139, 157, 195, 0.04);
+  border-left: 3px solid var(--accent-steel);
+  border-radius: 0 8px 8px 0;
+}
+
+.consulting-dash-intake-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent-steel);
+  margin: 0 0 10px 0;
+}
+
+.consulting-dash-intake-text {
+  font-family: 'Crimson Pro', serif;
+  font-size: 1.05rem;
+  font-weight: 300;
+  line-height: 1.85;
+  color: var(--text-primary);
+  white-space: pre-line;
+  margin: 0;
+}
+
+/* Stage progression */
+.consulting-dash-stages {
+  margin-bottom: 36px;
+}
+
+.consulting-dash-stages-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent-steel);
+  margin: 0 0 14px 0;
+}
+
+.consulting-dash-stage-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.consulting-dash-stage {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: rgba(26, 26, 36, 0.5);
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.consulting-dash-stage:hover {
+  background: rgba(26, 26, 36, 0.8);
+  border-color: rgba(139, 157, 195, 0.3);
+}
+
+.consulting-dash-stage.active {
+  border-color: var(--accent-ember);
+  background: rgba(196, 113, 58, 0.06);
+}
+
+.consulting-dash-stage.completed {
+  border-color: rgba(91, 217, 122, 0.3);
+}
+
+.consulting-dash-stage.selected {
+  border-color: var(--accent-gold);
+  background: rgba(201, 169, 97, 0.06);
+  box-shadow: 0 0 8px rgba(201, 169, 97, 0.1);
+}
+
+.consulting-dash-stage-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.consulting-dash-stage-dot.pending {
+  border: 2px solid #3a3a4a;
+  background: transparent;
+}
+
+.consulting-dash-stage-dot.active {
+  border: 2px solid var(--accent-ember);
+  background: var(--accent-ember);
+  box-shadow: 0 0 6px rgba(196, 113, 58, 0.4);
+}
+
+.consulting-dash-stage-dot.completed {
+  border: 2px solid #5bd97a;
+  background: #5bd97a;
+}
+
+.consulting-dash-stage-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--text-primary);
+  flex: 1;
+}
+
+.consulting-dash-stage-desc {
+  font-family: 'Crimson Pro', serif;
+  font-size: 0.85rem;
+  font-weight: 300;
+  color: var(--text-secondary);
+  display: none;
+}
+
+.consulting-dash-stage.selected .consulting-dash-stage-desc,
+.consulting-dash-stage.active .consulting-dash-stage-desc {
+  display: block;
+}
+
+.consulting-dash-stage-status {
+  font-family: 'Cinzel', serif;
+  font-size: 0.6rem;
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+/* Stage detail panel */
+.consulting-dash-detail {
+  margin-bottom: 36px;
+  padding: 24px;
+  background: rgba(26, 26, 36, 0.6);
+  border: 1px solid var(--border-subtle);
+  border-radius: 10px;
+}
+
+.consulting-dash-detail-title {
+  font-family: 'Cinzel', serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--accent-ember);
+  margin: 0 0 6px 0;
+}
+
+.consulting-dash-detail-desc {
+  font-family: 'Crimson Pro', serif;
+  font-size: 1rem;
+  font-weight: 300;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  margin: 0 0 20px 0;
+}
+
+/* Session button */
+.consulting-session-btn {
+  font-family: 'Cinzel', serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent-ember);
+  background: rgba(196, 113, 58, 0.1);
+  border: 1px solid var(--accent-ember);
+  border-radius: 8px;
+  padding: 10px 24px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.consulting-session-btn:hover {
+  background: rgba(196, 113, 58, 0.2);
+  box-shadow: 0 0 10px rgba(196, 113, 58, 0.15);
+}
+
+.consulting-session-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Artifacts */
+.consulting-dash-artifacts {
+  margin-top: 20px;
+}
+
+.consulting-dash-artifacts-title {
+  font-family: 'Cinzel', serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent-steel);
+  margin: 0 0 10px 0;
+}
+
+.consulting-dash-artifact {
+  padding: 14px;
+  margin-bottom: 8px;
+  background: rgba(139, 157, 195, 0.04);
+  border-left: 2px solid var(--accent-gold);
+  border-radius: 0 6px 6px 0;
+}
+
+.consulting-dash-artifact-type {
+  font-family: 'Cinzel', serif;
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent-gold);
+  margin: 0 0 6px 0;
+}
+
+.consulting-dash-artifact-content {
+  font-family: 'Crimson Pro', serif;
+  font-size: 0.95rem;
+  font-weight: 300;
+  line-height: 1.7;
+  color: var(--text-primary);
+  white-space: pre-line;
+  margin: 0;
+}
+
+/* Session history */
+.consulting-dash-sessions {
+  margin-top: 20px;
+}
+
+.consulting-dash-sessions-title {
+  font-family: 'Cinzel', serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent-steel);
+  margin: 0 0 10px 0;
+}
+
+.consulting-dash-session-item {
+  padding: 10px 14px;
+  margin-bottom: 6px;
+  background: rgba(26, 26, 36, 0.5);
+  border: 1px solid rgba(58, 58, 74, 0.5);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: 'Crimson Pro', serif;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.consulting-dash-session-date {
+  font-size: 0.75rem;
+  color: #6a6a7a;
+  flex-shrink: 0;
+}
+
+.consulting-dash-session-artifacts {
+  font-size: 0.75rem;
+  color: var(--accent-gold);
+}
+
+/* Synthesis */
+.consulting-dash-synthesis {
+  margin-bottom: 36px;
+  padding: 24px;
+  background: rgba(201, 169, 97, 0.04);
+  border: 1px solid rgba(201, 169, 97, 0.2);
+  border-radius: 10px;
+}
+
+.consulting-dash-synthesis-title {
+  font-family: 'Cinzel', serif;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--accent-gold);
+  margin: 0 0 14px 0;
+}
+
+.consulting-dash-synthesis-text {
+  font-family: 'Crimson Pro', serif;
+  font-size: 1.05rem;
+  font-weight: 300;
+  line-height: 1.85;
+  color: var(--text-primary);
+  white-space: pre-line;
+  margin: 0;
+}
+
+/* Engagement list (when user has multiple) */
+.consulting-dash-eng-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 36px;
+}
+
+.consulting-dash-eng-card {
+  padding: 16px 20px;
+  background: rgba(26, 26, 36, 0.7);
+  border: 1px solid var(--border-subtle);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.consulting-dash-eng-card:hover {
+  border-color: rgba(196, 113, 58, 0.4);
+  background: rgba(196, 113, 58, 0.05);
+}
+
+.consulting-dash-eng-card-title {
+  font-family: 'Cinzel', serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--accent-ember);
+  margin: 0 0 4px 0;
+}
+
+.consulting-dash-eng-card-meta {
+  font-family: 'Cinzel', serif;
+  font-size: 0.65rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  display: flex;
+  gap: 12px;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .consulting-dash-stage {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .consulting-dash-detail {
+    padding: 16px;
+  }
+}

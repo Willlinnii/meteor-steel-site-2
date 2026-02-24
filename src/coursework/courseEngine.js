@@ -293,6 +293,37 @@ export const COURSES = [
       },
     ],
   },
+
+  // ── Consulting ──
+  {
+    id: 'mythic-consulting',
+    name: 'Mythic Consulting Engagement',
+    description: 'Complete a full mythic narrative consulting engagement — intake, sessions, and synthesis.',
+    active: true,
+    page: '/consulting/dashboard',
+    requirements: [
+      {
+        id: 'dashboard-visited',
+        type: 'element',
+        element: 'consulting.dashboard.visited',
+        description: 'Visit the consulting dashboard',
+      },
+      {
+        id: 'session-completed',
+        type: 'count',
+        element: 'consulting.session.completed',
+        threshold: 1,
+        description: 'Complete at least one consulting session',
+      },
+      {
+        id: 'artifact-captured',
+        type: 'count',
+        element: 'consulting.artifact.captured',
+        threshold: 1,
+        description: 'Capture at least one artifact during a session',
+      },
+    ],
+  },
 ];
 
 // Check if a single requirement is satisfied given user progress

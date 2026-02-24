@@ -447,7 +447,7 @@ module.exports = async function handler(req, res) {
     }
   }
 
-  const { messages, area, persona, mode, challengeStop, level, journeyId, stageId, gameMode, stageData, aspect, courseSummary, episodeContext, situationalContext, existingCredentials, existingNatalChart, qualifiedMentorTypes, uploadedDocument, tarotPhase, tarotCards, tarotIntention, culture, template, stageContent, targetStage, stageEntries, adjacentDrafts, requestDraft, drafts, completionType, completionData, currentSummary, currentFullStory } = req.body || {};
+  const { messages, area, persona, mode, challengeStop, level, journeyId, stageId, gameMode, stageData, aspect, courseSummary, episodeContext, situationalContext, existingCredentials, existingNatalChart, qualifiedMentorTypes, uploadedDocument, tarotPhase, tarotCards, tarotIntention, culture, template, stageContent, targetStage, stageEntries, adjacentDrafts, requestDraft, drafts, completionType, completionData, currentSummary, currentFullStory, clientType, engagementContext } = req.body || {};
 
   // --- Story Forge mode (narrative generation via OpenAI) ---
   if (mode === 'forge') {
@@ -753,6 +753,268 @@ module.exports = async function handler(req, res) {
       const result = { reply }; if (consultingProfile) result.consultingProfile = consultingProfile;
       return res.status(200).json(result);
     } catch (err) { console.error('Consulting Setup API error:', err?.message, err?.status); return res.status(500).json({ error: `Something went wrong: ${err?.message || 'Unknown error'}` }); }
+  }
+
+  // --- Consulting Intake mode ---
+  if (mode === 'consulting-intake') {
+    const SAVE_INTAKE_ASSESSMENT_TOOL = {
+      name: 'save_intake_assessment',
+      description: 'Save the mythic intake assessment after the conversation has revealed the client\'s archetypal pattern, journey stage, and narrative situation. Call this when you have enough information to write the assessment.',
+      input_schema: {
+        type: 'object',
+        properties: {
+          archetype: { type: 'string', description: 'The active archetype identified (e.g. "Saturn — The Builder", "Mars — The Warrior", "Moon — The Mirror")' },
+          journeyStage: { type: 'string', description: 'Where the client is in their journey (e.g. "The Threshold", "The Forge", "The Return")' },
+          narrative: { type: 'string', description: 'A 2-3 paragraph mythic assessment of where they are in their story, naming the archetype, the stage, and the invitation.' },
+          suggestedTitle: { type: 'string', description: 'A mythic name for this engagement (e.g. "The Forge of Clarity", "The Threshold of Voice")' },
+        },
+        required: ['archetype', 'journeyStage', 'narrative', 'suggestedTitle'],
+      },
+    };
+
+    const clientTypeLabel = clientType || 'seeker';
+    const credentialBlock = existingCredentials ? `\nThe client has these existing credentials on Mythouse: ${JSON.stringify(existingCredentials).slice(0, 2000)}` : '';
+    const natalBlock = existingNatalChart ? `\nThe client has a natal chart on file: Sun in ${existingNatalChart.planets?.[0]?.sign || '?'}, Moon in ${existingNatalChart.planets?.[1]?.sign || '?'}.` : '';
+
+    const intakeSystemPrompt = `You are Atlas conducting a mythic narrative intake for the Mythouse consulting practice. Your role is to understand where this person or organization is in their story — not through business language but through archetypal, psychological, and narrative language.
+
+The client identifies as: ${clientTypeLabel}${credentialBlock}${natalBlock}
+
+YOUR APPROACH:
+- Map their situation to the hero's journey stages
+- Identify the active archetype (which of the planetary/zodiacal energies is most alive)
+- Surface the mythic pattern in their situation
+- Name the threshold they're standing at
+
+CONVERSATION FLOW (4-8 exchanges):
+1. Welcome them warmly into the practice. Ask what brought them here — the call.
+2. Listen for the pattern. Ask what they're leaving behind — the departure.
+3. Ask what they fear in this transition — the guardian at the threshold.
+4. Ask what they hope to forge, create, or become — the boon.
+5. When you have enough to see the pattern, call save_intake_assessment with your mythic assessment.
+
+VOICE: Warm, perceptive, mythic but grounded. You are a guide, not a guru. Ask real questions. Listen for real patterns. Never inflate.
+
+IMPORTANT: Do not rush to the assessment. Let the conversation breathe. But once you see the pattern clearly, call the tool.`;
+
+    const raw = messages.slice(-20).map((m) => ({ role: m.role === 'assistant' ? 'assistant' : 'user', content: String(m.content || '').slice(0, 4000) }));
+    const trimmed = []; for (const msg of raw) { if (trimmed.length > 0 && trimmed[trimmed.length - 1].role === msg.role) { trimmed[trimmed.length - 1].content += '\n' + msg.content; } else { trimmed.push({ ...msg }); } } if (trimmed.length > 0 && trimmed[0].role !== 'user') trimmed.shift();
+    const anthropic = getAnthropicClient(userKeys.anthropicKey);
+
+    try {
+      let currentMessages = [...trimmed], reply = '', intakeAssessment = null;
+      for (let turn = 0; turn < 5; turn++) {
+        const response = await anthropic.messages.create({ model: MODELS.quality, system: intakeSystemPrompt, messages: currentMessages, max_tokens: 1500, tools: [SAVE_INTAKE_ASSESSMENT_TOOL] });
+        const toolBlocks = response.content.filter(c => c.type === 'tool_use');
+        const textBlock = response.content.find(c => c.type === 'text');
+        if (toolBlocks.length === 0) { reply = textBlock?.text || 'No response generated.'; break; }
+        const toolResults = [];
+        for (const tb of toolBlocks) {
+          if (tb.name === 'save_intake_assessment' && tb.input) {
+            intakeAssessment = { archetype: tb.input.archetype || '', journeyStage: tb.input.journeyStage || '', narrative: tb.input.narrative || '', suggestedTitle: tb.input.suggestedTitle || 'Mythic Narrative Engagement' };
+            toolResults.push({ type: 'tool_result', tool_use_id: tb.id, content: JSON.stringify({ success: true, message: 'Intake assessment saved. Share the assessment with the client.' }) });
+          }
+        }
+        if (textBlock?.text) reply = textBlock.text;
+        if (toolResults.length === 0) break;
+        currentMessages = [...currentMessages, { role: 'assistant', content: response.content }, { role: 'user', content: toolResults }];
+      }
+      const result = { reply };
+      if (intakeAssessment) result.intakeAssessment = intakeAssessment;
+      return res.status(200).json(result);
+    } catch (err) { console.error('Consulting Intake API error:', err?.message, err?.status); if (err.status === 401 && isByok) return res.status(401).json({ error: 'Your Anthropic API key is invalid or expired.', keyError: true }); return res.status(500).json({ error: `Something went wrong: ${err?.message || 'Unknown error'}` }); }
+  }
+
+  // --- Consulting Session mode ---
+  if (mode === 'consulting-session') {
+    if (!engagementContext) return res.status(400).json({ error: 'engagementContext is required for consulting sessions.' });
+
+    const CAPTURE_ARTIFACT_TOOL = {
+      name: 'capture_artifact',
+      description: 'Capture a meaningful artifact from this session — a narrative insight, an exercise, or a key realization. Call this whenever the conversation produces something worth preserving.',
+      input_schema: {
+        type: 'object',
+        properties: {
+          type: { type: 'string', enum: ['narrative', 'insight', 'exercise', 'reflection'], description: 'The type of artifact' },
+          content: { type: 'string', description: 'The artifact content — a paragraph or two capturing the insight, narrative, or exercise' },
+        },
+        required: ['type', 'content'],
+      },
+    };
+
+    const MARK_STAGE_COMPLETE_TOOL = {
+      name: 'mark_stage_complete',
+      description: 'Mark the current engagement stage as complete. Call this only when the client has genuinely crossed the threshold of this stage — not just discussed it, but integrated it.',
+      input_schema: {
+        type: 'object',
+        properties: {
+          summary: { type: 'string', description: 'A brief mythic summary of what was accomplished in this stage' },
+        },
+        required: ['summary'],
+      },
+    };
+
+    const { title, archetype, intakeNotes, currentStage, natalData } = engagementContext;
+    const stageLabel = currentStage?.label || 'unknown stage';
+
+    // Build natal/planetary context if available
+    let natalContext = '';
+    if (natalData) {
+      const parts = [];
+      if (natalData.sunSign) parts.push(`Sun in ${natalData.sunSign}`);
+      if (natalData.moonSign) parts.push(`Moon in ${natalData.moonSign}`);
+      if (natalData.risingSign) parts.push(`Rising ${natalData.risingSign}`);
+      if (natalData.dominantPlanet) parts.push(`Dominant planet: ${natalData.dominantPlanet}`);
+      if (parts.length > 0) natalContext = `\nNATAL CORRESPONDENCES: ${parts.join(' — ')}\nUse planetary and zodiacal language as a lens when it illuminates the client's situation. The natal chart is a diagnostic, not a prescription.`;
+    }
+
+    const sessionSystemPrompt = `You are Atlas as consulting partner in a mythic narrative session on the Mythouse platform.
+
+ENGAGEMENT: "${title || 'Mythic Narrative Engagement'}"
+ACTIVE ARCHETYPE: ${archetype || 'Not yet identified'}
+CURRENT STAGE: ${stageLabel}
+${currentStage?.description ? `STAGE MEANING: ${currentStage.description}` : ''}${natalContext}
+
+MYTHIC ASSESSMENT FROM INTAKE:
+${intakeNotes || 'No intake notes available.'}
+
+YOUR ROLE:
+- Guide this session through archetypal and narrative language
+- Surface mythic parallels to the client's situation
+- Help them see their situation as part of a larger pattern
+- When they reach insight, capture it as an artifact
+- When they identify next steps, frame them as mythic action items (not corporate to-dos)
+- When the client has genuinely crossed the threshold of this stage, mark it complete
+
+VOICE: Warm, perceptive, mythic but grounded. You are a guide walking alongside them, not above them. Let patterns speak. Never inflate.
+
+TOOLS: Use capture_artifact when the conversation produces something worth preserving. Use mark_stage_complete only when the threshold has truly been crossed.`;
+
+    const raw = messages.slice(-30).map((m) => ({ role: m.role === 'assistant' ? 'assistant' : 'user', content: String(m.content || '').slice(0, 4000) }));
+    const trimmed = []; for (const msg of raw) { if (trimmed.length > 0 && trimmed[trimmed.length - 1].role === msg.role) { trimmed[trimmed.length - 1].content += '\n' + msg.content; } else { trimmed.push({ ...msg }); } } if (trimmed.length > 0 && trimmed[0].role !== 'user') trimmed.shift();
+    const anthropic = getAnthropicClient(userKeys.anthropicKey);
+
+    try {
+      let currentMessages = [...trimmed], reply = '', artifacts = [], stageComplete = null;
+      for (let turn = 0; turn < 5; turn++) {
+        const response = await anthropic.messages.create({ model: MODELS.quality, system: sessionSystemPrompt, messages: currentMessages, max_tokens: 1500, tools: [CAPTURE_ARTIFACT_TOOL, MARK_STAGE_COMPLETE_TOOL] });
+        const toolBlocks = response.content.filter(c => c.type === 'tool_use');
+        const textBlock = response.content.find(c => c.type === 'text');
+        if (toolBlocks.length === 0) { reply = textBlock?.text || 'No response generated.'; break; }
+        const toolResults = [];
+        for (const tb of toolBlocks) {
+          if (tb.name === 'capture_artifact' && tb.input) {
+            artifacts.push({ type: tb.input.type || 'insight', content: tb.input.content || '', createdAt: new Date().toISOString() });
+            toolResults.push({ type: 'tool_result', tool_use_id: tb.id, content: JSON.stringify({ success: true, message: 'Artifact captured.' }) });
+          }
+          if (tb.name === 'mark_stage_complete' && tb.input) {
+            stageComplete = { summary: tb.input.summary || '' };
+            toolResults.push({ type: 'tool_result', tool_use_id: tb.id, content: JSON.stringify({ success: true, message: 'Stage marked complete. Acknowledge the threshold crossing to the client.' }) });
+          }
+        }
+        if (textBlock?.text) reply = textBlock.text;
+        if (toolResults.length === 0) break;
+        currentMessages = [...currentMessages, { role: 'assistant', content: response.content }, { role: 'user', content: toolResults }];
+      }
+      const result = { reply };
+      if (artifacts.length > 0) result.artifacts = artifacts;
+      if (stageComplete) result.stageComplete = stageComplete;
+      return res.status(200).json(result);
+    } catch (err) { console.error('Consulting Session API error:', err?.message, err?.status); if (err.status === 401 && isByok) return res.status(401).json({ error: 'Your Anthropic API key is invalid or expired.', keyError: true }); return res.status(500).json({ error: `Something went wrong: ${err?.message || 'Unknown error'}` }); }
+  }
+
+  // --- Consulting Synthesis mode ---
+  if (mode === 'consulting-synthesis') {
+    if (!engagementContext) return res.status(400).json({ error: 'engagementContext is required for consulting synthesis.' });
+
+    const { title, archetype, intakeNotes, clientType, stages: engStages, sessions: engSessions } = engagementContext;
+
+    // Build stage narratives from session data
+    const stageBlock = (engStages || []).map(s => {
+      const stageSessions = (engSessions || []).filter(sess => sess.stageId === s.id);
+      const artifacts = stageSessions.flatMap(sess => (sess.artifacts || []).map(a => `[${a.type}] ${a.content}`));
+      const clientWords = stageSessions.flatMap(sess => sess.messages || []);
+      return `### ${s.label} (${s.description || ''})\nClient reflections: ${clientWords.join(' | ') || 'No recorded reflections'}\nArtifacts: ${artifacts.join('\n') || 'None captured'}`;
+    }).join('\n\n');
+
+    const synthesisPrompt = `You are Atlas. A traveler has completed a full mythic narrative consulting engagement on the Mythouse platform. Your task is to weave their entire journey into a mythic narrative — the story of their transformation.
+
+ENGAGEMENT: "${title || 'Mythic Narrative Engagement'}"
+CLIENT TYPE: ${clientType || 'seeker'}
+ACTIVE ARCHETYPE: ${archetype || 'Not identified'}
+
+INTAKE ASSESSMENT:
+${intakeNotes || 'No intake notes.'}
+
+JOURNEY THROUGH THE STAGES:
+${stageBlock}
+
+YOUR TASK:
+Weave these fragments into a single, cohesive mythic narrative of this person's transformation. Honor their words and insights. Show how they moved through the stages — what died, what was forged, what emerged.
+
+VOICE: Warm, mythic, honoring. This is their story. You are the narrator, not the hero. 800-1500 words. Use rich, literary language but keep it grounded and personal.
+
+IMPORTANT: Never inflate the client into a hero who conquered or decoded. They walked, they noticed, they returned. Let the pattern speak.`;
+
+    const anthropic = getAnthropicClient(userKeys.anthropicKey);
+    try {
+      const response = await anthropic.messages.create({ model: MODELS.quality, system: synthesisPrompt, messages: [{ role: 'user', content: 'Please weave my consulting journey into a mythic narrative.' }], max_tokens: 4096 });
+      const text = response.content?.find(c => c.type === 'text')?.text || 'No synthesis generated.';
+      return res.status(200).json({ synthesis: text });
+    } catch (err) { console.error('Consulting Synthesis API error:', err?.message, err?.status); if (err.status === 401 && isByok) return res.status(401).json({ error: 'Your Anthropic API key is invalid or expired.', keyError: true }); return res.status(500).json({ error: `Something went wrong: ${err?.message || 'Unknown error'}` }); }
+  }
+
+  // --- Consulting Forge mode — Story Forge applied to engagement material ---
+  if (mode === 'consulting-forge') {
+    if (!engagementContext || !Array.isArray(messages) || messages.length === 0) return res.status(400).json({ error: 'engagementContext and messages are required for consulting forge.' });
+    const { title, archetype, intakeNotes, clientType, stages: engStages, sessions: engSessions, currentStageId } = engagementContext;
+
+    // Gather raw material from sessions
+    const rawMaterial = (engStages || []).map(s => {
+      const stageSessions = (engSessions || []).filter(sess => sess.stageId === s.id);
+      const artifacts = stageSessions.flatMap(sess => (sess.artifacts || []).map(a => `[${a.type}] ${a.content}`));
+      const clientWords = stageSessions.flatMap(sess => sess.messages || []);
+      return `=== ${s.label} ===\n${clientWords.length > 0 ? clientWords.join('\n') : '(No material yet)'}\n${artifacts.length > 0 ? 'Artifacts:\n' + artifacts.join('\n') : ''}`;
+    }).join('\n\n');
+
+    const forgePrompt = `You are Atlas, a story collaborator helping a consulting client forge the narrative of their transformation into a polished written work. This is the Story Forge applied to mythic consulting.
+
+ENGAGEMENT: "${title || 'Mythic Narrative Engagement'}"
+CLIENT TYPE: ${clientType || 'seeker'}
+ACTIVE ARCHETYPE: ${archetype || 'Not identified'}
+
+INTAKE ASSESSMENT:
+${(intakeNotes || '').slice(0, 800)}
+
+RAW MATERIAL FROM ENGAGEMENT:
+${rawMaterial.slice(0, 4000)}
+
+${currentStageId ? `Currently focused on stage: ${currentStageId}` : ''}
+
+YOUR ROLE: Help the client craft their transformation story. Ask what they want to emphasize, notice what's vivid, suggest structure. Be a collaborator, not a ghostwriter.
+
+TOOLS:
+- suggest_mythic_parallel: Use when you notice a genuinely striking parallel between their material and a mythic tradition. At most once per exchange.
+- produce_draft: Use when the client explicitly asks for a draft. 200-600 words, polished prose that preserves their voice and insights.
+
+VOICE: Warm, editorial, mythic. You are helping them find the shape of their story.`;
+
+    const raw = messages.slice(-20).map(m => ({ role: m.role === 'assistant' ? 'assistant' : 'user', content: String(m.content || '').slice(0, 4000) }));
+    const trimmed = []; for (const msg of raw) { if (trimmed.length > 0 && trimmed[trimmed.length - 1].role === msg.role) { trimmed[trimmed.length - 1].content += '\n' + msg.content; } else { trimmed.push({ ...msg }); } } if (trimmed.length > 0 && trimmed[0].role !== 'user') trimmed.shift();
+
+    const anthropic = getAnthropicClient(userKeys.anthropicKey);
+    try {
+      const response = await anthropic.messages.create({
+        model: MODELS.quality, max_tokens: 2500, system: forgePrompt, messages: trimmed,
+        tools: [
+          { name: 'suggest_mythic_parallel', description: 'Surface a parallel between the client\'s engagement material and a mythic tradition.', input_schema: { type: 'object', properties: { parallel: { type: 'string' }, source: { type: 'string' }, suggestion: { type: 'string' } }, required: ['parallel', 'source', 'suggestion'] } },
+          { name: 'produce_draft', description: 'Produce a polished draft passage from the engagement material.', input_schema: { type: 'object', properties: { draft: { type: 'string', description: 'The polished draft passage (200-600 words)' } }, required: ['draft'] } },
+        ],
+      });
+      let reply = '', draft = null, mythicParallel = null;
+      for (const block of response.content) { if (block.type === 'text') { reply += block.text; } else if (block.type === 'tool_use') { if (block.name === 'suggest_mythic_parallel') mythicParallel = block.input; else if (block.name === 'produce_draft') draft = block.input.draft; } }
+      return res.status(200).json({ reply, draft, mythicParallel });
+    } catch (err) { console.error('Consulting Forge API error:', err?.message, err?.status); if (err.status === 401 && isByok) return res.status(401).json({ error: 'Your Anthropic API key is invalid or expired.', keyError: true }); return res.status(500).json({ error: `Something went wrong: ${err?.message || 'Unknown error'}` }); }
   }
 
   // --- Fellowship summary mode ---

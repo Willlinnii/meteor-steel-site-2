@@ -1,0 +1,286 @@
+.consulting-page {
+  min-height: 100vh;
+  padding: 70px 20px 60px;
+  background:
+    radial-gradient(1px 1px at 15% 25%, rgba(255,255,255,0.4), transparent),
+    radial-gradient(1px 1px at 65% 15%, rgba(255,255,255,0.3), transparent),
+    radial-gradient(1px 1px at 85% 55%, rgba(255,255,255,0.35), transparent),
+    radial-gradient(1px 1px at 35% 75%, rgba(255,255,255,0.3), transparent),
+    radial-gradient(1px 1px at 55% 45%, rgba(255,255,255,0.25), transparent),
+    linear-gradient(to bottom, #06060f 0%, #0a0a18 40%, #0d0d1a 70%, #08080f 100%);
+  background-attachment: fixed;
+  color: var(--text-primary);
+}
+
+.consulting-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* Hero Section */
+.consulting-hero {
+  text-align: center;
+  margin-bottom: 60px;
+  padding: 40px 0;
+}
+
+.consulting-hero-title {
+  font-family: 'Cinzel', serif;
+  font-size: 2.2rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--accent-ember);
+  margin: 0 0 16px 0;
+}
+
+.consulting-hero-subtitle {
+  font-family: 'Crimson Pro', serif;
+  font-size: 1.2rem;
+  font-weight: 300;
+  color: var(--text-secondary);
+  letter-spacing: 0.04em;
+  margin: 0;
+}
+
+/* Section headings */
+.consulting-section {
+  margin-bottom: 48px;
+}
+
+.consulting-section-title {
+  font-family: 'Cinzel', serif;
+  font-size: 1.3rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: var(--accent-steel);
+  margin: 0 0 20px 0;
+  text-transform: uppercase;
+}
+
+/* The Practice */
+.consulting-practice-text {
+  font-family: 'Crimson Pro', serif;
+  font-size: 1.1rem;
+  font-weight: 300;
+  line-height: 1.85;
+  color: var(--text-primary);
+  padding: 20px;
+  background: rgba(139, 157, 195, 0.04);
+  border-left: 3px solid var(--accent-steel);
+}
+
+/* Who It Serves — Cards */
+.consulting-serves-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 18px;
+}
+
+.consulting-serves-card {
+  padding: 20px;
+  background: rgba(26, 26, 36, 0.7);
+  border: 1px solid var(--border-subtle);
+  border-radius: 10px;
+  transition: all 0.3s ease;
+}
+
+.consulting-serves-card:hover {
+  border-color: rgba(196, 113, 58, 0.4);
+  background: rgba(196, 113, 58, 0.05);
+}
+
+.consulting-serves-card-title {
+  font-family: 'Cinzel', serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--accent-ember);
+  margin: 0 0 10px 0;
+}
+
+.consulting-serves-card-text {
+  font-family: 'Crimson Pro', serif;
+  font-size: 1rem;
+  font-weight: 300;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+/* How It Works — Arc */
+.consulting-arc {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  margin-bottom: 12px;
+}
+
+.consulting-arc-step {
+  flex: 1;
+  padding: 20px 16px;
+  text-align: center;
+  position: relative;
+  border: 1px solid var(--border-subtle);
+}
+
+.consulting-arc-step:first-child {
+  border-radius: 10px 0 0 10px;
+}
+
+.consulting-arc-step:last-child {
+  border-radius: 0 10px 10px 0;
+}
+
+.consulting-arc-step:not(:last-child)::after {
+  content: '\2192';
+  position: absolute;
+  right: -12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--accent-ember);
+  font-size: 1.2rem;
+  z-index: 1;
+}
+
+.consulting-arc-step-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent-gold);
+  margin: 0 0 8px 0;
+}
+
+.consulting-arc-step-desc {
+  font-family: 'Crimson Pro', serif;
+  font-size: 0.9rem;
+  font-weight: 300;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+/* Tiers */
+.consulting-tiers {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 18px;
+}
+
+.consulting-tier {
+  padding: 24px 20px;
+  background: rgba(26, 26, 36, 0.7);
+  border: 1px solid var(--border-subtle);
+  border-radius: 10px;
+  transition: all 0.3s ease;
+}
+
+.consulting-tier:hover {
+  border-color: rgba(201, 169, 97, 0.4);
+}
+
+.consulting-tier-name {
+  font-family: 'Cinzel', serif;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--accent-gold);
+  margin: 0 0 6px 0;
+}
+
+.consulting-tier-price {
+  font-family: 'Cinzel', serif;
+  font-size: 0.75rem;
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  color: var(--text-secondary);
+  margin: 0 0 12px 0;
+  text-transform: uppercase;
+}
+
+.consulting-tier-desc {
+  font-family: 'Crimson Pro', serif;
+  font-size: 1rem;
+  font-weight: 300;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+/* Begin CTA */
+.consulting-cta {
+  text-align: center;
+  padding: 40px 0;
+}
+
+.consulting-begin-btn {
+  font-family: 'Cinzel', serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent-ember);
+  background: rgba(196, 113, 58, 0.1);
+  border: 1px solid var(--accent-ember);
+  border-radius: 8px;
+  padding: 14px 36px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.consulting-begin-btn:hover {
+  background: rgba(196, 113, 58, 0.2);
+  box-shadow: 0 0 12px rgba(196, 113, 58, 0.2);
+}
+
+.consulting-cta-sub {
+  font-family: 'Crimson Pro', serif;
+  font-size: 0.95rem;
+  font-weight: 300;
+  color: var(--text-secondary);
+  margin: 16px 0 0 0;
+}
+
+/* Divider */
+.consulting-divider {
+  border: none;
+  border-top: 1px solid var(--border-subtle);
+  margin: 0 0 48px 0;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .consulting-page {
+    padding: 60px 12px 40px;
+  }
+  .consulting-hero-title {
+    font-size: 1.6rem;
+  }
+  .consulting-arc {
+    flex-direction: column;
+  }
+  .consulting-arc-step {
+    border-radius: 0;
+  }
+  .consulting-arc-step:first-child {
+    border-radius: 10px 10px 0 0;
+  }
+  .consulting-arc-step:last-child {
+    border-radius: 0 0 10px 10px;
+  }
+  .consulting-arc-step:not(:last-child)::after {
+    content: '\2193';
+    right: 50%;
+    top: auto;
+    bottom: -12px;
+    transform: translateX(50%);
+  }
+  .consulting-serves-grid,
+  .consulting-tiers {
+    grid-template-columns: 1fr;
+  }
+}

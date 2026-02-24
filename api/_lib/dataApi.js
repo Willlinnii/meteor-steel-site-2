@@ -282,6 +282,8 @@ function handleRoot(req, res) {
         library:          '/v1/library — curated reading list of foundational texts',
         // Source vault
         vault:            '/v1/vault — author\'s original research: planetary tradition charts, observations, notes',
+        // Consulting
+        consulting:       '/v1/consulting — mythic narrative consulting: stage templates, client types, engagement structure',
       },
     },
   }, '/v1/');
@@ -887,6 +889,85 @@ function handleVault(segments, req, res) {
   return respond(res, 404, { error: `Unknown vault resource: ${sub}` }, endpoint);
 }
 
+// ─── CONSULTING ───
+
+const CONSULTING_STAGE_TEMPLATES = {
+  storyteller: [
+    { id: 'seed', label: 'The Seed', description: 'What wants to be born? The raw impulse.' },
+    { id: 'call', label: 'The Call', description: 'The vision clarifies. What story is asking to be told?' },
+    { id: 'descent', label: 'The Descent', description: 'Into material. Research, gathering, immersion.' },
+    { id: 'forge', label: 'The Forge', description: 'Active creation. Heat and hammer.' },
+    { id: 'quench', label: 'The Quench', description: 'Stepping back. Letting it cool. First reflection.' },
+    { id: 'polish', label: 'The Polish', description: 'Refinement. Craft applied to raw creation.' },
+    { id: 'offering', label: 'The Offering', description: 'Preparation for the world. Framing, context, courage.' },
+    { id: 'release', label: 'The Release', description: 'Letting it go. The work enters the world.' },
+  ],
+  seeker: [
+    { id: 'ordinary-world', label: 'Ordinary World', description: 'Where you are. The known ground.' },
+    { id: 'call', label: 'The Call', description: "What's pulling you. The disturbance." },
+    { id: 'threshold', label: 'The Threshold', description: 'What you must leave behind to answer.' },
+    { id: 'trials', label: 'The Trials', description: 'What you face. The tests that shape you.' },
+    { id: 'abyss', label: 'The Abyss', description: 'The deepest point. What dies so something can live.' },
+    { id: 'return', label: 'The Return', description: 'What you bring back. The boon.' },
+    { id: 'integration', label: 'Integration', description: 'Making it real in daily life.' },
+    { id: 'renewal', label: 'Renewal', description: "The new ordinary world. Who you've become." },
+  ],
+  brand: [
+    { id: 'origin', label: 'Origin', description: 'Where you came from. The founding myth.' },
+    { id: 'identity', label: 'Identity', description: 'Who you are. The archetypal core.' },
+    { id: 'shadow', label: 'Shadow', description: 'What you avoid. The unspoken story.' },
+    { id: 'transformation', label: 'Transformation', description: "What's changing. The threshold you're crossing." },
+    { id: 'voice', label: 'Voice', description: 'How you speak. The narrative language.' },
+    { id: 'story', label: 'Story', description: 'The story you tell. The myth you carry.' },
+    { id: 'culture', label: 'Culture', description: 'How the story lives in your people.' },
+    { id: 'legacy', label: 'Legacy', description: 'What you leave behind. The myth that outlasts you.' },
+  ],
+};
+
+const CONSULTING_CLIENT_TYPES = {
+  storyteller: { id: 'storyteller', label: 'Storytellers & Artists', aliases: ['artist', 'creator'], stageTemplate: 'storyteller' },
+  seeker: { id: 'seeker', label: 'Seekers on the Journey', aliases: [], stageTemplate: 'seeker' },
+  brand: { id: 'brand', label: 'Brands & Organizations', aliases: ['leader'], stageTemplate: 'brand' },
+};
+
+function handleConsulting(segments, req, res) {
+  const endpoint = '/v1/consulting' + (segments.length ? '/' + segments.join('/') : '');
+
+  // GET /v1/consulting — overview
+  if (segments.length === 0) {
+    return respond(res, 200, {
+      data: {
+        description: 'Mythic Narrative Consulting — stage templates and client type definitions for the consulting coordinate system.',
+        clientTypes: Object.values(CONSULTING_CLIENT_TYPES),
+        stageTemplates: Object.keys(CONSULTING_STAGE_TEMPLATES),
+      },
+    }, endpoint);
+  }
+
+  // GET /v1/consulting/stages — all stage templates
+  if (segments[0] === 'stages') {
+    if (segments.length === 1) {
+      return respond(res, 200, { data: CONSULTING_STAGE_TEMPLATES }, endpoint);
+    }
+
+    // GET /v1/consulting/stages/:clientType
+    const clientType = segments[1];
+    const resolvedType = clientType === 'artist' || clientType === 'creator' ? 'storyteller' : clientType === 'leader' ? 'brand' : clientType;
+    const stages = CONSULTING_STAGE_TEMPLATES[resolvedType];
+    if (!stages) {
+      return respond(res, 404, { error: `Unknown client type: ${clientType}. Valid types: storyteller, artist, creator, seeker, brand, leader` }, endpoint);
+    }
+    return respond(res, 200, { data: { clientType: resolvedType, stages } }, endpoint);
+  }
+
+  // GET /v1/consulting/client-types
+  if (segments[0] === 'client-types') {
+    return respond(res, 200, { data: Object.values(CONSULTING_CLIENT_TYPES) }, endpoint);
+  }
+
+  return respond(res, 404, { error: `Unknown consulting resource: ${segments[0]}` }, endpoint);
+}
+
 // ── Router ──
 
 function route(segments, req, res) {
@@ -919,6 +1000,8 @@ function route(segments, req, res) {
     case 'library':          return handleLibrary(rest, req, res);
     // Source vault
     case 'vault':            return handleVault(rest, req, res);
+    // Consulting
+    case 'consulting':       return handleConsulting(rest, req, res);
     default:
       return respond(res, 404, { error: `Unknown resource: ${resource}` }, '/v1/' + segments.join('/'));
   }

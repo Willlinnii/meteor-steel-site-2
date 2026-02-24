@@ -118,6 +118,23 @@ service cloud.firestore {
       allow write: if false;
     }
 
+    // Consulting engagements — readable by client, practitioner, or admin; server-written only
+    match /consulting-engagements/{engagementId} {
+      allow read: if request.auth != null
+        && (request.auth.uid == resource.data.clientUid
+            || request.auth.uid == resource.data.practitionerUid
+            || request.auth.token.email == 'willlinnii@gmail.com');
+      allow write: if false;
+
+      match /sessions/{sessionId} {
+        allow read: if request.auth != null
+          && (request.auth.uid == get(/databases/$(database)/documents/consulting-engagements/$(engagementId)).data.clientUid
+              || request.auth.uid == get(/databases/$(database)/documents/consulting-engagements/$(engagementId)).data.practitionerUid
+              || request.auth.token.email == 'willlinnii@gmail.com');
+        allow write: if false;
+      }
+    }
+
     // Community feed (legacy top-level) — any authenticated user can read/create; only author can update/delete
     match /feed/{postId} {
       allow read: if request.auth != null;

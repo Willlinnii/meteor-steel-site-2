@@ -48,6 +48,40 @@ const ZODIAC_STAGES = [
   { id: 'pisces', label: 'Pisces', entity: 'Pisces', phase: 'zodiac', type: 'zodiac' },
 ];
 
+// Consulting engagement stages mapped as journey stops
+const CONSULTING_STORYTELLER_STAGES = [
+  { id: 'seed', label: 'The Seed' },
+  { id: 'call', label: 'The Call' },
+  { id: 'descent', label: 'The Descent' },
+  { id: 'forge', label: 'The Forge' },
+  { id: 'quench', label: 'The Quench' },
+  { id: 'polish', label: 'The Polish' },
+  { id: 'offering', label: 'The Offering' },
+  { id: 'release', label: 'The Release' },
+];
+
+const CONSULTING_SEEKER_STAGES = [
+  { id: 'ordinary-world', label: 'Ordinary World' },
+  { id: 'call', label: 'The Call' },
+  { id: 'threshold', label: 'The Threshold' },
+  { id: 'trials', label: 'The Trials' },
+  { id: 'abyss', label: 'The Abyss' },
+  { id: 'return', label: 'The Return' },
+  { id: 'integration', label: 'Integration' },
+  { id: 'renewal', label: 'Renewal' },
+];
+
+const CONSULTING_BRAND_STAGES = [
+  { id: 'origin', label: 'Origin' },
+  { id: 'identity', label: 'Identity' },
+  { id: 'shadow', label: 'Shadow' },
+  { id: 'transformation', label: 'Transformation' },
+  { id: 'voice', label: 'Voice' },
+  { id: 'story', label: 'Story' },
+  { id: 'culture', label: 'Culture' },
+  { id: 'legacy', label: 'Legacy' },
+];
+
 const JOURNEY_DEFS = {
   monomyth: {
     id: 'monomyth',
@@ -168,6 +202,67 @@ const JOURNEY_DEFS = {
     ],
     completion: "You have traversed all twelve signs of the zodiac. From Aries through Pisces, the wheel has turned full circle. The ouroboros turns.",
     completionElement: 'journeys.zodiac.completed',
+  },
+
+  // Consulting journeys — map engagement stages as Ouroboros stops
+  'consulting-storyteller': {
+    id: 'consulting-storyteller',
+    label: 'Storyteller Journey',
+    challengeMode: 'wheel',
+    levelsPerStop: 1,
+    autoStart: false,
+    isFused: false,
+    stages: CONSULTING_STORYTELLER_STAGES,
+    dotRadius: 31,
+    cssClass: '',
+    title: 'The Storyteller\u2019s Journey',
+    intro: [
+      'Atlas invites you to walk the creative arc \u2014 from raw impulse to release.',
+      'Eight stages of the maker\u2019s path. At each one, Atlas will guide you deeper into the mythic pattern inside your creative process.',
+      'The forge is where the material meets the meaning.',
+    ],
+    completion: 'You have walked the full arc of the storyteller \u2014 from Seed through Release. The work has entered the world. The ouroboros turns.',
+    completionElement: 'journeys.consulting-storyteller.completed',
+  },
+
+  'consulting-seeker': {
+    id: 'consulting-seeker',
+    label: 'Seeker Journey',
+    challengeMode: 'wheel',
+    levelsPerStop: 1,
+    autoStart: false,
+    isFused: false,
+    stages: CONSULTING_SEEKER_STAGES,
+    dotRadius: 31,
+    cssClass: '',
+    title: 'The Seeker\u2019s Journey',
+    intro: [
+      'Atlas invites you to walk the hero\u2019s path \u2014 from ordinary world to renewal.',
+      'Eight thresholds around the dragon\u2019s coil. At each one, Atlas will map the territory of your transformation.',
+      'Not as metaphor, but as lived pattern.',
+    ],
+    completion: 'You have walked the full circle of the seeker \u2014 from Ordinary World through Renewal. You carried something through the fire and something emerged. The ouroboros turns.',
+    completionElement: 'journeys.consulting-seeker.completed',
+  },
+
+  'consulting-brand': {
+    id: 'consulting-brand',
+    label: 'Brand Journey',
+    challengeMode: 'wheel',
+    levelsPerStop: 1,
+    autoStart: false,
+    isFused: false,
+    stages: CONSULTING_BRAND_STAGES,
+    dotRadius: 31,
+    cssClass: '',
+    title: 'The Brand\u2019s Journey',
+    intro: [
+      'Atlas invites you to surface the myth your organization carries \u2014 spoken or not.',
+      'Eight stages from origin to legacy. At each one, Atlas will help you see the archetypal pattern alive in your narrative.',
+      'So your story becomes conscious and coherent.',
+    ],
+    completion: 'You have walked the full arc of the brand \u2014 from Origin through Legacy. The founding myth is now a living narrative. The ouroboros turns.',
+    completionElement: 'journeys.consulting-brand.completed',
   },
 };
 

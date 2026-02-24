@@ -69,6 +69,43 @@ const STRIPE_PRODUCTS = {
     name: 'Starlight Bundle',
     amount: 4000,
   },
+  // Consulting
+  'consulting-single': {
+    mode: 'payment',
+    name: 'Consulting: Single Session',
+    amount: 15000,
+  },
+  'consulting-4pack': {
+    mode: 'payment',
+    name: 'Consulting: 4-Session Pack',
+    amount: 50000,
+  },
+  'consulting-8pack': {
+    mode: 'payment',
+    name: 'Consulting: Full Journey (8 Sessions)',
+    amount: 90000,
+  },
+  'consulting-certification': {
+    mode: 'payment',
+    name: 'Practitioner Certification',
+    amount: 250000,
+  },
+  // Retreats
+  'retreat-day': {
+    mode: 'payment',
+    name: 'Mentone Day Retreat',
+    amount: 50000,
+  },
+  'retreat-weekend': {
+    mode: 'payment',
+    name: 'Mentone Weekend Retreat',
+    amount: 150000,
+  },
+  'retreat-week': {
+    mode: 'payment',
+    name: 'Mentone Week-Long Residency',
+    amount: 500000,
+  },
 };
 
 /**

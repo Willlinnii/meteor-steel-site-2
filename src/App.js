@@ -87,6 +87,9 @@ const CuratedProductsPage = lazy(() => import('./pages/CuratedProducts/CuratedPr
 const MatchingPage = lazy(() => import('./pages/Matching/MatchingPage'));
 const ConsultingPage = lazy(() => import('./pages/Consulting/ConsultingPage'));
 const ConsultingIntakePage = lazy(() => import('./pages/Consulting/ConsultingIntakePage'));
+const ConsultingDashboardPage = lazy(() => import('./pages/Consulting/ConsultingDashboardPage'));
+const PractitionerDashboardPage = lazy(() => import('./pages/Consulting/PractitionerDashboardPage'));
+const ConsultingForgePage = lazy(() => import('./pages/Consulting/ConsultingForgePage'));
 const StorePage = lazy(() => import('./pages/Store/StorePage'));
 
 const STAGES = [
@@ -2295,6 +2298,10 @@ function AppContent() {
         <Route path="/mythic-earth" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><MythicEarthPage /></Suspense>} />
         <Route path="/consulting" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><ConsultingPage /></Suspense>} />
         <Route path="/consulting/intake" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><ConsultingIntakePage /></Suspense>} />
+        <Route path="/consulting/dashboard" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><ConsultingDashboardPage /></Suspense>} />
+        <Route path="/consulting/engagement/:engagementId" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><ConsultingDashboardPage /></Suspense>} />
+        <Route path="/consulting/practitioner" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><PractitionerDashboardPage /></Suspense>} />
+        <Route path="/consulting/forge/:engagementId" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><ConsultingForgePage /></Suspense>} />
         <Route path="/mentors" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><MentorDirectoryPage /></Suspense>} />
         <Route path="/guild" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><GuildPage /></Suspense>} />
         <Route path="/discover" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><DiscoverPage /></Suspense>} />
