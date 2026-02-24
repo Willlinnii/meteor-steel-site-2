@@ -26,6 +26,7 @@ import wheelData from '../../data/medicineWheels.json';
 import wheelContent from '../../data/medicineWheelContent.json';
 import dayNightData from '../../data/dayNight.json';
 import useYellowBrickRoad from '../../components/chronosphaera/useYellowBrickRoad';
+import useCompass from '../../hooks/useCompass';
 import YellowBrickRoadPanel from '../../components/chronosphaera/YellowBrickRoadPanel';
 import StageContent from '../../components/monomyth/StageContent';
 import MeteorSteelContent from '../../components/meteorSteel/MeteorSteelContent';
@@ -98,6 +99,7 @@ const MONTHS = ['January','February','March','April','May','June',
 const PLANET_NAV_COLORS = {
   Sun: '#e8e8e8', Moon: '#9b59b6', Mars: '#4a90d9',
   Mercury: '#4caf50', Jupiter: '#f0c040', Venus: '#e67e22', Saturn: '#c04040',
+  Earth: '#6bc5a0',
 };
 
 const WEEKDAYS = [
@@ -548,6 +550,7 @@ export default function ChronosphaeraPage() {
   const location = useLocation();
   const navigate = useNavigate();
   const { hasPurchase, hasSubscription } = useProfile();
+  const compass = useCompass();
   const [selectedPlanet, setSelectedPlanet] = useState('Sun');
   const [hoveredPlanet, setHoveredPlanet] = useState(null);
   const [activeTab, setActiveTab] = useState('overview');
@@ -557,6 +560,8 @@ export default function ChronosphaeraPage() {
   const [selectedEarth, setSelectedEarth] = useState(null);
   const [devEntries, setDevEntries] = useState({});
   const [clockMode, setClockMode] = useState('24h');
+  // Stop compass when leaving clock mode
+  useEffect(() => { if (!clockMode && compass.active) compass.stopCompass(); }, [clockMode]); // eslint-disable-line react-hooks/exhaustive-deps
   const [zodiacMode, setZodiacMode] = useState('tropical');
   const [showCalendar, setShowCalendar] = useState(() => location.pathname.endsWith('/calendar'));
   const [selectedMonth, setSelectedMonth] = useState(() => location.pathname.endsWith('/calendar') ? MONTHS[new Date().getMonth()] : null);
@@ -1311,6 +1316,10 @@ export default function ChronosphaeraPage() {
             setActiveMonthTab('stone');
             navigate(next === '24h' ? '/chronosphaera/calendar-24' : '/chronosphaera/calendar');
           }}
+          compassHeading={compass.active ? compass.heading : null}
+          compassSupported={compass.supported}
+          onRequestCompass={compass.requestCompass}
+          onStopCompass={compass.stopCompass}
           showMedicineWheel={showMedicineWheel}
           onToggleMedicineWheel={() => {
             clearAllSelections();

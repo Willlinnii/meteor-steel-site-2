@@ -214,7 +214,7 @@ const ORDER_LABELS = {
   chaldean: 'Chaldean Order',
   ascending: 'Ascending Order',
   heliocentric: 'Heliocentric Order',
-  weekdays: 'Weekday Order',
+  weekdays: 'Order of the Week',
   descending: 'Descending Order',
   evolutionary: 'Evolutionary Order',
   sephirotic: 'Sephirotic Order',
@@ -230,11 +230,13 @@ const STANDARD_ORDERS = {
   ascending: ['Moon', 'Mercury', 'Venus', 'Sun', 'Mars', 'Jupiter', 'Saturn'],
   descending: ['Saturn', 'Jupiter', 'Mars', 'Sun', 'Venus', 'Mercury', 'Moon'],
   weekdays: ['Sun', 'Moon', 'Mars', 'Mercury', 'Jupiter', 'Venus', 'Saturn'],
+  heliocentric: ['Sun', 'Mercury', 'Venus', 'Earth', 'Mars', 'Jupiter', 'Saturn'],
 };
 
 const PLANET_COLORS = {
   Sun: '#e8e8e8', Moon: '#9b59b6', Mars: '#4a90d9',
   Mercury: '#4caf50', Jupiter: '#f0c040', Venus: '#e67e22', Saturn: '#c04040',
+  Earth: '#6bc5a0',
 };
 
 function camelToTitle(key) {
@@ -253,18 +255,19 @@ function isPopulated(chart) {
 }
 
 // Derive planet navigation order from a chart.
-// Only entries with a classicalPlanet mapping are navigable planets;
+// Only entries with a classicalPlanet mapping (or the key name for heliocentric) are navigable;
 // non-planetary layers (Material World, Fixed Stars, Kether, etc.) are excluded.
 function derivePlanetOrder(chart) {
   const entries = Object.entries(chart.correspondences);
+  const isHelio = chart.centerModel === 'heliocentric';
   const hasNumbers = entries.some(([, d]) => d.number != null);
 
   if (hasNumbers) {
-    // Sort by number field; only include entries that map to a classical planet
+    // Sort by number field; use classicalPlanet, or key name for heliocentric (Earth)
     const planets = entries
-      .filter(([, d]) => d.number != null && d.classicalPlanet)
+      .filter(([key, d]) => d.number != null && (d.classicalPlanet || (isHelio && key === 'Earth')))
       .sort((a, b) => a[1].number - b[1].number)
-      .map(([, d]) => d.classicalPlanet);
+      .map(([key, d]) => d.classicalPlanet || key);
     if (planets.length > 0) return planets;
   }
 
