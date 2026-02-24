@@ -257,7 +257,7 @@ function ensureYTApi() {
   });
 }
 
-export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPlanet, hoveredPlanet, selectedSign, onSelectSign, selectedCardinal, onSelectCardinal, selectedEarth, onSelectEarth, showCalendar, onToggleCalendar, selectedMonth, onSelectMonth, showMedicineWheel, onToggleMedicineWheel, selectedWheelItem, onSelectWheelItem, chakraViewMode, onToggleChakraView, onClickOrderLabel, orderLabel, videoUrl, onCloseVideo, ybrActive, ybrCurrentStopIndex, ybrStopProgress, ybrJourneySequence, onToggleYBR, ybrAutoStart, clockMode, onToggleClock, compassHeading, compassSupported, onRequestCompass, onStopCompass, showMonomyth, showMeteorSteel, monomythStages, selectedMonomythStage, onSelectMonomythStage, onToggleMonomyth, monomythModel, showCycles, onSelectCycleSegment, activeCulture, showFallenStarlight, showStoryOfStories, onToggleStarlight, starlightStages, selectedStarlightStage, onSelectStarlightStage, selectedConstellation, onSelectConstellation, zodiacMode, onSelectBeyondRing, beyondRings, activeBeyondRing }) {
+export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPlanet, hoveredPlanet, selectedSign, onSelectSign, selectedCardinal, onSelectCardinal, selectedEarth, onSelectEarth, showCalendar, onToggleCalendar, selectedMonth, onSelectMonth, showMedicineWheel, selectedWheelItem, onSelectWheelItem, chakraViewMode, onToggleBodyWheel, onClickOrderLabel, orderLabel, videoUrl, onCloseVideo, ybrActive, ybrCurrentStopIndex, ybrStopProgress, ybrJourneySequence, onToggleYBR, ybrAutoStart, clockMode, onToggleClock, compassHeading, compassSupported, compassDenied, onRequestCompass, onStopCompass, seasonalSign, seasonalMonth, seasonalStageIndex, showMonomyth, showMeteorSteel, monomythStages, selectedMonomythStage, onSelectMonomythStage, onToggleMonomyth, monomythModel, showCycles, onSelectCycleSegment, activeCulture, showFallenStarlight, showStoryOfStories, onToggleStarlight, starlightStages, selectedStarlightStage, onSelectStarlightStage, selectedConstellation, onSelectConstellation, zodiacMode, onSelectBeyondRing, beyondRings, activeBeyondRing }) {
   const wrapperRef = useRef(null);
   const [tooltip, setTooltip] = useState(null);
   const { hasPurchase, hasSubscription } = useProfile();
@@ -1368,8 +1368,7 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
               const hx = CX + MONTH_TEXT_R * Math.cos(rad);
               const hy = CY + MONTH_TEXT_R * Math.sin(rad);
               // Highlight current month
-              const now = new Date();
-              const isCurrent = now.getMonth() === i;
+              const isCurrent = seasonalMonth === i && !isSelected;
 
               return (
                 <g
@@ -1382,6 +1381,20 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
                   style={{ cursor: 'pointer' }}
                 >
                   <circle cx={hx} cy={hy} r="18" fill="transparent" />
+                  {isCurrent && (() => {
+                    const cwEdge = -(i * 30) + MONTH_OFFSET;
+                    const ccwEdge = -(i * 30 + 30) + MONTH_OFFSET;
+                    const cwR = (cwEdge * Math.PI) / 180;
+                    const ccwR = (ccwEdge * Math.PI) / 180;
+                    return (
+                      <path
+                        d={`M ${CX + MONTH_RING_INNER * Math.cos(cwR)},${CY + MONTH_RING_INNER * Math.sin(cwR)} A ${MONTH_RING_INNER},${MONTH_RING_INNER} 0 0,0 ${CX + MONTH_RING_INNER * Math.cos(ccwR)},${CY + MONTH_RING_INNER * Math.sin(ccwR)} L ${CX + MONTH_RING_OUTER * Math.cos(ccwR)},${CY + MONTH_RING_OUTER * Math.sin(ccwR)} A ${MONTH_RING_OUTER},${MONTH_RING_OUTER} 0 0,1 ${CX + MONTH_RING_OUTER * Math.cos(cwR)},${CY + MONTH_RING_OUTER * Math.sin(cwR)} Z`}
+                        fill="rgba(100, 200, 240, 0.06)"
+                      >
+                        <animate attributeName="fill-opacity" values="0.03;0.10;0.03" dur="5s" repeatCount="indefinite" />
+                      </path>
+                    );
+                  })()}
                   {isSelected && (
                     <circle cx={hx} cy={hy} r="14" fill="none" stroke="rgba(100, 180, 220, 0.5)" strokeWidth="0.8">
                       <animate attributeName="r" values="12;16;12" dur="2s" repeatCount="indefinite" />
@@ -1447,11 +1460,12 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
         {/* Zodiac sign labels on curved paths with SVG glyph icons */}
         {ZODIAC.map((z, i) => {
           const isSelected = selectedSign === z.sign;
+          const isSeasonal = seasonalSign === z.sign && !isSelected;
           const centerAngle = -(i * 30 + 15);
           const rad = (centerAngle * Math.PI) / 180;
           const hx = CX + ZODIAC_TEXT_R * Math.cos(rad);
           const hy = CY + ZODIAC_TEXT_R * Math.sin(rad);
-          const color = isSelected ? '#f5d050' : showMonomyth ? 'rgba(230, 200, 90, 0.5)' : 'rgba(230, 200, 90, 0.75)';
+          const color = isSelected ? '#f5d050' : isSeasonal ? 'rgba(255, 210, 80, 0.95)' : showMonomyth ? 'rgba(230, 200, 90, 0.5)' : 'rgba(230, 200, 90, 0.75)';
 
           // Culture-specific display name (strip parenthetical suffixes; use tarot card names for Tarot)
           const cultureKey = activeCulture ? activeCulture.toLowerCase() : null;
@@ -1482,9 +1496,23 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
               style={{ cursor: 'pointer' }}
             >
               <circle cx={hx} cy={hy} r="24" fill="transparent" />
+              {isSeasonal && (() => {
+                const cwEdge = -(i * 30);
+                const ccwEdge = -(i * 30 + 30);
+                const cwR = (cwEdge * Math.PI) / 180;
+                const ccwR = (ccwEdge * Math.PI) / 180;
+                return (
+                  <path
+                    d={`M ${CX + ZODIAC_INNER_R * Math.cos(cwR)},${CY + ZODIAC_INNER_R * Math.sin(cwR)} A ${ZODIAC_INNER_R},${ZODIAC_INNER_R} 0 0,0 ${CX + ZODIAC_INNER_R * Math.cos(ccwR)},${CY + ZODIAC_INNER_R * Math.sin(ccwR)} L ${CX + ZODIAC_OUTER_R * Math.cos(ccwR)},${CY + ZODIAC_OUTER_R * Math.sin(ccwR)} A ${ZODIAC_OUTER_R},${ZODIAC_OUTER_R} 0 0,1 ${CX + ZODIAC_OUTER_R * Math.cos(cwR)},${CY + ZODIAC_OUTER_R * Math.sin(cwR)} Z`}
+                    fill="rgba(255, 210, 80, 0.06)"
+                  >
+                    <animate attributeName="fill-opacity" values="0.03;0.10;0.03" dur="5s" repeatCount="indefinite" />
+                  </path>
+                );
+              })()}
               <g transform={`translate(${gx},${gy}) rotate(${glyphRot}) scale(0.75)`}>
                 <path d={ZODIAC_GLYPHS[z.sign]} fill="none" stroke={color}
-                  strokeWidth={isSelected ? '2' : '1.6'} strokeLinecap="round" strokeLinejoin="round"
+                  strokeWidth={isSelected ? '2' : isSeasonal ? '2' : '1.6'} strokeLinecap="round" strokeLinejoin="round"
                   style={{ transition: 'stroke 0.3s' }} />
               </g>
               <text
@@ -1704,6 +1732,7 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
                 const cwEdge = center + SLICE_DEG / 2;   // clockwise boundary (higher angle)
                 const ccwEdge = center - SLICE_DEG / 2;  // counter-clockwise boundary (lower angle)
                 const isSelected = selectedMonomythStage === stage.id;
+                const isSeasonal = seasonalStageIndex === i && !isSelected;
 
                 // Determine text direction: upper half → CW arc, lower half → CCW arc
                 const effectiveAngle = ((center % 360) + 360) % 360;
@@ -1740,20 +1769,28 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
                         fill="rgba(232, 192, 128, 0.12)"
                       />
                     )}
+                    {isSeasonal && (
+                      <path
+                        d={`M ${CX + MONO_INNER_R * Math.cos(cwRad)},${CY + MONO_INNER_R * Math.sin(cwRad)} A ${MONO_INNER_R},${MONO_INNER_R} 0 0,0 ${CX + MONO_INNER_R * Math.cos(ccwRad)},${CY + MONO_INNER_R * Math.sin(ccwRad)} L ${CX + MONO_OUTER_R * Math.cos(ccwRad)},${CY + MONO_OUTER_R * Math.sin(ccwRad)} A ${MONO_OUTER_R},${MONO_OUTER_R} 0 0,1 ${CX + MONO_OUTER_R * Math.cos(cwRad)},${CY + MONO_OUTER_R * Math.sin(cwRad)} Z`}
+                        fill="rgba(232, 192, 128, 0.06)"
+                      >
+                        <animate attributeName="fill-opacity" values="0.03;0.10;0.03" dur="5s" repeatCount="indefinite" />
+                      </path>
+                    )}
                     {/* Hit target */}
                     <circle cx={hx} cy={hy} r="20" fill="transparent" />
                     {/* Text arc path */}
                     <path id={pathId} d={pathD} fill="none" />
                     {/* Pulse ring on selected */}
-                    {isSelected && (
+                    {(isSelected || isSeasonal) && (
                       <circle cx={hx} cy={hy} r="14" fill="none" stroke="rgba(232, 192, 128, 0.5)" strokeWidth="0.8">
-                        <animate attributeName="r" values="12;16;12" dur="2s" repeatCount="indefinite" />
-                        <animate attributeName="opacity" values="0.5;0.2;0.5" dur="2s" repeatCount="indefinite" />
+                        <animate attributeName="r" values={isSelected ? "12;16;12" : "12;15;12"} dur={isSelected ? "2s" : "5s"} repeatCount="indefinite" />
+                        <animate attributeName="opacity" values={isSelected ? "0.5;0.2;0.5" : "0.3;0.1;0.3"} dur={isSelected ? "2s" : "5s"} repeatCount="indefinite" />
                       </circle>
                     )}
                     {/* Label */}
                     <text
-                      fill={isSelected ? '#f0d090' : 'rgba(232, 192, 128, 0.95)'}
+                      fill={isSelected ? '#f0d090' : isSeasonal ? '#f0d090' : 'rgba(232, 192, 128, 0.95)'}
                       fontSize="15"
                       fontFamily="Cinzel, serif"
                       fontWeight={isSelected ? '700' : '600'}
@@ -2120,7 +2157,6 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
             return <line x1={CX} y1={CY} x2={CX + len * Math.cos(rad)} y2={CY + len * Math.sin(rad)} stroke={color} strokeWidth={width} strokeLinecap="round" />;
           };
           return (
-            <g transform={compassActive ? `rotate(${compassHeading}, ${CX}, ${CY})` : undefined}>
             <g className="clock-overlay">
               {hourAngles.map(({ num, x, y }) => (
                 <text key={`clk-${num}`} x={x} y={y} textAnchor="middle" dominantBaseline="central"
@@ -2151,7 +2187,6 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
               </>}
 
               <circle cx={CX} cy={CY} r={5} fill="rgba(201, 169, 97, 0.95)" />
-            </g>
             </g>
           );
         })()}
@@ -2896,9 +2931,9 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
       </div>
       {compassSupported && showClock && (
         <button
-          className={`compass-toggle${compassActive ? ' active' : ''}`}
+          className={`compass-toggle${compassActive ? ' active' : ''}${compassDenied ? ' denied' : ''}`}
           onClick={compassActive ? onStopCompass : onRequestCompass}
-          title={compassActive ? 'Disable compass' : 'Align to compass'}
+          title={compassDenied ? 'Compass permission denied — tap to retry' : compassActive ? 'Disable compass' : 'Align to compass'}
         >
           <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.5">
             <circle cx="12" cy="12" r="9" />
@@ -2937,16 +2972,34 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
             {clockMode && <circle cx="12" cy="12" r="2.5" fill={clockMode === '12h' ? '#f0c040' : '#4a9bd9'} stroke="none" />}
           </svg>
         </button>
-        <button
-          className="chakra-view-toggle"
-          onClick={() => { onToggleChakraView && onToggleChakraView(); }}
-          title={!chakraViewMode ? 'Show body viewer' : 'Return to orbital view'}
-        >
-          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" stroke="none">
-            <circle cx="12" cy="4" r="2.5" />
-            <path d="M12 8 C9 8 7 10 7 12 L7 16 L9.5 16 L9.5 23 L14.5 23 L14.5 16 L17 16 L17 12 C17 10 15 8 12 8Z" />
-          </svg>
-        </button>
+        <span style={{ position: 'relative' }}>
+          <button
+            className={`body-wheel-toggle${chakraViewMode ? ' active body' : ''}${showMedicineWheel ? ' active wheel' : ''}${!hasMedicineWheel && chakraViewMode && !showMedicineWheel ? ' gate' : ''}`}
+            onClick={() => {
+              if (chakraViewMode && !showMedicineWheel && !hasMedicineWheel) { setMedicineWheelGateId('medicine-wheel'); return; }
+              if (chakraViewMode && !showMedicineWheel) triggerStormFlash();
+              onToggleBodyWheel && onToggleBodyWheel();
+            }}
+            title={showMedicineWheel ? 'Medicine wheel — click for body view' : chakraViewMode ? 'Body view — click for medicine wheel' : 'Show body viewer'}
+          >
+            {chakraViewMode && !showMedicineWheel ? (
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M13 2 L5 14 L11 14 L11 22 L19 10 L13 10 Z" />
+              </svg>
+            ) : (
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" stroke="none">
+                <circle cx="12" cy="4" r="2.5" />
+                <path d="M12 8 C9 8 7 10 7 12 L7 16 L9.5 16 L9.5 23 L14.5 23 L14.5 16 L17 16 L17 12 C17 10 15 8 12 8Z" />
+              </svg>
+            )}
+          </button>
+          {stormFlash && (
+            <>
+              <div className="storm-flash-btn-bg" />
+              <img src="/storm-shield.png" alt="" className="storm-flash-btn-img" />
+            </>
+          )}
+        </span>
         <button
           className={`monomyth-toggle${showMonomyth ? ' active' : ''}${showCycles ? ' cycles' : ''}${showMeteorSteel ? ' steel' : ''}${!hasMonomyth ? ' disabled' : ''}`}
           onClick={() => {
@@ -3022,27 +3075,6 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
           )}
         </button>
 
-        <span style={{ position: 'relative' }}>
-          <button
-            className={`medicine-wheel-toggle${showMedicineWheel ? ' active' : ''}${!hasMedicineWheel ? ' disabled' : ''}`}
-            onClick={() => {
-              if (!hasMedicineWheel) { setMedicineWheelGateId('medicine-wheel'); return; }
-              triggerStormFlash();
-              onToggleMedicineWheel && onToggleMedicineWheel();
-            }}
-            title={!hasMedicineWheel ? 'Unlock Medicine Wheel' : showMedicineWheel ? 'Show celestial wheels' : 'Show medicine wheel'}
-          >
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M13 2 L5 14 L11 14 L11 22 L19 10 L13 10 Z" />
-            </svg>
-          </button>
-          {stormFlash && (
-            <>
-              <div className="storm-flash-btn-bg" />
-              <img src="/storm-shield.png" alt="" className="storm-flash-btn-img" />
-            </>
-          )}
-        </span>
       </div>
       {starlightGateId && (
         <div className="subscription-gate-overlay" onClick={() => setStarlightGateId(null)}>

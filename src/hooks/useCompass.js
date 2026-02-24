@@ -4,12 +4,13 @@ const SMOOTHING = 0.15; // low-pass filter coefficient (0 = no update, 1 = no sm
 
 /**
  * Hook that provides a smoothed compass heading from the device magnetometer.
- * Returns { heading, supported, active, requestCompass, stopCompass }.
+ * Returns { heading, supported, active, denied, requestCompass, stopCompass }.
  */
 export default function useCompass() {
   const [heading, setHeading] = useState(0);
   const [active, setActive] = useState(false);
   const [supported, setSupported] = useState(false);
+  const [denied, setDenied] = useState(false);
 
   const smoothedRef = useRef(0);
   const hasDataRef = useRef(false);
@@ -27,16 +28,13 @@ export default function useCompass() {
   const onOrientation = useCallback((e) => {
     let raw;
     if (e.webkitCompassHeading != null) {
-      // iOS Safari: direct compass heading (degrees from magnetic north)
       raw = e.webkitCompassHeading;
     } else if (e.alpha != null) {
-      // Android / other: alpha is rotation around z-axis
       raw = (360 - e.alpha) % 360;
     } else {
       return;
     }
 
-    // Circular low-pass filter (handles 359↔0 wrap)
     if (!hasDataRef.current) {
       smoothedRef.current = raw;
       hasDataRef.current = true;
@@ -52,7 +50,7 @@ export default function useCompass() {
   const startRAF = useCallback(() => {
     const tick = () => {
       if (hasDataRef.current) {
-        setHeading(Math.round(smoothedRef.current * 10) / 10); // 0.1° precision
+        setHeading(Math.round(smoothedRef.current * 10) / 10);
       }
       rafRef.current = requestAnimationFrame(tick);
     };
@@ -66,23 +64,35 @@ export default function useCompass() {
     }
   }, []);
 
-  // Request permission and start listening
-  const requestCompass = useCallback(() => {
-    if (listenerAttached.current) return;
+  // Request permission and start listening (must be called from user gesture)
+  const requestCompass = useCallback(async () => {
+    // Safety: reset stale state from a previously failed attempt
+    if (listenerAttached.current) {
+      window.removeEventListener('deviceorientation', onOrientation, true);
+      listenerAttached.current = false;
+    }
 
     const attach = () => {
       window.addEventListener('deviceorientation', onOrientation, true);
       listenerAttached.current = true;
       setActive(true);
+      setDenied(false);
       startRAF();
     };
 
     if (typeof DeviceOrientationEvent !== 'undefined' &&
         typeof DeviceOrientationEvent.requestPermission === 'function') {
-      // iOS 13+ requires user-gesture permission
-      DeviceOrientationEvent.requestPermission()
-        .then(state => { if (state === 'granted') attach(); })
-        .catch(() => {});
+      try {
+        const state = await DeviceOrientationEvent.requestPermission();
+        if (state === 'granted') {
+          attach();
+        } else {
+          setDenied(true);
+        }
+      } catch {
+        // Some browsers throw but still allow the listener
+        attach();
+      }
     } else if (typeof DeviceOrientationEvent !== 'undefined') {
       attach();
     }
@@ -106,5 +116,5 @@ export default function useCompass() {
     };
   }, [onOrientation]);
 
-  return { heading, supported, active, requestCompass, stopCompass };
+  return { heading, supported, active, denied, requestCompass, stopCompass };
 }

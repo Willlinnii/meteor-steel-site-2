@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useMemo, useEffect, useRef, useCallback, lazy, Suspense } from 'react';
 import OrbitalDiagram from '../../components/chronosphaera/OrbitalDiagram';
 import MetalDetailPanel from '../../components/chronosphaera/MetalDetailPanel';
 import MetalContentTabs, { CultureTimelineBar } from '../../components/chronosphaera/MetalContentTabs';
@@ -28,6 +28,8 @@ import dayNightData from '../../data/dayNight.json';
 import useYellowBrickRoad from '../../components/chronosphaera/useYellowBrickRoad';
 import useCompass from '../../hooks/useCompass';
 import useAmbientLight from '../../hooks/useAmbientLight';
+import useSeason from '../../hooks/useSeason';
+import useHapticFeedback from '../../hooks/useHapticFeedback';
 import YellowBrickRoadPanel from '../../components/chronosphaera/YellowBrickRoadPanel';
 import StageContent from '../../components/monomyth/StageContent';
 import MeteorSteelContent from '../../components/meteorSteel/MeteorSteelContent';
@@ -49,6 +51,8 @@ import { useProfile } from '../../profile/ProfileContext';
 import usePerspective, { camelToTitle } from '../../components/chronosphaera/usePerspective';
 import { BEYOND_RINGS, BEYOND_TRADITIONS, FIXED_STARS_RING } from '../../data/chronosphaeraBeyondRings';
 import ColumnSequencePopup from '../../components/chronosphaera/ColumnSequencePopup';
+
+const InlineScene3D = lazy(() => import('../../components/chronosphaera/vr/InlineScene3D'));
 
 const METEOR_STEEL_STAGES = [
   { id: 'golden-age', label: 'Golden Age' },
@@ -553,6 +557,8 @@ export default function ChronosphaeraPage() {
   const { hasPurchase, hasSubscription } = useProfile();
   const compass = useCompass();
   const ambient = useAmbientLight();
+  const season = useSeason();
+  useHapticFeedback(compass.heading, compass.active);
   const [selectedPlanet, setSelectedPlanet] = useState('Sun');
   const [hoveredPlanet, setHoveredPlanet] = useState(null);
   const [activeTab, setActiveTab] = useState('overview');
@@ -584,6 +590,7 @@ export default function ChronosphaeraPage() {
   const [selectedBeyondRing, setSelectedBeyondRing] = useState(null); // 'fixedStars' | 'worldSoul' | 'nous' | 'source' | null
   const [showOrderInfo, setShowOrderInfo] = useState(false);
   const [columnSequencePopup, setColumnSequencePopup] = useState(null);
+  const [view3D, setView3D] = useState(false);
   // Single mode enum replaces 8 separate boolean/enum state variables
   const [mode, setMode] = useState(() => {
     if (location.pathname.endsWith('/medicine-wheel') && hasPurchase('medicine-wheel')) return 'medicine-wheel';
@@ -970,6 +977,38 @@ export default function ChronosphaeraPage() {
     }
   }, [mode, clearAllSelections, navigate]);
 
+  const handleToggleBodyWheel = useCallback(() => {
+    if (mode !== 'chakra' && mode !== 'medicine-wheel') {
+      // off → body
+      clearAllSelections();
+      setMode('chakra');
+      setSelectedPlanet('Sun');
+      setActiveTab('body');
+      setShowCalendar(false);
+      setClockMode(null);
+      setShowOrderInfo(false);
+      navigate('/chronosphaera/body');
+    } else if (mode === 'chakra') {
+      // body → medicine-wheel
+      clearAllSelections();
+      setMode('medicine-wheel');
+      trackElement('chronosphaera.medicine-wheel.opened');
+      setShowCalendar(false);
+      setClockMode(null);
+      navigate('/chronosphaera/medicine-wheel');
+    } else {
+      // medicine-wheel → body
+      clearAllSelections();
+      setMode('chakra');
+      setSelectedPlanet('Sun');
+      setActiveTab('body');
+      setShowCalendar(false);
+      setClockMode(null);
+      setShowOrderInfo(false);
+      navigate('/chronosphaera/body');
+    }
+  }, [mode, clearAllSelections, trackElement, navigate]);
+
   const handleToggleStarlight = useCallback(() => {
     if (mode !== 'fallen-starlight' && mode !== 'story-of-stories') {
       // Enter Fallen Starlight mode
@@ -1273,155 +1312,208 @@ export default function ChronosphaeraPage() {
   return (
     <div className={`chronosphaera-page chrono-${ambient.mode}`}>
       <div className="chrono-diagram-center">
-        <OrbitalDiagram
-          tooltipData={tooltipData}
-          selectedPlanet={selectedPlanet}
-          hoveredPlanet={hoveredPlanet}
-          onSelectPlanet={(p) => { trackElement(`chronosphaera.planet.${p}`); setSelectedPlanet(p); setSelectedSign(null); setSelectedCardinal(null); setSelectedEarth(null); setSelectedMonth(null); setVideoUrl(null); setPersonaChatOpen(null); if (chakraViewMode) setActiveTab('body'); if (showMonomyth) { setSelectedMonomythStage(null); setMonomythModel(null); } setSelectedStarlightStage(null); setSelectedConstellation(null); }}
-          selectedSign={selectedSign}
-          onSelectSign={(sign) => { trackElement(`chronosphaera.zodiac.${sign}`); setSelectedSign(sign); setSelectedCardinal(null); setSelectedEarth(null); setSelectedMonth(null); setVideoUrl(null); setPersonaChatOpen(null); setSelectedPlanet(null); setSelectedMonomythStage(null); setMonomythModel(null); setSelectedStarlightStage(null); setSelectedConstellation(null); }}
-          selectedCardinal={selectedCardinal}
-          onSelectCardinal={(c) => { trackElement(`chronosphaera.cardinal.${c}`); setSelectedCardinal(c); setSelectedSign(null); setSelectedEarth(null); setSelectedMonth(null); setVideoUrl(null); setPersonaChatOpen(null); setSelectedPlanet(null); setSelectedMonomythStage(null); setMonomythModel(null); setActiveWheelTab(null); setSelectedStarlightStage(null); setSelectedConstellation(null); }}
-          selectedEarth={selectedEarth}
-          onSelectEarth={(e) => { trackElement(`chronosphaera.earth.${e}`); setSelectedEarth(e); setSelectedSign(null); setSelectedCardinal(null); setSelectedMonth(null); setVideoUrl(null); setPersonaChatOpen(null); setSelectedConstellation(null); }}
-          showCalendar={showCalendar}
-          onToggleCalendar={() => {
-            const next = !showCalendar;
-            setShowCalendar(next);
-            if (next) {
-              trackElement('chronosphaera.calendar.opened');
+        {hasSubscription('monomyth') && (
+          <div className="chrono-3d-toggle-group">
+            <button
+              className="chrono-3d-toggle"
+              onClick={() => setView3D(v => !v)}
+              title={view3D ? 'Switch to 2D' : 'Switch to 3D'}
+            >
+              {view3D ? '2D' : '3D'}
+            </button>
+            {view3D && (
+              <button
+                className="chrono-3d-toggle chrono-vr-enter"
+                onClick={() => navigate('/chronosphaera/vr')}
+                title="Enter immersive VR/AR experience"
+              >
+                Enter VR
+              </button>
+            )}
+          </div>
+        )}
+        {view3D ? (
+          <Suspense fallback={<div className="chrono-3d-container chrono-3d-loading">Loading 3D...</div>}>
+            <InlineScene3D
+              selectedPlanet={selectedPlanet}
+              onSelectPlanet={(p) => { trackElement(`chronosphaera.planet.${p}`); setSelectedPlanet(p); setSelectedSign(null); setSelectedCardinal(null); setSelectedEarth(null); setSelectedMonth(null); setVideoUrl(null); setPersonaChatOpen(null); if (chakraViewMode) setActiveTab('body'); if (showMonomyth) { setSelectedMonomythStage(null); setMonomythModel(null); } setSelectedStarlightStage(null); setSelectedConstellation(null); }}
+              selectedSign={selectedSign}
+              onSelectSign={(sign) => { trackElement(`chronosphaera.zodiac.${sign}`); setSelectedSign(sign); setSelectedCardinal(null); setSelectedEarth(null); setSelectedMonth(null); setVideoUrl(null); setPersonaChatOpen(null); setSelectedPlanet(null); setSelectedMonomythStage(null); setMonomythModel(null); setSelectedStarlightStage(null); setSelectedConstellation(null); }}
+              selectedCardinal={selectedCardinal}
+              onSelectCardinal={(c) => { trackElement(`chronosphaera.cardinal.${c}`); setSelectedCardinal(c); setSelectedSign(null); setSelectedEarth(null); setSelectedMonth(null); setVideoUrl(null); setPersonaChatOpen(null); setSelectedPlanet(null); setSelectedMonomythStage(null); setMonomythModel(null); setActiveWheelTab(null); setSelectedStarlightStage(null); setSelectedConstellation(null); }}
+              selectedEarth={selectedEarth}
+              onSelectEarth={(e) => { trackElement(`chronosphaera.earth.${e}`); setSelectedEarth(e); setSelectedSign(null); setSelectedCardinal(null); setSelectedMonth(null); setVideoUrl(null); setPersonaChatOpen(null); setSelectedConstellation(null); }}
+              showCalendar={showCalendar}
+              selectedMonth={selectedMonth}
+              onSelectMonth={(m) => { if (m) trackElement(`chronosphaera.calendar.month.${m}`); setSelectedMonth(m); setActiveMonthTab('stone'); if (m) { setSelectedSign(null); setSelectedCardinal(null); setSelectedEarth(null); } }}
+              showMedicineWheel={showMedicineWheel}
+              wheels={wheelData.wheels}
+              selectedWheelItem={selectedWheelItem}
+              onSelectWheelItem={(item) => { if (item) trackElement(`chronosphaera.medicine-wheel.${item}`); setSelectedWheelItem(item); setActiveWheelTab(null); if (item) { setSelectedSign(null); setSelectedCardinal(null); setSelectedEarth(null); setSelectedMonth(null); } }}
+              chakraViewMode={chakraViewMode}
+              chakraOrdering={chakraViewMode ? CHAKRA_ORDERINGS[chakraViewMode] : null}
+              orderLabel={perspective.orderLabel}
+              showMonomyth={showMonomyth}
+              showMeteorSteel={showMeteorSteel}
+              monomythStages={showMeteorSteel ? METEOR_STEEL_STAGES : MONOMYTH_STAGES}
+              selectedMonomythStage={selectedMonomythStage}
+              onSelectMonomythStage={(id) => {
+                if (id) trackElement(`chronosphaera.monomyth.stage.${id}`);
+                if (showMeteorSteel) {
+                  setSelectedMonomythStage(selectedMonomythStage === id ? null : id);
+                  setMeteorSteelTab('technology');
+                } else {
+                  setSelectedMonomythStage(id);
+                  setMonomythTab('overview');
+                  setMonomythModel(null);
+                  setMonomythWorld(null);
+                }
+                setSelectedPlanet(null);
+                setSelectedSign(null);
+                setSelectedCardinal(null);
+              }}
+              showFallenStarlight={showFallenStarlight}
+              showStoryOfStories={showStoryOfStories}
+              starlightStages={showStoryOfStories ? STORY_OF_STORIES_STAGES : FALLEN_STARLIGHT_STAGES}
+              selectedStarlightStage={selectedStarlightStage}
+              onSelectStarlightStage={(id) => {
+                setSelectedStarlightStage(selectedStarlightStage === id ? null : id);
+                setStarlightSectionId(null);
+                setSelectedPlanet(null);
+                setSelectedSign(null);
+                setSelectedCardinal(null);
+                setSelectedMonomythStage(null);
+                setSelectedConstellation(null);
+              }}
+            />
+          </Suspense>
+        ) : (
+          <OrbitalDiagram
+            tooltipData={tooltipData}
+            selectedPlanet={selectedPlanet}
+            hoveredPlanet={hoveredPlanet}
+            onSelectPlanet={(p) => { trackElement(`chronosphaera.planet.${p}`); setSelectedPlanet(p); setSelectedSign(null); setSelectedCardinal(null); setSelectedEarth(null); setSelectedMonth(null); setVideoUrl(null); setPersonaChatOpen(null); if (chakraViewMode) setActiveTab('body'); if (showMonomyth) { setSelectedMonomythStage(null); setMonomythModel(null); } setSelectedStarlightStage(null); setSelectedConstellation(null); }}
+            selectedSign={selectedSign}
+            onSelectSign={(sign) => { trackElement(`chronosphaera.zodiac.${sign}`); setSelectedSign(sign); setSelectedCardinal(null); setSelectedEarth(null); setSelectedMonth(null); setVideoUrl(null); setPersonaChatOpen(null); setSelectedPlanet(null); setSelectedMonomythStage(null); setMonomythModel(null); setSelectedStarlightStage(null); setSelectedConstellation(null); }}
+            selectedCardinal={selectedCardinal}
+            onSelectCardinal={(c) => { trackElement(`chronosphaera.cardinal.${c}`); setSelectedCardinal(c); setSelectedSign(null); setSelectedEarth(null); setSelectedMonth(null); setVideoUrl(null); setPersonaChatOpen(null); setSelectedPlanet(null); setSelectedMonomythStage(null); setMonomythModel(null); setActiveWheelTab(null); setSelectedStarlightStage(null); setSelectedConstellation(null); }}
+            selectedEarth={selectedEarth}
+            onSelectEarth={(e) => { trackElement(`chronosphaera.earth.${e}`); setSelectedEarth(e); setSelectedSign(null); setSelectedCardinal(null); setSelectedMonth(null); setVideoUrl(null); setPersonaChatOpen(null); setSelectedConstellation(null); }}
+            showCalendar={showCalendar}
+            onToggleCalendar={() => {
+              const next = !showCalendar;
+              setShowCalendar(next);
+              if (next) {
+                trackElement('chronosphaera.calendar.opened');
+                setSelectedMonth(MONTHS[new Date().getMonth()]);
+                setActiveMonthTab('stone');
+                setSelectedSign(null); setSelectedCardinal(null); setSelectedEarth(null);
+              } else {
+                setSelectedMonth(null);
+              }
+              navigate(next ? '/chronosphaera/calendar' : '/chronosphaera');
+            }}
+            selectedMonth={selectedMonth}
+            onSelectMonth={(m) => { if (m) trackElement(`chronosphaera.calendar.month.${m}`); setSelectedMonth(m); setActiveMonthTab('stone'); if (m) { setSelectedSign(null); setSelectedCardinal(null); setSelectedEarth(null); } }}
+            clockMode={clockMode}
+            onToggleClock={() => {
+              const next = clockMode === '12h' ? '24h' : '12h';
+              clearAllSelections();
+              setMode('default');
+              setClockMode(next);
+              setZodiacMode(next === '24h' ? 'sidereal' : 'tropical');
+              setShowCalendar(true);
               setSelectedMonth(MONTHS[new Date().getMonth()]);
               setActiveMonthTab('stone');
-              setSelectedSign(null); setSelectedCardinal(null); setSelectedEarth(null);
-            } else {
+              navigate(next === '24h' ? '/chronosphaera/calendar-24' : '/chronosphaera/calendar');
+            }}
+            compassHeading={compass.active ? compass.heading : null}
+            compassSupported={compass.supported}
+            compassDenied={compass.denied}
+            onRequestCompass={compass.requestCompass}
+            onStopCompass={compass.stopCompass}
+            seasonalSign={season.currentSign}
+            seasonalMonth={season.currentMonth}
+            seasonalStageIndex={season.currentStageIndex}
+            showMedicineWheel={showMedicineWheel}
+            selectedWheelItem={selectedWheelItem}
+            onSelectWheelItem={(item) => { if (item) trackElement(`chronosphaera.medicine-wheel.${item}`); setSelectedWheelItem(item); setActiveWheelTab(null); if (item) { setSelectedSign(null); setSelectedCardinal(null); setSelectedEarth(null); setSelectedMonth(null); } }}
+            chakraViewMode={chakraViewMode}
+            orderLabel={perspective.orderLabel}
+            onToggleBodyWheel={handleToggleBodyWheel}
+            onClickOrderLabel={() => setShowOrderInfo(prev => !prev)}
+            videoUrl={videoUrl}
+            onCloseVideo={() => setVideoUrl(null)}
+            ybrActive={ybr.active}
+            ybrCurrentStopIndex={ybr.currentStopIndex}
+            ybrStopProgress={ybr.stopProgress}
+            ybrJourneySequence={ybr.journeySequence}
+            onToggleYBR={handleYBRToggle}
+            ybrAutoStart={ybrAutoStart}
+            showMonomyth={showMonomyth}
+            showMeteorSteel={showMeteorSteel}
+            monomythStages={showMeteorSteel ? METEOR_STEEL_STAGES : MONOMYTH_STAGES}
+            selectedMonomythStage={selectedMonomythStage}
+            onSelectMonomythStage={(id) => {
+              if (id) trackElement(`chronosphaera.monomyth.stage.${id}`);
+              if (showMeteorSteel) {
+                setSelectedMonomythStage(selectedMonomythStage === id ? null : id);
+                setMeteorSteelTab('technology');
+              } else {
+                setSelectedMonomythStage(id);
+                setMonomythTab('overview');
+                setMonomythModel(null);
+                setMonomythWorld(null);
+              }
+              setSelectedPlanet(null);
+              setSelectedSign(null);
+              setSelectedCardinal(null);
+            }}
+            onToggleMonomyth={handleToggleMonomyth}
+            monomythModel={monomythModel}
+            showCycles={showCycles}
+            onSelectCycleSegment={handleSelectCycleSegment}
+            activeCulture={activeCulture}
+            showFallenStarlight={showFallenStarlight}
+            showStoryOfStories={showStoryOfStories}
+            onToggleStarlight={handleToggleStarlight}
+            starlightStages={showStoryOfStories ? STORY_OF_STORIES_STAGES : FALLEN_STARLIGHT_STAGES}
+            selectedStarlightStage={selectedStarlightStage}
+            onSelectStarlightStage={(id) => {
+              setSelectedStarlightStage(selectedStarlightStage === id ? null : id);
+              setStarlightSectionId(null);
+              setSelectedPlanet(null);
+              setSelectedSign(null);
+              setSelectedCardinal(null);
+              setSelectedMonomythStage(null);
+              setSelectedConstellation(null);
+            }}
+            selectedConstellation={selectedConstellation}
+            zodiacMode={zodiacMode}
+            onSelectConstellation={(cid) => {
+              trackElement(`chronosphaera.constellation.${cid}`);
+              setSelectedConstellation(selectedConstellation === cid ? null : cid);
+              setSelectedPlanet(null);
+              setSelectedSign(null);
+              setSelectedCardinal(null);
+              setSelectedEarth(null);
               setSelectedMonth(null);
-            }
-            navigate(next ? '/chronosphaera/calendar' : '/chronosphaera');
-          }}
-          selectedMonth={selectedMonth}
-          onSelectMonth={(m) => { if (m) trackElement(`chronosphaera.calendar.month.${m}`); setSelectedMonth(m); setActiveMonthTab('stone'); if (m) { setSelectedSign(null); setSelectedCardinal(null); setSelectedEarth(null); } }}
-          clockMode={clockMode}
-          onToggleClock={() => {
-            const next = clockMode === '12h' ? '24h' : '12h';
-            clearAllSelections();
-            setMode('default');
-            setClockMode(next);
-            setZodiacMode(next === '24h' ? 'sidereal' : 'tropical');
-            setShowCalendar(true);
-            setSelectedMonth(MONTHS[new Date().getMonth()]);
-            setActiveMonthTab('stone');
-            navigate(next === '24h' ? '/chronosphaera/calendar-24' : '/chronosphaera/calendar');
-          }}
-          compassHeading={compass.active ? compass.heading : null}
-          compassSupported={compass.supported}
-          onRequestCompass={compass.requestCompass}
-          onStopCompass={compass.stopCompass}
-          showMedicineWheel={showMedicineWheel}
-          onToggleMedicineWheel={() => {
-            clearAllSelections();
-            if (mode !== 'medicine-wheel') {
-              setMode('medicine-wheel');
-              trackElement('chronosphaera.medicine-wheel.opened');
-              setShowCalendar(false);
-              setClockMode(null);
-              navigate('/chronosphaera/medicine-wheel');
-            }
-          }}
-          selectedWheelItem={selectedWheelItem}
-          onSelectWheelItem={(item) => { if (item) trackElement(`chronosphaera.medicine-wheel.${item}`); setSelectedWheelItem(item); setActiveWheelTab(null); if (item) { setSelectedSign(null); setSelectedCardinal(null); setSelectedEarth(null); setSelectedMonth(null); } }}
-          chakraViewMode={chakraViewMode}
-          orderLabel={perspective.orderLabel}
-          onToggleChakraView={() => {
-            if (chakraViewMode) {
-              // Exit body mode — back to default
-              setMode('default');
-              setShowCalendar(true);
-              setClockMode(perspective.clockMode);
-              navigate('/chronosphaera');
-            } else {
-              // Enter body mode
-              clearAllSelections();
-              setMode('chakra');
-              setSelectedPlanet('Sun');
-              setActiveTab('body');
-              setShowCalendar(false);
-              setClockMode(null);
-              setShowOrderInfo(false);
-              navigate('/chronosphaera/body');
-            }
-          }}
-          onClickOrderLabel={() => setShowOrderInfo(prev => !prev)}
-          videoUrl={videoUrl}
-          onCloseVideo={() => setVideoUrl(null)}
-          ybrActive={ybr.active}
-          ybrCurrentStopIndex={ybr.currentStopIndex}
-          ybrStopProgress={ybr.stopProgress}
-          ybrJourneySequence={ybr.journeySequence}
-          onToggleYBR={handleYBRToggle}
-          ybrAutoStart={ybrAutoStart}
-          showMonomyth={showMonomyth}
-          showMeteorSteel={showMeteorSteel}
-          monomythStages={showMeteorSteel ? METEOR_STEEL_STAGES : MONOMYTH_STAGES}
-          selectedMonomythStage={selectedMonomythStage}
-          onSelectMonomythStage={(id) => {
-            if (id) trackElement(`chronosphaera.monomyth.stage.${id}`);
-            if (showMeteorSteel) {
-              setSelectedMonomythStage(selectedMonomythStage === id ? null : id);
-              setMeteorSteelTab('technology');
-            } else {
-              setSelectedMonomythStage(id);
-              setMonomythTab('overview');
+              setVideoUrl(null);
+              setPersonaChatOpen(null);
+              setSelectedMonomythStage(null);
               setMonomythModel(null);
-              setMonomythWorld(null);
+              setSelectedStarlightStage(null);
+              setSelectedBeyondRing(null);
+            }}
+            activeBeyondRing={selectedBeyondRing}
+            beyondRings={beyondRings}
+            onSelectBeyondRing={
+              STAR_SPHERE_TRADITIONS.has(perspective.activePerspective) || BEYOND_TRADITIONS.has(perspective.activePerspective)
+                ? handleSelectBeyondRing
+                : undefined
             }
-            setSelectedPlanet(null);
-            setSelectedSign(null);
-            setSelectedCardinal(null);
-          }}
-          onToggleMonomyth={handleToggleMonomyth}
-          monomythModel={monomythModel}
-          showCycles={showCycles}
-          onSelectCycleSegment={handleSelectCycleSegment}
-          activeCulture={activeCulture}
-          showFallenStarlight={showFallenStarlight}
-          showStoryOfStories={showStoryOfStories}
-          onToggleStarlight={handleToggleStarlight}
-          starlightStages={showStoryOfStories ? STORY_OF_STORIES_STAGES : FALLEN_STARLIGHT_STAGES}
-          selectedStarlightStage={selectedStarlightStage}
-          onSelectStarlightStage={(id) => {
-            setSelectedStarlightStage(selectedStarlightStage === id ? null : id);
-            setStarlightSectionId(null);
-            setSelectedPlanet(null);
-            setSelectedSign(null);
-            setSelectedCardinal(null);
-            setSelectedMonomythStage(null);
-            setSelectedConstellation(null);
-          }}
-          selectedConstellation={selectedConstellation}
-          zodiacMode={zodiacMode}
-          onSelectConstellation={(cid) => {
-            trackElement(`chronosphaera.constellation.${cid}`);
-            setSelectedConstellation(selectedConstellation === cid ? null : cid);
-            setSelectedPlanet(null);
-            setSelectedSign(null);
-            setSelectedCardinal(null);
-            setSelectedEarth(null);
-            setSelectedMonth(null);
-            setVideoUrl(null);
-            setPersonaChatOpen(null);
-            setSelectedMonomythStage(null);
-            setMonomythModel(null);
-            setSelectedStarlightStage(null);
-            setSelectedBeyondRing(null);
-          }}
-          activeBeyondRing={selectedBeyondRing}
-          beyondRings={beyondRings}
-          onSelectBeyondRing={
-            STAR_SPHERE_TRADITIONS.has(perspective.activePerspective) || BEYOND_TRADITIONS.has(perspective.activePerspective)
-              ? handleSelectBeyondRing
-              : undefined
-          }
-        />
+          />
+        )}
       </div>
 
       <div key={`${mode}|${selectedPlanet}|${selectedSign}|${selectedCardinal}|${selectedEarth}|${selectedMonth}|${selectedMonomythStage}|${selectedStarlightStage}|${selectedConstellation}|${selectedWheelItem}|${selectedBeyondRing}`} className="chrono-content-fade">
@@ -2362,29 +2454,6 @@ export default function ChronosphaeraPage() {
           displayReversed={columnSequencePopup.displayReversed}
         />
       )}
-      <button
-        className={`ambient-toggle${ambient.isManual ? ' manual' : ''}`}
-        onClick={ambient.toggle}
-        title={`${ambient.mode === 'solar' ? 'Solar' : 'Lunar'} mode${ambient.isManual ? ' (manual — tap to reset)' : ''}`}
-      >
-        {ambient.mode === 'solar' ? (
-          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
-            <circle cx="12" cy="12" r="4" fill="currentColor" stroke="none" />
-            <line x1="12" y1="2" x2="12" y2="5" />
-            <line x1="12" y1="19" x2="12" y2="22" />
-            <line x1="2" y1="12" x2="5" y2="12" />
-            <line x1="19" y1="12" x2="22" y2="12" />
-            <line x1="5.6" y1="5.6" x2="7.5" y2="7.5" />
-            <line x1="16.5" y1="16.5" x2="18.4" y2="18.4" />
-            <line x1="5.6" y1="18.4" x2="7.5" y2="16.5" />
-            <line x1="16.5" y1="7.5" x2="18.4" y2="5.6" />
-          </svg>
-        ) : (
-          <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" stroke="none">
-            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
-          </svg>
-        )}
-      </button>
     </div>
   );
 }

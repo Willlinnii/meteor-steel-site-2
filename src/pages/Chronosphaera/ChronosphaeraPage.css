@@ -1,11 +1,28 @@
 /* ===== SEVEN METALS PAGE ===== */
 
 .chronosphaera-page {
+  /* Palette variables — overridden by .chrono-solar / .chrono-lunar */
+  --cp-bg1: #06060f;
+  --cp-bg2: #0a0a18;
+  --cp-bg3: #0d0d1a;
+  --cp-bg4: #08080f;
+  --cp-star-warm: rgba(201,169,97,0.4);
+  --cp-star-warm2: rgba(201,169,97,0.3);
+  --cp-star-cool: rgba(139,157,195,0.5);
+  --cp-star-cool2: rgba(139,157,195,0.4);
+  --cp-vignette-top: rgba(30,30,60,0.4);
+  --cp-vignette-left: rgba(15,15,40,0.3);
+  --cp-btn-border: rgba(201, 169, 97, 0.5);
+  --cp-btn-color: rgba(201, 169, 97, 0.8);
+  --cp-teal-border: rgba(139, 195, 170, 0.4);
+  --cp-teal-color: rgba(139, 195, 170, 0.7);
+
   padding: 8px 20px 60px;
   max-width: 1400px;
   margin: 0 auto;
   position: relative;
   min-height: 100vh;
+  transition: --cp-bg1 3s, --cp-bg2 3s, --cp-bg3 3s, --cp-bg4 3s;
   background:
     radial-gradient(1px 1px at 10% 15%, rgba(255,255,255,0.7) 50%, transparent 50%),
     radial-gradient(1px 1px at 25% 35%, rgba(255,255,255,0.5) 50%, transparent 50%),
@@ -25,15 +42,15 @@
     radial-gradient(1px 1px at 60% 92%, rgba(255,255,255,0.6) 50%, transparent 50%),
     radial-gradient(1px 1px at 75% 78%, rgba(255,255,255,0.5) 50%, transparent 50%),
     radial-gradient(1px 1px at 90% 88%, rgba(255,255,255,0.4) 50%, transparent 50%),
-    radial-gradient(1.5px 1.5px at 8% 42%, rgba(201,169,97,0.4) 50%, transparent 50%),
-    radial-gradient(1px 1px at 30% 18%, rgba(201,169,97,0.3) 50%, transparent 50%),
-    radial-gradient(1px 1px at 62% 5%, rgba(139,157,195,0.5) 50%, transparent 50%),
-    radial-gradient(1.5px 1.5px at 78% 60%, rgba(139,157,195,0.4) 50%, transparent 50%),
+    radial-gradient(1.5px 1.5px at 8% 42%, var(--cp-star-warm) 50%, transparent 50%),
+    radial-gradient(1px 1px at 30% 18%, var(--cp-star-warm2) 50%, transparent 50%),
+    radial-gradient(1px 1px at 62% 5%, var(--cp-star-cool) 50%, transparent 50%),
+    radial-gradient(1.5px 1.5px at 78% 60%, var(--cp-star-cool2) 50%, transparent 50%),
     radial-gradient(1px 1px at 48% 38%, rgba(255,255,255,0.3) 50%, transparent 50%),
     radial-gradient(1px 1px at 18% 68%, rgba(255,255,255,0.5) 50%, transparent 50%),
-    radial-gradient(ellipse at 50% 0%, rgba(30,30,60,0.4) 0%, transparent 70%),
-    radial-gradient(ellipse at 20% 50%, rgba(15,15,40,0.3) 0%, transparent 60%),
-    linear-gradient(to bottom, #06060f 0%, #0a0a18 40%, #0d0d1a 70%, #08080f 100%);
+    radial-gradient(ellipse at 50% 0%, var(--cp-vignette-top) 0%, transparent 70%),
+    radial-gradient(ellipse at 20% 50%, var(--cp-vignette-left) 0%, transparent 60%),
+    linear-gradient(to bottom, var(--cp-bg1) 0%, var(--cp-bg2) 40%, var(--cp-bg3) 70%, var(--cp-bg4) 100%);
   background-attachment: fixed;
 }
 
@@ -60,6 +77,76 @@
 }
 .chrono-content-fade {
   animation: content-fade-in 150ms ease-out;
+}
+
+/* ===== 3D TOGGLE & CONTAINER ===== */
+
+.chrono-diagram-center {
+  position: relative;
+}
+
+.chrono-3d-toggle-group {
+  position: absolute;
+  top: 14px;
+  right: 24px;
+  z-index: 10;
+  display: flex;
+  gap: 6px;
+}
+
+.chrono-3d-toggle {
+  position: relative;
+  top: auto;
+  right: auto;
+  background: rgba(201, 169, 97, 0.12);
+  border: 1px solid rgba(201, 169, 97, 0.35);
+  color: #c9a961;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  padding: 4px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+}
+.chrono-3d-toggle:hover {
+  background: rgba(201, 169, 97, 0.22);
+  border-color: rgba(201, 169, 97, 0.55);
+}
+
+.chrono-vr-enter {
+  background: rgba(139, 157, 195, 0.12);
+  border-color: rgba(139, 157, 195, 0.35);
+  color: #8b9dc3;
+}
+.chrono-vr-enter:hover {
+  background: rgba(139, 157, 195, 0.22);
+  border-color: rgba(139, 157, 195, 0.55);
+}
+
+.chrono-3d-container {
+  width: 684px;
+  max-width: 90vw;
+  aspect-ratio: 1;
+  border-radius: 8px;
+  overflow: hidden;
+  margin: 0 auto;
+}
+
+.chrono-3d-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(201, 169, 97, 0.5);
+  font-size: 0.85rem;
+  background: rgba(10, 10, 20, 0.6);
+}
+
+@media (max-width: 600px) {
+  .chrono-3d-toggle-group {
+    top: 28px;
+    right: 8px;
+  }
 }
 
 /* ===== ORBITAL SVG ===== */
@@ -176,6 +263,27 @@
   opacity: 1;
   box-shadow: 0 0 12px rgba(139, 195, 170, 0.4);
   background: rgba(139, 195, 170, 0.08);
+}
+.compass-toggle.denied {
+  border-color: rgba(200, 100, 80, 0.6);
+  color: rgba(200, 100, 80, 0.8);
+  opacity: 1;
+}
+.compass-toggle:active {
+  opacity: 1;
+  background: rgba(139, 195, 170, 0.25);
+  transform: scale(0.92);
+}
+
+@media (max-width: 600px) {
+  .compass-toggle {
+    bottom: 56px;
+    left: 16px;
+    width: 44px;
+    height: 44px;
+    background: rgba(10, 10, 20, 0.5);
+    -webkit-tap-highlight-color: rgba(139, 195, 170, 0.3);
+  }
 }
 
 /* ===== ORBITAL MODE TOGGLE (cycle: orbiting → live → aligned) ===== */
@@ -1129,8 +1237,7 @@
 
   .orbital-mode-toggle,
   .calendar-toggle,
-  .medicine-wheel-toggle,
-  .chakra-view-toggle,
+  .body-wheel-toggle,
   .star-map-toggle,
   .vr-view-toggle,
   .mythic-earth-toggle,
@@ -1340,9 +1447,9 @@
   margin-bottom: 12px;
 }
 
-/* ===== CHAKRA VIEW TOGGLE ===== */
+/* ===== BODY / WHEEL COMBINED TOGGLE ===== */
 
-.chakra-view-toggle {
+.body-wheel-toggle {
   position: static;
   background: none;
   border: 1px solid rgba(155, 89, 182, 0.5);
@@ -1359,10 +1466,36 @@
   opacity: 0.7;
 }
 
-.chakra-view-toggle:hover {
+.body-wheel-toggle:hover {
   opacity: 1;
   background: rgba(155, 89, 182, 0.1);
   box-shadow: 0 0 10px rgba(155, 89, 182, 0.3);
+}
+
+.body-wheel-toggle.active.body {
+  opacity: 1;
+  border-color: rgba(240, 192, 64, 0.8);
+  color: rgba(240, 192, 64, 0.9);
+  background: rgba(240, 192, 64, 0.1);
+  box-shadow: 0 0 12px rgba(240, 192, 64, 0.3);
+}
+
+.body-wheel-toggle.active.body:hover {
+  background: rgba(240, 192, 64, 0.15);
+  box-shadow: 0 0 14px rgba(240, 192, 64, 0.4);
+}
+
+.body-wheel-toggle.active.wheel {
+  opacity: 1;
+  border-color: rgba(155, 89, 182, 0.8);
+  color: rgba(155, 89, 182, 0.9);
+  background: rgba(155, 89, 182, 0.15);
+  box-shadow: 0 0 12px rgba(155, 89, 182, 0.4);
+}
+
+.body-wheel-toggle.active.wheel:hover {
+  background: rgba(155, 89, 182, 0.2);
+  box-shadow: 0 0 14px rgba(155, 89, 182, 0.5);
 }
 
 /* ===== ORDER INFO PANEL (Chaldean / Heliocentric / Weekday descriptions) ===== */
@@ -1446,37 +1579,6 @@
   pointer-events: none;
 }
 
-/* ===== MEDICINE WHEEL TOGGLE ===== */
-
-.medicine-wheel-toggle {
-  position: static;
-  background: none;
-  border: 1px solid rgba(180, 140, 80, 0.5);
-  color: rgba(180, 140, 80, 0.8);
-  font-size: 1.3rem;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s ease;
-  opacity: 0.7;
-}
-
-.medicine-wheel-toggle:hover {
-  opacity: 1;
-  background: rgba(180, 140, 80, 0.1);
-  box-shadow: 0 0 10px rgba(180, 140, 80, 0.3);
-}
-
-.medicine-wheel-toggle.active {
-  opacity: 1;
-  border-color: rgba(180, 140, 80, 0.8);
-  background: rgba(180, 140, 80, 0.15);
-  box-shadow: 0 0 12px rgba(180, 140, 80, 0.4);
-}
 
 .star-map-toggle {
   position: static;
@@ -3373,99 +3475,83 @@
   to { opacity: 1; }
 }
 
-/* ===== AMBIENT LIGHT: SOLAR / LUNAR MODE ===== */
+/* ===== AMBIENT LIGHT: SOLAR / LUNAR PALETTE ===== */
+/* No overlays — actual colour variables shift between warm and cool. */
 
-/* Tint overlay — sits above background starfield, below interactive content */
-.chronosphaera-page::after {
-  content: '';
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  pointer-events: none;
-  z-index: 1;
-  opacity: 0;
-  transition: opacity 3s ease;
-}
+/* ---------- SOLAR (day) — warm golds, amber sky ---------- */
 
-/* Solar (day) — warm golden atmosphere */
-.chronosphaera-page.chrono-solar::after {
-  opacity: 1;
-  background:
-    radial-gradient(ellipse at 50% 20%, rgba(240, 192, 64, 0.09) 0%, transparent 55%),
-    radial-gradient(ellipse at 50% 50%, rgba(201, 169, 97, 0.05) 0%, transparent 70%),
-    linear-gradient(to bottom, rgba(45, 25, 8, 0.18) 0%, rgba(25, 14, 5, 0.10) 40%, transparent 80%);
+.chronosphaera-page.chrono-solar {
+  --cp-bg1: #0f0906;
+  --cp-bg2: #1a100a;
+  --cp-bg3: #1c120d;
+  --cp-bg4: #110a06;
+  --cp-star-warm: rgba(220,170,70,0.55);
+  --cp-star-warm2: rgba(220,170,70,0.45);
+  --cp-star-cool: rgba(180,160,130,0.3);
+  --cp-star-cool2: rgba(180,160,130,0.25);
+  --cp-vignette-top: rgba(60,30,10,0.35);
+  --cp-vignette-left: rgba(40,20,8,0.25);
+  --cp-btn-border: rgba(220, 170, 70, 0.6);
+  --cp-btn-color: rgba(220, 170, 70, 0.9);
+  --cp-teal-border: rgba(200, 175, 130, 0.45);
+  --cp-teal-color: rgba(200, 175, 130, 0.75);
 }
 
 .chrono-solar .orbital-svg {
-  filter: sepia(0.07) saturate(1.15) brightness(1.03);
+  filter: sepia(0.15) saturate(1.25) brightness(1.03);
   transition: filter 3s ease;
 }
 
-/* Lunar (night) — subtle cool silver enhancement */
-.chronosphaera-page.chrono-lunar::after {
-  opacity: 1;
-  background:
-    radial-gradient(ellipse at 50% 60%, rgba(100, 130, 200, 0.035) 0%, transparent 55%);
+.chrono-solar .mobile-mode-toggle,
+.chrono-solar .orbital-mode-toggle {
+  border-color: var(--cp-btn-border);
+  color: var(--cp-btn-color);
+  transition: border-color 3s ease, color 3s ease;
+}
+
+.chrono-solar .compass-toggle,
+.chrono-solar .calendar-toggle,
+.chrono-solar .clock-toggle {
+  border-color: var(--cp-teal-border);
+  color: var(--cp-teal-color);
+  transition: border-color 3s ease, color 3s ease;
+}
+
+/* ---------- LUNAR (night) — cool silver, deep blue ---------- */
+
+.chronosphaera-page.chrono-lunar {
+  --cp-bg1: #050810;
+  --cp-bg2: #080c1a;
+  --cp-bg3: #0a0e1c;
+  --cp-bg4: #060910;
+  --cp-star-warm: rgba(180,155,100,0.3);
+  --cp-star-warm2: rgba(180,155,100,0.22);
+  --cp-star-cool: rgba(150,170,220,0.6);
+  --cp-star-cool2: rgba(150,170,220,0.5);
+  --cp-vignette-top: rgba(20,25,60,0.45);
+  --cp-vignette-left: rgba(10,15,45,0.35);
+  --cp-btn-border: rgba(170, 160, 190, 0.45);
+  --cp-btn-color: rgba(170, 160, 190, 0.75);
+  --cp-teal-border: rgba(120, 170, 195, 0.45);
+  --cp-teal-color: rgba(120, 170, 195, 0.75);
 }
 
 .chrono-lunar .orbital-svg {
-  filter: saturate(1.05) brightness(0.98);
+  filter: saturate(1.08) brightness(0.97) hue-rotate(5deg);
   transition: filter 3s ease;
 }
 
-/* ===== AMBIENT TOGGLE BUTTON (bottom-left, above compass) ===== */
-
-.ambient-toggle {
-  position: fixed;
-  bottom: 124px;
-  left: 24px;
-  z-index: 999;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: none;
-  border: 1px solid rgba(201, 169, 97, 0.35);
-  color: rgba(201, 169, 97, 0.6);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s ease;
-  opacity: 0.6;
-}
-.ambient-toggle:hover {
-  opacity: 1;
-  background: rgba(201, 169, 97, 0.08);
-  box-shadow: 0 0 10px rgba(201, 169, 97, 0.25);
-}
-.ambient-toggle.manual {
-  border-color: rgba(201, 169, 97, 0.8);
-  color: rgba(201, 169, 97, 1);
-  opacity: 1;
-  box-shadow: 0 0 12px rgba(201, 169, 97, 0.35);
-  background: rgba(201, 169, 97, 0.06);
+.chrono-lunar .mobile-mode-toggle,
+.chrono-lunar .orbital-mode-toggle {
+  border-color: var(--cp-btn-border);
+  color: var(--cp-btn-color);
+  transition: border-color 3s ease, color 3s ease;
 }
 
-/* Lunar mode — shift toggle color to cool silver */
-.chrono-lunar .ambient-toggle {
-  border-color: rgba(139, 157, 195, 0.35);
-  color: rgba(139, 157, 195, 0.6);
-}
-.chrono-lunar .ambient-toggle:hover {
-  background: rgba(139, 157, 195, 0.08);
-  box-shadow: 0 0 10px rgba(139, 157, 195, 0.25);
-}
-.chrono-lunar .ambient-toggle.manual {
-  border-color: rgba(139, 157, 195, 0.8);
-  color: rgba(139, 157, 195, 1);
-  box-shadow: 0 0 12px rgba(139, 157, 195, 0.35);
-  background: rgba(139, 157, 195, 0.06);
-}
-
-@media (max-width: 600px) {
-  .ambient-toggle {
-    bottom: 100px;
-    left: 16px;
-    width: 34px;
-    height: 34px;
-  }
+.chrono-lunar .compass-toggle,
+.chrono-lunar .calendar-toggle,
+.chrono-lunar .clock-toggle {
+  border-color: var(--cp-teal-border);
+  color: var(--cp-teal-color);
+  transition: border-color 3s ease, color 3s ease;
 }

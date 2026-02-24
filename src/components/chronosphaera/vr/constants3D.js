@@ -69,6 +69,23 @@ export const ORBITAL_MODES = {
 
 export const ALIGN_ANGLE = -90;
 
+// Stage ring constants (SVG px / 20 ≈ world units)
+export const STAGE_RING_RADIUS = 17.4;
+export const MONTH_RING_RADIUS = 13.5;
+
+// Chakra column constants
+export const CHAKRA_COLORS = [
+  '#9b59b6', // Crown — violet
+  '#5b6abf', // Third Eye — indigo
+  '#3498db', // Throat — blue
+  '#2ecc71', // Heart — green
+  '#f1c40f', // Solar Plexus — yellow
+  '#e67e22', // Sacral — orange
+  '#e74c3c', // Root — red
+];
+export const CHAKRA_LABELS = ['Crown','Third Eye','Throat','Heart','Solar Plexus','Sacral','Root'];
+export const CHAKRA_Y_POSITIONS = [3, 2, 1, 0, -1, -2, -3];
+
 // Mode labels for cycle button
 export const MODE_LABELS = {
   [ORBITAL_MODES.GEOCENTRIC]: 'Earth Centered',

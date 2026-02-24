@@ -1069,17 +1069,31 @@ function MythicEarthPage({ embedded, onSiteSelect: onSiteSelectExternal, externa
     }
   }, [track]);
 
+  const [gyroDenied, setGyroDenied] = useState(false);
+  const [arRetry, setArRetry] = useState(() => {
+    if (typeof sessionStorage !== 'undefined' && sessionStorage.getItem('earth-ar-retry')) {
+      sessionStorage.removeItem('earth-ar-retry');
+      return true;
+    }
+    return false;
+  });
+
   const startCameraAR = useCallback(async () => {
     try {
-      // iOS requires user gesture for deviceorientation permission
       if (typeof DeviceOrientationEvent !== 'undefined' &&
           typeof DeviceOrientationEvent.requestPermission === 'function') {
         const perm = await DeviceOrientationEvent.requestPermission();
         if (perm !== 'granted') {
-          alert('Gyroscope permission is needed for AR mode. Please allow motion access.');
+          setGyroDenied(true);
           return;
         }
       }
+      if (typeof DeviceMotionEvent !== 'undefined' &&
+          typeof DeviceMotionEvent.requestPermission === 'function') {
+        await DeviceMotionEvent.requestPermission().catch(() => {});
+      }
+      setGyroDenied(false);
+      setArRetry(false);
       const stream = await navigator.mediaDevices.getUserMedia({
         video: { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 720 } },
         audio: false,
@@ -1411,6 +1425,39 @@ function MythicEarthPage({ embedded, onSiteSelect: onSiteSelectExternal, externa
           </div>
         )}
       </div>
+
+      {gyroDenied && (
+        <div className="celestial-gyro-denied" style={{ position: 'fixed', bottom: '80px', left: '50%', transform: 'translateX(-50%)', zIndex: 999 }}>
+          <p style={{ color: 'rgba(220,210,190,0.85)', fontFamily: "'Crimson Pro', serif", fontSize: '0.9rem', lineHeight: 1.5, margin: '0 0 12px' }}>Motion access was denied. Safari only shows the permission prompt once per visit.</p>
+          <button
+            className="mythic-earth-ctrl-btn"
+            style={{ display: 'block', width: '100%', marginBottom: 10, padding: '10px 16px' }}
+            onClick={() => {
+              try { sessionStorage.setItem('earth-ar-retry', '1'); } catch {}
+              window.location.reload();
+            }}
+          >
+            Reload Page
+          </button>
+          <p style={{ color: 'rgba(201,169,97,0.45)', fontSize: '0.78rem', marginBottom: 8 }}>
+            After the page reloads, tap <strong>Start AR</strong> and then tap <strong>Allow</strong> when Safari asks for motion access.
+          </p>
+          <button onClick={() => setGyroDenied(false)} style={{ background: 'none', border: 'none', color: 'rgba(201,169,97,0.4)', fontSize: '0.75rem', cursor: 'pointer', textDecoration: 'underline' }}>Dismiss</button>
+        </div>
+      )}
+      {arRetry && !cameraAR && (
+        <div className="celestial-gyro-denied" style={{ position: 'fixed', bottom: '80px', left: '50%', transform: 'translateX(-50%)', zIndex: 999 }}>
+          <p style={{ color: 'rgba(220,210,190,0.85)', fontFamily: "'Crimson Pro', serif", fontSize: '0.9rem', lineHeight: 1.5, margin: '0 0 12px' }}>Tap below to start AR. When Safari asks for motion access, tap <strong>Allow</strong>.</p>
+          <button
+            className="mythic-earth-ctrl-btn"
+            style={{ display: 'block', width: '100%', marginBottom: 10, padding: '10px 16px' }}
+            onClick={startCameraAR}
+          >
+            Start AR
+          </button>
+          <button onClick={() => setArRetry(false)} style={{ background: 'none', border: 'none', color: 'rgba(201,169,97,0.4)', fontSize: '0.75rem', cursor: 'pointer', textDecoration: 'underline' }}>Dismiss</button>
+        </div>
+      )}
 
       {xrSlot && createPortal(
         <>
