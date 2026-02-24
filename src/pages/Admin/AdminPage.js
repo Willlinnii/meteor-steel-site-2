@@ -226,14 +226,14 @@ function AdminStatsBar() {
 
   return (
     <div style={{
-      display: 'flex', gap: 4, padding: '8px 12px', marginBottom: 16,
+      display: 'flex', gap: 2, padding: '4px 12px', marginBottom: 12,
       background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)',
-      borderRadius: 8, flexWrap: 'wrap', justifyContent: 'center',
+      borderRadius: 6, flexWrap: 'wrap', justifyContent: 'center',
     }}>
       {stats.map(s => (
-        <div key={s.label} style={{ textAlign: 'center', padding: '2px 12px', minWidth: 70 }}>
-          <div style={{ fontSize: '1rem', fontWeight: 700, color: s.color || 'var(--accent-gold, #c9a961)' }}>{s.value}</div>
-          <div style={{ fontSize: '0.62rem', color: 'var(--text-secondary, #8a8a9a)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>{s.label}</div>
+        <div key={s.label} style={{ textAlign: 'center', padding: '1px 10px', minWidth: 60 }}>
+          <div style={{ fontSize: '0.78rem', fontWeight: 700, color: s.color || 'var(--accent-gold, #c9a961)', lineHeight: 1.3 }}>{s.value}</div>
+          <div style={{ fontSize: '0.56rem', color: 'var(--text-secondary, #8a8a9a)', textTransform: 'uppercase', letterSpacing: '0.04em', lineHeight: 1.2 }}>{s.label}</div>
         </div>
       ))}
     </div>
