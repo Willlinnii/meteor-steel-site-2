@@ -121,8 +121,8 @@ const SELF_KEYS = new Set([
 const CYCLE_ORDER = [
   'sumerian',               // c. 3500–2000 BCE
   'babylon',                // c. 1800–500 BCE
-  'phoenician',             // c. 1500–300 BCE
   'assyrian',               // c. 2000–609 BCE (Neo-Assyrian peak ~700)
+  'phoenician',             // c. 1500–300 BCE
   'genesis',                // c. 6th–5th c BCE (oral tradition much older)
   'pythagorean',            // 6th c BCE
   'plato',                  // 4th c BCE
@@ -140,8 +140,8 @@ const CYCLE_ORDER = [
   'dante',                  // 1320
   'tarot',                  // c. 1430s–1440s (Visconti-Sforza, Milan)
   'ficino',                 // 1433–1499
-  'agrippa',                // 1531 (Three Books of Occult Philosophy)
   'paracelsus',             // 1493–1541
+  'agrippa',                // 1531 (Three Books of Occult Philosophy)
   'john-dee',               // 1582–1589
   'kepler',                 // 1596–1619
   'rosicrucian',            // 1614–17th c
