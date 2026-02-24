@@ -159,7 +159,9 @@ service cloud.firestore {
       match /feed/{postId} {
         allow read, create: if request.auth != null
           && request.auth.uid in get(/databases/$(database)/documents/families/$(familyId)).data.memberUids;
-        allow update, delete: if request.auth != null
+        allow update: if request.auth != null
+          && request.auth.uid in get(/databases/$(database)/documents/families/$(familyId)).data.memberUids;
+        allow delete: if request.auth != null
           && request.auth.uid in get(/databases/$(database)/documents/families/$(familyId)).data.memberUids
           && request.auth.uid == resource.data.createdBy;
       }
@@ -224,7 +226,8 @@ service cloud.firestore {
     match /fellowship-posts/{postId} {
       allow read: if request.auth != null;
       allow create: if request.auth != null && request.auth.uid == request.resource.data.authorUid;
-      allow update, delete: if request.auth != null && request.auth.uid == resource.data.authorUid;
+      allow update: if request.auth != null;
+      allow delete: if request.auth != null && request.auth.uid == resource.data.authorUid;
     }
 
     // ===== Friend requests (1-to-1) =====
@@ -274,7 +277,9 @@ service cloud.firestore {
       match /feed/{postId} {
         allow read, create: if request.auth != null
           && request.auth.uid in get(/databases/$(database)/documents/friendGroups/$(groupId)).data.memberUids;
-        allow update, delete: if request.auth != null
+        allow update: if request.auth != null
+          && request.auth.uid in get(/databases/$(database)/documents/friendGroups/$(groupId)).data.memberUids;
+        allow delete: if request.auth != null
           && request.auth.uid in get(/databases/$(database)/documents/friendGroups/$(groupId)).data.memberUids
           && request.auth.uid == resource.data.createdBy;
       }

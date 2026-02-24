@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { collection, addDoc, deleteDoc, doc, onSnapshot, orderBy, query, serverTimestamp } from 'firebase/firestore';
+import { collection, addDoc, deleteDoc, doc, onSnapshot, orderBy, query, serverTimestamp, updateDoc, arrayUnion, arrayRemove } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { db, storage } from '../../auth/firebase';
 import { useAuth } from '../../auth/AuthContext';
@@ -156,6 +156,21 @@ export default function FeedPage() {
     }
   };
 
+  // Circle / uncircle post
+  const handleCircle = async (postId) => {
+    if (!activeScope || !user) return;
+    const postRef = doc(db, activeScope.collection, activeScope.id, 'feed', postId);
+    const post = posts.find(p => p.id === postId);
+    const alreadyCircled = post?.circledBy?.includes(user.uid);
+    try {
+      await updateDoc(postRef, {
+        circledBy: alreadyCircled ? arrayRemove(user.uid) : arrayUnion(user.uid),
+      });
+    } catch (err) {
+      console.error('Failed to circle post:', err);
+    }
+  };
+
   const hasContent = text.trim() || imageFiles.length > 0 || link.trim();
 
   return (
@@ -242,6 +257,7 @@ export default function FeedPage() {
               post={post}
               currentUid={user?.uid}
               onDelete={handleDelete}
+              onCircle={handleCircle}
             />
           ))}
         </div>

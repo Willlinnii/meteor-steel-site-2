@@ -178,6 +178,12 @@
   border: 1px solid var(--border-subtle);
   border-radius: 10px;
   padding: 14px;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.feed-post.circled {
+  border-color: var(--accent-gold);
+  box-shadow: 0 0 10px rgba(200, 170, 110, 0.2);
 }
 
 .feed-post-header {
@@ -290,6 +296,46 @@
   border-radius: 8px;
   max-height: 400px;
   object-fit: cover;
+}
+
+/* ===== CIRCLE BUTTON ===== */
+.feed-post-footer {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.feed-circle-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: color 0.3s;
+  font-size: 0.8rem;
+}
+
+.feed-circle-btn:hover {
+  color: var(--accent-gold);
+}
+
+.feed-circle-btn.active {
+  color: var(--accent-gold);
+}
+
+.feed-circle-btn.active svg {
+  filter: drop-shadow(0 0 3px rgba(200, 170, 110, 0.5));
+}
+
+.feed-circle-count {
+  font-size: 0.8rem;
+  line-height: 1;
 }
 
 /* ===== LINK PREVIEW ===== */

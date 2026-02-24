@@ -110,6 +110,12 @@
   border-radius: 10px;
   padding: 14px;
   backdrop-filter: blur(8px);
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.fellowship-post.circled {
+  border-color: var(--accent-gold);
+  box-shadow: 0 0 10px rgba(200, 170, 110, 0.2);
 }
 
 .fellowship-post-header {
@@ -265,6 +271,46 @@
   border-radius: 8px;
   max-height: 400px;
   object-fit: cover;
+}
+
+/* Circle button */
+.fellowship-post-footer {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.fellowship-circle-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: color 0.3s;
+  font-size: 0.8rem;
+}
+
+.fellowship-circle-btn:hover {
+  color: var(--accent-gold);
+}
+
+.fellowship-circle-btn.active {
+  color: var(--accent-gold);
+}
+
+.fellowship-circle-btn.active svg {
+  filter: drop-shadow(0 0 3px rgba(200, 170, 110, 0.5));
+}
+
+.fellowship-circle-count {
+  font-size: 0.8rem;
+  line-height: 1;
 }
 
 /* Video link */

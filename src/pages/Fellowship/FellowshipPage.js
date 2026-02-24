@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { doc, updateDoc, arrayUnion, arrayRemove } from 'firebase/firestore';
+import { db } from '../../auth/firebase';
 import { useAuth } from '../../auth/AuthContext';
 import { useFellowship } from '../../contexts/FellowshipContext';
 import { useFriendRequests } from '../../contexts/FriendRequestsContext';
@@ -13,6 +15,20 @@ export default function FellowshipPage() {
   const { feedItems, loading, deletePost } = useFellowship();
   const { friends } = useFriendRequests();
   const [activeTab, setActiveTab] = useState('achievements');
+
+  const handleCircle = async (postId) => {
+    if (!user) return;
+    const postRef = doc(db, 'fellowship-posts', postId);
+    const post = feedItems.find(p => p.id === postId);
+    const alreadyCircled = post?.circledBy?.includes(user.uid);
+    try {
+      await updateDoc(postRef, {
+        circledBy: alreadyCircled ? arrayRemove(user.uid) : arrayUnion(user.uid),
+      });
+    } catch (err) {
+      console.error('Failed to circle fellowship post:', err);
+    }
+  };
 
   return (
     <div className="fellowship-page">
@@ -67,6 +83,7 @@ export default function FellowshipPage() {
                   post={post}
                   currentUid={user?.uid}
                   onDelete={deletePost}
+                  onCircle={handleCircle}
                 />
               )
             ))}

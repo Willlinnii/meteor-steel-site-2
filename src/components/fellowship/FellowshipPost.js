@@ -20,15 +20,18 @@ function timeAgo(timestamp) {
   return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
 }
 
-export default function FellowshipPost({ post, currentUid, onDelete }) {
+export default function FellowshipPost({ post, currentUid, onDelete, onCircle }) {
   const [expanded, setExpanded] = useState(false);
   const [confirming, setConfirming] = useState(false);
 
   const isAuthor = post.authorUid === currentUid;
   const typeDef = FELLOWSHIP_TYPES[post.completionType] || null;
+  const circledBy = post.circledBy || [];
+  const isCircled = currentUid && circledBy.includes(currentUid);
+  const circleCount = circledBy.length;
 
   return (
-    <div className="fellowship-post">
+    <div className={`fellowship-post${isCircled ? ' circled' : ''}`}>
       <div className="fellowship-post-header">
         <div className="fellowship-post-avatar">
           {post.authorPhotoURL ? (
@@ -104,6 +107,19 @@ export default function FellowshipPost({ post, currentUid, onDelete }) {
           </a>
         </div>
       )}
+
+      <div className="fellowship-post-footer">
+        <button
+          className={`fellowship-circle-btn${isCircled ? ' active' : ''}`}
+          onClick={() => onCircle?.(post.id)}
+          title={isCircled ? 'Remove from your circle' : 'Add to your circle'}
+        >
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.5">
+            <circle cx="12" cy="12" r="9" />
+          </svg>
+          {circleCount > 0 && <span className="fellowship-circle-count">{circleCount}</span>}
+        </button>
+      </div>
     </div>
   );
 }

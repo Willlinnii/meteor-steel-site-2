@@ -19,13 +19,16 @@ function timeAgo(timestamp) {
   return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
 }
 
-export default function FeedPost({ post, currentUid, onDelete }) {
+export default function FeedPost({ post, currentUid, onDelete, onCircle }) {
   const [confirming, setConfirming] = useState(false);
 
   const isAuthor = post.createdBy === currentUid;
+  const circledBy = post.circledBy || [];
+  const isCircled = currentUid && circledBy.includes(currentUid);
+  const circleCount = circledBy.length;
 
   return (
-    <div className="feed-post">
+    <div className={`feed-post${isCircled ? ' circled' : ''}`}>
       <div className="feed-post-header">
         <div className="feed-post-avatar">
           {post.createdByPhoto ? (
@@ -73,6 +76,19 @@ export default function FeedPost({ post, currentUid, onDelete }) {
       )}
 
       {post.link && <LinkPreview url={post.link} />}
+
+      <div className="feed-post-footer">
+        <button
+          className={`feed-circle-btn${isCircled ? ' active' : ''}`}
+          onClick={() => onCircle?.(post.id)}
+          title={isCircled ? 'Remove from your circle' : 'Add to your circle'}
+        >
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.5">
+            <circle cx="12" cy="12" r="9" />
+          </svg>
+          {circleCount > 0 && <span className="feed-circle-count">{circleCount}</span>}
+        </button>
+      </div>
     </div>
   );
 }
