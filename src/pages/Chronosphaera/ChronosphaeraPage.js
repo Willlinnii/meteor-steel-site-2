@@ -594,11 +594,11 @@ export default function ChronosphaeraPage() {
   const showMedicineWheel = mode === 'medicine-wheel';
   const showFallenStarlight = mode === 'fallen-starlight' || mode === 'story-of-stories';
   const showStoryOfStories = mode === 'story-of-stories';
-  const chakraViewMode = mode.startsWith('chakra-') ? mode.replace('chakra-', '') : null;
 
   const ybr = useYellowBrickRoad();
   const { forgeMode } = useStoryForge();
   const perspective = usePerspective(selectedPlanet);
+  const chakraViewMode = mode === 'chakra' ? (perspective.bodyOrderKey || 'chaldean') : null;
 
   // Which beyond rings (worldSoul / nous / source) the current tradition supports
   const beyondRings = useMemo(() => {
@@ -875,15 +875,9 @@ export default function ChronosphaeraPage() {
       setActiveMonthTab('stone');
     }
 
-    // Body modes
-    if (sub === '/body/chaldean' && mode !== 'chakra-chaldean') {
-      setMode('chakra-chaldean'); setSelectedPlanet('Sun'); setActiveTab('body'); setShowCalendar(false); setClockMode(null);
-    } else if (sub === '/body/heliocentric' && mode !== 'chakra-heliocentric') {
-      setMode('chakra-heliocentric'); setSelectedPlanet('Sun'); setActiveTab('body'); setShowCalendar(false); setClockMode(null);
-    } else if (sub === '/body/weekdays' && mode !== 'chakra-weekdays') {
-      setMode('chakra-weekdays'); setSelectedPlanet('Sun'); setActiveTab('body'); setShowCalendar(false); setClockMode(null);
-    } else if (sub === '/body/evolutionary' && mode !== 'chakra-evolutionary') {
-      setMode('chakra-evolutionary'); setSelectedPlanet('Sun'); setActiveTab('body'); setShowCalendar(false); setClockMode(null);
+    // Body mode (single route — ordering derived from active tradition)
+    if ((sub === '/body' || sub.startsWith('/body/')) && mode !== 'chakra') {
+      setMode('chakra'); setSelectedPlanet('Sun'); setActiveTab('body'); setShowCalendar(false); setClockMode(null);
     }
 
     // Monomyth / Meteor Steel (gated by subscription)
@@ -1334,19 +1328,25 @@ export default function ChronosphaeraPage() {
           selectedWheelItem={selectedWheelItem}
           onSelectWheelItem={(item) => { if (item) trackElement(`chronosphaera.medicine-wheel.${item}`); setSelectedWheelItem(item); setActiveWheelTab(null); if (item) { setSelectedSign(null); setSelectedCardinal(null); setSelectedEarth(null); setSelectedMonth(null); } }}
           chakraViewMode={chakraViewMode}
+          orderLabel={perspective.orderLabel}
           onToggleChakraView={() => {
-            const nextChakra = mode === 'chakra-chaldean' ? 'heliocentric'
-              : mode === 'chakra-heliocentric' ? 'weekdays'
-              : mode === 'chakra-weekdays' ? 'evolutionary'
-              : 'chaldean';
-            clearAllSelections();
-            setMode(`chakra-${nextChakra}`);
-            setSelectedPlanet('Sun');
-            setActiveTab('body');
-            setShowCalendar(false);
-            setClockMode(null);
-            setShowOrderInfo(false);
-            navigate(`/chronosphaera/body/${nextChakra}`);
+            if (chakraViewMode) {
+              // Exit body mode — back to default
+              setMode('default');
+              setShowCalendar(true);
+              setClockMode(perspective.clockMode);
+              navigate('/chronosphaera');
+            } else {
+              // Enter body mode
+              clearAllSelections();
+              setMode('chakra');
+              setSelectedPlanet('Sun');
+              setActiveTab('body');
+              setShowCalendar(false);
+              setClockMode(null);
+              setShowOrderInfo(false);
+              navigate('/chronosphaera/body');
+            }
           }}
           onClickOrderLabel={() => setShowOrderInfo(prev => !prev)}
           videoUrl={videoUrl}

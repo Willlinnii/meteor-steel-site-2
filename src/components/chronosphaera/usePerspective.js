@@ -210,6 +210,16 @@ const CLOCK_SETTINGS = {
   sephirotic: null,
 };
 
+const ORDER_TO_BODY = {
+  chaldean: 'chaldean',
+  ascending: 'chaldean',
+  descending: 'chaldean',
+  weekdays: 'weekdays',
+  heliocentric: 'heliocentric',
+  evolutionary: 'evolutionary',
+  sephirotic: 'chaldean',
+};
+
 const ORDER_LABELS = {
   chaldean: 'Chaldean Order',
   ascending: 'Ascending Order',
@@ -334,9 +344,11 @@ export default function usePerspective(selectedPlanet) {
     if (activePerspective === 'dante') return DANTE_TABS;
     const keySet = new Set();
     let hasSelf = false;
+    const hidePlanetTab = activeChart.planetIsNavOnly;
     for (const data of Object.values(activeChart.correspondences)) {
       for (const k of Object.keys(data)) {
         if (META_KEYS.has(k)) continue;
+        if (k === 'classicalPlanet' && hidePlanetTab) continue;
         if (SELF_KEYS.has(k)) { hasSelf = true; continue; }
         keySet.add(k);
       }
@@ -413,6 +425,7 @@ export default function usePerspective(selectedPlanet) {
   const centerModel = activeChart?.centerModel || 'geocentric';
   const clockMode = centerModel === 'heliocentric' ? '12h' : '24h';
   const orderLabel = chartOrder ? (ORDER_LABELS[chartOrder] || chartOrder) : null;
+  const bodyOrderKey = ORDER_TO_BODY[chartOrder] || 'chaldean';
 
   // Should the popup display be reversed? (earthly at bottom, divine at top)
   // Only for numbered charts that aren't in the keep-order exception set
@@ -465,6 +478,7 @@ export default function usePerspective(selectedPlanet) {
     centerModel,
     zodiacFrame: activeChart?.zodiacFrame || 'tropical',
     orderLabel,
+    bodyOrderKey,
     displayReversed,
     getBeyondData,
   };

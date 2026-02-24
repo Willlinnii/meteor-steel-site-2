@@ -257,11 +257,12 @@ function ensureYTApi() {
   });
 }
 
-export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPlanet, hoveredPlanet, selectedSign, onSelectSign, selectedCardinal, onSelectCardinal, selectedEarth, onSelectEarth, showCalendar, onToggleCalendar, selectedMonth, onSelectMonth, showMedicineWheel, onToggleMedicineWheel, selectedWheelItem, onSelectWheelItem, chakraViewMode, onToggleChakraView, onClickOrderLabel, videoUrl, onCloseVideo, ybrActive, ybrCurrentStopIndex, ybrStopProgress, ybrJourneySequence, onToggleYBR, ybrAutoStart, clockMode, onToggleClock, showMonomyth, showMeteorSteel, monomythStages, selectedMonomythStage, onSelectMonomythStage, onToggleMonomyth, monomythModel, showCycles, onSelectCycleSegment, activeCulture, showFallenStarlight, showStoryOfStories, onToggleStarlight, starlightStages, selectedStarlightStage, onSelectStarlightStage, selectedConstellation, onSelectConstellation, zodiacMode, onSelectBeyondRing, beyondRings, activeBeyondRing }) {
+export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPlanet, hoveredPlanet, selectedSign, onSelectSign, selectedCardinal, onSelectCardinal, selectedEarth, onSelectEarth, showCalendar, onToggleCalendar, selectedMonth, onSelectMonth, showMedicineWheel, onToggleMedicineWheel, selectedWheelItem, onSelectWheelItem, chakraViewMode, onToggleChakraView, onClickOrderLabel, orderLabel, videoUrl, onCloseVideo, ybrActive, ybrCurrentStopIndex, ybrStopProgress, ybrJourneySequence, onToggleYBR, ybrAutoStart, clockMode, onToggleClock, compassHeading, compassSupported, onRequestCompass, onStopCompass, showMonomyth, showMeteorSteel, monomythStages, selectedMonomythStage, onSelectMonomythStage, onToggleMonomyth, monomythModel, showCycles, onSelectCycleSegment, activeCulture, showFallenStarlight, showStoryOfStories, onToggleStarlight, starlightStages, selectedStarlightStage, onSelectStarlightStage, selectedConstellation, onSelectConstellation, zodiacMode, onSelectBeyondRing, beyondRings, activeBeyondRing }) {
   const wrapperRef = useRef(null);
   const [tooltip, setTooltip] = useState(null);
   const { hasPurchase, hasSubscription } = useProfile();
   const navigate = useNavigate();
+  const compassActive = compassHeading != null;
   const [hoveredBeyondRing, setHoveredBeyondRing] = useState(null);
 
   // Pre-generate star positions for the star sphere ring (narrow band outside zodiac)
@@ -1017,6 +1018,7 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
       style={pinchStyle}
     >
       <svg viewBox={(showMonomyth || showFallenStarlight || (beyondRings && beyondRings.length > 0)) ? '-50 -50 800 800' : '0 0 700 700'} preserveAspectRatio="xMidYMid meet" className="orbital-svg" role="img" aria-label={showMedicineWheel ? "Medicine wheel diagram" : showMonomyth ? "Celestial clock with monomyth ring" : showFallenStarlight ? "Celestial clock with starlight ring" : heliocentric ? "Heliocentric orbital diagram" : "Geocentric orbital diagram with zodiac"}>
+        <g transform={compassActive ? `rotate(${-compassHeading}, ${CX}, ${CY})` : undefined}>
         {showMedicineWheel ? (
           <g className="medicine-wheel" onMouseMove={handleWheelMove} onMouseLeave={() => { hoveredRingRef.current = null; setHoveredRing(null); }}>
             {/* Quadrant background sectors */}
@@ -2130,6 +2132,7 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
               {hand(sDeg, 230, 1, 'rgba(220, 130, 65, 0.95)')}
 
               {/* Compass directions — map convention: N top, S bottom, E right, W left (Cancer/N, Aries/E, Capricorn/S, Libra/W) */}
+              {!compassActive && <>
               <text x={CX} y={2} textAnchor="middle" dominantBaseline="hanging"
                 fill={starMapMode === 'north' ? 'rgba(180, 220, 255, 0.95)' : 'rgba(201, 169, 97, 0.7)'}
                 fontSize="16" fontFamily="Cinzel, serif" fontWeight="700" letterSpacing="2"
@@ -2144,6 +2147,7 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
                 fill="rgba(201, 169, 97, 0.7)" fontSize="16" fontFamily="Cinzel, serif" fontWeight="700" letterSpacing="2">E</text>
               <text x={2} y={CY} textAnchor="start" dominantBaseline="central"
                 fill="rgba(201, 169, 97, 0.7)" fontSize="16" fontFamily="Cinzel, serif" fontWeight="700" letterSpacing="2">W</text>
+              </>}
 
               <circle cx={CX} cy={CY} r={5} fill="rgba(201, 169, 97, 0.95)" />
             </g>
@@ -2171,6 +2175,7 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
           };
 
           return (
+            <g transform={compassActive ? `rotate(${compassHeading}, ${CX}, ${CY})` : undefined}>
             <g className="clock-overlay clock-24h">
               {/* 24 hour numbers */}
               {!showCycles && hourAngles24.map(({ num, x, y }) => (
@@ -2241,7 +2246,7 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
               })()}
 
               {/* Compass directions — when monomyth active: map convention (N top); otherwise sky convention (S top) */}
-              {showMonomyth ? (
+              {!compassActive && (showMonomyth ? (
                 <>
                   <text x={CX} y={2} textAnchor="middle" dominantBaseline="hanging"
                     fill={starMapMode === 'north' ? 'rgba(180, 220, 255, 0.95)' : 'rgba(201, 169, 97, 0.7)'}
@@ -2275,7 +2280,7 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
                   <text x={2} y={CY} textAnchor="start" dominantBaseline="central"
                     fill="rgba(201, 169, 97, 0.7)" fontSize="16" fontFamily="Cinzel, serif" fontWeight="700" letterSpacing="2">E</text>
                 </>
-              )}
+              ))}
 
               {/* Clock hands — hour, minute, second */}
               {hand24(hDeg24, 140, 3.5, 'rgba(201, 169, 97, 0.95)')}
@@ -2284,6 +2289,7 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
 
               {/* Center dot */}
               <circle cx={CX} cy={CY} r={5} fill="rgba(201, 169, 97, 0.95)" />
+            </g>
             </g>
           );
         })()}
@@ -2367,9 +2373,9 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
             <g style={{ cursor: 'pointer' }} onClick={onClickOrderLabel}>
               <text x={CX} y={585} textAnchor="middle" fill="rgba(201,169,97,0.9)" fontSize="18" fontFamily="Cinzel, serif" fontWeight="600" letterSpacing="2"
                 style={{ textDecoration: 'underline', textDecorationColor: 'rgba(201,169,97,0.35)', textUnderlineOffset: '4px' }}>
-                {CHAKRA_MODE_LABELS[chakraViewMode]}
+                {orderLabel || CHAKRA_MODE_LABELS[chakraViewMode]}
               </text>
-              <text x={CX + (CHAKRA_MODE_LABELS[chakraViewMode].length * 5.5) + 12} y={585} textAnchor="middle" fill="rgba(201,169,97,0.5)" fontSize="12" fontFamily="sans-serif">
+              <text x={CX + ((orderLabel || CHAKRA_MODE_LABELS[chakraViewMode] || '').length * 5.5) + 12} y={585} textAnchor="middle" fill="rgba(201,169,97,0.5)" fontSize="12" fontFamily="sans-serif">
                 ▾
               </text>
             </g>
@@ -2795,6 +2801,37 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
           );
         })()}
         </>)}
+        </g>{/* end compass-rotate wrapper */}
+
+        {/* Fixed N/S/E/W cardinal labels when compass mode active — rendered outside rotation */}
+        {compassActive && showClock && (() => {
+          // Determine convention: 24h non-monomyth uses sky convention (S top), everything else uses map (N top)
+          const sky = clockMode === '24h' && !showMonomyth;
+          const topLabel = sky ? 'S' : 'N';
+          const bottomLabel = sky ? 'N' : 'S';
+          const rightLabel = sky ? 'W' : 'E';
+          const leftLabel = sky ? 'E' : 'W';
+          const topDir = sky ? 'south' : 'north';
+          const bottomDir = sky ? 'north' : 'south';
+          return (
+            <g className="compass-cardinals-fixed">
+              <text x={CX} y={2} textAnchor="middle" dominantBaseline="hanging"
+                fill={starMapMode === topDir ? 'rgba(180, 220, 255, 0.95)' : 'rgba(201, 169, 97, 0.7)'}
+                fontSize="16" fontFamily="Cinzel, serif" fontWeight="700" letterSpacing="2"
+                style={{ cursor: 'pointer' }}
+                onClick={() => setStarMapMode(p => p === topDir ? 'none' : topDir)}>{topLabel}</text>
+              <text x={CX} y={698} textAnchor="middle" dominantBaseline="auto"
+                fill={starMapMode === bottomDir ? 'rgba(180, 220, 255, 0.95)' : 'rgba(201, 169, 97, 0.7)'}
+                fontSize="16" fontFamily="Cinzel, serif" fontWeight="700" letterSpacing="2"
+                style={{ cursor: 'pointer' }}
+                onClick={() => setStarMapMode(p => p === bottomDir ? 'none' : bottomDir)}>{bottomLabel}</text>
+              <text x={698} y={CY} textAnchor="end" dominantBaseline="central"
+                fill="rgba(201, 169, 97, 0.7)" fontSize="16" fontFamily="Cinzel, serif" fontWeight="700" letterSpacing="2">{rightLabel}</text>
+              <text x={2} y={CY} textAnchor="start" dominantBaseline="central"
+                fill="rgba(201, 169, 97, 0.7)" fontSize="16" fontFamily="Cinzel, serif" fontWeight="700" letterSpacing="2">{leftLabel}</text>
+            </g>
+          );
+        })()}
       </svg>
       {stormFlash && (
         <div className="storm-shield-overlay">
@@ -2857,6 +2894,20 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
         );
       })()}
       </div>
+      {compassSupported && showClock && (
+        <button
+          className={`compass-toggle${compassActive ? ' active' : ''}`}
+          onClick={compassActive ? onStopCompass : onRequestCompass}
+          title={compassActive ? 'Disable compass' : 'Align to compass'}
+        >
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.5">
+            <circle cx="12" cy="12" r="9" />
+            <polygon points="12,3 14,12 12,10.5 10,12" fill="currentColor" stroke="none" />
+            <polygon points="12,21 14,12 12,13.5 10,12" />
+            <circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none" />
+          </svg>
+        </button>
+      )}
       <div className="orbital-btn-row" data-expanded={mobileMenuOpen || undefined}>
         <button
           className="mobile-mode-toggle"
@@ -2889,13 +2940,7 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
         <button
           className="chakra-view-toggle"
           onClick={() => { onToggleChakraView && onToggleChakraView(); }}
-          title={
-            !chakraViewMode ? 'Show chakra body viewer (Chaldean)' :
-            chakraViewMode === 'chaldean' ? 'Chaldean Order — click for Heliocentric' :
-            chakraViewMode === 'heliocentric' ? 'Heliocentric Order — click for Weekday' :
-            chakraViewMode === 'weekdays' ? 'Weekday Order — click for Evolutionary' :
-            'Evolutionary Order — click for Chaldean'
-          }
+          title={!chakraViewMode ? 'Show body viewer' : 'Return to orbital view'}
         >
           <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" stroke="none">
             <circle cx="12" cy="4" r="2.5" />
