@@ -1517,5 +1517,263 @@
     "category": "mythic-location",
     "description": "The Sumerian paradise — a pure, clean, bright land where the sun rises. In the Epic of Gilgamesh, Dilmun is the garden of the gods where Utnapishtim dwells after surviving the Great Flood. The Enki and Ninhursag myth describes it as a place where there is no sickness, old age, or death, watered by Enki's sweet springs. Ancient Gulf civilisation flourished here as a trade hub linking Mesopotamia, the Indus Valley, and Arabia.",
     "region": "Qatar"
+  },
+  {
+    "id": "jericho",
+    "name": "Jericho (Tell es-Sultan)",
+    "era": "c. 9000 BCE",
+    "lat": 31.871,
+    "lng": 35.444,
+    "category": "sacred-site",
+    "description": "Oldest walled settlement on Earth. The Tower of Jericho, built around 8000 BCE, is the oldest known monumental structure beyond simple shelters — a stone cylinder nine meters tall with an internal staircase of twenty-two steps. Before agriculture, before pottery, before metal, people here built walls and a tower whose purpose remains debated: defense, flood control, or ritual assertion that this place mattered.",
+    "region": "West Bank",
+    "streetView": {
+      "heading": 90,
+      "pitch": 5
+    }
+  },
+  {
+    "id": "mehrgarh",
+    "name": "Mehrgarh",
+    "era": "c. 7000 BCE",
+    "lat": 29.3838,
+    "lng": 67.6164,
+    "category": "sacred-site",
+    "description": "Earliest farming settlement in South Asia, ancestor of the entire Indus Valley Civilization. The people of Mehrgarh cultivated wheat and barley, domesticated cattle, and practiced the world's first known dentistry — drilling teeth with flint-tipped bow drills. They were also the first to cultivate cotton. A 4,000-year continuum of occupation traces the slow emergence of complex society on the subcontinent.",
+    "region": "Balochistan, Pakistan"
+  },
+  {
+    "id": "jiahu",
+    "name": "Jiahu",
+    "era": "c. 7000–5700 BCE",
+    "lat": 33.6167,
+    "lng": 113.6667,
+    "category": "sacred-site",
+    "description": "Neolithic Chinese settlement that produced the world's oldest playable musical instruments — bone flutes carved from the wing bones of red-crowned cranes, tuned to a pentatonic scale still recognizable as music 9,000 years later. Jiahu also yielded the earliest known fermented beverage (a rice-honey-hawthorn wine) and symbols on tortoise shells that may be the earliest ancestors of Chinese writing.",
+    "region": "Henan, China"
+  },
+  {
+    "id": "ain-ghazal",
+    "name": "Ain Ghazal",
+    "era": "c. 7200 BCE",
+    "lat": 31.99,
+    "lng": 35.982,
+    "category": "sacred-site",
+    "description": "One of the largest Neolithic settlements in the ancient Near East, covering fifteen hectares at its peak. Ain Ghazal is famous for its haunting plaster ancestor statues — half-meter-tall human figures with shell eyes and painted features, buried in pits beneath house floors. Among the earliest large-scale human sculpture, they suggest a ritual relationship with the dead that predates organized religion by millennia.",
+    "region": "Amman, Jordan",
+    "streetView": {
+      "heading": 0,
+      "pitch": 5
+    }
+  },
+  {
+    "id": "lepenski-vir",
+    "name": "Lepenski Vir",
+    "era": "c. 6500–5500 BCE",
+    "lat": 44.5581,
+    "lng": 22.0264,
+    "category": "sacred-site",
+    "description": "Mesolithic settlement on the Danube whose boulder sculptures of human-fish hybrids are among the oldest monumental art in Europe. Trapezoidal houses were oriented precisely toward a whirlpool in the river, and the fish-god faces carved into sandstone boulders suggest a cosmology centered on the river as source of life. A settled community sustained entirely by fishing, predating agriculture in the region.",
+    "region": "Serbia",
+    "streetView": {
+      "heading": 180,
+      "pitch": 10
+    }
+  },
+  {
+    "id": "varna-necropolis",
+    "name": "Varna Necropolis",
+    "era": "c. 4600–4200 BCE",
+    "lat": 43.22,
+    "lng": 27.91,
+    "category": "sacred-site",
+    "description": "The world's oldest known gold artifacts were found in this cemetery on the Black Sea coast of Bulgaria. Grave 43, belonging to a man buried around 4600 BCE, contained more gold than had been found in the entire rest of the world for that period — over 1.5 kilograms of gold objects including a scepter, bracelets, and a penis sheath. The dawn of wealth inequality and status display, made visible in metal for the first time.",
+    "region": "Bulgaria",
+    "streetView": {
+      "heading": 90,
+      "pitch": 5
+    }
+  },
+  {
+    "id": "eridu",
+    "name": "Eridu",
+    "era": "c. 5400–600 BCE",
+    "lat": 30.8158,
+    "lng": 45.9958,
+    "category": "sacred-site",
+    "description": "The Sumerian King List records that \"when kingship descended from heaven, it descended to Eridu\" — making it the first city in Mesopotamian tradition. Sacred to Enki (Ea), god of wisdom and the sweet underground waters (abzu). Excavations revealed eighteen successive temples built one atop another over four millennia, each on the ruins of the last, a physical record of continuous worship from mud-brick shrine to ziggurat.",
+    "region": "Iraq"
+  },
+  {
+    "id": "vinca",
+    "name": "Vinča-Belo Brdo",
+    "era": "c. 5500–4500 BCE",
+    "lat": 44.7553,
+    "lng": 20.6272,
+    "category": "sacred-site",
+    "description": "Type site of the Vinča culture, the largest and most complex prehistoric culture in southeast Europe. Its mysterious incised symbols — found on pottery, figurines, and spindle whorls — are debated as the earliest known form of writing, predating Sumerian cuneiform by a millennium. The Vinča people practiced sophisticated copper smelting and created thousands of enigmatic terracotta figurines with mask-like triangular faces.",
+    "region": "Serbia",
+    "streetView": {
+      "heading": 0,
+      "pitch": 5
+    }
+  },
+  {
+    "id": "trypillia",
+    "name": "Trypillia (Cucuteni-Trypillia)",
+    "era": "c. 5500–2750 BCE",
+    "lat": 49.45,
+    "lng": 31.5667,
+    "category": "sacred-site",
+    "description": "The Cucuteni-Trypillia culture built the largest settlements on Earth between 4100 and 3600 BCE — mega-sites of up to 15,000 people, larger than contemporary Mesopotamian cities. Most remarkably, they periodically burned their own settlements to the ground and rebuilt them in the same location, possibly as ritual renewal. Their painted ceramics and clay figurines reveal a sophisticated symbolic world.",
+    "region": "Ukraine"
+  },
+  {
+    "id": "khirokitia",
+    "name": "Khirokitia",
+    "era": "c. 7000–4000 BCE",
+    "lat": 34.7967,
+    "lng": 33.3397,
+    "category": "sacred-site",
+    "description": "Remarkably well-preserved Neolithic settlement on Cyprus, built as a dense cluster of circular stone houses connected by narrow alleys. The dead were buried beneath the floors of their own homes, curled in fetal position with stone bowls placed on their chests. The uniform size of houses and absence of monumental buildings suggest a deeply egalitarian society — no chiefs, no palaces, no temples.",
+    "region": "Cyprus",
+    "streetView": {
+      "heading": 180,
+      "pitch": 10
+    }
+  },
+  {
+    "id": "uruk-city",
+    "name": "Uruk (City)",
+    "era": "c. 4000–3100 BCE",
+    "lat": 31.3225,
+    "lng": 45.6375,
+    "category": "sacred-site",
+    "description": "The world's first true city, growing to 40,000 people by 3100 BCE — the largest human settlement that had ever existed. Uruk gave the world cuneiform writing, cylinder seals, monumental temple architecture, and the concept of urban life itself. The White Temple and Eanna precinct were the first buildings designed to overwhelm with scale. Gilgamesh was its legendary king, but the city's real achievement was inventing civilization.",
+    "region": "Iraq"
+  },
+  {
+    "id": "tell-brak",
+    "name": "Tell Brak (Nagar)",
+    "era": "c. 4000–1500 BCE",
+    "lat": 36.67,
+    "lng": 41.06,
+    "category": "sacred-site",
+    "description": "One of the world's first cities, rivaling Uruk in antiquity. The \"Eye Temple\" (c. 3500 BCE) contained thousands of small alabaster figurines with enormous staring eyes — mass-produced votive offerings that represent the earliest known example of standardized production. Tell Brak was a major urban center on the trade routes between Mesopotamia and Anatolia, thriving for over two millennia.",
+    "region": "Syria"
+  },
+  {
+    "id": "susa",
+    "name": "Susa",
+    "era": "c. 4400–640 BCE",
+    "lat": 32.1878,
+    "lng": 48.2575,
+    "category": "sacred-site",
+    "description": "One of the oldest continuously inhabited cities on Earth, occupied from around 4400 BCE to the 13th century CE. Capital of Elam and later the Achaemenid winter capital. The Code of Hammurabi, the world's most famous ancient law code, was found here — carried off as a war trophy from Babylon. Susa sat at the crossroads of Mesopotamia and the Iranian plateau, a hinge point of ancient civilization.",
+    "region": "Iran",
+    "streetView": {
+      "heading": 0,
+      "pitch": 5
+    }
+  },
+  {
+    "id": "sialk",
+    "name": "Sialk",
+    "era": "c. 5500–4000 BCE",
+    "lat": 33.97,
+    "lng": 51.41,
+    "category": "sacred-site",
+    "description": "Prehistoric mound site on the Iranian plateau, one of the key sites for understanding early metallurgy — the technological transition that gives the Copper Age its name. Sialk's earliest levels contain some of the oldest known evidence of copper smelting. Later proto-Elamite levels feature a stepped mudbrick platform that may be an ancestor of the Mesopotamian ziggurat.",
+    "region": "Iran"
+  },
+  {
+    "id": "beer-sheva",
+    "name": "Tel Be'er Sheva",
+    "era": "c. 4500–4000 BCE",
+    "lat": 31.2455,
+    "lng": 34.8411,
+    "category": "sacred-site",
+    "description": "Center of the Beersheba Chalcolithic culture, whose inhabitants were among the earliest copper metalworkers in the Levant. The nearby Nahal Mishmar cave yielded a spectacular hoard of over 400 copper ritual objects — mace heads, scepters, and crowns — hidden in a reed mat, the most important Chalcolithic treasure ever found. The objects suggest elaborate ritual practices in a society just beginning to master metal.",
+    "region": "Israel",
+    "streetView": {
+      "heading": 90,
+      "pitch": 5
+    }
+  },
+  {
+    "id": "hierakonpolis",
+    "name": "Hierakonpolis (Nekhen)",
+    "era": "c. 3500–2686 BCE",
+    "lat": 25.0986,
+    "lng": 32.7789,
+    "category": "sacred-site",
+    "description": "Capital of predynastic Upper Egypt and birthplace of pharaonic civilization. The Narmer Palette, depicting the unification of Egypt under one ruler, was found here — the founding document of Egyptian history. Hierakonpolis contained the earliest known Egyptian temple, the oldest known zoo, and the world's oldest known brewery (producing beer for ritual purposes). The falcon god Horus was worshipped here before any pyramid was built.",
+    "region": "Egypt"
+  },
+  {
+    "id": "skara-brae",
+    "name": "Skara Brae",
+    "era": "c. 3180–2500 BCE",
+    "lat": 59.0487,
+    "lng": -3.3413,
+    "category": "sacred-site",
+    "description": "Best-preserved Neolithic village in Europe, revealed by a storm in 1850 after being buried in sand for over four thousand years. Eight stone houses survive with their original furniture intact — stone beds, dressers, storage boxes, and a sophisticated drainage system. Connected by covered passages, the village was a self-contained world on the windswept edge of Orkney, older than Stonehenge and the Great Pyramid.",
+    "region": "Scotland",
+    "streetView": {
+      "heading": 270,
+      "pitch": 5
+    }
+  },
+  {
+    "id": "abydos",
+    "name": "Abydos",
+    "era": "c. 3300–30 BCE",
+    "lat": 26.1849,
+    "lng": 31.919,
+    "category": "sacred-site",
+    "description": "Royal necropolis of Egypt's earliest kings and the cult center of Osiris, god of death and resurrection, for over three millennia. The tombs of Dynasty 0 at Umm el-Qa'ab contain the earliest known Egyptian hieroglyphic writing — bone labels dating to around 3250 BCE. Pilgrims carved over a million graffiti on temple walls seeking Osiris's blessing in the afterlife. Seti I's temple here contains the famous Abydos King List.",
+    "region": "Egypt",
+    "streetView": {
+      "heading": 0,
+      "pitch": 10
+    }
+  },
+  {
+    "id": "hagar-qim",
+    "name": "Ħaġar Qim",
+    "era": "c. 3600–3200 BCE",
+    "lat": 35.8275,
+    "lng": 14.4422,
+    "category": "sacred-site",
+    "description": "Megalithic temple on the southern coast of Malta, among the oldest freestanding stone structures in the world — older than Stonehenge and the pyramids. Built from massive limestone blocks (the largest weighing over 20 tons), the temple is aligned so that sunlight passes through a small hole in its wall at the summer solstice, illuminating a stone slab inside. The Maltese temples are one of archaeology's great enigmas: who built them, and why did their civilization vanish?",
+    "region": "Malta",
+    "streetView": {
+      "heading": 180,
+      "pitch": 10
+    }
+  },
+  {
+    "id": "harappa",
+    "name": "Harappa",
+    "era": "c. 3300–1300 BCE",
+    "lat": 30.628,
+    "lng": 72.865,
+    "category": "sacred-site",
+    "description": "One of the first urban centers of the Indus Valley Civilization, which at its height encompassed five million people across an area larger than ancient Egypt and Mesopotamia combined. Harappa's grid-planned streets, standardized weights and measures, advanced drainage, and massive granaries reveal a sophisticated society. Most remarkably, no palaces, no temples, and no evidence of warfare have been found — a great civilization that may have governed itself without kings.",
+    "region": "Punjab, Pakistan"
+  },
+  {
+    "id": "hattusa",
+    "name": "Hattusa",
+    "era": "c. 1600–1178 BCE",
+    "lat": 40.02,
+    "lng": 34.615,
+    "category": "sacred-site",
+    "description": "Capital of the Hittite Empire, the first civilization to smelt iron — initially from meteoritic sources, giving the Meteor Steel age its literal meaning. At its peak, Hattusa's walls enclosed 180 hectares, making it one of the largest cities of the Late Bronze Age. Its royal archives yielded thousands of cuneiform tablets, including the world's oldest known peace treaty (with Ramesses II after the Battle of Kadesh). The city fell catastrophically in the Bronze Age Collapse around 1178 BCE, burned and abandoned forever.",
+    "region": "Turkey",
+    "streetView": {
+      "heading": 0,
+      "pitch": 10
+    }
   }
 ]
