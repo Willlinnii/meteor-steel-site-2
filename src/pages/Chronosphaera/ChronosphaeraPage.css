@@ -135,6 +135,17 @@
   box-shadow: 0 0 10px rgba(201, 169, 97, 0.3);
 }
 
+.chrono-view3d-controls {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+}
+
 .chrono-3d-container {
   width: 684px;
   max-width: 90vw;
