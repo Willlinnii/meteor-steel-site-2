@@ -269,17 +269,35 @@ export default function ChronosphaeraVRPage() {
   const videoRef = useRef(null);
   const streamRef = useRef(null);
 
+  const [orientationGranted, setOrientationGranted] = useState(false);
+  const [gyroDenied, setGyroDenied] = useState(false);
+  // After reload, show a "tap to start AR" prompt so the fresh gesture triggers the dialog
+  const [arRetry, setArRetry] = useState(() => {
+    if (typeof sessionStorage !== 'undefined' && sessionStorage.getItem('chrono-ar-retry')) {
+      sessionStorage.removeItem('chrono-ar-retry');
+      return true;
+    }
+    return false;
+  });
+
   const startCameraAR = useCallback(async () => {
     try {
-      // iOS requires user gesture for deviceorientation permission
+      // iOS requires user gesture for deviceorientation + devicemotion permission
       if (typeof DeviceOrientationEvent !== 'undefined' &&
           typeof DeviceOrientationEvent.requestPermission === 'function') {
         const perm = await DeviceOrientationEvent.requestPermission();
         if (perm !== 'granted') {
-          alert('Gyroscope permission is needed for AR mode. Please allow motion access.');
+          setGyroDenied(true);
           return;
         }
       }
+      if (typeof DeviceMotionEvent !== 'undefined' &&
+          typeof DeviceMotionEvent.requestPermission === 'function') {
+        await DeviceMotionEvent.requestPermission().catch(() => {});
+      }
+      setGyroDenied(false);
+      setArRetry(false);
+      setOrientationGranted(true);
       const stream = await navigator.mediaDevices.getUserMedia({
         video: { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 720 } },
         audio: false,
@@ -313,7 +331,6 @@ export default function ChronosphaeraVRPage() {
   const joystickRef = useRef({ x: 0, y: 0 });
   const cameraPosRef = useRef({ x: 0, y: 0, z: 0 });
   const anglesRef = useRef(null);
-  const [arZoom, setArZoom] = useState(1);
   const [flyToTarget, setFlyToTarget] = useState(null);
   const onFlyComplete = useCallback(() => setFlyToTarget(null), []);
 
@@ -476,15 +493,14 @@ export default function ChronosphaeraVRPage() {
           xrStore={xrStore}
           cameraAR={cameraAR}
           arPassthrough={arPassthrough}
-          arZoom={arZoom}
           joystickRef={joystickRef}
           flyToTarget={flyToTarget}
           onFlyComplete={onFlyComplete}
-          onScaleChange={setArZoom}
           cameraPosRef={cameraPosRef}
           anglesRef={anglesRef}
           onPanelLock={handlePanelLock}
           panelLockedRef={panelLockedExtRef}
+          orientationGranted={orientationGranted}
         />
 
         {/* AR navigation overlays — hidden when full-screen panel is open */}
@@ -575,6 +591,37 @@ export default function ChronosphaeraVRPage() {
             </button>
           )}
         </div>
+
+        {gyroDenied && (
+          <div className="celestial-gyro-denied">
+            <p>Motion access was denied. Safari only shows the permission prompt once per visit.</p>
+            <button
+              className="celestial-btn celestial-xr-enter"
+              onClick={() => {
+                try { sessionStorage.setItem('chrono-ar-retry', '1'); } catch {}
+                window.location.reload();
+              }}
+            >
+              Reload Page
+            </button>
+            <p className="celestial-gyro-denied-hint">
+              After the page reloads, tap <strong>Start AR</strong> and then tap <strong>Allow</strong> when Safari asks for motion access.
+            </p>
+            <button className="celestial-gyro-denied-dismiss" onClick={() => setGyroDenied(false)}>Dismiss</button>
+          </div>
+        )}
+        {arRetry && !cameraAR && (
+          <div className="celestial-gyro-denied">
+            <p>Tap below to start AR. When Safari asks for motion access, tap <strong>Allow</strong>.</p>
+            <button
+              className="celestial-btn celestial-xr-enter"
+              onClick={startCameraAR}
+            >
+              Start AR
+            </button>
+            <button className="celestial-gyro-denied-dismiss" onClick={() => setArRetry(false)}>Dismiss</button>
+          </div>
+        )}
       </div>
 
       {/* Side panel with full content — hidden in AR mode (content goes into 3D scene instead) */}

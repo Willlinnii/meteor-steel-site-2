@@ -92,6 +92,7 @@ export default function OrbitalScene({
   anglesRef: externalAnglesRef,
   panelLockedRef,
   onPanelLock,
+  children,
 }) {
   const { anglesRef, moonPhaseRef } = useOrbitalAnimation(mode);
 
@@ -104,7 +105,7 @@ export default function OrbitalScene({
 
   const isHelio = mode === ORBITAL_MODES.HELIOCENTRIC;
   const orbitData = isHelio ? HELIO_ORBITS_3D : ORBITS_3D;
-  const sizeScale = cameraAR ? 2.5 : 1; // bigger planets in phone AR
+  const sizeScale = cameraAR ? 1.2 : 1; // slightly bigger planets in phone AR for mobile visibility
 
   // Sun orbit radius for the light tracker
   const sunOrbitR = ORBITS_3D.find(o => o.planet === 'Sun')?.radius || 8;
@@ -207,6 +208,9 @@ export default function OrbitalScene({
           {infoPanelContent}
         </InfoPanel3D>
       )}
+
+      {/* Mode-specific overlays injected by ModeAwareScene */}
+      {children}
     </>
   );
 }

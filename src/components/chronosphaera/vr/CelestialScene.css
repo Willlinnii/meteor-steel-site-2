@@ -10,6 +10,12 @@
   display: block;
 }
 
+/* Prevent browser zoom on pinch in AR mode */
+.celestial-scene-container.ar-mode,
+.celestial-scene-container.ar-mode canvas {
+  touch-action: none;
+}
+
 /* Camera AR — video feed behind transparent canvas */
 .camera-ar-video {
   position: absolute;
@@ -194,6 +200,60 @@
   border-color: rgba(100, 180, 255, 0.6);
   color: #8cf;
   box-shadow: 0 0 12px rgba(100, 180, 255, 0.25);
+}
+
+/* ===== Gyro Permission Denied Banner ===== */
+
+.celestial-gyro-denied {
+  position: absolute;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 30;
+  background: rgba(12, 10, 16, 0.95);
+  border: 1px solid rgba(240, 192, 64, 0.35);
+  border-radius: 10px;
+  padding: 18px 24px;
+  max-width: 340px;
+  text-align: center;
+  backdrop-filter: blur(8px);
+  animation: ar-panel-fade-in 0.3s ease;
+}
+
+.celestial-gyro-denied p {
+  color: rgba(220, 210, 190, 0.85);
+  font-family: 'Crimson Pro', serif;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin: 0 0 12px;
+}
+
+.celestial-gyro-denied .celestial-btn {
+  display: block;
+  width: 100%;
+  margin-bottom: 10px;
+  font-size: 14px;
+  padding: 10px 16px;
+}
+
+.celestial-gyro-denied-hint {
+  color: rgba(201, 169, 97, 0.45) !important;
+  font-size: 0.78rem !important;
+  margin-bottom: 8px !important;
+}
+
+.celestial-gyro-denied-dismiss {
+  background: none;
+  border: none;
+  color: rgba(201, 169, 97, 0.4);
+  font-size: 0.75rem;
+  cursor: pointer;
+  padding: 4px 8px;
+  text-decoration: underline;
+}
+
+.celestial-gyro-denied-dismiss:hover {
+  color: rgba(201, 169, 97, 0.7);
 }
 
 /* ===== VR Layout: 3D + Side Panel ===== */

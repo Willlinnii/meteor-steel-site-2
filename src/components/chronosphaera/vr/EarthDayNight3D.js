@@ -8,6 +8,10 @@ export default function EarthDayNight3D({ sunAngle = 0, selectedEarth, onSelectE
   const glowRef = useRef();
   const r = EARTH_RADIUS;
 
+  // Tap detection for AR: distinguish taps from pinch gestures
+  const tapStartDay = useRef(null);
+  const tapStartNight = useRef(null);
+
   // Pulsing glow
   useFrame((state) => {
     if (glowRef.current && selectedEarth) {
@@ -18,6 +22,29 @@ export default function EarthDayNight3D({ sunAngle = 0, selectedEarth, onSelectE
 
   // Day hemisphere faces the sun direction, night faces away
   const sunRad = (sunAngle * Math.PI) / 180;
+
+  const handleTap = (tapRef, side) => ({
+    onPointerDown: cameraAR ? (e) => {
+      e.stopPropagation();
+      tapRef.current = { time: Date.now(), x: e.clientX ?? 0, y: e.clientY ?? 0 };
+    } : undefined,
+    onPointerUp: cameraAR ? (e) => {
+      e.stopPropagation();
+      if (!tapRef.current) return;
+      const dt = Date.now() - tapRef.current.time;
+      const dx = (e.clientX ?? 0) - tapRef.current.x;
+      const dy = (e.clientY ?? 0) - tapRef.current.y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      tapRef.current = null;
+      if (dt < 300 && dist < 10) {
+        onSelectEarth && onSelectEarth(selectedEarth === side ? null : side);
+      }
+    } : undefined,
+    onClick: cameraAR ? undefined : (e) => { e.stopPropagation(); onSelectEarth && onSelectEarth(selectedEarth === side ? null : side); },
+  });
+
+  const dayHandlers = handleTap(tapStartDay, 'day');
+  const nightHandlers = handleTap(tapStartNight, 'night');
 
   return (
     <group ref={groupRef}>
@@ -43,8 +70,7 @@ export default function EarthDayNight3D({ sunAngle = 0, selectedEarth, onSelectE
       {/* Day hemisphere (facing sun) */}
       <mesh
         rotation={[0, -sunRad + Math.PI / 2, 0]}
-        onClick={cameraAR ? undefined : (e) => { e.stopPropagation(); onSelectEarth && onSelectEarth(selectedEarth === 'day' ? null : 'day'); }}
-        onPointerDown={cameraAR ? (e) => { e.stopPropagation(); onSelectEarth && onSelectEarth(selectedEarth === 'day' ? null : 'day'); } : undefined}
+        {...dayHandlers}
         onPointerOver={(e) => { e.stopPropagation(); document.body.style.cursor = 'pointer'; }}
         onPointerOut={() => { document.body.style.cursor = 'auto'; }}
       >
@@ -62,8 +88,7 @@ export default function EarthDayNight3D({ sunAngle = 0, selectedEarth, onSelectE
       {/* Night hemisphere (away from sun) */}
       <mesh
         rotation={[0, -sunRad - Math.PI / 2, 0]}
-        onClick={cameraAR ? undefined : (e) => { e.stopPropagation(); onSelectEarth && onSelectEarth(selectedEarth === 'night' ? null : 'night'); }}
-        onPointerDown={cameraAR ? (e) => { e.stopPropagation(); onSelectEarth && onSelectEarth(selectedEarth === 'night' ? null : 'night'); } : undefined}
+        {...nightHandlers}
         onPointerOver={(e) => { e.stopPropagation(); document.body.style.cursor = 'pointer'; }}
         onPointerOut={() => { document.body.style.cursor = 'auto'; }}
       >

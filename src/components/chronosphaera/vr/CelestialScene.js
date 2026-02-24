@@ -39,12 +39,10 @@ function ConditionalOrbitControls({ cameraAR }) {
   );
 }
 
-// Scale down scene in AR so it fits in a room, with dynamic pinch zoom
-function ARScaleWrapper({ children, cameraAR, arZoom }) {
+// Scale wrapper: WebXR uses 0.08 (room-scale), camera-AR uses 1.0 (camera moves through scene)
+function ARScaleWrapper({ children, cameraAR }) {
   const isPresenting = useXR((state) => state.session != null);
-  const inAR = isPresenting || cameraAR;
-  const baseScale = inAR ? 0.08 : 1;
-  const scale = baseScale * (inAR ? (arZoom || 1) : 1);
+  const scale = isPresenting ? 0.08 : 1;
   const y = isPresenting ? -0.5 : 0;
   return (
     <group scale={[scale, scale, scale]} position={[0, y, 0]}>
@@ -67,22 +65,21 @@ export default function CelestialScene({
   xrStore,
   cameraAR,
   arPassthrough,
-  arZoom,
   joystickRef,
   flyToTarget,
   onFlyComplete,
-  onScaleChange,
   cameraPosRef,
   anglesRef,
   onPanelLock,
   panelLockedRef: externalPanelLockedRef,
+  orientationGranted,
 }) {
   const internalCamPosRef = useRef({ x: 0, y: 0, z: 0 });
   const internalPanelLockedRef = useRef(false);
   const panelLockedRef = externalPanelLockedRef || internalPanelLockedRef;
 
   return (
-    <div className="celestial-scene-container" style={cameraAR ? { background: 'transparent' } : undefined}>
+    <div className={`celestial-scene-container${cameraAR ? ' ar-mode' : ''}`} style={cameraAR ? { background: 'transparent' } : undefined}>
       <Canvas
         camera={{ position: [0, 8, 20], fov: 60, near: 0.1, far: 200 }}
         gl={{ antialias: true, alpha: true }}
@@ -92,7 +89,7 @@ export default function CelestialScene({
         <ClearColorManager cameraAR={cameraAR} />
         <XR store={xrStore}>
           <Suspense fallback={<SceneFallback />}>
-            <ARScaleWrapper cameraAR={cameraAR} arZoom={arZoom}>
+            <ARScaleWrapper cameraAR={cameraAR}>
               <OrbitalScene
                 mode={mode}
                 selectedPlanet={selectedPlanet}
@@ -117,9 +114,9 @@ export default function CelestialScene({
                 joystickRef={joystickRef}
                 flyToTarget={flyToTarget}
                 onFlyComplete={onFlyComplete}
-                onScaleChange={onScaleChange}
                 cameraPosRef={cameraPosRef || internalCamPosRef}
                 panelLockedRef={panelLockedRef}
+                orientationGranted={orientationGranted}
               />
             )}
           </Suspense>

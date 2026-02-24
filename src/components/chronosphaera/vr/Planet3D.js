@@ -84,6 +84,9 @@ export default function Planet3D({ planet, position, size, selected, onClick, mo
   const glowRef = useRef();
   const [hovered, setHovered] = useState(false);
 
+  // Tap detection for AR: distinguish taps from pinch gestures
+  const tapStart = useRef(null);
+
   // Pulsing glow for selected
   useFrame((state) => {
     if (glowRef.current && selected) {
@@ -114,7 +117,22 @@ export default function Planet3D({ planet, position, size, selected, onClick, mo
       {/* Invisible expanded hit area for easier clicking */}
       <mesh
         onClick={cameraAR ? undefined : (e) => { e.stopPropagation(); onClick && onClick(); }}
-        onPointerDown={cameraAR ? (e) => { e.stopPropagation(); onClick && onClick(); } : undefined}
+        onPointerDown={cameraAR ? (e) => {
+          e.stopPropagation();
+          tapStart.current = { time: Date.now(), x: e.clientX ?? 0, y: e.clientY ?? 0 };
+        } : undefined}
+        onPointerUp={cameraAR ? (e) => {
+          e.stopPropagation();
+          if (!tapStart.current) return;
+          const dt = Date.now() - tapStart.current.time;
+          const dx = (e.clientX ?? 0) - tapStart.current.x;
+          const dy = (e.clientY ?? 0) - tapStart.current.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          tapStart.current = null;
+          if (dt < 300 && dist < 10) {
+            onClick && onClick();
+          }
+        } : undefined}
         onPointerOver={(e) => { e.stopPropagation(); setHovered(true); document.body.style.cursor = 'pointer'; }}
         onPointerOut={() => { setHovered(false); document.body.style.cursor = 'auto'; }}
       >

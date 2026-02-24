@@ -5,12 +5,16 @@ import * as THREE from 'three';
 const MOVE_SPEED = 3; // world units per second at joystick full tilt
 const FLY_SPEED = 3;  // lerp speed for fly-to
 const FLY_OFFSET = 1.5; // stop this far from target (don't go inside planet)
+const ZOOM_SENSITIVITY = 0.02; // world units per pixel of pinch delta
+const ZOOM_MIN = -5;   // max zoom out (backward along look direction)
+const ZOOM_MAX = 20;   // max zoom in (forward along look direction)
 
 /**
  * Phone AR camera: gyroscope orientation + joystick movement + fly-to + pinch zoom.
  * Camera sits at Earth (0,0,0) initially and can move freely on the orbital plane.
+ * Pinch zoom moves the camera forward/backward along its look direction.
  */
-export default function GyroscopeCamera({ joystickRef, flyToTarget, onFlyComplete, onScaleChange, cameraPosRef, panelLockedRef }) {
+export default function GyroscopeCamera({ joystickRef, flyToTarget, onFlyComplete, cameraPosRef, panelLockedRef, orientationGranted }) {
   const { camera, gl } = useThree();
   const euler = useRef(new THREE.Euler(0, 0, 0, 'YXZ'));
   const quat = useRef(new THREE.Quaternion());
@@ -27,7 +31,7 @@ export default function GyroscopeCamera({ joystickRef, flyToTarget, onFlyComplet
   const flyCompleteRef = useRef(onFlyComplete);
   flyCompleteRef.current = onFlyComplete;
 
-  // Update fly target when prop changes
+  // Update fly target when prop changes — also reset zoom offset
   useEffect(() => {
     if (flyToTarget) {
       const target = new THREE.Vector3(flyToTarget.x, 0, flyToTarget.z);
@@ -40,13 +44,16 @@ export default function GyroscopeCamera({ joystickRef, flyToTarget, onFlyComplet
       } else {
         flyTargetRef.current = target;
       }
+      // Reset zoom on fly-to so you start fresh at the destination
+      zoomOffset.current = 0;
     }
   }, [flyToTarget]);
 
-  // Pinch zoom
+  // Pinch zoom — moves camera forward/backward along look direction
   const pinchStartDist = useRef(null);
-  const scaleAtPinchStart = useRef(1);
-  const currentScale = useRef(1);
+  const zoomAtPinchStart = useRef(0);
+  const zoomOffset = useRef(0);
+  const forward = useRef(new THREE.Vector3());
 
   useEffect(() => {
     const el = gl.domElement;
@@ -59,26 +66,27 @@ export default function GyroscopeCamera({ joystickRef, flyToTarget, onFlyComplet
 
     const onTouchStart = (e) => {
       if (e.touches.length === 2) {
+        e.preventDefault();
         pinchStartDist.current = getTouchDist(e.touches);
-        scaleAtPinchStart.current = currentScale.current;
+        zoomAtPinchStart.current = zoomOffset.current;
       }
     };
     const onTouchMove = (e) => {
       if (e.touches.length === 2 && pinchStartDist.current != null) {
+        e.preventDefault();
         const dist = getTouchDist(e.touches);
-        const ratio = dist / pinchStartDist.current;
-        currentScale.current = Math.max(0.3, Math.min(3, scaleAtPinchStart.current * ratio));
-        if (onScaleChange) onScaleChange(currentScale.current);
+        const delta = dist - pinchStartDist.current;
+        zoomOffset.current = Math.max(ZOOM_MIN, Math.min(ZOOM_MAX, zoomAtPinchStart.current + delta * ZOOM_SENSITIVITY));
       }
     };
     const onTouchEnd = () => {
       pinchStartDist.current = null;
     };
 
-    el.addEventListener('touchstart', onTouchStart, { passive: true });
-    el.addEventListener('touchmove', onTouchMove, { passive: true });
-    el.addEventListener('touchend', onTouchEnd, { passive: true });
-    el.addEventListener('touchcancel', onTouchEnd, { passive: true });
+    el.addEventListener('touchstart', onTouchStart, { passive: false });
+    el.addEventListener('touchmove', onTouchMove, { passive: false });
+    el.addEventListener('touchend', onTouchEnd, { passive: false });
+    el.addEventListener('touchcancel', onTouchEnd, { passive: false });
 
     return () => {
       el.removeEventListener('touchstart', onTouchStart);
@@ -86,24 +94,9 @@ export default function GyroscopeCamera({ joystickRef, flyToTarget, onFlyComplet
       el.removeEventListener('touchend', onTouchEnd);
       el.removeEventListener('touchcancel', onTouchEnd);
     };
-  }, [gl, onScaleChange]);
+  }, [gl]);
 
   // Device orientation
-  const requestPermission = useCallback(() => {
-    if (typeof DeviceOrientationEvent !== 'undefined' &&
-        typeof DeviceOrientationEvent.requestPermission === 'function') {
-      DeviceOrientationEvent.requestPermission()
-        .then(state => {
-          if (state === 'granted') {
-            window.addEventListener('deviceorientation', onOrientation);
-          }
-        })
-        .catch(() => {});
-    } else {
-      window.addEventListener('deviceorientation', onOrientation);
-    }
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
   const onOrientation = useCallback((e) => {
     if (e.alpha != null) {
       alpha.current = e.alpha;
@@ -118,14 +111,31 @@ export default function GyroscopeCamera({ joystickRef, flyToTarget, onFlyComplet
       screenOrient.current = window.orientation || 0;
     };
 
-    requestPermission();
+    // If parent already obtained permission (user gesture context), just attach listener.
+    // Otherwise try requesting — but this may silently fail outside a gesture on iOS.
+    if (orientationGranted) {
+      window.addEventListener('deviceorientation', onOrientation);
+    } else if (typeof DeviceOrientationEvent !== 'undefined' &&
+               typeof DeviceOrientationEvent.requestPermission === 'function') {
+      DeviceOrientationEvent.requestPermission()
+        .then(state => {
+          if (state === 'granted') {
+            window.addEventListener('deviceorientation', onOrientation);
+          }
+        })
+        .catch(() => {});
+    } else {
+      // Non-iOS: no permission API, just attach
+      window.addEventListener('deviceorientation', onOrientation);
+    }
+
     window.addEventListener('orientationchange', onScreen);
 
     return () => {
       window.removeEventListener('deviceorientation', onOrientation);
       window.removeEventListener('orientationchange', onScreen);
     };
-  }, [requestPermission, onOrientation]);
+  }, [orientationGranted, onOrientation]);
 
   useFrame((_, delta) => {
     // --- Freeze everything when panel is locked ---
@@ -190,12 +200,19 @@ export default function GyroscopeCamera({ joystickRef, flyToTarget, onFlyComplet
       }
     }
 
-    // --- Apply position ---
+    // --- Apply position + zoom offset along camera forward ---
     camera.position.copy(posRef.current);
+    if (zoomOffset.current !== 0) {
+      camera.getWorldDirection(forward.current);
+      // Project forward onto the XZ plane (keep camera on orbital plane)
+      forward.current.y = 0;
+      forward.current.normalize();
+      camera.position.addScaledVector(forward.current, zoomOffset.current);
+    }
 
     // Expose position for mini-map
     if (cameraPosRef) {
-      cameraPosRef.current = { x: posRef.current.x, y: posRef.current.y, z: posRef.current.z };
+      cameraPosRef.current = { x: camera.position.x, y: camera.position.y, z: camera.position.z };
     }
   });
 
