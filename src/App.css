@@ -4017,6 +4017,43 @@ body {
   animation: cw-fade-in 0.3s ease;
 }
 
+.profile-donation-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.profile-donation-input-wrap {
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  padding: 0 6px;
+}
+
+.profile-donation-dollar {
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+}
+
+.profile-donation-input {
+  width: 48px;
+  background: transparent;
+  border: none;
+  color: var(--text-primary);
+  font-size: 0.8rem;
+  padding: 5px 2px;
+  outline: none;
+  -moz-appearance: textfield;
+}
+
+.profile-donation-input::-webkit-inner-spin-button,
+.profile-donation-input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
 /* ===== SUBSCRIPTION GATE POPUP ===== */
 .subscription-gate-overlay {
   position: fixed;

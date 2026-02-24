@@ -23,7 +23,7 @@ import dayNight from '../../data/dayNight.json';
 
 const SUBSCRIPTIONS = [
   {
-    id: 'developer-api', name: 'Secret Weapon API',
+    id: 'developer-api', name: 'Secret Weapon API', free: true,
     icon: (
       <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
         <polyline points="16 18 22 12 16 6" />
@@ -36,7 +36,7 @@ const SUBSCRIPTIONS = [
     hasCustomContent: true,
   },
   {
-    id: 'master-key', name: 'Mythouse Master Key',
+    id: 'master-key', name: 'Mythouse Master Key', price: '$100/mo',
     isBundle: true,
     bundleSubscriptions: ['ybr', 'forge', 'coursework', 'monomyth'],
     bundlePurchases: ['starlight-bundle', 'fallen-starlight', 'story-of-stories'],
@@ -54,7 +54,7 @@ const SUBSCRIPTIONS = [
     details: 'The Master Key unlocks the full Mythouse experience: all Yellow Brick Road journeys, the Story Forge, full Coursework tracking (Monomyth Explorer, Celestial Clocks Explorer, Meteor Steel Initiate, Atlas Conversationalist, Mythic Gamer, Starlight Reader, Ouroboros Walker), the Monomyth & Meteor Steel overlay, and the complete Starlight Bundle (Fallen Starlight + Story of Stories).',
   },
   {
-    id: 'ybr', name: 'Yellow Brick Road',
+    id: 'ybr', name: 'Yellow Brick Road', price: '$5/mo',
     icon: (
       <svg viewBox="0 0 20 14" width="20" height="14" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinejoin="round">
         <path d="M1,4 L7,1 L19,1 L13,4 Z" />
@@ -70,7 +70,7 @@ const SUBSCRIPTIONS = [
     details: 'The Yellow Brick Road is a guided, stage-by-stage journey through the monomyth. Atlas walks alongside you as you encounter mythic figures at each threshold \u2014 gods, tricksters, mentors, and shadow guardians drawn from world mythology. Answer their challenges through conversation to advance along the path.',
   },
   {
-    id: 'forge', name: 'Story Forge',
+    id: 'forge', name: 'Story Forge', price: '$45/mo',
     icon: (
       <svg viewBox="0 0 20 20" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round">
         <path d="M10,2 L10,11" />
@@ -83,7 +83,7 @@ const SUBSCRIPTIONS = [
     details: 'The Story Forge lets you craft your own personal myth using the eight stages of the monomyth as a framework. Write freely at each stage while an AI collaborator helps you develop themes, deepen character arcs, and weave in mythic resonance. Your stories are saved to your profile and can be revisited anytime.',
   },
   {
-    id: 'coursework', name: 'Coursework',
+    id: 'coursework', name: 'Coursework', price: '$45/mo',
     icon: (
       <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
         <path d="M2 12 L12 6 L22 12 L12 18 Z" />
@@ -96,7 +96,7 @@ const SUBSCRIPTIONS = [
   },
   {
     id: 'monomyth', name: 'Monomyth & Meteor Steel',
-    preSubscribe: true,
+    price: '$25/mo',
     icon: (
       <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2">
         <circle cx="12" cy="12" r="9" />
@@ -111,7 +111,7 @@ const SUBSCRIPTIONS = [
 const PURCHASES = [
   {
     id: 'fallen-starlight', name: 'Fallen Starlight',
-    preSubscribe: true,
+    price: '$25',
     icon: (
       <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
         <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
@@ -124,7 +124,7 @@ const PURCHASES = [
   },
   {
     id: 'story-of-stories', name: 'Story of Stories',
-    preSubscribe: true,
+    price: '$25',
     icon: (
       <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
         <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
@@ -136,7 +136,7 @@ const PURCHASES = [
     details: 'Story of Stories is a companion layer to Fallen Starlight \u2014 the mythic tradition behind the seven metals, told through the Chronosphaera. It traces the stories that emerged as celestial fire descended into the material world.',
   },
   {
-    id: 'medicine-wheel', name: 'Medicine Wheel',
+    id: 'medicine-wheel', name: 'Medicine Wheel', donation: true,
     icon: (
       <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <path d="M13 2 L5 14 L11 14 L11 22 L19 10 L13 10 Z" />
@@ -147,7 +147,7 @@ const PURCHASES = [
   },
   {
     id: 'starlight-bundle', name: 'Starlight Bundle',
-    preSubscribe: true,
+    price: '$40',
     isBundle: true,
     bundleItems: ['fallen-starlight', 'story-of-stories'],
     icon: (
@@ -181,6 +181,7 @@ const { cards: storyCards, loaded: storyCardsLoaded } = useStoryCardSync();
   const [consultingRespondingId, setConsultingRespondingId] = useState(null);
   const [checkoutLoading, setCheckoutLoading] = useState(null); // itemId being checked out
   const [checkoutSuccess, setCheckoutSuccess] = useState(false);
+  const [donationAmount, setDonationAmount] = useState(''); // for pay-what-you-want items
 
   // Detect checkout success from Stripe redirect
   useEffect(() => {
@@ -846,8 +847,6 @@ const { cards: storyCards, loaded: storyCardsLoaded } = useStoryCardSync();
                   <span className="profile-subscription-action" onClick={e => e.stopPropagation()}>
                     {enabled ? (
                       <span className="profile-stripe-status active">Active</span>
-                    ) : sub.preSubscribe ? (
-                      <span className="profile-stripe-status coming-soon">Coming Soon</span>
                     ) : (
                       <button
                         className="profile-stripe-btn subscribe"
@@ -858,7 +857,7 @@ const { cards: storyCards, loaded: storyCardsLoaded } = useStoryCardSync();
                           setCheckoutLoading(null);
                         }}
                       >
-                        {checkoutLoading === sub.id ? '...' : 'Subscribe'}
+                        {checkoutLoading === sub.id ? '...' : sub.free ? 'Activate' : sub.price ? `Subscribe ${sub.price}` : 'Subscribe'}
                       </button>
                     )}
                   </span>
@@ -1098,8 +1097,34 @@ All responses return { data, meta } JSON. GET /v1/ for full discovery.`}</pre>
                   <span className="profile-subscription-action" onClick={e => e.stopPropagation()}>
                     {enabled ? (
                       <span className="profile-stripe-status active">Purchased</span>
-                    ) : p.preSubscribe ? (
-                      <span className="profile-stripe-status coming-soon">Coming Soon</span>
+                    ) : p.donation ? (
+                      <span className="profile-donation-row">
+                        <span className="profile-donation-input-wrap">
+                          <span className="profile-donation-dollar">$</span>
+                          <input
+                            type="number"
+                            min="1"
+                            step="1"
+                            placeholder="10"
+                            className="profile-donation-input"
+                            value={donationAmount}
+                            onChange={e => setDonationAmount(e.target.value)}
+                          />
+                        </span>
+                        <button
+                          className="profile-stripe-btn purchase"
+                          disabled={checkoutLoading === p.id || !donationAmount}
+                          onClick={async () => {
+                            const cents = Math.round(Number(donationAmount) * 100);
+                            if (cents < 100) return;
+                            setCheckoutLoading(p.id);
+                            try { await initiateCheckout(p.id, { donationAmount: cents }); } catch {}
+                            setCheckoutLoading(null);
+                          }}
+                        >
+                          {checkoutLoading === p.id ? '...' : 'Donate'}
+                        </button>
+                      </span>
                     ) : (
                       <button
                         className="profile-stripe-btn purchase"
@@ -1110,7 +1135,7 @@ All responses return { data, meta } JSON. GET /v1/ for full discovery.`}</pre>
                           setCheckoutLoading(null);
                         }}
                       >
-                        {checkoutLoading === p.id ? '...' : 'Buy'}
+                        {checkoutLoading === p.id ? '...' : p.price ? `Buy ${p.price}` : 'Buy'}
                       </button>
                     )}
                   </span>
@@ -2273,7 +2298,7 @@ function NatalChartDisplay({ chart }) {
     setChartMode('live');
     if (!liveSky) {
       try {
-        const res = await fetch('/api/sky-now');
+        const res = await fetch('/api/celestial');
         const data = await res.json();
         if (data.planets) setLiveSky(data);
       } catch (err) {
@@ -3345,7 +3370,7 @@ function NatalChartInput({ existingChart, onSave }) {
 
     setLoading(true);
     try {
-      const res = await apiFetch('/api/natal-chart', {
+      const res = await apiFetch('/api/celestial?type=natal', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

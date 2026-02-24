@@ -1,24 +1,74 @@
 /**
- * Maps internal item IDs to Stripe Price IDs and payment modes.
- *
- * Price IDs are placeholders — replace with real Stripe Price IDs
- * after creating products in the Stripe Dashboard.
+ * Product catalog with inline pricing.
+ * No Stripe Dashboard product creation needed — prices are passed as
+ * price_data to Checkout Sessions, and Stripe auto-creates products.
  *
  * mode: 'subscription' = recurring, 'payment' = one-time
+ * amount: price in cents (USD)
+ * interval: billing interval for subscriptions ('month')
+ * free: true = skip Stripe, activate directly
+ * donation: true = user chooses amount (minimum 100 cents / $1)
  */
 const STRIPE_PRODUCTS = {
   // Subscriptions
-  'developer-api':  { priceId: process.env.STRIPE_PRICE_DEVELOPER_API  || null, mode: 'subscription' },
-  'master-key':     { priceId: process.env.STRIPE_PRICE_MASTER_KEY     || null, mode: 'subscription' },
-  'ybr':            { priceId: process.env.STRIPE_PRICE_YBR            || null, mode: 'subscription' },
-  'forge':          { priceId: process.env.STRIPE_PRICE_FORGE          || null, mode: 'subscription' },
-  'coursework':     { priceId: process.env.STRIPE_PRICE_COURSEWORK     || null, mode: 'subscription' },
-  'monomyth':       { priceId: process.env.STRIPE_PRICE_MONOMYTH       || null, mode: 'subscription' },
+  'developer-api': {
+    mode: 'subscription',
+    name: 'Secret Weapon API',
+    amount: 0,
+    free: true,
+  },
+  'master-key': {
+    mode: 'subscription',
+    name: 'Mythouse Master Key',
+    amount: 10000,
+    interval: 'month',
+  },
+  'ybr': {
+    mode: 'subscription',
+    name: 'Yellow Brick Road',
+    amount: 500,
+    interval: 'month',
+  },
+  'forge': {
+    mode: 'subscription',
+    name: 'Story Forge',
+    amount: 4500,
+    interval: 'month',
+  },
+  'coursework': {
+    mode: 'subscription',
+    name: 'Coursework',
+    amount: 4500,
+    interval: 'month',
+  },
+  'monomyth': {
+    mode: 'subscription',
+    name: 'Monomyth & Meteor Steel',
+    amount: 2500,
+    interval: 'month',
+  },
   // One-time purchases
-  'fallen-starlight':  { priceId: process.env.STRIPE_PRICE_FALLEN_STARLIGHT  || null, mode: 'payment' },
-  'story-of-stories':  { priceId: process.env.STRIPE_PRICE_STORY_OF_STORIES  || null, mode: 'payment' },
-  'medicine-wheel':    { priceId: process.env.STRIPE_PRICE_MEDICINE_WHEEL    || null, mode: 'payment' },
-  'starlight-bundle':  { priceId: process.env.STRIPE_PRICE_STARLIGHT_BUNDLE  || null, mode: 'payment' },
+  'fallen-starlight': {
+    mode: 'payment',
+    name: 'Fallen Starlight',
+    amount: 2500,
+  },
+  'story-of-stories': {
+    mode: 'payment',
+    name: 'Story of Stories',
+    amount: 2500,
+  },
+  'medicine-wheel': {
+    mode: 'payment',
+    name: 'Medicine Wheel',
+    amount: 0,
+    donation: true,
+  },
+  'starlight-bundle': {
+    mode: 'payment',
+    name: 'Starlight Bundle',
+    amount: 4000,
+  },
 };
 
 /**

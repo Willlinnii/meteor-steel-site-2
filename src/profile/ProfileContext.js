@@ -695,32 +695,39 @@ export function ProfileProvider({ children }) {
   // Stripe integration
   const hasStripeAccount = !!profileData?.stripeCustomerId;
 
-  const initiateCheckout = useCallback(async (itemId) => {
+  const initiateCheckout = useCallback(async (itemId, options = {}) => {
     if (!user) return;
     try {
       const token = await user.getIdToken();
-      const resp = await fetch('/api/stripe-checkout', {
+      const body = { itemId };
+      if (options.donationAmount) body.donationAmount = options.donationAmount;
+      const resp = await fetch('/api/stripe?route=checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-        body: JSON.stringify({ itemId }),
+        body: JSON.stringify(body),
       });
       if (!resp.ok) {
         const err = await resp.json();
         throw new Error(err.error || 'Failed to create checkout session');
       }
-      const { url } = await resp.json();
-      window.location.href = url;
+      const data = await resp.json();
+      if (data.activated) {
+        // Free item — activated server-side, refresh profile
+        await refreshProfile();
+        return;
+      }
+      window.location.href = data.url;
     } catch (err) {
       console.error('Checkout error:', err);
       throw err;
     }
-  }, [user]);
+  }, [user, refreshProfile]);
 
   const openBillingPortal = useCallback(async () => {
     if (!user) return;
     try {
       const token = await user.getIdToken();
-      const resp = await fetch('/api/stripe-portal', {
+      const resp = await fetch('/api/stripe?route=portal', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
       });
@@ -808,7 +815,7 @@ export function ProfileProvider({ children }) {
     if (!user) return null;
     try {
       const token = await user.getIdToken();
-      const resp = await fetch('/api/apikey', {
+      const resp = await fetch('/api/user-actions?route=apikey', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify({ action: 'generate' }),
@@ -830,7 +837,7 @@ export function ProfileProvider({ children }) {
     if (!user) return null;
     try {
       const token = await user.getIdToken();
-      const resp = await fetch('/api/apikey', {
+      const resp = await fetch('/api/user-actions?route=apikey', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify({ action: 'regenerate' }),
