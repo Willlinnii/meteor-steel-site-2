@@ -6,6 +6,8 @@
   "entered": "2026-02-24",
   "method": "dictation",
   "order": "chaldean",
+  "centerModel": "geocentric",
+  "zodiacFrame": "tropical",
   "note": "The Sumerians named the planets and identified them with their gods, but the systematic seven-planet correspondence table is a later Babylonian achievement. Inanna-Venus is the oldest firmly attested planet-deity pairing (Enheduanna, c. 2285 BCE). Utu-Sun and Nanna-Moon are also solid. The outer planet identifications are less certain at this early date — the names listed here are from Sumerian star catalogs preserved in later compilations. No metal-planet system is attested for this period.",
   "correspondences": {
     "Saturn": {

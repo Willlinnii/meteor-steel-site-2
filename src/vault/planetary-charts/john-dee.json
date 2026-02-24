@@ -6,6 +6,8 @@
   "entered": "2026-02-23",
   "method": "dictation",
   "order": "chaldean",
+  "centerModel": "geocentric",
+  "zodiacFrame": "tropical",
   "note": "Dee's angelic planetary correspondences from his Enochian workings. The angel assignments are consistent with the Kabbalah and the Golden Dawn.",
   "correspondences": {
     "Saturn": {

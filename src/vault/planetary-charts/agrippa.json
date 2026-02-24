@@ -6,6 +6,8 @@
   "entered": "2026-02-24",
   "method": "dictation",
   "order": "chaldean",
+  "centerModel": "geocentric",
+  "zodiacFrame": "tropical",
   "note": "Agrippa compiled the most comprehensive Renaissance correspondence tables, synthesizing Pliny, Ptolemy, Picatrix, Ficino, Pico della Mirandola, Reuchlin, and Kabbalistic sources into a single integrated system spanning three levels of reality: natural (Book I), celestial (Book II), and divine/angelic (Book III). The correspondences are mostly traditional; what Agrippa contributed was the architecture — the idea that a single table could span from mineral to angel, from incense to gematria, expressing a unified cosmic structure. The Golden Dawn, Crowley's Liber 777, and modern planetary magic are all downstream of this system. He is the Renaissance junction point: classical and medieval lore flows in; modern occultism flows out.",
   "correspondences": {
     "Saturn": {

@@ -6,6 +6,8 @@
   "entered": "2026-02-24",
   "method": "dictation",
   "order": "weekdays",
+  "centerModel": "geocentric",
+  "zodiacFrame": "tropical",
   "note": "The Sabians of Harran maintained what may have been the last organized pagan planetary temple cult in the Near East. Seven temples, each dedicated to a planet, each with distinct geometric architecture, colors, animals, incense, and vestments. Worshippers dressed in the planet's color, faced north, and prayed three times daily. They venerated Hermes Trismegistus as their prophet and possessed copies of the Corpus Hermeticum. In 830 CE, when Caliph al-Ma'mun challenged them to identify their religion, they adopted the Quranic name 'Sabian' for legal protection. Thabit ibn Qurra and al-Battani were members of this community. The Picatrix (Ghayat al-Hakim) preserves their planetary invocations in extraordinary detail. Critical caveat: 'The descriptions of the Sabian religion by Sabians have not been preserved. The accounts that have survived show us the Sabians through the eyes of their detractors' (J.B. Segal, 1963).",
   "correspondences": {
     "Sun": {

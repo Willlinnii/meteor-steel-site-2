@@ -6,6 +6,8 @@
   "entered": "2026-02-23",
   "method": "transcribed",
   "order": "ascending",
+  "centerModel": "geocentric",
+  "zodiacFrame": "tropical",
   "note": "The same seven planets repeat three times across the register — as descent (Hell), purgation (Purgatory), and ascent (Paradise). Only Paradise names the planets explicitly. The other two emerge when Dante's sins are mapped through their planetary correspondences.",
   "correspondences": {
     "Moon": {

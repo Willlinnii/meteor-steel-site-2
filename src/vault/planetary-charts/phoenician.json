@@ -6,6 +6,8 @@
   "entered": "2026-02-24",
   "method": "dictation",
   "order": "chaldean",
+  "centerModel": "geocentric",
+  "zodiacFrame": "tropical",
   "note": "The Phoenician planet-deity system is reconstructed, not directly attested in Phoenician texts. Our sources are Philo of Byblos (1st–2nd c CE) who claims to translate the ancient priest Sanchuniathon, the Ugaritic tablets from Ras Shamra (which are Canaanite, not strictly Phoenician), and Greek/Roman identifications. El-Saturn and Astarte-Venus are the most firmly attested pairings. No metal-planet system is documented for the Phoenicians — they were the ancient world's greatest metal traders, but they left no record linking those metals to planets.",
   "correspondences": {
     "Saturn": {

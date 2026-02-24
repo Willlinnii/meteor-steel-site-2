@@ -406,7 +406,9 @@ export default function usePerspective(selectedPlanet) {
   // Current chart's order field and derived clock setting
   // Mythouse defaults to weekday order (Sun Mon Tue … Sat)
   const chartOrder = activePerspective === 'mythouse' ? 'weekdays' : (activeChart?.order || null);
-  const clockMode = chartOrder ? (CLOCK_SETTINGS[chartOrder] || null) : null;
+  // Clock mode driven by centerModel: geocentric → 24h live positions, heliocentric → 12h
+  const centerModel = activeChart?.centerModel || 'geocentric';
+  const clockMode = centerModel === 'heliocentric' ? '12h' : '24h';
   const orderLabel = chartOrder ? (ORDER_LABELS[chartOrder] || chartOrder) : null;
 
   // Should the popup display be reversed? (earthly at bottom, divine at top)
@@ -457,6 +459,8 @@ export default function usePerspective(selectedPlanet) {
     camelToTitle,
     chartOrder,
     clockMode,
+    centerModel,
+    zodiacFrame: activeChart?.zodiacFrame || 'tropical',
     orderLabel,
     displayReversed,
     getBeyondData,

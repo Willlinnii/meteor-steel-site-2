@@ -6,6 +6,8 @@
   "entered": "2026-02-23",
   "method": "dictation",
   "order": "chaldean",
+  "centerModel": "geocentric",
+  "zodiacFrame": "tropical",
   "note": "The Babylonian planet-deity system is the oldest known set of planetary correspondences. The Chaldean order — Saturn, Jupiter, Mars, Sun, Venus, Mercury, Moon — originates here, derived from observed orbital periods. Each planet was identified with a major deity of the Mesopotamian pantheon, and these associations passed directly into Greek, Roman, and eventually all Western astrological traditions. The metal correspondences were not yet fixed in Babylonian sources the way they later became in Hellenistic alchemy, but the planetary gods, their temples, and their domains were precisely catalogued.",
   "correspondences": {
     "Saturn": {

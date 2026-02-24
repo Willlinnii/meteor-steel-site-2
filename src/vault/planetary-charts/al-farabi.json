@@ -6,6 +6,8 @@
   "entered": "2026-02-23",
   "method": "dictation",
   "order": "descending",
+  "centerModel": "geocentric",
+  "zodiacFrame": "tropical",
   "note": "Islamic Neoplatonic emanation hierarchy. Four emanation levels: (1) God, (2) First through Ninth Intellects generating the celestial spheres, (3) Tenth/Active Intellect, (4) Material/sublunary world. Each intellect emanates from the one above by contemplating both itself and the First Cause. The material world divides into three levels of human attainment. Arabic planet names: Zuhal (Saturn), Mushtari (Jupiter), Mirrikh (Mars), Shams (Sun), Zuhrah (Venus), 'Utarid (Mercury), Qamar (Moon).",
   "correspondences": {
     "God": {

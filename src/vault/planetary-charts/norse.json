@@ -6,6 +6,8 @@
   "entered": "2026-02-23",
   "method": "dictation",
   "order": "descending",
+  "centerModel": "geocentric",
+  "zodiacFrame": "tropical",
   "note": "The nine worlds of Yggdrasil mapped to planetary correspondences via the Norse-weekday god system. Asgard (Sun) at the crown, descending through the realms to Helheim (Saturn). Three additional worlds extend beyond Saturn — Niflheim, Muspelheim, and Ginnungagap — with suggested modern planet correspondences (Uranus, Neptune, Pluto) in parentheses. God archetypes follow the weekday associations: Sunday/Sol, Monday/Mani, Tuesday/Tyr, Wednesday/Odin, Thursday/Thor, Friday/Freya, Saturday/Saturn-figure.",
   "correspondences": {
     "Asgard": {

@@ -6,6 +6,8 @@
   "entered": "2026-02-23",
   "method": "dictation",
   "order": "weekdays",
+  "centerModel": "geocentric",
+  "zodiacFrame": "tropical",
   "note": "The seven days of creation from Genesis. The text itself assigns no metals, no planets, and no sephirotic correspondences — those layers arrive later through Kabbalah, alchemy, and astrology. What Genesis gives is simpler and stranger: seven acts of divine speech, a cosmos spoken into being, and rest as the culmination rather than an afterthought.",
   "correspondences": {
     "Sun": {

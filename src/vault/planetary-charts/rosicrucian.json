@@ -6,6 +6,8 @@
   "entered": "2026-02-23",
   "method": "dictation",
   "order": "chaldean",
+  "centerModel": "geocentric",
+  "zodiacFrame": "tropical",
   "note": "The seven alchemical stages of the Great Work mapped to planets in Chaldean order. Each stage represents both a laboratory process and an inner transformation. The sequence moves from calcination (burning to prima materia) through to the crystallization of the Philosopher's Stone.",
   "correspondences": {
     "Saturn": {

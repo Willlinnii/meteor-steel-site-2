@@ -6,6 +6,8 @@
   "entered": "2026-02-23",
   "method": "dictation",
   "order": "ascending",
+  "centerModel": "geocentric",
+  "zodiacFrame": "tropical",
   "note": "The seven planetary trumps of the Major Arcana. Planet-to-card assignments follow the Golden Dawn system (codified 1888), drawing on Éliphas Lévi's earlier Kabbalistic mapping. The order here is ascending (Moon to Saturn), matching the soul's ascent through the spheres. Each card's Hebrew letter and Tree of Life path derive from the Golden Dawn's 777 tables.",
   "correspondences": {
     "Moon": {

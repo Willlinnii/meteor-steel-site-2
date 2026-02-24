@@ -6,6 +6,8 @@
   "entered": "2026-02-24",
   "method": "dictation",
   "order": null,
+  "centerModel": "geocentric",
+  "zodiacFrame": "tropical",
   "note": "Seven grades of initiation in the Roman mystery cult of Mithras, each mapped to a classical planet. The most complete source is the floor mosaic of the Felicissimus Mithraeum at Ostia, which shows each grade's symbols alongside planetary emblems. The Santa Prisca mithraeum in Rome swaps the Mercury and Moon assignments for the first and fifth grades. The Celsus passage (preserved by Origen) describes a seven-gated ladder with metals — but the ladder's planet order does not match the grade order, as they represent two different symbolic sequences: cosmological descent vs. initiatory ascent. No single ancient source maps all three (grade, planet, metal) together; the standard modern synthesis draws grade-planet from the Felicissimus mosaic and metal-planet from the broader Hellenistic tradition.",
   "correspondences": {
     "Corax (Raven)": {

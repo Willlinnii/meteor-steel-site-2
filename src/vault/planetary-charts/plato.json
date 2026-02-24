@@ -6,6 +6,8 @@
   "entered": "2026-02-23",
   "method": "dictation",
   "order": "ascending",
+  "centerModel": "geocentric",
+  "zodiacFrame": "tropical",
   "note": "Three Platonic cosmological models compared level by level. The Cave allegory describes the ascent from illusion to truth in three stages. The Myth of Er maps the soul's postmortem journey through the planetary spheres. The Timaeus describes the Demiurge's construction of the cosmos. Not all levels appear in all three works.",
   "correspondences": {
     "Material World": {

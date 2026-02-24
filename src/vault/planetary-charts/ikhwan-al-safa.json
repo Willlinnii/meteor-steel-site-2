@@ -6,6 +6,8 @@
   "entered": "2026-02-23",
   "method": "dictation",
   "order": "descending",
+  "centerModel": "geocentric",
+  "zodiacFrame": "tropical",
   "note": "Nine-level Neoplatonic emanation hierarchy from 10th-century Basra. The planets reside collectively at level 7 (World of Spheres) rather than distributing across individual levels. Influenced by Plotinus but expanded from his three hypostases to nine members.",
   "correspondences": {
     "God the Creator": {

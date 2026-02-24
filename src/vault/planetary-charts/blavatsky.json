@@ -6,6 +6,8 @@
   "entered": "2026-02-23",
   "method": "dictation",
   "order": "chaldean",
+  "centerModel": "geocentric",
+  "zodiacFrame": "tropical",
   "note": "Blavatsky's seven principles of human and cosmic constitution. Numbered 1 (densest) to 7 (most subtle). Planet mapping follows Theosophical Chaldean order (same as Besant and Leadbeater).",
   "correspondences": {
     "Sthula Sharira": {

@@ -6,6 +6,8 @@
   "entered": "2026-02-23",
   "method": "dictation",
   "order": "chaldean",
+  "centerModel": "geocentric",
+  "zodiacFrame": "tropical",
   "note": "Same Theosophical Chaldean order as Leadbeater — Saturn(1) through Moon(7), Mercury and Venus swapped from standard Chaldean",
   "correspondences": {
     "Saturn": {

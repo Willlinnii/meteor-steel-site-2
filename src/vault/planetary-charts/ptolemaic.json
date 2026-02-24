@@ -6,6 +6,8 @@
   "entered": "2026-02-24",
   "method": "dictation",
   "order": "ascending",
+  "centerModel": "geocentric",
+  "zodiacFrame": "tropical",
   "note": "The Hellenistic planetary system codified what became the foundation of all Western astrology. Ptolemy grounded planetary effects in Aristotelian physics — four qualities (hot, cold, wet, dry) — rather than divine will. His Tetrabiblos systematized the essential dignities (domicile, exaltation, detriment, fall) and organized planets into diurnal and nocturnal sects. Vettius Valens, a contemporary practitioner, provides richer character descriptions and practical delineation. The metal correspondences come from the parallel Greco-Egyptian alchemical tradition rather than from Ptolemy's text directly. Together these sources define the classical framework that everything from medieval Arabic astrology to the Golden Dawn inherited.",
   "correspondences": {
     "Moon": {

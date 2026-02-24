@@ -6,6 +6,8 @@
   "entered": "2026-02-23",
   "method": "dictation",
   "order": "evolutionary",
+  "centerModel": "geocentric",
+  "zodiacFrame": "tropical",
   "note": "Steiner's own cosmological sequence — not Chaldean or weekday. Replaces Mars and Mercury with Earth and Vulcan. Keys are his epoch names, not standard classical planets. Consciousness, kingdom, and element are laterally connected to epochs (same axis). Steiner's metal-planet correspondences exist in his medical work but are on a separate axis (classical planets, not epochs).",
   "correspondences": {
     "Old Saturn": {

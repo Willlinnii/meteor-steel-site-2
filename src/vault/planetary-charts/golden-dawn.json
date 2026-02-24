@@ -6,6 +6,8 @@
   "entered": "2026-02-23",
   "method": "dictation",
   "order": "chaldean",
+  "centerModel": "geocentric",
+  "zodiacFrame": "tropical",
   "note": "The Golden Dawn synthesis: alchemical stages from the Rosicrucian tradition combined with the seven liberal arts and Kabbalistic angel correspondences. The liberal arts represent the intellectual curriculum of ascent — each planet governs a mode of knowing.",
   "correspondences": {
     "Saturn": {

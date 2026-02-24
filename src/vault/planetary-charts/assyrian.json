@@ -6,6 +6,8 @@
   "entered": "2026-02-24",
   "method": "dictation",
   "order": "chaldean",
+  "centerModel": "geocentric",
+  "zodiacFrame": "tropical",
   "note": "The Assyrians inherited the Sumerian-Babylonian planetary system and systematized it into the most rigorous omen literature the ancient world produced. Ashurbanipal's library at Nineveh (c. 650 BCE) preserved thousands of celestial omen tablets — the Enūma Anu Enlil series alone runs to 70 tablets. Neo-Assyrian cuneiform tablets from Nineveh list metals alongside planets, though scholars debate whether these represent a coherent symbolic system or ritual/liturgical associations. The deity-planet identifications are firmly attested. Ashur, the supreme national god, overlay the system without replacing it.",
   "correspondences": {
     "Saturn": {

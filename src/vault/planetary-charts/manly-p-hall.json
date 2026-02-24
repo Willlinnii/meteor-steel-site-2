@@ -6,6 +6,8 @@
   "entered": "2026-02-23",
   "method": "research",
   "order": "chaldean",
+  "centerModel": "geocentric",
+  "zodiacFrame": "tropical",
   "note": "Hall's synthesis as a self-identified Rosicrucian Christian, shaped by Blavatsky and Max Heindel's Rosicrucian Cosmo-Conception. His distinctive contribution is compiling the Neoplatonic seven souls (the qualities the soul acquires descending through the planetary spheres) alongside standard Western esoteric correspondences into a single unified framework. He said of Blavatsky: 'Take away her contribution and all modern occultism falls like a house of cards.'",
   "correspondences": {
     "Saturn": {

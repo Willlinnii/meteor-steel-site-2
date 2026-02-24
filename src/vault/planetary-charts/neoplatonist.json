@@ -6,6 +6,8 @@
   "entered": "2026-02-23",
   "method": "dictation",
   "order": "ascending",
+  "centerModel": "geocentric",
+  "zodiacFrame": "tropical",
   "note": "The Neoplatonic celestial hierarchy. Nine levels from Moon to Source. The seven planetary spheres are traversed in the soul's ascent, followed by the Nous (fixed stars/firmament) and the Source (Primum Mobile / The One).",
   "correspondences": {
     "Moon": {

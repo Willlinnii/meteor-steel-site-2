@@ -6,6 +6,8 @@
   "entered": "2026-02-23",
   "method": "dictation",
   "order": "chaldean",
+  "centerModel": "geocentric",
+  "zodiacFrame": "tropical",
   "note": "Tolkien's cosmogony is modeled on Neoplatonic emanation: Eru (the One) creates the Ainur, whose Music becomes Arda. The Elvish planet names are canonical (Morgoth's Ring). The Valar-to-planet mapping is interpretive — based on thematic parallels between each Vala's domain and classical planetary archetypes. Tolkien never published an explicit alignment, though his deep knowledge of medieval cosmology makes the resonances unmistakable. Arda (the created world) occupies the Sun/center. Earth at position 8 represents Melkor's fallen domain. Mars could also be Oromë (the Huntsman); Tulkas chosen for stronger martial resonance.",
   "correspondences": {
     "Saturn": {

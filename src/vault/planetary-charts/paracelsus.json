@@ -6,6 +6,8 @@
   "entered": "2026-02-23",
   "method": "dictation",
   "order": "chaldean",
+  "centerModel": "geocentric",
+  "zodiacFrame": "tropical",
   "inheritsFrom": "corpus-hermeticum",
   "correspondences": {
     "Sun": {

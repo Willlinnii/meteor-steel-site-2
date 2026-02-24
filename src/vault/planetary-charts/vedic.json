@@ -6,6 +6,8 @@
   "entered": "2026-02-23",
   "method": "dictation",
   "order": "ascending",
+  "centerModel": "geocentric",
+  "zodiacFrame": "sidereal",
   "note": "Two parallel systems: the Seven Lokas (planes of existence ascending from Earth to Brahma's realm) and the Navagraha (nine planetary bodies with their deities, archetypes, and gemstones). Rahu and Ketu are the shadow planets — the lunar nodes — placed below the seven classical correspondences.",
   "correspondences": {
     "Rahu / Ketu": {

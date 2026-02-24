@@ -6,6 +6,8 @@
   "entered": "2026-02-23",
   "method": "dictation",
   "order": "ascending",
+  "centerModel": "geocentric",
+  "zodiacFrame": "tropical",
   "note": "Ficino's Neoplatonic cosmology. Eleven levels from the sublunary material realm through the planetary spheres to The One. Ficino synthesized Plato, Plotinus, and Hermeticism into a unified system of celestial influence and spiritual ascent.",
   "correspondences": {
     "Sublunary": {

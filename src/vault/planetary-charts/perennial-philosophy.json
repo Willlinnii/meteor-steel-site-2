@@ -6,6 +6,8 @@
   "entered": "2026-02-23",
   "method": "dictation",
   "order": "ascending",
+  "centerModel": "geocentric",
+  "zodiacFrame": "tropical",
   "note": "Five levels of reality, not seven. A distillation of the common metaphysical structure across traditions. No planetary correspondences — these are ontological planes.",
   "correspondences": {
     "Sthula Sharira": {

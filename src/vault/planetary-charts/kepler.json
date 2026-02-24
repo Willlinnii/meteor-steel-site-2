@@ -6,6 +6,8 @@
   "entered": "2026-02-23",
   "method": "dictation",
   "order": "heliocentric",
+  "centerModel": "heliocentric",
+  "zodiacFrame": "tropical",
   "note": "Kepler's heliocentric cosmology. The Sun sits at the center as divine architect — planets radiate outward. Each planet carries a musical interval (from Harmonices Mundi), a Platonic solid (from Mysterium Cosmographicum, nested between orbital spheres), a temperament, and an elemental correspondence. Earth replaces the Moon as a planetary body; the Moon orbits Earth and its silver correspondence passes to this level.",
   "correspondences": {
     "Sun": {
