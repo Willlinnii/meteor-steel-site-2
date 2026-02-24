@@ -1,5 +1,6 @@
 import { useState, useMemo, useCallback } from 'react';
 
+import { BEYOND_RINGS, FIXED_STARS_RING } from '../../data/chronosphaeraBeyondRings';
 import vaultIndex from '../../vault/_index.json';
 import corpusHermeticum from '../../vault/planetary-charts/corpus-hermeticum.json';
 import paracelsus from '../../vault/planetary-charts/paracelsus.json';
@@ -25,6 +26,12 @@ import ficino from '../../vault/planetary-charts/ficino.json';
 import norse from '../../vault/planetary-charts/norse.json';
 import ikhwanAlSafa from '../../vault/planetary-charts/ikhwan-al-safa.json';
 import alFarabi from '../../vault/planetary-charts/al-farabi.json';
+import tarot from '../../vault/planetary-charts/tarot.json';
+import genesis from '../../vault/planetary-charts/genesis.json';
+import babylon from '../../vault/planetary-charts/babylon.json';
+import sumerian from '../../vault/planetary-charts/sumerian.json';
+import assyrian from '../../vault/planetary-charts/assyrian.json';
+import phoenician from '../../vault/planetary-charts/phoenician.json';
 
 const CHART_MAP = {
   'corpus-hermeticum': corpusHermeticum,
@@ -51,21 +58,41 @@ const CHART_MAP = {
   'norse': norse,
   'ikhwan-al-safa': ikhwanAlSafa,
   'al-farabi': alFarabi,
+  'tarot': tarot,
+  'genesis': genesis,
+  'babylon': babylon,
+  'sumerian': sumerian,
+  'assyrian': assyrian,
+  'phoenician': phoenician,
 };
 
 // Meta fields filtered from display
-const META_KEYS = new Set(['number', 'emanationLevel']);
+const META_KEYS = new Set(['number', 'emanationLevel', 'arcanaNumber', 'majorArcana']);
 
 // Tabs that appear across many traditions get priority (leftmost, closest to tradition name).
 // Keys not listed here appear after, in their natural discovery order.
 // '__self__' is a synthetic tab that groups all self-related fields.
-const TAB_PRIORITY = ['metal', 'classicalPlanet', '__self__'];
+const TAB_PRIORITY = ['overview', 'metal', 'classicalPlanet', '__self__'];
 
 // Display-friendly label overrides for camelCase keys
 const TAB_LABEL_OVERRIDES = {
   classicalPlanet: 'Planet',
   __self__: 'Self',
 };
+
+// Dante realm groupings — collapse many flat keys into three synthetic realm tabs
+const DANTE_REALM_KEYS = new Set([
+  'paradise', 'paradiseVirtue',
+  'purgatory', 'purgatoryTerrace', 'purgatoryVirtue', 'purgatoryNote',
+  'hell', 'hellCircle', 'hellNote',
+]);
+
+const DANTE_TABS = [
+  { id: 'metal', label: 'Metal' },
+  { id: '__paradiso__', label: 'Paradiso' },
+  { id: '__purgatorio__', label: 'Purgatorio' },
+  { id: '__inferno__', label: 'Inferno' },
+];
 
 // Fields that describe aspects of the self (body, energy, consciousness, vice/virtue)
 // collapse into a single "Self" tab. NOT stages (initiation, alchemical phase, etc.).
@@ -81,16 +108,22 @@ const SELF_KEYS = new Set([
 // Chronological cycle order — after Mythouse (present), starts at oldest and moves
 // forward through time back to the present.
 const CYCLE_ORDER = [
+  'sumerian',               // c. 3500–2000 BCE
+  'babylon',                // c. 1800–500 BCE
+  'phoenician',             // c. 1500–300 BCE
+  'assyrian',               // c. 2000–609 BCE (Neo-Assyrian peak ~700)
+  'genesis',                // c. 6th–5th c BCE (oral tradition much older)
   'pythagorean',            // 6th c BCE
   'plato',                  // 4th c BCE
   'corpus-hermeticum',      // 1st–3rd c CE
-  'kabbalah',               // 2nd–13th c CE
   'neoplatonist',           // 3rd–5th c CE
+  'kabbalah',               // 2nd–13th c CE (midpoint ~750)
   'vedic',                  // 7th–10th c CE (codified)
-  'norse',                  // 9th–13th c CE
   'al-farabi',              // c. 870–950 CE
   'ikhwan-al-safa',         // 10th c CE
+  'norse',                  // 9th–13th c CE (midpoint ~1100)
   'dante',                  // 1320
+  'tarot',                  // c. 1430s–1440s (Visconti-Sforza, Milan)
   'ficino',                 // 1433–1499
   'paracelsus',             // 1493–1541
   'john-dee',               // 1582–1589
@@ -110,10 +143,16 @@ const CYCLE_ORDER = [
 // Era groupings for the perspective picker accordion
 export const ERA_GROUPS = [
   {
+    id: 'near-east',
+    label: 'Ancient Near East',
+    period: '3500–300 BCE',
+    traditions: ['sumerian', 'babylon', 'assyrian', 'phoenician'],
+  },
+  {
     id: 'ancient',
-    label: 'Ancient World',
+    label: 'Classical World',
     period: '6th c BCE – 5th c CE',
-    traditions: ['pythagorean', 'plato', 'corpus-hermeticum', 'kabbalah', 'neoplatonist'],
+    traditions: ['genesis', 'pythagorean', 'plato', 'corpus-hermeticum', 'kabbalah', 'neoplatonist'],
   },
   {
     id: 'medieval',
@@ -125,7 +164,7 @@ export const ERA_GROUPS = [
     id: 'renaissance',
     label: 'Renaissance',
     period: '15th – 17th c',
-    traditions: ['ficino', 'paracelsus', 'john-dee', 'kepler', 'rosicrucian'],
+    traditions: ['tarot', 'ficino', 'paracelsus', 'john-dee', 'kepler', 'rosicrucian'],
   },
   {
     id: 'modern',
@@ -141,13 +180,18 @@ export const ERA_GROUPS = [
   },
 ];
 
-// Chart orders that map to a clock setting on the orbital diagram
-// chaldean/weekdays → 24h (geocentric orbits), heliocentric → 12h (heliocentric orbits)
-// evolutionary/ascending/descending → not mapped → null → no clock change
+// Chart orders that map to a clock setting on the orbital diagram.
+// '24h'  = geocentric with 24-hour weekday clock face
+// '12h'  = heliocentric with 12-hour clock face
+// null   = standard geocentric (calendar overlay, no clock face)
 const CLOCK_SETTINGS = {
-  chaldean: '24h',
-  heliocentric: '12h',
   weekdays: '24h',
+  heliocentric: '12h',
+  chaldean: null,
+  ascending: null,
+  descending: null,
+  evolutionary: null,
+  sephirotic: null,
 };
 
 const ORDER_LABELS = {
@@ -162,7 +206,7 @@ const ORDER_LABELS = {
 
 // Traditions where numbered display should NOT reverse (divine is already at low numbers)
 // All other numbered traditions display reversed: earthly at bottom, monad/divine at top
-const DISPLAY_KEEP_ORDER = new Set(['norse', 'kepler', 'john-dee', 'tolkien', 'ikhwan-al-safa', 'al-farabi']);
+const DISPLAY_KEEP_ORDER = new Set(['genesis', 'norse', 'kepler', 'john-dee', 'tolkien', 'ikhwan-al-safa', 'al-farabi']);
 
 // Standard planet orderings
 const STANDARD_ORDERS = {
@@ -190,18 +234,20 @@ function isPopulated(chart) {
   );
 }
 
-// Derive planet navigation order from a chart
+// Derive planet navigation order from a chart.
+// Only entries with a classicalPlanet mapping are navigable planets;
+// non-planetary layers (Material World, Fixed Stars, Kether, etc.) are excluded.
 function derivePlanetOrder(chart) {
   const entries = Object.entries(chart.correspondences);
   const hasNumbers = entries.some(([, d]) => d.number != null);
 
   if (hasNumbers) {
-    // Sort by number field, map to classical planet names
-    return entries
-      .filter(([, d]) => d.number != null)
+    // Sort by number field; only include entries that map to a classical planet
+    const planets = entries
+      .filter(([, d]) => d.number != null && d.classicalPlanet)
       .sort((a, b) => a[1].number - b[1].number)
-      .map(([key, d]) => d.classicalPlanet || key)
-      .filter(p => p !== null);
+      .map(([, d]) => d.classicalPlanet);
+    if (planets.length > 0) return planets;
   }
 
   // Use the stated order type if we have a standard sequence
@@ -260,8 +306,11 @@ export default function usePerspective(selectedPlanet) {
   // Tab definitions from the active tradition's column keys
   // Priority tabs (metal, planet, self) come first; the rest follow in discovery order.
   // SELF_KEYS collapse into a single "__self__" synthetic tab.
+  // Dante gets special three-realm tabs instead of flat keys.
   const perspectiveTabs = useMemo(() => {
     if (!activeChart) return null;
+    // Dante: use fixed realm tabs
+    if (activePerspective === 'dante') return DANTE_TABS;
     const keySet = new Set();
     let hasSelf = false;
     for (const data of Object.values(activeChart.correspondences)) {
@@ -281,7 +330,7 @@ export default function usePerspective(selectedPlanet) {
       id: k,
       label: TAB_LABEL_OVERRIDES[k] || camelToTitle(k),
     }));
-  }, [activeChart]);
+  }, [activeChart, activePerspective]);
 
   // Planet navigation order for the active tradition
   const activePlanetOrder = useMemo(() => {
@@ -307,13 +356,18 @@ export default function usePerspective(selectedPlanet) {
 
   const activeTradition = useMemo(() => {
     if (activePerspective === 'mythouse') return null;
-    return activeChart ? {
+    if (!activeChart) return null;
+    const base = {
       tradition: activeChart.tradition,
       sourceText: activeChart.sourceText,
       period: activeChart.period,
       order: activeChart.order,
       note: activeChart.note || null,
-    } : null;
+    };
+    // Dante: pass realm metadata for the three-realm display
+    if (activeChart.threeOrders) base.threeOrders = activeChart.threeOrders;
+    if (activeChart.authorCommentary) base.authorCommentary = activeChart.authorCommentary;
+    return base;
   }, [activePerspective, activeChart]);
 
   // Cycle through: Mythouse → curated populated traditions → back to Mythouse
@@ -326,11 +380,13 @@ export default function usePerspective(selectedPlanet) {
   }, [populatedIds, activePerspective]);
 
   const perspectiveLabel = activePerspective === 'mythouse'
-    ? 'Mythouse'
+    ? 'Atlas'
+    : activePerspective === 'krishnamurti'
+    ? 'Krishnamurti'
     : activeChart?.tradition || activePerspective;
 
   // Current chart's order field and derived clock setting
-  // Mythouse defaults to weekday order
+  // Mythouse defaults to weekday order (Sun Mon Tue … Sat)
   const chartOrder = activePerspective === 'mythouse' ? 'weekdays' : (activeChart?.order || null);
   const clockMode = chartOrder ? (CLOCK_SETTINGS[chartOrder] || null) : null;
   const orderLabel = chartOrder ? (ORDER_LABELS[chartOrder] || chartOrder) : null;
@@ -340,6 +396,32 @@ export default function usePerspective(selectedPlanet) {
   const displayReversed = useMemo(() => {
     if (!activeChart || DISPLAY_KEEP_ORDER.has(activePerspective)) return false;
     return Object.values(activeChart.correspondences).some(d => d.number != null);
+  }, [activeChart, activePerspective]);
+
+  // Look up a tradition's data for a given beyond ring (worldSoul / nous / source).
+  // Handles Dante's special `beyondTheSeven` top-level field.
+  const getBeyondData = useCallback((ringId) => {
+    if (!activeChart || activePerspective === 'mythouse') return null;
+    const ring = ringId === 'fixedStars'
+      ? FIXED_STARS_RING
+      : BEYOND_RINGS.find(r => r.id === ringId);
+    if (!ring) return null;
+    const tradMapping = ring.traditions[activePerspective];
+    if (!tradMapping) return null;
+    const { correspondenceKey, label } = tradMapping;
+
+    // Dante stores beyond-planetary data in a separate top-level field
+    if (correspondenceKey.startsWith('beyondTheSeven.')) {
+      const subKey = correspondenceKey.split('.')[1];
+      const data = activeChart.beyondTheSeven?.[subKey];
+      if (!data) return null;
+      return { label, ...data };
+    }
+
+    // All other traditions store it in correspondences
+    const data = activeChart.correspondences[correspondenceKey];
+    if (!data) return null;
+    return { label, ...data };
   }, [activeChart, activePerspective]);
 
   return {
@@ -359,7 +441,8 @@ export default function usePerspective(selectedPlanet) {
     clockMode,
     orderLabel,
     displayReversed,
+    getBeyondData,
   };
 }
 
-export { META_KEYS, SELF_KEYS, TAB_LABEL_OVERRIDES, camelToTitle };
+export { META_KEYS, SELF_KEYS, DANTE_REALM_KEYS, TAB_LABEL_OVERRIDES, CYCLE_ORDER, camelToTitle };

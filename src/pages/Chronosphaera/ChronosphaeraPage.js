@@ -1,6 +1,7 @@
 import React, { useState, useMemo, useEffect, useRef, useCallback } from 'react';
 import OrbitalDiagram from '../../components/chronosphaera/OrbitalDiagram';
 import MetalDetailPanel from '../../components/chronosphaera/MetalDetailPanel';
+import MetalContentTabs, { CultureTimelineBar } from '../../components/chronosphaera/MetalContentTabs';
 import CultureSelector from '../../components/chronosphaera/CultureSelector';
 import './ChronosphaeraPage.css';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -43,7 +44,8 @@ import { useAtlasContext } from '../../contexts/AtlasContext';
 import resolveBodyPosition from '../../data/resolveBodyPosition';
 import { CHAKRA_ORDERINGS } from '../../data/chronosphaeraBodyPositions';
 import { useProfile } from '../../profile/ProfileContext';
-import usePerspective from '../../components/chronosphaera/usePerspective';
+import usePerspective, { camelToTitle } from '../../components/chronosphaera/usePerspective';
+import { BEYOND_RINGS, BEYOND_TRADITIONS, FIXED_STARS_RING } from '../../data/chronosphaeraBeyondRings';
 import ColumnSequencePopup from '../../components/chronosphaera/ColumnSequencePopup';
 
 const METEOR_STEEL_STAGES = [
@@ -201,6 +203,7 @@ const CULTURE_KEY_MAP = {
   Islamic: 'islamic',
   Medieval: 'medieval',
   Tarot: 'tarot',
+  Atlas: 'synthesis',
 };
 
 function CultureBlock({ cultureData }) {
@@ -220,6 +223,27 @@ function CultureBlock({ cultureData }) {
 function ZodiacContent({ sign, activeCulture }) {
   const z = zodiacData.find(d => d.sign === sign);
   if (!z) return <p className="chrono-empty">No data for {sign}.</p>;
+
+  if (activeCulture === 'Atlas') {
+    const syn = z.cultures?.synthesis;
+    return (
+      <div className="tab-content">
+        <h4>{z.symbol} {syn?.name || z.sign}</h4>
+        <div className="overview-grid">
+          <div className="overview-item"><span className="ov-label">Element</span><span className="ov-value">{z.element}</span></div>
+          <div className="overview-item"><span className="ov-label">Modality</span><span className="ov-value">{z.modality}</span></div>
+          <div className="overview-item"><span className="ov-label">Ruler</span><span className="ov-value">{z.rulingPlanet}</span></div>
+          <div className="overview-item"><span className="ov-label">House</span><span className="ov-value">{z.house}</span></div>
+          <div className="overview-item"><span className="ov-label">Dates</span><span className="ov-value">{z.dates}</span></div>
+        </div>
+        {syn?.description && (
+          <div className="modern-section">
+            {syn.description.split('\n\n').map((p, i) => <p key={i}>{p}</p>)}
+          </div>
+        )}
+      </div>
+    );
+  }
 
   if (activeCulture === 'Tarot') {
     return (
@@ -523,16 +547,16 @@ function StageArrow({ items, currentId, onSelect, getId = x => x, getLabel = x =
 export default function ChronosphaeraPage() {
   const location = useLocation();
   const navigate = useNavigate();
-  const { hasPurchase } = useProfile();
+  const { hasPurchase, hasSubscription } = useProfile();
   const [selectedPlanet, setSelectedPlanet] = useState('Sun');
   const [hoveredPlanet, setHoveredPlanet] = useState(null);
   const [activeTab, setActiveTab] = useState('overview');
-  const [activeCulture, setActiveCulture] = useState('Greek');
+  const [activeCulture, setActiveCulture] = useState('Atlas');
   const [selectedSign, setSelectedSign] = useState(null);
   const [selectedCardinal, setSelectedCardinal] = useState(null);
   const [selectedEarth, setSelectedEarth] = useState(null);
   const [devEntries, setDevEntries] = useState({});
-  const [clockMode, setClockMode] = useState('12h');
+  const [clockMode, setClockMode] = useState('24h');
   const [zodiacMode, setZodiacMode] = useState('tropical');
   const [showCalendar, setShowCalendar] = useState(() => location.pathname.endsWith('/calendar'));
   const [selectedMonth, setSelectedMonth] = useState(() => location.pathname.endsWith('/calendar') ? MONTHS[new Date().getMonth()] : null);
@@ -550,7 +574,7 @@ export default function ChronosphaeraPage() {
   const [selectedStarlightStage, setSelectedStarlightStage] = useState(null);
   const [starlightSectionId, setStarlightSectionId] = useState(null);
   const [selectedConstellation, setSelectedConstellation] = useState(null);
-  const [selectedStarSphere, setSelectedStarSphere] = useState(false);
+  const [selectedBeyondRing, setSelectedBeyondRing] = useState(null); // 'fixedStars' | 'worldSoul' | 'nous' | 'source' | null
   const [showOrderInfo, setShowOrderInfo] = useState(false);
   const [columnSequencePopup, setColumnSequencePopup] = useState(null);
   // Single mode enum replaces 8 separate boolean/enum state variables
@@ -570,6 +594,14 @@ export default function ChronosphaeraPage() {
   const ybr = useYellowBrickRoad();
   const { forgeMode } = useStoryForge();
   const perspective = usePerspective(selectedPlanet);
+
+  // Which beyond rings (worldSoul / nous / source) the current tradition supports
+  const beyondRings = useMemo(() => {
+    if (showMonomyth || showFallenStarlight) return [];
+    return BEYOND_RINGS
+      .filter(ring => ring.traditions[perspective.activePerspective])
+      .map(ring => ring.id);
+  }, [perspective.activePerspective, showMonomyth, showFallenStarlight]);
 
   const [ybrAutoStart, setYbrAutoStart] = useState(false);
   const { trackElement, trackTime, isElementCompleted, courseworkMode } = useCoursework();
@@ -607,11 +639,13 @@ export default function ChronosphaeraPage() {
     } else if (perspective.perspectiveTabs && perspective.perspectiveTabs.length > 0) {
       setActiveTab(perspective.perspectiveTabs[0].id);
     }
-    // Auto-switch clock OR body to match tradition's planet order
-    // Stay in whichever view (clock vs body) the user is already in
-    if (perspective.clockMode && !mode?.startsWith('chakra-')) {
-      // In clock/orbital area — update clock setting
-      setClockMode(perspective.clockMode);
+    // Clock mode flows from the chart's order field via usePerspective.
+    // '24h' = weekday clock, '12h' = heliocentric clock, null = standard geocentric.
+    if (!mode?.startsWith('chakra-')) {
+      setClockMode(prev => {
+        const next = perspective.clockMode;
+        return prev === next ? prev : next;
+      });
       setShowCalendar(true);
     }
   }, [perspective.activePerspective]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -646,7 +680,7 @@ export default function ChronosphaeraPage() {
     setSelectedStarlightStage(null);
     setStarlightSectionId(null);
     setSelectedConstellation(null);
-    setSelectedStarSphere(false);
+    setSelectedBeyondRing(null);
     setSelectedWheelItem(null);
     setMonomythModel(null);
     setMonomythWorld(null);
@@ -657,6 +691,155 @@ export default function ChronosphaeraPage() {
     setVideoUrl(null);
     setPersonaChatOpen(null);
   }, []);
+
+  const handleSelectBeyondRing = useCallback((ringId) => {
+    trackElement(`chronosphaera.beyond.${ringId}`);
+    setSelectedBeyondRing(prev => prev === ringId ? null : ringId);
+    setSelectedPlanet(null);
+    setSelectedSign(null);
+    setSelectedCardinal(null);
+    setSelectedEarth(null);
+    setSelectedMonth(null);
+    setVideoUrl(null);
+    setPersonaChatOpen(null);
+    setSelectedConstellation(null);
+  }, [trackElement]);
+
+  // Shape beyond-ring vault data into the same { key, data, epochName } that
+  // PerspectiveTabContent expects, so MetalDetailPanel renders it identically
+  // to a planet selection — same tabs, same layout.
+  const beyondPerspectiveData = useMemo(() => {
+    if (!selectedBeyondRing) return null;
+    const raw = perspective.getBeyondData(selectedBeyondRing);
+    if (!raw) return null;
+    const { label, ...data } = raw;
+    return { key: label, data, epochName: null };
+  }, [selectedBeyondRing, perspective.getBeyondData]);
+
+  const renderKrishnamurtiContent = () => (
+    <>
+      <h2 className="chrono-heading">
+        <span className="chrono-heading-title-row">Krishnamurti</span>
+        <span className="chrono-sub">The Dissolution of the Order of the Star &middot; 1929</span>
+      </h2>
+      <div className="container">
+        <div id="content-container">
+          <div className="metal-detail-panel">
+            <MetalContentTabs
+              activeTab={null}
+              onSelectTab={() => {}}
+              tabs={[]}
+              perspectiveLabel={perspective.perspectiveLabel}
+              orderLabel={perspective.orderLabel}
+              onSelectPerspective={perspective.setActivePerspective}
+              activePerspective={perspective.activePerspective}
+              populatedPerspectives={perspective.populated}
+              onTogglePersonaChat={() => {}}
+              personaChatActive={false}
+            />
+            <div className="tab-content">
+              <p className="metal-desc">
+                In 1911, the Theosophical Society's leaders Annie Besant and C.W. Leadbeater declared the young Jiddu Krishnamurti to be the vehicle for the coming World Teacher — the Maitreya. The Order of the Star in the East was created around him, drawing thousands of devoted members worldwide who believed they were witnessing the preparation of a new messianic figure.
+              </p>
+              <div className="overview-grid">
+                <div className="overview-item"><span className="ov-label">Born</span><span className="ov-value">1895, Madanapalle, India</span></div>
+                <div className="overview-item"><span className="ov-label">The Break</span><span className="ov-value">3 August 1929</span></div>
+                <div className="overview-item"><span className="ov-label">Context</span><span className="ov-value">Order of the Star dissolved</span></div>
+                <div className="overview-item"><span className="ov-label">Died</span><span className="ov-value">1986, Ojai, California</span></div>
+              </div>
+              <p className="metal-desc">
+                On 3 August 1929, before a gathering of three thousand members at Ommen in the Netherlands, Krishnamurti dissolved the Order. His declaration cut to the bone of every spiritual institution that had built itself around him: "Truth is a pathless land. You cannot approach it by any path whatsoever, by any religion, by any sect." He rejected all organized belief, spiritual authority, and the guru system itself — the very apparatus that had elevated him.
+              </p>
+              <p className="metal-desc">
+                He spent the remaining decades of his life teaching that genuine freedom comes not from following authority but from understanding oneself directly — through observation without judgement, without the mediation of doctrine or teacher.
+              </p>
+              <p className="metal-desc">
+                On the Chronosphaera timeline, this rupture sits at a precise hinge. Behind it lies the organized esoteric revival — Blavatsky's Theosophy, the Golden Dawn's ritual magic, Steiner's Anthroposophy, Leadbeater and Besant's hierarchical clairvoyance. Ahead of it lie the independent, integrative approaches: Aldous Huxley's Perennial Philosophy (1945), Tolkien's mythopoeic vision, the Ra material's Law of One. Krishnamurti's dissolution marks the moment the tradition turned and questioned its own structure.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+
+  const renderBeyondRingContent = (ringId) => {
+    const ringDef = ringId === 'fixedStars'
+      ? FIXED_STARS_RING
+      : BEYOND_RINGS.find(r => r.id === ringId);
+    if (!ringDef) return <p className="chrono-empty">No data for this ring.</p>;
+    const beyondData = perspective.getBeyondData(ringId);
+
+    // If no vault data for this tradition, show static fallback for fixed stars
+    if (!beyondPerspectiveData) {
+      if (ringId === 'fixedStars') {
+        return (
+          <>
+            <h2 className="chrono-heading">
+              <span className="chrono-heading-title-row">
+                Sphere of Fixed Stars
+              </span>
+              <span className="chrono-sub">The Eighth Sphere</span>
+            </h2>
+            <div className="container">
+              <div id="content-container">
+                <div className="metal-detail-panel">
+                  <div className="tab-content">
+                    <p className="metal-desc">
+                      Beyond the seven planetary spheres lay the eighth: the realm of the fixed stars. In every tradition that mapped the cosmos as nested shells—Ptolemaic, Neoplatonic, Hermetic, Islamic—the stars formed a single turning vault. Unlike the planets, which wandered at their own speeds against this backdrop, the fixed stars moved together as one, completing a revolution each day. This was the boundary between the mutable world of planetary influence and the unchanging perfection beyond.
+                    </p>
+                    <p className="metal-desc">
+                      The zodiac—twelve constellations straddling the ecliptic—lives in this sphere. These are not planets with individual orbits but fixed patterns projected onto the celestial vault. When the ancients spoke of a planet being "in" a sign, they meant it was passing through that segment of the stellar sphere as seen from Earth. The slow drift of this sphere against the seasons—the precession of the equinoxes—takes roughly 26,000 years to complete one full cycle.
+                    </p>
+                    <div className="overview-grid">
+                      <div className="overview-item"><span className="ov-label">Also Known As</span><span className="ov-value">Firmament</span></div>
+                      <div className="overview-item"><span className="ov-label">Contains</span><span className="ov-value">12 Zodiac Signs</span></div>
+                      <div className="overview-item"><span className="ov-label">Motion</span><span className="ov-value">Diurnal Rotation</span></div>
+                      <div className="overview-item"><span className="ov-label">Precession</span><span className="ov-value">~26,000 years</span></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </>
+        );
+      }
+      return <p className="chrono-empty">No data for this ring in the current tradition.</p>;
+    }
+
+    return (
+      <>
+        <h2 className="chrono-heading">
+          <span className="chrono-heading-title-row">
+            {beyondData?.label || ringDef.label}
+          </span>
+          <span className="chrono-sub">{ringDef.subtitle} · {perspective.perspectiveLabel}</span>
+        </h2>
+        <div className="container">
+          <div id="content-container">
+            <MetalDetailPanel
+              data={null}
+              activeTab={activeTab}
+              onSelectTab={(tab) => { trackElement(`chronosphaera.tab.${tab}.beyond.${ringId}`); setActiveTab(tab); }}
+              activeCulture={activeCulture}
+              onSelectCulture={(c) => { trackElement(`chronosphaera.culture.${c}`); setActiveCulture(c); }}
+              devEntries={devEntries}
+              setDevEntries={setDevEntries}
+              activePerspective={perspective.activePerspective}
+              perspectiveData={beyondPerspectiveData}
+              perspectiveTabs={perspective.perspectiveTabs}
+              activeTradition={perspective.activeTradition}
+              perspectiveLabel={perspective.perspectiveLabel}
+              orderLabel={perspective.orderLabel}
+              onSelectPerspective={perspective.setActivePerspective}
+              populatedPerspectives={perspective.populated}
+              onColumnClick={handleColumnClick}
+            />
+          </div>
+        </div>
+      </>
+    );
+  };
 
   // Sync view state with URL on back/forward navigation
   useEffect(() => {
@@ -675,14 +858,13 @@ export default function ChronosphaeraPage() {
       setMode('default');
     }
 
-    // Calendar (12h default)
+    // Calendar visibility — clockMode is derived solely from the active perspective
+    // (usePerspective → chart.order → CLOCK_SETTINGS), not from the route.
     const isCal = sub === '/calendar' || sub === '/calendar-24';
     const isStarlight = sub === '/fallen-starlight' || sub === '/story-of-stories';
     const isMono = sub === '/monomyth' || sub === '/meteor-steel';
     setShowCalendar(isCal || sub === '' || isStarlight || isMono); // root chronosphaera also shows calendar
-    if (sub === '/calendar-24') { setClockMode('24h'); }
-    else if (sub === '/calendar') { setClockMode('12h'); }
-    else if (!isCal && !isStarlight && !isMono && sub !== '') { setClockMode(null); }
+    if (!isCal && !isStarlight && !isMono && sub !== '') { setClockMode(prev => prev === null ? prev : null); }
     if ((isCal || sub === '') && !selectedMonth) {
       setSelectedMonth(MONTHS[new Date().getMonth()]);
       setActiveMonthTab('stone');
@@ -699,11 +881,19 @@ export default function ChronosphaeraPage() {
       setMode('chakra-evolutionary'); setSelectedPlanet('Sun'); setActiveTab('body'); setShowCalendar(false); setClockMode(null);
     }
 
-    // Monomyth / Meteor Steel
+    // Monomyth / Meteor Steel (gated by subscription)
     if (sub === '/monomyth' && mode !== 'monomyth') {
-      setMode('monomyth'); setClockMode('24h'); setShowCalendar(true);
+      if (hasSubscription('monomyth')) {
+        setMode('monomyth'); setClockMode('24h'); setShowCalendar(true);
+      } else {
+        navigate('/chronosphaera', { replace: true });
+      }
     } else if (sub === '/meteor-steel' && mode !== 'meteor-steel') {
-      setMode('meteor-steel'); setClockMode('24h'); setShowCalendar(true);
+      if (hasSubscription('monomyth')) {
+        setMode('meteor-steel'); setClockMode('24h'); setShowCalendar(true);
+      } else {
+        navigate('/chronosphaera', { replace: true });
+      }
     }
 
     // Fallen Starlight / Story of Stories (gated by purchase)
@@ -731,14 +921,14 @@ export default function ChronosphaeraPage() {
     const sequence = perspective.getColumnSequence(columnKey);
     setColumnSequencePopup({
       columnKey,
-      columnLabel: perspective.camelToTitle(columnKey),
+      columnLabel: camelToTitle(columnKey),
       traditionName: perspective.activeTradition?.tradition || '',
       sequence,
       perspectiveId: perspective.activePerspective,
       orderLabel: perspective.orderLabel,
       displayReversed: perspective.displayReversed,
     });
-  }, [perspective]);
+  }, [perspective.getColumnSequence, perspective.activeTradition, perspective.activePerspective, perspective.orderLabel, perspective.displayReversed]);
 
   const handleYBRToggle = useCallback(() => {
     if (ybr.active) {
@@ -1007,13 +1197,9 @@ export default function ChronosphaeraPage() {
 
   function renderPlanetWeekdayNav() {
     const arcHeight = 28;
-    // In body modes, use the active chakra ordering; otherwise weekday order
-    const ordering = chakraViewMode && CHAKRA_ORDERINGS[chakraViewMode]
-      ? CHAKRA_ORDERINGS[chakraViewMode]
-      : null;
-    const items = ordering
-      ? ordering.map((planet, i) => ({ planet, color: ARC_COLORS[i] }))
-      : WEEKDAYS.map((w, i) => ({ planet: w.planet, day: w.day, label: w.label, color: ARC_COLORS[i] }));
+    // Single source: planetNavItems already derives order from each chart's order field
+    // via perspective.activePlanetOrder → usePerspective → chart.order
+    const items = planetNavItems.map((p, i) => ({ ...p, color: ARC_COLORS[i % ARC_COLORS.length] }));
     const count = items.length;
     const mid = (count - 1) / 2;
     return (
@@ -1037,11 +1223,9 @@ export default function ChronosphaeraPage() {
               }}
               onMouseEnter={() => setHoveredPlanet(item.planet)}
               onMouseLeave={() => setHoveredPlanet(null)}
-              title={ordering ? item.planet : `${item.day} — ${item.planet}`}
+              title={`${item.day} — ${item.planet}`}
             >
-              {ordering
-                ? (isSelected ? item.planet : (item.planet.length > 4 ? item.planet.substring(0, 3) : item.planet))
-                : (isSelected ? item.day : item.label)}
+              {isSelected ? item.day : item.label}
             </button>
           );
         })}
@@ -1217,25 +1401,19 @@ export default function ChronosphaeraPage() {
             setSelectedMonomythStage(null);
             setMonomythModel(null);
             setSelectedStarlightStage(null);
-            setSelectedStarSphere(false);
+            setSelectedBeyondRing(null);
           }}
-          starSphereActive={selectedStarSphere}
-          onSelectStarSphere={STAR_SPHERE_TRADITIONS.has(perspective.activePerspective) ? () => {
-            trackElement('chronosphaera.star-sphere');
-            setSelectedStarSphere(!selectedStarSphere);
-            setSelectedPlanet(null);
-            setSelectedSign(null);
-            setSelectedCardinal(null);
-            setSelectedEarth(null);
-            setSelectedMonth(null);
-            setVideoUrl(null);
-            setPersonaChatOpen(null);
-            setSelectedConstellation(null);
-          } : undefined}
+          activeBeyondRing={selectedBeyondRing}
+          beyondRings={beyondRings}
+          onSelectBeyondRing={
+            STAR_SPHERE_TRADITIONS.has(perspective.activePerspective) || BEYOND_TRADITIONS.has(perspective.activePerspective)
+              ? handleSelectBeyondRing
+              : undefined
+          }
         />
       </div>
 
-      <div key={`${mode}|${selectedPlanet}|${selectedSign}|${selectedCardinal}|${selectedEarth}|${selectedMonth}|${selectedMonomythStage}|${selectedStarlightStage}|${selectedConstellation}|${selectedWheelItem}|${selectedStarSphere}`} className="chrono-content-fade">
+      <div key={`${mode}|${selectedPlanet}|${selectedSign}|${selectedCardinal}|${selectedEarth}|${selectedMonth}|${selectedMonomythStage}|${selectedStarlightStage}|${selectedConstellation}|${selectedWheelItem}|${selectedBeyondRing}`} className="chrono-content-fade">
       {ybr.active ? (
         <YellowBrickRoadPanel
           currentStopIndex={ybr.currentStopIndex}
@@ -1437,6 +1615,7 @@ export default function ChronosphaeraPage() {
                 <div id="content-container">
                   <div className="metal-detail-panel">
                     <div className="metal-tabs">
+                      <CultureTimelineBar activeCulture={activeCulture} onSelectCulture={setActiveCulture} />
                       <CultureSelector activeCulture={activeCulture} onSelectCulture={setActiveCulture} />
                       {ZODIAC_PLAYLISTS[selectedSign] && (
                         <button
@@ -1486,35 +1665,10 @@ export default function ChronosphaeraPage() {
                 </div>
               </div>
             </>
-          ) : selectedStarSphere ? (
-            <>
-              <h2 className="chrono-heading">
-                <span className="chrono-heading-title-row">
-                  Sphere of Fixed Stars
-                </span>
-                <span className="chrono-sub">The Eighth Sphere</span>
-              </h2>
-              <div className="container">
-                <div id="content-container">
-                  <div className="metal-detail-panel">
-                    <div className="tab-content">
-                      <p className="metal-desc">
-                        Beyond the seven planetary spheres lay the eighth: the realm of the fixed stars. In every tradition that mapped the cosmos as nested shells\u2014Ptolemaic, Neoplatonic, Hermetic, Islamic\u2014the stars formed a single turning vault. Unlike the planets, which wandered at their own speeds against this backdrop, the fixed stars moved together as one, completing a revolution each day. This was the boundary between the mutable world of planetary influence and the unchanging perfection beyond.
-                      </p>
-                      <p className="metal-desc">
-                        The zodiac\u2014twelve constellations straddling the ecliptic\u2014lives in this sphere. These are not planets with individual orbits but fixed patterns projected onto the celestial vault. When the ancients spoke of a planet being \u201cin\u201d a sign, they meant it was passing through that segment of the stellar sphere as seen from Earth. The slow drift of this sphere against the seasons\u2014the precession of the equinoxes\u2014takes roughly 26,000 years to complete one full cycle.
-                      </p>
-                      <div className="overview-grid">
-                        <div className="overview-item"><span className="ov-label">Also Known As</span><span className="ov-value">Firmament</span></div>
-                        <div className="overview-item"><span className="ov-label">Contains</span><span className="ov-value">12 Zodiac Signs</span></div>
-                        <div className="overview-item"><span className="ov-label">Motion</span><span className="ov-value">Diurnal Rotation</span></div>
-                        <div className="overview-item"><span className="ov-label">Precession</span><span className="ov-value">~26,000 years</span></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </>
+          ) : perspective.activePerspective === 'krishnamurti' ? (
+            renderKrishnamurtiContent()
+          ) : selectedBeyondRing ? (
+            renderBeyondRingContent(selectedBeyondRing)
           ) : selectedPlanet && currentData ? (
             <>
               {renderPlanetWeekdayNav()}
@@ -1562,6 +1716,7 @@ export default function ChronosphaeraPage() {
                     perspectiveTabs={perspective.perspectiveTabs}
                     activeTradition={perspective.activeTradition}
                     perspectiveLabel={perspective.perspectiveLabel}
+                    orderLabel={perspective.orderLabel}
                     onSelectPerspective={perspective.setActivePerspective}
                     populatedPerspectives={perspective.populated}
                     onColumnClick={handleColumnClick}
@@ -1634,6 +1789,7 @@ export default function ChronosphaeraPage() {
                 <div id="content-container">
                   <div className="metal-detail-panel">
                     <div className="metal-tabs">
+                      <CultureTimelineBar activeCulture={activeCulture} onSelectCulture={setActiveCulture} />
                       <CultureSelector activeCulture={activeCulture} onSelectCulture={setActiveCulture} />
                       {ZODIAC_PLAYLISTS[selectedSign] && (
                         <button
@@ -1683,35 +1839,10 @@ export default function ChronosphaeraPage() {
                 </div>
               </div>
             </>
-          ) : selectedStarSphere ? (
-            <>
-              <h2 className="chrono-heading">
-                <span className="chrono-heading-title-row">
-                  Sphere of Fixed Stars
-                </span>
-                <span className="chrono-sub">The Eighth Sphere</span>
-              </h2>
-              <div className="container">
-                <div id="content-container">
-                  <div className="metal-detail-panel">
-                    <div className="tab-content">
-                      <p className="metal-desc">
-                        Beyond the seven planetary spheres lay the eighth: the realm of the fixed stars. In every tradition that mapped the cosmos as nested shells\u2014Ptolemaic, Neoplatonic, Hermetic, Islamic\u2014the stars formed a single turning vault. Unlike the planets, which wandered at their own speeds against this backdrop, the fixed stars moved together as one, completing a revolution each day. This was the boundary between the mutable world of planetary influence and the unchanging perfection beyond.
-                      </p>
-                      <p className="metal-desc">
-                        The zodiac\u2014twelve constellations straddling the ecliptic\u2014lives in this sphere. These are not planets with individual orbits but fixed patterns projected onto the celestial vault. When the ancients spoke of a planet being \u201cin\u201d a sign, they meant it was passing through that segment of the stellar sphere as seen from Earth. The slow drift of this sphere against the seasons\u2014the precession of the equinoxes\u2014takes roughly 26,000 years to complete one full cycle.
-                      </p>
-                      <div className="overview-grid">
-                        <div className="overview-item"><span className="ov-label">Also Known As</span><span className="ov-value">Firmament</span></div>
-                        <div className="overview-item"><span className="ov-label">Contains</span><span className="ov-value">12 Zodiac Signs</span></div>
-                        <div className="overview-item"><span className="ov-label">Motion</span><span className="ov-value">Diurnal Rotation</span></div>
-                        <div className="overview-item"><span className="ov-label">Precession</span><span className="ov-value">~26,000 years</span></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </>
+          ) : perspective.activePerspective === 'krishnamurti' ? (
+            renderKrishnamurtiContent()
+          ) : selectedBeyondRing ? (
+            renderBeyondRingContent(selectedBeyondRing)
           ) : selectedPlanet && currentData ? (
             <>
               {renderPlanetWeekdayNav()}
@@ -1759,6 +1890,7 @@ export default function ChronosphaeraPage() {
                     perspectiveTabs={perspective.perspectiveTabs}
                     activeTradition={perspective.activeTradition}
                     perspectiveLabel={perspective.perspectiveLabel}
+                    orderLabel={perspective.orderLabel}
                     onSelectPerspective={perspective.setActivePerspective}
                     populatedPerspectives={perspective.populated}
                     onColumnClick={handleColumnClick}
@@ -2058,6 +2190,7 @@ export default function ChronosphaeraPage() {
             <div id="content-container">
               <div className="metal-detail-panel">
                 <div className="metal-tabs">
+                  <CultureTimelineBar activeCulture={activeCulture} onSelectCulture={setActiveCulture} />
                   <CultureSelector activeCulture={activeCulture} onSelectCulture={setActiveCulture} />
                   {ZODIAC_PLAYLISTS[selectedSign] && (
                     <button
@@ -2128,37 +2261,10 @@ export default function ChronosphaeraPage() {
           </div>
         </>
         );
-      })() : selectedStarSphere ? (
-        <>
-          <h2 className="chrono-heading">
-            <span className="chrono-heading-title-row">
-              Sphere of Fixed Stars
-            </span>
-            <span className="chrono-sub">The Eighth Sphere · {chakraViewMode === 'chaldean' ? 'Beyond Saturn' : 'The Stellar Background'}</span>
-          </h2>
-          <div className="container">
-            <div id="content-container">
-              <div className="metal-detail-panel">
-                <div className="tab-content">
-                  <p className="metal-desc">
-                    {chakraViewMode === 'chaldean'
-                      ? 'In the Ptolemaic cosmos, the seven planets each occupied a crystalline sphere nested concentrically around the Earth. Beyond Saturn\u2014the slowest and most distant wanderer\u2014lay the eighth sphere: the realm of the fixed stars. Unlike the planets, which moved against this backdrop at their own speeds, the fixed stars turned together as a single shell, completing one revolution per day. This was the boundary between the mutable world of planetary influence and the unchanging perfection beyond.'
-                      : 'Even after Copernicus moved the Sun to the center and Kepler reordered the planets by actual distance, the sphere of fixed stars remained the outermost reference frame. The stars were still understood as immeasurably distant\u2014so far that no parallax could be measured with the instruments of the time. They formed the background against which all planetary motion was charted, the stillness that made movement visible.'}
-                  </p>
-                  <p className="metal-desc">
-                    The zodiac\u2014the twelve constellations straddling the ecliptic\u2014lives in this sphere. These are not planets with individual orbits but fixed patterns projected onto the celestial vault. When the ancients spoke of a planet being &ldquo;in&rdquo; a sign, they meant it was passing through that segment of the stellar sphere as seen from Earth.
-                  </p>
-                  <div className="overview-grid">
-                    <div className="overview-item"><span className="ov-label">Also Known As</span><span className="ov-value">Firmament</span></div>
-                    <div className="overview-item"><span className="ov-label">Contains</span><span className="ov-value">12 Zodiac Signs</span></div>
-                    <div className="overview-item"><span className="ov-label">Motion</span><span className="ov-value">Diurnal Rotation</span></div>
-                    <div className="overview-item"><span className="ov-label">Precession</span><span className="ov-value">~26,000 years</span></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </>
+      })() : perspective.activePerspective === 'krishnamurti' ? (
+        renderKrishnamurtiContent()
+      ) : selectedBeyondRing ? (
+        renderBeyondRingContent(selectedBeyondRing)
       ) : (
         <>
           {currentData && (
@@ -2212,6 +2318,7 @@ export default function ChronosphaeraPage() {
                     perspectiveTabs={perspective.perspectiveTabs}
                     activeTradition={perspective.activeTradition}
                     perspectiveLabel={perspective.perspectiveLabel}
+                    orderLabel={perspective.orderLabel}
                     onSelectPerspective={perspective.setActivePerspective}
                     populatedPerspectives={perspective.populated}
                     onColumnClick={handleColumnClick}
