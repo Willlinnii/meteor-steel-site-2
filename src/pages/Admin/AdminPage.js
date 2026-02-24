@@ -197,7 +197,6 @@ const SECTION_GROUPS = [
   { group: 'Business', children: [
     { id: 'glinter', label: 'Glinter LLC' },
     { id: 'plan', label: 'Plan' },
-    { id: 'store', label: 'Store' },
     { id: 'ip-registry', label: 'IP Registry' },
     { id: 'legal', label: 'Legal' },
   ]},
@@ -215,6 +214,7 @@ const SECTION_GROUPS = [
     { id: 'mentors', label: 'Mentors' },
   ]},
   { group: 'Site', children: [
+    { id: 'store', label: 'Store' },
     { id: 'coursework', label: 'Coursework' },
     { id: 'curated-products', label: 'Curated Products' },
     { id: '360-media', label: '360 Media' },
