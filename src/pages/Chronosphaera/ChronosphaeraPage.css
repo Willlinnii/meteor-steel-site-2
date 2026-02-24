@@ -3372,3 +3372,100 @@
   from { opacity: 0; }
   to { opacity: 1; }
 }
+
+/* ===== AMBIENT LIGHT: SOLAR / LUNAR MODE ===== */
+
+/* Tint overlay — sits above background starfield, below interactive content */
+.chronosphaera-page::after {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0;
+  transition: opacity 3s ease;
+}
+
+/* Solar (day) — warm golden atmosphere */
+.chronosphaera-page.chrono-solar::after {
+  opacity: 1;
+  background:
+    radial-gradient(ellipse at 50% 20%, rgba(240, 192, 64, 0.09) 0%, transparent 55%),
+    radial-gradient(ellipse at 50% 50%, rgba(201, 169, 97, 0.05) 0%, transparent 70%),
+    linear-gradient(to bottom, rgba(45, 25, 8, 0.18) 0%, rgba(25, 14, 5, 0.10) 40%, transparent 80%);
+}
+
+.chrono-solar .orbital-svg {
+  filter: sepia(0.07) saturate(1.15) brightness(1.03);
+  transition: filter 3s ease;
+}
+
+/* Lunar (night) — subtle cool silver enhancement */
+.chronosphaera-page.chrono-lunar::after {
+  opacity: 1;
+  background:
+    radial-gradient(ellipse at 50% 60%, rgba(100, 130, 200, 0.035) 0%, transparent 55%);
+}
+
+.chrono-lunar .orbital-svg {
+  filter: saturate(1.05) brightness(0.98);
+  transition: filter 3s ease;
+}
+
+/* ===== AMBIENT TOGGLE BUTTON (bottom-left, above compass) ===== */
+
+.ambient-toggle {
+  position: fixed;
+  bottom: 124px;
+  left: 24px;
+  z-index: 999;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: none;
+  border: 1px solid rgba(201, 169, 97, 0.35);
+  color: rgba(201, 169, 97, 0.6);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  opacity: 0.6;
+}
+.ambient-toggle:hover {
+  opacity: 1;
+  background: rgba(201, 169, 97, 0.08);
+  box-shadow: 0 0 10px rgba(201, 169, 97, 0.25);
+}
+.ambient-toggle.manual {
+  border-color: rgba(201, 169, 97, 0.8);
+  color: rgba(201, 169, 97, 1);
+  opacity: 1;
+  box-shadow: 0 0 12px rgba(201, 169, 97, 0.35);
+  background: rgba(201, 169, 97, 0.06);
+}
+
+/* Lunar mode — shift toggle color to cool silver */
+.chrono-lunar .ambient-toggle {
+  border-color: rgba(139, 157, 195, 0.35);
+  color: rgba(139, 157, 195, 0.6);
+}
+.chrono-lunar .ambient-toggle:hover {
+  background: rgba(139, 157, 195, 0.08);
+  box-shadow: 0 0 10px rgba(139, 157, 195, 0.25);
+}
+.chrono-lunar .ambient-toggle.manual {
+  border-color: rgba(139, 157, 195, 0.8);
+  color: rgba(139, 157, 195, 1);
+  box-shadow: 0 0 12px rgba(139, 157, 195, 0.35);
+  background: rgba(139, 157, 195, 0.06);
+}
+
+@media (max-width: 600px) {
+  .ambient-toggle {
+    bottom: 100px;
+    left: 16px;
+    width: 34px;
+    height: 34px;
+  }
+}

@@ -1,0 +1,475 @@
+THE GNOSTIC SEVEN-ARCHON PLANETARY SYSTEM
+A Reference for Planetary Tradition Mapping
+=========================================
+
+Period: 2nd-4th century CE
+Primary traditions: Sethian, Ophite, Valentinian
+Primary sources: Nag Hammadi Library (discovered 1945), Patristic heresiological reports
+
+
+I. OVERVIEW
+-----------
+
+In Gnostic cosmology, the seven archons ("rulers") are hostile or ignorant
+cosmic powers who govern the seven planetary spheres. They were created by
+the chief archon, the Demiurge (most commonly called Yaldabaoth/Ialdabaoth),
+who in turn was the deficient offspring of the aeon Sophia. The archons
+collectively produce heimarmene (fate) -- the deterministic web of astrological
+influence that keeps the divine spark trapped within matter.
+
+The soul, descending from the Pleroma (divine fullness) into incarnation,
+passes through each archonic sphere and acquires a layer of material
+conditioning. After death, the soul must ascend back through these spheres.
+At each gate, the archon demands proof of the soul's worthiness to pass.
+The Gnostic initiate, armed with gnosis -- knowledge of the archons' names,
+their true (inferior) natures, and the correct passwords -- can bypass them
+and return to the Pleroma.
+
+The number seven derives from the seven classical "planets" visible to
+antiquity: Moon, Mercury, Venus, Sun, Mars, Jupiter, Saturn. This is the
+same sevenfold structure found in Babylonian astral religion, Platonic
+cosmology (Timaeus), and Hermetic tradition, but in Gnosticism the planetary
+rulers are uniformly depicted as adversarial or at best ignorant -- wardens
+of a cosmic prison rather than beneficent governors.
+
+
+II. YALDABAOTH: THE CHIEF ARCHON
+---------------------------------
+
+Name: Yaldabaoth (also Ialdabaoth, Saklas ["the fool"], Samael ["blind god"])
+Planet: Saturn (the outermost sphere, highest in the geocentric model)
+Source texts: Apocryphon of John, On the Origin of the World, Hypostasis of
+             the Archons, Pistis Sophia, Irenaeus (Against Heresies I.29-30)
+
+Yaldabaoth is the Demiurge -- the creator of the material world and father
+of the remaining six archons. He is born from Sophia's deficient emanation
+and, ignorant of the realms above him, declares: "I am God and there is no
+other God beside me" (Apocryphon of John; echoing Isaiah 45:5-6).
+
+He is described as lion-faced (Apocryphon of John, long recension) or
+serpentine. His association with Saturn follows the ancient identification of
+Saturn as the outermost visible planet and the planet of limitation,
+constraint, and time -- all fitting the Demiurge's role as cosmic jailer.
+
+Vice/quality: Audacity (authadia), arrogance, ignorance
+Personified vice (Pistis Sophia, Hellenized system): Authadia (Audacity)
+
+
+III. THE SEVEN ARCHONS: SYSTEM-BY-SYSTEM COMPARISON
+-----------------------------------------------------
+
+NOTE ON PLANETARY ASSIGNMENTS: The Nag Hammadi texts themselves (particularly
+the Apocryphon of John) do not always explicitly assign each archon to a
+specific planet by name. The planetary correspondences given below follow the
+conventional scholarly reconstruction based on the order of the archons as
+listed in the texts mapped onto the standard Chaldean planetary order
+(Saturn, Jupiter, Mars, Sun/Venus, Venus/Mercury, Mercury/Sun, Moon -- with
+variations). Different scholars and different texts produce slightly different
+mappings. Where there is genuine ambiguity, it is noted.
+
+The Ophite system (reported by Origen from Celsus) and the heresiological
+reports of Irenaeus provide the most explicit planet-archon pairings.
+
+
+A. THE APOCRYPHON OF JOHN (Sethian)
+   Nag Hammadi Codex II,1; III,1; IV,1; BG 8502,2
+   Four extant versions (two short, two long recensions)
+
+   The seven "powers" created by Yaldabaoth, each given a quality, a
+   theriomorphic (animal) face, and dominion over a day of the week:
+
+   1. ATHOTH (also Athoth-Harmas in the long recension)
+      Quality: Goodness (a corrupted/deficient form)
+      Animal face: Sheep
+      Planet: Saturn or Moon (placement debated; listed first)
+      Day: First day
+      Note: The long recension names him "the reaper" and adds an
+      alternate name, Harmas.
+
+   2. ELOAIOS (also Eloaiou, Eloai)
+      Quality: Forethought/Providence (pronoia -- deficient form)
+      Animal face: Donkey
+      Planet: Jupiter or Mercury
+      Day: Second day
+      Note: Name derived from Elohim (Hebrew divine name).
+
+   3. ASTAPHAIOS (also Astraphaio)
+      Quality: Divinity (deficient form)
+      Animal face: Hyena
+      Planet: Venus
+      Day: Third day
+      Note: Attested on Gnostic gems as associated with Venus.
+
+   4. YAO (also Iao)
+      Quality: Lordship
+      Animal face: Seven-headed serpent
+      Planet: Jupiter or Mars (varies by reconstruction)
+      Day: Fourth day
+      Note: Name derived from Yahweh/Iao.
+
+   5. SABAOTH
+      Quality: Kingdom
+      Animal face: Dragon (or serpent)
+      Planet: Mars
+      Day: Fifth day
+      Note: Name from "Yahweh Sabaoth" (Lord of Hosts). In On the
+      Origin of the World, Sabaoth uniquely repents and is elevated
+      by Sophia to the seventh heaven, making him a complex figure
+      who transcends his archonic role.
+
+   6. ADONIN (also Adonaios, Adoneus)
+      Quality: Jealousy/Zeal
+      Animal face: Ape/Monkey
+      Planet: Sun
+      Day: Sixth day
+      Note: Name from Adonai (Hebrew for "Lord"). Connected to the
+      Adonis/Tammuz solar mythology.
+
+   7. SABBATAIOS (also Sabbede, Sabbateon)
+      Quality: Understanding (deficient form)
+      Animal face: Shining/flaming fire
+      Planet: Moon or Saturn (placement debated; listed last)
+      Day: Seventh day (Sabbath)
+      Note: Name transparently derived from Sabbath. The "face of
+      flame" rather than an animal form is unique among the seven.
+
+
+B. THE OPHITE SYSTEM (reported by Origen, Contra Celsum VI.24-38)
+   Source: Celsus's lost work (c. 170s CE), preserved in Origen's refutation
+   (c. 248 CE); also partly in Irenaeus, Against Heresies I.30
+
+   The Ophite diagram described by Celsus was a visual map of the cosmos
+   used ritually. Origen preserves both the archon identities and the
+   ascending-soul formulas. The Ophites used angelic names alongside the
+   archonic names.
+
+   Archon (Ophite)    Angel Name     Animal Form     Planet
+   ---------------------------------------------------------------
+   1. Ialdabaoth      Michael        Lion            Saturn
+   2. Iao             Suriel         Bull            Jupiter
+   3. Sabaoth         --             Dragon/Serpent  Mars
+   4. Astaphaios      Raphael        Serpent         Venus
+   5. Adonaios        Gabriel        Eagle           Sun
+   6. Elaios/Ailoaios --             Dog             Mercury
+   7. Horaios/Oraios  Thauthabaoth   Donkey/Ass      Moon
+      (also Onoel,
+       Thartharaoth)
+
+   Note: The angelic identifications (Michael, Suriel, Raphael, Gabriel)
+   are remarkable -- these are the same angels found in Jewish apocalyptic
+   literature, here demoted to archonic status. This reflects the Gnostic
+   inversion of the Hebrew God and his servants as cosmic tyrants.
+
+
+C. IRENAEUS'S REPORT (Against Heresies I.30, c. 180 CE)
+
+   Irenaeus lists the seven as: Ialdabaoth, Iao, Sabaoth, Adoneus,
+   Eloeus, Oreus (= Horaios), and Astanphaeus (= Astaphaios).
+
+   He states: "The holy Hebdomad is the seven stars which they call
+   planets." He does not give explicit one-to-one pairings but the
+   order is generally taken to follow the Chaldean descending order:
+   Saturn, Jupiter, Mars, Sun, Venus, Mercury, Moon.
+
+
+D. ON THE ORIGIN OF THE WORLD (Nag Hammadi Codex II,5; XIII,2)
+
+   Lists seven androgynous archons, each with a masculine and a feminine
+   name (the feminine name being their "quality"):
+
+   Archon          Feminine Name / Quality
+   ----------------------------------------
+   1. Yao          Lordship
+   2. Sabaoth      Divinity (later repents; elevated by Sophia)
+   3. Adonaios     Kingship
+   4. Eloaios      Jealousy/Envy
+   5. Oraios       Wealth/Riches
+   6. Astaphaios   Wisdom (Sophia -- ironic, as it is deficient)
+   7. (unnamed)    --
+
+   This text notably describes the creation of the first three archons
+   through sound: Yaldabaoth opened his mouth and cooed, and the
+   archons responded with the sounds that became their names ("Eee" =
+   Yao; "Eh" = Eloai; "Asss" = Astaphaios).
+
+   The text does not assign explicit planetary correspondences, but
+   the seven heavens of chaos inhabited by these androgynous beings
+   map to the standard planetary scheme.
+
+
+E. PISTIS SOPHIA (3rd-4th century CE, Codex Askewianus)
+
+   In the Pistis Sophia, the archonic system is more elaborate and less
+   clearly mapped to the classical seven planets. Jesus is described as
+   having descended and ascended through the archonic realms, binding
+   the archons with "mysteries of light" and reversing the motions of
+   their spheres.
+
+   The Hellenized form replaces some archon names with personified vices:
+   - Authadia (Audacity) = Yaldabaoth
+   - Kakia (Vice/Wickedness)
+   - Zelos (Jealousy)
+   - Phthonos (Envy)
+   - Erinnys (Wrath/Fury)
+   - Epithymia (Desire) = associated with Venus
+
+   Five archon-leaders are also named: Paraplex, Hekate, Ariouth,
+   Typhon, and Iachtanabas, governing realms of punishment.
+
+
+F. GOSPEL OF THE EGYPTIANS (Holy Book of the Great Invisible Spirit)
+   Nag Hammadi Codex III,2; IV,2
+
+   A Sethian text that describes Sakla (= Yaldabaoth) and Nebruel
+   creating twelve angels/archons, rather than seven. The text is more
+   focused on the heavenly emanation of Seth and the Five Seals baptismal
+   rite than on elaborating archonic planetary correspondences. It shares
+   the same cosmological framework as the Apocryphon of John but does
+   not provide a detailed seven-archon planetary mapping.
+
+
+IV. VICES AND QUALITIES IMPOSED ON THE DESCENDING SOUL
+-------------------------------------------------------
+
+Across the Gnostic systems, each archonic sphere imparts a layer of
+material/psychic conditioning to the soul as it descends into incarnation.
+The texts do not always give a consistent or complete vice-per-planet
+mapping (unlike the Hermetic system, which is quite explicit). However,
+the following patterns emerge from the combined sources:
+
+Planet      Archon(s)              Vice/Conditioning Imposed
+--------------------------------------------------------------------
+Saturn      Yaldabaoth/Saklas      Audacity, arrogance, ignorance of
+                                   the divine. The outermost shell of
+                                   cosmic delusion.
+
+Jupiter     Iao                    False lordship, deceptive authority
+
+Mars        Sabaoth                Wrath, fiery domination
+                                   (but note: in OOW, Sabaoth repents)
+
+Sun         Adonaios               Desire for kingship and power
+
+Venus       Astaphaios             Lust, desire (Epithymia in the
+                                   Hellenized system)
+
+Mercury     Elaios/Eloaios         Envy, evil machination
+
+Moon        Horaios/Sabbataios     Falsehood, illusion, the lowest
+                                   veil before incarnation
+
+NOTE: These vice assignments are reconstructed from multiple texts and
+represent a scholarly synthesis. Individual Gnostic communities may have
+used different mappings. The Apocryphon of John assigns "qualities"
+(goodness, forethought, divinity, lordship, kingdom, jealousy,
+understanding) rather than vices per se -- these are presented as
+deficient imitations of the true divine attributes of the Pleroma.
+
+
+V. PASSWORDS AND FORMULAS FOR THE ASCENDING SOUL
+--------------------------------------------------
+
+The most complete set of ascending-soul passwords comes from Origen's
+Contra Celsum VI.31, preserving the Ophite formulas. Each formula
+addresses the archon by name, acknowledges its domain, and asserts
+the soul's right of passage through gnosis:
+
+TO IALDABAOTH (Saturn):
+"You, O first and seventh, who art born to command with confidence,
+you, O Ialdabaoth, who art the rational ruler of a pure mind, and a
+perfect work to son and father, bearing the symbol of life in the
+character of a type, and opening to the world the gate which you
+closed against your kingdom, I pass again in freedom through your
+realm. Let grace be with me; O father, let it be with me."
+
+TO IAO (Jupiter):
+"You, O second Iao, who shines by night, who art the ruler of the
+secret mysteries of son and father, first prince of death, and
+portion of the innocent, bearing now my own beard as symbol, I am
+ready to pass through your realm, having strengthened him who is
+born of you by the living word. Let grace be with me; O father,
+let it be with me."
+
+TO SABAOTH (Mars):
+"O governor of the fifth realm, powerful Sabaoth, defender of the
+law of your creatures, who are liberated by your grace through the
+help of a more powerful Pentad, admit me, seeing the faultless symbol
+of their art, preserved by the stamp of an image, a body liberated
+by a Pentad. Let grace be with me; O father, let it be with me."
+
+TO ASTAPHAEUS (Venus):
+"O Astaphaeus, ruler of the third gate, overseer of the first
+principle of water, look upon me as one of your initiated, admit me
+who am purified with the spirit of a virgin, you who sees the essence
+of the world. Let grace be with me; O father, let it be with me."
+
+TO ALOAEUS/ELAIOS (Mercury):
+"O Aloaeus, governor of the second gate, let me pass, seeing I bring
+to you the symbol of your mother, a grace which is hidden by the
+powers of the realms. Let grace be with me; O father, let it be
+with me."
+
+TO HORAIOS (Moon):
+"You who fearlessly leaped over the rampart of fire, O Horaios, who
+obtained the government of the first gate, let me pass, seeing you
+behold the symbol of your own power, sculptured on the figure of
+the tree of life, and formed after this image, in the likeness of
+innocence. Let grace be with me; O father, let it be with me."
+
+NOTE: The numbering of the "gates" in these formulas does not always
+match the planetary order as we might expect. This may reflect an
+ascending order (Moon = first gate, Saturn = seventh) vs. the
+descending Chaldean order, or it may reflect the specific ritual
+geography of the Ophite diagram itself.
+
+Additionally, the seal spoken at the beginning of the ascent:
+"I have been anointed with the white chrism from the tree of life."
+
+
+VI. THE HERMETIC COMPARISON: POIMANDRES (Corpus Hermeticum I)
+--------------------------------------------------------------
+
+The Hermetic ascent described in the Poimandres (1st-3rd century CE) shares
+the same seven-planetary structure but differs fundamentally in tone and
+theology.
+
+In the Hermetic model, the ascending soul does not face hostile gatekeepers.
+Instead, at each zone it surrenders a quality it acquired during descent --
+shedding material accretions like removing garments. The zones are morally
+neutral or instrumental, not adversarial:
+
+Zone 1 (Moon):     The energy of increase and decrease
+Zone 2 (Mercury):  Evil machination / deceitful craft
+Zone 3 (Venus):    The illusion of longing / desiderative guile
+Zone 4 (Sun):      The ruler's arrogance / display of command
+Zone 5 (Mars):     Unholy presumption and daring recklessness
+Zone 6 (Jupiter):  The evil impulses that come from wealth
+Zone 7 (Saturn):   Entrapping falsehood / the lie that lies in wait
+
+Having shed all seven, the soul rises to the Eighth Sphere (Ogdoad),
+"clothed in its proper Power," and then to the divine realm.
+
+KEY DIFFERENCES FROM THE GNOSTIC MODEL:
+- The Hermetic zones are not ruled by hostile archons but by
+  "governors" (kosmokratores) who are ambivalent powers of Harmony.
+- No passwords or combat are needed; the soul simply surrenders
+  what does not belong to it.
+- The Hermetic Demiurge (Nous/Mind) is not evil -- he creates the
+  seven governors as part of the divine plan.
+- There is no Sophia-fall narrative, no ignorant Demiurge.
+- The process is more akin to spiritual purification than escape
+  from a prison.
+- The Hermetic tradition views the cosmos as fundamentally good
+  (though the body may be a hindrance); the Gnostic tradition
+  views it as fundamentally a trap.
+
+Despite these differences, the structural parallel is clear: both
+systems map the same seven classical planets to a layered cosmos
+through which the soul must pass. The Gnostic version darkens what
+the Hermetic version treats as neutral or even pedagogical.
+
+
+VII. SCHOLARLY NOTES AND CAVEATS
+---------------------------------
+
+1. PLANETARY ASSIGNMENTS ARE NOT UNIFORM. The Apocryphon of John does
+   not explicitly state "Athoth = Saturn" or "Eloaios = Jupiter."
+   Scholars reconstruct these mappings based on: the order in which the
+   archons are listed, cross-referencing with the Ophite system (which
+   is more explicit), the Chaldean planetary order, and the weekday
+   associations. Different scholars produce slightly different mappings.
+
+2. VARIANT NAME SPELLINGS are common across Coptic, Greek, and Latin
+   transmission: Ialdabaoth/Yaldabaoth, Iao/Yao, Sabaoth, Adonaios/
+   Adonin/Adoneus, Eloaios/Elaios/Ailoaios/Eloeus, Astaphaios/
+   Astanphaeus/Astraphaeus, Horaios/Oraios/Oreus, Sabbataios/Sabbede.
+
+3. THE OPHITE AND SETHIAN SYSTEMS ARE RELATED BUT NOT IDENTICAL. They
+   share most archon names (derived from Hebrew divine names: Yahweh,
+   Elohim, Adonai, Sabaoth) but differ in animal forms and the
+   specific planetary ordering.
+
+4. VALENTINIAN GNOSTICISM treats the archons differently. They are
+   "psychical" (soul-level) powers rather than purely demonic entities.
+   The Demiurge in Valentinian thought is ignorant rather than
+   malicious, and the archons are subordinate to him rather than
+   independent planetary tyrants. Valentinian texts (Ptolemy's Letter
+   to Flora, the Gospel of Truth) do not typically enumerate seven
+   named archons with animal forms. The planetary structure is assumed
+   but not the focus.
+
+5. THE BASILIDEAN SYSTEM (Basilides, c. 120-140 CE) expands the
+   archonic hierarchy to 365 heavens under the chief archon Abraxas/
+   Abrasax, whose numerical value in Greek equals 365. This system
+   transcends the seven-planet model.
+
+6. ON THE ORIGIN OF THE WORLD lists only six named archons under
+   Yaldabaoth (the seventh is unnamed or Yaldabaoth himself occupies
+   the chief position above the six).
+
+7. THE ANIMAL FORMS in the Apocryphon of John (sheep, donkey, hyena,
+   seven-headed serpent, dragon, ape, fire) likely draw on Egyptian
+   theriomorphic divine imagery and serve to emphasize the bestial,
+   sub-divine nature of the archons. The Ophite animal forms (lion,
+   bull, serpent, eagle, bear, dog, ass) partly overlap with the
+   four living creatures of Ezekiel 1 and Revelation 4 (lion, bull,
+   eagle, human face), further underscoring the Gnostic inversion
+   of orthodox symbolism.
+
+8. THE ROLE OF PROPHETS. In the Ophite system (per Irenaeus), each
+   archon inspired specific Hebrew prophets:
+   - Ialdabaoth: Moses, Joshua, Amos, Habakkuk
+   - Iao: Samuel, Nathan, Jonah, Micah
+   - Sabaoth: Elijah, Joel, Zechariah
+   - Adonaios: Isaiah, Ezekiel, Jeremiah, Daniel
+   - Astaphaios: Esdras, Zephaniah
+   - Elaios: Tobias, Haggai
+   - Horaios: Michaiah, Nahum
+
+
+VIII. CONSOLIDATED REFERENCE TABLE
+------------------------------------
+
+Planet    | Ophite Name    | ApocJohn Name  | Animal (ApocJohn) | Animal (Ophite) | Quality (ApocJohn) | Vice
+----------|----------------|----------------|-------------------|-----------------|--------------------|-----------
+Saturn    | Ialdabaoth     | [Chief/above]  | Lion-faced         | Lion            | --                 | Arrogance
+Jupiter   | Iao            | Yao            | 7-headed serpent   | Bull            | Lordship           | False authority
+Mars      | Sabaoth        | Sabaoth        | Dragon             | Dragon/Serpent  | Kingdom            | Wrath
+Sun       | Adonaios       | Adonin         | Ape                | Eagle           | Jealousy/Zeal      | Vainglory
+Venus     | Astaphaios     | Astaphaios     | Hyena              | Serpent         | Divinity           | Desire
+Mercury   | Elaios         | Eloaios        | Donkey             | Dog             | Forethought        | Envy
+Moon      | Horaios        | Sabbataios     | Flaming fire       | Ass             | Understanding      | Falsehood
+
+IMPORTANT: This table is a synthesis across systems. The Apocryphon of
+John's order does not perfectly map onto the Ophite order. The archon
+listed first in ApocJohn (Athoth, with a sheep's face) does not appear
+in the Ophite system at all -- suggesting that Athoth may be an alternate
+name for one of the Ophite archons, or that the Sethian and Ophite
+traditions drew on different (though overlapping) archon lists.
+
+
+IX. SOURCE TEXTS
+-----------------
+
+Primary Gnostic texts (Nag Hammadi Library and related codices):
+- Apocryphon of John (NHC II,1; III,1; IV,1; BG 8502,2) -- 2nd c.
+- On the Origin of the World (NHC II,5; XIII,2) -- 3rd-4th c.
+- Hypostasis of the Archons (NHC II,4) -- 3rd c.
+- Gospel of the Egyptians / Holy Book of the Great Invisible Spirit
+  (NHC III,2; IV,2) -- 3rd c.
+- Pistis Sophia (Codex Askewianus) -- 3rd-4th c.
+
+Patristic reports:
+- Irenaeus, Against Heresies (Adversus Haereses) I.29-30 -- c. 180 CE
+- Origen, Contra Celsum (Against Celsus) VI.24-38 -- c. 248 CE
+  (preserving the Ophite diagram of Celsus, c. 170s CE)
+- Epiphanius, Panarion -- c. 375 CE
+
+Hermetic (for comparison):
+- Corpus Hermeticum I (Poimandres) -- 1st-3rd c. CE
+
+Modern scholarly editions:
+- James M. Robinson, ed., The Nag Hammadi Library in English (1977; rev. 1988)
+- Marvin Meyer, ed., The Nag Hammadi Scriptures (2007)
+- Bentley Layton, The Gnostic Scriptures (1987)
+- Karen King, The Secret Revelation of John (2006)

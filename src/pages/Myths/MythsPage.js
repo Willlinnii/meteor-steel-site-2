@@ -2147,7 +2147,7 @@ function MythsPage() {
               )}
             </div>
 
-            {(mythicEarthCategory === 'temple' || mythicEarthCategory === 'library') && !selectedMythicSite && (
+            {!selectedMythicSite && mythicEarthCategory !== 'tours' && mythicEarthCategory !== 'my-sites' && (
               <MythicAgesTimeline
                 rangeStart={timelineRange[0]}
                 rangeEnd={timelineRange[1]}
@@ -2162,6 +2162,8 @@ function MythsPage() {
                     setMythicEarthCategory('library');
                     const lib = ancientLibraries.find(l => `library-${l.id}` === pin.id);
                     if (lib) setSelectedMythicSite({ ...lib, isLibrary: true });
+                  } else if (pin.type === 'movement') {
+                    // Scroll movement into view if visible
                   }
                 }}
               />

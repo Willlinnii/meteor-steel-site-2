@@ -1,6 +1,6 @@
 {
   "tradition": "Ra / Law of One",
-  "sourceText": "The Ra Material (The Law of One), Sessions 1–106",
+  "sourceText": "The Ra Material (The Law of One), Sessions 1–106, channeled by Don Elkins, Carla Rueckert, and Jim McCarty, 1981–1984",
   "period": "1981–1984",
   "origin": "channeled",
   "entered": "2026-02-23",
@@ -8,49 +8,78 @@
   "order": "ascending",
   "centerModel": "geocentric",
   "zodiacFrame": "tropical",
-  "note": "Seven densities of consciousness as described by Ra through Don Elkins, Carla Rueckert, and Jim McCarty. Not a planetary system — these are evolutionary densities of awareness.",
+  "planetIsNavOnly": true,
+  "note": "Seven densities of consciousness as described by Ra. Ra does not assign planets to densities — this is explicitly declined in the material (Sessions 19.21, 76.12, 88.23). The classical planet mapping shown here follows the Theosophical chakra-planet correspondence (Leadbeater, The Chakras, 1927): both Ra's energy centers and the planetary tradition map sevenfold onto the body from root to crown. The body is the shared coordinate where both systems converge without either claiming the other. Root/Saturn, Sacral/Jupiter, Solar Plexus/Mars, Heart/Sun, Throat/Mercury, Third Eye/Venus, Crown/Moon.",
   "correspondences": {
     "First Density": {
       "number": 1,
-      "description": "Beingness and bare awareness — the elements of earth, air, water, and fire. Stability, foundation, and awareness.",
+      "classicalPlanet": "Saturn",
       "energyCenter": "Red ray",
-      "distortion": "Fear of survival and disconnection from reality"
+      "chakra": "Root",
+      "vehicle": "The elements — earth, water, fire, wind. No individuated vehicle; awareness exists in raw matter itself",
+      "consciousness": "Awareness without movement — the mineral and water life learning from fire and wind the awareness of being (Session 13.21)",
+      "distortion": "Survival — the foundational distortion of bodily continuation",
+      "description": "The density of beingness. Earth, water, fire, and wind in their elemental forms — not yet alive, but aware. Ra describes a cycle of approximately two billion years. 'The first density is the density of consciousness' (Session 13.21). The elements learn from each other: fire teaches earth, wind teaches water. Awareness without purpose, without direction — only being. The foundation on which everything else is built."
     },
     "Second Density": {
       "number": 2,
-      "description": "Growth and movement — growth and response. Plants, animals, and life. Development, will, instinct, social cooperation, and environmental stimuli.",
+      "classicalPlanet": "Jupiter",
       "energyCenter": "Orange ray",
-      "distortion": "Issues with intimacy, personal boundaries, and trauma"
+      "chakra": "Sacral",
+      "vehicle": "Biological body — plants, animals, and all growing things",
+      "consciousness": "Growth and movement — striving toward light, catalyst-response. Pack, herd, and flock awareness (Sessions 9.14, 19.2)",
+      "distortion": "Personal identity and boundaries — the first stirring of individual will, the desire to persist",
+      "description": "The density of growth and movement. Plants reach toward light; animals form packs, herds, and hierarchies. Duration approximately 4.6 billion years. Second density beings 'strive towards the third density which is the density of self-consciousness' (Session 9.14). The critical transition: certain animals, through sustained contact with third-density beings (pets, companions), develop enough individuation to be 'invested' — to cross the threshold into self-awareness. The tree strains upward. The dog gazes at its owner and, in that gaze, begins to become."
     },
     "Third Density": {
       "number": 3,
-      "description": "Self-awareness and choice — self-consciousness and polarity. Humans. The crossroads: service to others (positive) or service to self (negative). The veil of confusion, forgetting, and free will.",
+      "classicalPlanet": "Mars",
       "energyCenter": "Yellow ray",
-      "distortion": "Power struggles, identity confusion, and social distortion"
+      "chakra": "Solar Plexus",
+      "vehicle": "Mind/body/spirit complex — the first vehicle capable of self-reflection",
+      "consciousness": "Self-awareness and the choice of polarity — service to others or service to self. The veil of forgetting makes the choice meaningful (Sessions 16.21, 47.3)",
+      "distortion": "Power, identity, confusion — the necessary fog that makes free will possible. 'The forgetting process can be penetrated' but rarely is (Session 20.24)",
+      "description": "The density of choice — the crucible. A major cycle of approximately 75,000 years (three 25,000-year sub-cycles). The defining feature: the veil of forgetting, which separates conscious from unconscious mind so that the choice of polarity (service to others or service to self) is made in genuine unknowing, without proof. 'The third density being is the first to be self-aware' (Session 16.21). This is where we are. The veil makes faith possible by making certainty impossible. Harvest occurs when a being has chosen and polarized sufficiently — 51% service to others, or 95% service to self. Earth is currently transitioning out of third density."
     },
     "Fourth Density": {
       "number": 4,
-      "description": "Love and understanding — unconditional, universal love. Harmonized beings beyond ego. The healers.",
+      "classicalPlanet": "Sun",
       "energyCenter": "Green ray",
-      "distortion": "Closed heart, judgment, and conditional love"
+      "chakra": "Heart",
+      "vehicle": "Refined mind/body/spirit complex — the body is 'more full of the light,' denser in vibration, translucent (Session 48.6)",
+      "consciousness": "Love and understanding — unconditional compassion, the opening of the green-ray heart. Social memory complex: shared consciousness among all beings of a group (Sessions 16.50, 20.36)",
+      "distortion": "Compassion without wisdom — the tendency toward martyrdom, giving without discernment, naivety in the face of manipulation",
+      "description": "The density of love and understanding. Beings form social memory complexes — groups that share all memory, all experience, as one unified consciousness while retaining individual identity. The physical form becomes 'more full of the light' (Session 48.6) — radiant, translucent. Fourth density positive is characterized by unconditional love; fourth density negative by absolute control. Duration approximately 30 million years. The great lesson: love is not enough by itself. Fourth-density entities must eventually confront that love without wisdom leads to folly — which drives the turn toward fifth density."
     },
     "Fifth Density": {
       "number": 5,
-      "description": "Wisdom and light — individualized inwardness, discernment, and incarnation in 3D. Sages and seers as teachers.",
+      "classicalPlanet": "Mercury",
       "energyCenter": "Blue ray",
-      "distortion": "Inauthenticity, repression, and poor communication"
+      "chakra": "Throat",
+      "vehicle": "Light body — 'extremely white in color' (Session 33.20). Fifth-density beings may shed physicality entirely",
+      "consciousness": "Wisdom and light — discernment, the capacity to teach, communication of deep understanding. Individuality sharpens rather than dissolves (Session 25.6)",
+      "distortion": "Wisdom without compassion — the temptation to withdraw from suffering, to observe without engaging, to become cold in one's clarity",
+      "description": "The density of light and wisdom. Fifth-density entities are 'extremely white in color' (Session 33.20). This is the density of individual mastery — unlike fourth density's group love, fifth density sharpens individuality toward pure discernment. Fifth-density beings may choose to teach by incarnating backward into third density — appearing as sages, seers, teachers. Notably, fifth-density negative entities are formidable: 'The fifth-density negative is extraordinarily compacted and powerful' (Session 25.6). The negative path begins to fail here — at sixth density, unity is inescapable, and the negative path cannot proceed without reversing polarity."
     },
     "Sixth Density": {
       "number": 6,
-      "description": "Unity — love, wisdom, and completion. Balance of love and wisdom. Unity beings like Ra. Integration of duality.",
+      "classicalPlanet": "Venus",
       "energyCenter": "Indigo ray",
-      "distortion": "Distorted perception, spiritual pride, and false unity"
+      "chakra": "Third Eye",
+      "vehicle": "Unity body — the social memory complex as a single being. Ra describes itself as 'a unified thought form' (Session 6.14)",
+      "consciousness": "Unity — the balancing of love and wisdom into one integrated understanding. 'We are those of the Law of One... we are Ra' (Sessions 1.1, 6.14)",
+      "distortion": "Spiritual pride — the last subtle imbalance before dissolution. Ra itself describes a failed attempt to help Earth as a distortion of this kind (Session 14.19)",
+      "description": "The density of unity. This is Ra's own density — 'I am Ra. I am a sixth-density social memory complex formed upon the planet you call Venus' (Session 6.4). Love and wisdom, which separated at fourth and fifth density, reunite here. All negative-path entities must reverse polarity to enter sixth density — unity cannot be achieved through separation. Ra's narrative of building the Great Pyramid and failing to help Egypt is told from this level: even at sixth density, the attempt to serve can produce distortion. The honesty of that admission — a sixth-density being acknowledging its own error — is one of the most distinctive qualities of the material."
     },
     "Seventh Density": {
       "number": 7,
-      "description": "Gateway to the infinite — the Creator as Self. Dissolution, universal consciousness, void and pure light.",
+      "classicalPlanet": "Moon",
       "energyCenter": "Violet ray",
-      "distortion": null
+      "chakra": "Crown",
+      "vehicle": "None — dissolution. 'The mind/body/spirit complex is no longer' (Session 16.21)",
+      "consciousness": "The gateway — completion, turning toward timelessness, becoming the Creator. 'All things are one, there is no polarity, no right or wrong, no disharmony, but only identity' (Session 16.22)",
+      "distortion": null,
+      "description": "The density of foreverness — the gateway. Ra speaks of seventh density with unusual brevity: 'It is a density of completion and the turning towards timelessness or infinity' (Session 16.21). The individual, the social memory complex, all distinction dissolves back into the Creator. The octave completes. Ra notes that seventh density beings do not communicate because there is no longer a self to communicate from. What remains is intelligent infinity itself — which, in turn, generates the conditions for a new octave. The serpent eats its tail."
     }
   },
   "authorCommentary": []

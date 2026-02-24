@@ -2,10 +2,13 @@ import React, { useRef, useCallback, useEffect, useMemo } from 'react';
 
 /* ── Age Definitions ── */
 export const MYTHIC_AGES = [
-  { id: 'stone',        label: 'Stone',        startYear: -10000, endYear: -3300, color: '#a89070' },
-  { id: 'bronze',       label: 'Bronze',       startYear: -3300,  endYear: -1400, color: '#c4713a' },
-  { id: 'meteor-steel', label: 'Meteor Steel', startYear: -1400,  endYear: -1177, color: '#c9a961' },
-  { id: 'iron',         label: 'Iron',         startYear: -1177,  endYear: 2026,  color: '#8b9dc3' },
+  { id: 'stone',        label: 'Stone',        startYear: -10000, endYear: -5000, color: '#a89070' },
+  { id: 'gold',         label: 'Gold',         startYear: -5000,  endYear: -4500, color: '#d4af37' },
+  { id: 'copper',       label: 'Copper',       startYear: -4500,  endYear: -4000, color: '#b87333' },
+  { id: 'silver',       label: 'Silver',       startYear: -4000,  endYear: -3300, color: '#c0c0c0' },
+  { id: 'bronze',       label: 'Bronze',       startYear: -3300,  endYear: -1800, color: '#c4713a' },
+  { id: 'meteor-steel', label: 'Meteor Steel', startYear: -1800,  endYear: -1200, color: '#c9a961' },
+  { id: 'iron',         label: 'Iron',         startYear: -1200,  endYear: 2026,  color: '#8b9dc3' },
 ];
 
 export const TIMELINE_MIN = -10000;

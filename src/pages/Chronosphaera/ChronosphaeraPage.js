@@ -27,6 +27,7 @@ import wheelContent from '../../data/medicineWheelContent.json';
 import dayNightData from '../../data/dayNight.json';
 import useYellowBrickRoad from '../../components/chronosphaera/useYellowBrickRoad';
 import useCompass from '../../hooks/useCompass';
+import useAmbientLight from '../../hooks/useAmbientLight';
 import YellowBrickRoadPanel from '../../components/chronosphaera/YellowBrickRoadPanel';
 import StageContent from '../../components/monomyth/StageContent';
 import MeteorSteelContent from '../../components/meteorSteel/MeteorSteelContent';
@@ -551,6 +552,7 @@ export default function ChronosphaeraPage() {
   const navigate = useNavigate();
   const { hasPurchase, hasSubscription } = useProfile();
   const compass = useCompass();
+  const ambient = useAmbientLight();
   const [selectedPlanet, setSelectedPlanet] = useState('Sun');
   const [hoveredPlanet, setHoveredPlanet] = useState(null);
   const [activeTab, setActiveTab] = useState('overview');
@@ -1269,7 +1271,7 @@ export default function ChronosphaeraPage() {
   }
 
   return (
-    <div className="chronosphaera-page">
+    <div className={`chronosphaera-page chrono-${ambient.mode}`}>
       <div className="chrono-diagram-center">
         <OrbitalDiagram
           tooltipData={tooltipData}
@@ -2360,6 +2362,29 @@ export default function ChronosphaeraPage() {
           displayReversed={columnSequencePopup.displayReversed}
         />
       )}
+      <button
+        className={`ambient-toggle${ambient.isManual ? ' manual' : ''}`}
+        onClick={ambient.toggle}
+        title={`${ambient.mode === 'solar' ? 'Solar' : 'Lunar'} mode${ambient.isManual ? ' (manual — tap to reset)' : ''}`}
+      >
+        {ambient.mode === 'solar' ? (
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
+            <circle cx="12" cy="12" r="4" fill="currentColor" stroke="none" />
+            <line x1="12" y1="2" x2="12" y2="5" />
+            <line x1="12" y1="19" x2="12" y2="22" />
+            <line x1="2" y1="12" x2="5" y2="12" />
+            <line x1="19" y1="12" x2="22" y2="12" />
+            <line x1="5.6" y1="5.6" x2="7.5" y2="7.5" />
+            <line x1="16.5" y1="16.5" x2="18.4" y2="18.4" />
+            <line x1="5.6" y1="18.4" x2="7.5" y2="16.5" />
+            <line x1="16.5" y1="7.5" x2="18.4" y2="5.6" />
+          </svg>
+        ) : (
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" stroke="none">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+          </svg>
+        )}
+      </button>
     </div>
   );
 }
