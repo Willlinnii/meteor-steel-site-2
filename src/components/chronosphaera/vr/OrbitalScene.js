@@ -113,7 +113,7 @@ export default function OrbitalScene({
   return (
     <>
       {/* Lighting */}
-      <ambientLight intensity={0.3} />
+      <ambientLight intensity={0.6} />
       <SunLight anglesRef={anglesRef} isHelio={isHelio} orbitRadius={sunOrbitR} />
 
       {/* Stars — hidden in passthrough mode so only artifacts show over camera */}

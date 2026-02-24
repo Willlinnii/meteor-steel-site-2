@@ -150,9 +150,9 @@ export default function Planet3D({ planet, position, size, selected, onClick, mo
         ) : (
           <meshStandardMaterial
             color={color}
-            emissive={hovered || selected ? color : '#000000'}
-            emissiveIntensity={selected ? 0.3 : hovered ? 0.15 : 0}
-            roughness={0.8}
+            emissive={color}
+            emissiveIntensity={selected ? 0.5 : hovered ? 0.35 : 0.2}
+            roughness={0.6}
             metalness={0.2}
           />
         )}
