@@ -678,81 +678,61 @@ export function ProfileProvider({ children }) {
     }
   }, [user]);
 
-  // Subscriptions
+  // Subscriptions (read-only — flags written by Stripe webhook only)
   const subscriptions = profileData?.subscriptions || {};
 
   const hasSubscription = useCallback((id) => {
     return !!(profileDataRef.current?.subscriptions || {})[id];
   }, []);
 
-  const updateSubscription = useCallback(async (id, enabled) => {
-    if (!user || !firebaseConfigured || !db) return;
-
-    const merged = { ...(profileDataRef.current?.subscriptions || {}), [id]: enabled };
-
-    // Update local state immediately
-    setProfileData(prev => ({ ...prev, subscriptions: merged }));
-
-    // Persist to Firestore
-    try {
-      const ref = doc(db, 'users', user.uid, 'meta', 'profile');
-      await setDoc(ref, { subscriptions: merged, updatedAt: serverTimestamp() }, { merge: true });
-    } catch (err) {
-      console.error('Failed to update subscription:', err);
-    }
-  }, [user]);
-
-  // Batch update multiple subscriptions at once (avoids race conditions)
-  const updateSubscriptions = useCallback(async (updates) => {
-    if (!user || !firebaseConfigured || !db) return;
-
-    const merged = { ...(profileDataRef.current?.subscriptions || {}), ...updates };
-
-    setProfileData(prev => ({ ...prev, subscriptions: merged }));
-
-    try {
-      const ref = doc(db, 'users', user.uid, 'meta', 'profile');
-      await setDoc(ref, { subscriptions: merged, updatedAt: serverTimestamp() }, { merge: true });
-    } catch (err) {
-      console.error('Failed to update subscriptions:', err);
-    }
-  }, [user]);
-
-  // Purchases
+  // Purchases (read-only — flags written by Stripe webhook only)
   const purchases = profileData?.purchases || {};
 
   const hasPurchase = useCallback((id) => {
     return !!(profileDataRef.current?.purchases || {})[id];
   }, []);
 
-  const updatePurchase = useCallback(async (id, enabled) => {
-    if (!user || !firebaseConfigured || !db) return;
+  // Stripe integration
+  const hasStripeAccount = !!profileData?.stripeCustomerId;
 
-    const merged = { ...(profileDataRef.current?.purchases || {}), [id]: enabled };
-
-    setProfileData(prev => ({ ...prev, purchases: merged }));
-
+  const initiateCheckout = useCallback(async (itemId) => {
+    if (!user) return;
     try {
-      const ref = doc(db, 'users', user.uid, 'meta', 'profile');
-      await setDoc(ref, { purchases: merged, updatedAt: serverTimestamp() }, { merge: true });
+      const token = await user.getIdToken();
+      const resp = await fetch('/api/stripe-checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ itemId }),
+      });
+      if (!resp.ok) {
+        const err = await resp.json();
+        throw new Error(err.error || 'Failed to create checkout session');
+      }
+      const { url } = await resp.json();
+      window.location.href = url;
     } catch (err) {
-      console.error('Failed to update purchase:', err);
+      console.error('Checkout error:', err);
+      throw err;
     }
   }, [user]);
 
-  // Batch update multiple purchases at once (avoids race conditions)
-  const updatePurchases = useCallback(async (updates) => {
-    if (!user || !firebaseConfigured || !db) return;
-
-    const merged = { ...(profileDataRef.current?.purchases || {}), ...updates };
-
-    setProfileData(prev => ({ ...prev, purchases: merged }));
-
+  const openBillingPortal = useCallback(async () => {
+    if (!user) return;
     try {
-      const ref = doc(db, 'users', user.uid, 'meta', 'profile');
-      await setDoc(ref, { purchases: merged, updatedAt: serverTimestamp() }, { merge: true });
+      const token = await user.getIdToken();
+      const resp = await fetch('/api/stripe-portal', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      });
+      if (!resp.ok) {
+        const err = await resp.json();
+        throw new Error(err.error || 'Failed to open billing portal');
+      }
+      const { url } = await resp.json();
+      window.location.href = url;
     } catch (err) {
-      console.error('Failed to update purchases:', err);
+      console.error('Billing portal error:', err);
+      throw err;
     }
   }, [user]);
 
@@ -1021,7 +1001,7 @@ export function ProfileProvider({ children }) {
   const luckyNumber = profileData?.luckyNumber ?? null;
   const personalStory = profileData?.personalStory || null;
 
-  const value = {
+  const value = useMemo(() => ({
     profileData,
     earnedRanks,
     highestRank,
@@ -1033,12 +1013,11 @@ export function ProfileProvider({ children }) {
     numerologyName,
     subscriptions,
     hasSubscription,
-    updateSubscription,
-    updateSubscriptions,
     purchases,
     hasPurchase,
-    updatePurchase,
-    updatePurchases,
+    hasStripeAccount,
+    initiateCheckout,
+    openBillingPortal,
     updateCredentials,
     updateNatalChart,
     updateNumerologyName,
@@ -1098,7 +1077,23 @@ export function ProfileProvider({ children }) {
     savePersonalStory,
     curatorApproved,
     updateCuratorStatus,
-  };
+  }), [
+    profileData, earnedRanks, highestRank, activeCredentials, hasProfile, loaded, handle,
+    natalChart, numerologyName, subscriptions, hasSubscription, purchases, hasPurchase,
+    hasStripeAccount, initiateCheckout, openBillingPortal, updateCredentials,
+    updateNatalChart, updateNumerologyName, luckyNumber, updateLuckyNumber,
+    completeOnboarding, refreshProfile, mentorData, qualifiedMentorTypes, mentorEligible,
+    mentorCoursesComplete, effectiveMentorStatus, submitMentorApplication, acceptMentorContract,
+    updateMentorStatus, mentorPairings, pairingCategories, updateMentorBio, updateMentorCapacity,
+    publishToDirectory, unpublishFromDirectory, requestMentor, respondToPairing, endPairing,
+    photoURL, consultingData, consultingRequests, consultingCategories, updateProfilePhoto,
+    submitConsultingProfile, requestConsulting, respondToConsulting,
+    apiKeys, apiKeysLoaded, saveApiKey, removeApiKey, hasAnthropicKey, hasOpenaiKey,
+    mythouseApiKey, hasMythouseKey, generateMythouseKey, regenerateMythouseKey,
+    social, updateSocial, pilgrimages, pilgrimagesLoaded, addPilgrimage, removePilgrimage,
+    userSites, userSitesLoaded, addUserSite, removeUserSite, savedSiteIds, saveSite, unsaveSite,
+    personalStory, savePersonalStory, curatorApproved, updateCuratorStatus,
+  ]);
 
   return (
     <ProfileContext.Provider value={value}>

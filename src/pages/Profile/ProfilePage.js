@@ -38,7 +38,7 @@ const SUBSCRIPTIONS = [
   {
     id: 'master-key', name: 'Mythouse Master Key',
     isBundle: true,
-    bundleSubscriptions: ['ybr', 'forge', 'coursework'],
+    bundleSubscriptions: ['ybr', 'forge', 'coursework', 'monomyth'],
     bundlePurchases: ['starlight-bundle', 'fallen-starlight', 'story-of-stories'],
     icon: (
       <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -51,7 +51,7 @@ const SUBSCRIPTIONS = [
       </svg>
     ),
     description: 'Everything Mythouse has to offer — all journeys, courses, stories, and the forge.',
-    details: 'The Master Key unlocks the full Mythouse experience: all Yellow Brick Road journeys, the Story Forge, full Coursework tracking (Monomyth Explorer, Celestial Clocks Explorer, Meteor Steel Initiate, Atlas Conversationalist, Mythic Gamer, Starlight Reader, Ouroboros Walker), and the complete Starlight Bundle (Fallen Starlight + Story of Stories).',
+    details: 'The Master Key unlocks the full Mythouse experience: all Yellow Brick Road journeys, the Story Forge, full Coursework tracking (Monomyth Explorer, Celestial Clocks Explorer, Meteor Steel Initiate, Atlas Conversationalist, Mythic Gamer, Starlight Reader, Ouroboros Walker), the Monomyth & Meteor Steel overlay, and the complete Starlight Bundle (Fallen Starlight + Story of Stories).',
   },
   {
     id: 'ybr', name: 'Yellow Brick Road',
@@ -94,11 +94,24 @@ const SUBSCRIPTIONS = [
     description: 'Track your progress through courses, earn ranks and certificates.',
     details: 'Coursework tracks your exploration across the site and awards progress toward structured courses. Visit pages, interact with content, and complete activities to fill requirements. Finish courses to earn ranks and certificates displayed on your profile.',
   },
+  {
+    id: 'monomyth', name: 'Monomyth & Meteor Steel',
+    preSubscribe: true,
+    icon: (
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2">
+        <circle cx="12" cy="12" r="9" />
+        <path d="M12 3 L14 6 L10 6 Z" fill="currentColor" stroke="none" />
+      </svg>
+    ),
+    description: 'The hero\'s journey ring and the metallurgical transformation narrative on the Chronosphaera.',
+    details: 'Activates the eight-stage monomyth ring and the meteor steel metallurgical overlay on the Chronosphaera. Toggle between the hero\'s journey stages and their correspondence to the ancient art of steel-making.',
+  },
 ];
 
 const PURCHASES = [
   {
     id: 'fallen-starlight', name: 'Fallen Starlight',
+    preSubscribe: true,
     icon: (
       <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
         <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
@@ -111,6 +124,7 @@ const PURCHASES = [
   },
   {
     id: 'story-of-stories', name: 'Story of Stories',
+    preSubscribe: true,
     icon: (
       <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
         <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
@@ -133,6 +147,7 @@ const PURCHASES = [
   },
   {
     id: 'starlight-bundle', name: 'Starlight Bundle',
+    preSubscribe: true,
     isBundle: true,
     bundleItems: ['fallen-starlight', 'story-of-stories'],
     icon: (
@@ -153,7 +168,7 @@ const PURCHASES = [
 export default function ProfilePage() {
   const { user, signOut } = useAuth();
   const { getCourseStates, completedCourses, certificateData, allCourses } = useCoursework();
-  const { earnedRanks, highestRank, activeCredentials, hasProfile, loaded: profileLoaded, handle, natalChart, updateNatalChart, numerologyName, updateNumerologyName, luckyNumber, updateLuckyNumber, subscriptions, updateSubscription, updateSubscriptions, purchases, updatePurchase, updatePurchases, refreshProfile, mentorData, qualifiedMentorTypes, mentorEligible, mentorCoursesComplete, effectiveMentorStatus, pairingCategories, updateMentorBio, updateMentorCapacity, publishToDirectory, unpublishFromDirectory, respondToPairing, endPairing, photoURL, consultingData, consultingCategories, updateProfilePhoto, respondToConsulting, apiKeys, saveApiKey, removeApiKey, hasAnthropicKey, hasOpenaiKey, mythouseApiKey, hasMythouseKey, generateMythouseKey, regenerateMythouseKey, social, updateSocial, pilgrimages, pilgrimagesLoaded, removePilgrimage, personalStory, savePersonalStory, curatorApproved } = useProfile();
+  const { earnedRanks, highestRank, activeCredentials, hasProfile, loaded: profileLoaded, handle, natalChart, updateNatalChart, numerologyName, updateNumerologyName, luckyNumber, updateLuckyNumber, subscriptions, purchases, hasStripeAccount, initiateCheckout, openBillingPortal, refreshProfile, mentorData, qualifiedMentorTypes, mentorEligible, mentorCoursesComplete, effectiveMentorStatus, pairingCategories, updateMentorBio, updateMentorCapacity, publishToDirectory, unpublishFromDirectory, respondToPairing, endPairing, photoURL, consultingData, consultingCategories, updateProfilePhoto, respondToConsulting, apiKeys, saveApiKey, removeApiKey, hasAnthropicKey, hasOpenaiKey, mythouseApiKey, hasMythouseKey, generateMythouseKey, regenerateMythouseKey, social, updateSocial, pilgrimages, pilgrimagesLoaded, removePilgrimage, personalStory, savePersonalStory, curatorApproved } = useProfile();
 const { cards: storyCards, loaded: storyCardsLoaded } = useStoryCardSync();
   const navigate = useNavigate();
   const location = useLocation();
@@ -164,6 +179,24 @@ const { cards: storyCards, loaded: storyCardsLoaded } = useStoryCardSync();
   const [expandedCard, setExpandedCard] = useState(null); // 'ybr' | 'forge' | etc.
   const [showSocial, setShowSocial] = useState(false);
   const [consultingRespondingId, setConsultingRespondingId] = useState(null);
+  const [checkoutLoading, setCheckoutLoading] = useState(null); // itemId being checked out
+  const [checkoutSuccess, setCheckoutSuccess] = useState(false);
+
+  // Detect checkout success from Stripe redirect
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    if (params.get('checkout') === 'success') {
+      setCheckoutSuccess(true);
+      // Refresh profile after a short delay to pick up webhook-written flags
+      const timer = setTimeout(() => {
+        refreshProfile();
+        setCheckoutSuccess(false);
+      }, 3000);
+      // Clean the URL
+      navigate('/profile', { replace: true });
+      return () => clearTimeout(timer);
+    }
+  }, [location.search, refreshProfile, navigate]);
 
   // Personal Story state
   const [storyInput, setStoryInput] = useState('');
@@ -810,28 +843,25 @@ const { cards: storyCards, loaded: storyCardsLoaded } = useStoryCardSync();
                     <div className="profile-subscription-name">{sub.name}{isBundle && <span className="profile-bundle-badge">Bundle</span>}</div>
                     <div className="profile-subscription-desc">{sub.description}</div>
                   </div>
-                  <label className="profile-subscription-toggle" onClick={e => e.stopPropagation()}>
-                    <input
-                      type="checkbox"
-                      checked={enabled}
-                      onChange={() => {
-                        const newVal = !enabled;
-                        if (isBundle && sub.bundleSubscriptions) {
-                          const subUpdates = { [sub.id]: newVal };
-                          sub.bundleSubscriptions.forEach(id => { subUpdates[id] = newVal; });
-                          updateSubscriptions(subUpdates);
-                          if (sub.bundlePurchases) {
-                            const purUpdates = {};
-                            sub.bundlePurchases.forEach(id => { purUpdates[id] = newVal; });
-                            updatePurchases(purUpdates);
-                          }
-                        } else {
-                          updateSubscription(sub.id, newVal);
-                        }
-                      }}
-                    />
-                    <span className="profile-subscription-slider" />
-                  </label>
+                  <span className="profile-subscription-action" onClick={e => e.stopPropagation()}>
+                    {enabled ? (
+                      <span className="profile-stripe-status active">Active</span>
+                    ) : sub.preSubscribe ? (
+                      <span className="profile-stripe-status coming-soon">Coming Soon</span>
+                    ) : (
+                      <button
+                        className="profile-stripe-btn subscribe"
+                        disabled={checkoutLoading === sub.id}
+                        onClick={async () => {
+                          setCheckoutLoading(sub.id);
+                          try { await initiateCheckout(sub.id); } catch {}
+                          setCheckoutLoading(null);
+                        }}
+                      >
+                        {checkoutLoading === sub.id ? '...' : 'Subscribe'}
+                      </button>
+                    )}
+                  </span>
                 </div>
                 {expanded && (
                   <div className="profile-subscription-details">
@@ -1065,23 +1095,25 @@ All responses return { data, meta } JSON. GET /v1/ for full discovery.`}</pre>
                     <div className="profile-subscription-name">{p.name}{isBundle && <span className="profile-bundle-badge">Bundle</span>}</div>
                     <div className="profile-subscription-desc">{p.description}</div>
                   </div>
-                  <label className="profile-subscription-toggle" onClick={e => e.stopPropagation()}>
-                    <input
-                      type="checkbox"
-                      checked={enabled}
-                      onChange={() => {
-                        const newVal = !enabled;
-                        if (isBundle && p.bundleItems) {
-                          const updates = { [p.id]: newVal };
-                          p.bundleItems.forEach(itemId => { updates[itemId] = newVal; });
-                          updatePurchases(updates);
-                        } else {
-                          updatePurchase(p.id, newVal);
-                        }
-                      }}
-                    />
-                    <span className="profile-subscription-slider" />
-                  </label>
+                  <span className="profile-subscription-action" onClick={e => e.stopPropagation()}>
+                    {enabled ? (
+                      <span className="profile-stripe-status active">Purchased</span>
+                    ) : p.preSubscribe ? (
+                      <span className="profile-stripe-status coming-soon">Coming Soon</span>
+                    ) : (
+                      <button
+                        className="profile-stripe-btn purchase"
+                        disabled={checkoutLoading === p.id}
+                        onClick={async () => {
+                          setCheckoutLoading(p.id);
+                          try { await initiateCheckout(p.id); } catch {}
+                          setCheckoutLoading(null);
+                        }}
+                      >
+                        {checkoutLoading === p.id ? '...' : 'Buy'}
+                      </button>
+                    )}
+                  </span>
                 </div>
                 {expanded && (
                   <div className="profile-subscription-details">
@@ -1093,6 +1125,22 @@ All responses return { data, meta } JSON. GET /v1/ for full discovery.`}</pre>
           })}
         </div>
       </div>
+
+      {/* Checkout success banner */}
+      {checkoutSuccess && (
+        <div className="profile-checkout-success">
+          Payment successful! Your access is being activated...
+        </div>
+      )}
+
+      {/* Manage Billing button */}
+      {hasStripeAccount && (
+        <div className="profile-billing-row">
+          <button className="profile-stripe-btn billing" onClick={openBillingPortal}>
+            Manage Billing
+          </button>
+        </div>
+      )}
 
       {/* Active Courses */}
       <h2 className="profile-section-title">Courses</h2>

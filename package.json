@@ -19,6 +19,7 @@
     "react-router-dom": "^6.30.3",
     "react-scripts": "5.0.1",
     "resium": "^1.19.4",
+    "stripe": "^20.3.1",
     "three": "^0.182.0"
   },
   "scripts": {

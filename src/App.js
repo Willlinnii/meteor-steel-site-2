@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef, useContext, createContext, Suspense, lazy } from 'react';
+import React, { useState, useEffect, useCallback, useMemo, useRef, useContext, createContext, Suspense, lazy } from 'react';
 import { Routes, Route, Link, Navigate, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from './auth/AuthContext';
 import { CourseworkProvider, useCoursework } from './coursework/CourseworkContext';
@@ -1835,6 +1835,8 @@ const MASTER_KEY_INCLUDES = ['ybr', 'forge', 'coursework', 'fallen-starlight', '
 
 function SubscriptionGate({ gateInfo, onClose }) {
   const navigate = useNavigate();
+  const { initiateCheckout } = useProfile();
+  const [loading, setLoading] = useState(false);
   const isPurchase = gateInfo?.type === 'purchase';
   const meta = isPurchase ? PURCHASES_META[gateInfo?.id] : SUBSCRIPTIONS_META[gateInfo?.id];
   if (!meta) return null;
@@ -1852,12 +1854,26 @@ function SubscriptionGate({ gateInfo, onClose }) {
         {includedInMasterKey && (
           <p className="subscription-gate-master-key">Also included in the Mythouse Master Key.</p>
         )}
-        {meta.cta && (
-          <p className="subscription-gate-cta">{meta.cta}</p>
-        )}
         <div className="subscription-gate-actions">
-          <button className="subscription-gate-primary" onClick={() => { navigate(isPurchase ? '/profile#purchases' : '/profile#subscriptions'); onClose(); }}>
-            Go to Subscriptions
+          <button
+            className="subscription-gate-primary"
+            disabled={loading}
+            onClick={async () => {
+              setLoading(true);
+              try {
+                await initiateCheckout(gateInfo.id);
+              } catch {
+                // Fallback: navigate to profile if checkout fails
+                navigate(isPurchase ? '/profile#purchases' : '/profile#subscriptions');
+                onClose();
+              }
+              setLoading(false);
+            }}
+          >
+            {loading ? 'Redirecting...' : (isPurchase ? 'Buy Now' : 'Subscribe Now')}
+          </button>
+          <button className="subscription-gate-secondary" onClick={() => { navigate(isPurchase ? '/profile#purchases' : '/profile#subscriptions'); onClose(); }}>
+            View Details
           </button>
           <button className="subscription-gate-secondary" onClick={onClose}>
             Not now
@@ -2215,11 +2231,16 @@ function AppContent() {
     try { localStorage.setItem('mythouse_xr_mode', val ? '1' : '0'); } catch {}
   }, [xrMode]);
 
+  const storyForgeValue = useMemo(() => ({ forgeMode, setForgeMode }), [forgeMode, setForgeMode]);
+  const ybrModeValue = useMemo(() => ({ ybrMode, setYbrMode }), [ybrMode, setYbrMode]);
+  const xrModeValue = useMemo(() => ({ xrMode, setXrMode }), [xrMode, setXrMode]);
+  const ybrHeaderValue = useMemo(() => ({ ...ybrHeader, register: setYbrHeader }), [ybrHeader, setYbrHeader]);
+
   return (
-    <StoryForgeContext.Provider value={{ forgeMode, setForgeMode }}>
-    <YBRModeContext.Provider value={{ ybrMode, setYbrMode }}>
-    <XRModeContext.Provider value={{ xrMode, setXrMode }}>
-    <YBRHeaderContext.Provider value={{ ...ybrHeader, register: setYbrHeader }}>
+    <StoryForgeContext.Provider value={storyForgeValue}>
+    <YBRModeContext.Provider value={ybrModeValue}>
+    <XRModeContext.Provider value={xrModeValue}>
+    <YBRHeaderContext.Provider value={ybrHeaderValue}>
     <AtlasContextProvider>
     <div className={`app${courseworkMode ? ' cw-mode' : ''}`}>
       <SiteHeader />

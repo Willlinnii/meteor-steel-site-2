@@ -3942,51 +3942,79 @@ body {
   to   { opacity: 1; max-height: 200px; }
 }
 
-/* Toggle switch */
-.profile-subscription-toggle {
-  position: relative;
-  display: inline-block;
-  width: 44px;
-  height: 24px;
+/* Stripe action area (replaces toggle switches) */
+.profile-subscription-action {
   flex-shrink: 0;
-  cursor: pointer;
+  display: flex;
+  align-items: center;
 }
 
-.profile-subscription-toggle input {
-  opacity: 0;
-  width: 0;
-  height: 0;
+.profile-stripe-status {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 4px 10px;
+  border-radius: 12px;
+  white-space: nowrap;
 }
 
-.profile-subscription-slider {
-  position: absolute;
-  inset: 0;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 24px;
+.profile-stripe-status.active {
+  color: var(--accent-gold);
+  background: rgba(201, 169, 97, 0.15);
+  border: 1px solid rgba(201, 169, 97, 0.3);
+}
+
+.profile-stripe-status.coming-soon {
+  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.05);
   border: 1px solid var(--border-subtle);
-  transition: all 0.25s ease;
+  font-size: 0.7rem;
 }
 
-.profile-subscription-slider::before {
-  content: '';
-  position: absolute;
-  width: 18px;
-  height: 18px;
-  left: 2px;
-  bottom: 2px;
-  background: var(--text-secondary);
-  border-radius: 50%;
-  transition: all 0.25s ease;
+.profile-stripe-btn {
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 6px 16px;
+  border-radius: 6px;
+  border: 1px solid var(--accent-gold);
+  background: transparent;
+  color: var(--accent-gold);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
 }
 
-.profile-subscription-toggle input:checked + .profile-subscription-slider {
-  background: rgba(201, 169, 97, 0.2);
-  border-color: var(--accent-gold);
+.profile-stripe-btn:hover:not(:disabled) {
+  background: rgba(201, 169, 97, 0.15);
 }
 
-.profile-subscription-toggle input:checked + .profile-subscription-slider::before {
-  transform: translateX(20px);
-  background: var(--accent-gold);
+.profile-stripe-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.profile-stripe-btn.billing {
+  font-size: 0.82rem;
+  padding: 8px 20px;
+}
+
+.profile-billing-row {
+  display: flex;
+  justify-content: flex-end;
+  padding: 8px 0 16px;
+}
+
+.profile-checkout-success {
+  background: rgba(201, 169, 97, 0.15);
+  border: 1px solid rgba(201, 169, 97, 0.3);
+  color: var(--accent-gold);
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  text-align: center;
+  margin-bottom: 16px;
+  animation: cw-fade-in 0.3s ease;
 }
 
 /* ===== SUBSCRIPTION GATE POPUP ===== */
