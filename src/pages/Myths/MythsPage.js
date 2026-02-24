@@ -2084,6 +2084,7 @@ function MythsPage() {
               embedded
               externalFilters={activeEarthFilters}
               externalTourSiteIds={tourSiteIds}
+              externalTimelineRange={timelineRange}
               onSiteSelect={(site) => {
                 setSelectedMythicSite(site);
                 if (site?.isTemple) setMythicEarthCategory('temple');

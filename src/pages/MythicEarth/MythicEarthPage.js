@@ -18,6 +18,7 @@ import { useAreaOverride, useXRMode } from '../../App';
 import { useAuth } from '../../auth/AuthContext';
 import { useProfile } from '../../profile/ProfileContext';
 import { usePageTracking } from '../../coursework/CourseworkContext';
+import { parseEraString } from '../../components/MythicAgesTimeline';
 import './MythicEarthPage.css';
 
 import { apiFetch } from '../../lib/chatApi';
@@ -443,7 +444,7 @@ function MovementDetail({ movement }) {
   );
 }
 
-function MythicEarthGlobe({ activeFilters, onSelectSite, onReady, highlightedSiteIds, cameraAR, vrSupported, onViewerReady, initialLocation, activeTab, onSelectMovement, showPilgrimagesOnly, pilgrimageIds, extraSites }) {
+function MythicEarthGlobe({ activeFilters, timelineRange, onSelectSite, onReady, highlightedSiteIds, cameraAR, vrSupported, onViewerReady, initialLocation, activeTab, onSelectMovement, showPilgrimagesOnly, pilgrimageIds, extraSites }) {
   const viewerRef = useRef(null);
   const readyFired = useRef(false);
   const geoApplied = useRef(false);
@@ -457,11 +458,15 @@ function MythicEarthGlobe({ activeFilters, onSelectSite, onReady, highlightedSit
     const curated = sites.filter(s => {
       if (!activeFilters.has(s.category)) return false;
       if (showPilgrimagesOnly && pilgrimageIds && !pilgrimageIds.has(s.id)) return false;
+      if (timelineRange) {
+        const era = parseEraString(s.era);
+        if (era && (era.endYear < timelineRange[0] || era.startYear > timelineRange[1])) return false;
+      }
       return true;
     });
     const userList = (extraSites || []).filter(s => activeFilters.has(s.category));
     return [...curated, ...userList];
-  }, [activeFilters, showPilgrimagesOnly, pilgrimageIds, extraSites]);
+  }, [activeFilters, showPilgrimagesOnly, pilgrimageIds, extraSites, timelineRange]);
 
   const handleClick = useCallback((site) => {
     onSelectSite(site);
@@ -935,7 +940,7 @@ function AddSiteForm({ onAdd, onCancel }) {
   );
 }
 
-function MythicEarthPage({ embedded, onSiteSelect: onSiteSelectExternal, externalSite, externalFilters, externalTourSiteIds }) {
+function MythicEarthPage({ embedded, onSiteSelect: onSiteSelectExternal, externalSite, externalFilters, externalTourSiteIds, externalTimelineRange }) {
   const { track } = usePageTracking('mythic-earth');
   const { xrMode } = useXRMode();
   const { user } = useAuth();
@@ -1234,6 +1239,7 @@ function MythicEarthPage({ embedded, onSiteSelect: onSiteSelectExternal, externa
 
           <MythicEarthGlobe
             activeFilters={embedded && externalFilters ? externalFilters : activeFilters}
+            timelineRange={embedded ? externalTimelineRange : null}
             onSelectSite={handleSelectSite}
             onReady={handleGlobeReady}
             highlightedSiteIds={highlightedSiteIds}
