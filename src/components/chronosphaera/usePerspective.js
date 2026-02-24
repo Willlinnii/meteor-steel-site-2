@@ -146,13 +146,13 @@ export const ERA_GROUPS = [
     id: 'near-east',
     label: 'Ancient Near East',
     period: '3500–300 BCE',
-    traditions: ['sumerian', 'babylon', 'assyrian', 'phoenician'],
+    traditions: ['sumerian', 'babylon', 'assyrian', 'phoenician', 'genesis'],
   },
   {
     id: 'ancient',
     label: 'Classical World',
     period: '6th c BCE – 5th c CE',
-    traditions: ['genesis', 'pythagorean', 'plato', 'corpus-hermeticum', 'kabbalah', 'neoplatonist'],
+    traditions: ['pythagorean', 'plato', 'corpus-hermeticum', 'kabbalah', 'neoplatonist'],
   },
   {
     id: 'medieval',
@@ -208,10 +208,12 @@ const ORDER_LABELS = {
 // All other numbered traditions display reversed: earthly at bottom, monad/divine at top
 const DISPLAY_KEEP_ORDER = new Set(['genesis', 'norse', 'kepler', 'john-dee', 'tolkien', 'ikhwan-al-safa', 'al-farabi']);
 
-// Standard planet orderings
+// Standard planet orderings (fallback when a chart has no numbered entries)
 const STANDARD_ORDERS = {
   chaldean: ['Saturn', 'Jupiter', 'Mars', 'Sun', 'Venus', 'Mercury', 'Moon'],
   ascending: ['Moon', 'Mercury', 'Venus', 'Sun', 'Mars', 'Jupiter', 'Saturn'],
+  descending: ['Saturn', 'Jupiter', 'Mars', 'Sun', 'Venus', 'Mercury', 'Moon'],
+  weekdays: ['Sun', 'Moon', 'Mars', 'Mercury', 'Jupiter', 'Venus', 'Saturn'],
 };
 
 const PLANET_COLORS = {
