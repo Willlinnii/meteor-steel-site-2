@@ -115,10 +115,10 @@ const CYCLE_ORDER = [
   'genesis',                // c. 6th–5th c BCE (oral tradition much older)
   'pythagorean',            // 6th c BCE
   'plato',                  // 4th c BCE
+  'vedic',                  // c. 2nd c BCE – 5th c CE (Alexandrian contact)
   'corpus-hermeticum',      // 1st–3rd c CE
   'neoplatonist',           // 3rd–5th c CE
   'kabbalah',               // 2nd–13th c CE (midpoint ~750)
-  'vedic',                  // 7th–10th c CE (codified)
   'al-farabi',              // c. 870–950 CE
   'ikhwan-al-safa',         // 10th c CE
   'norse',                  // 9th–13th c CE (midpoint ~1100)
@@ -152,13 +152,13 @@ export const ERA_GROUPS = [
     id: 'ancient',
     label: 'Classical World',
     period: '6th c BCE – 5th c CE',
-    traditions: ['pythagorean', 'plato', 'corpus-hermeticum', 'kabbalah', 'neoplatonist'],
+    traditions: ['pythagorean', 'plato', 'vedic', 'corpus-hermeticum', 'kabbalah', 'neoplatonist'],
   },
   {
     id: 'medieval',
     label: 'Medieval',
     period: '7th – 14th c CE',
-    traditions: ['vedic', 'norse', 'al-farabi', 'ikhwan-al-safa', 'dante'],
+    traditions: ['norse', 'al-farabi', 'ikhwan-al-safa', 'dante'],
   },
   {
     id: 'renaissance',
