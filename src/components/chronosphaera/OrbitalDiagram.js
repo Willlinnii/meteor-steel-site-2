@@ -2120,6 +2120,7 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
             return <line x1={CX} y1={CY} x2={CX + len * Math.cos(rad)} y2={CY + len * Math.sin(rad)} stroke={color} strokeWidth={width} strokeLinecap="round" />;
           };
           return (
+            <g transform={compassActive ? `rotate(${compassHeading}, ${CX}, ${CY})` : undefined}>
             <g className="clock-overlay">
               {hourAngles.map(({ num, x, y }) => (
                 <text key={`clk-${num}`} x={x} y={y} textAnchor="middle" dominantBaseline="central"
@@ -2151,6 +2152,7 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
 
               <circle cx={CX} cy={CY} r={5} fill="rgba(201, 169, 97, 0.95)" />
             </g>
+            </g>
           );
         })()}
 
@@ -2175,7 +2177,6 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
           };
 
           return (
-            <g transform={compassActive ? `rotate(${compassHeading}, ${CX}, ${CY})` : undefined}>
             <g className="clock-overlay clock-24h">
               {/* 24 hour numbers */}
               {!showCycles && hourAngles24.map(({ num, x, y }) => (
@@ -2289,7 +2290,6 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
 
               {/* Center dot */}
               <circle cx={CX} cy={CY} r={5} fill="rgba(201, 169, 97, 0.95)" />
-            </g>
             </g>
           );
         })()}
