@@ -4,6 +4,7 @@
   "created": "2026-02-23",
 
   "charts": [
+    { "id": "genesis",              "file": "planetary-charts/genesis.json",              "tradition": "Genesis" },
     { "id": "corpus-hermeticum",     "file": "planetary-charts/corpus-hermeticum.json",     "tradition": "Corpus Hermeticum" },
     { "id": "steiner",               "file": "planetary-charts/steiner.json",               "tradition": "Rudolf Steiner" },
     { "id": "dante",                 "file": "planetary-charts/dante.json",                 "tradition": "Dante Alighieri" },
@@ -27,7 +28,12 @@
     { "id": "ficino",               "file": "planetary-charts/ficino.json",               "tradition": "Marsilio Ficino" },
     { "id": "norse",                "file": "planetary-charts/norse.json",                "tradition": "Norse / Yggdrasil" },
     { "id": "ikhwan-al-safa",      "file": "planetary-charts/ikhwan-al-safa.json",      "tradition": "Ikhwan al-Safa (Brothers of Purity)" },
-    { "id": "al-farabi",            "file": "planetary-charts/al-farabi.json",            "tradition": "Al-Farabi" }
+    { "id": "al-farabi",            "file": "planetary-charts/al-farabi.json",            "tradition": "Al-Farabi" },
+    { "id": "tarot",                "file": "planetary-charts/tarot.json",                "tradition": "Tarot" },
+    { "id": "babylon",              "file": "planetary-charts/babylon.json",              "tradition": "Babylonian Astronomy" },
+    { "id": "sumerian",             "file": "planetary-charts/sumerian.json",             "tradition": "Sumerian" },
+    { "id": "assyrian",             "file": "planetary-charts/assyrian.json",             "tradition": "Assyrian" },
+    { "id": "phoenician",           "file": "planetary-charts/phoenician.json",           "tradition": "Phoenician" }
   ],
 
   "topics": [
