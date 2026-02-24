@@ -12,7 +12,7 @@
 const admin = require('firebase-admin');
 const { ensureFirebaseAdmin } = require('./_lib/auth');
 const { getStripe } = require('./_lib/stripe');
-const { getProduct, getBundleExpansion, STRIPE_PRODUCTS } = require('./_lib/stripeProducts');
+const { getProduct, getBundleExpansion } = require('./_lib/stripeProducts');
 
 // Vercel doesn't parse the body when we export a config with no bodyParser
 module.exports = async function handler(req, res) {
@@ -31,9 +31,8 @@ module.exports = async function handler(req, res) {
 
   let event;
   try {
-    // req.body is a Buffer when bodyParser is disabled
-    const rawBody = typeof req.body === 'string' ? req.body : req.body;
-    event = stripe.webhooks.constructEvent(rawBody, sig, webhookSecret);
+    // req.body is a Buffer when bodyParser is disabled on Vercel
+    event = stripe.webhooks.constructEvent(req.body, sig, webhookSecret);
   } catch (err) {
     console.error('Webhook signature verification failed:', err.message);
     return res.status(400).json({ error: 'Invalid signature' });
@@ -96,13 +95,25 @@ async function handleCheckoutCompleted(session, stripe) {
   const profileRef = admin.firestore().doc(`users/${uid}/meta/profile`);
   const updates = { updatedAt: admin.firestore.FieldValue.serverTimestamp() };
 
+  // Campaign attribution from UTM params
+  const campaign = session.metadata?.utm_campaign || null;
+  const content = session.metadata?.utm_content || null;
+
   if (product.mode === 'subscription') {
     // Activate the subscription flag
     updates[`subscriptions.${itemId}`] = true;
 
-    // Store Stripe subscription ID for future webhook mapping
+    // Store Stripe subscription ID for future webhook mapping (keep as string for resolveSubscription compat)
     if (session.subscription) {
       updates[`stripeSubscriptions.${itemId}`] = session.subscription;
+    }
+
+    // Store campaign attribution if present
+    if (campaign || content) {
+      const attr = { subscribedAt: admin.firestore.FieldValue.serverTimestamp() };
+      if (campaign) attr.campaign = campaign;
+      if (content) attr.content = content;
+      updates[`subscriptionAttribution.${itemId}`] = attr;
     }
 
     // Expand bundles
@@ -119,12 +130,15 @@ async function handleCheckoutCompleted(session, stripe) {
     // One-time purchase — activate the purchase flag
     updates[`purchases.${itemId}`] = true;
 
-    // Store payment intent ID for audit trail
+    // Store payment intent ID for audit trail + campaign attribution
     if (session.payment_intent) {
-      updates[`stripePurchases.${itemId}`] = {
+      const purchaseRecord = {
         paymentIntentId: session.payment_intent,
         purchasedAt: admin.firestore.FieldValue.serverTimestamp(),
       };
+      if (campaign) purchaseRecord.campaign = campaign;
+      if (content) purchaseRecord.content = content;
+      updates[`stripePurchases.${itemId}`] = purchaseRecord;
     }
 
     // Expand bundles
@@ -208,6 +222,8 @@ async function handleSubscriptionStatusChange(uid, itemId, status) {
 
 /**
  * Deactivate a subscription and its bundle expansions.
+ * Preserves purchase flags if the user has a direct purchase record
+ * (e.g. they bought Fallen Starlight separately before subscribing to Master Key).
  */
 async function deactivateSubscription(uid, itemId) {
   const profileRef = admin.firestore().doc(`users/${uid}/meta/profile`);
@@ -222,7 +238,15 @@ async function deactivateSubscription(uid, itemId) {
       expansion.subscriptions.forEach(id => { updates[`subscriptions.${id}`] = false; });
     }
     if (expansion.purchases) {
-      expansion.purchases.forEach(id => { updates[`purchases.${id}`] = false; });
+      // Read profile to check for direct purchase records before revoking
+      const snap = await profileRef.get();
+      const stripePurchases = snap.exists ? (snap.data().stripePurchases || {}) : {};
+      expansion.purchases.forEach(id => {
+        // Only revoke if no separate direct purchase exists
+        if (!stripePurchases[id]) {
+          updates[`purchases.${id}`] = false;
+        }
+      });
     }
   }
 

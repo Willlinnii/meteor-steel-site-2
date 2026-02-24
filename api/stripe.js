@@ -20,7 +20,7 @@ async function handleCheckout(req, res) {
     return res.status(401).json({ error: 'Unauthorized' });
   }
 
-  const { itemId, donationAmount } = req.body || {};
+  const { itemId, donationAmount, launchKey, utm_campaign, utm_content } = req.body || {};
   if (!itemId) {
     return res.status(400).json({ error: 'Missing itemId' });
   }
@@ -31,7 +31,6 @@ async function handleCheckout(req, res) {
   }
 
   // Launch key: activate any item for free (no Stripe charge)
-  const { launchKey } = req.body || {};
   if (launchKey === (process.env.STRIPE_LAUNCH_KEY || 'Dodecahedron')) {
     return handleFreeActivation(uid, itemId, product, res);
   }
@@ -64,23 +63,27 @@ async function handleCheckout(req, res) {
       priceData.recurring = { interval: product.interval || 'month' };
     }
 
+    const metadata = { uid, itemId };
+    if (utm_campaign) metadata.utm_campaign = utm_campaign;
+    if (utm_content) metadata.utm_content = utm_content;
+
     const sessionParams = {
       customer: customerId,
       line_items: [{ price_data: priceData, quantity: 1 }],
       mode: product.mode,
       success_url: `${getBaseUrl(req)}/profile?checkout=success&item=${itemId}`,
       cancel_url: `${getBaseUrl(req)}/profile#${product.mode === 'subscription' ? 'subscriptions' : 'purchases'}`,
-      metadata: { uid, itemId },
+      metadata,
     };
 
     if (product.mode === 'payment') {
       sessionParams.payment_intent_data = {
         setup_future_usage: 'off_session',
-        metadata: { uid, itemId },
+        metadata,
       };
     } else {
       sessionParams.subscription_data = {
-        metadata: { uid, itemId },
+        metadata,
       };
     }
 
@@ -188,9 +191,7 @@ async function handlePortal(req, res) {
     }
 
     const stripe = getStripe();
-    const proto = req.headers['x-forwarded-proto'] || 'https';
-    const host = req.headers['x-forwarded-host'] || req.headers.host;
-    const returnUrl = `${proto}://${host}/profile`;
+    const returnUrl = `${getBaseUrl(req)}/profile`;
 
     const session = await stripe.billingPortal.sessions.create({
       customer: stripeCustomerId,

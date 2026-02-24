@@ -714,6 +714,8 @@ export function ProfileProvider({ children }) {
       const body = { itemId };
       if (options.donationAmount) body.donationAmount = options.donationAmount;
       if (options.launchKey) body.launchKey = options.launchKey;
+      if (options.campaign) body.utm_campaign = options.campaign;
+      if (options.content) body.utm_content = options.content;
       const resp = await fetch('/api/stripe?route=checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },

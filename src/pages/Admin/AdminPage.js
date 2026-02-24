@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect, useCallback, useRef, lazy, Suspense } from 'react';
+import React, { useState, useMemo, useEffect, useCallback, useRef, lazy, Suspense, createContext, useContext } from 'react';
 import { collection, getDocs, query, orderBy, doc, setDoc, getDoc, addDoc, deleteDoc, updateDoc } from 'firebase/firestore';
 import { db, firebaseConfigured } from '../../auth/firebase';
 import { useAuth } from '../../auth/AuthContext';
@@ -15,6 +15,385 @@ import './AdminPage.css';
 
 const ContactsPage = lazy(() => import('./ContactsPage'));
 const PanoViewer = lazy(() => import('../../components/PanoViewer'));
+
+// ═══════════════════════════════════════════════════════════════
+// SHARED ADMIN DATA — loaded once, consumed by all sections
+// ═══════════════════════════════════════════════════════════════
+
+const AdminDataContext = createContext(null);
+function useAdminData() { return useContext(AdminDataContext); }
+
+// Product catalog used across admin (Store, Campaign, Plan)
+const ADMIN_CATALOG = [
+  { id: 'developer-api', name: 'Secret Weapon API', mode: 'sub', cents: 0, label: 'Free', free: true },
+  { id: 'master-key', name: 'Master Key', mode: 'sub', cents: 10000, label: '$100/mo', bundle: true },
+  { id: 'ybr', name: 'Yellow Brick Road', mode: 'sub', cents: 500, label: '$5/mo' },
+  { id: 'forge', name: 'Story Forge', mode: 'sub', cents: 4500, label: '$45/mo' },
+  { id: 'coursework', name: 'Coursework', mode: 'sub', cents: 4500, label: '$45/mo' },
+  { id: 'monomyth', name: 'Monomyth & Meteor Steel', mode: 'sub', cents: 2500, label: '$25/mo' },
+  { id: 'fallen-starlight', name: 'Fallen Starlight', mode: 'purchase', cents: 2500, label: '$25' },
+  { id: 'story-of-stories', name: 'Story of Stories', mode: 'purchase', cents: 2500, label: '$25' },
+  { id: 'starlight-bundle', name: 'Starlight Bundle', mode: 'purchase', cents: 4000, label: '$40', bundle: true },
+  { id: 'medicine-wheel', name: 'Medicine Wheel', mode: 'purchase', cents: 0, label: 'Donation', donation: true },
+];
+
+const ADMIN_BUNDLE_CHILDREN = {
+  'master-key': { subs: ['ybr', 'forge', 'coursework', 'monomyth'], purchases: ['starlight-bundle', 'fallen-starlight', 'story-of-stories'] },
+  'starlight-bundle': { purchases: ['fallen-starlight', 'story-of-stories'] },
+};
+
+function useAdminDataLoader() {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [drawerUser, setDrawerUser] = useState(null);
+
+  const loadAll = useCallback(async () => {
+    if (!firebaseConfigured || !db) return;
+    setLoading(true);
+    try {
+      const usersSnap = await getDocs(collection(db, 'users'));
+      const users = [];
+      let totalUsers = 0, payingUsers = 0, mrr = 0, oneTime = 0;
+      const itemCounts = {};
+      ADMIN_CATALOG.forEach(p => { itemCounts[p.id] = { total: 0, direct: 0 }; });
+
+      // Campaign attribution aggregation
+      const campaignAttr = {}; // { campaignName: { count, revenue, items: { itemId: count } } }
+
+      // Coursework aggregation
+      let courseCompletions = 0;
+
+      // Mentor aggregation
+      let activeMentors = 0;
+
+      for (const userDoc of usersSnap.docs) {
+        totalUsers++;
+        const uid = userDoc.id;
+        const userData = userDoc.data();
+        let profileData = {};
+        let progressData = {};
+
+        try {
+          const metaSnap = await getDocs(collection(db, 'users', uid, 'meta'));
+          metaSnap.forEach(d => {
+            if (d.id === 'profile') profileData = d.data();
+            if (d.id === 'certificates') {
+              const completed = d.data().completed || {};
+              courseCompletions += Object.keys(completed).length;
+            }
+          });
+        } catch { /* no meta */ }
+
+        // Load progress for coursework
+        try {
+          const progressSnap = await getDocs(collection(db, 'users', uid, 'progress'));
+          progressSnap.forEach(d => { progressData[d.id] = d.data(); });
+        } catch { /* no progress */ }
+
+        // Mentor status
+        const mentor = profileData.mentor;
+        if (mentor && (mentor.status === 'approved' || mentor.status === 'active') && mentor.directoryListed) {
+          activeMentors++;
+        }
+
+        const subs = profileData.subscriptions || {};
+        const purchases = profileData.purchases || {};
+        const stripePurchases = profileData.stripePurchases || {};
+        const subAttribution = profileData.subscriptionAttribution || {};
+
+        // Item tracking
+        const activeIds = new Set();
+        ADMIN_CATALOG.forEach(p => {
+          const active = p.mode === 'sub' ? !!subs[p.id] : !!purchases[p.id];
+          if (active) {
+            activeIds.add(p.id);
+            itemCounts[p.id].total++;
+          }
+        });
+
+        // Bundle-aware direct counts
+        const bundledIds = new Set();
+        if (activeIds.has('master-key')) {
+          ADMIN_BUNDLE_CHILDREN['master-key'].subs.forEach(id => bundledIds.add(id));
+          ADMIN_BUNDLE_CHILDREN['master-key'].purchases.forEach(id => bundledIds.add(id));
+        }
+        if (activeIds.has('starlight-bundle') && !bundledIds.has('starlight-bundle')) {
+          ADMIN_BUNDLE_CHILDREN['starlight-bundle'].purchases.forEach(id => bundledIds.add(id));
+        }
+        activeIds.forEach(id => {
+          if (!bundledIds.has(id)) itemCounts[id].direct++;
+        });
+
+        // Revenue
+        let userMrr = 0, userOneTime = 0;
+        activeIds.forEach(id => {
+          if (bundledIds.has(id)) return;
+          const item = ADMIN_CATALOG.find(c => c.id === id);
+          if (!item || item.free || item.donation) return;
+          if (item.mode === 'sub') userMrr += item.cents;
+          else userOneTime += item.cents;
+        });
+        mrr += userMrr;
+        oneTime += userOneTime;
+        const hasPaid = [...activeIds].some(id => { const c = ADMIN_CATALOG.find(x => x.id === id); return c && !c.free; });
+        if (hasPaid) payingUsers++;
+
+        // Campaign attribution from stripePurchases and subscriptionAttribution
+        for (const [itemId, record] of Object.entries(stripePurchases)) {
+          if (record && record.campaign) {
+            if (!campaignAttr[record.campaign]) campaignAttr[record.campaign] = { count: 0, revenue: 0, items: {} };
+            campaignAttr[record.campaign].count++;
+            const item = ADMIN_CATALOG.find(c => c.id === itemId);
+            campaignAttr[record.campaign].revenue += item ? item.cents : 0;
+            campaignAttr[record.campaign].items[itemId] = (campaignAttr[record.campaign].items[itemId] || 0) + 1;
+          }
+        }
+        for (const [itemId, record] of Object.entries(subAttribution)) {
+          if (record && record.campaign) {
+            if (!campaignAttr[record.campaign]) campaignAttr[record.campaign] = { count: 0, revenue: 0, items: {} };
+            campaignAttr[record.campaign].count++;
+            const item = ADMIN_CATALOG.find(c => c.id === itemId);
+            campaignAttr[record.campaign].revenue += item ? item.cents : 0;
+            campaignAttr[record.campaign].items[itemId] = (campaignAttr[record.campaign].items[itemId] || 0) + 1;
+          }
+        }
+
+        // Course progress per user
+        const courseStates = COURSES.map(c => ({
+          courseId: c.id,
+          progress: c.requirements.reduce((sum, req) => sum + requirementProgress(req, progressData), 0) / Math.max(c.requirements.length, 1),
+        }));
+
+        users.push({
+          uid, email: userData.email || uid,
+          displayName: userData.displayName || '',
+          profileData, subs, purchases, stripePurchases, subAttribution,
+          activeIds: [...activeIds], bundledIds: [...bundledIds],
+          userMrr, userOneTime, hasPaid,
+          stripeCustomerId: profileData.stripeCustomerId || null,
+          mentor: profileData.mentor || null,
+          handle: profileData.handle || null,
+          courseStates, progressData,
+        });
+      }
+
+      // Campaign progress from localStorage
+      let campaignPosted = 0, campaignTotal = 0;
+      try {
+        const raw = localStorage.getItem('campaign-statuses-mythicYear');
+        const statuses = raw ? JSON.parse(raw) : {};
+        campaignTotal = campaignData.length;
+        campaignPosted = Object.values(statuses).filter(s => s === 'posted').length;
+      } catch { /* ignore */ }
+
+      setData({
+        users: users.sort((a, b) => b.userMrr + b.userOneTime - (a.userMrr + a.userOneTime)),
+        totalUsers, payingUsers, mrr, oneTime, itemCounts,
+        campaignAttr,
+        courseCompletions, activeMentors,
+        campaignPosted, campaignTotal,
+      });
+    } catch (err) {
+      console.error('Failed to load admin data:', err);
+    }
+    setLoading(false);
+  }, []);
+
+  useEffect(() => { loadAll(); }, [loadAll]);
+
+  return { data, loading, refresh: loadAll, drawerUser, setDrawerUser };
+}
+
+// ═══════════════════════════════════════════════════════════════
+// ADMIN STATS BAR — persistent across all sections
+// ═══════════════════════════════════════════════════════════════
+
+function AdminStatsBar() {
+  const ctx = useAdminData();
+  if (!ctx || !ctx.data) return null;
+  const { data } = ctx;
+  const fmt = (cents) => '$' + (cents / 100).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+
+  const stats = [
+    { label: 'MRR', value: fmt(data.mrr), color: data.mrr > 0 ? '#6ec87a' : null },
+    { label: 'Paying', value: data.payingUsers },
+    { label: 'Users', value: data.totalUsers },
+    { label: 'Courses Done', value: data.courseCompletions },
+    { label: 'Mentors', value: data.activeMentors },
+    { label: 'Campaign', value: `${data.campaignPosted}/${data.campaignTotal}` },
+    { label: 'Revenue', value: fmt(data.oneTime), color: data.oneTime > 0 ? '#6ec87a' : null },
+  ];
+
+  return (
+    <div style={{
+      display: 'flex', gap: 4, padding: '8px 12px', marginBottom: 16,
+      background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)',
+      borderRadius: 8, flexWrap: 'wrap', justifyContent: 'center',
+    }}>
+      {stats.map(s => (
+        <div key={s.label} style={{ textAlign: 'center', padding: '2px 12px', minWidth: 70 }}>
+          <div style={{ fontSize: '1rem', fontWeight: 700, color: s.color || 'var(--accent-gold, #c9a961)' }}>{s.value}</div>
+          <div style={{ fontSize: '0.62rem', color: 'var(--text-secondary, #8a8a9a)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>{s.label}</div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════
+// USER 360 DRAWER — unified view of any user across all sections
+// ═══════════════════════════════════════════════════════════════
+
+function UserDrawer() {
+  const ctx = useAdminData();
+  if (!ctx || !ctx.drawerUser) return null;
+  const u = ctx.drawerUser;
+  const fmt = (cents) => '$' + (cents / 100).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+
+  const S = {
+    overlay: { position: 'fixed', inset: 0, zIndex: 9998, background: 'rgba(0,0,0,0.5)' },
+    drawer: {
+      position: 'fixed', top: 0, right: 0, bottom: 0, width: 420, maxWidth: '90vw', zIndex: 9999,
+      background: 'var(--bg-dark, #0d0d14)', borderLeft: '1px solid rgba(255,255,255,0.08)',
+      overflowY: 'auto', padding: '24px 20px',
+    },
+    close: { background: 'none', border: 'none', color: 'var(--text-secondary)', fontSize: '1.2rem', cursor: 'pointer', float: 'right' },
+    heading: { fontSize: '0.82rem', color: 'var(--accent-gold, #c9a961)', textTransform: 'uppercase', letterSpacing: '0.04em', margin: '20px 0 8px' },
+    badge: (bg, fg) => ({ display: 'inline-block', padding: '2px 8px', fontSize: '0.72rem', borderRadius: 10, background: bg, color: fg, border: `1px solid ${fg}33`, marginRight: 4, marginBottom: 4 }),
+    val: { fontSize: '0.82rem', color: 'var(--text-primary, #e8e8f0)', marginBottom: 4 },
+    dim: { fontSize: '0.78rem', color: 'var(--text-secondary, #8a8a9a)' },
+  };
+
+  // Subscriptions & purchases
+  const activeSubs = ADMIN_CATALOG.filter(c => c.mode === 'sub' && u.activeIds.includes(c.id));
+  const activePurchases = ADMIN_CATALOG.filter(c => c.mode === 'purchase' && u.activeIds.includes(c.id));
+
+  // Campaign attribution
+  const attrSources = [];
+  for (const [itemId, record] of Object.entries(u.stripePurchases || {})) {
+    if (record?.campaign) attrSources.push({ item: itemId, campaign: record.campaign, content: record.content });
+  }
+  for (const [itemId, record] of Object.entries(u.subAttribution || {})) {
+    if (record?.campaign) attrSources.push({ item: itemId, campaign: record.campaign, content: record.content });
+  }
+
+  // Course progress
+  const courseProgress = (u.courseStates || []).filter(c => c.progress > 0);
+
+  return (
+    <>
+      <div style={S.overlay} onClick={() => ctx.setDrawerUser(null)} />
+      <div style={S.drawer}>
+        <button style={S.close} onClick={() => ctx.setDrawerUser(null)}>&times;</button>
+        <div style={{ fontSize: '1.1rem', fontWeight: 600, color: 'var(--text-primary)', marginBottom: 4 }}>
+          {u.displayName || u.email}
+        </div>
+        {u.displayName && <div style={S.dim}>{u.email}</div>}
+        {u.handle && <div style={{ ...S.dim, color: 'var(--accent-gold)' }}>@{u.handle}</div>}
+
+        {/* Revenue */}
+        <div style={S.heading}>Revenue</div>
+        <div style={S.val}>
+          MRR: <strong style={{ color: u.userMrr > 0 ? '#6ec87a' : 'inherit' }}>{fmt(u.userMrr)}</strong>
+          {u.userOneTime > 0 && <> &nbsp;|&nbsp; One-time: <strong style={{ color: '#6ec87a' }}>{fmt(u.userOneTime)}</strong></>}
+        </div>
+
+        {/* Subscriptions */}
+        <div style={S.heading}>Subscriptions ({activeSubs.length})</div>
+        <div>
+          {activeSubs.length > 0 ? activeSubs.map(s => (
+            <span key={s.id} style={S.badge('rgba(201,169,97,0.12)', '#c9a961')}>
+              {s.name} {u.bundledIds.includes(s.id) ? '(via bundle)' : ''}
+            </span>
+          )) : <span style={S.dim}>None</span>}
+        </div>
+
+        {/* Purchases */}
+        <div style={S.heading}>Purchases ({activePurchases.length})</div>
+        <div>
+          {activePurchases.length > 0 ? activePurchases.map(p => (
+            <span key={p.id} style={S.badge('rgba(110,200,122,0.1)', '#6ec87a')}>
+              {p.name} {u.bundledIds.includes(p.id) ? '(via bundle)' : ''}
+            </span>
+          )) : <span style={S.dim}>None</span>}
+        </div>
+
+        {/* Course Progress */}
+        <div style={S.heading}>Course Progress ({courseProgress.length})</div>
+        {courseProgress.length > 0 ? courseProgress.map(c => {
+          const course = COURSES.find(x => x.id === c.courseId);
+          return (
+            <div key={c.courseId} style={{ marginBottom: 6 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.78rem' }}>
+                <span style={{ color: '#ddd' }}>{course?.name || c.courseId}</span>
+                <span style={{ color: c.progress >= 1 ? '#6ec87a' : '#c9a961' }}>{Math.round(c.progress * 100)}%</span>
+              </div>
+              <div style={{ background: 'rgba(255,255,255,0.06)', borderRadius: 3, height: 4, marginTop: 2 }}>
+                <div style={{ width: `${Math.round(c.progress * 100)}%`, height: '100%', borderRadius: 3, background: c.progress >= 1 ? '#6ec87a' : '#c9a961' }} />
+              </div>
+            </div>
+          );
+        }) : <div style={S.dim}>No course activity</div>}
+
+        {/* Mentor Status */}
+        {u.mentor && (
+          <>
+            <div style={S.heading}>Mentor</div>
+            <div style={S.val}>
+              Type: {u.mentor.type || '—'} &nbsp;|&nbsp; Status: <span style={{ color: u.mentor.status === 'approved' || u.mentor.status === 'active' ? '#6ec87a' : '#c9a961' }}>{u.mentor.status}</span>
+            </div>
+            {u.mentor.directoryListed && <div style={S.dim}>Listed in directory</div>}
+          </>
+        )}
+
+        {/* Campaign Attribution */}
+        {attrSources.length > 0 && (
+          <>
+            <div style={S.heading}>Campaign Source</div>
+            {attrSources.map((a, i) => (
+              <div key={i} style={{ ...S.dim, marginBottom: 2 }}>
+                {a.item}: <span style={{ color: '#c9a961' }}>{a.campaign}</span>{a.content ? ` / ${a.content}` : ''}
+              </div>
+            ))}
+          </>
+        )}
+
+        {/* Stripe */}
+        {u.stripeCustomerId && (
+          <>
+            <div style={S.heading}>Stripe</div>
+            <a
+              href={`https://dashboard.stripe.com/customers/${u.stripeCustomerId}`}
+              target="_blank" rel="noopener noreferrer"
+              style={{ fontSize: '0.78rem', color: 'var(--accent-gold)' }}
+            >View in Stripe Dashboard &nearr;</a>
+          </>
+        )}
+      </div>
+    </>
+  );
+}
+
+// Helper: read campaign product tags from localStorage for cross-referencing
+function getCampaignProductTags() {
+  const tags = {}; // { productId: [{ campaignId, postId, postTitle }] }
+  try {
+    const key = 'campaign-products-mythicYear';
+    const raw = localStorage.getItem(key);
+    if (raw) {
+      const products = JSON.parse(raw);
+      for (const [postId, productIds] of Object.entries(products)) {
+        if (!Array.isArray(productIds)) continue;
+        const post = campaignData.find(p => p.id === postId);
+        for (const pid of productIds) {
+          if (!tags[pid]) tags[pid] = [];
+          tags[pid].push({ campaignId: 'mythicYear', postId, postTitle: post?.title || postId });
+        }
+      }
+    }
+  } catch { /* ignore */ }
+  return tags;
+}
 
 const ZODIAC_SYMBOLS = {
   Aries: '\u2648', Taurus: '\u2649', Gemini: '\u264A', Cancer: '\u264B',
@@ -90,6 +469,31 @@ function usePostStatuses(campaignId) {
   }, []);
 
   return { getStatus, setStatus, setBulkStatus };
+}
+
+// --- Post product tags hook (localStorage persistence) ---
+function usePostProducts(campaignId) {
+  const key = `campaign-products-${campaignId}`;
+  const [products, setProducts] = useState(() => {
+    try {
+      const saved = localStorage.getItem(key);
+      return saved ? JSON.parse(saved) : {};
+    } catch {
+      return {};
+    }
+  });
+
+  useEffect(() => {
+    localStorage.setItem(key, JSON.stringify(products));
+  }, [key, products]);
+
+  const getProducts = useCallback((postId) => products[postId] || [], [products]);
+
+  const setPostProducts = useCallback((postId, productIds) => {
+    setProducts(prev => ({ ...prev, [postId]: productIds }));
+  }, []);
+
+  return { getProducts, setPostProducts };
 }
 
 // --- Filing tracker hook (localStorage persistence) ---
@@ -212,13 +616,26 @@ const SECTION_GROUPS = [
     { id: 'subscribers', label: 'Subscribers' },
     { id: 'contacts', label: 'Contacts' },
     { id: 'mentors', label: 'Mentors' },
+    { id: 'consulting', label: 'Consulting' },
   ]},
   { group: 'Site', children: [
     { id: 'store', label: 'Store' },
     { id: 'coursework', label: 'Coursework' },
     { id: 'curated-products', label: 'Curated Products' },
     { id: '360-media', label: '360 Media' },
-    { id: 'discover', label: 'Discover Page \u2197', href: '/discover' },
+  ]},
+  { group: 'Discover', children: [
+    { id: 'discover-main', label: 'Main Discover \u2197', href: '/discover' },
+    { id: 'discover-journeys', label: 'Journeys \u2197', href: '/discover/journeys' },
+    { id: 'discover-games', label: 'Game Room \u2197', href: '/discover/games' },
+    { id: 'discover-story-forge', label: 'Story Forge \u2197', href: '/discover/story-forge' },
+    { id: 'discover-coursework', label: 'Coursework \u2197', href: '/discover/coursework' },
+    { id: 'discover-chronosphaera', label: 'Chronosphaera \u2197', href: '/discover/chronosphaera' },
+    { id: 'discover-mythosphaera', label: 'Mythosphaera \u2197', href: '/discover/mythosphaera' },
+    { id: 'discover-mythology-channel', label: 'Mythology Channel \u2197', href: '/discover/mythology-channel' },
+    { id: 'discover-atlas', label: 'Atlas \u2197', href: '/discover/atlas' },
+    { id: 'discover-fellowship', label: 'Fellowship \u2197', href: '/discover/fellowship' },
+    { id: 'discover-vr-xr', label: 'VR/XR \u2197', href: '/discover/vr-xr' },
   ]},
   { group: null, children: [
     { id: 'treasured', label: '\uD83D\uDC8E Treasured Conversations' },
@@ -229,6 +646,49 @@ const SECTION_GROUPS = [
 ];
 
 // --- Campaign Manager content (extracted for tab switching) ---
+// Campaign Revenue Impact — shows conversions attributed to a specific campaign
+function CampaignRevenueImpact({ campaignId }) {
+  const ctx = useAdminData();
+  if (!ctx || !ctx.data) return null;
+
+  const { campaignAttr } = ctx.data;
+  const campaignData = campaignAttr[campaignId];
+  if (!campaignData || campaignData.count === 0) return null;
+
+  const fmt = (cents) => '$' + (cents / 100).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+
+  return (
+    <div style={{
+      display: 'flex', gap: 16, padding: '12px 16px', marginBottom: 12,
+      background: 'rgba(110,200,122,0.06)', border: '1px solid rgba(110,200,122,0.2)',
+      borderRadius: 10, alignItems: 'center', flexWrap: 'wrap',
+    }}>
+      <div style={{ textAlign: 'center', padding: '0 12px' }}>
+        <div style={{ fontSize: '1.3rem', fontWeight: 700, color: '#6ec87a' }}>{campaignData.count}</div>
+        <div style={{ fontSize: '0.68rem', color: 'var(--text-secondary)', textTransform: 'uppercase' }}>Conversions</div>
+      </div>
+      <div style={{ textAlign: 'center', padding: '0 12px' }}>
+        <div style={{ fontSize: '1.3rem', fontWeight: 700, color: '#6ec87a' }}>{fmt(campaignData.revenue)}</div>
+        <div style={{ fontSize: '0.68rem', color: 'var(--text-secondary)', textTransform: 'uppercase' }}>Revenue</div>
+      </div>
+      <div style={{ flex: 1, display: 'flex', gap: 4, flexWrap: 'wrap', alignItems: 'center' }}>
+        {Object.entries(campaignData.items).map(([itemId, ct]) => {
+          const item = ADMIN_CATALOG.find(c => c.id === itemId);
+          return (
+            <span key={itemId} style={{
+              fontSize: '0.72rem', padding: '2px 8px', borderRadius: 10,
+              background: 'rgba(110,200,122,0.1)', color: '#6ec87a',
+              border: '1px solid rgba(110,200,122,0.2)',
+            }}>
+              {item?.name || itemId} ({ct})
+            </span>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 function CampaignManagerSection() {
   const [activeCampaignId, setActiveCampaignId] = useState(null);
   const [selectedMonth, setSelectedMonth] = useState(1);
@@ -239,6 +699,19 @@ function CampaignManagerSection() {
   const data = useMemo(() => campaign ? campaign.data : [], [campaign]);
 
   const { getStatus, setStatus, setBulkStatus } = usePostStatuses(activeCampaignId || '__none');
+  const { getProducts: getPostProducts, setPostProducts } = usePostProducts(activeCampaignId || '__none');
+
+  // Product catalog for tagging (non-free items)
+  const PROMO_CATALOG = useMemo(() => [
+    { id: 'master-key', name: 'Master Key', label: '$100/mo' },
+    { id: 'ybr', name: 'Yellow Brick Road', label: '$5/mo' },
+    { id: 'forge', name: 'Story Forge', label: '$45/mo' },
+    { id: 'coursework', name: 'Coursework', label: '$45/mo' },
+    { id: 'monomyth', name: 'Monomyth', label: '$25/mo' },
+    { id: 'fallen-starlight', name: 'Fallen Starlight', label: '$25' },
+    { id: 'story-of-stories', name: 'Story of Stories', label: '$25' },
+    { id: 'starlight-bundle', name: 'Starlight Bundle', label: '$40' },
+  ], []);
 
   // Build a progress summary for a campaign (used by list view)
   const getStatusForCampaign = useCallback((camp) => {
@@ -375,6 +848,8 @@ function CampaignManagerSection() {
           </div>
         </div>
       </div>
+
+      <CampaignRevenueImpact campaignId={activeCampaignId} />
 
       <div className="admin-timeline">
         {Array.from({ length: 12 }, (_, i) => i + 1).map(num => {
@@ -537,6 +1012,60 @@ function CampaignManagerSection() {
               {selectedPost.flower && (
                 <div className="admin-preview-extra">Flower: {selectedPost.flower}</div>
               )}
+
+              {/* Promoted Products */}
+              <div style={{ marginTop: 16, paddingTop: 16, borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+                <label style={{ fontSize: '0.78rem', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.04em', display: 'block', marginBottom: 8 }}>
+                  Promoted Products
+                </label>
+                <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 8 }}>
+                  {PROMO_CATALOG.map(p => {
+                    const tagged = getPostProducts(selectedPost.id).includes(p.id);
+                    return (
+                      <button
+                        key={p.id}
+                        onClick={() => {
+                          const current = getPostProducts(selectedPost.id);
+                          if (tagged) {
+                            setPostProducts(selectedPost.id, current.filter(id => id !== p.id));
+                          } else {
+                            setPostProducts(selectedPost.id, [...current, p.id]);
+                          }
+                        }}
+                        style={{
+                          padding: '3px 10px', fontSize: '0.72rem', borderRadius: 12, cursor: 'pointer',
+                          border: `1px solid ${tagged ? 'rgba(201,169,97,0.4)' : 'var(--border-subtle)'}`,
+                          background: tagged ? 'rgba(201,169,97,0.15)' : 'none',
+                          color: tagged ? 'var(--accent-gold)' : 'var(--text-secondary)',
+                        }}
+                      >
+                        {p.name}
+                      </button>
+                    );
+                  })}
+                </div>
+                {getPostProducts(selectedPost.id).length > 0 && (
+                  <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
+                    {getPostProducts(selectedPost.id).map(pid => {
+                      const p = PROMO_CATALOG.find(c => c.id === pid);
+                      if (!p) return null;
+                      const link = `https://mythouse.com/store?highlight=${pid}&utm_campaign=mythicYear&utm_content=${selectedPost.id}`;
+                      return (
+                        <div key={pid} style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 4 }}>
+                          <span style={{ color: 'var(--accent-gold)' }}>{p.name}</span>
+                          <code style={{ fontSize: '0.68rem', background: 'rgba(255,255,255,0.06)', padding: '1px 5px', borderRadius: 3, wordBreak: 'break-all', flex: 1 }}>{link}</code>
+                          <button
+                            onClick={() => navigator.clipboard.writeText(link).catch(() => {})}
+                            style={{ padding: '2px 8px', fontSize: '0.68rem', border: '1px solid var(--border-subtle)', borderRadius: 6, background: 'none', color: 'var(--text-secondary)', cursor: 'pointer' }}
+                          >
+                            Copy
+                          </button>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
             </>
           ) : (
             <div className="admin-preview-empty">Select a post to preview</div>
@@ -913,19 +1442,23 @@ function MentorManagerSection() {
 
 // --- Subscribers Section ---
 const SUBSCRIPTION_ITEMS = [
+  { id: 'developer-api', name: 'Secret Weapon API' },
+  { id: 'master-key', name: 'Master Key' },
   { id: 'ybr', name: 'Yellow Brick Road' },
   { id: 'forge', name: 'Story Forge' },
   { id: 'coursework', name: 'Coursework' },
-  { id: 'xr', name: 'VR / XR' },
+  { id: 'monomyth', name: 'Monomyth & Meteor Steel' },
 ];
 
 const PURCHASE_ITEMS = [
   { id: 'fallen-starlight', name: 'Fallen Starlight' },
   { id: 'story-of-stories', name: 'Story of Stories' },
   { id: 'starlight-bundle', name: 'Starlight Bundle' },
+  { id: 'medicine-wheel', name: 'Medicine Wheel' },
 ];
 
 function SubscribersSection() {
+  const adminCtx = useAdminData();
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [filter, setFilter] = useState('any');
@@ -1070,7 +1603,12 @@ function SubscribersSection() {
 
           <div className="admin-subscribers-list">
             {filtered.map(u => (
-              <div key={u.uid} className="admin-subscribers-row">
+              <div key={u.uid} className="admin-subscribers-row" style={{ cursor: 'pointer' }} onClick={() => {
+                if (adminCtx?.data) {
+                  const full = adminCtx.data.users.find(x => x.uid === u.uid);
+                  if (full) adminCtx.setDrawerUser(full);
+                }
+              }}>
                 <div className="admin-subscribers-user">
                   <span className="admin-subscribers-email">{u.displayName || u.email}</span>
                   {u.displayName && <span className="admin-subscribers-uid">{u.email}</span>}
@@ -3545,7 +4083,7 @@ const FEATURE_MATRIX = [
   { name: 'IP Registry (35+ items, NDAs, manifests)', route: 'system', status: 'live', category: 'ops' },
   { name: 'Campaign Manager (Mythic Year)', route: 'system', status: 'live', category: 'ops' },
   // --- Not Built ---
-  { name: 'Stripe / Payments', route: 'system', status: 'not-built', category: 'revenue' },
+  { name: 'Stripe / Payments', route: '/store', status: 'live', category: 'revenue' },
   { name: 'Email Automation', route: 'system', status: 'not-built', category: 'growth' },
   { name: 'SEO / Blog', route: 'system', status: 'not-built', category: 'growth' },
   { name: 'Push / In-App Notifications', route: 'system', status: 'not-built', category: 'platform' },
@@ -4334,10 +4872,10 @@ const KEY_METRICS = [
   { name: 'Games Played (Multiplayer)', target: 'Track', source: 'matches collection (Firestore)', phase: '1' },
   { name: 'Fellowship Posts / Week', target: 'Track', source: 'fellowship-posts collection', phase: '2' },
   { name: 'Active Friend Connections', target: 'Track', source: 'friend-requests (accepted)', phase: '2' },
-  // --- Revenue (after Stripe) ---
-  { name: 'Free \u2192 Paid Conversion', target: '3-5%', source: 'Stripe + profiles (needs Stripe)', phase: '0' },
-  { name: 'Subscription Churn', target: '<5%/mo', source: 'Stripe (needs integration)', phase: '0' },
-  { name: 'Revenue Per User (ARPU)', target: 'Track', source: 'Stripe (needs integration)', phase: '0' },
+  // --- Revenue ---
+  { name: 'Free \u2192 Paid Conversion', target: '3-5%', source: 'Stripe + Firestore profiles', phase: '0' },
+  { name: 'Subscription Churn', target: '<5%/mo', source: 'Stripe webhook events (needs historical tracking)', phase: '0' },
+  { name: 'Revenue Per User (ARPU)', target: 'Track', source: 'Stripe + Firestore profiles', phase: '0' },
   // --- Community ---
   { name: 'Mentor Active Pairings', target: 'Track', source: 'mentor-pairings collection (built)', phase: '3' },
   { name: 'Guild Forum Posts', target: 'Track', source: 'guild-posts collection (built)', phase: '3' },
@@ -4417,6 +4955,8 @@ function StrategicPlanSection() {
   const [roadmapFilterCat, setRoadmapFilterCat] = useState('all');
   const [roadmapFilterMaturity, setRoadmapFilterMaturity] = useState('all');
   const [expandedProduct, setExpandedProduct] = useState(null);
+  const adminCtx = useAdminData();
+  const liveData = adminCtx?.data;
 
   const S = {
     section: { padding: '32px 24px', maxWidth: 1100, margin: '0 auto' },
@@ -4595,9 +5135,14 @@ function StrategicPlanSection() {
           Revenue Architecture
         </h3>
         <div style={{ color: '#aaa', fontSize: '0.85rem', lineHeight: 1.7 }}>
-          <strong style={{ color: '#ddd' }}>4 subscriptions</strong> (Master Key bundle + 3 individual) +{' '}
-          <strong style={{ color: '#ddd' }}>4 one-time purchases</strong> (3 content + 1 bundle) are fully defined in the profile system.
-          Toggle infrastructure exists. <span style={{ color: '#e74c3c' }}>Missing: Stripe integration, pricing, and payment processing.</span>
+          <strong style={{ color: '#ddd' }}>5 subscriptions</strong> (Master Key bundle + 4 individual) +{' '}
+          <strong style={{ color: '#ddd' }}>4 one-time purchases</strong> (2 books + 1 bundle + 1 donation) are live with Stripe checkout.
+          {liveData && (
+            <span style={{ color: '#5bd97a' }}>
+              {' '}Current MRR: <strong>${(liveData.mrr / 100).toFixed(0)}</strong> from{' '}
+              <strong>{liveData.payingUsers}</strong> paying user{liveData.payingUsers !== 1 ? 's' : ''}.
+            </span>
+          )}
         </div>
       </div>
 
@@ -4626,7 +5171,21 @@ function StrategicPlanSection() {
                     </span>
                   </div>
                   <div style={{ color: '#777', fontSize: '0.78rem', marginBottom: 6 }}>{item.description}</div>
-                  <div style={{ color: '#d9a55b', fontSize: '0.75rem', fontStyle: 'italic' }}>{item.priceNote}</div>
+                  <div style={{ color: '#d9a55b', fontSize: '0.75rem', fontStyle: 'italic' }}>
+                    {(() => {
+                      const catalogItem = ADMIN_CATALOG.find(c => c.id === item.id);
+                      if (catalogItem) {
+                        const liveCount = liveData?.itemCounts?.[item.id];
+                        return (
+                          <>
+                            {catalogItem.label}{catalogItem.mode === 'sub' ? '/mo' : ''}
+                            {liveCount ? ` · ${liveCount.direct} direct subscriber${liveCount.direct !== 1 ? 's' : ''}` : ''}
+                          </>
+                        );
+                      }
+                      return item.priceNote;
+                    })()}
+                  </div>
                 </div>
               );
             })}
@@ -4694,14 +5253,35 @@ function StrategicPlanSection() {
           Key Performance Indicators
         </h3>
         <div style={{ color: '#aaa', fontSize: '0.85rem', lineHeight: 1.7 }}>
-          These are the metrics that matter. Several data sources already exist in the codebase
-          (coursework tracking, subscriber system, mentor pairing). Revenue metrics require Stripe integration.
+          These are the metrics that matter. {liveData ? (
+            <span style={{ color: '#5bd97a' }}>Live data connected — values shown below reflect current Firestore state.</span>
+          ) : (
+            'Load admin data to see live metric values.'
+          )}
         </div>
       </div>
 
       <div style={S.grid(320)}>
         {KEY_METRICS.map(metric => {
           const phase = PLAN_PHASES.find(p => p.phase === metric.phase);
+          // Compute live value from admin data
+          const liveValue = liveData ? (() => {
+            switch (metric.name) {
+              case 'Monthly Active Users': return liveData.totalUsers.toString();
+              case 'Email List Size': return liveData.totalUsers.toString();
+              case 'Course Completion Rate': {
+                const total = liveData.users.reduce((s, u) => s + (u.courseStates?.length || 0), 0);
+                return total > 0 ? `${Math.round((liveData.courseCompletions / total) * 100)}%` : '—';
+              }
+              case 'Free → Paid Conversion': return liveData.totalUsers > 0
+                ? `${((liveData.payingUsers / liveData.totalUsers) * 100).toFixed(1)}%` : '—';
+              case 'Revenue Per User (ARPU)': return liveData.payingUsers > 0
+                ? `$${((liveData.mrr + liveData.oneTime) / liveData.payingUsers / 100).toFixed(2)}` : '—';
+              case 'Mentor Active Pairings': return liveData.activeMentors.toString();
+              case 'Subscription Churn': return '—'; // needs historical data
+              default: return null;
+            }
+          })() : null;
           return (
             <div key={metric.name} style={{ ...S.card(), padding: '14px 16px', marginBottom: 0 }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 6 }}>
@@ -4712,8 +5292,15 @@ function StrategicPlanSection() {
                 <span style={{ color: '#5bd97a', fontSize: '0.82rem', fontFamily: 'Cinzel, serif' }}>
                   Target: {metric.target}
                 </span>
+                {liveValue && (
+                  <span style={{ color: '#3498db', fontSize: '0.88rem', fontWeight: 700, fontFamily: 'Cinzel, serif' }}>
+                    {liveValue}
+                  </span>
+                )}
               </div>
-              <div style={{ color: '#666', fontSize: '0.72rem', marginTop: 4 }}>{metric.source}</div>
+              <div style={{ color: '#666', fontSize: '0.72rem', marginTop: 4 }}>
+                {metric.source.replace(' (needs Stripe)', '').replace(' (needs integration)', '')}
+              </div>
             </div>
           );
         })}
@@ -5844,47 +6431,322 @@ function CuratedProductsSection() {
   );
 }
 
+// Campaign Attribution panel — reads from shared admin data
+function CampaignAttributionPanel({ S }) {
+  const ctx = useAdminData();
+  if (!ctx || !ctx.data) return (
+    <div style={{ marginTop: 32 }}>
+      <h3 style={S.heading}>Campaign Attribution</h3>
+      <p style={{ fontSize: '0.78rem', color: 'var(--text-secondary)', fontStyle: 'italic' }}>Loading shared data...</p>
+    </div>
+  );
+
+  const { campaignAttr } = ctx.data;
+  const campaigns = Object.entries(campaignAttr);
+  const fmt = (cents) => '$' + (cents / 100).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+
+  return (
+    <div style={{ marginTop: 32 }}>
+      <h3 style={S.heading}>Campaign Attribution</h3>
+      {campaigns.length === 0 ? (
+        <p style={{ fontSize: '0.78rem', color: 'var(--text-secondary)', fontStyle: 'italic' }}>
+          No attributed conversions yet. Purchases via UTM-tagged store links will appear here.
+        </p>
+      ) : (
+        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+          <thead>
+            <tr style={S.row}>
+              <th style={S.th}>Campaign</th>
+              <th style={{ ...S.th, width: 80 }}>Conversions</th>
+              <th style={{ ...S.th, width: 100 }}>Revenue</th>
+              <th style={S.th}>Items</th>
+            </tr>
+          </thead>
+          <tbody>
+            {campaigns.sort((a, b) => b[1].count - a[1].count).map(([name, data]) => (
+              <tr key={name} style={S.row}>
+                <td style={{ ...S.td, color: 'var(--accent-gold)' }}>{name}</td>
+                <td style={{ ...S.td, fontWeight: 600 }}>{data.count}</td>
+                <td style={{ ...S.td, color: '#6ec87a' }}>{fmt(data.revenue)}</td>
+                <td style={S.td}>
+                  <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
+                    {Object.entries(data.items).map(([itemId, ct]) => {
+                      const item = ADMIN_CATALOG.find(c => c.id === itemId);
+                      return (
+                        <span key={itemId} style={{ fontSize: '0.72rem', padding: '1px 6px', borderRadius: 8, background: 'rgba(201,169,97,0.1)', color: 'var(--accent-gold)' }}>
+                          {item?.name || itemId} ({ct})
+                        </span>
+                      );
+                    })}
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
+    </div>
+  );
+}
+
 function StoreSection() {
+  const adminCtx = useAdminData();
+  const adminDataRef = useRef(adminCtx);
+  useEffect(() => { adminDataRef.current = adminCtx; }, [adminCtx]);
+
   const LAUNCH_KEY = 'Dodecahedron';
 
-  const PRICING = [
-    { id: 'developer-api', name: 'Secret Weapon API', type: 'Subscription', price: 'Free', notes: 'Activates directly, no Stripe' },
-    { id: 'master-key', name: 'Mythouse Master Key', type: 'Subscription', price: '$100/mo', notes: 'Bundle: all subs + all purchases' },
-    { id: 'ybr', name: 'Yellow Brick Road', type: 'Subscription', price: '$5/mo', notes: '' },
-    { id: 'forge', name: 'Story Forge', type: 'Subscription', price: '$45/mo', notes: '' },
-    { id: 'coursework', name: 'Coursework', type: 'Subscription', price: '$45/mo', notes: '' },
-    { id: 'monomyth', name: 'Monomyth & Meteor Steel', type: 'Subscription', price: '$25/mo', notes: '' },
-    { id: 'fallen-starlight', name: 'Fallen Starlight', type: 'Purchase', price: '$25', notes: '' },
-    { id: 'story-of-stories', name: 'Story of Stories', type: 'Purchase', price: '$25', notes: '' },
-    { id: 'starlight-bundle', name: 'Starlight Bundle', type: 'Purchase', price: '$40', notes: 'Bundle: Fallen Starlight + Story of Stories' },
-    { id: 'medicine-wheel', name: 'Medicine Wheel', type: 'Purchase', price: 'Donation', notes: 'Pay what you want, min $1' },
+  // Product catalog — mirrors api/_lib/stripeProducts.js for client-side revenue calculations
+  const CATALOG = [
+    { id: 'developer-api', name: 'Secret Weapon API', mode: 'sub', cents: 0, label: 'Free', free: true },
+    { id: 'master-key', name: 'Master Key', mode: 'sub', cents: 10000, label: '$100/mo', bundle: true },
+    { id: 'ybr', name: 'Yellow Brick Road', mode: 'sub', cents: 500, label: '$5/mo' },
+    { id: 'forge', name: 'Story Forge', mode: 'sub', cents: 4500, label: '$45/mo' },
+    { id: 'coursework', name: 'Coursework', mode: 'sub', cents: 4500, label: '$45/mo' },
+    { id: 'monomyth', name: 'Monomyth & Meteor Steel', mode: 'sub', cents: 2500, label: '$25/mo' },
+    { id: 'fallen-starlight', name: 'Fallen Starlight', mode: 'purchase', cents: 2500, label: '$25' },
+    { id: 'story-of-stories', name: 'Story of Stories', mode: 'purchase', cents: 2500, label: '$25' },
+    { id: 'starlight-bundle', name: 'Starlight Bundle', mode: 'purchase', cents: 4000, label: '$40', bundle: true },
+    { id: 'medicine-wheel', name: 'Medicine Wheel', mode: 'purchase', cents: 0, label: 'Donation', donation: true },
   ];
+
+  // Items included via bundle — don't double-count revenue
+  const BUNDLE_CHILDREN = {
+    'master-key': { subs: ['ybr', 'forge', 'coursework', 'monomyth'], purchases: ['starlight-bundle', 'fallen-starlight', 'story-of-stories'] },
+    'starlight-bundle': { purchases: ['fallen-starlight', 'story-of-stories'] },
+  };
 
   const STRIPE_LINKS = [
-    { label: 'Payments', href: 'https://dashboard.stripe.com/payments', desc: 'All transactions, refunds, disputes' },
+    { label: 'Payments', href: 'https://dashboard.stripe.com/payments', desc: 'Transactions, refunds, disputes' },
     { label: 'Subscriptions', href: 'https://dashboard.stripe.com/subscriptions', desc: 'Active, past due, canceled' },
     { label: 'Customers', href: 'https://dashboard.stripe.com/customers', desc: 'Customer records, payment methods' },
-    { label: 'Invoices', href: 'https://dashboard.stripe.com/invoices', desc: 'Billing history, upcoming invoices' },
-    { label: 'Revenue', href: 'https://dashboard.stripe.com/revenue', desc: 'MRR, churn, growth' },
+    { label: 'Invoices', href: 'https://dashboard.stripe.com/invoices', desc: 'Billing history, upcoming' },
+    { label: 'Revenue', href: 'https://dashboard.stripe.com/revenue', desc: 'MRR, churn, growth analytics' },
     { label: 'Webhooks', href: 'https://dashboard.stripe.com/webhooks', desc: 'Event delivery, failures' },
-    { label: 'Customer Portal', href: 'https://dashboard.stripe.com/settings/billing/portal', desc: 'Configure self-serve billing' },
-    { label: 'API Keys', href: 'https://dashboard.stripe.com/apikeys', desc: 'Manage secret & publishable keys' },
+    { label: 'Portal Config', href: 'https://dashboard.stripe.com/settings/billing/portal', desc: 'Self-serve billing settings' },
+    { label: 'API Keys', href: 'https://dashboard.stripe.com/apikeys', desc: 'Secret & publishable keys' },
   ];
 
+  const [storeTab, setStoreTab] = useState('dashboard');
+  const [loading, setLoading] = useState(false);
+  const [stats, setStats] = useState(null);
+  const [customers, setCustomers] = useState([]);
+  const [custFilter, setCustFilter] = useState('paying');
   const [copied, setCopied] = useState(false);
-  const [storeTab, setStoreTab] = useState('payments');
+  const [compEmail, setCompEmail] = useState('');
+  const [compItem, setCompItem] = useState('');
+  const [compMsg, setCompMsg] = useState('');
+
+  // Load all user profiles from Firestore and compute stats
+  const loadData = useCallback(async () => {
+    if (!firebaseConfigured || !db) return;
+    setLoading(true);
+    try {
+      const usersSnap = await getDocs(collection(db, 'users'));
+      const allCustomers = [];
+      const itemCounts = {};
+      CATALOG.forEach(p => { itemCounts[p.id] = { total: 0, direct: 0 }; });
+
+      let totalUsers = 0, payingUsers = 0, stripeLinked = 0, freeOnly = 0;
+
+      for (const userDoc of usersSnap.docs) {
+        totalUsers++;
+        const uid = userDoc.id;
+        const userData = userDoc.data();
+        let profileData = {};
+        try {
+          const metaSnap = await getDocs(collection(db, 'users', uid, 'meta'));
+          metaSnap.forEach(d => { if (d.id === 'profile') profileData = d.data(); });
+        } catch { /* no meta */ }
+
+        const subs = profileData.subscriptions || {};
+        const purchases = profileData.purchases || {};
+        const hasStripe = !!profileData.stripeCustomerId;
+        if (hasStripe) stripeLinked++;
+
+        // Determine which items this user has active
+        const activeItems = [];
+        const activeIds = new Set();
+        CATALOG.forEach(p => {
+          const active = p.mode === 'sub' ? !!subs[p.id] : !!purchases[p.id];
+          if (active) {
+            activeItems.push(p);
+            activeIds.add(p.id);
+            itemCounts[p.id].total++;
+          }
+        });
+
+        // Determine "direct" (not via bundle) for revenue accuracy
+        const bundledIds = new Set();
+        if (activeIds.has('master-key')) {
+          BUNDLE_CHILDREN['master-key'].subs.forEach(id => bundledIds.add(id));
+          BUNDLE_CHILDREN['master-key'].purchases.forEach(id => bundledIds.add(id));
+        }
+        if (activeIds.has('starlight-bundle') && !bundledIds.has('starlight-bundle')) {
+          BUNDLE_CHILDREN['starlight-bundle'].purchases.forEach(id => bundledIds.add(id));
+        }
+        activeIds.forEach(id => {
+          if (!bundledIds.has(id)) itemCounts[id].direct++;
+        });
+
+        // Compute what this user actually pays (bundle-aware)
+        let userMrr = 0;
+        let userOneTime = 0;
+        activeIds.forEach(id => {
+          if (bundledIds.has(id)) return; // covered by bundle
+          const item = CATALOG.find(c => c.id === id);
+          if (!item || item.free || item.donation) return;
+          if (item.mode === 'sub') userMrr += item.cents;
+          else userOneTime += item.cents;
+        });
+
+        const hasPaid = activeItems.some(i => !i.free);
+        if (hasPaid) payingUsers++;
+        else if (activeItems.length > 0) freeOnly++;
+
+        allCustomers.push({
+          uid,
+          email: userData.email || uid,
+          displayName: userData.displayName || '',
+          hasStripe,
+          stripeCustomerId: profileData.stripeCustomerId || null,
+          activeItems,
+          activeIds: [...activeIds],
+          bundledIds: [...bundledIds],
+          userMrr,
+          userOneTime,
+          hasPaid,
+          freeOnly: activeItems.length > 0 && !hasPaid,
+          itemCount: activeItems.length,
+        });
+      }
+
+      // Aggregate MRR and one-time revenue
+      let mrr = 0, oneTime = 0;
+      allCustomers.forEach(c => { mrr += c.userMrr; oneTime += c.userOneTime; });
+
+      setStats({ totalUsers, payingUsers, stripeLinked, freeOnly, mrr, oneTime, itemCounts });
+      setCustomers(allCustomers.sort((a, b) => b.userMrr + b.userOneTime - (a.userMrr + a.userOneTime) || b.itemCount - a.itemCount));
+    } catch (err) {
+      console.error('Failed to load store data:', err);
+    }
+    setLoading(false);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => { loadData(); }, [loadData]);
+
+  // Admin comp: activate an item for a user by email
+  const handleComp = useCallback(async () => {
+    if (!compEmail || !compItem || !db) return;
+    setCompMsg('');
+    try {
+      // Find user by email
+      const usersSnap = await getDocs(collection(db, 'users'));
+      let targetUid = null;
+      usersSnap.forEach(d => {
+        if (d.data().email === compEmail) targetUid = d.id;
+      });
+      if (!targetUid) { setCompMsg('User not found'); return; }
+
+      const item = CATALOG.find(c => c.id === compItem);
+      if (!item) { setCompMsg('Invalid item'); return; }
+
+      const profileRef = doc(db, 'users', targetUid, 'meta', 'profile');
+      const updates = { updatedAt: serverTimestamp() };
+      const field = item.mode === 'sub' ? 'subscriptions' : 'purchases';
+      updates[`${field}.${compItem}`] = true;
+
+      // Expand bundles
+      const expansion = BUNDLE_CHILDREN[compItem];
+      if (expansion) {
+        if (expansion.subs) expansion.subs.forEach(id => { updates[`subscriptions.${id}`] = true; });
+        if (expansion.purchases) expansion.purchases.forEach(id => { updates[`purchases.${id}`] = true; });
+      }
+
+      await setDoc(profileRef, updates, { merge: true });
+      setCompMsg(`Activated ${item.name} for ${compEmail}`);
+      setCompEmail('');
+      setCompItem('');
+      loadData(); // refresh stats
+    } catch (err) {
+      setCompMsg('Error: ' + err.message);
+    }
+  }, [compEmail, compItem, loadData]);
+
+  const fmt = (cents) => '$' + (cents / 100).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+
+  // Filtered customer list
+  const filteredCustomers = useMemo(() => {
+    if (custFilter === 'all') return customers;
+    if (custFilter === 'paying') return customers.filter(c => c.hasPaid);
+    if (custFilter === 'free') return customers.filter(c => c.freeOnly);
+    if (custFilter === 'stripe') return customers.filter(c => c.hasStripe);
+    if (custFilter === 'none') return customers.filter(c => c.itemCount === 0);
+    // Filter by specific item
+    return customers.filter(c => c.activeIds.includes(custFilter));
+  }, [customers, custFilter]);
+
+  // --- Promo Links state ---
+  const [linkCampaign, setLinkCampaign] = useState('mythicYear');
+  const [linkContent, setLinkContent] = useState('');
+  const [linkCopied, setLinkCopied] = useState(null);
+
+  const LINK_CAMPAIGNS = [
+    { id: 'mythicYear', label: 'Mythic Year' },
+    { id: 'secret-weapon', label: 'Secret Weapon' },
+    { id: 'custom', label: 'Custom' },
+  ];
+
+  const buildPromoLink = (itemId) => {
+    const base = `https://mythouse.com/store?highlight=${itemId}`;
+    const campaign = linkCampaign === 'custom' ? (linkContent || 'custom') : linkCampaign;
+    const content = linkContent || itemId;
+    return `${base}&utm_campaign=${encodeURIComponent(campaign)}&utm_content=${encodeURIComponent(content)}`;
+  };
+
+  const copyPromoLink = (itemId) => {
+    const url = buildPromoLink(itemId);
+    navigator.clipboard.writeText(url).then(() => {
+      setLinkCopied(itemId);
+      setTimeout(() => setLinkCopied(null), 2000);
+    }).catch(() => {});
+  };
+
+  const TABS = [
+    { id: 'dashboard', label: 'Dashboard' },
+    { id: 'links', label: 'Links' },
+    { id: 'customers', label: 'Customers' },
+    { id: 'stripe', label: 'Stripe' },
+    { id: 'config', label: 'Config' },
+  ];
 
   const S = {
     tabs: { display: 'flex', gap: 0, borderBottom: '1px solid var(--border-subtle)', marginBottom: 20 },
     tab: { padding: '8px 16px', fontSize: '0.82rem', background: 'none', border: 'none', borderBottom: '2px solid transparent', color: 'var(--text-secondary)', cursor: 'pointer' },
     tabActive: { color: 'var(--accent-gold)', borderBottomColor: 'var(--accent-gold)' },
     heading: { fontSize: '0.95rem', marginBottom: 10, color: 'var(--accent-gold)' },
-    code: { background: 'rgba(255,255,255,0.08)', padding: '1px 5px', borderRadius: 3 },
+    code: { background: 'rgba(255,255,255,0.08)', padding: '1px 5px', borderRadius: 3, fontSize: '0.8rem' },
+    // Stat cards
+    cardGrid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', gap: 12, marginBottom: 24 },
+    card: { padding: '16px', background: 'rgba(255,255,255,0.03)', border: '1px solid var(--border-subtle)', borderRadius: 10 },
+    cardValue: { fontSize: '1.6rem', fontWeight: 700, color: 'var(--accent-gold)', marginBottom: 2 },
+    cardLabel: { fontSize: '0.75rem', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em' },
+    // Link grid
     linkGrid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 10, marginBottom: 24 },
     linkCard: { display: 'block', padding: '14px 16px', background: 'rgba(255,255,255,0.03)', border: '1px solid var(--border-subtle)', borderRadius: 8, textDecoration: 'none', transition: 'border-color 0.2s' },
     linkLabel: { fontSize: '0.88rem', fontWeight: 600, color: 'var(--text-primary)', marginBottom: 4 },
     linkDesc: { fontSize: '0.75rem', color: 'var(--text-secondary)' },
-    linkArrow: { fontSize: '0.7rem', color: 'var(--text-secondary)', marginLeft: 4 },
+    // Table
+    th: { padding: '6px 8px', color: 'var(--text-secondary)', textAlign: 'left', fontSize: '0.78rem', textTransform: 'uppercase', letterSpacing: '0.04em' },
+    td: { padding: '6px 8px', fontSize: '0.82rem' },
+    row: { borderBottom: '1px solid rgba(255,255,255,0.04)' },
+    // Filter pills
+    pill: { padding: '4px 12px', fontSize: '0.78rem', background: 'none', border: '1px solid var(--border-subtle)', borderRadius: 20, color: 'var(--text-secondary)', cursor: 'pointer', whiteSpace: 'nowrap' },
+    pillActive: { background: 'rgba(201,169,97,0.15)', borderColor: 'rgba(201,169,97,0.4)', color: 'var(--accent-gold)' },
+    // Bar chart
+    bar: { height: 6, borderRadius: 3, background: 'rgba(201,169,97,0.25)', marginTop: 4 },
+    barFill: { height: '100%', borderRadius: 3, background: 'var(--accent-gold)' },
   };
 
   return (
@@ -5892,19 +6754,336 @@ function StoreSection() {
       <h2 className="admin-coursework-title">STORE & BILLING</h2>
 
       <div style={S.tabs}>
-        {['payments', 'pricing', 'config'].map(t => (
-          <button key={t} style={{ ...S.tab, ...(storeTab === t ? S.tabActive : {}) }} onClick={() => setStoreTab(t)}>
-            {t === 'payments' ? 'Payments' : t === 'pricing' ? 'Pricing' : 'Config'}
+        {TABS.map(t => (
+          <button key={t.id} style={{ ...S.tab, ...(storeTab === t.id ? S.tabActive : {}) }} onClick={() => setStoreTab(t.id)}>
+            {t.label}{t.id === 'customers' && stats ? ` (${stats.payingUsers})` : ''}
           </button>
         ))}
       </div>
 
-      {storeTab === 'payments' && (
+      {loading && <p style={{ color: 'var(--text-secondary)', fontSize: '0.82rem' }}>Loading...</p>}
+
+      {/* ── Dashboard ── */}
+      {storeTab === 'dashboard' && stats && (
+        <>
+          {/* Top-level stats */}
+          <div style={S.cardGrid}>
+            <div style={S.card}>
+              <div style={S.cardValue}>{fmt(stats.mrr)}</div>
+              <div style={S.cardLabel}>MRR</div>
+            </div>
+            <div style={S.card}>
+              <div style={S.cardValue}>{fmt(stats.oneTime)}</div>
+              <div style={S.cardLabel}>One-Time Revenue</div>
+            </div>
+            <div style={S.card}>
+              <div style={S.cardValue}>{stats.payingUsers}</div>
+              <div style={S.cardLabel}>Paying Users</div>
+            </div>
+            <div style={S.card}>
+              <div style={S.cardValue}>{stats.totalUsers}</div>
+              <div style={S.cardLabel}>Total Users</div>
+            </div>
+            <div style={S.card}>
+              <div style={S.cardValue}>{stats.stripeLinked}</div>
+              <div style={S.cardLabel}>Stripe Linked</div>
+            </div>
+            <div style={S.card}>
+              <div style={S.cardValue}>{stats.totalUsers > 0 ? Math.round(stats.payingUsers / stats.totalUsers * 100) : 0}%</div>
+              <div style={S.cardLabel}>Conversion</div>
+            </div>
+          </div>
+
+          {/* Per-item breakdown */}
+          <h3 style={S.heading}>Subscriptions</h3>
+          <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: 24 }}>
+            <thead>
+              <tr style={S.row}>
+                <th style={S.th}>Item</th>
+                <th style={{ ...S.th, width: 80 }}>Active</th>
+                <th style={{ ...S.th, width: 80 }}>Direct</th>
+                <th style={{ ...S.th, width: 90 }}>Price</th>
+                <th style={{ ...S.th, width: 100 }}>Revenue/mo</th>
+                <th style={{ ...S.th, minWidth: 100 }}></th>
+              </tr>
+            </thead>
+            <tbody>
+              {CATALOG.filter(c => c.mode === 'sub').map(item => {
+                const ct = stats.itemCounts[item.id] || { total: 0, direct: 0 };
+                const maxActive = Math.max(...CATALOG.filter(c => c.mode === 'sub').map(c => (stats.itemCounts[c.id] || { total: 0 }).total), 1);
+                const rev = ct.direct * item.cents;
+                return (
+                  <tr key={item.id} style={S.row}>
+                    <td style={S.td}>{item.name}</td>
+                    <td style={{ ...S.td, color: ct.total > 0 ? 'var(--accent-gold)' : 'var(--text-secondary)' }}>{ct.total}</td>
+                    <td style={{ ...S.td, color: 'var(--text-secondary)' }}>{ct.direct}</td>
+                    <td style={{ ...S.td, color: 'var(--text-secondary)' }}>{item.label}</td>
+                    <td style={{ ...S.td, color: rev > 0 ? '#6ec87a' : 'var(--text-secondary)' }}>{item.free ? '—' : fmt(rev)}</td>
+                    <td style={S.td}>
+                      <div style={S.bar}><div style={{ ...S.barFill, width: `${(ct.total / maxActive) * 100}%` }} /></div>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+
+          <h3 style={S.heading}>Purchases</h3>
+          <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: 24 }}>
+            <thead>
+              <tr style={S.row}>
+                <th style={S.th}>Item</th>
+                <th style={{ ...S.th, width: 80 }}>Sold</th>
+                <th style={{ ...S.th, width: 80 }}>Direct</th>
+                <th style={{ ...S.th, width: 90 }}>Price</th>
+                <th style={{ ...S.th, width: 100 }}>Revenue</th>
+                <th style={{ ...S.th, minWidth: 100 }}></th>
+              </tr>
+            </thead>
+            <tbody>
+              {CATALOG.filter(c => c.mode === 'purchase').map(item => {
+                const ct = stats.itemCounts[item.id] || { total: 0, direct: 0 };
+                const maxSold = Math.max(...CATALOG.filter(c => c.mode === 'purchase').map(c => (stats.itemCounts[c.id] || { total: 0 }).total), 1);
+                const rev = ct.direct * item.cents;
+                return (
+                  <tr key={item.id} style={S.row}>
+                    <td style={S.td}>{item.name}</td>
+                    <td style={{ ...S.td, color: ct.total > 0 ? 'var(--accent-gold)' : 'var(--text-secondary)' }}>{ct.total}</td>
+                    <td style={{ ...S.td, color: 'var(--text-secondary)' }}>{ct.direct}</td>
+                    <td style={{ ...S.td, color: 'var(--text-secondary)' }}>{item.label}</td>
+                    <td style={{ ...S.td, color: rev > 0 ? '#6ec87a' : 'var(--text-secondary)' }}>{item.donation ? '—' : fmt(rev)}</td>
+                    <td style={S.td}>
+                      <div style={S.bar}><div style={{ ...S.barFill, width: `${(ct.total / maxSold) * 100}%` }} /></div>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+
+          {/* Admin comp */}
+          <h3 style={S.heading}>Comp a User</h3>
+          <p style={{ fontSize: '0.78rem', color: 'var(--text-secondary)', marginBottom: 8 }}>
+            Activate any item for a user directly (no Stripe charge). Bundle expansions applied automatically.
+          </p>
+          <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
+            <input
+              placeholder="User email"
+              value={compEmail}
+              onChange={e => setCompEmail(e.target.value)}
+              style={{ padding: '6px 10px', fontSize: '0.82rem', background: 'rgba(255,255,255,0.06)', border: '1px solid var(--border-subtle)', borderRadius: 6, color: 'var(--text-primary)', width: 220 }}
+            />
+            <select
+              value={compItem}
+              onChange={e => setCompItem(e.target.value)}
+              style={{ padding: '6px 10px', fontSize: '0.82rem', background: 'rgba(255,255,255,0.06)', border: '1px solid var(--border-subtle)', borderRadius: 6, color: 'var(--text-primary)' }}
+            >
+              <option value="">Select item...</option>
+              {CATALOG.map(c => <option key={c.id} value={c.id}>{c.name} ({c.label})</option>)}
+            </select>
+            <button className="admin-coursework-load-btn" onClick={handleComp} disabled={!compEmail || !compItem}>
+              Comp
+            </button>
+          </div>
+          {compMsg && <p style={{ fontSize: '0.82rem', marginTop: 6, color: compMsg.startsWith('Error') ? '#e87a7a' : '#6ec87a' }}>{compMsg}</p>}
+
+          {/* Campaign Attribution */}
+          {(() => {
+            const adminCtx = document.querySelector('[data-admin-ctx]'); // not used — we read from shared context below
+            // Read from the shared admin data context (campaignAttr is aggregated there)
+            const attrEntries = [];
+            customers.forEach(c => {
+              // Reconstruct from loaded customer data in StoreSection
+              // The customer objects don't have stripePurchases, but the shared admin context does
+            });
+
+            return (
+              <CampaignAttributionPanel S={S} />
+            );
+          })()}
+        </>
+      )}
+
+      {/* ── Links ── */}
+      {storeTab === 'links' && (
+        <>
+          <h3 style={S.heading}>Promo Link Generator</h3>
+          <p style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', marginBottom: 16, lineHeight: 1.5 }}>
+            Generate trackable purchase links for campaigns. Copy and paste into Instagram bio, emails, or campaign tools.
+          </p>
+
+          <div style={{ display: 'flex', gap: 12, alignItems: 'center', marginBottom: 20, flexWrap: 'wrap' }}>
+            <div>
+              <label style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', display: 'block', marginBottom: 4 }}>Campaign</label>
+              <select
+                value={linkCampaign}
+                onChange={e => setLinkCampaign(e.target.value)}
+                style={{ padding: '6px 10px', fontSize: '0.82rem', background: 'rgba(255,255,255,0.06)', border: '1px solid var(--border-subtle)', borderRadius: 6, color: 'var(--text-primary)' }}
+              >
+                {LINK_CAMPAIGNS.map(c => <option key={c.id} value={c.id}>{c.label}</option>)}
+              </select>
+            </div>
+            <div>
+              <label style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', display: 'block', marginBottom: 4 }}>Content Tag (optional)</label>
+              <input
+                placeholder="e.g. aries-cta"
+                value={linkContent}
+                onChange={e => setLinkContent(e.target.value)}
+                style={{ padding: '6px 10px', fontSize: '0.82rem', background: 'rgba(255,255,255,0.06)', border: '1px solid var(--border-subtle)', borderRadius: 6, color: 'var(--text-primary)', width: 180 }}
+              />
+            </div>
+          </div>
+
+          {(() => {
+            const productTags = getCampaignProductTags();
+            return (
+              <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                <thead>
+                  <tr style={S.row}>
+                    <th style={S.th}>Product</th>
+                    <th style={S.th}>Price</th>
+                    <th style={S.th}>Link</th>
+                    <th style={S.th}>Campaign Posts</th>
+                    <th style={{ ...S.th, width: 70 }}></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {CATALOG.filter(c => !c.free).map(item => {
+                    const posts = productTags[item.id] || [];
+                    return (
+                      <tr key={item.id} style={S.row}>
+                        <td style={S.td}>{item.name}</td>
+                        <td style={{ ...S.td, color: 'var(--text-secondary)' }}>{item.label}</td>
+                        <td style={S.td}>
+                          <code style={{ ...S.code, fontSize: '0.72rem', wordBreak: 'break-all' }}>{buildPromoLink(item.id)}</code>
+                        </td>
+                        <td style={S.td}>
+                          {posts.length > 0 ? (
+                            <div style={{ display: 'flex', gap: 3, flexWrap: 'wrap' }}>
+                              {posts.map((p, i) => (
+                                <span key={i} style={{ fontSize: '0.68rem', padding: '1px 6px', borderRadius: 8, background: 'rgba(201,169,97,0.1)', color: 'var(--accent-gold)' }} title={p.postTitle}>
+                                  {p.postTitle.length > 20 ? p.postTitle.slice(0, 20) + '...' : p.postTitle}
+                                </span>
+                              ))}
+                            </div>
+                          ) : (
+                            <span style={{ fontSize: '0.72rem', color: 'var(--text-secondary)' }}>—</span>
+                          )}
+                        </td>
+                        <td style={S.td}>
+                          <button
+                            className="admin-coursework-load-btn"
+                            style={{ fontSize: '0.75rem', padding: '4px 10px' }}
+                            onClick={() => copyPromoLink(item.id)}
+                          >
+                            {linkCopied === item.id ? 'Copied!' : 'Copy'}
+                          </button>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            );
+          })()}
+        </>
+      )}
+
+      {/* ── Customers ── */}
+      {storeTab === 'customers' && (
+        <>
+          <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 16 }}>
+            {[
+              { id: 'paying', label: 'Paying' },
+              { id: 'all', label: 'All Users' },
+              { id: 'free', label: 'Free Only' },
+              { id: 'stripe', label: 'Stripe Linked' },
+              { id: 'none', label: 'No Items' },
+            ].map(f => (
+              <button key={f.id} style={{ ...S.pill, ...(custFilter === f.id ? S.pillActive : {}) }} onClick={() => setCustFilter(f.id)}>
+                {f.label}
+              </button>
+            ))}
+            <span style={{ width: 1, background: 'var(--border-subtle)', margin: '0 4px' }} />
+            {CATALOG.filter(c => !c.free).map(c => (
+              <button key={c.id} style={{ ...S.pill, ...(custFilter === c.id ? S.pillActive : {}) }} onClick={() => setCustFilter(c.id)}>
+                {c.name}
+              </button>
+            ))}
+          </div>
+
+          <div style={{ fontSize: '0.78rem', color: 'var(--text-secondary)', marginBottom: 12 }}>
+            {filteredCustomers.length} user{filteredCustomers.length !== 1 ? 's' : ''}
+          </div>
+
+          <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+            <thead>
+              <tr style={S.row}>
+                <th style={S.th}>User</th>
+                <th style={S.th}>Active Items</th>
+                <th style={{ ...S.th, width: 80 }}>MRR</th>
+                <th style={{ ...S.th, width: 70 }}>Stripe</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredCustomers.slice(0, 100).map(c => (
+                <tr key={c.uid} style={{ ...S.row, cursor: 'pointer' }} onClick={() => {
+                  const ctx = adminDataRef.current;
+                  if (ctx) {
+                    const user = ctx.data?.users?.find(u => u.uid === c.uid);
+                    if (user) ctx.setDrawerUser(user);
+                  }
+                }}>
+                  <td style={S.td}>
+                    <div style={{ fontWeight: 500 }}>{c.displayName || c.email}</div>
+                    {c.displayName && <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>{c.email}</div>}
+                  </td>
+                  <td style={S.td}>
+                    <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
+                      {c.activeItems.map(item => (
+                        <span key={item.id} style={{
+                          display: 'inline-block', padding: '2px 8px', fontSize: '0.72rem', borderRadius: 10,
+                          background: c.bundledIds.includes(item.id) ? 'rgba(255,255,255,0.05)' : 'rgba(201,169,97,0.12)',
+                          color: c.bundledIds.includes(item.id) ? 'var(--text-secondary)' : 'var(--accent-gold)',
+                          border: `1px solid ${c.bundledIds.includes(item.id) ? 'transparent' : 'rgba(201,169,97,0.2)'}`,
+                        }}>
+                          {item.name}
+                        </span>
+                      ))}
+                      {c.activeItems.length === 0 && <span style={{ color: 'var(--text-secondary)', fontSize: '0.78rem' }}>—</span>}
+                    </div>
+                  </td>
+                  <td style={{ ...S.td, color: c.userMrr > 0 ? '#6ec87a' : 'var(--text-secondary)' }}>
+                    {c.userMrr > 0 ? fmt(c.userMrr) : '—'}
+                  </td>
+                  <td style={S.td}>
+                    {c.hasStripe ? (
+                      <a
+                        href={`https://dashboard.stripe.com/customers/${c.stripeCustomerId}`}
+                        target="_blank" rel="noopener noreferrer"
+                        style={{ fontSize: '0.78rem', color: 'var(--accent-gold)', textDecoration: 'none' }}
+                      >View</a>
+                    ) : (
+                      <span style={{ color: 'var(--text-secondary)', fontSize: '0.78rem' }}>—</span>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          {filteredCustomers.length > 100 && (
+            <p style={{ fontSize: '0.78rem', color: 'var(--text-secondary)', marginTop: 8 }}>Showing first 100 of {filteredCustomers.length}</p>
+          )}
+        </>
+      )}
+
+      {/* ── Stripe Dashboard ── */}
+      {storeTab === 'stripe' && (
         <>
           <div style={{ marginBottom: 24 }}>
             <h3 style={S.heading}>Stripe Dashboard</h3>
             <p style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', marginBottom: 12, lineHeight: 1.5 }}>
-              All payment management happens in Stripe. Click through to view transactions, manage subscriptions, issue refunds, or update billing settings.
+              Detailed payment management, refunds, and analytics live in Stripe.
             </p>
             <div style={S.linkGrid}>
               {STRIPE_LINKS.map(link => (
@@ -5912,7 +7091,7 @@ function StoreSection() {
                   onMouseEnter={e => e.currentTarget.style.borderColor = 'rgba(201,169,97,0.4)'}
                   onMouseLeave={e => e.currentTarget.style.borderColor = 'var(--border-subtle)'}
                 >
-                  <div style={S.linkLabel}>{link.label}<span style={S.linkArrow}>&nearr;</span></div>
+                  <div style={S.linkLabel}>{link.label}<span style={{ fontSize: '0.7rem', color: 'var(--text-secondary)', marginLeft: 4 }}>&nearr;</span></div>
                   <div style={S.linkDesc}>{link.desc}</div>
                 </a>
               ))}
@@ -5922,67 +7101,22 @@ function StoreSection() {
           <div style={{ marginBottom: 24 }}>
             <h3 style={S.heading}>Launch Key</h3>
             <p style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', marginBottom: 8, lineHeight: 1.5 }}>
-              Enter this key in the Profile page launch key field to comp any subscription or purchase without charging.
-              Validated server-side. Override via <code style={S.code}>STRIPE_LAUNCH_KEY</code> env var.
+              Users enter this on the Profile page to comp any item. Validated server-side. Override via <code style={S.code}>STRIPE_LAUNCH_KEY</code> env var.
             </p>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
               <code style={{
-                background: 'rgba(201, 169, 97, 0.12)',
-                border: '1px solid rgba(201, 169, 97, 0.3)',
-                color: 'var(--accent-gold)',
-                padding: '8px 16px',
-                borderRadius: 6,
-                fontSize: '1.1rem',
-                fontWeight: 600,
-                letterSpacing: '0.04em',
-              }}>
-                {LAUNCH_KEY}
-              </code>
-              <button
-                className="admin-coursework-load-btn"
-                onClick={() => {
-                  navigator.clipboard.writeText(LAUNCH_KEY).then(() => {
-                    setCopied(true);
-                    setTimeout(() => setCopied(false), 2000);
-                  }).catch(() => {});
-                }}
-              >
-                {copied ? 'Copied!' : 'Copy'}
-              </button>
+                background: 'rgba(201, 169, 97, 0.12)', border: '1px solid rgba(201, 169, 97, 0.3)',
+                color: 'var(--accent-gold)', padding: '8px 16px', borderRadius: 6, fontSize: '1.1rem', fontWeight: 600, letterSpacing: '0.04em',
+              }}>{LAUNCH_KEY}</code>
+              <button className="admin-coursework-load-btn" onClick={() => {
+                navigator.clipboard.writeText(LAUNCH_KEY).then(() => { setCopied(true); setTimeout(() => setCopied(false), 2000); }).catch(() => {});
+              }}>{copied ? 'Copied!' : 'Copy'}</button>
             </div>
           </div>
         </>
       )}
 
-      {storeTab === 'pricing' && (
-        <div style={{ marginBottom: 24 }}>
-          <h3 style={S.heading}>Pricing Table</h3>
-          <p style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', marginBottom: 12, lineHeight: 1.5 }}>
-            Prices are defined in code (<code style={S.code}>api/_lib/stripeProducts.js</code>) and passed inline to Stripe Checkout — no Dashboard product setup needed.
-          </p>
-          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.82rem' }}>
-            <thead>
-              <tr style={{ borderBottom: '1px solid var(--border-subtle)', textAlign: 'left' }}>
-                <th style={{ padding: '6px 8px', color: 'var(--text-secondary)' }}>Item</th>
-                <th style={{ padding: '6px 8px', color: 'var(--text-secondary)' }}>Type</th>
-                <th style={{ padding: '6px 8px', color: 'var(--text-secondary)' }}>Price</th>
-                <th style={{ padding: '6px 8px', color: 'var(--text-secondary)' }}>Notes</th>
-              </tr>
-            </thead>
-            <tbody>
-              {PRICING.map(p => (
-                <tr key={p.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
-                  <td style={{ padding: '6px 8px' }}>{p.name}</td>
-                  <td style={{ padding: '6px 8px', color: 'var(--text-secondary)' }}>{p.type}</td>
-                  <td style={{ padding: '6px 8px', color: 'var(--accent-gold)' }}>{p.price}</td>
-                  <td style={{ padding: '6px 8px', color: 'var(--text-secondary)', fontSize: '0.78rem' }}>{p.notes}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
-
+      {/* ── Config ── */}
       {storeTab === 'config' && (
         <div style={{ marginBottom: 24 }}>
           <h3 style={S.heading}>Stripe Configuration</h3>
@@ -5994,16 +7128,42 @@ function StoreSection() {
               <li><code style={S.code}>STRIPE_LAUNCH_KEY</code> — optional, overrides the default comp key</li>
             </ul>
             <p><strong>Webhook endpoint</strong>: <code style={S.code}>/api/stripe-webhook</code></p>
-            <p><strong>Events listened</strong>:</p>
+            <p><strong>Events</strong>:</p>
             <ul style={{ margin: '4px 0 12px 20px', lineHeight: 1.9 }}>
               <li><code style={S.code}>checkout.session.completed</code> — activates items after payment</li>
               <li><code style={S.code}>customer.subscription.updated</code> — tracks status changes</li>
               <li><code style={S.code}>customer.subscription.deleted</code> — deactivates on cancel</li>
               <li><code style={S.code}>invoice.payment_failed</code> — logged for notification</li>
             </ul>
-            <p><strong>Products</strong>: Defined in <code style={S.code}>api/_lib/stripeProducts.js</code> — prices passed as <code style={S.code}>price_data</code> to Checkout Sessions</p>
-            <p><strong>Source of truth</strong>: Webhook writes all <code style={S.code}>subscriptions.*</code> and <code style={S.code}>purchases.*</code> flags in Firestore. Client never writes these.</p>
-            <p><strong>Firestore path</strong>: <code style={S.code}>users/&#123;uid&#125;/meta/profile</code> &mdash; <code style={S.code}>stripeCustomerId</code>, <code style={S.code}>stripeSubscriptions</code>, <code style={S.code}>stripePurchases</code></p>
+            <p><strong>Products</strong>: Defined in <code style={S.code}>api/_lib/stripeProducts.js</code> — inline <code style={S.code}>price_data</code>, no Dashboard setup needed</p>
+            <p><strong>Source of truth</strong>: Webhook writes all <code style={S.code}>subscriptions.*</code> and <code style={S.code}>purchases.*</code> flags. Client never writes these.</p>
+            <p><strong>Firestore path</strong>: <code style={S.code}>users/&#123;uid&#125;/meta/profile</code></p>
+
+            <h3 style={{ ...S.heading, marginTop: 24 }}>Pricing Reference</h3>
+            <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+              <thead>
+                <tr style={S.row}>
+                  <th style={S.th}>Item ID</th>
+                  <th style={S.th}>Name</th>
+                  <th style={S.th}>Type</th>
+                  <th style={S.th}>Price</th>
+                  <th style={S.th}>Notes</th>
+                </tr>
+              </thead>
+              <tbody>
+                {CATALOG.map(p => (
+                  <tr key={p.id} style={S.row}>
+                    <td style={S.td}><code style={S.code}>{p.id}</code></td>
+                    <td style={S.td}>{p.name}</td>
+                    <td style={{ ...S.td, color: 'var(--text-secondary)' }}>{p.mode === 'sub' ? 'Subscription' : 'Purchase'}</td>
+                    <td style={{ ...S.td, color: 'var(--accent-gold)' }}>{p.label}</td>
+                    <td style={{ ...S.td, color: 'var(--text-secondary)', fontSize: '0.78rem' }}>
+                      {p.bundle ? 'Bundle' : ''}{p.free ? 'Free activation' : ''}{p.donation ? 'Pay what you want' : ''}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
       )}
@@ -6321,12 +7481,218 @@ function TreasuredConversationsSection() {
   );
 }
 
+// --- Consulting Manager Section ---
+function ConsultingManagerSection() {
+  const { user } = useAuth();
+  const [engagements, setEngagements] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [expandedId, setExpandedId] = useState(null);
+  const [actionLoading, setActionLoading] = useState(null);
+
+  const loadEngagements = useCallback(async () => {
+    if (!user) return;
+    setLoading(true);
+    try {
+      const token = await user.getIdToken();
+      const res = await fetch('/api/consulting', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+        body: JSON.stringify({ action: 'list-engagements' }),
+      });
+      const data = await res.json();
+      if (data.success) setEngagements(data.engagements || []);
+    } catch (err) {
+      console.error('Failed to load engagements:', err);
+    }
+    setLoading(false);
+  }, [user]);
+
+  const updateStatus = async (engagementId, newStatus) => {
+    if (!user) return;
+    setActionLoading(engagementId);
+    try {
+      const token = await user.getIdToken();
+      await fetch('/api/consulting', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+        body: JSON.stringify({ action: 'update-engagement-status', engagementId, status: newStatus }),
+      });
+      await loadEngagements();
+    } catch (err) {
+      console.error('Failed to update engagement:', err);
+    }
+    setActionLoading(null);
+  };
+
+  const STATUS_COLORS = {
+    'intake': '#d9a55b',
+    'active': '#5bd97a',
+    'paused': '#a8a8b8',
+    'completing': '#5b8dd9',
+    'completed': '#7a5bd9',
+    'archived': '#6a6a7a',
+  };
+
+  const sorted = useMemo(() => {
+    return [...engagements].sort((a, b) => {
+      const order = { intake: 0, active: 1, paused: 2, completing: 3, completed: 4, archived: 5 };
+      return (order[a.status] || 9) - (order[b.status] || 9);
+    });
+  }, [engagements]);
+
+  const statusCounts = useMemo(() => {
+    const counts = {};
+    engagements.forEach(e => { counts[e.status] = (counts[e.status] || 0) + 1; });
+    return counts;
+  }, [engagements]);
+
+  return (
+    <div className="admin-coursework">
+      <h2 className="admin-coursework-title">CONSULTING ENGAGEMENTS</h2>
+
+      <button
+        className="admin-coursework-load-btn"
+        onClick={loadEngagements}
+        disabled={loading}
+      >
+        {loading ? 'Loading...' : engagements.length > 0 ? 'Refresh' : 'Load Engagements'}
+      </button>
+
+      {engagements.length > 0 && (
+        <div className="admin-coursework-stats">
+          <div className="admin-coursework-stat-row">
+            <span>Total engagements:</span>
+            <strong>{engagements.length}</strong>
+          </div>
+          {Object.entries(statusCounts).map(([status, count]) => (
+            <div key={status} className="admin-coursework-stat-row">
+              <span style={{ color: STATUS_COLORS[status] || '#a8a8b8' }}>{status}:</span>
+              <strong>{count}</strong>
+            </div>
+          ))}
+        </div>
+      )}
+
+      <div className="admin-coursework-users">
+        {sorted.map(eng => {
+          const expanded = expandedId === eng.id;
+          const activeStage = (eng.stages || []).find(s => s.status === 'active');
+          const completedCount = (eng.stages || []).filter(s => s.status === 'completed').length;
+
+          return (
+            <div
+              key={eng.id}
+              className="admin-coursework-user-row"
+              style={{ flexDirection: 'column', alignItems: 'stretch', cursor: 'pointer' }}
+              onClick={() => setExpandedId(expanded ? null : eng.id)}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
+                <span className="admin-coursework-user-email">{eng.clientName || eng.clientHandle || eng.clientUid}</span>
+                <span className="admin-badge" style={{ borderColor: STATUS_COLORS[eng.status], color: STATUS_COLORS[eng.status] }}>
+                  {eng.status}
+                </span>
+                {eng.archetype && <span className="admin-badge">{eng.archetype}</span>}
+                {activeStage && <span className="admin-coursework-req-count">{activeStage.label}</span>}
+                <span className="admin-coursework-req-count">{completedCount}/{(eng.stages || []).length} stages</span>
+              </div>
+
+              {expanded && (
+                <div style={{ marginTop: '12px', paddingLeft: '8px' }}>
+                  {eng.title && (
+                    <div className="admin-coursework-req-desc" style={{ marginBottom: '8px' }}>
+                      <strong>Title:</strong> {eng.title}
+                    </div>
+                  )}
+                  <div className="admin-coursework-req-desc" style={{ marginBottom: '8px' }}>
+                    <strong>Client Type:</strong> {eng.clientType || 'seeker'}
+                  </div>
+                  {eng.journeyStage && (
+                    <div className="admin-coursework-req-desc" style={{ marginBottom: '8px' }}>
+                      <strong>Journey Stage:</strong> {eng.journeyStage}
+                    </div>
+                  )}
+                  {eng.intakeNotes && (
+                    <div className="admin-coursework-req-desc" style={{ marginBottom: '8px', whiteSpace: 'pre-line' }}>
+                      <strong>Intake Assessment:</strong><br />{eng.intakeNotes}
+                    </div>
+                  )}
+
+                  {/* Stage progression */}
+                  <div style={{ marginBottom: '12px' }}>
+                    <strong style={{ fontSize: '0.75rem', color: '#a8a8b8', letterSpacing: '0.06em' }}>STAGES</strong>
+                    <div style={{ display: 'flex', gap: '4px', marginTop: '6px', flexWrap: 'wrap' }}>
+                      {(eng.stages || []).map(stage => (
+                        <span
+                          key={stage.id}
+                          style={{
+                            fontSize: '0.65rem',
+                            padding: '3px 8px',
+                            borderRadius: '4px',
+                            border: `1px solid ${stage.status === 'completed' ? '#5bd97a' : stage.status === 'active' ? '#d9a55b' : '#3a3a4a'}`,
+                            color: stage.status === 'completed' ? '#5bd97a' : stage.status === 'active' ? '#d9a55b' : '#6a6a7a',
+                            background: stage.status === 'completed' ? 'rgba(91,217,122,0.08)' : stage.status === 'active' ? 'rgba(217,165,91,0.08)' : 'transparent',
+                          }}
+                        >
+                          {stage.label}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Status actions */}
+                  <div style={{ display: 'flex', gap: '8px', marginTop: '8px' }}>
+                    {eng.status === 'intake' && (
+                      <button className="admin-approve-btn" style={{ fontSize: '0.65rem', padding: '4px 10px' }} onClick={(e) => { e.stopPropagation(); updateStatus(eng.id, 'active'); }} disabled={actionLoading === eng.id}>
+                        Activate
+                      </button>
+                    )}
+                    {eng.status === 'active' && (
+                      <button className="admin-reject-btn" style={{ fontSize: '0.65rem', padding: '4px 10px' }} onClick={(e) => { e.stopPropagation(); updateStatus(eng.id, 'paused'); }} disabled={actionLoading === eng.id}>
+                        Pause
+                      </button>
+                    )}
+                    {eng.status === 'paused' && (
+                      <button className="admin-approve-btn" style={{ fontSize: '0.65rem', padding: '4px 10px' }} onClick={(e) => { e.stopPropagation(); updateStatus(eng.id, 'active'); }} disabled={actionLoading === eng.id}>
+                        Resume
+                      </button>
+                    )}
+                    {(eng.status === 'completing' || eng.status === 'active') && (
+                      <button className="admin-approve-btn" style={{ fontSize: '0.65rem', padding: '4px 10px', borderColor: '#7a5bd9', color: '#7a5bd9' }} onClick={(e) => { e.stopPropagation(); updateStatus(eng.id, 'completed'); }} disabled={actionLoading === eng.id}>
+                        Complete
+                      </button>
+                    )}
+                    {eng.status !== 'archived' && (
+                      <button className="admin-reject-btn" style={{ fontSize: '0.65rem', padding: '4px 10px', borderColor: '#6a6a7a', color: '#6a6a7a' }} onClick={(e) => { e.stopPropagation(); updateStatus(eng.id, 'archived'); }} disabled={actionLoading === eng.id}>
+                        Archive
+                      </button>
+                    )}
+                  </div>
+
+                  {eng.createdAt && (
+                    <div style={{ marginTop: '8px', fontSize: '0.65rem', color: '#6a6a7a' }}>
+                      Created: {eng.createdAt?.seconds ? new Date(eng.createdAt.seconds * 1000).toLocaleDateString() : 'Unknown'}
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 function AdminPage() {
   const [activeSection, setActiveSection] = useState('plan');
   const [openGroup, setOpenGroup] = useState('Business');
+  const adminData = useAdminDataLoader();
 
   return (
+    <AdminDataContext.Provider value={adminData}>
     <div className="admin-page">
+      <AdminStatsBar />
+      <UserDrawer />
       <div className="admin-section-tabs">
         {SECTION_GROUPS.map(({ group, children }) => {
           if (!group) {
@@ -6403,6 +7769,7 @@ function AdminPage() {
       {activeSection === '360-media' && <Media360Section />}
       {activeSection === 'subscribers' && <SubscribersSection />}
       {activeSection === 'mentors' && <MentorManagerSection />}
+      {activeSection === 'consulting' && <ConsultingManagerSection />}
       {activeSection === 'contacts' && (
         <Suspense fallback={<div className="contacts-loading">Loading Contacts...</div>}>
           <ContactsPage />
@@ -6415,6 +7782,7 @@ function AdminPage() {
       {activeSection === 'dev-tools' && <DevToolsSection />}
       {activeSection === 'treasured' && <TreasuredConversationsSection />}
     </div>
+    </AdminDataContext.Provider>
   );
 }
 

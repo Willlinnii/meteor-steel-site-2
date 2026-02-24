@@ -79,11 +79,15 @@ const GuildPage = lazy(() => import('./pages/Guild/GuildPage'));
 const SacredSites360Page = lazy(() => import('./pages/SacredSites360/SacredSites360Page'));
 const DiscoverPage = lazy(() => import('./pages/Discover/DiscoverPage'));
 const DiscoverStarlightPage = lazy(() => import('./pages/DiscoverStarlight/DiscoverStarlightPage'));
+const DiscoverFeaturePage = lazy(() => import('./pages/DiscoverFeature/DiscoverFeaturePage'));
 const SecretWeaponPage = lazy(() => import('./pages/SecretWeapon/SecretWeaponPage'));
 const SecretWeaponAPIPage = lazy(() => import('./pages/SecretWeaponAPI/SecretWeaponAPIPage'));
 const FellowshipPage = lazy(() => import('./pages/Fellowship/FellowshipPage'));
 const CuratedProductsPage = lazy(() => import('./pages/CuratedProducts/CuratedProductsPage'));
 const MatchingPage = lazy(() => import('./pages/Matching/MatchingPage'));
+const ConsultingPage = lazy(() => import('./pages/Consulting/ConsultingPage'));
+const ConsultingIntakePage = lazy(() => import('./pages/Consulting/ConsultingIntakePage'));
+const StorePage = lazy(() => import('./pages/Store/StorePage'));
 
 const STAGES = [
   { id: 'golden-age', label: 'Golden Age' },
@@ -2176,6 +2180,12 @@ function MentorContractPopup() {
 const LAST_PATH_KEY = 'mythouse_last_path';
 const LAST_PATH_MAX_AGE = 4 * 60 * 60 * 1000; // 4 hours
 
+// Wrapper to pass profile context to StorePage when authenticated
+function StorePageWithProfile() {
+  const profile = useProfile();
+  return <StorePage profile={profile} />;
+}
+
 function AppContent() {
   const location = useLocation();
   const navigate = useNavigate();
@@ -2187,6 +2197,15 @@ function AppContent() {
   useEffect(() => {
     if (hasRestored.current) return;
     hasRestored.current = true;
+    // Check for store return URL (set when unauthenticated user clicks buy on /store)
+    try {
+      const storeReturn = sessionStorage.getItem('mythouse_return');
+      if (storeReturn) {
+        sessionStorage.removeItem('mythouse_return');
+        navigate(storeReturn, { replace: true });
+        return;
+      }
+    } catch { /* ignore */ }
     if (location.pathname !== '/') return; // only redirect from home
     try {
       const raw = localStorage.getItem(LAST_PATH_KEY);
@@ -2265,6 +2284,7 @@ function AppContent() {
         <Route path="/games/*" element={<GamesPage />} />
         <Route path="/mythology-channel/:showId" element={<MythologyChannelPage />} />
         <Route path="/mythosophia" element={<MythosophiaPage />} />
+        <Route path="/store" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><StorePageWithProfile /></Suspense>} />
         <Route path="/profile" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><ProfilePage /></Suspense>} />
         <Route path="/atlas" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><AtlasPage /></Suspense>} />
         <Route path="/journey/:journeyId" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" />Loading Journey...</div>}><OuroborosJourneyPage /></Suspense>} />
@@ -2273,10 +2293,13 @@ function AppContent() {
         <Route path="/treasures" element={<Navigate to="/myths/treasures" replace />} />
         <Route path="/myths/*" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><MythsPage /></Suspense>} />
         <Route path="/mythic-earth" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><MythicEarthPage /></Suspense>} />
+        <Route path="/consulting" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><ConsultingPage /></Suspense>} />
+        <Route path="/consulting/intake" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><ConsultingIntakePage /></Suspense>} />
         <Route path="/mentors" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><MentorDirectoryPage /></Suspense>} />
         <Route path="/guild" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><GuildPage /></Suspense>} />
         <Route path="/discover" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><DiscoverPage /></Suspense>} />
         <Route path="/discover/starlight" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><DiscoverStarlightPage /></Suspense>} />
+        <Route path="/discover/:featureId" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><DiscoverFeaturePage /></Suspense>} />
         <Route path="/secret-weapon" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><SecretWeaponPage /></Suspense>} />
         <Route path="/secret-weapon-api" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><SecretWeaponAPIPage /></Suspense>} />
         <Route path="/fellowship" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><FellowshipPage /></Suspense>} />
@@ -2310,6 +2333,20 @@ function App() {
   }
 
   if (!user) {
+    // Public routes: allow /store to be viewed without login
+    if (window.location.pathname === '/store') {
+      return (
+        <div className="app">
+          <Routes>
+            <Route path="/store" element={
+              <Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}>
+                <StorePage />
+              </Suspense>
+            } />
+          </Routes>
+        </div>
+      );
+    }
     return <LoginPage />;
   }
 
