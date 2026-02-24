@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import { useStoryForge, useYBRMode } from '../../App';
 import { ERA_GROUPS, CYCLE_ORDER } from './usePerspective';
+import DodecahedronButton from '../DodecahedronButton';
 
 // Representative midpoint year per tradition (for timeline positioning)
 const TIMELINE_YEARS = {
@@ -427,9 +428,6 @@ export default function MetalContentTabs({ activeTab, onSelectTab, playlistUrl, 
           perspectiveLabel={perspectiveLabel}
         />
       )}
-      {orderLabel && (
-        <span className="perspective-order-label">{orderLabel}</span>
-      )}
       {displayTabs.map(t => (
         <button
           key={t.id}
@@ -486,6 +484,7 @@ export default function MetalContentTabs({ activeTab, onSelectTab, playlistUrl, 
       >
         {personaChatActive ? '\u25A0' : '\uD83C\uDF99'}
       </button>
+      <DodecahedronButton className="metal-tab-dodec" iconSize={22} />
     </div>
   );
 }
