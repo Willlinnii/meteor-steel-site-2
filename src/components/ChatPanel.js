@@ -6,6 +6,7 @@ import { useWritings } from '../writings/WritingsContext';
 import { useProfile } from '../profile/ProfileContext';
 import { useAreaOverride } from '../App';
 import { useAtlasContext } from '../contexts/AtlasContext';
+import DodecahedronButton from './DodecahedronButton';
 import { apiFetch } from '../lib/chatApi';
 
 function parseAtlasMessage(text) {
@@ -249,6 +250,7 @@ export default function ChatPanel() {
                 {recording ? '\u{23F9}' : '\u{1F3A4}'}
               </button>
             )}
+            <DodecahedronButton />
             <button
               className="chat-send"
               onClick={handleSend}

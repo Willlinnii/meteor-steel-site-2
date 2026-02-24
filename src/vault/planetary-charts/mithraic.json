@@ -1,0 +1,90 @@
+{
+  "tradition": "Mithraic Mysteries",
+  "sourceText": "Felicissimus Mithraeum mosaic, Ostia (CIMRM 299, 3rd c CE); Santa Prisca frescoes and inscriptions, Rome (CIMRM 476); Origen, Contra Celsum VI.22 (citing Celsus, c. 175 CE); Porphyry, De Antro Nympharum; Jerome, Letter 107; Tertullian, De Corona and De Praescriptione",
+  "period": "1st–4th century CE",
+  "origin": "tradition",
+  "entered": "2026-02-24",
+  "method": "dictation",
+  "order": null,
+  "note": "Seven grades of initiation in the Roman mystery cult of Mithras, each mapped to a classical planet. The most complete source is the floor mosaic of the Felicissimus Mithraeum at Ostia, which shows each grade's symbols alongside planetary emblems. The Santa Prisca mithraeum in Rome swaps the Mercury and Moon assignments for the first and fifth grades. The Celsus passage (preserved by Origen) describes a seven-gated ladder with metals — but the ladder's planet order does not match the grade order, as they represent two different symbolic sequences: cosmological descent vs. initiatory ascent. No single ancient source maps all three (grade, planet, metal) together; the standard modern synthesis draws grade-planet from the Felicissimus mosaic and metal-planet from the broader Hellenistic tradition.",
+  "correspondences": {
+    "Corax (Raven)": {
+      "number": 1,
+      "classicalPlanet": "Mercury",
+      "metal": "Quicksilver",
+      "grade": "Corax — the Raven. Lowest grade. The initiate serves at ritual meals but does not yet partake.",
+      "mosaicSymbols": "Raven, caduceus, cup (Felicissimus mosaic, Ostia, CIMRM 299)",
+      "role": "Messenger and servant. The raven is Mercury's bird — messenger between worlds. Jerome (Letter 107) mentions the initiate mimics the raven's cry. Tertullian (De Corona) notes initiates were blindfolded.",
+      "ritualElements": "Blindfolding, mimicry of raven's cry. The raven appears in tauroctony scenes as Mithras's messenger, perched near the dying bull.",
+      "santaPrisca": "Santa Prisca assigns Moon (not Mercury) to this grade, swapping with Perses. The other five pairings are consistent across sources.",
+      "description": "Entry into the mysteries. The raven flies between the living and the dead — the initiate is a go-between, not yet fully within the sacred space. Porphyry (De Antro Nympharum 15) explains the lowest grades as 'servants' at the sacred meal."
+    },
+    "Nymphus (Bride)": {
+      "number": 2,
+      "classicalPlanet": "Venus",
+      "metal": "Copper",
+      "grade": "Nymphus — the Bride (or Bridegroom). Also written Nymphos or Cryphius ('hidden one').",
+      "mosaicSymbols": "Lamp (or lantern), diadem, veil (Felicissimus mosaic)",
+      "role": "Purification and dedication. The 'bride' is betrothed to the mysteries. The lamp symbolizes light entering the initiate's understanding. The veil indicates concealment — the mysteries are not yet fully revealed.",
+      "ritualElements": "Ritual offering of a lamp. Some inscriptions use 'Cryphius' (hidden one) as alternate name, suggesting a period of concealment or incubation.",
+      "santaPrisca": "Planet assignment (Venus) is consistent across sources.",
+      "description": "The bridal metaphor — the soul is wedded to the divine mysteries. Venus's association with love and union governs this grade. The diadem and lamp suggest interior illumination: the initiate begins to see."
+    },
+    "Miles (Soldier)": {
+      "number": 3,
+      "classicalPlanet": "Mars",
+      "metal": "Iron",
+      "grade": "Miles — the Soldier. The initiate takes on the obligation to fight for Mithras.",
+      "mosaicSymbols": "Spear (or lance), helmet, knapsack (kit-bag) (Felicissimus mosaic)",
+      "role": "Warrior of the faith. Tertullian (De Praescriptione 40) describes a ritual where the Miles is offered a crown on a sword and must refuse it, declaring 'Mithras is my crown.' The military metaphor is literal: many initiates were Roman soldiers.",
+      "ritualElements": "Crown offered and rejected — the soldier refuses worldly honors in service to a higher allegiance. Branding or marking on the forehead reported by some sources.",
+      "santaPrisca": "Planet assignment (Mars) is consistent across sources.",
+      "description": "The turning point — the initiate commits. Mars governs courage and combat. The refusal of the crown is the central ritual act: choosing the god over worldly glory. Maps to the soldier's oath (sacramentum) in Roman military practice."
+    },
+    "Leo (Lion)": {
+      "number": 4,
+      "classicalPlanet": "Jupiter",
+      "metal": "Tin",
+      "grade": "Leo — the Lion. Fire-keeper and ritual guardian. The Leo tends the sacred fire and purifies by fire.",
+      "mosaicSymbols": "Thunderbolt, fire-shovel (batillum), sistrum (Egyptian rattle) (Felicissimus mosaic)",
+      "role": "The thunderbolt is Jupiter's weapon. The sistrum connects to Isis worship — a sign of Mithraic syncretism. The Leo guards the threshold between the lower grades (servants) and the upper grades (cosmic).",
+      "ritualElements": "Honey placed on the tongue and hands. Porphyry (De Antro Nympharum 15): honey purifies and preserves; the Leo's hands are cleansed with honey so they touch nothing impure during ritual service. Some mithraeum paintings show Lions breathing fire.",
+      "santaPrisca": "Inscription: 'nama leonibus' ('hail to the Lions'). Lions served food at the ritual meal. Planet assignment (Jupiter) consistent.",
+      "description": "Jupiter's thunderbolt and the lion's fire mark this as the grade of purification through elemental force. Porphyry: 'To those undergoing the Lion grade, honey is poured on their hands instead of water for cleansing.'"
+    },
+    "Perses (Persian)": {
+      "number": 5,
+      "classicalPlanet": "Moon",
+      "metal": "Silver",
+      "grade": "Perses — the Persian. Connects to the cult's mythic homeland. The sickle is both agricultural (harvest) and martial (Perseus's harpe).",
+      "mosaicSymbols": "Sickle (harpe), crescent moon, stars, ear of wheat (Felicissimus mosaic)",
+      "role": "Harvester and cosmic guardian. Porphyry: 'for the Persian, honey is poured as guardian of the fruits.' The ear of wheat and sickle connect to fertility and the harvest cycle. Perseus and Perses share etymological connection; the harpe links to the Perseus myth.",
+      "ritualElements": "Honey again features, poured as 'guardian of the fruits.' The crescent moon is the grade's planetary emblem. Agricultural and celestial imagery merge.",
+      "santaPrisca": "Santa Prisca assigns Mercury (not Moon) — the reverse of the Corax swap. Felicissimus mosaic (majority scholarly consensus) assigns Moon.",
+      "description": "The grade of the harvest — the Moon governs agricultural cycles, growth, and the passage of time. The Persian is keeper of cosmic rhythms. The mythic connection to Persia roots the initiate in the cult's origin story."
+    },
+    "Heliodromus (Sun-Runner)": {
+      "number": 6,
+      "classicalPlanet": "Sun",
+      "metal": "Gold",
+      "grade": "Heliodromus — the Sun-Runner (Courier of the Sun). Second only to the Pater. The Sun's deputy on Earth.",
+      "mosaicSymbols": "Torch, radiate crown (sun-ray crown), whip (Felicissimus mosaic)",
+      "role": "Representative of the Sun god, Mithras's companion at the sacred banquet. The torch illuminates; the radiate crown identifies the grade with Sol Invictus; the whip drives the solar chariot.",
+      "ritualElements": "Participates in ritual re-enactment of the cosmic banquet between Mithras and Sol. In tauroctony scenes, Sol and Mithras feast together after the bull-slaying. The Heliodromus plays Sol's role.",
+      "santaPrisca": "Planet assignment (Sun) consistent across all sources.",
+      "description": "The penultimate grade — the initiate becomes the Sun's embodiment. Sol and Mithras are allies but distinct: Sol submits to Mithras after their contest, and they feast as equals. The Heliodromus enacts this relationship, carrying the Sun's authority while acknowledging Mithras's supremacy."
+    },
+    "Pater (Father)": {
+      "number": 7,
+      "classicalPlanet": "Saturn",
+      "metal": "Lead",
+      "grade": "Pater — the Father. Highest grade. High priest, community leader, Mithras's avatar on Earth. Presides over all rituals, initiations, and the sacred meal.",
+      "mosaicSymbols": "Phrygian cap, staff (scepter), patera (libation bowl), ring, sickle (Felicissimus mosaic)",
+      "role": "The Pater wears the Phrygian cap like Mithras himself — he is the god's representative. Saturn's assignment: the Pater stands at the cosmic boundary, the outermost sphere. Jerome (Letter 107) calls him 'Pater Patrum' (Father of Fathers) in communities with multiple Patres.",
+      "ritualElements": "Conducts all initiations, consecrates ritual space, presides over tauroctony reenactment. Ring: authority. Patera: libation. Staff: governance.",
+      "santaPrisca": "Inscription: 'nama patribus ab oriente ad occidentem' ('hail to the Fathers from east to west'). Planet assignment (Saturn) consistent across all sources.",
+      "description": "The summit of initiation. Saturn — outermost planet, boundary of the visible cosmos — governs time, limits, ultimate authority. The Pater has passed through all seven spheres and stands at the edge of the divine. His Phrygian cap identifies him with Mithras; his sickle connects to Kronos/Saturn, lord of the ages."
+    }
+  },
+  "authorCommentary": []
+}

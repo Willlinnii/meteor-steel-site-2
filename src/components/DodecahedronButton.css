@@ -1,0 +1,118 @@
+/* ── Dodecahedron inline button (matches mic-btn sizing) ── */
+
+.dodec-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  flex-shrink: 0;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: rgba(196, 113, 58, 0.08);
+  border: 1px solid rgba(196, 113, 58, 0.3);
+  color: var(--accent-ember, #c4713a);
+  /* default to chat-panel size; atlas overrides below */
+  width: 30px;
+  height: 30px;
+  font-size: 0.85rem;
+}
+
+.dodec-btn:hover {
+  background: rgba(196, 113, 58, 0.15);
+  border-color: rgba(196, 113, 58, 0.6);
+}
+
+/* atlas-sized variant */
+.dodec-btn.atlas-dodec-btn {
+  width: 40px;
+  height: 40px;
+  background: transparent;
+  border: 1px solid var(--ember, #c4713a);
+  color: var(--ember, #c4713a);
+  font-size: 1rem;
+}
+
+.dodec-btn.atlas-dodec-btn:hover {
+  background: rgba(196, 113, 58, 0.15);
+  border-color: rgba(196, 113, 58, 0.8);
+}
+
+/* ── Modal overlay ── */
+
+.dodec-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(4px);
+  animation: dodec-fade-in 0.2s ease;
+}
+
+@keyframes dodec-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.dodec-modal {
+  position: relative;
+  width: 90vw;
+  max-width: 480px;
+  min-height: 320px;
+  background: #1a1410;
+  border: 1px solid rgba(196, 113, 58, 0.3);
+  border-radius: 12px;
+  padding: 40px 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5);
+  animation: dodec-scale-in 0.25s ease;
+}
+
+@keyframes dodec-scale-in {
+  from { transform: scale(0.92); opacity: 0; }
+  to   { transform: scale(1);    opacity: 1; }
+}
+
+.dodec-modal-close {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  background: none;
+  border: none;
+  color: rgba(196, 113, 58, 0.6);
+  font-size: 1.6rem;
+  cursor: pointer;
+  line-height: 1;
+  transition: color 0.15s;
+}
+
+.dodec-modal-close:hover {
+  color: rgba(196, 113, 58, 1);
+}
+
+.dodec-modal-icon {
+  color: var(--accent-ember, #c4713a);
+  opacity: 0.7;
+}
+
+.dodec-modal-title {
+  margin: 0;
+  font-family: 'Cinzel', serif;
+  font-size: 1.4rem;
+  color: var(--accent-ember, #c4713a);
+  letter-spacing: 0.05em;
+}
+
+.dodec-modal-placeholder {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.35);
+  font-size: 0.9rem;
+  font-style: italic;
+}

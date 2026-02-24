@@ -1,0 +1,90 @@
+{
+  "tradition": "Tarot",
+  "sourceText": "Visconti-Sforza Tarot (c. 1440–1450); Tarot de Marseille (c. 1499–1700s); Éliphas Lévi, Dogme et Rituel de la Haute Magie (1856); Golden Dawn Knowledge Lectures; A.E. Waite, The Pictorial Key to the Tarot (1911)",
+  "period": "c. 1440–present",
+  "origin": "tradition",
+  "entered": "2026-02-23",
+  "method": "dictation",
+  "order": "ascending",
+  "note": "The seven planetary trumps of the Major Arcana. Planet-to-card assignments follow the Golden Dawn system (codified 1888), drawing on Éliphas Lévi's earlier Kabbalistic mapping. The order here is ascending (Moon to Saturn), matching the soul's ascent through the spheres. Each card's Hebrew letter and Tree of Life path derive from the Golden Dawn's 777 tables.",
+  "correspondences": {
+    "Moon": {
+      "number": 1,
+      "classicalPlanet": "Moon",
+      "metal": "Silver",
+      "majorArcana": "II — The High Priestess",
+      "arcanaNumber": 2,
+      "hebrewLetter": "Gimel (ג) — the camel, the carrier across the desert. Third letter of the Hebrew alphabet. It bridges the highest point of the Tree to its center, bearing what cannot be spoken across a vast interior distance.",
+      "treePath": "Kether → Tiphareth — the longest vertical path on the Tree of Life, connecting the Crown (pure divine unity) directly to Beauty (the heart, the seat of the soul). This is the path of the High Priestess because it crosses the Abyss without passing through any intermediate Sephirah. Only intuition, not intellect, can make this crossing.",
+      "esotericTitle": "Priestess of the Silver Star — the star is the light that shines in darkness without consuming it. She does not illuminate by force but by reflection, the way the Moon receives and returns what the Sun gives. The Silver Star is the hidden point of initiation that the aspirant can only approach in stillness.",
+      "overview": "Intuition, mystery, the unconscious, hidden knowledge, the veil between worlds.\n\nShe sits between the pillars of severity and mercy, guarding the threshold of the inner temple. The scroll in her lap is half-concealed — knowledge that reveals itself only to those who approach in silence."
+    },
+    "Mercury": {
+      "number": 2,
+      "classicalPlanet": "Mercury",
+      "metal": "Quicksilver",
+      "majorArcana": "I — The Magician",
+      "arcanaNumber": 1,
+      "hebrewLetter": "Beth (ב) — the house, the first letter of Genesis (Bereshith). Second letter of the Hebrew alphabet. It is the container that makes creation possible — before there is a house, there is nothing to dwell in.",
+      "treePath": "Kether → Binah — from the Crown to Understanding, the path descends from undifferentiated unity into the first act of form. This is the lightning flash's first diagonal stroke, the moment pure potential becomes directed will. The Magician stands at this juncture: he does not create the current, he gives it a channel.",
+      "esotericTitle": "Magus of Power — not power as domination but as directed capacity. The Magus holds the wand upward because power flows through, not from, the practitioner. This title was adopted by the Golden Dawn's highest grade to signify mastery of the four elements through conscious will.",
+      "overview": "Will, skill, communication, craft, the channel between above and below.\n\nOne hand raised to heaven, one pointing to earth — as above, so below. The four elemental tools on his table are the raw material of manifestation. He does not create from nothing; he conducts what already flows."
+    },
+    "Venus": {
+      "number": 3,
+      "classicalPlanet": "Venus",
+      "metal": "Copper",
+      "majorArcana": "III — The Empress",
+      "arcanaNumber": 3,
+      "hebrewLetter": "Daleth (ד) — the door, the threshold between inside and outside. Fourth letter of the Hebrew alphabet. Every door implies two states: the known and the unknown. Venus dwells at the door because beauty is always an invitation to cross over.",
+      "treePath": "Chokmah → Binah — the horizontal path uniting the two Supernal parents: Wisdom (the active, expansive father) and Understanding (the receptive, forming mother). The Empress is the door between them, the principle through which raw creative force takes living shape. This is the highest horizontal path on the Tree.",
+      "esotericTitle": "Daughter of the Mighty Ones — the Mighty Ones are Chokmah and Binah, the primordial masculine and feminine. She is their offspring and their union made visible — nature itself, endlessly generating, the living evidence that the two great pillars meet.",
+      "overview": "Fertility, beauty, abundance, sensory pleasure, the creative feminine.\n\nEnthroned in a field of grain beneath twelve stars, she is nature in its generative aspect — not passive, but ceaselessly producing. The stream at her feet is the living water that runs beneath all growth."
+    },
+    "Sun": {
+      "number": 4,
+      "classicalPlanet": "Sun",
+      "metal": "Gold",
+      "majorArcana": "XIX — The Sun",
+      "arcanaNumber": 19,
+      "hebrewLetter": "Resh (ר) — the head, the face turned upward. Twentieth letter of the Hebrew alphabet. The head is where light enters and where recognition happens. Resh is consciousness itself — not what is seen, but the capacity to see.",
+      "treePath": "Hod → Yesod — from Splendor (the intellectual, mercurial sphere) to Foundation (the lunar, imaginative sphere). This path carries the clarity of rational understanding down into the body's instinctive knowing. The Sun card illuminates this passage: thought becomes felt, and what was grasped by the mind is finally lived.",
+      "esotericTitle": "Lord of the Fire of the World — not celestial fire but the fire that animates the physical world, the warmth in living things. This is the solar logos made manifest — consciousness descended fully into matter and shining there. The child on the card carries this fire without being burned by it.",
+      "overview": "Joy, vitality, clarity, success, the illuminated self, innocence restored.\n\nA child rides bareback beneath a blazing sun, arms open, unafraid. The wall behind marks the boundary of the garden — the child has passed beyond it. This is consciousness after the dark night: not naïve but renewed."
+    },
+    "Mars": {
+      "number": 5,
+      "classicalPlanet": "Mars",
+      "metal": "Iron",
+      "majorArcana": "XVI — The Tower",
+      "arcanaNumber": 16,
+      "hebrewLetter": "Peh (פ) — the mouth, speech, the power to break open. Seventeenth letter of the Hebrew alphabet. The mouth both speaks and devours. Peh is the utterance that shatters — the word that, once spoken, cannot be taken back.",
+      "treePath": "Netzach → Hod — from Victory (Venus, feeling, desire) to Splendor (Mercury, intellect, analysis). This horizontal path crosses the lower Tree at the level of personality. The Tower strikes here because this is where our constructed self-image lives — the structure we have built from desire and reason. Lightning reveals what that structure was actually standing on.",
+      "esotericTitle": "Lord of the Hosts of the Mighty — the hosts are the forces that dismantle false order. This is not destruction for its own sake but the overwhelming arrival of truth. The mighty do not negotiate with the tower; they pass through it. What remains standing afterward was real.",
+      "overview": "Sudden upheaval, destruction of the false, revelation, liberation through shock.\n\nLightning strikes the crown from the tower. The figures falling are not punished — they are freed from a structure that could not hold. What was built on false foundations must break so something true can stand."
+    },
+    "Jupiter": {
+      "number": 6,
+      "classicalPlanet": "Jupiter",
+      "metal": "Tin",
+      "majorArcana": "X — Wheel of Fortune",
+      "arcanaNumber": 10,
+      "hebrewLetter": "Kaph (כ) — the palm of the hand, the grip. Eleventh letter of the Hebrew alphabet. The palm grasps and releases. Kaph is the hand on the wheel — holding on or letting go, the fundamental choice the turning of fortune demands.",
+      "treePath": "Chesed → Netzach — from Mercy (Jupiter, expansion, benevolence) to Victory (Venus, desire, endurance). This diagonal path carries abundance downward into lived experience. The Wheel turns along this axis: what is given by grace must be received by the open hand, and what is lost was never truly held.",
+      "esotericTitle": "Lord of the Forces of Life — life's forces are not static; they are cyclical, rising and falling. This title names the principle that animates the wheel itself — not any single position on it, but the turning. The lord of these forces is not the rider but the axis.",
+      "overview": "Cycles, fate, expansion, turning points, the axis of becoming.\n\nThe wheel turns. Sphinx at the top, serpent descending, Anubis rising. No position on the rim is permanent. The still point is the hub — the one who watches the turning without being turned."
+    },
+    "Saturn": {
+      "number": 7,
+      "classicalPlanet": "Saturn",
+      "metal": "Lead",
+      "majorArcana": "XXI — The World",
+      "arcanaNumber": 21,
+      "hebrewLetter": "Tav (ת) — the mark, the seal, the signature at the end. Twenty-second and final letter of the Hebrew alphabet. Tav completes the alphabet the way The World completes the Major Arcana — it is the last sign, the stamp that says: it is finished.",
+      "treePath": "Malkuth → Yesod — from the Kingdom (the physical, manifest world) back up to Foundation (the astral, dream-body). This is the first path of return — the moment the material world looks up and remembers it was dreamed. The World card dances at this threshold because completion is not an ending but a turning back toward the source.",
+      "esotericTitle": "Great One of the Night of Time — Saturn rules time, and the night of time is what lies beyond its boundary. This title points past the last card to whatever precedes the Fool's first step. The dancer in the wreath has moved through all 21 stations and arrived at the edge of the cycle, where the only thing left is to begin again.",
+      "overview": "Completion, integration, cosmic dance, the end that is also the beginning.\n\nThe dancer within the wreath holds the two wands of polarity in perfect balance. The four fixed signs of the zodiac anchor the corners. This is the last card and the first — the completed circuit that dissolves back into the Fool's leap."
+    }
+  },
+  "authorCommentary": []
+}

@@ -19,6 +19,8 @@ import { StreetViewEmbed, AddSiteForm } from '../MythicEarth/MythicEarthPage';
 import { useAuth } from '../../auth/AuthContext';
 import { useProfile } from '../../profile/ProfileContext';
 import MYTHIC_EARTH_TOURS from '../../data/mythicEarthTours';
+import mythicEarthMovements from '../../data/mythicEarthMovements.json';
+import MythicAgesTimeline, { parseEraString } from '../../components/MythicAgesTimeline';
 import '../Treasures/TreasuresPage.css';
 import ArchetypesPanel from '../../components/ArchetypesPanel';
 import './MythsPage.css';
@@ -183,7 +185,7 @@ const ALL_CATEGORIES = [
   { id: 'archive', label: 'Archive' },
 ];
 
-function LibrariesPanel({ trackElement }) {
+function LibrariesPanel({ trackElement, timelineRange }) {
   const [selectedLibrary, setSelectedLibrary] = useState(null);
   const [activeFilter, setActiveFilter] = useState('all');
   const [selectedText, setSelectedText] = useState(null);
@@ -286,7 +288,11 @@ function LibrariesPanel({ trackElement }) {
       </div>
 
       <div className="mythic-earth-site-grid">
-        {ancientLibraries.map(lib => (
+        {ancientLibraries.filter(lib => {
+          const era = parseEraString(lib.era);
+          if (!era) return true;
+          return era.endYear >= timelineRange[0] && era.startYear <= timelineRange[1];
+        }).map(lib => (
           <button
             key={lib.id}
             className="mythic-earth-site-card library-card"
@@ -319,7 +325,7 @@ const TEMPLE_DOMAINS = [
   { id: 'sacred-object', label: 'Sacred Object' },
 ];
 
-function TemplesPanel({ trackElement }) {
+function TemplesPanel({ trackElement, timelineRange }) {
   const [selectedTemple, setSelectedTemple] = useState(null);
   const [activeFilter, setActiveFilter] = useState('all');
   const [selectedDeity, setSelectedDeity] = useState(null);
@@ -403,7 +409,11 @@ function TemplesPanel({ trackElement }) {
       </div>
 
       <div className="mythic-earth-site-grid">
-        {ancientTemples.map(temple => (
+        {ancientTemples.filter(temple => {
+          const era = parseEraString(temple.era);
+          if (!era) return true; // no parseable date → always show
+          return era.endYear >= timelineRange[0] && era.startYear <= timelineRange[1];
+        }).map(temple => (
           <button
             key={temple.id}
             className="mythic-earth-site-card temple-card"
@@ -2008,6 +2018,25 @@ function MythsPage() {
     [activeTour]
   );
 
+  const [timelineRange, setTimelineRange] = useState([-10000, 2026]);
+
+  const timelinePins = useMemo(() => {
+    const pins = [];
+    ancientTemples.forEach(t => {
+      const era = parseEraString(t.era);
+      if (era) pins.push({ id: `temple-${t.id}`, name: t.name, ...era, type: 'temple', color: '#c47a5a' });
+    });
+    ancientLibraries.forEach(l => {
+      const era = parseEraString(l.era);
+      if (era) pins.push({ id: `library-${l.id}`, name: l.name, ...era, type: 'library', color: '#a89060' });
+    });
+    mythicEarthMovements.forEach(m => {
+      const era = parseEraString(m.founded);
+      if (era) pins.push({ id: `movement-${m.id}`, name: m.name, ...era, type: 'movement', color: m.color || '#b07acc' });
+    });
+    return pins;
+  }, []);
+
   useEffect(() => { trackElement('myths.page.visited'); }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Auto-scroll to content area when a site is selected
@@ -2118,6 +2147,26 @@ function MythsPage() {
               )}
             </div>
 
+            {(mythicEarthCategory === 'temple' || mythicEarthCategory === 'library') && !selectedMythicSite && (
+              <MythicAgesTimeline
+                rangeStart={timelineRange[0]}
+                rangeEnd={timelineRange[1]}
+                onRangeChange={(s, e) => setTimelineRange([s, e])}
+                pins={timelinePins}
+                onPinClick={(pin) => {
+                  if (pin.type === 'temple') {
+                    setMythicEarthCategory('temple');
+                    const temple = ancientTemples.find(t => `temple-${t.id}` === pin.id);
+                    if (temple) setSelectedMythicSite({ ...temple, isTemple: true });
+                  } else if (pin.type === 'library') {
+                    setMythicEarthCategory('library');
+                    const lib = ancientLibraries.find(l => `library-${l.id}` === pin.id);
+                    if (lib) setSelectedMythicSite({ ...lib, isLibrary: true });
+                  }
+                }}
+              />
+            )}
+
             {mythicEarthCategory === 'tours' && !activeTour && !selectedMythicSite ? (
               <div className="mythic-earth-tour-panel">
                 <div className="mythic-earth-tour-header">
@@ -2208,9 +2257,9 @@ function MythsPage() {
                 )}
               </div>
             ) : mythicEarthCategory === 'temple' || selectedMythicSite?.isTemple ? (
-              <TemplesPanel trackElement={trackElement} />
+              <TemplesPanel trackElement={trackElement} timelineRange={timelineRange} />
             ) : mythicEarthCategory === 'library' || selectedMythicSite?.isLibrary ? (
-              <LibrariesPanel trackElement={trackElement} />
+              <LibrariesPanel trackElement={trackElement} timelineRange={timelineRange} />
             ) : selectedMythicSite ? (
               <div className="mythic-earth-site-detail">
                 <button className="mythic-earth-back" onClick={() => setSelectedMythicSite(null)}>

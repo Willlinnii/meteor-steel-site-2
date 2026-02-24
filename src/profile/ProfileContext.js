@@ -174,15 +174,15 @@ export function ProfileProvider({ children }) {
   }, [user]);
 
   // Compute ranks from completedCourses
-  const earnedRanks = getEarnedRanks(completedCourses);
-  const highestRank = getHighestRank(completedCourses);
+  const earnedRanks = useMemo(() => getEarnedRanks(completedCourses), [completedCourses]);
+  const highestRank = useMemo(() => getHighestRank(completedCourses), [completedCourses]);
 
   // Mentor derived values (computed before credentials so guildMember can be injected)
   const mentorData = profileData?.mentor || null;
-  const qualifiedMentorTypes = getQualifiedMentorTypes(profileData?.credentials);
-  const mentorEligible = isEligibleForMentor(profileData?.credentials);
-  const mentorCoursesComplete = isMentorCourseComplete(completedCourses);
-  const effectiveMentorStatus = getEffectiveMentorStatus(mentorData, completedCourses);
+  const qualifiedMentorTypes = useMemo(() => getQualifiedMentorTypes(profileData?.credentials), [profileData?.credentials]);
+  const mentorEligible = useMemo(() => isEligibleForMentor(profileData?.credentials), [profileData?.credentials]);
+  const mentorCoursesComplete = useMemo(() => isMentorCourseComplete(completedCourses), [completedCourses]);
+  const effectiveMentorStatus = useMemo(() => getEffectiveMentorStatus(mentorData, completedCourses), [mentorData, completedCourses]);
 
   // Compute active credentials from profileData, injecting guildMember if active mentor
   const credentialsWithGuild = useMemo(() => {
@@ -192,7 +192,7 @@ export function ProfileProvider({ children }) {
     }
     return base;
   }, [profileData?.credentials, effectiveMentorStatus]);
-  const activeCredentials = getActiveCredentials(credentialsWithGuild);
+  const activeCredentials = useMemo(() => getActiveCredentials(credentialsWithGuild), [credentialsWithGuild]);
 
   const hasProfile = !!(profileData && profileData.credentials && Object.keys(profileData.credentials).length > 0);
 
@@ -679,18 +679,30 @@ export function ProfileProvider({ children }) {
   }, [user]);
 
   // Subscriptions (read-only — flags written by Stripe webhook only)
-  const subscriptions = profileData?.subscriptions || {};
+  const subscriptions = useMemo(() => profileData?.subscriptions || {}, [profileData?.subscriptions]);
 
   const hasSubscription = useCallback((id) => {
     return !!(profileDataRef.current?.subscriptions || {})[id];
   }, []);
 
   // Purchases (read-only — flags written by Stripe webhook only)
-  const purchases = profileData?.purchases || {};
+  const purchases = useMemo(() => profileData?.purchases || {}, [profileData?.purchases]);
 
   const hasPurchase = useCallback((id) => {
     return !!(profileDataRef.current?.purchases || {})[id];
   }, []);
+
+  // Refresh profile data (e.g. after handle registration, free purchase activation)
+  const refreshProfile = useCallback(async () => {
+    if (!user || !firebaseConfigured || !db) return;
+    try {
+      const ref = doc(db, 'users', user.uid, 'meta', 'profile');
+      const snap = await getDoc(ref);
+      setProfileData(snap.exists() ? snap.data() : null);
+    } catch (err) {
+      console.error('Failed to refresh profile:', err);
+    }
+  }, [user]);
 
   // Stripe integration
   const hasStripeAccount = !!profileData?.stripeCustomerId;
@@ -701,6 +713,7 @@ export function ProfileProvider({ children }) {
       const token = await user.getIdToken();
       const body = { itemId };
       if (options.donationAmount) body.donationAmount = options.donationAmount;
+      if (options.launchKey) body.launchKey = options.launchKey;
       const resp = await fetch('/api/stripe?route=checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
@@ -860,7 +873,7 @@ export function ProfileProvider({ children }) {
   const hasOpenaiKey = !!apiKeys.openaiKey;
 
   // Social links
-  const social = profileData?.social || {};
+  const social = useMemo(() => profileData?.social || {}, [profileData?.social]);
 
   const updateSocial = useCallback(async (socialData) => {
     if (!user || !firebaseConfigured || !db) return;
@@ -990,18 +1003,6 @@ export function ProfileProvider({ children }) {
 
   // Handle from profile data
   const handle = profileData?.handle || null;
-
-  // Refresh profile data (e.g. after handle registration)
-  const refreshProfile = useCallback(async () => {
-    if (!user || !firebaseConfigured || !db) return;
-    try {
-      const ref = doc(db, 'users', user.uid, 'meta', 'profile');
-      const snap = await getDoc(ref);
-      setProfileData(snap.exists() ? snap.data() : null);
-    } catch (err) {
-      console.error('Failed to refresh profile:', err);
-    }
-  }, [user]);
 
   const natalChart = profileData?.natalChart || null;
   const numerologyName = profileData?.numerologyName || null;

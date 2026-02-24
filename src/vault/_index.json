@@ -33,7 +33,12 @@
     { "id": "babylon",              "file": "planetary-charts/babylon.json",              "tradition": "Babylonian Astronomy" },
     { "id": "sumerian",             "file": "planetary-charts/sumerian.json",             "tradition": "Sumerian" },
     { "id": "assyrian",             "file": "planetary-charts/assyrian.json",             "tradition": "Assyrian" },
-    { "id": "phoenician",           "file": "planetary-charts/phoenician.json",           "tradition": "Phoenician" }
+    { "id": "phoenician",           "file": "planetary-charts/phoenician.json",           "tradition": "Phoenician" },
+    { "id": "ptolemaic",            "file": "planetary-charts/ptolemaic.json",            "tradition": "Hellenistic Astrology (Ptolemy)" },
+    { "id": "mithraic",             "file": "planetary-charts/mithraic.json",             "tradition": "Mithraic Mysteries" },
+    { "id": "gnostic",              "file": "planetary-charts/gnostic.json",              "tradition": "Gnostic Archons (Ophite / Sethian)" },
+    { "id": "sabians",              "file": "planetary-charts/sabians.json",              "tradition": "Sabians of Harran" },
+    { "id": "agrippa",              "file": "planetary-charts/agrippa.json",              "tradition": "Cornelius Agrippa" }
   ],
 
   "topics": [

@@ -27,7 +27,7 @@ export default function SolarMagneticField() {
 
   useEffect(() => {
     let cancelled = false;
-    fetch('/api/sky-now?type=solar-field')
+    fetch('/api/celestial?type=solar-field')
       .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
       .then(d => { if (!cancelled) setData(d); })
       .catch(() => {})

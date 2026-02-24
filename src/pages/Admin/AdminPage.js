@@ -197,6 +197,7 @@ const SECTION_GROUPS = [
   { group: 'Business', children: [
     { id: 'glinter', label: 'Glinter LLC' },
     { id: 'plan', label: 'Plan' },
+    { id: 'store', label: 'Store' },
     { id: 'ip-registry', label: 'IP Registry' },
     { id: 'legal', label: 'Legal' },
   ]},
@@ -5843,6 +5844,173 @@ function CuratedProductsSection() {
   );
 }
 
+function StoreSection() {
+  const LAUNCH_KEY = 'Dodecahedron';
+
+  const PRICING = [
+    { id: 'developer-api', name: 'Secret Weapon API', type: 'Subscription', price: 'Free', notes: 'Activates directly, no Stripe' },
+    { id: 'master-key', name: 'Mythouse Master Key', type: 'Subscription', price: '$100/mo', notes: 'Bundle: all subs + all purchases' },
+    { id: 'ybr', name: 'Yellow Brick Road', type: 'Subscription', price: '$5/mo', notes: '' },
+    { id: 'forge', name: 'Story Forge', type: 'Subscription', price: '$45/mo', notes: '' },
+    { id: 'coursework', name: 'Coursework', type: 'Subscription', price: '$45/mo', notes: '' },
+    { id: 'monomyth', name: 'Monomyth & Meteor Steel', type: 'Subscription', price: '$25/mo', notes: '' },
+    { id: 'fallen-starlight', name: 'Fallen Starlight', type: 'Purchase', price: '$25', notes: '' },
+    { id: 'story-of-stories', name: 'Story of Stories', type: 'Purchase', price: '$25', notes: '' },
+    { id: 'starlight-bundle', name: 'Starlight Bundle', type: 'Purchase', price: '$40', notes: 'Bundle: Fallen Starlight + Story of Stories' },
+    { id: 'medicine-wheel', name: 'Medicine Wheel', type: 'Purchase', price: 'Donation', notes: 'Pay what you want, min $1' },
+  ];
+
+  const STRIPE_LINKS = [
+    { label: 'Payments', href: 'https://dashboard.stripe.com/payments', desc: 'All transactions, refunds, disputes' },
+    { label: 'Subscriptions', href: 'https://dashboard.stripe.com/subscriptions', desc: 'Active, past due, canceled' },
+    { label: 'Customers', href: 'https://dashboard.stripe.com/customers', desc: 'Customer records, payment methods' },
+    { label: 'Invoices', href: 'https://dashboard.stripe.com/invoices', desc: 'Billing history, upcoming invoices' },
+    { label: 'Revenue', href: 'https://dashboard.stripe.com/revenue', desc: 'MRR, churn, growth' },
+    { label: 'Webhooks', href: 'https://dashboard.stripe.com/webhooks', desc: 'Event delivery, failures' },
+    { label: 'Customer Portal', href: 'https://dashboard.stripe.com/settings/billing/portal', desc: 'Configure self-serve billing' },
+    { label: 'API Keys', href: 'https://dashboard.stripe.com/apikeys', desc: 'Manage secret & publishable keys' },
+  ];
+
+  const [copied, setCopied] = useState(false);
+  const [storeTab, setStoreTab] = useState('payments');
+
+  const S = {
+    tabs: { display: 'flex', gap: 0, borderBottom: '1px solid var(--border-subtle)', marginBottom: 20 },
+    tab: { padding: '8px 16px', fontSize: '0.82rem', background: 'none', border: 'none', borderBottom: '2px solid transparent', color: 'var(--text-secondary)', cursor: 'pointer' },
+    tabActive: { color: 'var(--accent-gold)', borderBottomColor: 'var(--accent-gold)' },
+    heading: { fontSize: '0.95rem', marginBottom: 10, color: 'var(--accent-gold)' },
+    code: { background: 'rgba(255,255,255,0.08)', padding: '1px 5px', borderRadius: 3 },
+    linkGrid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 10, marginBottom: 24 },
+    linkCard: { display: 'block', padding: '14px 16px', background: 'rgba(255,255,255,0.03)', border: '1px solid var(--border-subtle)', borderRadius: 8, textDecoration: 'none', transition: 'border-color 0.2s' },
+    linkLabel: { fontSize: '0.88rem', fontWeight: 600, color: 'var(--text-primary)', marginBottom: 4 },
+    linkDesc: { fontSize: '0.75rem', color: 'var(--text-secondary)' },
+    linkArrow: { fontSize: '0.7rem', color: 'var(--text-secondary)', marginLeft: 4 },
+  };
+
+  return (
+    <div className="admin-coursework">
+      <h2 className="admin-coursework-title">STORE & BILLING</h2>
+
+      <div style={S.tabs}>
+        {['payments', 'pricing', 'config'].map(t => (
+          <button key={t} style={{ ...S.tab, ...(storeTab === t ? S.tabActive : {}) }} onClick={() => setStoreTab(t)}>
+            {t === 'payments' ? 'Payments' : t === 'pricing' ? 'Pricing' : 'Config'}
+          </button>
+        ))}
+      </div>
+
+      {storeTab === 'payments' && (
+        <>
+          <div style={{ marginBottom: 24 }}>
+            <h3 style={S.heading}>Stripe Dashboard</h3>
+            <p style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', marginBottom: 12, lineHeight: 1.5 }}>
+              All payment management happens in Stripe. Click through to view transactions, manage subscriptions, issue refunds, or update billing settings.
+            </p>
+            <div style={S.linkGrid}>
+              {STRIPE_LINKS.map(link => (
+                <a key={link.label} href={link.href} target="_blank" rel="noopener noreferrer" style={S.linkCard}
+                  onMouseEnter={e => e.currentTarget.style.borderColor = 'rgba(201,169,97,0.4)'}
+                  onMouseLeave={e => e.currentTarget.style.borderColor = 'var(--border-subtle)'}
+                >
+                  <div style={S.linkLabel}>{link.label}<span style={S.linkArrow}>&nearr;</span></div>
+                  <div style={S.linkDesc}>{link.desc}</div>
+                </a>
+              ))}
+            </div>
+          </div>
+
+          <div style={{ marginBottom: 24 }}>
+            <h3 style={S.heading}>Launch Key</h3>
+            <p style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', marginBottom: 8, lineHeight: 1.5 }}>
+              Enter this key in the Profile page launch key field to comp any subscription or purchase without charging.
+              Validated server-side. Override via <code style={S.code}>STRIPE_LAUNCH_KEY</code> env var.
+            </p>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+              <code style={{
+                background: 'rgba(201, 169, 97, 0.12)',
+                border: '1px solid rgba(201, 169, 97, 0.3)',
+                color: 'var(--accent-gold)',
+                padding: '8px 16px',
+                borderRadius: 6,
+                fontSize: '1.1rem',
+                fontWeight: 600,
+                letterSpacing: '0.04em',
+              }}>
+                {LAUNCH_KEY}
+              </code>
+              <button
+                className="admin-coursework-load-btn"
+                onClick={() => {
+                  navigator.clipboard.writeText(LAUNCH_KEY).then(() => {
+                    setCopied(true);
+                    setTimeout(() => setCopied(false), 2000);
+                  }).catch(() => {});
+                }}
+              >
+                {copied ? 'Copied!' : 'Copy'}
+              </button>
+            </div>
+          </div>
+        </>
+      )}
+
+      {storeTab === 'pricing' && (
+        <div style={{ marginBottom: 24 }}>
+          <h3 style={S.heading}>Pricing Table</h3>
+          <p style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', marginBottom: 12, lineHeight: 1.5 }}>
+            Prices are defined in code (<code style={S.code}>api/_lib/stripeProducts.js</code>) and passed inline to Stripe Checkout — no Dashboard product setup needed.
+          </p>
+          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.82rem' }}>
+            <thead>
+              <tr style={{ borderBottom: '1px solid var(--border-subtle)', textAlign: 'left' }}>
+                <th style={{ padding: '6px 8px', color: 'var(--text-secondary)' }}>Item</th>
+                <th style={{ padding: '6px 8px', color: 'var(--text-secondary)' }}>Type</th>
+                <th style={{ padding: '6px 8px', color: 'var(--text-secondary)' }}>Price</th>
+                <th style={{ padding: '6px 8px', color: 'var(--text-secondary)' }}>Notes</th>
+              </tr>
+            </thead>
+            <tbody>
+              {PRICING.map(p => (
+                <tr key={p.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
+                  <td style={{ padding: '6px 8px' }}>{p.name}</td>
+                  <td style={{ padding: '6px 8px', color: 'var(--text-secondary)' }}>{p.type}</td>
+                  <td style={{ padding: '6px 8px', color: 'var(--accent-gold)' }}>{p.price}</td>
+                  <td style={{ padding: '6px 8px', color: 'var(--text-secondary)', fontSize: '0.78rem' }}>{p.notes}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+
+      {storeTab === 'config' && (
+        <div style={{ marginBottom: 24 }}>
+          <h3 style={S.heading}>Stripe Configuration</h3>
+          <div style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', lineHeight: 1.9 }}>
+            <p><strong>Env vars</strong> (Vercel):</p>
+            <ul style={{ margin: '4px 0 12px 20px', lineHeight: 1.9 }}>
+              <li><code style={S.code}>STRIPE_SECRET_KEY</code> — live or test secret key</li>
+              <li><code style={S.code}>STRIPE_WEBHOOK_SECRET</code> — <code style={S.code}>whsec_...</code> from webhook endpoint</li>
+              <li><code style={S.code}>STRIPE_LAUNCH_KEY</code> — optional, overrides the default comp key</li>
+            </ul>
+            <p><strong>Webhook endpoint</strong>: <code style={S.code}>/api/stripe-webhook</code></p>
+            <p><strong>Events listened</strong>:</p>
+            <ul style={{ margin: '4px 0 12px 20px', lineHeight: 1.9 }}>
+              <li><code style={S.code}>checkout.session.completed</code> — activates items after payment</li>
+              <li><code style={S.code}>customer.subscription.updated</code> — tracks status changes</li>
+              <li><code style={S.code}>customer.subscription.deleted</code> — deactivates on cancel</li>
+              <li><code style={S.code}>invoice.payment_failed</code> — logged for notification</li>
+            </ul>
+            <p><strong>Products</strong>: Defined in <code style={S.code}>api/_lib/stripeProducts.js</code> — prices passed as <code style={S.code}>price_data</code> to Checkout Sessions</p>
+            <p><strong>Source of truth</strong>: Webhook writes all <code style={S.code}>subscriptions.*</code> and <code style={S.code}>purchases.*</code> flags in Firestore. Client never writes these.</p>
+            <p><strong>Firestore path</strong>: <code style={S.code}>users/&#123;uid&#125;/meta/profile</code> &mdash; <code style={S.code}>stripeCustomerId</code>, <code style={S.code}>stripeSubscriptions</code>, <code style={S.code}>stripePurchases</code></p>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 function GlinterSection() {
   const [expandedSub, setExpandedSub] = useState(null);
   const [expandedCircle, setExpandedCircle] = useState(null);
@@ -6225,6 +6393,7 @@ function AdminPage() {
       </div>
 
       {activeSection === 'glinter' && <GlinterSection />}
+      {activeSection === 'store' && <StoreSection />}
       {activeSection === 'plan' && <StrategicPlanSection />}
       {activeSection === 'system-health' && <SystemHealthSection />}
       {activeSection === 'campaigns' && <CampaignManagerSection />}

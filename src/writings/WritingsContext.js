@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { db, firebaseConfigured } from '../auth/firebase';
 import { useAuth } from '../auth/AuthContext';
@@ -420,7 +420,7 @@ export function WritingsProvider({ children }) {
     return items;
   }, []);
 
-  const value = {
+  const value = useMemo(() => ({
     forgeData,
     saveForge,
     saveForgeConversation,
@@ -440,7 +440,13 @@ export function WritingsProvider({ children }) {
     getStoriesForStage,
     getAllWritings,
     loaded,
-  };
+  }), [
+    forgeData, saveForge, saveForgeConversation, saveForgeDraft,
+    journeySyntheses, addJourneySynthesis, getConversation, saveConversation,
+    notesData, saveNotes, personalStories, addStory, addStoryEntry,
+    updateStoryGenerated, updateStoryEdited, updateStoryName,
+    getStoriesForStage, getAllWritings, loaded,
+  ]);
 
   return (
     <WritingsContext.Provider value={value}>

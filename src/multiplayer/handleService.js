@@ -14,7 +14,7 @@ export async function registerHandle(handle) {
   if (!user) throw new Error('Not authenticated');
 
   const token = await user.getIdToken();
-  const res = await fetch('/api/handles', {
+  const res = await fetch('/api/user-actions?route=handle', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ token, handle }),
@@ -36,7 +36,7 @@ export async function searchHandles(query) {
   if (!user) throw new Error('Not authenticated');
 
   const token = await user.getIdToken();
-  const res = await fetch(`/api/handles?q=${encodeURIComponent(query)}`, {
+  const res = await fetch(`/api/user-actions?route=handle&q=${encodeURIComponent(query)}`, {
     headers: { Authorization: `Bearer ${token}` },
   });
 

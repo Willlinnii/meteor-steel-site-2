@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import useVoice, { SpeechRecognition } from '../hooks/useVoice';
 import { useCoursework } from '../coursework/CourseworkContext';
 import { useWritings } from '../writings/WritingsContext';
+import DodecahedronButton from './DodecahedronButton';
 import { apiFetch } from '../lib/chatApi';
 
 function parseAtlasMessage(text) {
@@ -188,6 +189,7 @@ export default function PersonaChatPanel({ entityType, entityName, entityLabel, 
             {recording ? '\u{23F9}' : '\u{1F3A4}'}
           </button>
         )}
+        <DodecahedronButton />
         <button
           className="chat-send persona-chat-send"
           onClick={handleSend}

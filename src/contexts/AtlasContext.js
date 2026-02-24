@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useCallback, useRef, useEffect, useState } from 'react';
+import React, { createContext, useContext, useCallback, useMemo, useRef, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useCoursework } from '../coursework/CourseworkContext';
 
@@ -266,14 +266,14 @@ export function AtlasContextProvider({ children }) {
     return lines.join('\n');
   }, [location.pathname, progress, getCourseStates]);
 
-  const value = {
+  const value = useMemo(() => ({
     setPageContext,
     buildAtlasContext,
     // Backward compat
     area,
     meta,
     register,
-  };
+  }), [setPageContext, buildAtlasContext, area, meta, register]);
 
   return (
     <AtlasContext.Provider value={value}>

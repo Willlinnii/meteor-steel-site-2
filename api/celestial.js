@@ -1,9 +1,10 @@
 /**
- * /api/sky-now  —  Live celestial data hub
+ * /api/celestial — Consolidated celestial computation endpoints
  *
  * Routes by ?type= query parameter:
- *   (default)       — current sky: planet positions + aspects
- *   ?type=solar-field — real-time solar wind IMF from NOAA SWPC
+ *   (default / sky-now) — GET: current planet positions + aspects
+ *   natal               — POST: compute natal chart
+ *   solar-field         — GET: real-time solar wind IMF from NOAA SWPC
  */
 
 const { computeNatalChart } = require('./_lib/natalChart');
@@ -13,10 +14,6 @@ const { computeNatalChart } = require('./_lib/natalChart');
 const NOAA_MAG_URL =
   'https://services.swpc.noaa.gov/products/solar-wind/mag-1-day.json';
 
-// Polar field state — changes on ~11-year timescale.
-// Solar Cycle 25: reversal began ~2023, ongoing through 2024-2026.
-// Update manually every ~6 months based on WSO Stanford data.
-// Last updated: 2026-02-23
 const POLAR_FIELD = {
   cycle: 25,
   phase: 'maximum',
@@ -39,7 +36,7 @@ function parseAlignment(bzAvg) {
   return 'neutral';
 }
 
-// ─── Handlers ───
+// ─── Sky Now ───
 
 async function handleSkyNow(req, res) {
   try {
@@ -70,6 +67,40 @@ async function handleSkyNow(req, res) {
     return res.status(500).json({ error: 'Failed to compute current sky.' });
   }
 }
+
+// ─── Natal Chart ───
+
+async function handleNatalChart(req, res) {
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method not allowed' });
+  }
+
+  const { year, month, day, hour, minute, latitude, longitude, city, utcOffset } = req.body || {};
+
+  if (!year || !month || !day || typeof latitude !== 'number' || typeof longitude !== 'number') {
+    return res.status(400).json({ error: 'year, month, day, latitude, and longitude are required.' });
+  }
+
+  try {
+    const chart = computeNatalChart({
+      year,
+      month,
+      day,
+      hour: typeof hour === 'number' ? hour : -1,
+      minute: typeof minute === 'number' ? minute : 0,
+      latitude,
+      longitude,
+      city: city || '',
+      utcOffset: typeof utcOffset === 'number' ? utcOffset : 0,
+    });
+    return res.status(200).json({ chart });
+  } catch (err) {
+    console.error('Natal chart computation error:', err?.message);
+    return res.status(500).json({ error: 'Failed to compute natal chart.' });
+  }
+}
+
+// ─── Solar Field ───
 
 async function handleSolarField(req, res) {
   res.setHeader(
@@ -116,7 +147,6 @@ async function handleSolarField(req, res) {
       throw new Error('No valid readings found in NOAA data');
     }
 
-    // 1-hour average (~60 most recent rows)
     const recentRows = rows.slice(-60);
     let sumBx = 0, sumBy = 0, sumBz = 0, sumBt = 0, count = 0;
     for (const row of recentRows) {
@@ -174,15 +204,18 @@ async function handleSolarField(req, res) {
 // ─── Router ───
 
 module.exports = async function handler(req, res) {
-  if (req.method !== 'GET') {
-    return res.status(405).json({ error: 'Method not allowed' });
-  }
-
   const type = req.query.type;
 
-  if (type === 'solar-field') {
-    return handleSolarField(req, res);
+  switch (type) {
+    case 'natal':
+      return handleNatalChart(req, res);
+    case 'solar-field':
+      return handleSolarField(req, res);
+    default:
+      // Default = sky-now (GET current positions)
+      if (req.method !== 'GET') {
+        return res.status(405).json({ error: 'Method not allowed' });
+      }
+      return handleSkyNow(req, res);
   }
-
-  return handleSkyNow(req, res);
 };

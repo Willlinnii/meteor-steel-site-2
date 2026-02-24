@@ -1,0 +1,69 @@
+{
+  "tradition": "Sumerian",
+  "sourceText": "Sumerian star catalogs; Temple hymns of Enheduanna (c. 2285 BCE); Descent of Inanna; MUL.APIN (compiled later but preserving older Sumerian star names)",
+  "period": "c. 3500–2000 BCE",
+  "origin": "tradition",
+  "entered": "2026-02-24",
+  "method": "dictation",
+  "order": "chaldean",
+  "note": "The Sumerians named the planets and identified them with their gods, but the systematic seven-planet correspondence table is a later Babylonian achievement. Inanna-Venus is the oldest firmly attested planet-deity pairing (Enheduanna, c. 2285 BCE). Utu-Sun and Nanna-Moon are also solid. The outer planet identifications are less certain at this early date — the names listed here are from Sumerian star catalogs preserved in later compilations. No metal-planet system is attested for this period.",
+  "correspondences": {
+    "Saturn": {
+      "number": 1,
+      "classicalPlanet": "Saturn",
+      "planetName": "UDU.IDIM.SAG.UŠ — 'the steady star'",
+      "deity": "Ninurta",
+      "domain": "Agriculture, war, floods, and the thunderbird Anzu",
+      "description": "Son of Enlil, lord of the plow and the floodwaters. Ninurta defeated the monster Anzu who stole the Tablet of Destinies and returned cosmic order. His myths establish the pattern: the young warrior who restores what has been stolen from the gods. The slowest planet carried the Sumerian name UDU.IDIM.SAG.UŠ — 'the steady star' — because steadiness was his nature."
+    },
+    "Jupiter": {
+      "number": 2,
+      "classicalPlanet": "Jupiter",
+      "planetName": "SAG.ME.GAR",
+      "deity": "Enlil (later transferred to Marduk)",
+      "domain": "Air, wind, storms, kingship, the decree of fates",
+      "description": "Enlil was the supreme active god of the Sumerian pantheon — lord of the wind and the breath that separated heaven from earth. He held the Tablet of Destinies. The brightest planet's Sumerian name SAG.ME.GAR predates its identification with Marduk. Whether the Sumerians themselves linked it firmly to Enlil is uncertain — the association is inferred from Marduk's later inheritance of Enlil's cosmic role."
+    },
+    "Mars": {
+      "number": 3,
+      "classicalPlanet": "Mars",
+      "planetName": "MUL₂.ḪUŠ — 'the red star'",
+      "deity": "Nergal",
+      "domain": "The underworld, plague, war, the scorching sun of midsummer",
+      "description": "Nergal descended to the underworld and took Ereshkigal as his queen, becoming co-ruler of the land of the dead. The Sumerians called this planet MUL₂.ḪUŠ — simply 'the red star' — making the color association among the oldest planetary observations. Nergal's identification with this planet is attested by the Old Babylonian period and likely older."
+    },
+    "Sun": {
+      "number": 4,
+      "classicalPlanet": "Sun",
+      "planetName": "Utu (dUTU)",
+      "deity": "Utu",
+      "domain": "Justice, truth, the journey between worlds",
+      "description": "Utu (dUTU) crossed the sky each day and traveled the underworld each night, seeing everything in both realms. He was the god of justice because nothing could be hidden from him. He aided his sister Inanna's descent and helped Gilgamesh in his quest. Every Sumerian legal proceeding invoked his witness. The Sun-Utu identification is unambiguous and among the oldest in the record."
+    },
+    "Venus": {
+      "number": 5,
+      "classicalPlanet": "Venus",
+      "planetName": "MUL Dilbat",
+      "deity": "Inanna (Queen of Heaven)",
+      "domain": "Love, war, the morning and evening star, the storehouse of heaven",
+      "description": "Known as MUL Dilbat, Inanna is the oldest deity continuously identified with a specific planet. Enheduanna, history's first known author, wrote hymns praising her as the morning and evening star around 2285 BCE. Inanna's descent to the underworld — dying, hanging on a hook, and returning — is the prototype of all death-and-rebirth myths. She held love and war together without contradiction. This is the firmest planet-deity identification in the ancient world."
+    },
+    "Mercury": {
+      "number": 6,
+      "classicalPlanet": "Mercury",
+      "planetName": "UDU.IDIM.GU₄.UD — 'the jumping star'",
+      "deity": "UDU.IDIM.GU₄.UD (deity identification uncertain)",
+      "domain": "The darting star near the horizon",
+      "description": "The Sumerians called this planet UDU.IDIM.GU₄.UD — 'the jumping star' — a name that describes its behavior, darting near the horizon. The planet was later identified with Nabu (the Babylonian scribe god), but at the Sumerian stage no firm deity pairing is attested. The planet was observed and named, but who it belonged to remains unclear in the earliest sources."
+    },
+    "Moon": {
+      "number": 7,
+      "classicalPlanet": "Moon",
+      "planetName": "Nanna (dŠEŠ.KI)",
+      "deity": "Nanna",
+      "domain": "Timekeeping, cattle herding, fertility, the calendar",
+      "description": "Nanna (dŠEŠ.KI) was father of Utu and Inanna — the Moon who gave birth to the Sun and Venus. His city was Ur, one of the oldest in Sumer. The crescent moon was his crown and his boat, sailing the night sky. The entire Sumerian calendar followed his phases. Nanna was time made visible before anyone thought to call it that. The Moon-Nanna identification is unambiguous."
+    }
+  },
+  "authorCommentary": []
+}

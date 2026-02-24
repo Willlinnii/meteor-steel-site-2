@@ -1,0 +1,83 @@
+{
+  "tradition": "Assyrian",
+  "sourceText": "Enūma Anu Enlil (omen series); Ashurbanipal's Library at Nineveh; MUL.APIN tablets; Neo-Assyrian metal-planet tablets",
+  "period": "c. 2000–609 BCE",
+  "origin": "tradition",
+  "entered": "2026-02-24",
+  "method": "dictation",
+  "order": "chaldean",
+  "note": "The Assyrians inherited the Sumerian-Babylonian planetary system and systematized it into the most rigorous omen literature the ancient world produced. Ashurbanipal's library at Nineveh (c. 650 BCE) preserved thousands of celestial omen tablets — the Enūma Anu Enlil series alone runs to 70 tablets. Neo-Assyrian cuneiform tablets from Nineveh list metals alongside planets, though scholars debate whether these represent a coherent symbolic system or ritual/liturgical associations. The deity-planet identifications are firmly attested. Ashur, the supreme national god, overlay the system without replacing it.",
+  "correspondences": {
+    "Saturn": {
+      "number": 1,
+      "classicalPlanet": "Saturn",
+      "planetName": "Kaiamānu — 'the steady one'",
+      "metal": "Lead",
+      "deity": "Ninurta (under Ashur's authority)",
+      "domain": "Agriculture, boundaries, the slow enforcer",
+      "assyrianContext": "The Neo-Assyrian tablets explicitly pair Saturn with lead — the first written metal-planet correspondence. Saturn's omens in Enūma Anu Enlil concern agricultural cycles and the fate of empires. Its slowness was read as deliberation, not weakness.",
+      "description": "In the Assyrian system, Saturn's steady crawl across the sky was a royal omen. When Saturn approached a constellation, the astrologer-priests of Nineveh reported directly to the king. The planet's behavior could confirm or threaten a reign. Lead was its metal — heavy, enduring, the last to melt."
+    },
+    "Jupiter": {
+      "number": 2,
+      "classicalPlanet": "Jupiter",
+      "planetName": "Neberu — 'the star of Marduk'",
+      "metal": "Tin",
+      "deity": "Marduk (acknowledged under Ashur)",
+      "domain": "Kingship, cosmic order, the bright wanderer",
+      "assyrianContext": "The Assyrians acknowledged Marduk's planetary role while subordinating him to Ashur. Jupiter-Marduk omens were the most politically significant — a favorable Jupiter meant the gods endorsed the king. Tin, the metal that makes bronze possible, matched Jupiter's role as the enabler of civilization.",
+      "description": "Jupiter was called 'the star of Marduk' even in Assyrian texts, a concession to Babylonian tradition. Its brightness made it the most watched planet. Assyrian astrologers tracked Jupiter's synodic cycle with extraordinary precision, predicting its appearances to within days. Favorable Jupiter omens could launch military campaigns."
+    },
+    "Mars": {
+      "number": 3,
+      "classicalPlanet": "Mars",
+      "planetName": "Ṣalbatānu — 'the wild, flickering one'",
+      "metal": "Iron",
+      "deity": "Nergal",
+      "domain": "War, plague, the underworld, fever",
+      "assyrianContext": "Iron was the Assyrian military metal — their armies were the first to deploy iron weapons at scale. Nergal-Mars was the war star, and the Assyrians, a military empire above all else, watched it obsessively. An unfavorable Mars omen could delay a siege.",
+      "description": "The Assyrians forged the Iron Age into an empire. Their association of Mars with iron was not abstract — it was the metal of the sword, the chariot fitting, the siege engine. Nergal's red flicker meant blood, and the astrologers read his movements as dispatches from the battlefield of heaven."
+    },
+    "Sun": {
+      "number": 4,
+      "classicalPlanet": "Sun",
+      "planetName": "Shamash (dUTU)",
+      "metal": "Gold",
+      "deity": "Shamash",
+      "domain": "Justice, divination, truth, the oath",
+      "assyrianContext": "Shamash was the divine judge and the patron of extispicy — divination by reading animal entrails. Every major Assyrian decision, from treaty to war, required Shamash's sanction through divination. Solar eclipses were existential crises; substitute kings were installed to absorb the omen.",
+      "description": "The Assyrians took solar omens so seriously that they developed the substitute king ritual: when an eclipse threatened the monarch, a commoner was enthroned, dressed in royal garments, and — after the danger passed — executed. The real king hid. Gold was Shamash's metal, but in Assyria the sun's authority was literally a matter of life and death."
+    },
+    "Venus": {
+      "number": 5,
+      "classicalPlanet": "Venus",
+      "planetName": "Dilbat — 'the star of Ishtar'",
+      "metal": "Copper",
+      "deity": "Ishtar of Nineveh and Ishtar of Arbela",
+      "domain": "War, love, prophecy, the morning and evening star",
+      "assyrianContext": "The Assyrians split Ishtar into two aspects tied to their imperial cities: Ishtar of Nineveh (love, sexuality) and Ishtar of Arbela (war, prophecy). Both were Venus. The Venus Tablet of Ammisaduqa, preserved in Nineveh's library, is the oldest planetary observation record (c. 1650 BCE).",
+      "description": "Ishtar spoke through her prophets at Arbela, delivering oracles directly to the Assyrian kings. 'Fear not, Esarhaddon — I am your shield,' she declared through a woman named Baya. Venus was the only planet whose deity addressed the king in the first person. Copper — the metal of Cyprus, Ishtar's island — was hers."
+    },
+    "Mercury": {
+      "number": 6,
+      "classicalPlanet": "Mercury",
+      "planetName": "Šiḫṭu — 'the jumping one'",
+      "metal": "Mercury",
+      "deity": "Nabu",
+      "domain": "Writing, scribal wisdom, the Tablet of Destinies, scholarship",
+      "assyrianContext": "Nabu was Ashurbanipal's personal patron — the king who built the great library was devoted to the god of scribes. The Mercury-Nabu planet identification is firmly attested. The metal quicksilver's association with this planet is less certain at this date. Nabu's festival at the New Year involved ritually inscribing the fates for the coming year.",
+      "description": "Ashurbanipal, uniquely among Assyrian kings, boasted of his literacy: 'I read the cunning tablets of Sumer and the dark Akkadian language.' His patron Nabu governed not just writing but the very act of recording fate. The library at Nineveh — 30,000 tablets — was Nabu's temple in clay."
+    },
+    "Moon": {
+      "number": 7,
+      "classicalPlanet": "Moon",
+      "planetName": "Sin (Sîn)",
+      "metal": "Silver",
+      "deity": "Sin",
+      "domain": "The calendar, timekeeping, the oath, cattle",
+      "assyrianContext": "Lunar eclipses were even more politically charged than solar ones. The Assyrian astronomers developed sophisticated eclipse prediction methods — the Saros cycle was discovered through their records. Silver, moon-bright, was the metal of commerce and tribute.",
+      "description": "The Assyrian empire ran on silver — tribute was weighed in silver, debts were denominated in silver, and the moon god Sin governed the calendar that structured all of it. When the moon was eclipsed, the substitute king ritual was enacted. The Assyrian astronomers' meticulous lunar records, spanning centuries, became the foundation of all later astronomy."
+    }
+  },
+  "authorCommentary": []
+}

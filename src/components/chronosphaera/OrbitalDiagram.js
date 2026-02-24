@@ -11,6 +11,7 @@ import constellationsData from '../../data/constellations.json';
 import zodiacCultureData from '../../data/chronosphaeraZodiac.json';
 import constellationCultures from '../../data/constellationCultures.json';
 import { CHAKRA_ORDERINGS, CHAKRA_MODE_LABELS } from '../../data/chronosphaeraBodyPositions';
+import { BEYOND_RINGS } from '../../data/chronosphaeraBeyondRings';
 
 const BODY_MAP = {
   Moon: Body.Moon,
@@ -256,12 +257,12 @@ function ensureYTApi() {
   });
 }
 
-export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPlanet, hoveredPlanet, selectedSign, onSelectSign, selectedCardinal, onSelectCardinal, selectedEarth, onSelectEarth, showCalendar, onToggleCalendar, selectedMonth, onSelectMonth, showMedicineWheel, onToggleMedicineWheel, selectedWheelItem, onSelectWheelItem, chakraViewMode, onToggleChakraView, onClickOrderLabel, videoUrl, onCloseVideo, ybrActive, ybrCurrentStopIndex, ybrStopProgress, ybrJourneySequence, onToggleYBR, ybrAutoStart, clockMode, onToggleClock, showMonomyth, showMeteorSteel, monomythStages, selectedMonomythStage, onSelectMonomythStage, onToggleMonomyth, monomythModel, showCycles, onSelectCycleSegment, activeCulture, showFallenStarlight, showStoryOfStories, onToggleStarlight, starlightStages, selectedStarlightStage, onSelectStarlightStage, selectedConstellation, onSelectConstellation, zodiacMode, onSelectStarSphere, starSphereActive }) {
+export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPlanet, hoveredPlanet, selectedSign, onSelectSign, selectedCardinal, onSelectCardinal, selectedEarth, onSelectEarth, showCalendar, onToggleCalendar, selectedMonth, onSelectMonth, showMedicineWheel, onToggleMedicineWheel, selectedWheelItem, onSelectWheelItem, chakraViewMode, onToggleChakraView, onClickOrderLabel, videoUrl, onCloseVideo, ybrActive, ybrCurrentStopIndex, ybrStopProgress, ybrJourneySequence, onToggleYBR, ybrAutoStart, clockMode, onToggleClock, showMonomyth, showMeteorSteel, monomythStages, selectedMonomythStage, onSelectMonomythStage, onToggleMonomyth, monomythModel, showCycles, onSelectCycleSegment, activeCulture, showFallenStarlight, showStoryOfStories, onToggleStarlight, starlightStages, selectedStarlightStage, onSelectStarlightStage, selectedConstellation, onSelectConstellation, zodiacMode, onSelectBeyondRing, beyondRings, activeBeyondRing }) {
   const wrapperRef = useRef(null);
   const [tooltip, setTooltip] = useState(null);
-  const { hasPurchase } = useProfile();
+  const { hasPurchase, hasSubscription } = useProfile();
   const navigate = useNavigate();
-  const [starSphereHover, setStarSphereHover] = useState(false);
+  const [hoveredBeyondRing, setHoveredBeyondRing] = useState(null);
 
   // Pre-generate star positions for the star sphere ring (narrow band outside zodiac)
   const starBeltDots = useMemo(() => {
@@ -280,11 +281,123 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
     }
     return dots;
   }, []);
+
+  // Dodecahedron wireframe geometry for the Source ring (Plato's cosmic solid).
+  // Computes a face-on orthographic projection: one pentagonal face aimed at the viewer,
+  // producing 5-fold symmetry with a front pentagon near center and a decagonal silhouette.
+  const dodecahedron = useMemo(() => {
+    const phi = (1 + Math.sqrt(5)) / 2;
+    const invPhi = 1 / phi;
+
+    // 20 vertices of a regular dodecahedron (standard coordinates, all at distance sqrt(3))
+    const V = [];
+    for (const a of [-1, 1]) for (const b of [-1, 1]) for (const c of [-1, 1]) V.push([a, b, c]);
+    for (const a of [-1, 1]) for (const b of [-1, 1]) V.push([0, a * invPhi, b * phi]);
+    for (const a of [-1, 1]) for (const b of [-1, 1]) V.push([a * invPhi, b * phi, 0]);
+    for (const a of [-1, 1]) for (const b of [-1, 1]) V.push([a * phi, 0, b * invPhi]);
+
+    // 30 edges (connected at distance 2/phi) + adjacency lists
+    const elen = 2 / phi;
+    const edges = [];
+    const adj = V.map(() => []);
+    for (let i = 0; i < 20; i++)
+      for (let j = i + 1; j < 20; j++) {
+        if (Math.abs(Math.hypot(V[i][0] - V[j][0], V[i][1] - V[j][1], V[i][2] - V[j][2]) - elen) < 0.01) {
+          edges.push([i, j]);
+          adj[i].push(j);
+          adj[j].push(i);
+        }
+      }
+
+    // Walk one pentagonal face using the cross-product winding test.
+    // At each directed edge (u→v), the next vertex w in the CCW face (viewed from outside)
+    // satisfies: cross(v-u, w-v) · v > 0 (v points outward for a centered polyhedron).
+    function nextInFace(u, v) {
+      const e1 = [V[v][0] - V[u][0], V[v][1] - V[u][1], V[v][2] - V[u][2]];
+      for (const w of adj[v]) {
+        if (w === u) continue;
+        const e2 = [V[w][0] - V[v][0], V[w][1] - V[v][1], V[w][2] - V[v][2]];
+        const cross = [e1[1] * e2[2] - e1[2] * e2[1], e1[2] * e2[0] - e1[0] * e2[2], e1[0] * e2[1] - e1[1] * e2[0]];
+        if (cross[0] * V[v][0] + cross[1] * V[v][1] + cross[2] * V[v][2] > 0) return w;
+      }
+      return adj[v].find(w => w !== u);
+    }
+    const face = [0, adj[0][0]];
+    for (let i = 0; i < 3; i++) face.push(nextInFace(face[face.length - 2], face[face.length - 1]));
+
+    // Face center → outward unit normal
+    const fc = face.reduce((s, i) => [s[0] + V[i][0], s[1] + V[i][1], s[2] + V[i][2]], [0, 0, 0]).map(c => c / 5);
+    const fcL = Math.hypot(...fc);
+    const n = fc.map(c => c / fcL);
+
+    // Rodrigues' rotation: align face normal n with +z.
+    // Rotation axis = n × ẑ = (n[1], -n[0], 0), angle θ where cos θ = n[2].
+    const nz = n[2];
+    const s2 = n[0] * n[0] + n[1] * n[1];
+    let rot;
+    if (s2 < 1e-10) {
+      rot = nz > 0 ? (p => [...p]) : (([x, y, z]) => [x, -y, -z]);
+    } else {
+      const s = Math.sqrt(s2);
+      const c = nz;
+      const omc = 1 - c;
+      const kx = n[1] / s, ky = -n[0] / s;
+      rot = ([x, y, z]) => {
+        const kv = kx * x + ky * y;
+        return [
+          x * c + ky * z * s + kx * kv * omc,
+          y * c - kx * z * s + ky * kv * omc,
+          z * c + (kx * y - ky * x) * s,
+        ];
+      };
+    }
+
+    const R = V.map(rot);
+    const P = R.map(([x, y]) => [x, y]);
+    const maxD = Math.max(...P.map(([x, y]) => Math.hypot(x, y)));
+
+    // Rotate 2D so a front-face vertex points up (12 o'clock)
+    const fp = face.map(i => P[i]);
+    let topI = 0;
+    for (let i = 1; i < 5; i++) if (fp[i][1] > fp[topI][1]) topI = i;
+    const ta = Math.atan2(fp[topI][1], fp[topI][0]);
+    const off = Math.PI / 2 - ta;
+    const cR = Math.cos(off), sR = Math.sin(off);
+    const F = P.map(([x, y]) => [x * cR - y * sR, x * sR + y * cR]);
+
+    const Z = R.map(r => r[2]);
+    return { vertices: F, edges, maxDist: maxD, zVals: Z, minZ: Math.min(...Z), maxZ: Math.max(...Z) };
+  }, []);
+
+  // Pre-generate dot positions for beyond rings (World Soul, Nous, Source)
+  const beyondDots = useMemo(() => {
+    const dotsMap = {};
+    for (const ring of BEYOND_RINGS) {
+      const dots = [];
+      let seed = ring.dotSeed;
+      const rand = () => { seed = (seed * 16807 + 0) % 2147483647; return seed / 2147483647; };
+      for (let i = 0; i < ring.dotCount; i++) {
+        const angle = rand() * Math.PI * 2;
+        const r = ring.inner + rand() * ring.width;
+        const isSource = ring.id === 'source';
+        dots.push({
+          x: CX + r * Math.cos(angle),
+          y: CY + r * Math.sin(angle),
+          r: 0.3 + rand() * (isSource ? 0.6 : 0.8),
+          a: (isSource ? 0.2 : 0.3) + rand() * (isSource ? 0.5 : 0.7),
+        });
+      }
+      dotsMap[ring.id] = dots;
+    }
+    return dotsMap;
+  }, []);
   const [starlightGateId, setStarlightGateId] = useState(null); // null, 'fallen-starlight', or 'story-of-stories'
   const [medicineWheelGateId, setMedicineWheelGateId] = useState(null);
+  const [monomythGateOpen, setMonomythGateOpen] = useState(false);
   const hasFallenStarlight = hasPurchase('fallen-starlight');
   const hasStoryOfStories = hasPurchase('story-of-stories');
   const hasMedicineWheel = hasPurchase('medicine-wheel');
+  const hasMonomyth = hasSubscription('monomyth');
 
   // --- Analog clock state & effects ---
   const showClock = !!clockMode;
@@ -734,10 +847,11 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
     };
   }, [aligned, livePositions, heliocentric, chakraViewMode]);
 
-  // When calendar/clock mode is activated, switch view mode
+  // When calendar/clock mode is activated, switch view mode.
+  // Only '12h' triggers heliocentric; '24h' and null are both geocentric.
   useEffect(() => {
     if (showCalendar || showClock) {
-      setHeliocentric(clockMode !== '24h');
+      setHeliocentric(clockMode === '12h');
       setLivePositions(false);
       setAligned(false);
     }
@@ -902,7 +1016,7 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
       ref={wrapperRef}
       style={pinchStyle}
     >
-      <svg viewBox={(showMonomyth || showFallenStarlight) ? '-50 -50 800 800' : '0 0 700 700'} preserveAspectRatio="xMidYMid meet" className="orbital-svg" role="img" aria-label={showMedicineWheel ? "Medicine wheel diagram" : showMonomyth ? "Celestial clock with monomyth ring" : showFallenStarlight ? "Celestial clock with starlight ring" : heliocentric ? "Heliocentric orbital diagram" : "Geocentric orbital diagram with zodiac"}>
+      <svg viewBox={(showMonomyth || showFallenStarlight || (beyondRings && beyondRings.length > 0)) ? '-50 -50 800 800' : '0 0 700 700'} preserveAspectRatio="xMidYMid meet" className="orbital-svg" role="img" aria-label={showMedicineWheel ? "Medicine wheel diagram" : showMonomyth ? "Celestial clock with monomyth ring" : showFallenStarlight ? "Celestial clock with starlight ring" : heliocentric ? "Heliocentric orbital diagram" : "Geocentric orbital diagram with zodiac"}>
         {showMedicineWheel ? (
           <g className="medicine-wheel" onMouseMove={handleWheelMove} onMouseLeave={() => { hoveredRingRef.current = null; setHoveredRing(null); }}>
             {/* Quadrant background sectors */}
@@ -1453,19 +1567,19 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
         </g>{/* end zodiac/month rotated group */}
 
         {/* Star sphere — narrow ring just outside the zodiac band */}
-        {onSelectStarSphere && (
+        {onSelectBeyondRing && (
           <g>
             {/* Border circles for the star sphere ring */}
             <circle cx={CX} cy={CY} r={STAR_SPHERE_INNER} fill="none"
-              stroke={(starSphereHover || starSphereActive) ? 'rgba(255, 255, 240, 0.35)' : 'rgba(255, 255, 240, 0.08)'}
+              stroke={(hoveredBeyondRing === 'fixedStars' || activeBeyondRing === 'fixedStars') ? 'rgba(255, 255, 240, 0.35)' : 'rgba(255, 255, 240, 0.08)'}
               strokeWidth="0.6" style={{ transition: 'stroke 0.3s' }} />
             <circle cx={CX} cy={CY} r={STAR_SPHERE_OUTER} fill="none"
-              stroke={(starSphereHover || starSphereActive) ? 'rgba(255, 255, 240, 0.35)' : 'rgba(255, 255, 240, 0.08)'}
+              stroke={(hoveredBeyondRing === 'fixedStars' || activeBeyondRing === 'fixedStars') ? 'rgba(255, 255, 240, 0.35)' : 'rgba(255, 255, 240, 0.08)'}
               strokeWidth="0.6" style={{ transition: 'stroke 0.3s' }} />
             {/* Star dots — always faintly visible, brighten on hover */}
             {starBeltDots.map((s, i) => (
               <circle key={`star-${i}`} cx={s.x} cy={s.y} r={s.r}
-                fill={`rgba(255, 255, 240, ${(starSphereHover || starSphereActive) ? s.a : s.a * 0.25})`}
+                fill={`rgba(255, 255, 240, ${(hoveredBeyondRing === 'fixedStars' || activeBeyondRing === 'fixedStars') ? s.a : s.a * 0.25})`}
                 style={{ transition: 'fill 0.3s', pointerEvents: 'none' }} />
             ))}
             {/* Clickable hit target */}
@@ -1476,13 +1590,75 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
               stroke="rgba(255, 255, 240, 0.01)"
               strokeWidth={STAR_SPHERE_WIDTH}
               style={{ cursor: 'pointer' }}
-              onClick={(e) => { e.stopPropagation(); onSelectStarSphere(); }}
-              onMouseEnter={(e) => { setStarSphereHover(true); handleTooltipEnter('starSphere', 'Sphere of Fixed Stars', e); }}
+              onClick={(e) => { e.stopPropagation(); onSelectBeyondRing('fixedStars'); }}
+              onMouseEnter={(e) => { setHoveredBeyondRing('fixedStars'); handleTooltipEnter('starSphere', 'Sphere of Fixed Stars', e); }}
               onMouseMove={handleTooltipMove}
-              onMouseLeave={() => { setStarSphereHover(false); handleTooltipLeave(); }}
+              onMouseLeave={() => { setHoveredBeyondRing(null); handleTooltipLeave(); }}
             />
           </g>
         )}
+
+        {/* Beyond rings — World Soul, Nous, Source (hidden when monomyth/starlight active) */}
+        {onSelectBeyondRing && beyondRings && !showMonomyth && !showFallenStarlight && beyondRings.map(ringId => {
+          const ring = BEYOND_RINGS.find(r => r.id === ringId);
+          if (!ring) return null;
+          const { r: cr, g: cg, b: cb } = ring.color;
+          const isActive = activeBeyondRing === ringId || hoveredBeyondRing === ringId;
+          const dots = beyondDots[ringId] || [];
+          const isSource = ringId === 'source';
+          return (
+            <g key={ringId}>
+              <circle cx={CX} cy={CY} r={ring.inner} fill="none"
+                stroke={`rgba(${cr}, ${cg}, ${cb}, ${isActive ? 0.4 : 0.08})`}
+                strokeWidth="0.6" style={{ transition: 'stroke 0.3s' }} />
+              {isSource ? (
+                // Dodecahedron wireframe replaces the outer circle for The Source
+                (() => {
+                  const sc = ring.outer / dodecahedron.maxDist;
+                  const zRange = dodecahedron.maxZ - dodecahedron.minZ;
+                  return dodecahedron.edges.map(([i, j], idx) => {
+                    const x1 = CX + dodecahedron.vertices[i][0] * sc;
+                    const y1 = CY - dodecahedron.vertices[i][1] * sc;
+                    const x2 = CX + dodecahedron.vertices[j][0] * sc;
+                    const y2 = CY - dodecahedron.vertices[j][1] * sc;
+                    const depth = ((dodecahedron.zVals[i] + dodecahedron.zVals[j]) / 2 - dodecahedron.minZ) / zRange;
+                    const baseAlpha = 0.12 + depth * 0.35;
+                    const alpha = isActive ? baseAlpha * 2 : baseAlpha;
+                    return (
+                      <line key={`dodec-${idx}`}
+                        x1={x1} y1={y1} x2={x2} y2={y2}
+                        stroke={`rgba(255, 255, 255, ${Math.min(alpha, 1)})`}
+                        strokeWidth={isActive ? 0.7 : 0.5}
+                        style={{ transition: 'stroke 0.3s, stroke-width 0.3s', pointerEvents: 'none' }}
+                      />
+                    );
+                  });
+                })()
+              ) : (
+                <circle cx={CX} cy={CY} r={ring.outer} fill="none"
+                  stroke={`rgba(${cr}, ${cg}, ${cb}, ${isActive ? 0.4 : 0.08})`}
+                  strokeWidth="0.6" style={{ transition: 'stroke 0.3s' }} />
+              )}
+              {dots.map((s, i) => (
+                <circle key={`${ringId}-${i}`} cx={s.x} cy={s.y} r={s.r}
+                  fill={`rgba(${cr}, ${cg}, ${cb}, ${isActive ? s.a : s.a * 0.25})`}
+                  style={{ transition: 'fill 0.3s', pointerEvents: 'none' }} />
+              ))}
+              <circle
+                cx={CX} cy={CY}
+                r={ring.mid}
+                fill="none"
+                stroke={`rgba(${cr}, ${cg}, ${cb}, 0.01)`}
+                strokeWidth={ring.width}
+                style={{ cursor: 'pointer' }}
+                onClick={(e) => { e.stopPropagation(); onSelectBeyondRing(ringId); }}
+                onMouseEnter={(e) => { setHoveredBeyondRing(ringId); handleTooltipEnter(ringId, ring.tooltipLabel, e); }}
+                onMouseMove={handleTooltipMove}
+                onMouseLeave={() => { setHoveredBeyondRing(null); handleTooltipLeave(); }}
+              />
+            </g>
+          );
+        })}
 
         {/* Monomyth outer ring — 8 stages counter-clockwise, Surface at noon (top), Nadir at midnight (bottom) */}
         {showMonomyth && monomythStages && (() => {
@@ -2727,9 +2903,12 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
           </svg>
         </button>
         <button
-          className={`monomyth-toggle${showMonomyth ? ' active' : ''}${showCycles ? ' cycles' : ''}${showMeteorSteel ? ' steel' : ''}`}
-          onClick={() => { onToggleMonomyth && onToggleMonomyth(); }}
-          title={showMeteorSteel ? 'Meteor steel — click for monomyth' : showMonomyth ? 'Monomyth — click for meteor steel' : 'Show monomyth journey ring'}
+          className={`monomyth-toggle${showMonomyth ? ' active' : ''}${showCycles ? ' cycles' : ''}${showMeteorSteel ? ' steel' : ''}${!hasMonomyth ? ' disabled' : ''}`}
+          onClick={() => {
+            if (!hasMonomyth) { setMonomythGateOpen(true); return; }
+            onToggleMonomyth && onToggleMonomyth();
+          }}
+          title={!hasMonomyth ? 'Unlock Monomyth & Meteor Steel' : showMeteorSteel ? 'Meteor steel — click for monomyth' : showMonomyth ? 'Monomyth — click for meteor steel' : 'Show monomyth journey ring'}
           style={showCycles && !showMeteorSteel ? { color: '#6ecf8a' } : undefined}
         >
           {showMeteorSteel ? (
@@ -2848,6 +3027,22 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
                 Manage Membership
               </button>
               <button className="subscription-gate-secondary" onClick={() => setMedicineWheelGateId(null)}>
+                Not now
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      {monomythGateOpen && (
+        <div className="subscription-gate-overlay" onClick={() => setMonomythGateOpen(false)}>
+          <div className="subscription-gate-popup" onClick={e => e.stopPropagation()}>
+            <h3 className="subscription-gate-title">Monomyth & Meteor Steel</h3>
+            <p className="subscription-gate-desc">The hero's journey ring and the metallurgical transformation narrative — eight stages of the monomyth and their correspondence to the ancient art of steel-making, overlaid on the Chronosphaera.</p>
+            <div className="subscription-gate-actions">
+              <button className="subscription-gate-primary" onClick={() => { navigate('/profile#subscriptions'); setMonomythGateOpen(false); }}>
+                Manage Membership
+              </button>
+              <button className="subscription-gate-secondary" onClick={() => setMonomythGateOpen(false)}>
                 Not now
               </button>
             </div>

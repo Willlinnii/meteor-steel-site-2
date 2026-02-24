@@ -44,13 +44,12 @@
     "Sun": {
       "number": 4,
       "classicalPlanet": "Sun",
-      "metal": "Gold",
-      "vala": "Arda — the Quenya word for 'realm,' the name Tolkien gave to the entire created world that the Valar shaped from the Vision of the Music",
-      "elvishName": "Anar — the Quenya name for the Sun, the vessel that carries the last golden fruit of Laurelin (one of the Two Trees of Valinor) across the sky, guided by the Maia Arien",
+      "metal": "Gold — Laurelin the Golden Tree lit Valinor before Sun or Moon existed; its last fruit became Anar, the Sun. Galadriel's hair captured the light of Laurelin, and Fëanor asked three times for a strand — she refused. The Silmarils held that same golden light trapped in crystal, the most hallowed objects ever made, yet the Oath to recover them destroyed Fëanor's house and drenched three ages in blood. The One Ring is plain gold, unmarked until heated — Sauron poured his will to dominate into it, and it corrupts every bearer. Dragon-sickness is the spell that Smaug's gold-hoard casts over Thorin: he breaks faith with allies, hoards what he cannot use, and nearly starts a war over a single stone. Vilya, mightiest of the Three Elven Rings, is gold set with sapphire — worn by Elrond to preserve Rivendell. Gold is always the test: divine light shared freely, or divine light seized and hoarded.",
+      "vala": "Arda",
+      "elvishName": "Anar",
       "title": "The Created World",
       "governs": "The stage of the drama — the Music of the Ainur made manifest",
-      "domain": "Arda is not a Vala but the world itself — the physical realization of the Great Music that the Ainur sang before Eru. The Valar entered into it to prepare it for the coming of Elves and Men. Melkor's discord marred its substance from the beginning.",
-      "gold": "Gold in Tolkien is sacred light and its corruption at once. Laurelin the Golden Tree lit Valinor before Sun or Moon existed — its last fruit became Anar, the Sun. Galadriel's hair was said to have captured the light of Laurelin, and Fëanor asked three times for a strand; she refused. The Silmarils held that same golden light trapped in crystal — the most hallowed objects ever made, yet the Oath to recover them destroyed Fëanor's house and drenched three ages in blood. The One Ring is plain gold, unmarked until heated — Sauron poured his will to dominate into it, and it corrupts every bearer. Dragon-sickness is the spell that Smaug's gold-hoard casts over Thorin: he breaks faith with allies, hoards what he cannot use, and nearly starts a war over a single stone. Vilya, mightiest of the Three Elven Rings, is gold set with sapphire — worn by Elrond to preserve Rivendell. Gold is always the test: divine light shared freely, or divine light seized and hoarded.",
+      "domain": "Arda is the Quenya word for 'realm' — not a Vala but the world itself, the physical realization of the Great Music that the Ainur sang before Eru. The Valar entered into it to prepare it for the coming of Elves and Men. Melkor's discord marred its substance from the beginning. Anar, the Sun, is the vessel that carries the last golden fruit of Laurelin across the sky, guided by the Maia Arien.",
       "kindred": "Home of the Children of Ilúvatar — Elves (the Firstborn) and Men (the Followers)."
     },
     "Venus": {

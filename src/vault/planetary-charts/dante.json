@@ -10,7 +10,6 @@
   "correspondences": {
     "Moon": {
       "number": 1,
-      "metal": "Silver",
       "paradise": "First Heaven — souls who broke sacred vows. Deficient in constancy of faith.",
       "paradiseVirtue": "Faith",
       "purgatory": "Second Terrace — Envy (Invidia). Eyes sewn shut with iron wire.",
@@ -22,7 +21,6 @@
     },
     "Mercury": {
       "number": 2,
-      "metal": "Mercury",
       "paradise": "Second Heaven — souls who did good for fame and honor rather than God alone.",
       "paradiseVirtue": "Just Ambition / Hope",
       "purgatory": "Fifth Terrace — Avarice (Avaritia). Bound face-down to the earth.",
@@ -33,7 +31,6 @@
     },
     "Venus": {
       "number": 3,
-      "metal": "Copper",
       "paradise": "Third Heaven — souls whose love was excessive but redirected toward God.",
       "paradiseVirtue": "Love / Charity",
       "purgatory": "Seventh Terrace — Lust (Luxuria). Walking through refining fire.",
@@ -44,7 +41,6 @@
     },
     "Sun": {
       "number": 4,
-      "metal": "Gold",
       "paradise": "Fourth Heaven — the great theologians and doctors of the Church. Twin rings of light.",
       "paradiseVirtue": "Wisdom / Prudence",
       "purgatory": "First Terrace — Pride (Superbia). Bent double under crushing stones.",
@@ -56,7 +52,6 @@
     },
     "Mars": {
       "number": 5,
-      "metal": "Iron",
       "paradise": "Fifth Heaven — the warriors of faith. Souls form a luminous cross.",
       "paradiseVirtue": "Fortitude / Courage",
       "purgatory": "Third Terrace — Wrath (Ira). Blinded by acrid smoke.",
@@ -67,7 +62,6 @@
     },
     "Jupiter": {
       "number": 6,
-      "metal": "Tin",
       "paradise": "Sixth Heaven — the just rulers. Souls spell out DILIGITE IUSTITIAM and form an eagle.",
       "paradiseVirtue": "Justice",
       "purgatory": "Sixth Terrace — Gluttony (Gula). Starving before unreachable fruit trees.",
@@ -78,7 +72,6 @@
     },
     "Saturn": {
       "number": 7,
-      "metal": "Lead",
       "paradise": "Seventh Heaven — the contemplatives. A golden ladder rises beyond sight.",
       "paradiseVirtue": "Temperance / Contemplation",
       "purgatory": "Fourth Terrace — Sloth (Acedia). Running ceaselessly to make up for spiritual laziness.",
@@ -109,19 +102,59 @@
   "threeOrders": {
     "paradise": {
       "label": "Ascending Chaldean",
-      "sequence": ["Moon", "Mercury", "Venus", "Sun", "Mars", "Jupiter", "Saturn"],
+      "sequence": [
+        "Moon",
+        "Mercury",
+        "Venus",
+        "Sun",
+        "Mars",
+        "Jupiter",
+        "Saturn"
+      ],
       "note": "Planets explicit. The soul ascends from Earth through the spheres toward God."
     },
     "purgatory": {
       "label": "Weekday Order — Saturn Centered",
-      "sequence": ["Sun", "Moon", "Mars", "Saturn", "Mercury", "Jupiter", "Venus"],
-      "weekdays": ["Sunday", "Monday", "Tuesday", "Saturday", "Wednesday", "Thursday", "Friday"],
+      "sequence": [
+        "Sun",
+        "Moon",
+        "Mars",
+        "Saturn",
+        "Mercury",
+        "Jupiter",
+        "Venus"
+      ],
+      "weekdays": [
+        "Sunday",
+        "Monday",
+        "Tuesday",
+        "Saturday",
+        "Wednesday",
+        "Thursday",
+        "Friday"
+      ],
       "note": "The Gregorian sin order (Pride through Lust) mapped through Mythouse correspondences. Saturday/Sabbath at the center — the day of rest as the pivot between spiritual and carnal sins."
     },
     "hell": {
       "label": "Weekday Order Reversed",
-      "sequence": ["Saturn", "Venus", "Jupiter", "Mercury", "Mars", "Moon", "Sun"],
-      "weekdays": ["Saturday", "Friday", "Thursday", "Wednesday", "Tuesday", "Monday", "Sunday"],
+      "sequence": [
+        "Saturn",
+        "Venus",
+        "Jupiter",
+        "Mercury",
+        "Mars",
+        "Moon",
+        "Sun"
+      ],
+      "weekdays": [
+        "Saturday",
+        "Friday",
+        "Thursday",
+        "Wednesday",
+        "Tuesday",
+        "Monday",
+        "Sunday"
+      ],
       "note": "The weekday order running backward. Descent from the surface (Saturn/Sloth/Limbo) to the bottom (Sun/Pride/Violence). Circles 8–9 extend beyond the seven."
     }
   },

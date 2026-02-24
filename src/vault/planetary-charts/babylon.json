@@ -1,0 +1,83 @@
+{
+  "tradition": "Babylonian Astronomy",
+  "sourceText": "MUL.APIN tablets; Enūma Anu Enlil; Enūma Eliš",
+  "period": "c. 1800–500 BCE",
+  "origin": "tradition",
+  "entered": "2026-02-23",
+  "method": "dictation",
+  "order": "chaldean",
+  "note": "The Babylonian planet-deity system is the oldest known set of planetary correspondences. The Chaldean order — Saturn, Jupiter, Mars, Sun, Venus, Mercury, Moon — originates here, derived from observed orbital periods. Each planet was identified with a major deity of the Mesopotamian pantheon, and these associations passed directly into Greek, Roman, and eventually all Western astrological traditions. The metal correspondences were not yet fixed in Babylonian sources the way they later became in Hellenistic alchemy, but the planetary gods, their temples, and their domains were precisely catalogued.",
+  "correspondences": {
+    "Saturn": {
+      "number": 1,
+      "classicalPlanet": "Saturn",
+      "planetName": "Kaiamānu — 'the steady one'",
+      "metal": "Lead",
+      "deity": "Ninurta (later Kaiamānu)",
+      "domain": "Agriculture, war, boundaries, and the hunt",
+      "temple": "E-shumesha at Nippur",
+      "description": "Ninurta was the god of farming and war, son of Enlil. As the outermost visible planet, Saturn's slow, steady movement earned the Babylonian name Kaiamānu — 'the steady one.' Ninurta's myths emphasize the taming of wild forces and the establishment of order through labor."
+    },
+    "Jupiter": {
+      "number": 2,
+      "classicalPlanet": "Jupiter",
+      "planetName": "Neberu — 'the crossing point'",
+      "metal": "Tin",
+      "deity": "Marduk",
+      "domain": "Chief deity, kingship, order, creation",
+      "temple": "Esagila at Babylon",
+      "description": "Marduk, patron god of Babylon, was identified with Jupiter — the brightest wandering star. In the Enūma Eliš, Marduk defeats Tiamat and fashions the cosmos from her body. The Babylonians called Jupiter Neberu — 'the crossing point' — marking the meridian of the sky where the god's authority was absolute."
+    },
+    "Mars": {
+      "number": 3,
+      "classicalPlanet": "Mars",
+      "planetName": "Ṣalbatānu — 'the wild, flickering one'",
+      "metal": "Iron",
+      "deity": "Nergal",
+      "domain": "War, plague, the underworld",
+      "temple": "E-meslam at Kutha",
+      "description": "Nergal ruled the underworld alongside Ereshkigal and governed plague, fever, and warfare. Mars's red color and erratic motion earned the Babylonian name Ṣalbatānu — 'the wild, flickering one.' Nergal's descent to the underworld is one of the oldest recorded journey myths."
+    },
+    "Sun": {
+      "number": 4,
+      "classicalPlanet": "Sun",
+      "planetName": "Shamash",
+      "metal": "Gold",
+      "deity": "Shamash (Sumerian: Utu)",
+      "domain": "Justice, truth, divination, light",
+      "temple": "E-babbar at Sippar and Larsa",
+      "description": "Shamash was the all-seeing judge who traversed the sky by day and the underworld by night. He gave the law code to Hammurabi and was invoked in every omen text. Son of the moon god Sin, Shamash embodied moral clarity — what the sun illuminates cannot be hidden."
+    },
+    "Venus": {
+      "number": 5,
+      "classicalPlanet": "Venus",
+      "planetName": "Dilbat",
+      "metal": "Copper",
+      "deity": "Ishtar (Sumerian: Inanna)",
+      "domain": "Love, war, fertility, the morning and evening star",
+      "temple": "E-anna at Uruk",
+      "description": "Called Dilbat by the Babylonians, Ishtar was the most complex deity in the Mesopotamian pantheon — goddess of love and war simultaneously, the morning star as warrior and the evening star as lover. Her descent to the underworld is the prototype for all later katabasis myths. The Venus tablet of Ammisaduqa (c. 1650 BCE) is the oldest surviving planetary observation record."
+    },
+    "Mercury": {
+      "number": 6,
+      "classicalPlanet": "Mercury",
+      "planetName": "Šiḫṭu — 'the jumping one'",
+      "metal": "Mercury",
+      "deity": "Nabu",
+      "domain": "Writing, wisdom, scribal arts, prophecy",
+      "temple": "E-zida at Borsippa",
+      "description": "Nabu was the divine scribe, keeper of the Tablets of Destiny, and son of Marduk. Mercury's rapid, darting movement near the horizon gave it the Babylonian name Šiḫṭu — 'the jumping one.' Nabu's festival at the New Year involved the ritual transfer of the Tablets of Destiny, affirming cosmic order for the coming year."
+    },
+    "Moon": {
+      "number": 7,
+      "classicalPlanet": "Moon",
+      "planetName": "Sin (Sîn)",
+      "metal": "Silver",
+      "deity": "Sin (Sumerian: Nanna)",
+      "domain": "Wisdom, timekeeping, cattle herding, the calendar",
+      "temple": "E-kiš-nu-gal at Ur",
+      "description": "Sin was father of Shamash and Ishtar, and the lunar calendar that structured all Mesopotamian life was his domain. The crescent moon was his symbol, worn as a crown. Sin's city Ur was one of the oldest in Sumer. The moon's phases governed planting, ritual, and commerce — Sin was time itself made visible."
+    }
+  },
+  "authorCommentary": []
+}

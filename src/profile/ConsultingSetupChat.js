@@ -3,6 +3,7 @@ import { useProfile } from './ProfileContext';
 import { useAuth } from '../auth/AuthContext';
 import { useWritings } from '../writings/WritingsContext';
 import useVoice, { SpeechRecognition } from '../hooks/useVoice';
+import DodecahedronButton from '../components/DodecahedronButton';
 import { apiFetch } from '../lib/chatApi';
 
 export default function ConsultingSetupChat({ onComplete }) {
@@ -171,6 +172,7 @@ export default function ConsultingSetupChat({ onComplete }) {
             {recording ? '\u{23F9}' : '\u{1F3A4}'}
           </button>
         )}
+        <DodecahedronButton />
         <button
           className="profile-chat-send"
           onClick={() => sendMessage()}

@@ -182,6 +182,7 @@ const { cards: storyCards, loaded: storyCardsLoaded } = useStoryCardSync();
   const [checkoutLoading, setCheckoutLoading] = useState(null); // itemId being checked out
   const [checkoutSuccess, setCheckoutSuccess] = useState(false);
   const [donationAmount, setDonationAmount] = useState(''); // for pay-what-you-want items
+  const [launchKey, setLaunchKey] = useState(''); // sales key to activate items for free
 
   // Detect checkout success from Stripe redirect
   useEffect(() => {
@@ -828,6 +829,18 @@ const { cards: storyCards, loaded: storyCardsLoaded } = useStoryCardSync();
       {/* Membership Add-Ons */}
       <h2 className="profile-section-title">Membership Add-Ons</h2>
 
+      {/* Launch Key */}
+      <div className="profile-launch-key-row">
+        <input
+          type="text"
+          className="profile-launch-key-input"
+          placeholder="Enter launch key..."
+          value={launchKey}
+          onChange={e => setLaunchKey(e.target.value)}
+        />
+        {launchKey && <span className="profile-launch-key-hint">Key active — purchases will be comped</span>}
+      </div>
+
       {/* Subscriptions Sub-Section */}
       <div id="subscriptions">
         <h3 className="profile-subsection-title">Subscriptions</h3>
@@ -853,7 +866,7 @@ const { cards: storyCards, loaded: storyCardsLoaded } = useStoryCardSync();
                         disabled={checkoutLoading === sub.id}
                         onClick={async () => {
                           setCheckoutLoading(sub.id);
-                          try { await initiateCheckout(sub.id); } catch {}
+                          try { await initiateCheckout(sub.id, launchKey ? { launchKey } : {}); } catch {}
                           setCheckoutLoading(null);
                         }}
                       >
@@ -1118,7 +1131,7 @@ All responses return { data, meta } JSON. GET /v1/ for full discovery.`}</pre>
                             const cents = Math.round(Number(donationAmount) * 100);
                             if (cents < 100) return;
                             setCheckoutLoading(p.id);
-                            try { await initiateCheckout(p.id, { donationAmount: cents }); } catch {}
+                            try { await initiateCheckout(p.id, { donationAmount: cents, ...(launchKey ? { launchKey } : {}) }); } catch {}
                             setCheckoutLoading(null);
                           }}
                         >
@@ -1131,7 +1144,7 @@ All responses return { data, meta } JSON. GET /v1/ for full discovery.`}</pre>
                         disabled={checkoutLoading === p.id}
                         onClick={async () => {
                           setCheckoutLoading(p.id);
-                          try { await initiateCheckout(p.id); } catch {}
+                          try { await initiateCheckout(p.id, launchKey ? { launchKey } : {}); } catch {}
                           setCheckoutLoading(null);
                         }}
                       >
@@ -1158,14 +1171,39 @@ All responses return { data, meta } JSON. GET /v1/ for full discovery.`}</pre>
         </div>
       )}
 
-      {/* Manage Billing button */}
-      {hasStripeAccount && (
-        <div className="profile-billing-row">
-          <button className="profile-stripe-btn billing" onClick={openBillingPortal}>
-            Manage Billing
-          </button>
-        </div>
-      )}
+      {/* Billing & Payment Methods */}
+      <div className="profile-billing-section">
+        <h3 className="profile-subsection-title">Billing & Payment Methods</h3>
+        {hasStripeAccount ? (
+          <div className="profile-billing-card">
+            <div className="profile-billing-info">
+              <span className="profile-billing-icon">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="1" y="4" width="22" height="16" rx="2" ry="2" />
+                  <line x1="1" y1="10" x2="23" y2="10" />
+                </svg>
+              </span>
+              <span className="profile-billing-text">Payment method on file</span>
+            </div>
+            <button className="profile-stripe-btn billing" onClick={openBillingPortal}>
+              Manage Billing
+            </button>
+          </div>
+        ) : (
+          <div className="profile-billing-card">
+            <div className="profile-billing-info">
+              <span className="profile-billing-icon">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="1" y="4" width="22" height="16" rx="2" ry="2" />
+                  <line x1="1" y1="10" x2="23" y2="10" />
+                </svg>
+              </span>
+              <span className="profile-billing-text">No payment method on file</span>
+            </div>
+            <span className="profile-billing-hint">A payment method will be saved when you make your first purchase.</span>
+          </div>
+        )}
+      </div>
 
       {/* Active Courses */}
       <h2 className="profile-section-title">Courses</h2>

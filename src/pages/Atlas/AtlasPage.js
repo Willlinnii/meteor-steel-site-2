@@ -5,6 +5,7 @@ import { useCoursework } from '../../coursework/CourseworkContext';
 import { useWritings } from '../../writings/WritingsContext';
 import { useAtlasContext } from '../../contexts/AtlasContext';
 import './AtlasPage.css';
+import DodecahedronButton from '../../components/DodecahedronButton';
 import { apiFetch } from '../../lib/chatApi';
 
 function parseAtlasMessage(text) {
@@ -336,6 +337,7 @@ export default function AtlasPage() {
             {recording ? '\u{23F9}' : '\u{1F3A4}'}
           </button>
         )}
+        <DodecahedronButton className="atlas-dodec-btn" />
         <button className="atlas-send" onClick={handleSend} disabled={loading || !input.trim()}>&#9654;</button>
       </div>
     </div>

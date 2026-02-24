@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { doc, getDoc, setDoc, collection, getDocs, serverTimestamp } from 'firebase/firestore';
 import { db, firebaseConfigured } from '../auth/firebase';
 import { useAuth } from '../auth/AuthContext';
@@ -273,7 +273,7 @@ export function CourseworkProvider({ children }) {
     return summary;
   }, [getCourseStates]);
 
-  const value = {
+  const value = useMemo(() => ({
     progress,
     courseworkMode,
     toggleCourseworkMode,
@@ -289,7 +289,12 @@ export function CourseworkProvider({ children }) {
     buildCourseSummary,
     loaded,
     allCourses: COURSES,
-  };
+  }), [
+    progress, courseworkMode, toggleCourseworkMode, trackElement, trackTime,
+    isElementCompleted, getCourseStates, getTrackedElements,
+    completedCourses, certificateData, newlyCompleted, dismissCompletion,
+    buildCourseSummary, loaded,
+  ]);
 
   return (
     <CourseworkContext.Provider value={value}>

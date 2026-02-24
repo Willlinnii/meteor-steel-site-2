@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useProfile } from './ProfileContext';
 import { useWritings } from '../writings/WritingsContext';
 import useVoice, { SpeechRecognition } from '../hooks/useVoice';
+import DodecahedronButton from '../components/DodecahedronButton';
 import { apiFetch } from '../lib/chatApi';
 
 export default function ProfileChat({ onComplete, isUpdate }) {
@@ -216,6 +217,7 @@ export default function ProfileChat({ onComplete, isUpdate }) {
             {recording ? '\u{23F9}' : '\u{1F3A4}'}
           </button>
         )}
+        <DodecahedronButton />
         <button
           className="profile-chat-send"
           onClick={sendMessage}

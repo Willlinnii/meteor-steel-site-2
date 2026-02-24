@@ -2669,3 +2669,175 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* ===== MYTHIC AGES TIMELINE ===== */
+
+.mythic-ages-timeline {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: 900px;
+  margin: 14px auto 18px;
+  padding: 0 12px;
+  user-select: none;
+}
+
+.mythic-ages-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.55rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--text-secondary, #8899aa);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.mythic-ages-bar {
+  position: relative;
+  flex: 1;
+  height: 36px;
+  border-radius: 4px;
+  overflow: visible;
+  cursor: pointer;
+}
+
+.mythic-ages-segment {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 0;
+  cursor: pointer;
+  transition: filter 0.15s ease, box-shadow 0.15s ease;
+}
+
+.mythic-ages-segment:hover {
+  filter: brightness(1.15);
+}
+
+.mythic-ages-segment.selected {
+  box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.6);
+  filter: brightness(1.1);
+}
+
+.mythic-ages-segment:first-of-type {
+  border-radius: 4px 0 0 4px;
+}
+
+.mythic-ages-segment:last-of-type {
+  border-radius: 0 4px 4px 0;
+}
+
+.mythic-ages-segment-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.55rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(10, 10, 15, 0.85);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  padding: 0 4px;
+  pointer-events: none;
+}
+
+.mythic-ages-dim {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  background: rgba(10, 10, 15, 0.6);
+  pointer-events: none;
+  z-index: 2;
+  transition: width 0.05s linear, left 0.05s linear;
+}
+
+.mythic-ages-pin {
+  position: absolute;
+  top: 50%;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 3;
+  cursor: pointer;
+  border: 1px solid rgba(10, 10, 15, 0.4);
+  transition: transform 0.15s ease;
+}
+
+.mythic-ages-pin:hover {
+  transform: translate(-50%, -50%) scale(1.6);
+  z-index: 5;
+  border-color: rgba(255, 255, 255, 0.7);
+}
+
+.mythic-ages-handle {
+  position: absolute;
+  top: -4px;
+  width: 4px;
+  height: calc(100% + 8px);
+  background: #c9a961;
+  border-radius: 2px;
+  cursor: ew-resize;
+  z-index: 4;
+  transform: translateX(-50%);
+  box-shadow: 0 0 6px rgba(201, 169, 97, 0.5);
+  touch-action: none;
+}
+
+.mythic-ages-handle::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -8px;
+  width: 20px;
+  height: 100%;
+}
+
+.mythic-ages-handle-label {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Cinzel', serif;
+  font-size: 0.5rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: #c9a961;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+/* ── Mobile ── */
+@media (max-width: 600px) {
+  .mythic-ages-timeline {
+    gap: 6px;
+    padding: 0 8px;
+    margin: 10px auto 14px;
+  }
+
+  .mythic-ages-bar {
+    height: 28px;
+  }
+
+  .mythic-ages-label {
+    font-size: 0.48rem;
+  }
+
+  .mythic-ages-segment-label {
+    font-size: 0.45rem;
+    letter-spacing: 0.04em;
+  }
+
+  .mythic-ages-handle-label {
+    font-size: 0.42rem;
+  }
+
+  .mythic-ages-pin {
+    width: 5px;
+    height: 5px;
+  }
+}

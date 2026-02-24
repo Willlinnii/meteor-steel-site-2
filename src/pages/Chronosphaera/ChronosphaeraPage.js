@@ -646,7 +646,7 @@ export default function ChronosphaeraPage() {
         const next = perspective.clockMode;
         return prev === next ? prev : next;
       });
-      setShowCalendar(true);
+      setShowCalendar(prev => prev === true ? prev : true);
     }
   }, [perspective.activePerspective]); // eslint-disable-line react-hooks/exhaustive-deps
 

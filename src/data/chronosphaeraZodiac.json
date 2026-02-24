@@ -45,6 +45,10 @@
         "name": "Aries",
         "myth": "The Ram of Spring",
         "description": "Aries is the first sign of the zodiac, a cardinal fire sign ruled by Mars, known for boldness, courage, and initiating energy. The ram's horns carry sacrificial imagery, and in Christian context Aries's season (spring) heralds new beginnings — a fitting parallel to the resurrection theme of Easter."
+      },
+      "synthesis": {
+        "name": "The Ram",
+        "description": "This region of the sky marks the beginning. Every tradition that looked up at these stars saw the same thing: a threshold crossed, the first act of will that sets everything else in motion. The ram appears because the animal that leads is the animal that charges — headfirst, without hesitation. Mars rules here not because of war but because of the nerve it takes to start something. Spring equinox, first sign, cardinal fire — the pattern is initiation itself. The courage to be born. The courage to go first.\n\nWhat recurs most is the rescue. A golden ram carries children to safety. A god slays the dragon of chaos and fashions a world from its body. The returning sun breaks winter's hold. Over and over, this area of the sky tells the story of something that should not have survived — and did, because it moved. The ram does not deliberate. It does not wait for conditions to improve. It goes, and the going is the point."
       }
     }
   },
@@ -94,6 +98,10 @@
         "name": "Taurus (Luke – Ox)",
         "myth": "The Ox of Sacrifice and Service",
         "description": "The Ox is the symbol of St. Luke the Evangelist, associated with sacrifice and service. Luke's Gospel begins with a priest offering sacrifice in the Temple, and the ox signifies Christ's priestly role and sacrifice for redemption. Taurus's stability reflects Luke's emphasis on the steadfast, earthly life."
+      },
+      "synthesis": {
+        "name": "The Bull",
+        "description": "This region of the sky is about what endures. The bull appears in every tradition because it is the animal that does not move unless it means to — and when it does, nothing stops it. What recurs most is fertility and strength held in reserve: the power to sustain, to nourish, to hold ground. Venus rules here because the deepest pleasure is not novelty but continuation. The field that feeds you. The body that carries you. The beauty that does not need to announce itself.\n\nThe bull is also the first thing that gets sacrificed. The heavenly bull is slain in the oldest story we have. The ox bears the yoke. The white bull carries a woman across the sea to found a civilization. There is something in this part of the sky about power that serves — strength that submits to purpose greater than itself. The horn breaks and becomes a vessel of abundance. What Taurus knows is that the world does not need more force. It needs more patience."
       }
     }
   },
@@ -143,6 +151,10 @@
         "name": "Gemini",
         "myth": "The Twins of Duality",
         "description": "A mutable air sign symbolized by the Twins. Geminis thrive on intellectual stimulation, renowned for quick wit, eloquent communication, and dual nature. Ruled by Mercury, embodying adaptability and curiosity — they can see both sides of any situation."
+      },
+      "synthesis": {
+        "name": "The Twins",
+        "description": "Two figures stand in this part of the sky, and every tradition that named them saw the same tension: one mortal, one divine. One grounded, one flying. The pattern that recurs most is not duality for its own sake but the insistence that both halves need each other. Mercury rules here because the messenger is the one who moves between worlds — carrying knowledge from one side to the other, translating what neither twin could say alone.\n\nWhat makes the twins sacred is the bond, not the difference. One brother gives up immortality so they can stay together. The sun month splits into its longest and shortest days. The great twins of every sky map are not opposites — they are the same force looking at itself from two directions. Gemini is the mind discovering that it can hold two thoughts at once without choosing. That is not indecision. That is the beginning of real intelligence."
       }
     }
   },
@@ -192,6 +204,10 @@
         "name": "Cancer",
         "myth": "The Crab of Protection",
         "description": "A water sign symbolized by the Crab. Cancer is nurturing, empathetic, and home-loving, with a powerful capacity for empathy and healing. Ruled by the Moon, giving intuition and a gentle, changeable temperament. The Crab's hard shell guards soft inner feelings."
+      },
+      "synthesis": {
+        "name": "The Crab",
+        "description": "This part of the sky is where things get protected. The crab appears because it is the creature that builds its armor from the inside out — soft body first, then shell. The Moon rules here because the emotional life comes before the rational one. Every tradition saw this: the gateway of birth, the summer solstice, the point where light is fullest and the soul enters the world. The pattern that recurs most is not sentimentality but tenacity. The crab was crushed and still got placed in the sky. The loyalty was the point, not the survival.\n\nWhat Cancer knows is that home is not a place but a decision. The harvest is gathered. The hearth is tended. The young are fed before the self. The hard shell exists so the soft interior can remain soft — not as weakness but as the condition for feeling anything at all. Every tradition placed nurturing here, at the height of summer, because this is where the year is most alive and most vulnerable at the same time. To protect without smothering. To feel without drowning. That is the task this region of the sky keeps assigning."
       }
     }
   },
@@ -241,6 +257,10 @@
         "name": "Leo",
         "myth": "The Lion of St. Mark",
         "description": "A fire sign symbolized by the Lion, the 'king of the zodiac.' Leos are bold, confident, and warm. Ruled by the Sun, carrying solar energy — expressive, creative, and life-giving. In Christian symbolism, the lion is associated with St. Mark and Christ's royal authority."
+      },
+      "synthesis": {
+        "name": "The Lion",
+        "description": "Every culture that looked at this part of the sky saw sovereignty. The lion appears because no other animal commands attention simply by being present. The Sun rules here because Leo is not about acquiring power — it is about radiating it. What recurs most across every tradition is the connection between courage and generosity: the lion that guards, the king that gives, the heart star Regulus beating at the center of the constellation. This is the part of the cycle where the self becomes fully visible. Not hidden, not shared, not compromised — declared.\n\nThe lion is always slain or tamed in the old stories, and that is the other half of what this sky region teaches. The first labor. The invulnerable beast brought down by bare hands. The solar king whose power must be tested before it can be trusted. Leo's fire is not the spark of Aries — it is the sustained blaze, the furnace that holds its heat. What every tradition agrees on is that this much light comes with a responsibility: to warm, not to scorch. The lion that roars to frighten is not yet the lion that roars to lead."
       }
     }
   },
@@ -290,6 +310,10 @@
         "name": "Virgo",
         "myth": "The Virgin of Purity and Service",
         "description": "An earth sign represented by the Virgin or maiden, often associated with wheat and agriculture. Virgos are logical, practical, and meticulous. In Christian context, linked to the Virgin Mary or to an ideal of spiritual purity and humility."
+      },
+      "synthesis": {
+        "name": "The Maiden",
+        "description": "This region of the sky holds grain in one hand and judgment in the other. The maiden appears in every tradition because the harvest does not happen by accident — it requires discernment, timing, and labor no one sees. Mercury rules here not for cleverness but for precision: the ability to separate what nourishes from what does not. What recurs most is the figure who lived among people and then withdrew — not out of contempt but because the standard she carried could no longer survive on the ground. The furrow goddess. The golden age woman. The virgin who is virgin because she belongs to herself.\n\nWhat Virgo knows is that service is not submission. The ear of wheat is the oldest symbol in this constellation, and it means the same thing everywhere: something was cultivated with care, harvested at the right moment, and offered. The maiden's purity is not about innocence — it is about integrity. The refusal to hand over what has been carefully made to anyone who has not earned it. Every tradition placed the harvest here, at the turn from summer into autumn, because this is where the year's work reveals whether it was done well. Virgo is the quality control the soul performs on itself."
       }
     }
   },
@@ -339,6 +363,10 @@
         "name": "Libra",
         "myth": "Archangel Michael's Scales",
         "description": "An air sign represented by the Scales — the only inanimate zodiac symbol — signifying balance and justice. Librans are diplomatic and charm-filled, striving for harmony. In medieval Christian allegory, the scales are associated with Archangel Michael weighing souls."
+      },
+      "synthesis": {
+        "name": "The Scales",
+        "description": "This is the only region of the sky named for a tool, not a creature — and that says everything. The scales appear in every tradition because judgment is not an opinion; it is a mechanism. Something is placed on one side, something on the other, and the beam moves or it does not. Venus rules here not for beauty but for the deeper thing beauty requires: proportion. What recurs most is the equinox itself — day and night in perfect balance, the year tipping from light into dark. Every culture that watched this threshold understood that fairness is not a feeling. It is a measurement.\n\nWhat Libra knows is that harmony is not the absence of tension but the correct distribution of weight. The scales weigh souls. The slaughter month begins. The livestock are counted against the winter ahead. There is nothing sentimental about this part of the sky — it is where the world asks what something is actually worth. The archangel holds the scales because the verdict is not negotiable. Libra's diplomacy is not people-pleasing; it is the discipline of seeing both sides long enough to find the point where they balance. That point exists. Finding it is the work."
       }
     }
   },
@@ -388,6 +416,10 @@
         "name": "Scorpio (John – Eagle)",
         "myth": "The Eagle of Transformation",
         "description": "Scorpio is traditionally symbolized by the Scorpion, but esoteric lore gives it the higher symbol of the Eagle, representing transcendence. John the Evangelist's Eagle represents soaring divine insight. The eagle is the transmuted symbol of the scorpion — death transformed into spiritual vision."
+      },
+      "synthesis": {
+        "name": "The Scorpion",
+        "description": "This part of the sky is where something dies so something else can live. The scorpion appears because it is the creature that stings from below — the danger you did not see coming, the truth you were not ready for. Mars rules here for a different reason than in Aries: not the courage to begin but the will to go through. What recurs most across every tradition is the connection between depth and transformation. The scorpion goddess. The frost month. The underworld passage. The hunter who boasted too loudly and was humbled by something small and venomous.\n\nThe esoteric traditions all agree that the scorpion has a second form: the eagle. That is not a metaphor — it is a description of what happens when the sting turns inward. The same intensity that destroys from the outside becomes vision when directed at the self. Every culture placed death here, in late autumn, because the earth is doing exactly what Scorpio demands: releasing what it can no longer carry. The leaves fall. The fields go bare. What is left is what was always underneath. Scorpio does not create darkness — it removes everything that was pretending to be light."
       }
     }
   },
@@ -437,6 +469,10 @@
         "name": "Sagittarius",
         "myth": "The Centaur Archer of Advent",
         "description": "A fire sign symbolized by the Archer, a centaur aiming toward the heavens. Sagittarians are famous for boundless optimism, adventurous spirit, and philosophical insight. In medieval context, Sagittarius's time (late autumn) was linked to advent and preparation for the coming light."
+      },
+      "synthesis": {
+        "name": "The Archer",
+        "description": "This region of the sky is half animal and half human, and the arrow points up. The centaur appears because the question this part of the cycle asks is whether the beast and the sage can share the same body. Jupiter rules here because expansion is not just movement outward — it is the faith required to aim at something you cannot see. What recurs most is the teacher. The wise centaur who trains heroes. The warrior archer who protects. The bow drawn at midwinter, aimed toward a target that is pure direction, no object.\n\nWhat Sagittarius knows is that truth is not a destination but a trajectory. The arrow never arrives — it is always in flight. The darkest month of the year falls here, and every tradition placed fire in it: Yule logs, advent candles, the inner alchemy of the solstice. The seeds of what will grow are gestating in absolute darkness, and the archer's job is to believe in the shot. Not to see where it lands. The centaur is not half beast because he failed at being human. He is half beast because he refused to leave the animal behind. The philosophy that cannot run through a forest is no philosophy at all."
       }
     }
   },
@@ -486,6 +522,10 @@
         "name": "Capricorn",
         "myth": "The Goat of Endurance under Cassiel",
         "description": "An earth sign symbolized by the Goat, renowned for discipline and ambition. Ruled by Saturn, embodying endurance, order, and maturity. Saturn's archangel Cassiel imparts lessons of temperance, wisdom, and perseverance. Capricorns are the 'architect' archetype — building to last."
+      },
+      "synthesis": {
+        "name": "The Sea-Goat",
+        "description": "This part of the sky is where the goat meets the ocean and keeps climbing. The sea-goat appears everywhere because the image is irreducible: an animal that belongs on the mountain peak with a tail that belongs in the deep. Saturn rules here because time is the only material that cannot be faked, and everything Capricorn builds is tested against it. What recurs most is endurance under pressure — the frost month, the coldest passage, the soul bound in ice that refuses to break. The cornucopia comes from a broken horn. The abundance was never free.\n\nWhat Capricorn knows is that structure is not the enemy of freedom — it is the condition for it. The goat climbs not because it enjoys hardship but because the summit is the only place with a clear view. Every tradition placed its hardest season here and its most disciplined archetype: the architect, the taskmaster, the king who earns the crown through labor, not inheritance. The fish tail is the part most people forget, and it is the part that matters most. Capricorn is not only stone — it is also water. The ambition runs deeper than the surface. The mountain has roots in the sea."
       }
     }
   },
@@ -535,6 +575,10 @@
         "name": "Aquarius (Matthew – Man/Angel)",
         "myth": "The Water-Bearer of the Holy Spirit",
         "description": "Matthew the Evangelist is symbolized by a winged man or angel, linked to Aquarius (the 'man' of the four fixed signs). Aquarius's symbol of pouring water connects to the outpouring of wisdom and the Holy Spirit. The 'man with a pitcher of water' in Luke 22:10 heralds a new age."
+      },
+      "synthesis": {
+        "name": "The Water-Bearer",
+        "description": "This is the only region of the sky where a human figure does not fight, flee, or fall — it pours. The water-bearer appears because the image answers a question no animal can: what do you do with what you know? Saturn rules here (alongside the modern attribution to Uranus) because liberation and discipline are not opposites — you cannot pour steadily with shaking hands. What recurs most is the act of giving knowledge to the collective. The cupbearer of the gods. The healing goddess. The pitcher of purification. The water is not literal — it is whatever the individual has gathered that the community needs.\n\nWhat Aquarius knows is that the future is not built by leaving the past behind but by carrying its water forward. Late winter falls here — the sky is clearest, the stars sharpest, and the vision most unobstructed. Every tradition placed its visionary archetype at this threshold because the old year is almost spent and something genuinely new is about to be possible. The water-bearer is the only zodiac figure that is fully human, and that is the point. No claws, no horns, no wings. Just a person holding a vessel, deciding where to pour."
       }
     }
   },
@@ -584,6 +628,10 @@
         "name": "Pisces",
         "myth": "The Fish of Christ (Ichthys)",
         "description": "Two Fish swimming in opposite directions, signifying the fluid and dual nature of this final sign. In Christian symbolism, the Fish has special significance — the ichthys as symbol of Christ and baptism. Pisces represents profound compassion, self-sacrifice, and spiritual unity."
+      },
+      "synthesis": {
+        "name": "The Fishes",
+        "description": "This is where the wheel dissolves. Two fish swim in opposite directions, tied together by a cord, and that cord is the last image the zodiac offers before it begins again. Jupiter rules here because the final expansion is not outward but inward — into everything at once. What recurs most across every tradition is the theme of surrender that is not defeat. The gods flee into the water. The rivers become divine. The old year exhales its last breath. Pisces is the twelfth house, the house of endings, and what ends here is the illusion that the self was ever separate from the rest of it.\n\nWhat Pisces knows is that the cord between the two fish is the only thing that matters. One fish swims toward spirit, the other toward matter, and neither can break free because they were never meant to. The great fish carries the world on its back. The final month closes the cycle not with triumph but with acceptance. Every tradition placed its mystic here, at the edge of winter and spring, because the last thing the soul learns before it is born again is that it was never alone. The water does not choose its shape. It takes the shape of whatever holds it. That is not weakness. That is the deepest form of knowing."
       }
     }
   }

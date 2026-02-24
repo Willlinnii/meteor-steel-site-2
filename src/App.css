@@ -3999,10 +3999,42 @@ body {
   padding: 8px 20px;
 }
 
-.profile-billing-row {
+.profile-billing-section {
+  margin-bottom: 16px;
+}
+
+.profile-billing-card {
   display: flex;
-  justify-content: flex-end;
-  padding: 8px 0 16px;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border-subtle);
+  border-radius: 10px;
+  padding: 14px 16px;
+}
+
+.profile-billing-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.profile-billing-icon {
+  color: var(--text-secondary);
+  display: flex;
+}
+
+.profile-billing-text {
+  font-size: 0.85rem;
+  color: var(--text-primary);
+}
+
+.profile-billing-hint {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  opacity: 0.7;
 }
 
 .profile-checkout-success {
@@ -4052,6 +4084,34 @@ body {
 .profile-donation-input::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
+}
+
+.profile-launch-key-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.profile-launch-key-input {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  color: var(--text-primary);
+  font-size: 0.82rem;
+  padding: 6px 12px;
+  width: 180px;
+  outline: none;
+}
+
+.profile-launch-key-input:focus {
+  border-color: var(--accent-gold);
+}
+
+.profile-launch-key-hint {
+  font-size: 0.75rem;
+  color: var(--accent-gold);
+  opacity: 0.8;
 }
 
 /* ===== SUBSCRIPTION GATE POPUP ===== */

@@ -1,0 +1,62 @@
+{
+  "tradition": "Phoenician",
+  "sourceText": "Philo of Byblos (via Eusebius, Praeparatio Evangelica); Sanchuniathon; Ugaritic texts (Ras Shamra); Lucian, De Dea Syria",
+  "period": "c. 1500–300 BCE",
+  "origin": "tradition",
+  "entered": "2026-02-24",
+  "method": "dictation",
+  "order": "chaldean",
+  "note": "The Phoenician planet-deity system is reconstructed, not directly attested in Phoenician texts. Our sources are Philo of Byblos (1st–2nd c CE) who claims to translate the ancient priest Sanchuniathon, the Ugaritic tablets from Ras Shamra (which are Canaanite, not strictly Phoenician), and Greek/Roman identifications. El-Saturn and Astarte-Venus are the most firmly attested pairings. No metal-planet system is documented for the Phoenicians — they were the ancient world's greatest metal traders, but they left no record linking those metals to planets.",
+  "correspondences": {
+    "Saturn": {
+      "number": 1,
+      "classicalPlanet": "Saturn",
+      "deity": "El (Ilu)",
+      "domain": "The supreme father god, creator, the head of the pantheon",
+      "description": "El sat at the head of the Canaanite pantheon — the aged, wise father of the gods whose word was final. The Greeks identified him with Kronos (Saturn), and this is among the best-attested Phoenician planetary identifications. Philo of Byblos records that El-Kronos circumnavigated the world and gave Egypt to the god Taautus. His epithet was 'Father of Years,' connecting him to Saturn's domain over time."
+    },
+    "Jupiter": {
+      "number": 2,
+      "classicalPlanet": "Jupiter",
+      "deity": "Baal Hadad",
+      "domain": "Storms, rain, fertility, kingship — the active ruler of heaven",
+      "description": "Baal Hadad was the storm god, son of El, who defeated the sea god Yam and death itself (Mot) in the Ugaritic Baal Cycle. He was the active king of heaven while El was the retired patriarch. The Greeks identified him with Zeus (Jupiter). His thunderbolt was the sign of divine sovereignty, and his annual death and resurrection governed the agricultural cycle."
+    },
+    "Mars": {
+      "number": 3,
+      "classicalPlanet": "Mars",
+      "deity": "Resheph (planet identification uncertain)",
+      "domain": "War, plague, fire, the gateway",
+      "description": "Resheph was the archer god — plague and war walked where his arrows fell. His name means 'the burner' or 'the ravager.' At Ebla and across the Levant, he guarded gates and thresholds. The Greeks identified him with Apollo (plague-bringer), not Ares — his association with Mars is inferred from his warlike domain rather than directly attested."
+    },
+    "Sun": {
+      "number": 4,
+      "classicalPlanet": "Sun",
+      "deity": "Melqart",
+      "domain": "The sun, the sea, colonization, the sacred fire of Tyre",
+      "description": "Melqart was Tyre's patron — 'King of the City.' The Greeks called him Herakles. Each year his sacred fire was ritually extinguished and relit, enacting the sun's death and rebirth. Melqart sailed west with the Tyrian colonists, and his temples marked every Phoenician settlement from Carthage to Cadiz. His solar identification comes through the Greek equation with Herakles, who was sometimes identified with the Sun."
+    },
+    "Venus": {
+      "number": 5,
+      "classicalPlanet": "Venus",
+      "deity": "Astarte (Ashtart)",
+      "domain": "Love, war, the sea, the morning and evening star",
+      "description": "Astarte was Ishtar's western cognate — the Canaanite goddess of love and war, identified with the planet Venus. This is one of the most firmly attested Phoenician planetary identifications, confirmed by Philo of Byblos and by the continuity with Mesopotamian Ishtar. Her temples at Byblos, Sidon, and Paphos (Cyprus) were among the wealthiest in the ancient world. Sailors prayed to her for safe passage. She was the star they steered by."
+    },
+    "Mercury": {
+      "number": 6,
+      "classicalPlanet": "Mercury",
+      "deity": "Taautus (planet identification uncertain)",
+      "domain": "Writing, invention, sacred knowledge",
+      "description": "Philo of Byblos names Taautus as the inventor of writing, whom the Egyptians called Thoth and the Greeks Hermes. This makes Taautus the most likely Phoenician candidate for Mercury. But the identification comes from Hellenistic-era Greek interpretation, not from Phoenician sources themselves. Eshmun (the healing god of Sidon) is sometimes also proposed, but his Greek equivalent was Asclepius, not Hermes."
+    },
+    "Moon": {
+      "number": 7,
+      "classicalPlanet": "Moon",
+      "deity": "Yarikh",
+      "domain": "The moon, night, marriage, dew",
+      "description": "Yarikh was the moon god, known from Ugaritic texts where he pays a vast bride-price to marry the goddess Nikkal. His name survives in the city name Jericho (Yariho, 'city of the moon'). This is a solid identification — Yarikh is explicitly a moon deity in the Ugaritic sources. The Phoenicians navigated by the moon and stars; Yarikh's phases set the rhythm of the sea routes."
+    }
+  },
+  "authorCommentary": []
+}

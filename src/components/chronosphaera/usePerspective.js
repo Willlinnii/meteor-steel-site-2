@@ -32,6 +32,11 @@ import babylon from '../../vault/planetary-charts/babylon.json';
 import sumerian from '../../vault/planetary-charts/sumerian.json';
 import assyrian from '../../vault/planetary-charts/assyrian.json';
 import phoenician from '../../vault/planetary-charts/phoenician.json';
+import ptolemaic from '../../vault/planetary-charts/ptolemaic.json';
+import mithraic from '../../vault/planetary-charts/mithraic.json';
+import gnostic from '../../vault/planetary-charts/gnostic.json';
+import sabians from '../../vault/planetary-charts/sabians.json';
+import agrippa from '../../vault/planetary-charts/agrippa.json';
 
 const CHART_MAP = {
   'corpus-hermeticum': corpusHermeticum,
@@ -64,6 +69,11 @@ const CHART_MAP = {
   'sumerian': sumerian,
   'assyrian': assyrian,
   'phoenician': phoenician,
+  'ptolemaic': ptolemaic,
+  'mithraic': mithraic,
+  'gnostic': gnostic,
+  'sabians': sabians,
+  'agrippa': agrippa,
 };
 
 // Meta fields filtered from display
@@ -72,11 +82,12 @@ const META_KEYS = new Set(['number', 'emanationLevel', 'arcanaNumber', 'majorArc
 // Tabs that appear across many traditions get priority (leftmost, closest to tradition name).
 // Keys not listed here appear after, in their natural discovery order.
 // '__self__' is a synthetic tab that groups all self-related fields.
-const TAB_PRIORITY = ['overview', 'metal', 'classicalPlanet', '__self__'];
+const TAB_PRIORITY = ['overview', 'metal', 'planetName', 'classicalPlanet', '__self__'];
 
 // Display-friendly label overrides for camelCase keys
 const TAB_LABEL_OVERRIDES = {
   classicalPlanet: 'Planet',
+  planetName: 'Planet',
   __self__: 'Self',
 };
 
@@ -117,14 +128,19 @@ const CYCLE_ORDER = [
   'plato',                  // 4th c BCE
   'vedic',                  // c. 2nd c BCE – 5th c CE (Alexandrian contact)
   'corpus-hermeticum',      // 1st–3rd c CE
+  'ptolemaic',              // c. 150 CE (Ptolemy, Tetrabiblos)
+  'mithraic',               // 1st–4th c CE
+  'gnostic',                // 2nd–4th c CE
   'neoplatonist',           // 3rd–5th c CE
   'kabbalah',               // 2nd–13th c CE (midpoint ~750)
   'al-farabi',              // c. 870–950 CE
+  'sabians',                // 9th–11th c CE (documented; traditions much older)
   'ikhwan-al-safa',         // 10th c CE
   'norse',                  // 9th–13th c CE (midpoint ~1100)
   'dante',                  // 1320
   'tarot',                  // c. 1430s–1440s (Visconti-Sforza, Milan)
   'ficino',                 // 1433–1499
+  'agrippa',                // 1531 (Three Books of Occult Philosophy)
   'paracelsus',             // 1493–1541
   'john-dee',               // 1582–1589
   'kepler',                 // 1596–1619
@@ -152,19 +168,19 @@ export const ERA_GROUPS = [
     id: 'ancient',
     label: 'Classical World',
     period: '6th c BCE – 5th c CE',
-    traditions: ['pythagorean', 'plato', 'vedic', 'corpus-hermeticum', 'kabbalah', 'neoplatonist'],
+    traditions: ['pythagorean', 'plato', 'vedic', 'corpus-hermeticum', 'ptolemaic', 'mithraic', 'gnostic', 'kabbalah', 'neoplatonist'],
   },
   {
     id: 'medieval',
     label: 'Medieval',
     period: '7th – 14th c CE',
-    traditions: ['norse', 'al-farabi', 'ikhwan-al-safa', 'dante'],
+    traditions: ['norse', 'al-farabi', 'ikhwan-al-safa', 'sabians', 'dante'],
   },
   {
     id: 'renaissance',
     label: 'Renaissance',
     period: '15th – 17th c',
-    traditions: ['tarot', 'ficino', 'paracelsus', 'john-dee', 'kepler', 'rosicrucian'],
+    traditions: ['tarot', 'ficino', 'agrippa', 'paracelsus', 'john-dee', 'kepler', 'rosicrucian'],
   },
   {
     id: 'modern',
@@ -206,7 +222,7 @@ const ORDER_LABELS = {
 
 // Traditions where numbered display should NOT reverse (divine is already at low numbers)
 // All other numbered traditions display reversed: earthly at bottom, monad/divine at top
-const DISPLAY_KEEP_ORDER = new Set(['genesis', 'norse', 'kepler', 'john-dee', 'tolkien', 'ikhwan-al-safa', 'al-farabi']);
+const DISPLAY_KEEP_ORDER = new Set(['genesis', 'norse', 'kepler', 'john-dee', 'tolkien', 'ikhwan-al-safa', 'al-farabi', 'agrippa', 'gnostic', 'sabians']);
 
 // Standard planet orderings (fallback when a chart has no numbered entries)
 const STANDARD_ORDERS = {

@@ -30,6 +30,12 @@ async function handleCheckout(req, res) {
     return res.status(400).json({ error: `Unknown item: ${itemId}` });
   }
 
+  // Launch key: activate any item for free (no Stripe charge)
+  const { launchKey } = req.body || {};
+  if (launchKey === (process.env.STRIPE_LAUNCH_KEY || 'Dodecahedron')) {
+    return handleFreeActivation(uid, itemId, product, res);
+  }
+
   // Free items: activate directly in Firestore, no Stripe needed
   if (product.free) {
     return handleFreeActivation(uid, itemId, product, res);

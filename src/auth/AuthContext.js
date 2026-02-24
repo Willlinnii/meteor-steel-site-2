@@ -27,7 +27,7 @@ export function AuthProvider({ children }) {
           setTimeout(async () => {
             try {
               const token = await firebaseUser.getIdToken(true);
-              await fetch('/api/auth-sync', {
+              await fetch('/api/user-actions?route=auth-sync', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ token }),
