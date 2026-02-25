@@ -101,6 +101,10 @@ export default function CelestialScene({
   onSelectEarth,
   selectedStar,
   onSelectStar,
+  beyondRings,
+  selectedBeyondRing,
+  onSelectBeyondRing,
+  activePerspective,
   infoPanelContent,
   xrStore,
   cameraAR,
@@ -147,6 +151,10 @@ export default function CelestialScene({
                 onSelectEarth={onSelectEarth}
                 selectedStar={selectedStar}
                 onSelectStar={onSelectStar}
+                beyondRings={beyondRings}
+                selectedBeyondRing={selectedBeyondRing}
+                onSelectBeyondRing={onSelectBeyondRing}
+                activePerspective={activePerspective}
                 infoPanelContent={infoPanelContent}
                 cameraAR={cameraAR}
                 arPassthrough={arPassthrough}

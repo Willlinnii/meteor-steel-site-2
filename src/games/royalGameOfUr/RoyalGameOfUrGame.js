@@ -146,28 +146,46 @@ function evaluateMove(pieces, currentPlayer, move) {
 // ── SVG Drawing Helpers ──────────────────────────────────────────────────────
 
 function RosettePattern({ cx, cy, size }) {
-  const r = size * 0.35;
-  const petalR = size * 0.15;
+  const petalLen = size * 0.36;
+  const petalWidth = size * 0.18;
   const petals = [];
   for (let i = 0; i < 8; i++) {
     const angle = (i * Math.PI) / 4;
+    const cos = Math.cos(angle);
+    const sin = Math.sin(angle);
+    const nx = -sin; // perpendicular
+    const ny = cos;
+    // Teardrop petal: wide in the middle, pointed at tip
+    const tipX = cx + cos * petalLen;
+    const tipY = cy + sin * petalLen;
+    // Control points bulge out at ~40% along the petal
+    const cp1x = cx + cos * petalLen * 0.35 + nx * petalWidth;
+    const cp1y = cy + sin * petalLen * 0.35 + ny * petalWidth;
+    const cp2x = cx + cos * petalLen * 0.35 - nx * petalWidth;
+    const cp2y = cy + sin * petalLen * 0.35 - ny * petalWidth;
+    // Near-tip controls curve inward to form the point
+    const tp1x = cx + cos * petalLen * 0.8 + nx * petalWidth * 0.35;
+    const tp1y = cy + sin * petalLen * 0.8 + ny * petalWidth * 0.35;
+    const tp2x = cx + cos * petalLen * 0.8 - nx * petalWidth * 0.35;
+    const tp2y = cy + sin * petalLen * 0.8 - ny * petalWidth * 0.35;
     petals.push(
-      <circle
+      <path
         key={i}
-        cx={cx + Math.cos(angle) * r * 0.7}
-        cy={cy + Math.sin(angle) * r * 0.7}
-        r={petalR}
-        fill="none"
+        d={`M ${cx} ${cy} C ${cp1x} ${cp1y} ${tp1x} ${tp1y} ${tipX} ${tipY} C ${tp2x} ${tp2y} ${cp2x} ${cp2y} ${cx} ${cy}`}
+        fill="rgba(201, 169, 97, 0.3)"
         stroke="#c9a961"
-        strokeWidth="1.5"
-        opacity="0.7"
+        strokeWidth="1"
+        opacity="0.85"
       />
     );
   }
   return (
     <g className="ur-rosette">
       {petals}
-      <circle cx={cx} cy={cy} r={petalR * 0.8} fill="none" stroke="#c9a961" strokeWidth="1.5" opacity="0.7" />
+      {/* Inner ring */}
+      <circle cx={cx} cy={cy} r={size * 0.14} fill="none" stroke="#c9a961" strokeWidth="1" opacity="0.5" />
+      {/* Center dot */}
+      <circle cx={cx} cy={cy} r={size * 0.07} fill="#c9a961" opacity="0.75" />
     </g>
   );
 }
@@ -188,9 +206,14 @@ function BoardCell({ row, col, cellSize, padding, isRosette, highlight, onClick 
         className={`board-cell ${isDark ? 'board-cell-dark' : 'board-cell-light'}`}
         stroke="#4a3520"
         strokeWidth="1"
-        fill={highlight ? 'rgba(100, 200, 100, 0.3)' : isDark ? '#5c4a2e' : '#d4b87a'}
+        fill={highlight ? 'rgba(196, 113, 58, 0.3)' : isDark ? 'url(#ur-lapis)' : 'url(#ur-shell)'}
       />
-      {isRosette && <RosettePattern cx={center.x} cy={center.y} size={cellSize} />}
+      {isRosette && (
+        <>
+          <circle cx={center.x} cy={center.y} r={cellSize * 0.4} fill="rgba(201, 169, 97, 0.08)" />
+          <RosettePattern cx={center.x} cy={center.y} size={cellSize} />
+        </>
+      )}
     </g>
   );
 }
@@ -207,8 +230,8 @@ function Piece({ cx, cy, player, isMovable, onClick, isHighlight }) {
         cx={cx}
         cy={cy}
         r={r}
-        fill={PLAYER_COLORS[player]}
-        stroke={isHighlight ? '#00ff88' : PLAYER_STROKE[player]}
+        fill={player === 0 ? 'url(#ur-piece-gold)' : 'url(#ur-piece-steel)'}
+        stroke={isHighlight ? 'var(--accent-ember)' : PLAYER_STROKE[player]}
         strokeWidth={isHighlight ? 3 : 2}
         opacity={0.95}
       />
@@ -218,7 +241,7 @@ function Piece({ cx, cy, player, isMovable, onClick, isHighlight }) {
           cy={cy}
           r={r + 3}
           fill="none"
-          stroke="#00ff88"
+          stroke="var(--accent-ember)"
           strokeWidth="2"
           opacity="0.8"
         >
@@ -237,7 +260,7 @@ function MoveTarget({ cx, cy }) {
       cx={cx}
       cy={cy}
       r={CELL_SIZE * 0.15}
-      fill="#00ff88"
+      fill="var(--accent-ember)"
       opacity="0.5"
     >
       <animate attributeName="opacity" values="0.3;0.7;0.3" dur="1s" repeatCount="indefinite" />
@@ -668,10 +691,28 @@ export default function RoyalGameOfUrGame({
 
   const renderBoard = () => (
     <svg
+      className="game-board-svg"
       viewBox={`-60 -10 ${svgWidth} ${svgHeight}`}
-      width="100%"
-      style={{ maxWidth: '600px', display: 'block', margin: '0 auto' }}
     >
+      <defs>
+        <linearGradient id="ur-lapis" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#3a4a6e" />
+          <stop offset="100%" stopColor="#2a3550" />
+        </linearGradient>
+        <linearGradient id="ur-shell" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#c8b080" />
+          <stop offset="100%" stopColor="#a89060" />
+        </linearGradient>
+        <radialGradient id="ur-piece-gold" cx="40%" cy="35%">
+          <stop offset="0%" stopColor="#e8c878" />
+          <stop offset="100%" stopColor="#a88832" />
+        </radialGradient>
+        <radialGradient id="ur-piece-steel" cx="40%" cy="35%">
+          <stop offset="0%" stopColor="#a8b8d8" />
+          <stop offset="100%" stopColor="#5a6f94" />
+        </radialGradient>
+      </defs>
+
       {/* Board cells */}
       {BOARD_CELLS.map(({ row, col }) => (
         <BoardCell
@@ -742,7 +783,7 @@ export default function RoyalGameOfUrGame({
                   cy={yBase + 4}
                   r={8}
                   fill="none"
-                  stroke="#00ff88"
+                  stroke="var(--accent-ember)"
                   strokeWidth="1.5"
                   opacity="0.6"
                 >
@@ -919,9 +960,9 @@ export default function RoyalGameOfUrGame({
       onPlayerClick={isOnline ? onPlayerClick : undefined}
       isOnline={isOnline}
       isMyTurn={isMyTurn}
+      playerStatus={scoreInfo}
       chatPanel={isOnline ? <MultiplayerChat messages={chatMessages || []} onSend={sendChat} myUid={matchData?.players?.[myPlayerIndex]?.uid} /> : null}
     >
-      {scoreInfo}
       {renderBoard()}
     </GameShell>
   );

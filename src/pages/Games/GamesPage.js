@@ -19,40 +19,40 @@ import './GamesPage.css';
 
 const GAMES = [
   {
-    id: 'snakes-and-ladders',
-    label: 'Snakes & Ladders',
-    origin: 'India (Moksha Patam)',
-    description: 'A race of virtue and vice on a 10\u00D710 grid. Pure luck.',
-  },
-  {
     id: 'senet',
     label: 'Senet',
-    origin: 'Ancient Egypt',
+    origin: 'Egypt, c. 3100 BCE',
     description: 'Navigate 30 squares with stick dice. Strategy meets fate.',
-  },
-  {
-    id: 'royal-game-of-ur',
-    label: 'Royal Game of Ur',
-    origin: 'Mesopotamia',
-    description: 'Race 7 pieces through a shared gauntlet. Rosettes grant sanctuary.',
   },
   {
     id: 'mehen',
     label: 'Mehen',
-    origin: 'Ancient Egypt',
+    origin: 'Egypt, c. 3000 BCE',
     description: 'Race along the coils of a serpent to the center and back.',
+  },
+  {
+    id: 'royal-game-of-ur',
+    label: 'Royal Game of Ur',
+    origin: 'Mesopotamia, c. 2600 BCE',
+    description: 'Race 7 pieces through a shared gauntlet. Rosettes grant sanctuary.',
   },
   {
     id: 'jackals-and-hounds',
     label: 'Jackals & Hounds',
-    origin: 'Ancient Egypt',
+    origin: 'Egypt, c. 2000 BCE',
     description: 'Parallel paths with hidden shortcuts. First to finish wins.',
   },
   {
     id: 'pachisi',
     label: 'Pachisi',
-    origin: 'India',
+    origin: 'India, ancient',
     description: 'Cross-shaped board with cowrie shell dice. Castle squares grant safety.',
+  },
+  {
+    id: 'snakes-and-ladders',
+    label: 'Snakes & Ladders',
+    origin: 'India (Moksha Patam), c. 1000 CE',
+    description: 'A race of virtue and vice on a 10\u00D710 grid. Pure luck.',
   },
 ];
 

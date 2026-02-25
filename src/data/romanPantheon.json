@@ -1,0 +1,187 @@
+{
+  "id": "roman",
+  "name": "The Dii Consentes",
+  "description": "The Dii Consentes gathered where Vulcan's forge burned beneath Mount Etna, the most active volcano in Europe, whose eruptions the Romans read not as divine wrath but as industrial output — the god of fire fulfilling his contract with civilization. Rome's gods were less mythological characters than juridical persons, bound to the state by the formula do ut des (I give so that you may give), their worship a matter of public law administered by pontifices and augures whose authority was constitutional, not charismatic.",
+  "deities": [
+    {
+      "id": "jupiter",
+      "name": "Jupiter",
+      "title": "King of the Gods",
+      "group": "olympian",
+      "description": "Jupiter Optimus Maximus held the Capitoline Hill not as a patriarch of myths but as the constitutional sovereign of the Roman state. His temple on the Capitol, rebuilt three times and never relocated, was where consuls took their inaugural vows and where triumphant generals laid their laurel wreaths — Livy records that no public act of consequence proceeded without consulting his will through the auspices. The augures read his intentions in lightning bolts, the flight of birds, and the feeding patterns of sacred chickens, and Roman law held that no assembly of the people could convene if Jupiter's signs were unfavorable. Cicero in De Natura Deorum treats Jupiter as the rational principle governing the cosmos, the Stoic logos wearing a Roman face. His flamen Dialis, the priest dedicated solely to his service, lived under extraordinary taboos: he could not touch a horse, see an army arrayed for battle, or spend three consecutive nights outside Rome. The oak was his tree, the eagle his bird, and the thunderbolt his weapon, but these were insignia of office, not narrative props. Virgil's Aeneid opens with Jupiter calmly assuring Venus that Rome's destiny is fixed — fatum — and his role is not to intervene dramatically but to guarantee the constitutional order of the cosmos. On Etna's slopes, his thunderbolts were manufactured by the Cyclopes in Vulcan's forge, linking the volcano directly to his sovereign power. Jupiter reveals what happens when a civilization decides that divinity is governance: the king of the gods becomes the supreme magistrate, and worship becomes civic obligation.",
+      "animals": ["eagle", "woodpecker"],
+      "weapons": ["thunderbolt", "scepter"],
+      "consorts": ["Juno"],
+      "colors": ["white", "purple", "gold"]
+    },
+    {
+      "id": "juno",
+      "name": "Juno",
+      "title": "Queen of the Gods",
+      "group": "olympian",
+      "description": "Juno Regina was far more than a divine wife. She was the protector of the Roman state, the guardian of its finances — her great temple on the Arx housed the mint, which is why money is still called moneta, from Juno Moneta, Juno the Warner, who reportedly alerted Rome to the Gallic invasion of 390 BCE with her sacred geese. Livy records this episode as historical fact, not legend, which tells you everything about how Rome understood its gods: as active participants in the defense of the city. As Juno Lucina she presided over childbirth and the Matronalia festival on March 1st, when husbands gave gifts to their wives and women loosened every knot on their clothing, since knots could bind a child in the womb. As Juno Sospita she wore a goatskin and carried a spear and shield, worshipped at Lanuvium with a ritual in which a blindfolded girl descended into a cave to feed a sacred serpent — if the snake accepted the food, the girl was proven chaste and the fields would be fertile. Ovid's Fasti describes her anger at being excluded from the creation of Minerva without a mother, and how Flora gave her a magic flower whose touch made her pregnant with Mars, a myth that justified the Matronalia's placement in Mars's month. Virgil makes her the primary antagonist of the Aeneid, delaying Aeneas not from pettiness but from genuine political grievance: she favored Carthage and foresaw its destruction. Her relationship to Jupiter was contractual, not romantic. Rome built its understanding of marriage — a legal institution with property implications — in her image. She is the divine precedent for the idea that partnership is obligation, not sentiment.",
+      "animals": ["peacock", "goose", "goat"],
+      "weapons": ["spear", "shield"],
+      "consorts": ["Jupiter"],
+      "colors": ["royal blue", "white", "silver"]
+    },
+    {
+      "id": "mars",
+      "name": "Mars",
+      "title": "God of War",
+      "group": "olympian",
+      "description": "Mars was to Rome what Athena was to Athens: the defining god of a civilization's self-image. He was not merely a war deity but the father of Romulus and Remus through the Vestal Virgin Rhea Silvia, making every Roman citizen his descendant by mythic charter. His importance dwarfed that of his Greek counterpart Ares, whom Homer treated as a brute and a coward. Mars was the second-most-important god in the state cult, and his month, Martius, opened the old Roman calendar — the year began when the campaign season began. The Salii, his leaping priests, danced through Rome in March carrying the ancilia, twelve sacred shields, one of which had fallen from heaven, and sang the Carmen Saliare, a hymn so ancient that by Cicero's time no one could fully translate it. On the Campus Martius, the field that bore his name, soldiers mustered, horses raced, and the census was taken, binding military service to citizenship. Before battle, a Roman general entered the sacrarium of the Regia and shook the sacred spears while chanting Mars vigila — Mars, be wakeful. The Lupercalia in February, which likely predated Mars's association with it, involved priests called Luperci running nearly naked through the streets striking women with goatskin thongs to promote fertility, linking Mars to agricultural renewal as well as warfare. Varro classified Mars among the di indigetes, the native Italian gods, predating any Greek influence. His wolf, his woodpecker, his spear standing in the Regia as a fetish object — these were not decorative myths but state instruments. Rome made war a sacrament and Mars was the priest.",
+      "animals": ["wolf", "woodpecker", "horse"],
+      "weapons": ["spear", "shield (ancile)"],
+      "consorts": ["Venus", "Rhea Silvia", "Nerio"],
+      "colors": ["red", "bronze"]
+    },
+    {
+      "id": "venus",
+      "name": "Venus",
+      "title": "Goddess of Love",
+      "group": "olympian",
+      "description": "Venus Genetrix, Venus the Ancestress, was the mother of Aeneas and therefore the divine grandmother of the Roman people. Julius Caesar claimed direct descent from her through the gens Iulia and dedicated a temple to Venus Genetrix in his new Forum in 46 BCE, making his family's genealogy a matter of state architecture. This was not metaphor; Suetonius records that Caesar wore her image on his signet ring. Lucretius opens De Rerum Natura — a work of Epicurean atomic physics — with an invocation to Venus as the generative force behind all nature, the impulse that drives atoms to combine: voluptas, the pleasure principle that makes the universe cohere. Virgil makes her a political operator in the Aeneid, negotiating with Jupiter for her son's safe passage and gifting Aeneas the armor forged by her husband Vulcan inside Mount Etna, where the Cyclopes hammered the shield that depicted Rome's future history. Ovid in the Fasti describes her festival, the Veneralia on April 1st, when women of all classes washed her cult statue, removed her golden jewelry, and bathed together. As Venus Verticordia she was invoked to turn women's hearts toward chastity — a paradox that made perfect Roman sense: the goddess of desire governing the discipline of desire. Her consort Mars gave her Concordia and Timor (Harmony and Fear), the children of love and war, and the Romans found this pairing not contradictory but essential. She is the proof that Rome understood attraction as a structural force — not a private emotion but a civic power that founds dynasties, drives migration, and binds atoms into worlds.",
+      "animals": ["dove", "sparrow", "swan", "hare"],
+      "weapons": ["cestus (girdle of desire)"],
+      "consorts": ["Mars", "Vulcan", "Anchises"],
+      "colors": ["rose", "sea-green", "gold"],
+      "vegetation": ["myrtle", "rose", "apple"]
+    },
+    {
+      "id": "neptune",
+      "name": "Neptune",
+      "title": "God of the Sea",
+      "group": "olympian",
+      "description": "Neptune occupied a peculiar position in Roman religion: essential in cult but peripheral in myth, because Rome was not a maritime civilization by instinct. It was a city of farmers and soldiers that acquired a navy by necessity during the First Punic War and copied Carthaginian ship designs plank by plank, as Polybius describes. Neptune's festival, the Neptunalia on July 23rd, was celebrated with the building of arbor-like shelters from leafy branches, suggesting an older association with freshwater and irrigation rather than the open sea. Varro identifies him among the di selecti, the twenty principal gods of the state, and his consort Salacia, whose name derives from sal (salt), governed the deep waters, while his other companion Venilia governed the shoreward-coming waves. When Augustus defeated Sextus Pompeius — who had styled himself the son of Neptune — at the Battle of Naulochus, he pointedly removed Neptune's statue from the procession of gods, a political snub that was also a theological statement: Rome's power over the sea derived from Jupiter's cosmic order, not Neptune's personal favor. Virgil gives Neptune a dignified role in the Aeneid, calming the storm that Juno had unleashed through Aeolus, and his famous quos ego speech — where he begins to threaten the winds, then catches himself — became a rhetorical model for restrained authority. His trident, his dolphins, his sea-green chariot drawn by hippocampi are familiar, but the distinctly Roman Neptune is the god a land empire reluctantly acknowledged when it realized it had to cross water to survive. The Romans' relationship to the sea was contractual, like all their divine relationships: they offered, Neptune delivered, and when he didn't, they disciplined his image.",
+      "animals": ["horse", "dolphin", "bull"],
+      "weapons": ["trident"],
+      "consorts": ["Salacia", "Venilia"],
+      "colors": ["sea-blue", "green", "white"]
+    },
+    {
+      "id": "minerva",
+      "name": "Minerva",
+      "title": "Goddess of Wisdom and Strategy",
+      "group": "olympian",
+      "description": "Minerva completed the Capitoline Triad alongside Jupiter and Juno, sharing the great temple on the Capitol and receiving state worship at the highest level of Roman religious practice. She was patron of craftspeople, physicians, musicians, and poets — the Quinquatrus festival from March 19th to 23rd was a school holiday, and students brought gifts to their teachers in her name, making her the divine sponsor of education. Ovid in the Fasti describes artisans praying to her before beginning any skilled work: weavers, fullers, dyers, cobblers, doctors, and schoolmasters all claimed her protection. Unlike Athena, whose myths are rich with personal narratives — the contest with Arachne, the blinding of Tiresias, the judgment of Orestes — Minerva in Roman cult is almost entirely functional. She has few Roman myths of her own because she didn't need them; her power was demonstrated not in stories but in outcomes. The guildsmen of Rome organized their collegia under her authority, making her the patron saint of the professional middle class. On Etna's slopes, where Vulcan's Cyclopes worked their craft, Minerva's influence governed the intelligence behind the smithing — the technical knowledge that transformed raw volcanic metal into civilized implements. Cicero in De Natura Deorum discusses her as the divine mind itself, the providentia that plans before acting. She wore the aegis with the Gorgon's head, carried the spear, and kept the owl, but her Roman identity was less warrior than administrator: the goddess of competence, the divine technician, the reason Rome valued engineering over philosophy.",
+      "animals": ["owl", "serpent"],
+      "weapons": ["spear", "aegis with Gorgon's head"],
+      "consorts": ["none — perpetual virgin"],
+      "colors": ["olive green", "gold", "white"]
+    },
+    {
+      "id": "apollo",
+      "name": "Apollo",
+      "title": "God of Light and Prophecy",
+      "group": "olympian",
+      "description": "Apollo entered Rome as a foreign god and never fully shed that status, which is precisely what made him useful. He had no flamen, no place in the most archaic ritual calendar, and his first Roman temple, vowed in 433 BCE during a plague and dedicated in 431, was located outside the pomerium, the sacred boundary of the city — foreigners stayed outside. But Augustus changed everything. After Actium in 31 BCE, Augustus built the Temple of Apollo Palatinus adjacent to his own house on the Palatine, installed the Sibylline Books in its vault, and effectively made Apollo his personal patron, the divine sponsor of the new political order. Horace's Carmen Saeculare, commissioned by Augustus for the Secular Games of 17 BCE, is addressed to Apollo and Diana and asks them to guarantee Rome's eternity. The Sibylline oracles, kept in Apollo's temple and consulted only by decree of the Senate during national crises, were Rome's ultimate prophetic instrument — Livy describes multiple occasions when the quindecimviri sacris faciundis opened the books and prescribed Greek-style rituals to avert disaster. Apollo's lyre, his laurel, his association with rational order and measured beauty suited the Augustan program perfectly: a civilization claiming to have ended chaos and inaugurated an age of peace needed a god of clarity, not frenzy. Virgil in the Aeneid has the Sibyl of Cumae channel Apollo in a prophetic seizure at the cave near the Phlegraean Fields, not far from Etna's volcanic kin, where volcanic gases and underground fire made the landscape itself oracular. Apollo's Roman career demonstrates how a state adopts divinity strategically: he was imported to solve a plague, maintained to legitimize prophecy, and elevated to sanctify an emperor.",
+      "animals": ["raven", "swan", "dolphin", "wolf"],
+      "weapons": ["silver bow", "lyre", "laurel branch"],
+      "consorts": ["Daphne (unrequited)", "Coronis"],
+      "colors": ["gold", "white", "silver"]
+    },
+    {
+      "id": "diana",
+      "name": "Diana",
+      "title": "Goddess of the Hunt and Moon",
+      "group": "olympian",
+      "description": "Diana's oldest and most politically significant cult site was the grove at Aricia on the shores of Lake Nemi in the Alban Hills, where a runaway slave could become the Rex Nemorensis — King of the Wood — by breaking a branch from a sacred tree and killing the current priest-king in single combat. This brutal ritual fascinated James George Frazer so deeply that it became the opening scene and governing question of The Golden Bough, the foundational text of comparative religion, making Diana of Nemi arguably the most consequential single cult in the history of religious studies. Strabo describes the sanctuary; Ovid in the Fasti tells how Hippolytus, resurrected by Asclepius, was hidden by Diana at Nemi under the name Virbius. The temple of Diana on the Aventine Hill, traditionally founded by Servius Tullius, served a deliberate political function: it was a federal sanctuary for the Latin League, and its charter was modeled on the temple of Artemis at Ephesus, giving Rome's plebeians and Latin allies a divine patron and a legal meeting place. Diana was the goddess of the enslaved, the foreign, the marginal — those outside the pomerium's protection. She governed the moon, the hunt, and the wild places that lay beyond cultivated land, and her worship at crossroads (as Diana Trivia, the three-way goddess) linked her to Hecate and to the liminal spaces where Roman order dissolved into something older. Her virginity was not passivity but sovereignty: she answered to no consort and no male authority. Catullus calls her Latonia, Lucina, Trivia, and Luna in a single hymn, mapping four identities onto one goddess. She is what Rome acknowledged but could not fully control — the wild that persists at the edge of every civilization.",
+      "animals": ["deer", "hunting dog", "bear"],
+      "weapons": ["bow and quiver", "hunting spear"],
+      "consorts": ["none — perpetual virgin"],
+      "colors": ["silver", "white", "forest green"]
+    },
+    {
+      "id": "mercury",
+      "name": "Mercury",
+      "title": "Messenger of the Gods",
+      "group": "olympian",
+      "description": "Mercury's temple on the Aventine Hill was dedicated on May 15, 495 BCE — Ovid gives the date in the Fasti — and from its founding he was the god of merchants, traders, and thieves, his name sharing its root with merx (merchandise), mercari (to trade), and merces (wages). His festival, the Mercuralia on May 15th, involved merchants sprinkling their heads and their merchandise with water from his sacred spring at the Porta Capena, ritually purifying their goods and, by extension, the profit motive itself. This is distinctly Roman: a civilization that sanctified commerce, gave it a god, built him a temple on the commercial hill near the Circus Maximus, and asked him to bless not just communication but the transactions that made empire possible. Livy records that his temple was assigned to the first collegium mercatorum, the guild of merchants. He carried the caduceus, wore the winged sandals and the petasos hat, and guided the dead to the underworld as Psychopompos, but his Roman function was primarily economic. When Caesar encountered the Gauls, he reported in De Bello Gallico that Mercury was the god they most worshipped — likely a Roman interpretation of a native deity through commercial lenses. The road system that made Rome's empire function — the viae publicae radiating from the Milliarium Aureum in the Forum — was his domain, and herms at crossroads marked his presence throughout Italy. Mercury is what happens when a civilization realizes that communication infrastructure is sacred: the god of roads, of messages, of the movement of goods and souls, the divine principle that nothing of value stays in one place.",
+      "animals": ["rooster", "ram", "tortoise"],
+      "weapons": ["caduceus (herald's staff)", "winged sandals (talaria)"],
+      "consorts": ["Larunda"],
+      "colors": ["yellow", "silver"]
+    },
+    {
+      "id": "ceres",
+      "name": "Ceres",
+      "title": "Goddess of Agriculture",
+      "group": "olympian",
+      "description": "Ceres held the Aventine alongside Mercury and Diana, forming a triad of plebeian deities whose political significance matched their religious function. Her temple, vowed during a famine in 496 BCE and dedicated in 493, served as the headquarters of the plebeian aediles and the archive for senatus consulta affecting the common people — Livy makes clear that this was a conscious political act, giving the plebs their own sacred center to counterbalance the patrician gods on the Capitoline. The grain dole that would eventually define Roman urban politics was administered under her authority, and the word cereal derives directly from her name. Her mysteries at Eleusis were imported to Rome as the sacra Cereris, celebrated exclusively by women and conducted in Greek by Greek priestesses — Cicero in Pro Balbo describes them as the holiest rites in Roman religion, so secret that even their general character was difficult to discuss publicly. Ovid's Metamorphoses tells her search for Proserpina, taken by Pluto into the underworld, and the Fasti describes the Cerialia festival on April 19th when foxes with burning torches tied to their tails were released in the Circus Maximus, a ritual Ovid himself found bizarre and could only explain with an aetiological tale. On Etna's fertile volcanic slopes, where the richest wheat fields in Sicily grew in soil made of ash, the cult of Ceres was ancient and intense — Cicero's Verrine Orations describe the Sicilians' devotion to her as the deepest in the Roman world, and Enna, near Etna, was reputed to be the very spot where Pluto broke through the earth to seize her daughter. Ceres is the proof that Rome understood food supply as theology: whoever controls the grain controls the city, and the goddess of the grain is the goddess of political survival.",
+      "animals": ["pig", "serpent", "crane"],
+      "weapons": ["torch", "sheaf of wheat", "sickle"],
+      "consorts": ["Saturn"],
+      "colors": ["golden yellow", "green", "brown"],
+      "vegetation": ["wheat", "barley", "poppy"]
+    },
+    {
+      "id": "vulcan",
+      "name": "Vulcan",
+      "title": "God of the Forge and Fire",
+      "group": "olympian",
+      "description": "Vulcan's forge beneath Mount Etna is not a quaint myth but a geological explanation: the Romans heard the mountain roar and smelled the sulfur and concluded that someone was working down there. Virgil, in Aeneid Book 8, describes the scene directly — the Cyclopes Brontes, Steropes, and Pyracmon hammering thunderbolts for Jupiter and armor for Mars beneath the island, the anvil-strikes shaking the earth, molten metal flowing in rivers that Romans could see as actual lava. His Volcanalia on August 23rd was celebrated by throwing live fish and small animals into bonfires, a substitutionary offering to keep the destructive aspect of fire at bay during the dry season when urban fires were most deadly. His temple stood in the Forum, but outside the pomerium — like Etna itself, fire was essential but dangerous and kept at a ritual distance from the city's sacred center. Pliny the Elder records in the Naturalis Historia that the workers of Lipari, the volcanic island near Etna, left raw iron out overnight and found it forged by morning, attributing the work to Vulcan. His lameness — thrown from heaven by Jupiter or Juno depending on the source — made him the only physically imperfect Olympian, and his marriage to Venus, the most beautiful goddess, was Rome's most famous mismatch, a union of beauty and craft, surface and substance. Ovid tells the story of Vulcan catching Venus and Mars in a golden net, exposing their adultery to the assembled gods, a scene that is less jealous rage than contractual enforcement — he had fulfilled his obligations and they had not fulfilled theirs. He is the god who proves that civilization is built by those who work with their hands in fire and darkness, far from the elegant halls of power, and that the volcano beneath Etna is not chaos but an underground factory. Every eruption is a product being finished.",
+      "animals": ["donkey", "crane"],
+      "weapons": ["hammer", "tongs", "anvil"],
+      "consorts": ["Venus"],
+      "colors": ["orange", "red", "black", "iron gray"]
+    },
+    {
+      "id": "bacchus",
+      "name": "Bacchus",
+      "title": "God of Wine and Ecstasy",
+      "group": "olympian",
+      "description": "Bacchus arrived in Rome as Liber Pater, the Free Father, an Italic god of fertility, wine, and the crossing of boundaries, long before his cult merged with the Greek Dionysus. The Liberalia on March 17th was the day when Roman boys assumed the toga virilis and became citizens — the transition from childhood to adulthood was placed under the patronage of the god who dissolves all fixed categories, which is a staggering piece of psychological insight embedded in public ritual. But the Senate's suppression of the Bacchanalia in 186 BCE, preserved in Livy's account and in the Senatus consultum de Bacchanalibus inscribed on a bronze tablet still extant, is one of the most revealing episodes in Roman religious history. The cult had spread rapidly through southern Italy, initiating thousands in secret nocturnal rites involving ecstatic trance, sexual transgression, and what the Senate alleged was conspiracy against the state. The resulting crackdown — seven thousand people investigated, many executed — was Rome declaring that ecstasy was fine as long as the state administered it, and that unregulated religious experience was sedition. Ovid in the Metamorphoses tells of Bacchus turning the Tyrrhenian pirates into dolphins and driving the women of Thebes to dismember Pentheus, stories that encode the god's capacity to dissolve not just personal boundaries but social order itself. Etna's volcanic slopes produced some of the ancient world's most prized wines, and the heat that rose through the volcanic soil ripened grapes with an intensity that cooler ground could not match. Bacchus is the god Rome simultaneously craved and feared: the force that says civilization's categories are provisional, that the sober state rests on an intoxicated foundation, and that every structure contains within it the ecstasy that could unmake it.",
+      "animals": ["leopard", "panther", "goat", "serpent"],
+      "weapons": ["thyrsus (ivy-tipped staff)", "kantharos (drinking cup)"],
+      "consorts": ["Ariadne"],
+      "colors": ["purple", "vine green", "gold"],
+      "vegetation": ["grapevine", "ivy", "fig"]
+    },
+    {
+      "id": "saturn",
+      "name": "Saturn",
+      "title": "God of Time and Agriculture",
+      "group": "roman",
+      "description": "Saturn is the god Rome remembered as its founder-before-the-founding, the ruler of a golden age of equality and abundance that preceded Jupiter's reign and that Romans ritually recovered every December during the Saturnalia. For seven days beginning December 17th, masters served their slaves at table, gambling was permitted, the toga was replaced by the synthesis (a casual dinner garment), and social hierarchy temporarily inverted — Macrobius devotes the entire first book of his Saturnalia to describing and explaining these customs. His temple at the foot of the Capitoline Hill, one of the oldest in Rome with a traditional founding date of 497 BCE, housed the state treasury (aerarium Saturni), linking the god of time directly to the stored wealth of the republic. Varro in Antiquitates Rerum Divinarum places Saturn among the oldest Italian agricultural deities, his name connected to satus (sowing), and the sickle he carries is a harvesting tool, not a weapon — though the Greek identification with Kronos who castrated his father Ouranos with a sickle added a darker resonance. Macrobius argues that Saturn and the sun are the same deity, the regulator of seasons and therefore of agricultural time. His festival fell near the winter solstice for a reason: at the year's darkest point, the Romans enacted a return to paradise, acknowledging that civilization is built on the suppression of an older equality that must periodically surface or the social contract will crack. The early Christian church placed Christ's nativity at the same calendrical moment, absorbing the Saturnalian pattern of light returning in darkness. Saturn is Rome's confession that order is not natural — that it was imposed on something freer, and that the imposition requires annual renegotiation.",
+      "animals": ["serpent", "crow"],
+      "weapons": ["sickle (falx)", "scythe"],
+      "consorts": ["Ops (Abundance)"],
+      "colors": ["black", "dark blue", "gold"],
+      "vegetation": ["wheat", "fig"]
+    },
+    {
+      "id": "janus",
+      "name": "Janus",
+      "title": "God of Beginnings and Doorways",
+      "group": "roman",
+      "description": "Janus has no Greek equivalent. He is entirely Roman — the two-faced god who looks simultaneously forward and backward, who presides over every beginning, every doorway, every transition, and who was invoked first in every Roman prayer regardless of which god was the prayer's ultimate recipient. Ovid opens the Fasti by interviewing Janus directly, and the god explains himself: he is the primordial chaos that preceded form, the shapeless mass that organized itself into the world, and his two faces represent the moment of division when inside separated from outside, before from after, peace from war. His shrine in the Forum, the Ianus Geminus, was a simple archway whose doors stood open in wartime and closed in peacetime — Livy records that they were closed only twice before Augustus, who closed them three times and made the gesture a centerpiece of his propaganda. January, Ianuarius, his month, begins the year because every beginning belongs to him. Macrobius identifies him with the sun, arguing that one face looks toward sunrise and the other toward sunset, but this astronomical reading diminishes his stranger truth: Janus is the god of the threshold itself, the liminal space between states, the neither-here-nor-there that every passage requires. Roman houses had a ianus, a doorway, and the ianitor (janitor) guarded it. Every arch, every gate, every moment of entering or leaving activated his power. He received the first portion of every sacrifice, the first prayer of every ritual, because nothing could begin without passing through him. Psychologically, Janus is Rome's recognition that consciousness itself is bifocal — that to be aware is to face two directions at once, holding the memory of what was and the anticipation of what will be in a single present moment that is, like a doorway, not a place but a passage.",
+      "animals": ["none specific — he predates animal associations"],
+      "weapons": ["key", "staff"],
+      "consorts": ["Camese", "Juturna"],
+      "colors": ["silver", "gray", "white"]
+    },
+    {
+      "id": "vesta",
+      "name": "Vesta",
+      "title": "Goddess of the Hearth",
+      "group": "roman",
+      "description": "Vesta had no cult statue. Her temple in the Forum Romanum was round, not rectangular like every other Roman temple, and contained no image — only the sacred flame that was never permitted to extinguish, tended by the six Vestal Virgins who served for thirty years under a vow of chastity enforced by the most extreme penalty in Roman law: a Vestal who broke her vow was buried alive in an underground chamber near the Colline Gate with a lamp, a loaf of bread, and a jug of water, then sealed in and left to die, because Roman law forbade the direct killing of a person consecrated to the gods. Livy, Plutarch, and Aulus Gellius all record instances. The Vestals' privileges were equally extraordinary: they were emancipated from their fathers' authority (a status almost no other Roman woman achieved), they could own property independently, their testimony required no oath, and they could pardon condemned prisoners by chance encounter. Ovid in the Fasti describes the Vestalia on June 9th, when married women walked barefoot to the temple to offer food baked on sacred hearthstones, and donkeys — normally used to turn grain mills — were garlanded with flowers and given a holiday. Vesta was Aeneas's charge: Virgil tells that he carried the sacred fire from burning Troy to Italy, and the flame in the Forum was understood as the direct continuation of that Trojan hearth. Her power had no mythology because it needed none — it was the fire itself, the irreducible center of every household and every city, the point around which domestic and political life organized. A civilization that understands the hearth as sacred has understood something essential: that the maintenance of warmth, cooking, and light is not a menial task but the foundational act upon which everything else depends. The Vestals were Rome's acknowledgment that someone must tend the fire for the city to survive, and that this work is the most sacred work there is.",
+      "animals": ["donkey"],
+      "weapons": ["none — the flame itself"],
+      "consorts": ["none — perpetual virgin"],
+      "colors": ["white", "flame orange", "red"]
+    },
+    {
+      "id": "pluto",
+      "name": "Pluto",
+      "title": "God of the Underworld",
+      "group": "roman",
+      "description": "Pluto — also called Dis Pater (the Rich Father) — governed the underworld not as a place of punishment but as a repository of wealth, since everything that goes beneath the earth, including seeds, corpses, and mineral ore, enters his domain and enriches it. His name derives from the Greek Plouton, itself from ploutos (wealth), and the Romans took the economic implication seriously: the god of the dead was the god of stored capital, the ultimate hoarder whose vaults never emptied. His cult was almost entirely avoidant. Romans rarely spoke his name, instead using euphemisms; they sacrificed to him by averting their faces, striking the earth with their hands, and offering dark-colored victims — black cattle, black sheep — at night. The Secular Games, held every saeculum (roughly 110 years), included nocturnal sacrifices to Dis Pater and Proserpina at the Tarentum in the Campus Martius, a spot believed to be an entrance to the underworld. Augustus's celebration of these games in 17 BCE, described in the surviving Acta of the proceedings, was one of the great religious spectacles of antiquity. Ovid's account of the rape of Proserpina in the Metamorphoses locates it in Sicily, near Etna: Pluto erupts from the earth at Lake Pergusa, seizes Ceres' daughter, and drags her underground — Claudian later devoted an entire epic to the scene, describing how Etna's fires marked the spot where the earth had been torn open. Cicero in the Verrine Orations confirms that the Sicilians worshipped Pluto and Proserpina at Enna with extraordinary fervor, and that their temple was one of the most ancient in the Greek and Roman world. Pluto is what lies beneath every civilization's foundations: the accumulated dead, the buried wealth, the repressed material that surfaces only through volcanic eruption or psychological crisis. His Roman cult's defining feature — the aversion of the face, the refusal to look directly — is the precise gesture Freud would later identify as the mechanism of repression.",
+      "animals": ["black horses", "screech owl", "serpent"],
+      "weapons": ["bident (two-pronged fork)", "helmet of invisibility"],
+      "consorts": ["Proserpina"],
+      "colors": ["black", "dark purple", "charcoal"]
+    }
+  ]
+}

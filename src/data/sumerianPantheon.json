@@ -1,0 +1,168 @@
+{
+  "id": "sumerian",
+  "name": "The Anunnaki",
+  "description": "The oldest recorded pantheon in human history, inscribed in cuneiform on clay tablets from the cities of Ur, Uruk, Nippur, and Eridu along the Tigris and Euphrates rivers. Where the two rivers converge in southern Iraq — the marshlands the Sumerians called the Abzu — the first written theology emerged: gods shaped from the problems of irrigation, kingship, grain storage, and death, yet carrying a psychological complexity that still startles.",
+  "deities": [
+    {
+      "id": "anu",
+      "name": "An / Anu",
+      "title": "God of the Heavens",
+      "group": "primordial",
+      "description": "An is the sky itself — the Sumerian word for heaven and the god who occupies it are the same sign in cuneiform. In the earliest god-lists from Fara (c. 2600 BCE), he stands first. The Enuma Elish recounts how he emerged from the mingling of Apsu (fresh water) and Tiamat (salt water), and later how he fashioned the cosmos from Tiamat's slaughtered body — though by the time that text was composed, his son Enlil and later Marduk had already supplanted him in practice. This is the defining pattern of An: supreme in title, passive in action. He holds the Tablet of Destinies but rarely wields it. He presides but does not intervene. The temple hymns of Enheduanna — the earliest named author in history, priestess at Ur around 2300 BCE — address him with formal distance, as one would a king who no longer governs. His animal is the bull. His number in the Mesopotamian divine ranking system is 60 — the highest — which seeded the sexagesimal mathematics that still structures our hours and minutes. What An models in human psychology is the absent father: the authority everyone invokes but no one can reach. Power that has become purely symbolic. Every institution eventually produces an An — the figurehead whose name is on the letterhead while someone else runs the operation.",
+      "animals": ["Bull"],
+      "consorts": ["Ki (Earth)", "Nammu (primordial sea, in some traditions)"],
+      "weapons": ["Tablet of Destinies"]
+    },
+    {
+      "id": "enlil",
+      "name": "Enlil",
+      "title": "Lord of Wind and Earth",
+      "group": "primordial",
+      "description": "Enlil is the god who actually runs things. His name means 'Lord Wind' — the force that separates heaven from earth in the Sumerian creation account, making room for the world to exist. His cult center was Nippur, the religious capital of Sumer, and no king was considered legitimate without his blessing. The Sumerian King List records kingship as descending from heaven to earth by Enlil's decree. He holds the Tablet of Destinies — borrowed or seized from An — which gives him control over the fates of gods and mortals. But the Atrahasis epic reveals his darker function: when humanity grew too numerous and noisy, Enlil sent plague, drought, and finally the Great Flood to destroy them. Only Enki's intervention — warning the hero Atrahasis to build a boat — saved the species. The tension between Enlil and Enki is one of the oldest recorded theological arguments: order versus mercy, control versus cunning, the administrator versus the inventor. Enlil's animal is the storm bird, sometimes depicted as a lion-headed eagle. His number is 50. He is the executive who believes the system works and resents those who subvert it. What he models is institutional authority — the conviction that hierarchy is natural, that silence is obedience, and that surplus population is a management problem. Every bureaucracy has an Enlil. The flood story passed from the Atrahasis to Utnapishtim's account in Gilgamesh and from there, recognizably, into Genesis.",
+      "animals": ["Storm bird (Anzu / lion-headed eagle)"],
+      "consorts": ["Ninlil (goddess of grain and wind)"],
+      "weapons": ["Tablet of Destinies", "Storm winds"]
+    },
+    {
+      "id": "enki",
+      "name": "Enki / Ea",
+      "title": "God of Water and Wisdom",
+      "group": "primordial",
+      "description": "Enki is the cleverest god in the oldest literature on earth, and he knows it. His domain is the Abzu — the freshwater aquifer beneath the earth that feeds the Tigris and Euphrates — and his city is Eridu, the oldest city in the Sumerian tradition, where archaeology has confirmed continuous settlement from roughly 5400 BCE. In the myth Enki and the World Order, he organizes civilization itself: assigning rivers their courses, fish to the marshes, grain to the fields, and gods to their proper offices. In the Atrahasis, he defies Enlil's decree of annihilation by whispering through a reed wall to warn Atrahasis to build a boat — technically not breaking his oath of silence because he addressed the wall, not the man. This is Enki's signature move: the loophole, the workaround, the creative interpretation that saves lives while maintaining plausible deniability. In Inanna and Enki, the goddess gets him drunk and steals the me — the divine decrees of civilization — and he is too hungover to stop her. His symbol is two streams of water flowing from his shoulders, sometimes with fish swimming in them. His animal is the goat-fish (the later Capricorn). His number is 40. His consort is Ninhursag, though their relationship in the myth of Enki and Ninhursag is complicated — he eats forbidden plants, she curses him with eight diseases, then relents and creates eight healing deities. What Enki models is intelligence as a survival strategy: the trickster who outmaneuvers brute authority, who saves humanity not through power but through cleverness and a willingness to bend rules. He is the engineer, the doctor, the defense lawyer. His temple at Eridu sat at the edge of the marshes where the rivers meet — wisdom, in Sumer, lived where fresh water touched the world.",
+      "animals": ["Goat-fish (later Capricorn)", "Turtle"],
+      "colors": ["Blue (lapis lazuli)"],
+      "consorts": ["Ninhursag / Damgalnuna"],
+      "weapons": ["The me (divine decrees of civilization)", "Incantations"]
+    },
+    {
+      "id": "ninhursag",
+      "name": "Ninhursag / Ki",
+      "title": "Mother Earth",
+      "group": "primordial",
+      "description": "Ninhursag is the great mother goddess of Sumer — 'Lady of the Sacred Mountain' — whose titles accumulate across millennia: Ninmah (Great Lady), Nintu (Lady of Birth), Damgalnuna, Ki (Earth). In the myth of Enki and Ninhursag, set in the paradise of Dilmun (often identified with Bahrain), she grows eight plants from Enki's seed, which he then eats without permission. She curses him with eight afflictions, one for each stolen plant — organs failing one by one. When the other gods beg her to relent, she creates eight healing deities, one for each wound. The whole episode reads like a negotiation about boundaries: creation, transgression, consequence, repair. It may be the earliest recorded template for the pattern that would become the Fall narrative. In the Atrahasis creation account, Ninhursag mixes clay with the blood of a slaughtered god to fashion the first humans — fourteen of them, seven male and seven female, shaped in her womb. The birth brick is her symbol: the clay block Mesopotamian women squatted over during labor. Temple hymns address her as the mother of all the gods. Her sacred animal is the omega-shaped symbol (possibly a uterus) that appears on boundary stones. What she models is the irreducible authority of the body — the one power that no cleverness, no decree, no theology can override. You were born. Someone bore you. That is her jurisdiction. She also models the mother's prerogative: she can curse and she can heal, and the decision is hers alone.",
+      "animals": ["Omega symbol (possibly uterine)", "Lion (in some traditions)"],
+      "consorts": ["Enki / Ea"],
+      "weapons": ["Birth brick", "Clay of creation"]
+    },
+    {
+      "id": "tiamat",
+      "name": "Tiamat",
+      "title": "The Primordial Sea",
+      "group": "primordial",
+      "description": "Tiamat is the salt sea before anything existed — a Babylonian overlay on the Sumerian cosmology, but so foundational that she cannot be separated from the tradition. The Enuma Elish, composed probably in the reign of Nebuchadnezzar I (c. 1125 BCE) and recited at the Babylonian New Year festival, opens with her: 'When above the heavens had not yet been named, nor below the earth called by a name, Apsu — the first, their begetter — and maker Tiamat, who bore them all, were mingling their waters together.' She and Apsu (fresh water) produce the first gods through the mixing of salt and sweet water — which is precisely what happens at the confluence of the Tigris and Euphrates in the southern marshlands. When her offspring become noisy and disruptive, Apsu wants to destroy them; Enki kills Apsu first. Tiamat, grieving and furious, spawns eleven monsters — serpent-dragons, lion-demons, scorpion-men, a mad dog, a fish-man — and appoints Kingu as her champion, giving him the Tablet of Destinies. The young god Marduk volunteers to face her on the condition that he be made supreme over all gods if he wins. He drives the four winds into her open mouth, inflates her body, and shoots an arrow through her belly. Then he splits her corpse: one half becomes the sky, the other the earth. Her eyes become the Tigris and Euphrates. What Tiamat models is the terrifying generativity of the original — the mother whose body literally becomes the world, who must be killed for structure to exist. Every cosmogony that begins with dismemberment echoes this: Ymir in the Prose Edda, Purusha in the Rig Veda. The deep discomfort in the myth is that civilization requires violence against its own source.",
+      "animals": ["Serpent-dragon (mušḫuššu)", "Sea creature"],
+      "colors": ["Deep blue-black (ocean depths)"],
+      "consorts": ["Apsu (fresh water)", "Kingu (champion and second consort)"],
+      "weapons": ["Eleven monsters", "Tablet of Destinies (given to Kingu)"]
+    },
+    {
+      "id": "inanna",
+      "name": "Inanna / Ishtar",
+      "title": "Goddess of Love and War",
+      "group": "celestial",
+      "description": "Inanna is the most vivid, most contradictory, most fully rendered deity in all of ancient literature — and we have more of her own voice than any other Mesopotamian god. The Descent of Inanna, one of the oldest narrative poems in existence (c. 1900-1600 BCE), tells how she resolved to visit the underworld — not because she was forced, but because she chose to. She passed through seven gates, and at each gate a piece of her regalia was stripped away: crown, lapis necklace, breast stones, gold ring, measuring rod, breastplate, and finally her garment. She arrived naked before her sister Ereshkigal, was struck dead, and hung on a hook for three days. She was eventually revived, but someone had to take her place — she chose her husband Dumuzi, who had been sitting on her throne enjoying her absence. In the temple hymns of Enheduanna, Inanna is addressed with ecstatic intensity as both sexual and terrifying: she dances in battle, she makes the dead rise, she turns men into women and women into men. Her planet is Venus — the morning and evening star — and her dual nature mirrors that astronomical fact: she appears at dawn as the goddess of war and at dusk as the goddess of desire. Her animal is the lion. Her symbol is the eight-pointed star. Her city is Uruk, where her sacred precinct, the Eanna, was one of the largest temple complexes in the ancient world. The sacred marriage rite — in which the king of Uruk ritually coupled with Inanna's priestess to ensure the fertility of the land — was the most intimate intersection of religion and statecraft in Mesopotamian culture. What Inanna models is the refusal to be one thing. She holds desire and destruction in the same hand. She descends voluntarily into death and returns transformed. She is not tamed by any narrative. Twenty-first-century readers often find her the most modern figure in ancient literature, which says something about both her and us.",
+      "animals": ["Lion", "Dove"],
+      "colors": ["Red (carnelian)", "Blue (lapis lazuli)"],
+      "consorts": ["Dumuzi / Tammuz"],
+      "weapons": ["Seven me (divine powers, taken from Enki)", "The double-edged blade"],
+      "vegetation": ["Date palm"]
+    },
+    {
+      "id": "utu",
+      "name": "Utu / Shamash",
+      "title": "The Sun God",
+      "group": "celestial",
+      "description": "Utu is the sun — not as life-giver or warmth-bringer but as the one who sees everything. In Mesopotamia, where the sun is more destroyer than nurturer (this is the desert, not Scandinavia), Utu's primary function is justice. He crosses the sky each day and witnesses every human act; at night he traverses the underworld, judging the dead. The prologue to the Code of Hammurabi (c. 1754 BCE) shows the king receiving the law from Shamash, who extends a rod and ring — the symbols of divine authority and righteous measurement. The Sippar sun-god tablet, one of the most important artifacts of Mesopotamian religion, depicts exactly this scene. In the Epic of Gilgamesh, Utu/Shamash is the one deity who consistently helps the heroes: he encourages Gilgamesh and Enkidu to face Humbaba, the monstrous guardian of the Cedar Forest, and sends thirteen winds to assist them in battle. He speaks in Gilgamesh's dreams. When Enkidu is dying and curses the temple prostitute Shamhat for civilizing him, it is Shamash who rebukes him: she gave you bread, beer, fine garments, and a magnificent companion — why curse her? Enkidu relents and blesses her instead. His symbol is the sun disc with rays terminating in wavy lines (heat shimmer on the horizon). His animal is the horse — rare in early Sumer, associated with speed and the chariot. His city is Sippar (and Larsa). What Utu models is conscience — the awareness that you are seen. Not the punishing god, but the seeing one. In a culture that invented written law, the sun god was the guarantor that law was not merely power but illumination.",
+      "animals": ["Horse", "Human-headed bull (lamassu, as guardian of justice)"],
+      "colors": ["Gold", "White"],
+      "consorts": ["Aya (goddess of dawn)"],
+      "weapons": ["Saw-toothed knife (for cutting through mountains at dawn)", "Rod and ring (symbols of justice)"]
+    },
+    {
+      "id": "nanna",
+      "name": "Nanna / Sin",
+      "title": "The Moon God",
+      "group": "celestial",
+      "description": "Nanna is the moon god of Ur, and in the Sumerian system he is more important than the sun. This surprises people raised in solar-centric cultures, but it makes perfect sense for a civilization that depended on irrigation: the lunar calendar governed planting, harvest, and the timing of the rivers' flood cycles. His great ziggurat at Ur — partially reconstructed and still standing in southern Iraq — was one of the largest religious structures in the ancient world. Enheduanna, the author of the temple hymns, was his high priestess there. His name generates the Akkadian word for month. His crescent is the oldest continuously used religious symbol in the region — it appears on cylinder seals from the third millennium BCE and on the flag of modern Turkey. In the myth Nanna's Journey to Nippur, he travels by boat along the canals from Ur to the religious capital to receive Enlil's blessing, bringing gifts of grain, cream, and dates — a ritual itinerary that mirrors the actual tribute journeys of Ur's kings. His light was understood as gentler than Utu's: the moon illuminates without burning, counts without judging. His number is 30 — the days of the lunar month. His animal is the bull, whose crescent horns mirror his own symbol. His consort is Ningal (Great Lady), and their children are Utu (the Sun) and Inanna (Venus) — meaning the two brightest objects in the sky after the moon are, in Sumerian theology, his offspring. What Nanna models is cyclical time — the understanding that light waxes and wanes, that fullness is temporary, that darkness is not death but the interval before return. Every lunar calendar in the world carries this insight. He also models the quiet authority of the timekeeper: the one who does not act but whose rhythm everything else follows.",
+      "animals": ["Bull (crescent horns)"],
+      "colors": ["Silver", "White"],
+      "consorts": ["Ningal (Great Lady)"],
+      "weapons": ["Crescent standard"]
+    },
+    {
+      "id": "ereshkigal",
+      "name": "Ereshkigal",
+      "title": "Queen of the Underworld",
+      "group": "celestial",
+      "description": "Ereshkigal rules the land of no return — Kur or Irkalla — and she rules it absolutely. She is Inanna's older sister, and the contrast between them structures Mesopotamian theology: Inanna gets the sky, the city, love, war, and Venus; Ereshkigal gets the dead. In the Descent of Inanna, when her radiant sister arrives at the underworld gates demanding entry, Ereshkigal orders her stripped at each of the seven gates and then fixes her with the eye of death, turning her into a corpse hung on a hook. There is no malice in this — it is protocol. Everyone who enters the underworld is subject to its laws, even a goddess. The Akkadian text Nergal and Ereshkigal tells a different story: when Nergal offends her by refusing to stand for her envoy, he is sent below to apologize. What follows is part seduction, part hostage negotiation, part genuine passion — she seizes him, he overpowers her, they end up ruling together, and the text is remarkably frank about the six days they spend in bed. She is described as groaning in labor in some traditions, perpetually giving birth in the dark — the dead as her children. Her city has no light. Dust is the food; clay is the bread. The Gilgamesh epic's underworld vision (Tablet XII) describes the dead in feathered garments like birds, crouching in darkness. What Ereshkigal models is the non-negotiable. She is grief itself — not as an emotion to be processed and released, but as a permanent condition that must be acknowledged. Inanna's descent works as a psychological text precisely because you cannot charm, buy, or talk your way past Ereshkigal. You go down. You are stripped. You face what is there.",
+      "animals": ["Owl (in some iconography)", "Serpent"],
+      "colors": ["Black"],
+      "consorts": ["Nergal (God of War and Plague)", "Gugalanna (the Bull of Heaven, first husband — slain)"],
+      "weapons": ["The eye of death", "Seven gates of the underworld"]
+    },
+    {
+      "id": "dumuzi",
+      "name": "Dumuzi / Tammuz",
+      "title": "The Shepherd God",
+      "group": "celestial",
+      "description": "Dumuzi is the shepherd-king of Uruk, consort of Inanna, and the figure whose death and mourning became one of the most enduring ritual cycles in the ancient Near East — echoing forward into the Greek Adonis, the Phrygian Attis, and arguably the Christian Passion. In the Descent of Inanna, he is chosen as her replacement in the underworld because when she died, he did not mourn. She found him seated on her throne, dressed in fine garments, and fixed him with the eye of death. The Sumerian Dream of Dumuzi recounts his terrified vision of his own capture by the galla-demons — he begs Utu for help, Utu transforms him into a gazelle, but the demons find him anyway. His sister Geshtinanna volunteers to share his fate: each spends half the year in the underworld, alternating. This is the Mesopotamian explanation for the seasons — one of the oldest in literature, predating the Persephone myth by a millennium. Cuneiform texts record ritual laments for Dumuzi's death performed in the fourth month (roughly June-July), when the brutal Mesopotamian summer kills the pastureland. Shepherds and women wailed in the streets. The prophet Ezekiel (8:14) describes women in Jerusalem weeping for Tammuz at the gate of the Temple — the rite had spread that far by the sixth century BCE. His symbol is the shepherd's crook. His animals are the sheep and the gazelle. What Dumuzi models is the cost of intimacy: he is loved, he fails the test of loyalty, and he pays with his life. He is also the figure who makes seasonal death personal — not an agricultural abstraction but a specific man whose absence is grieved by name.",
+      "animals": ["Sheep", "Gazelle"],
+      "consorts": ["Inanna / Ishtar"],
+      "weapons": ["Shepherd's crook"],
+      "vegetation": ["Grain (his death and return linked to harvest cycle)"]
+    },
+    {
+      "id": "marduk",
+      "name": "Marduk",
+      "title": "Champion of the Gods",
+      "group": "cultural",
+      "description": "Marduk is the supreme god of Babylon — not of Sumer, and that distinction matters. He does not appear in the earliest god-lists. He is a latecomer, a city god elevated to cosmic supremacy when Babylon became the political center of Mesopotamia under Hammurabi (c. 1792-1750 BCE) and then definitively in the Enuma Elish, which was composed specifically to justify his promotion. The poem is seven tablets long. In it, Marduk volunteers to face Tiamat — the primordial sea goddess who has spawned eleven monsters — when all the senior gods are too frightened. His condition: if he wins, he becomes supreme. He wins by driving the four winds into her open mouth, inflating her, and shooting an arrow through her belly. He splits her body to form heaven and earth, creates humanity from the blood of her champion Kingu, and builds Babylon as the center of the cosmos. His temple, Esagila, and the ziggurat Etemenanki — almost certainly the model for the biblical Tower of Babel — dominated Babylon's skyline. His symbol is the mušḫuššu dragon (the same creature Tiamat spawned, now domesticated as his pet). His weapon is the storm. His planet, in later astral theology, is Jupiter — the king planet. The Enuma Elish was recited annually at the Akitu (New Year) festival, when the king ritually grasped Marduk's hands in the statue's chamber, essentially renewing his divine mandate. What Marduk models is the self-made sovereign — the young god who earns supremacy through courage and a shrewd political deal. He is not born into power like An or Enlil; he negotiates for it. Every revolutionary leader who leverages a crisis into legitimate authority follows the Marduk template. But the Enuma Elish is also honest about the cost: the new order is built on a dismembered body.",
+      "animals": ["Mušḫuššu dragon (serpent-dragon with lion's forepaws and eagle's hindclaws)", "Horse"],
+      "colors": ["Blue (lapis lazuli)", "Gold"],
+      "consorts": ["Sarpanit (Zarpanitu)"],
+      "weapons": ["Net", "Four winds", "Bow and arrow", "Mace (flood-weapon)"]
+    },
+    {
+      "id": "nabu",
+      "name": "Nabu",
+      "title": "God of Writing",
+      "group": "cultural",
+      "description": "Nabu is the son of Marduk and the patron of scribes, literacy, and rational intelligence. His cult center was Borsippa, near Babylon, where his temple Ezida ('House of Knowledge') housed one of the great archives of the ancient world. He carries the clay tablet and the stylus — the actual tools of cuneiform writing — and his role is to inscribe the fates that the great gods decree. By the Neo-Assyrian period (911-609 BCE), Nabu had risen to extraordinary prominence: Assyrian kings named themselves after him (Nabopolassar, Nebuchadnezzar, Nabonidus), and his cult rivaled his father's. The colophons of cuneiform tablets — the scribal signatures at the end — frequently invoke his blessing. The library of Ashurbanipal at Nineveh, the single greatest repository of Mesopotamian literature (where the Epic of Gilgamesh was rediscovered in the nineteenth century), was assembled under Nabu's patronage. His symbol is the single wedge — the basic unit of cuneiform, the mark that a stylus makes when pressed into wet clay. His planet is Mercury — speed, communication, the bridge between divine intention and human record. What Nabu models is the power of the person who writes it down. In a civilization where literacy belonged to a trained elite, the scribe was not a secretary but a technologist — the one who could fix language in clay and make it outlast the king who spoke it. Every culture discovers this: the recorder shapes the record. Nabu is the patron saint of that realization, and of every archive, library, and database that followed.",
+      "animals": ["Winged dragon (inherited from Marduk)"],
+      "consorts": ["Tashmetum (goddess of hearing and listening)"],
+      "weapons": ["Clay tablet", "Stylus (the cuneiform wedge)"]
+    },
+    {
+      "id": "nergal",
+      "name": "Nergal",
+      "title": "God of War and Plague",
+      "group": "cultural",
+      "description": "Nergal is the god of war, pestilence, and the scorching summer sun — the destructive aspect of heat in a land where summer kills. His cult center was Kutha (modern Tell Ibrahim, Iraq), and his temple there, the Emeslam, was associated with the underworld. In the Akkadian myth Nergal and Ereshkigal, he is sent to the underworld as punishment for disrespecting the dead queen's envoy. What follows is one of the strangest love stories in ancient literature: Ereshkigal seizes him, they spend six days in bed, he escapes back to heaven, she threatens to raise the dead and let them devour the living unless he returns, and he goes back — this time kicking down the gates, dragging her off her throne by the hair, and raising his axe to cut off her head. She cries out: 'Be my husband!' He relents, and they rule the underworld together. The text exists in two versions (from Amarna and from Sultantepe), and the tonal difference between them — one more violent, one more tender — suggests that scribes were already arguing about how to read this relationship. His symbols are the mace and the lion-headed standard. His planet is Mars — war, fever, destruction. His number is 14. God-lists pair him with pestilence, but the Kutha Legend also credits him with protecting cities from plague when properly propitiated — the destroyer is also the one who can call the destruction off. What Nergal models is the frank acknowledgment that violence and desire are not opposites. His marriage to Ereshkigal is the ancient world's most honest portrait of a relationship forged in mutual threat, mutual need, and something that might actually be love.",
+      "animals": ["Lion", "Bull"],
+      "colors": ["Red", "Black"],
+      "consorts": ["Ereshkigal (Queen of the Underworld)"],
+      "weapons": ["Mace", "Scimitar", "Lion-headed standard"]
+    },
+    {
+      "id": "ninurta",
+      "name": "Ninurta",
+      "title": "God of Agriculture and War",
+      "group": "cultural",
+      "description": "Ninurta is the warrior-farmer — the god who fights monsters and then plows the field. Son of Enlil, his primary myths are combat narratives that double as agricultural allegories. In the Lugal-e (roughly 'O King'), he battles the demon Asag in the mountains and then builds a great stone wall — the hursag — to channel the mountain waters down to the plains for irrigation. His mother Ninhursag is so pleased she takes her title from this wall: 'Lady of the Hursag.' The Anzu myth recounts how the monstrous lion-headed storm bird Anzu stole the Tablet of Destinies from Enlil, plunging the cosmos into chaos. The great gods were afraid. Ninurta volunteered, pursued Anzu three times, failed twice, and on the third attempt — guided by Enki's cunning — shot an arrow through the Tablet itself, breaking Anzu's stolen power, and slew the beast. The Tablet was returned, and Ninurta was given fifty names in honor. His symbol is the plow. His animal is the lion-headed eagle (Anzu, now his trophy). His city is Girsu (modern Tello), where Gudea of Lagash (c. 2144-2124 BCE) built him a magnificent temple, the E-ninnu, recording every detail of its construction in the most extensive Sumerian building inscriptions known. What Ninurta models is the integration of violence and cultivation — the understanding, fundamental to early agriculture in southern Iraq, that you cannot grow food without controlling water, and you cannot control water without massive organized labor that looks, structurally, like war. The farmer and the soldier are the same person. The plow and the weapon require the same discipline.",
+      "animals": ["Lion-headed eagle (Anzu, as trophy)", "Lion"],
+      "consorts": ["Gula / Bau (goddess of healing)"],
+      "weapons": ["Sharur (a talking mace that gives counsel in battle)", "Bow", "Plow"]
+    },
+    {
+      "id": "adad",
+      "name": "Adad / Ishkur",
+      "title": "God of Storms",
+      "group": "cultural",
+      "description": "Adad is the storm — thunder, lightning, flood-rain, and the terrifying squalls that could destroy a year's harvest or, in the right measure, save it. In a land entirely dependent on irrigation and seasonal rainfall, the storm god held the difference between abundance and famine in his hands. His Sumerian name is Ishkur; his Akkadian name is Adad; his Amorite name is Hadad — the same figure refracted across every Mesopotamian linguistic tradition. He rides a bull and carries forked lightning. His voice is thunder. In the Atrahasis, when Enlil sends the flood, it is Adad who opens the heavens and lets the waters fall. In the Gilgamesh flood narrative (Tablet XI), Utnapishtim describes the storm: 'Adad's thunder rolled through the clouds... the land was shattered like a pot.' Even the gods were frightened and fled to the heaven of Anu, cowering like dogs crouched against a wall. After the flood, Adad's rains are the mechanism of renewal — the same force that destroyed is the force that regrows. His temple at Assur was one of the great cult centers of the Assyrian empire, and Neo-Assyrian kings invoked him before military campaigns, associating his thunder with the shock of their armies. His number is 6 (or 10 in some traditions). He is closely related to the Levantine Baal and the Hurrian Teshub — the storm god template that recurs across the entire ancient Near East. What Adad models is the absolute dependence of civilization on forces it cannot control. You can dig canals, build levees, organize labor, write laws — and one storm can undo it all. Or one storm can fill every canal and granary. This is not a metaphor in southern Iraq. It is the daily condition of existence. Adad is the god of that condition: the reminder that the infrastructure is always provisional, always at the mercy of the sky.",
+      "animals": ["Bull", "Lion-dragon"],
+      "colors": ["Dark grey", "Electric white"],
+      "consorts": ["Shala (goddess of grain and compassion)"],
+      "weapons": ["Forked lightning", "Thunder", "Flood-winds"]
+    }
+  ]
+}

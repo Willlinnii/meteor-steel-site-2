@@ -90,7 +90,10 @@ const ConsultingIntakePage = lazy(() => import('./pages/Consulting/ConsultingInt
 const ConsultingDashboardPage = lazy(() => import('./pages/Consulting/ConsultingDashboardPage'));
 const PractitionerDashboardPage = lazy(() => import('./pages/Consulting/PractitionerDashboardPage'));
 const ConsultingForgePage = lazy(() => import('./pages/Consulting/ConsultingForgePage'));
+const CrownPage = lazy(() => import('./pages/Crown/CrownPage'));
+const DodecahedronPage = lazy(() => import('./pages/Dodecahedron/DodecahedronPage'));
 const StorePage = lazy(() => import('./pages/Store/StorePage'));
+const TeacherPage = lazy(() => import('./pages/Teacher/TeacherPage'));
 
 const STAGES = [
   { id: 'golden-age', label: 'Golden Age' },
@@ -2274,6 +2277,8 @@ function AppContent() {
         <Route path="/home" element={<MeteorSteelHome />} />
         <Route path="/chronosphaera/vr" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" />Loading 3D...</div>}><ChronosphaeraVRPage /></Suspense>} />
         <Route path="/chronosphaera/*" element={<ChronosphaeraPage />} />
+        <Route path="/crown" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" />Loading Crown...</div>}><CrownPage /></Suspense>} />
+        <Route path="/dodecahedron" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" />Loading Dodecahedron...</div>}><DodecahedronPage /></Suspense>} />
         {/* Redirects from old /metals paths */}
         <Route path="/metals/vr" element={<Navigate to="/chronosphaera/vr" replace />} />
         <Route path="/metals/*" element={<Navigate to="/chronosphaera" replace />} />
@@ -2304,6 +2309,7 @@ function AppContent() {
         <Route path="/consulting/forge/:engagementId" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><ConsultingForgePage /></Suspense>} />
         <Route path="/mentors" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><MentorDirectoryPage /></Suspense>} />
         <Route path="/guild" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><GuildPage /></Suspense>} />
+        <Route path="/teacher" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><TeacherPage /></Suspense>} />
         <Route path="/discover" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><DiscoverPage /></Suspense>} />
         <Route path="/discover/starlight" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><DiscoverStarlightPage /></Suspense>} />
         <Route path="/discover/:featureId" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><DiscoverFeaturePage /></Suspense>} />

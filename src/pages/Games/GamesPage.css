@@ -225,15 +225,92 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 12px;
+  gap: 6px;
+  width: 100%;
+  min-height: calc(100vh - 60px);
 }
 
+/* Fullscreen mode — immersive, just the game */
+.game-shell-fullscreen {
+  background: #060609;
+  padding: 0;
+  height: 100vh;
+  min-height: 100vh;
+  overflow-y: auto;
+  gap: 0;
+}
+
+.game-shell-fullscreen .game-shell-header {
+  display: none;
+}
+
+.game-shell-fullscreen .game-shell-board {
+  flex: 1 1 auto;
+  padding: 8px;
+}
+
+.game-shell-fullscreen .game-board-svg {
+  max-height: calc(100vh - 160px) !important;
+}
+
+.game-shell-fullscreen .game-shell-dice-bar {
+  max-width: 100%;
+  padding: 4px 16px;
+}
+
+.game-shell-fullscreen .game-book-section {
+  max-width: 90vw;
+  padding: 0 12px 8px;
+}
+
+.game-shell-fullscreen .game-move-log {
+  max-width: 90vw;
+}
+
+/* Floating fullscreen button — stacked above Atlas chat toggle */
+.game-fullscreen-fab {
+  position: fixed;
+  bottom: 72px;
+  right: 24px;
+  width: 40px;
+  height: 40px;
+  border: 1px solid rgba(196, 113, 58, 0.5);
+  background: var(--bg-dark);
+  color: var(--accent-ember);
+  font-size: 1.1rem;
+  cursor: pointer;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 16px rgba(196, 113, 58, 0.3), 0 0 32px rgba(196, 113, 58, 0.1);
+  z-index: 90;
+}
+
+.game-fullscreen-fab:hover {
+  box-shadow: 0 0 24px rgba(196, 113, 58, 0.5), 0 0 48px rgba(196, 113, 58, 0.2);
+  transform: scale(1.05);
+}
+
+.game-fullscreen-fab.active {
+  background: rgba(196, 113, 58, 0.15);
+  border-color: var(--accent-ember);
+}
+
+/* In fullscreen, Atlas chat isn't visible — move FAB to bottom corner */
+.game-shell-fullscreen .game-fullscreen-fab {
+  bottom: 24px;
+}
+
+/* Compact header — back, title, players, fullscreen all in one row */
 .game-shell-header {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 8px;
   width: 100%;
-  max-width: 620px;
+  max-width: 700px;
+  padding: 0 4px;
 }
 
 .game-shell-back {
@@ -241,9 +318,9 @@
   border: none;
   color: var(--accent-ember);
   font-family: 'Cinzel', serif;
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   cursor: pointer;
-  padding: 4px 8px;
+  padding: 4px 6px;
   white-space: nowrap;
 }
 
@@ -254,7 +331,7 @@
 .game-shell-title {
   font-family: 'Cinzel', serif;
   color: var(--accent-gold);
-  font-size: 1.3rem;
+  font-size: 1.1rem;
   flex: 1;
   text-align: center;
   margin: 0;
@@ -262,23 +339,22 @@
 
 .game-shell-turn {
   color: var(--text-secondary);
-  font-size: 0.78rem;
+  font-size: 0.72rem;
   white-space: nowrap;
 }
 
 .game-shell-players {
   display: flex;
-  gap: 24px;
-  justify-content: center;
+  gap: 10px;
 }
 
 .game-shell-player {
   display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 4px 12px;
+  gap: 4px;
+  padding: 2px 8px;
   border-radius: 6px;
-  font-size: 0.85rem;
+  font-size: 0.78rem;
   color: var(--text-secondary);
   transition: all 0.2s ease;
 }
@@ -294,50 +370,82 @@
 }
 
 .player-dot {
-  width: 10px;
-  height: 10px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
   display: inline-block;
 }
 
 .player-name {
   font-family: 'Cinzel', serif;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   letter-spacing: 0.04em;
 }
 
-.game-shell-board {
-  display: flex;
-  justify-content: center;
-  width: 100%;
-}
 
-.game-shell-controls {
+
+/* Board — dominant area, takes most of the space */
+.game-shell-board {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
+  justify-content: flex-end;
   width: 100%;
-  max-width: 620px;
+  flex: 1 1 auto;
+  min-height: 0;
 }
 
-.game-shell-dice-area {
-  min-height: 52px;
+/* Dice bar — centered above toggle buttons, clickable to roll */
+.game-shell-dice-bar {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  min-height: 48px;
+  padding: 6px 16px;
+  width: 100%;
+  max-width: 620px;
+  transition: all 0.2s ease;
 }
 
-.game-shell-extra {
+.game-shell-dice-bar.roll-ready {
+  cursor: pointer;
+  border-radius: 8px;
+  background: rgba(196, 113, 58, 0.06);
+}
+
+.game-shell-dice-bar.roll-ready:hover {
+  background: rgba(196, 113, 58, 0.14);
+}
+
+.game-shell-dice-placeholder {
   color: var(--text-secondary);
-  font-size: 0.82rem;
-  text-align: center;
+  font-family: 'Cinzel', serif;
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
 }
 
-.game-shell-buttons {
+.game-shell-dice-bar.roll-ready .game-shell-dice-placeholder {
+  color: var(--accent-ember);
+  font-size: 1rem;
+  animation: rollPulse 1.5s ease-in-out infinite;
+}
+
+.game-shell-roll-hint {
+  color: var(--accent-ember);
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-top: 2px;
+  opacity: 0.7;
+}
+
+/* Bottom actions (Restart / Forfeit) below panel */
+.game-shell-bottom-actions {
   display: flex;
-  gap: 12px;
+  gap: 8px;
   justify-content: center;
+  margin-top: 10px;
 }
 
 .game-btn {
@@ -476,6 +584,50 @@
   color: #c8a0e8;
 }
 
+@keyframes rollPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(196, 113, 58, 0); }
+  50% { box-shadow: 0 0 10px 2px rgba(196, 113, 58, 0.3); }
+}
+
+/* Instructions button */
+.game-book-toggle-instructions.active {
+  background: rgba(100, 180, 140, 0.12);
+  border-color: #60b088;
+  color: #80d0a8;
+}
+
+.game-book-toggle-instructions:hover {
+  border-color: #60b088;
+  color: #80d0a8;
+}
+
+.game-book-panel-instructions {
+  border-color: rgba(100, 180, 140, 0.25);
+}
+
+.game-book-instruction-text {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.7;
+  margin: 0;
+}
+
+/* Players button */
+.game-book-toggle-players.active {
+  background: rgba(196, 160, 80, 0.12);
+  border-color: var(--accent-gold);
+  color: var(--accent-gold);
+}
+
+.game-book-toggle-players:hover {
+  border-color: var(--accent-gold);
+  color: var(--accent-gold);
+}
+
+.game-book-panel-players {
+  border-color: rgba(196, 160, 80, 0.25);
+}
+
 .game-book-panel {
   margin-top: 10px;
   padding: 16px 20px;
@@ -584,35 +736,41 @@
 /* ===== BOARD COMMON ===== */
 .game-board-svg {
   width: 100%;
-  max-width: 560px;
   height: auto;
+  max-height: calc(100vh - 200px);
 }
 
 .board-cell {
-  stroke: var(--border-subtle);
-  stroke-width: 0.5;
+  stroke: #5a4a35;
+  stroke-width: 0.8;
 }
 
 .board-cell-light {
-  fill: rgba(26, 26, 36, 0.9);
+  fill: #3d3628;
 }
 
 .board-cell-dark {
-  fill: rgba(20, 20, 28, 0.9);
+  fill: #2c2418;
 }
 
 .board-cell-special {
-  fill: rgba(201, 169, 97, 0.12);
-  stroke: rgba(201, 169, 97, 0.3);
+  fill: #3a3218;
+  stroke: #8b7a50;
 }
 
 .board-piece {
   transition: all 0.35s ease;
   cursor: pointer;
+  filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.5));
+}
+
+.board-piece:hover {
+  filter: drop-shadow(0 0 4px rgba(201, 169, 97, 0.4));
+  transform: scale(1.08);
 }
 
 .board-piece-highlight {
-  filter: drop-shadow(0 0 4px var(--accent-ember));
+  filter: drop-shadow(0 0 6px var(--accent-ember)) drop-shadow(0 0 12px rgba(196, 113, 58, 0.3));
 }
 
 .board-move-target {
@@ -620,10 +778,16 @@
   stroke: var(--accent-ember);
   stroke-width: 1;
   cursor: pointer;
+  animation: moveTargetPulse 1.4s ease-in-out infinite;
 }
 
 .board-move-target:hover {
   fill: rgba(196, 113, 58, 0.4);
+}
+
+@keyframes moveTargetPulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.8; }
 }
 
 .board-number {
@@ -636,26 +800,12 @@
 
 /* ===== SNAKES AND LADDERS ===== */
 .snl-ladder {
-  stroke: var(--accent-gold);
-  stroke-width: 1.2;
   stroke-linecap: round;
-}
-
-.snl-ladder-rung {
-  stroke: var(--accent-gold);
-  stroke-width: 0.6;
-  opacity: 0.6;
 }
 
 .snl-snake {
   fill: none;
-  stroke: #c44040;
-  stroke-width: 1.5;
   stroke-linecap: round;
-}
-
-.snl-snake-head {
-  fill: #c44040;
 }
 
 /* ===== SENET ===== */
@@ -674,11 +824,17 @@
   fill: rgba(201, 169, 97, 0.15);
   stroke: var(--accent-gold);
   stroke-width: 0.8;
+  animation: rosetteGlow 3s ease-in-out infinite;
 }
 
 .ur-rosette-star {
   fill: var(--accent-gold);
   opacity: 0.4;
+}
+
+@keyframes rosetteGlow {
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 1; }
 }
 
 /* ===== MEHEN ===== */
@@ -687,12 +843,13 @@
   stroke: rgba(139, 157, 195, 0.3);
   stroke-width: 14;
   stroke-linecap: round;
+  filter: drop-shadow(0 0 6px rgba(90, 122, 58, 0.3));
 }
 
 .mehen-space {
-  fill: rgba(26, 26, 36, 0.8);
-  stroke: var(--border-subtle);
-  stroke-width: 0.5;
+  fill: #302a1e;
+  stroke: #5a4a35;
+  stroke-width: 0.7;
 }
 
 /* ===== JACKALS AND HOUNDS ===== */
@@ -703,9 +860,9 @@
 }
 
 .jh-hole {
-  fill: rgba(26, 26, 36, 0.8);
-  stroke: var(--border-subtle);
-  stroke-width: 0.5;
+  fill: #302a1e;
+  stroke: #5a4a35;
+  stroke-width: 0.7;
 }
 
 .jh-shortcut {
@@ -717,27 +874,27 @@
 
 /* ===== PACHISI ===== */
 .pachisi-castle {
-  fill: rgba(201, 169, 97, 0.12);
+  fill: #3a3218;
   stroke: var(--accent-gold);
   stroke-width: 0.8;
 }
 
 .pachisi-home {
-  fill: rgba(196, 113, 58, 0.15);
+  fill: #4a2e1e;
   stroke: var(--accent-ember);
-  stroke-width: 1;
+  stroke-width: 1.2;
 }
 
 .pachisi-home-0 {
-  fill: rgba(201, 169, 97, 0.08);
-  stroke: rgba(201, 169, 97, 0.25);
-  stroke-width: 0.5;
+  fill: #3a3220;
+  stroke: #8b7a50;
+  stroke-width: 0.8;
 }
 
 .pachisi-home-1 {
-  fill: rgba(139, 157, 195, 0.08);
-  stroke: rgba(139, 157, 195, 0.25);
-  stroke-width: 0.5;
+  fill: #282c3a;
+  stroke: #5a6a8a;
+  stroke-width: 0.8;
 }
 
 /* ===== MYTHOUSE GAME ===== */
@@ -902,7 +1059,7 @@
 
 /* ===== MYTHOUSE BOARD SIZING ===== */
 .mythouse-board-wrapper .game-board-svg {
-  max-width: min(100%, calc(100vh - 260px));
+  max-height: calc(100vh - 220px);
 }
 
 /* ===== MYTHOUSE CELESTIAL INFO PANEL ===== */
@@ -1988,7 +2145,7 @@
   }
 
   .game-board-svg {
-    max-width: 100%;
+    max-height: calc(100vh - 180px);
   }
 
   .game-over-panel {

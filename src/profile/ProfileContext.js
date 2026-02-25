@@ -911,7 +911,7 @@ export function ProfileProvider({ children }) {
       region: site.region,
       lat: site.lat,
       lng: site.lng,
-      tradition: site.tradition || null,
+      pantheons: site.pantheons || [],
       addedAt: Date.now(),
     };
     setPilgrimages(prev => ({ ...prev, [site.id]: entry }));

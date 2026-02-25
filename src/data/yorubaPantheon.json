@@ -1,0 +1,142 @@
+{
+  "id": "yoruba",
+  "name": "The Orishas",
+  "description": "The Yoruba pantheon centers on the orishas, divine forces emanating from the supreme creator Olodumare, whose worship originates in Ile-Ife — the sacred city in present-day Nigeria where, according to Ifa oral tradition, the world was created and human civilization began. Carried across the Atlantic through the Middle Passage, the orishas endure in Candomble, Santeria, and Vodou, making this one of the most widely practiced living mythological systems on earth.",
+  "deities": [
+    {
+      "id": "olodumare",
+      "name": "Olodumare",
+      "title": "The Supreme Being",
+      "group": "primordial",
+      "description": "Olodumare is the supreme, omnipotent creator deity of Yoruba cosmology — the source of all ashe (divine energy) and the origin from which every orisha derives authority. Unlike the orishas, Olodumare is not worshipped through specific shrines or direct ritual supplication; rather, this ultimate force is understood as the architect of existence itself, too vast and encompassing for any single cult or priesthood to contain. In Ifa divination theology, Olodumare created the universe and then delegated governance of its various domains to the orishas, who serve as intermediaries between the supreme being and humanity. The Yoruba name itself encodes this theology: Olo (owner) + Odu (fullness, totality) + Mare (permanence) — the one who owns eternal fullness. Olodumare is also called Olorun, owner of the heavens, and Eleda, the creator. In Ile-Ife tradition, the act of creation began when Olodumare dispatched Obatala and Oduduwa from the celestial realm to shape the earth from the primordial waters below. Through the transatlantic diaspora, Olodumare persists as the distant but foundational supreme God in Santeria, Candomble, and other Afro-Atlantic traditions, often syncretized with the Christian concept of God while retaining a distinctly Yoruba theological character — immanent in all things yet beyond direct approach.",
+      "colors": ["white"],
+      "animals": []
+    },
+    {
+      "id": "obatala",
+      "name": "Obatala",
+      "title": "Creator of Human Bodies",
+      "group": "primordial",
+      "description": "Obatala, the eldest and most revered of the orishas, was entrusted by Olodumare with the sacred task of molding human bodies from clay before the breath of life was blown into them. The central pataki recounts how Obatala descended from orun (heaven) on a golden chain to shape the earth, carrying a snail shell filled with sand, a white hen to spread it, and a palm nut to plant the first tree. However, in some versions of the creation narrative, Obatala drank palm wine during the molding process and fashioned imperfect forms — the origin, in Yoruba theology, of physical disability, which is why people with albinism and physical differences are considered sacred to this orisha. Obatala's colors are exclusively white, symbolizing purity, clarity, and moral elevation. His devotees wear white cloth, eat white foods such as shea butter, snails, and pounded yam, and observe his holy day, which falls on Sunday in many Yoruba communities. As the father of many orishas and the first to arrive in Ile-Ife, Obatala holds supreme moral authority in the pantheon. In Brazilian Candomble he is syncretized with Oxala, and in Cuban Santeria with Our Lady of Mercy. His relationship with Oduduwa — sometimes cast as rival, sometimes as complement — forms one of the foundational dialectics of Yoruba mythic thought.",
+      "colors": ["white"],
+      "animals": ["snail", "white dove", "white hen"],
+      "vegetation": ["cotton", "shea tree"],
+      "consorts": ["Yemowo"]
+    },
+    {
+      "id": "oduduwa",
+      "name": "Oduduwa",
+      "title": "Ancestor of the Yoruba",
+      "group": "primordial",
+      "description": "Oduduwa is the primordial ancestor-deity of the Yoruba people and the mythic founder of Ile-Ife, the city regarded as the navel of the world.  According to the most widely told pataki, when Obatala became intoxicated with palm wine and failed to complete the creation of the earth, Olodumare dispatched Oduduwa to finish the task. Oduduwa descended on a chain from heaven, poured sand from a snail shell onto the primordial waters, and set a five-toed hen upon it to scratch and spread the land in all directions — the spot where the chain touched became Ile-Ife. Oduduwa then planted a palm nut that grew into the first tree, establishing the vegetative world. From this founding act, Oduduwa became the first Ooni (divine king) of Ife, and every subsequent Yoruba oba (ruler) traces lineage back to this figure. The sixteen sons and grandsons of Oduduwa are said to have dispersed from Ile-Ife to found the major Yoruba kingdoms — Oyo, Benin, Ketu, Ijebu, and others — giving the myth a political as well as cosmological dimension. Oduduwa's crown, the Are, is a beaded cone that covers the face, symbolizing the dangerous power of divine kingship. His festival in Ile-Ife remains one of the most important civic-religious celebrations in Yorubaland, binding political authority to sacred origin. In the diaspora, Oduduwa is less prominent in individual worship but remains foundational to the cosmological framework of both Santeria and Candomble.",
+      "colors": ["black", "white"],
+      "animals": ["hen", "black cat"],
+      "consorts": ["Olokun", "Moremi"]
+    },
+    {
+      "id": "ogun",
+      "name": "Ogun",
+      "title": "Orisha of Iron and War",
+      "group": "warrior",
+      "description": "Ogun is the fierce orisha of iron, metallurgy, war, and all technologies that require cutting, clearing, or forging — from the blacksmith's anvil to the surgeon's scalpel to the automobile on the highway. In Ifa tradition, Ogun was the first orisha to descend to earth, using his iron machete to hack through the impenetrable bush that separated heaven and earth, thereby opening the path for all the other orishas to follow. This act of primal clearing establishes Ogun as the deity who makes civilization possible: without his blade, no road is cut, no farm is cleared, no ore is smelted. His primary pataki tells of his reign as king of the city of Ire, where his relentless warrior nature eventually drove him to withdraw alone into the forest, emerging only when his people begged him to fight on their behalf. Ogun is honored on Tuesdays, and his sacred number is seven. His colors are green and black, and his devotees offer him roasted yam, palm wine, rooster, and dog — the dog being uniquely sacred to Ogun among all the orishas. In Ile-Ife, iron implements are placed at his shrine, and oaths sworn on Ogun's iron are considered the most binding in Yoruba jurisprudence. He is closely associated with Eshu, who opens the way, and with Oshosi, the hunter orisha, forming the warrior triad. In Santeria he is syncretized with Saint Peter, in Candomble with Saint George, and in Haitian Vodou with Ogou, where he retains his martial and metallurgical identity almost unchanged.",
+      "colors": ["green", "black"],
+      "animals": ["dog", "rooster"],
+      "weapons": ["machete", "iron sword", "anvil"],
+      "vegetation": ["palm frond", "iron weed"],
+      "consorts": ["Oya", "Oshun", "Yemoja"]
+    },
+    {
+      "id": "shango",
+      "name": "Shango",
+      "title": "Orisha of Thunder and Lightning",
+      "group": "warrior",
+      "description": "Shango is the orisha of thunder, lightning, fire, and justice — a deity of overwhelming charisma, royal authority, and violent meteorological power. Uniquely among the orishas, Shango is also an historicized figure: oral tradition holds that he was the third Alaafin (king) of the Oyo Empire, a ruler of such ferocity and ambition that he sought to master lightning itself. According to the central pataki, Shango accidentally destroyed his own palace and family with the thunderstorm he summoned, and in his grief and shame, he hanged himself from an ayan tree — or, in the version his devotees prefer, he did not die but descended into the earth, becoming an orisha. His priests cry Oba ko so! (The king did not hang!) during ceremonies. Shango's sacred symbol is the oshe, a double-headed axe representing the thunderbolt, and his colors are red and white. His holy day is Saturday in some lineages, and his sacred number is six. Devotees offer him amala (yam flour), gbegiri (bean soup), bitter kola, rooster, and ram. He was married to three powerful orishas — Oya, Oshun, and Oba — and the interplay among these consorts generates a rich cycle of pataki about jealousy, loyalty, and sacrifice. In Ile-Ife and throughout Yorubaland, his worship is marked by the bata drum ensemble, whose polyrhythmic patterns are said to be the voice of thunder itself. In Cuba he is syncretized with Saint Barbara, in Brazil with Xango, and in Trinidad with the entire Shango Baptist tradition — testament to his extraordinary durability across the diaspora.",
+      "colors": ["red", "white"],
+      "animals": ["ram", "rooster", "tortoise"],
+      "weapons": ["oshe (double-headed axe)", "lightning bolt"],
+      "vegetation": ["palm tree", "bitter kola"],
+      "consorts": ["Oya", "Oshun", "Oba"]
+    },
+    {
+      "id": "eshu",
+      "name": "Eshu",
+      "title": "The Trickster, Guardian of Crossroads",
+      "group": "warrior",
+      "description": "Eshu, also called Elegba or Elegbara, is the divine trickster, the guardian of crossroads, and the indispensable messenger between humanity and the orishas — no prayer reaches any deity without first passing through Eshu, which is why he is always propitiated first in every Yoruba ritual. Far from a mere mischief-maker, Eshu embodies the philosophical principle that communication itself is slippery, that meaning is never fixed, and that the boundaries between order and chaos must be continuously negotiated. The central pataki tells of Eshu walking between two friends wearing a hat that is red on one side and black on the other, causing them to quarrel over its color — a story that encodes the Yoruba insight that perspective determines reality. Eshu dwells at thresholds, gates, and crossroads, and his shrine — a mound of laterite clay — is traditionally placed at the entrance of compounds and marketplaces throughout Ile-Ife and Yorubaland. His colors are red and black, his sacred number is three, and Monday is his day. Devotees offer him palm oil, rooster, and eko (corn paste), and his worship requires meticulous attention because a neglected Eshu generates confusion, accidents, and reversed fortunes. In the Ifa divination system, Eshu is the enforcer of sacrifice: when the babalawo prescribes an offering and the client fails to perform it, it is Eshu who delivers the consequences. In Cuban Santeria he is syncretized with the Holy Child of Atocha or Saint Anthony, in Candomble as Exu, and in Vodou his energy permeates the figure of Papa Legba — the old man at the crossroads who must be addressed before any ceremony begins.",
+      "colors": ["red", "black"],
+      "animals": ["rooster", "he-goat"],
+      "weapons": ["ogo (club)", "calabash"],
+      "vegetation": ["palm kernel"],
+      "consorts": []
+    },
+    {
+      "id": "yemoja",
+      "name": "Yemoja",
+      "title": "Mother of Waters",
+      "group": "water",
+      "description": "Yemoja — whose name derives from Yeye Omo Eja, meaning 'Mother Whose Children Are the Fish' — is the great mother orisha of the Ogun River and, by extension, of all living waters, fertility, and maternal protection. In Yorubaland, Yemoja is not originally an ocean deity but a river goddess; her association with the sea developed primarily in the diaspora, where enslaved Yoruba people, having crossed the Atlantic, transferred her dominion to the vast ocean that both separated and connected them to their homeland. The foundational pataki recounts how Yemoja's waters broke and flooded the earth, giving birth to many of the other orishas — in some lineages, as many as fifteen deities emerged from her body, making her the literal mother of the pantheon. Her shrine at Abeokuta, near Ile-Ife, remains one of the most visited sacred sites in Yorubaland, and the annual Yemoja festival on the Ogun River draws thousands of devotees. Her colors are blue and white (sometimes crystal clear), her sacred number is seven, and Saturday is her day. Offerings include fish, watermelon, molasses, and duck. Yemoja is fiercely protective — gentle as calm water with those she loves, but devastating as a flood when her children are threatened. She is the consort of Obatala in some lineages and of Ogun or Okere in others. In Brazilian Candomble she reigns as Yemanja, the queen of the sea whose festival on February 2nd fills the beaches of Salvador with millions of flower offerings cast into the waves. In Santeria she is syncretized with Our Lady of Regla, and in Vodou her energy resonates in La Siren.",
+      "colors": ["blue", "white", "crystal"],
+      "animals": ["fish", "duck", "peacock"],
+      "vegetation": ["watermelon", "seaweed"],
+      "consorts": ["Obatala", "Okere"]
+    },
+    {
+      "id": "oshun",
+      "name": "Oshun",
+      "title": "Orisha of Sweet Water and Love",
+      "group": "water",
+      "description": "Oshun is the orisha of sweet water, love, fertility, beauty, diplomacy, and abundance — the radiant goddess of the Oshun River that flows through Osogbo, where her sacred grove is a UNESCO World Heritage Site and the annual Oshun-Osogbo festival remains one of the largest religious gatherings in West Africa. According to a key pataki, when the orishas first descended to earth they excluded Oshun from their council because she was the only woman among them; in response, she withdrew her fertilizing waters and the world became barren, forcing the other orishas to beg her return — a story that encodes her indispensable power over biological and social reproduction. Another pataki tells how Oshun alone succeeded in luring Ogun out of his forest exile through her irresistible beauty and honey, accomplishing what no warrior or king could. Her colors are gold and yellow, her sacred number is five, and her day is Saturday. Devotees offer her honey (always tasted first to ensure it is not poisoned, as another pataki warns), oranges, cinnamon, pumpkin, and river water. She wears brass and gold jewelry, carries a fan and a mirror, and her laughter is said to be the sound of water over stones. She is the consort of Shango in the most widely told stories, though her romantic entanglements with Ogun and Orunmila also generate important pataki. Her relationship to Yemoja — sometimes sister, sometimes mother and daughter — encodes the Yoruba understanding of the continuity between river water and ocean water. In Santeria she is syncretized with Our Lady of Charity (La Caridad del Cobre), Cuba's patron saint, and in Candomble as Oxum.",
+      "colors": ["gold", "yellow", "amber"],
+      "animals": ["peacock", "vulture", "parrot"],
+      "vegetation": ["pumpkin", "cinnamon", "orange", "honey"],
+      "consorts": ["Shango", "Ogun", "Orunmila"]
+    },
+    {
+      "id": "olokun",
+      "name": "Olokun",
+      "title": "Orisha of the Deep Ocean",
+      "group": "water",
+      "description": "Olokun is the orisha of the deep ocean floor, the unfathomable abyss beneath the waves — a deity of immense wealth, mystery, and terrifying power who rules the realm that humans can never fully know or control. In some Yoruba lineages Olokun is male, in others female, and in still others androgynous; this gender fluidity itself reflects the unknowable, boundary-dissolving nature of the deep sea. The central pataki recounts a contest between Olokun and Olorun (the sky aspect of the supreme deity) over who was more magnificent: Olokun appeared in dazzling garments of unimaginable splendor, but each time, the messenger sent by Olorun appeared in identical attire, demonstrating that heaven could match any display — a story about the futility of challenging the supreme order. In Ile-Ife, Olokun's worship is closely tied to the Benin kingdom, where spectacular bronze and brass heads from the court of the Oba are considered representations of Olokun's wealth and artistry. The ocean floor is understood as a mirror image of the terrestrial world, populated with cities, markets, and spirits. Olokun's colors are deep blue, dark green, and black, and offerings include elaborate beadwork, fine cloth, and items of luxury that are cast into or placed beside the sea. Olokun is the consort of Oduduwa in some traditions, tying the ocean's depth to the founding of the Yoruba world. In the diaspora, Olokun carries particular weight for communities descended from enslaved people, as the ocean floor holds the bodies of those who did not survive the Middle Passage — making Olokun simultaneously a deity of wealth and of ancestral grief. In Santeria, Olokun is one of the most closely guarded mysteries, received only by senior initiates.",
+      "colors": ["deep blue", "dark green", "black"],
+      "animals": ["fish", "seahorse", "eel"],
+      "vegetation": ["seaweed", "coral"],
+      "consorts": ["Oduduwa", "Yemoja"]
+    },
+    {
+      "id": "oya",
+      "name": "Oya",
+      "title": "Orisha of Wind and Transformation",
+      "group": "other",
+      "description": "Oya is the orisha of wind, storms, death, transformation, and the gateway between the world of the living and the world of the ancestors — the only orisha who has no fear of the dead, who stands at the cemetery gates and commands the egun (spirits of the departed). Her name derives from the Niger River, which the Yoruba call Odo-Oya, and her power manifests in the tornado, the hurricane, and every form of violent atmospheric change. The most dramatic pataki about Oya tells how she stole the secret of fire-breathing from Shango, her husband, by putting on his medicine and spewing flames — a story about the acquisition of dangerous power through daring and the instability of gendered boundaries. Oya is the only orisha who willingly followed Shango into exile and death, and she guards the doors of cemeteries in his name. She is a warrior of extraordinary ferocity; when she rides into battle, she wields a sword and a flywhisk made of horse or buffalo tail, and her war cry scatters enemies before any blade is drawn. Her sacred number is nine, reflecting the nine tributaries of the Niger River and her nine children. Her colors are burgundy, dark red, and brown, mixed with all other colors except black, and her day is Wednesday. Devotees offer her eggplant, red wine, plums, and she-goat. In Ile-Ife and across Yorubaland, her worship intersects with the Egungun masquerade societies, which honor the returning ancestors she governs. In Santeria she is syncretized with Our Lady of Candelaria or Saint Theresa, and in Candomble as Iansa, the mistress of lightning and wind.",
+      "colors": ["burgundy", "dark red", "brown", "multicolor"],
+      "animals": ["water buffalo", "she-goat", "black hen"],
+      "weapons": ["sword", "irukere (horse-tail flywhisk)"],
+      "vegetation": ["eggplant", "star apple"],
+      "consorts": ["Shango", "Ogun"]
+    },
+    {
+      "id": "orunmila",
+      "name": "Orunmila",
+      "title": "Orisha of Wisdom and Divination",
+      "group": "other",
+      "description": "Orunmila, also called Ifa, is the orisha of wisdom, knowledge, and divination — the deity who witnessed creation alongside Olodumare and therefore knows the destiny of every soul before it is born. He is the patron and source of the Ifa divination system, the vast oral literary corpus that contains 256 odu (chapters), each subdivided into hundreds of ese (verses), forming what may be the largest body of sacred oral literature in the world — recognized by UNESCO as a Masterpiece of the Oral and Intangible Heritage of Humanity. The fundamental pataki establishes that Orunmila was present when each human being chose their ori (personal destiny) in heaven, and therefore only he, through the babalawo (father of secrets, the Ifa priest), can reveal what a person's destiny holds and what sacrifices are required to align with it. The divination process uses the ikin (sacred palm nuts) or the opele (divining chain), cast upon the opon Ifa (divination tray) to produce one of the 256 odu. Orunmila's colors are green and yellow (or green and brown), his sacred number is sixteen (reflecting the sixteen principal odu), and his day is every day — for divination may be needed at any moment. Offerings include two-legged fowl, fish, and yams. In Ile-Ife, the Ifa temple complex remains a center of training for babalawos from across Yorubaland and the diaspora. Orunmila is the consort of Oshun in key traditions, linking sweet water and beauty to the deepest forms of knowledge. In Santeria he is called Orula, and access to his priesthood (the Awo) represents one of the highest levels of initiation. In Candomble he is called Orunmila-Ifa, and in many diaspora houses, his divination system forms the theological backbone of practice.",
+      "colors": ["green", "yellow", "brown"],
+      "animals": ["hen", "fish", "she-goat"],
+      "weapons": ["iroke Ifa (divination tapper)", "opele (divining chain)"],
+      "vegetation": ["palm nut", "yam"],
+      "consorts": ["Oshun"]
+    },
+    {
+      "id": "shopona",
+      "name": "Shopona",
+      "title": "Orisha of Disease and Healing",
+      "group": "other",
+      "description": "Shopona, also known as Babalu-Aye (meaning 'Father, Lord of the Earth'), is the feared and venerated orisha of infectious disease, epidemic illness, and — crucially — their healing. His domain encompasses smallpox, plague, and all afflictions that spread through communities, but his power is double-edged: the same orisha who sends disease is the one who can withdraw it, making his worship an act of both dread and desperate hope. The central pataki tells how Shopona was exiled from heaven because the other orishas feared his power, and he wandered the earth covered in sores, leaning on a crutch, accompanied only by flies and mosquitoes — until he arrived among humans who showed him compassion and were rewarded with healing. In Yorubaland, his name was historically so feared that it was forbidden to speak it aloud; he was referred to only by euphemism, as 'the hot earth' or 'the one we do not call by name.' His worship was banned by British colonial authorities in the early twentieth century, who associated his priesthood with the deliberate spreading of smallpox — a misunderstanding that reflected both genuine fear and colonial anxiety about African religious power. His colors are brown, earth tones, and black with white spots (representing the marks of disease), and his day is Monday. Offerings include roasted corn, sesame seeds, and he-goat. His shrine is typically located at the outskirts of town, on the hot earth where disease was believed to dwell. His connection to Ile-Ife is through the broader Ifa system, where several odu specifically address his worship and appeasement. In Cuban Santeria he is syncretized with Saint Lazarus — the figure on crutches followed by dogs who lick his wounds — and the annual December 17th pilgrimage to the church of El Rincon near Havana, where tens of thousands crawl on their knees to honor Babalu-Aye, is one of the most dramatic expressions of orisha worship in the diaspora. In Candomble he is called Omolu or Obaluaiye.",
+      "colors": ["brown", "earth tones", "black with white spots"],
+      "animals": ["he-goat", "rooster"],
+      "weapons": ["ja (broom of palm fronds)", "shankpanna staff"],
+      "vegetation": ["sesame", "roasted corn", "black-eyed peas"],
+      "consorts": ["Nana Buruku", "Yemoja"]
+    }
+  ]
+}

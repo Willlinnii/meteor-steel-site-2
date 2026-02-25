@@ -13,7 +13,10 @@
     "streetView": {
       "heading": 220,
       "pitch": 10
-    }
+    },
+    "pantheons": [
+      "olympian"
+    ]
   },
   {
     "id": "giza",
@@ -27,11 +30,14 @@
     "streetView": {
       "heading": 180,
       "pitch": 20
-    }
+    },
+    "pantheons": [
+      "egyptian"
+    ]
   },
   {
     "id": "uluru",
-    "name": "Uluru (Ayers Rock)",
+    "name": "Uluru",
     "mythicCenter": true,
     "era": "nature",
     "lat": -25.3444,
@@ -42,11 +48,14 @@
     "streetView": {
       "heading": 0,
       "pitch": 10
-    }
+    },
+    "pantheons": [
+      "aboriginal"
+    ]
   },
   {
     "id": "varanasi",
-    "name": "Varanasi (Kashi)",
+    "name": "Varanasi",
     "mythicCenter": true,
     "era": "c. 1200 BCE – present",
     "lat": 25.3176,
@@ -57,7 +66,11 @@
     "streetView": {
       "heading": 90,
       "pitch": 0
-    }
+    },
+    "pantheons": [
+      "hindu",
+      "vedic"
+    ]
   },
   {
     "id": "eleusis",
@@ -71,23 +84,28 @@
     "streetView": {
       "heading": 0,
       "pitch": 5
-    }
+    },
+    "pantheons": [
+      "olympian"
+    ]
   },
   {
     "id": "mt-olympus",
     "name": "Mount Olympus",
     "mythicCenter": true,
-    "pantheon": "olympian",
     "era": "nature",
     "lat": 40.0859,
     "lng": 22.3583,
-    "category": "mythic-location",
+    "category": "sacred-site",
     "description": "Highest mountain in Greece, mythological home of the twelve Olympian gods ruled by Zeus.",
     "region": "Greece",
     "streetView": {
       "heading": 180,
       "pitch": 15
-    }
+    },
+    "pantheons": [
+      "olympian"
+    ]
   },
   {
     "id": "mt-sinai",
@@ -102,7 +120,8 @@
     "streetView": {
       "heading": 270,
       "pitch": 20
-    }
+    },
+    "pantheons": []
   },
   {
     "id": "newgrange",
@@ -116,21 +135,28 @@
     "streetView": {
       "heading": 90,
       "pitch": 5
-    }
+    },
+    "pantheons": [
+      "celtic-irish",
+      "global"
+    ]
   },
   {
     "id": "troy",
-    "name": "Troy (Hisarlik)",
+    "name": "Troy",
     "era": "c. 3000–500 BCE",
     "lat": 39.9575,
     "lng": 26.2389,
-    "category": "mythic-location",
+    "category": "sacred-site",
     "description": "Archaeological site of ancient Troy, setting of Homer's Iliad. Where Achilles, Hector, and the Trojan Horse shaped Western storytelling.",
     "region": "Turkey",
     "streetView": {
       "heading": 90,
       "pitch": 5
-    }
+    },
+    "pantheons": [
+      "olympian"
+    ]
   },
   {
     "id": "teotihuacan",
@@ -145,13 +171,15 @@
     "streetView": {
       "heading": 0,
       "pitch": 15
-    }
+    },
+    "pantheons": [
+      "aztec"
+    ]
   },
   {
     "id": "mt-kailash",
     "name": "Mount Kailash",
     "mythicCenter": true,
-    "pantheon": "hindu",
     "era": "nature",
     "lat": 31.0672,
     "lng": 81.3119,
@@ -161,16 +189,19 @@
     "streetView": {
       "heading": 180,
       "pitch": 20
-    }
+    },
+    "pantheons": [
+      "hindu",
+      "tibetan"
+    ]
   },
   {
     "id": "avalon",
-    "name": "Glastonbury Tor (Avalon)",
-    "era": "12th century – 15th century CE",
+    "name": "Avalon",
+    "era": "c. 1136–1485 CE",
     "lat": 51.1442,
     "lng": -2.6987,
     "category": "literary-location",
-    "tradition": "European",
     "description": "Hill identified with the legendary Isle of Avalon, where King Arthur was taken after his final battle. The Tor rises from the Somerset levels like an otherworldly island.",
     "region": "England",
     "streetView": {
@@ -179,7 +210,10 @@
     },
     "readUrl": "https://sacred-texts.com/neu/arthur/index.htm",
     "wikisourcePage": "Le_Morte_d'Arthur",
-    "excerpt": "And when they were at the water side, even fast by the bank hoved a little barge with many fair ladies in it, and among them all was a queen, and all they had black hoods, and all they wept and shrieked when they saw King Arthur.\n\n\"Now put me into the barge,\" said the king. And so he did softly; and there received him three queens with great mourning; and so they set them down, and in one of their laps King Arthur laid his head.\n\nAnd then that queen said: \"Ah, dear brother, why have ye tarried so long from me? Alas, this wound on your head hath caught over-much cold.\" And so then they rowed from the land, and Sir Bedivere beheld all those ladies go from him. Then Sir Bedivere cried: \"Ah my lord Arthur, what shall become of me, now ye go from me and leave me here alone among mine enemies?\"\n\n\"Comfort thyself,\" said the king, \"and do as well as thou mayest, for in me is no trust for to trust in; for I will into the vale of Avilion to heal me of my grievous wound: and if thou hear never more of me, pray for my soul.\"\n\n— Sir Thomas Malory, Le Morte d'Arthur, Book XXI"
+    "excerpt": "And when they were at the water side, even fast by the bank hoved a little barge with many fair ladies in it, and among them all was a queen, and all they had black hoods, and all they wept and shrieked when they saw King Arthur.\n\n\"Now put me into the barge,\" said the king. And so he did softly; and there received him three queens with great mourning; and so they set them down, and in one of their laps King Arthur laid his head.\n\nAnd then that queen said: \"Ah, dear brother, why have ye tarried so long from me? Alas, this wound on your head hath caught over-much cold.\" And so then they rowed from the land, and Sir Bedivere beheld all those ladies go from him. Then Sir Bedivere cried: \"Ah my lord Arthur, what shall become of me, now ye go from me and leave me here alone among mine enemies?\"\n\n\"Comfort thyself,\" said the king, \"and do as well as thou mayest, for in me is no trust for to trust in; for I will into the vale of Avilion to heal me of my grievous wound: and if thou hear never more of me, pray for my soul.\"\n\n— Sir Thomas Malory, Le Morte d'Arthur, Book XXI",
+    "pantheons": [
+      "arthurian"
+    ]
   },
   {
     "id": "ithaca",
@@ -188,7 +222,6 @@
     "lat": 38.3659,
     "lng": 20.7181,
     "category": "literary-location",
-    "tradition": "Greek",
     "description": "Homeland of Odysseus in Homer's Odyssey. The island he spent ten years trying to reach after the fall of Troy — symbol of the longing for return.",
     "region": "Greece",
     "streetView": {
@@ -197,7 +230,10 @@
     },
     "readUrl": "https://sacred-texts.com/cla/homer/ody/index.htm",
     "wikisourcePage": "The_Odyssey_(Butler)",
-    "excerpt": "Tell me, O Muse, of that ingenious hero who travelled far and wide after he had sacked the famous town of Troy. Many cities did he visit, and many were the nations with whose manners and customs he was acquainted; moreover he suffered much by sea while trying to save his own life and bring his men safely home; but do what he might he could not save his men, for they perished through their own sheer folly in eating the cattle of the Sun-god Hyperion; so the god prevented them from ever reaching home. Tell me, too, about all these things, O daughter of Jove, from whatsoever source you may know them.\n\nSo now all who had escaped death in battle or by shipwreck had got safely home except Ulysses, and he, though he was longing to return to his wife and country, was detained by the goddess Calypso, who had got him into a large cave and wanted to marry him.\n\n— Homer, The Odyssey, Book I (trans. Samuel Butler)"
+    "excerpt": "Tell me, O Muse, of that ingenious hero who travelled far and wide after he had sacked the famous town of Troy. Many cities did he visit, and many were the nations with whose manners and customs he was acquainted; moreover he suffered much by sea while trying to save his own life and bring his men safely home; but do what he might he could not save his men, for they perished through their own sheer folly in eating the cattle of the Sun-god Hyperion; so the god prevented them from ever reaching home. Tell me, too, about all these things, O daughter of Jove, from whatsoever source you may know them.\n\nSo now all who had escaped death in battle or by shipwreck had got safely home except Ulysses, and he, though he was longing to return to his wife and country, was detained by the goddess Calypso, who had got him into a large cave and wanted to marry him.\n\n— Homer, The Odyssey, Book I (trans. Samuel Butler)",
+    "pantheons": [
+      "olympian"
+    ]
   },
   {
     "id": "angkor-wat",
@@ -213,16 +249,19 @@
     "streetView": {
       "heading": 90,
       "pitch": 10
-    }
+    },
+    "pantheons": [
+      "khmer",
+      "hindu"
+    ]
   },
   {
     "id": "delphi-sibyl",
-    "name": "Cumae (Sibyl's Cave)",
+    "name": "Cumae",
     "era": "c. 29–19 BCE",
     "lat": 40.8487,
     "lng": 14.0539,
     "category": "literary-location",
-    "tradition": "Roman",
     "description": "Entrance to the Underworld in Virgil's Aeneid. The Cumaean Sibyl guided Aeneas into Hades to meet his father's shade and learn Rome's destiny.",
     "region": "Italy",
     "streetView": {
@@ -231,7 +270,10 @@
     },
     "readUrl": "https://sacred-texts.com/cla/virgil/aen/index.htm",
     "wikisourcePage": "The_Works_of_Virgil_(Dryden)/Aeneid",
-    "excerpt": "There was a deep cave hewn from the flank of Cumae's rock, vast and gaping wide, guarded by the dark lake and the gloom of forests. No birds could wing their way safely overhead, so foul the breath that poured from those black jaws up to the vault of heaven.\n\nThe Sibyl cried: \"Now is the time to ask your destinies! The god! Behold, the god!\" And as she spoke before the doors, her face, her color changed; her hair streamed wild; her breast heaved and her heart swelled with frenzy; she seemed taller, her voice no longer mortal, for the god breathed upon her, ever nearer.\n\n\"Trojan Aeneas, the descent to Avernus is easy. Night and day the door of dark Dis stands open. But to retrace your steps and escape to the upper air — that is the task, that is the labor.\"\n\n— Virgil, The Aeneid, Book VI (trans. John Dryden)"
+    "excerpt": "There was a deep cave hewn from the flank of Cumae's rock, vast and gaping wide, guarded by the dark lake and the gloom of forests. No birds could wing their way safely overhead, so foul the breath that poured from those black jaws up to the vault of heaven.\n\nThe Sibyl cried: \"Now is the time to ask your destinies! The god! Behold, the god!\" And as she spoke before the doors, her face, her color changed; her hair streamed wild; her breast heaved and her heart swelled with frenzy; she seemed taller, her voice no longer mortal, for the god breathed upon her, ever nearer.\n\n\"Trojan Aeneas, the descent to Avernus is easy. Night and day the door of dark Dis stands open. But to retrace your steps and escape to the upper air — that is the task, that is the labor.\"\n\n— Virgil, The Aeneid, Book VI (trans. John Dryden)",
+    "pantheons": [
+      "roman"
+    ]
   },
   {
     "id": "stonehenge",
@@ -245,12 +287,14 @@
     "streetView": {
       "heading": 0,
       "pitch": 5
-    }
+    },
+    "pantheons": [
+      "arthurian"
+    ]
   },
   {
     "id": "mt-fuji",
     "name": "Mount Fuji",
-    "pantheon": "shinto",
     "era": "nature",
     "lat": 35.3606,
     "lng": 138.7274,
@@ -260,7 +304,10 @@
     "streetView": {
       "heading": 180,
       "pitch": 20
-    }
+    },
+    "pantheons": [
+      "shinto"
+    ]
   },
   {
     "id": "chaco-canyon",
@@ -274,7 +321,10 @@
     "streetView": {
       "heading": 90,
       "pitch": 5
-    }
+    },
+    "pantheons": [
+      "hopi"
+    ]
   },
   {
     "id": "mt-ararat",
@@ -282,13 +332,16 @@
     "era": "nature",
     "lat": 39.7019,
     "lng": 44.2991,
-    "category": "mythic-location",
+    "category": "sacred-site",
     "description": "Traditional resting place of Noah's Ark after the Great Flood. The mountain where humanity began again after divine destruction.",
     "region": "Turkey",
     "streetView": {
       "heading": 0,
       "pitch": 20
-    }
+    },
+    "pantheons": [
+      "armenian"
+    ]
   },
   {
     "id": "lascaux",
@@ -298,7 +351,8 @@
     "lng": 1.1686,
     "category": "sacred-site",
     "description": "Paleolithic cave with 17,000-year-old paintings of bulls, horses, and deer. Possibly the earliest known mythic-ritual space, a cathedral of the Ice Age imagination.",
-    "region": "France"
+    "region": "France",
+    "pantheons": []
   },
   {
     "id": "caral-supe",
@@ -308,7 +362,8 @@
     "lng": -77.5203,
     "category": "sacred-site",
     "description": "Oldest known civilization in the Americas, dating to 3000 BCE. Its monumental pyramids and sunken plazas predate the invention of pottery, built by a society that thrived on music and trade rather than warfare.",
-    "region": "Peru"
+    "region": "Peru",
+    "pantheons": []
   },
   {
     "id": "catalhoyuk",
@@ -322,7 +377,8 @@
     "streetView": {
       "heading": 0,
       "pitch": 5
-    }
+    },
+    "pantheons": []
   },
   {
     "id": "mt-elbrus",
@@ -330,9 +386,12 @@
     "era": "nature",
     "lat": 43.3499,
     "lng": 42.4453,
-    "category": "mythic-location",
+    "category": "sacred-site",
     "description": "Highest peak in the Caucasus, sometimes identified as the mountain where Prometheus was chained by Zeus for stealing fire and giving it to humanity.",
-    "region": "Russia"
+    "region": "Russia",
+    "pantheons": [
+      "scythian"
+    ]
   },
   {
     "id": "pillars-of-hercules",
@@ -340,13 +399,16 @@
     "era": "nature",
     "lat": 35.9838,
     "lng": -5.4955,
-    "category": "mythic-location",
+    "category": "sacred-site",
     "description": "The Strait of Gibraltar, marked by the Rock of Gibraltar and Jebel Musa. Hercules split a mountain during his tenth labor, creating the gateway between the known world and the Atlantic unknown. Plato placed Atlantis just beyond.",
     "region": "Gibraltar / Morocco",
     "streetView": {
       "heading": 180,
       "pitch": 10
-    }
+    },
+    "pantheons": [
+      "olympian"
+    ]
   },
   {
     "id": "talmud-sura",
@@ -355,11 +417,11 @@
     "lat": 32.07,
     "lng": 44.99,
     "category": "literary-location",
-    "tradition": "Abrahamic",
     "description": "Site of the great Talmudic academy founded by Rav in 219 CE. The Babylonian Talmud, the central text of Rabbinic Judaism, was compiled here and at nearby Pumbedita over centuries of scholarly debate.",
     "region": "Iraq",
     "readUrl": "https://sacred-texts.com/jud/talmud.htm",
-    "excerpt": "Rabbi Simlai expounded: Six hundred and thirteen commandments were communicated to Moses — three hundred and sixty-five negative commandments, corresponding to the number of days in the solar year, and two hundred and forty-eight positive commandments, corresponding to the parts of the human body.\n\nDavid came and reduced them to eleven principles, as it is written in Psalm 15: \"Lord, who shall abide in thy tabernacle? Who shall dwell in thy holy hill? He that walketh uprightly, and worketh righteousness, and speaketh the truth in his heart.\"\n\nIsaiah came and reduced them to six. Micah came and reduced them to three: \"Do justly, love mercy, and walk humbly with thy God.\" Isaiah again reduced them to two: \"Keep judgment and do righteousness.\" Amos came and reduced them to one: \"Seek Me and live.\"\n\n— Babylonian Talmud, Makkot 23b–24a"
+    "excerpt": "Rabbi Simlai expounded: Six hundred and thirteen commandments were communicated to Moses — three hundred and sixty-five negative commandments, corresponding to the number of days in the solar year, and two hundred and forty-eight positive commandments, corresponding to the parts of the human body.\n\nDavid came and reduced them to eleven principles, as it is written in Psalm 15: \"Lord, who shall abide in thy tabernacle? Who shall dwell in thy holy hill? He that walketh uprightly, and worketh righteousness, and speaketh the truth in his heart.\"\n\nIsaiah came and reduced them to six. Micah came and reduced them to three: \"Do justly, love mercy, and walk humbly with thy God.\" Isaiah again reduced them to two: \"Keep judgment and do righteousness.\" Amos came and reduced them to one: \"Seek Me and live.\"\n\n— Babylonian Talmud, Makkot 23b–24a",
+    "pantheons": []
   },
   {
     "id": "new-testament-jerusalem",
@@ -368,7 +430,6 @@
     "lat": 31.7683,
     "lng": 35.2137,
     "category": "literary-location",
-    "tradition": "Abrahamic",
     "description": "The city where Christ's passion, crucifixion, and resurrection took place. The Gospels and Epistles emerged from the early Christian communities rooted in this holy city.",
     "region": "Israel / Palestine",
     "streetView": {
@@ -377,7 +438,8 @@
     },
     "readUrl": "https://sacred-texts.com/bib/kjv/index.htm",
     "wikisourcePage": "Bible_(King_James)",
-    "excerpt": "In the beginning was the Word, and the Word was with God, and the Word was God. The same was in the beginning with God. All things were made by him; and without him was not any thing made that was made. In him was life; and the life was the light of men. And the light shineth in darkness; and the darkness comprehended it not.\n\nThere was a man sent from God, whose name was John. The same came for a witness, to bear witness of the Light, that all men through him might believe. He was not that Light, but was sent to bear witness of that Light. That was the true Light, which lighteth every man that cometh into the world.\n\nHe was in the world, and the world was made by him, and the world knew him not. He came unto his own, and his own received him not. But as many as received him, to them gave he power to become the sons of God, even to them that believe on his name.\n\nAnd the Word was made flesh, and dwelt among us, and we beheld his glory, the glory as of the only begotten of the Father, full of grace and truth.\n\n— Gospel of John 1:1–14 (KJV)"
+    "excerpt": "In the beginning was the Word, and the Word was with God, and the Word was God. The same was in the beginning with God. All things were made by him; and without him was not any thing made that was made. In him was life; and the life was the light of men. And the light shineth in darkness; and the darkness comprehended it not.\n\nThere was a man sent from God, whose name was John. The same came for a witness, to bear witness of the Light, that all men through him might believe. He was not that Light, but was sent to bear witness of that Light. That was the true Light, which lighteth every man that cometh into the world.\n\nHe was in the world, and the world was made by him, and the world knew him not. He came unto his own, and his own received him not. But as many as received him, to them gave he power to become the sons of God, even to them that believe on his name.\n\nAnd the Word was made flesh, and dwelt among us, and we beheld his glory, the glory as of the only begotten of the Father, full of grace and truth.\n\n— Gospel of John 1:1–14 (KJV)",
+    "pantheons": []
   },
   {
     "id": "quran-mecca",
@@ -387,12 +449,12 @@
     "lat": 21.4225,
     "lng": 39.8262,
     "category": "literary-location",
-    "tradition": "Abrahamic",
     "description": "Birthplace of the Prophet Muhammad and site where the Qur'an was first revealed by the angel Jibril. The Ka'aba at its center is the axis mundi of Islam.",
     "region": "Saudi Arabia",
     "readUrl": "https://sacred-texts.com/isl/quran/index.htm",
     "wikisourcePage": "The_Holy_Qur'an_(Maulana_Muhammad_Ali)",
-    "excerpt": "In the name of God, the Most Gracious, the Most Merciful.\n\nPraise be to God, Lord of all the worlds, the Most Gracious, the Most Merciful, Master of the Day of Judgment. It is You we worship and You we ask for help. Guide us on the straight path — the path of those upon whom You have bestowed favor, not of those who have earned anger or of those who are astray.\n\n— Al-Fatiha (The Opening), Surah 1\n\nGod is the Light of the heavens and the earth. The parable of His light is as if there were a niche and within it a lamp: the lamp enclosed in glass: the glass as it were a brilliant star, lit from a blessed tree, an olive, neither of the east nor of the west, whose oil is well-nigh luminous, though fire scarce touched it: Light upon Light! God doth guide whom He will to His Light.\n\n— Surah 24:35, The Light Verse (An-Nur)"
+    "excerpt": "In the name of God, the Most Gracious, the Most Merciful.\n\nPraise be to God, Lord of all the worlds, the Most Gracious, the Most Merciful, Master of the Day of Judgment. It is You we worship and You we ask for help. Guide us on the straight path — the path of those upon whom You have bestowed favor, not of those who have earned anger or of those who are astray.\n\n— Al-Fatiha (The Opening), Surah 1\n\nGod is the Light of the heavens and the earth. The parable of His light is as if there were a niche and within it a lamp: the lamp enclosed in glass: the glass as it were a brilliant star, lit from a blessed tree, an olive, neither of the east nor of the west, whose oil is well-nigh luminous, though fire scarce touched it: Light upon Light! God doth guide whom He will to His Light.\n\n— Surah 24:35, The Light Verse (An-Nur)",
+    "pantheons": []
   },
   {
     "id": "book-of-mormon-manchester",
@@ -401,12 +463,12 @@
     "lat": 42.9701,
     "lng": -77.2303,
     "category": "literary-location",
-    "tradition": "Abrahamic",
     "description": "Where Joseph Smith reported finding the golden plates on Hill Cumorah in 1827. The Book of Mormon was translated and first published nearby in Palmyra in 1830.",
     "region": "New York, USA",
     "readUrl": "https://sacred-texts.com/mor/bom/index.htm",
     "wikisourcePage": "Book_of_Mormon_(1981)",
-    "excerpt": "I, Nephi, having been born of goodly parents, therefore I was taught somewhat in all the learning of my father; and having seen many afflictions in the course of my days, nevertheless, having been highly favored of the Lord in all my days; yea, having had a great knowledge of the goodness and the mysteries of God, therefore I make a record of my proceedings in my days.\n\nYea, I make a record in the language of my father, which consists of the learning of the Jews and the language of the Egyptians. And I know that the record which I make is true; and I make it with mine own hand; and I make it according to my knowledge.\n\n— 1 Nephi 1:1–3"
+    "excerpt": "I, Nephi, having been born of goodly parents, therefore I was taught somewhat in all the learning of my father; and having seen many afflictions in the course of my days, nevertheless, having been highly favored of the Lord in all my days; yea, having had a great knowledge of the goodness and the mysteries of God, therefore I make a record of my proceedings in my days.\n\nYea, I make a record in the language of my father, which consists of the learning of the Jews and the language of the Egyptians. And I know that the record which I make is true; and I make it with mine own hand; and I make it according to my knowledge.\n\n— 1 Nephi 1:1–3",
+    "pantheons": []
   },
   {
     "id": "rigveda-punjab",
@@ -415,12 +477,14 @@
     "lat": 31.5,
     "lng": 72.5,
     "category": "literary-location",
-    "tradition": "Hindu",
     "description": "The Land of Seven Rivers where the oldest Vedic hymns were composed, circa 1500–1200 BCE. The Rigveda is humanity's oldest surviving religious poetry, invoking Agni, Indra, and the cosmic order.",
     "region": "Punjab",
     "readUrl": "https://sacred-texts.com/hin/rigveda/index.htm",
     "wikisourcePage": "The_Hymns_of_the_Rigveda",
-    "excerpt": "I praise Agni, the chosen Priest, God, minister of sacrifice, the hotar, lavishest of wealth. Worthy is Agni to be praised by living as by ancient seers. He shall bring hitherward the Gods.\n\nThrough Agni man obtaineth wealth, yea, plenty waxing day by day, most rich in heroes, glorious.\n\nAgni, the perfect sacrifice which thou encompassest about verily goeth to the Gods. May Agni, sapient-minded Priest, truthful, most gloriously great, the God, come hither with the Gods.\n\nWhatever blessing, Agni, thou wilt grant unto thy worshipper, that, Angiras, is indeed thy truth. To thee, dispeller of the night, O Agni, day by day with prayer bringing thee reverence, we come.\n\n— Rigveda, Mandala I, Hymn 1 (trans. Ralph T.H. Griffith)"
+    "excerpt": "I praise Agni, the chosen Priest, God, minister of sacrifice, the hotar, lavishest of wealth. Worthy is Agni to be praised by living as by ancient seers. He shall bring hitherward the Gods.\n\nThrough Agni man obtaineth wealth, yea, plenty waxing day by day, most rich in heroes, glorious.\n\nAgni, the perfect sacrifice which thou encompassest about verily goeth to the Gods. May Agni, sapient-minded Priest, truthful, most gloriously great, the God, come hither with the Gods.\n\nWhatever blessing, Agni, thou wilt grant unto thy worshipper, that, Angiras, is indeed thy truth. To thee, dispeller of the night, O Agni, day by day with prayer bringing thee reverence, we come.\n\n— Rigveda, Mandala I, Hymn 1 (trans. Ralph T.H. Griffith)",
+    "pantheons": [
+      "vedic"
+    ]
   },
   {
     "id": "upanishads-kuru",
@@ -429,11 +493,13 @@
     "lat": 28.95,
     "lng": 78.15,
     "category": "literary-location",
-    "tradition": "Hindu",
     "description": "The philosophical heartland where forest sages composed the Upanishads, exploring Brahman, Atman, and the nature of ultimate reality. These texts form the mystical foundation of Hindu thought.",
     "region": "Uttar Pradesh, India",
     "readUrl": "https://sacred-texts.com/hin/upan/index.htm",
-    "excerpt": "From the unreal lead me to the real. From darkness lead me to light. From death lead me to immortality.\n\n— Brihadaranyaka Upanishad 1.3.28\n\nIn the beginning this was Self alone, in the shape of a person. He looking round saw nothing but his Self. He first said, \"This is I\"; therefore he became I by name.\n\nHe was afraid, and therefore anyone who is lonely is afraid. He thought, \"As there is nothing but myself, why should I fear?\" Then his fear passed away. For what should he have feared? Truly fear arises from a second only.\n\nBut he felt no delight. Therefore a man who is lonely feels no delight. He wished for a second. He was so large as man and wife together. He then made this his Self to fall in two, and thence arose husband and wife.\n\n— Brihadaranyaka Upanishad 1.4.1–3 (trans. Max Müller)"
+    "excerpt": "From the unreal lead me to the real. From darkness lead me to light. From death lead me to immortality.\n\n— Brihadaranyaka Upanishad 1.3.28\n\nIn the beginning this was Self alone, in the shape of a person. He looking round saw nothing but his Self. He first said, \"This is I\"; therefore he became I by name.\n\nHe was afraid, and therefore anyone who is lonely is afraid. He thought, \"As there is nothing but myself, why should I fear?\" Then his fear passed away. For what should he have feared? Truly fear arises from a second only.\n\nBut he felt no delight. Therefore a man who is lonely feels no delight. He wished for a second. He was so large as man and wife together. He then made this his Self to fall in two, and thence arose husband and wife.\n\n— Brihadaranyaka Upanishad 1.4.1–3 (trans. Max Müller)",
+    "pantheons": [
+      "hindu"
+    ]
   },
   {
     "id": "mahabharata-kurukshetra",
@@ -442,12 +508,14 @@
     "lat": 29.9695,
     "lng": 76.8783,
     "category": "literary-location",
-    "tradition": "Hindu",
     "description": "Battlefield of the great war between the Pandavas and Kauravas. The longest epic poem ever written — a cosmos of dharma, duty, and divine play spanning 100,000 verses.",
     "region": "Haryana, India",
     "readUrl": "https://sacred-texts.com/hin/maha/index.htm",
     "wikisourcePage": "The_Mahabharata",
-    "excerpt": "Ugrasrava Sauti, the son of Lomaharshana, versed in the Puranas, while present in the forest of Naimisha, at the twelve-year sacrifice of Saunaka, surnamed Kulapati, approached with humility the Rishis sitting at their ease and said:\n\n\"What is there in this world, the wonder that is sung of in the tale of the Bharatas? What is narrated therein on virtue, on profit, on desire, and on salvation?\"\n\nThe Rishis answered: \"We are eager to learn the history called Bharata, the holy composition of the wonderful Vyasa. That history is called Jaya. It should be heard by every person desirous of salvation. It is equal to the Vedas; it is sacred and excellent; it is the highest of narratives. It is adorned with every form of art, of divine significance, and unrivalled in beauty.\"\n\n— Mahabharata, Adi Parva, Section I (trans. Kisari Mohan Ganguli)"
+    "excerpt": "Ugrasrava Sauti, the son of Lomaharshana, versed in the Puranas, while present in the forest of Naimisha, at the twelve-year sacrifice of Saunaka, surnamed Kulapati, approached with humility the Rishis sitting at their ease and said:\n\n\"What is there in this world, the wonder that is sung of in the tale of the Bharatas? What is narrated therein on virtue, on profit, on desire, and on salvation?\"\n\nThe Rishis answered: \"We are eager to learn the history called Bharata, the holy composition of the wonderful Vyasa. That history is called Jaya. It should be heard by every person desirous of salvation. It is equal to the Vedas; it is sacred and excellent; it is the highest of narratives. It is adorned with every form of art, of divine significance, and unrivalled in beauty.\"\n\n— Mahabharata, Adi Parva, Section I (trans. Kisari Mohan Ganguli)",
+    "pantheons": [
+      "hindu"
+    ]
   },
   {
     "id": "ramayana-ayodhya",
@@ -456,12 +524,14 @@
     "lat": 26.7922,
     "lng": 82.1998,
     "category": "literary-location",
-    "tradition": "Hindu",
     "description": "Birthplace of Lord Rama and starting point of Valmiki's epic. The Ramayana traces Rama's exile, Sita's abduction, and the great war against Ravana — the archetypal journey of righteous kingship.",
     "region": "Uttar Pradesh, India",
     "readUrl": "https://sacred-texts.com/hin/rama/index.htm",
     "wikisourcePage": "The_Ramayana",
-    "excerpt": "Once upon a time there was a great and prosperous city by the name of Ayodhya in the kingdom of Kosala. It lay along the banks of the river Sarayu and was vast and magnificent. The city had royal highways that were always watered and strewn with flowers.\n\nKing Dasaratha ruled it as Manu once ruled the world. It was full of warriors mighty as Indra, men of truth, with no trace of avarice or narrowness. In that great city none was unlearned, none was not generous, none was without faith.\n\nIn the line of Ikshvaku was born the godly King Dasaratha, ever devoted to sacred rites, mighty as a Patriarch. He had no son. Then with pious resolve he performed the great Horse Sacrifice, and by the grace of the gods, four sons were born to him — Rama, Bharata, Lakshmana, and Satrughna.\n\n— Valmiki, Ramayana, Bala Kanda, Cantos I–XVIII (adapted)"
+    "excerpt": "Once upon a time there was a great and prosperous city by the name of Ayodhya in the kingdom of Kosala. It lay along the banks of the river Sarayu and was vast and magnificent. The city had royal highways that were always watered and strewn with flowers.\n\nKing Dasaratha ruled it as Manu once ruled the world. It was full of warriors mighty as Indra, men of truth, with no trace of avarice or narrowness. In that great city none was unlearned, none was not generous, none was without faith.\n\nIn the line of Ikshvaku was born the godly King Dasaratha, ever devoted to sacred rites, mighty as a Patriarch. He had no son. Then with pious resolve he performed the great Horse Sacrifice, and by the grace of the gods, four sons were born to him — Rama, Bharata, Lakshmana, and Satrughna.\n\n— Valmiki, Ramayana, Bala Kanda, Cantos I–XVIII (adapted)",
+    "pantheons": [
+      "hindu"
+    ]
   },
   {
     "id": "bhagavad-gita-kurukshetra",
@@ -470,12 +540,14 @@
     "lat": 29.98,
     "lng": 76.87,
     "category": "literary-location",
-    "tradition": "Hindu",
     "description": "On the battlefield between two armies, Krishna reveals the nature of duty, self, and the divine to the warrior Arjuna. The Gita's 700 verses became the most influential text in Hindu philosophy.",
     "region": "Haryana, India",
     "readUrl": "https://sacred-texts.com/hin/gita/index.htm",
     "wikisourcePage": "Bhagavad-Gita_(Besant_4th)",
-    "excerpt": "Dhritarashtra said: What did my people and the sons of Pandu do when they had gathered together on the holy plain of Kurukshetra eager for battle?\n\nSanjaya said: Arjuna, seeing all his kinsmen arrayed for battle, was overcome with deep compassion and said in grief:\n\n\"Seeing these, my kinsmen, O Krishna, arrayed, eager to fight, my limbs fail and my mouth is parched, my body quakes and my hair stands on end. My skin burns all over; I am unable to stand; my mind is reeling.\"\n\nThe Blessed Lord said: \"Thy tears are for those beyond tears; and are thy words words of wisdom? The wise grieve neither for the living nor for the dead. There was never a time when I did not exist, nor you, nor any of these kings. Nor is there any future in which we shall cease to be.\n\n\"As the soul passes in this body through childhood, youth, and old age, so also does it pass into another body. The wise are not deceived by this.\"\n\n— Bhagavad Gita, Chapters 1–2 (trans. Sir Edwin Arnold)"
+    "excerpt": "Dhritarashtra said: What did my people and the sons of Pandu do when they had gathered together on the holy plain of Kurukshetra eager for battle?\n\nSanjaya said: Arjuna, seeing all his kinsmen arrayed for battle, was overcome with deep compassion and said in grief:\n\n\"Seeing these, my kinsmen, O Krishna, arrayed, eager to fight, my limbs fail and my mouth is parched, my body quakes and my hair stands on end. My skin burns all over; I am unable to stand; my mind is reeling.\"\n\nThe Blessed Lord said: \"Thy tears are for those beyond tears; and are thy words words of wisdom? The wise grieve neither for the living nor for the dead. There was never a time when I did not exist, nor you, nor any of these kings. Nor is there any future in which we shall cease to be.\n\n\"As the soul passes in this body through childhood, youth, and old age, so also does it pass into another body. The wise are not deceived by this.\"\n\n— Bhagavad Gita, Chapters 1–2 (trans. Sir Edwin Arnold)",
+    "pantheons": [
+      "hindu"
+    ]
   },
   {
     "id": "pali-canon-aluvihara",
@@ -484,12 +556,12 @@
     "lat": 7.5156,
     "lng": 80.6032,
     "category": "literary-location",
-    "tradition": "Buddhist",
     "description": "Rock cave monastery where the Theravada Buddhist canon was first written down in the 1st century BCE, preserving the Buddha's teachings after centuries of oral transmission.",
     "region": "Sri Lanka",
     "readUrl": "https://sacred-texts.com/bud/sbe10/index.htm",
     "wikisourcePage": "Dhammapada_(Muller)",
-    "excerpt": "All that we are is the result of what we have thought: it is founded on our thoughts, it is made up of our thoughts. If a man speaks or acts with an evil thought, pain follows him, as the wheel follows the foot of the ox that draws the carriage.\n\nAll that we are is the result of what we have thought: it is founded on our thoughts, it is made up of our thoughts. If a man speaks or acts with a pure thought, happiness follows him, like a shadow that never leaves him.\n\n\"He abused me, he beat me, he defeated me, he robbed me\" — in those who harbour such thoughts hatred will never cease.\n\n\"He abused me, he beat me, he defeated me, he robbed me\" — in those who do not harbour such thoughts hatred will cease.\n\nFor hatred does not cease by hatred at any time: hatred ceases by love. This is an old rule.\n\n— Dhammapada, Chapter 1: The Twin Verses (trans. F. Max Müller)"
+    "excerpt": "All that we are is the result of what we have thought: it is founded on our thoughts, it is made up of our thoughts. If a man speaks or acts with an evil thought, pain follows him, as the wheel follows the foot of the ox that draws the carriage.\n\nAll that we are is the result of what we have thought: it is founded on our thoughts, it is made up of our thoughts. If a man speaks or acts with a pure thought, happiness follows him, like a shadow that never leaves him.\n\n\"He abused me, he beat me, he defeated me, he robbed me\" — in those who harbour such thoughts hatred will never cease.\n\n\"He abused me, he beat me, he defeated me, he robbed me\" — in those who do not harbour such thoughts hatred will cease.\n\nFor hatred does not cease by hatred at any time: hatred ceases by love. This is an old rule.\n\n— Dhammapada, Chapter 1: The Twin Verses (trans. F. Max Müller)",
+    "pantheons": []
   },
   {
     "id": "lotus-sutra-gandhara",
@@ -498,11 +570,11 @@
     "lat": 34.2,
     "lng": 71.8,
     "category": "literary-location",
-    "tradition": "Buddhist",
     "description": "Crossroads region where Mahayana Buddhism flourished and key sutras like the Lotus Sutra were composed. The text proclaims that all beings possess Buddha-nature and can attain enlightenment.",
     "region": "Northwest Pakistan",
     "readUrl": "https://sacred-texts.com/bud/lotus/index.htm",
-    "excerpt": "Thus have I heard. At one time the Buddha was staying in Rajagriha, on Mount Gridhrakuta, together with a great assembly of twelve thousand monks. They were all great Arhats whose outflows had been exhausted.\n\nAt that time the World-Honored One, surrounded by the four kinds of believers, having received offerings and being respectfully revered, for the sake of the Bodhisattvas preached the Great Vehicle Sutra called Immeasurable Meanings.\n\nWhen the Buddha had finished preaching this sutra, he sat in the lotus position and entered into the concentration of Immeasurable Meanings. Heaven rained mandarava flowers and great mandarava flowers, and scattered them over the Buddha and the great assembly.\n\nThe whole Buddha world quaked in six different ways. At that time all in the assembly — monks, nuns, laymen, laywomen, gods, dragons, spirits — all gazed at the Buddha with a single mind.\n\n— Lotus Sutra, Chapter 1: Introduction (trans. Burton Watson)"
+    "excerpt": "Thus have I heard. At one time the Buddha was staying in Rajagriha, on Mount Gridhrakuta, together with a great assembly of twelve thousand monks. They were all great Arhats whose outflows had been exhausted.\n\nAt that time the World-Honored One, surrounded by the four kinds of believers, having received offerings and being respectfully revered, for the sake of the Bodhisattvas preached the Great Vehicle Sutra called Immeasurable Meanings.\n\nWhen the Buddha had finished preaching this sutra, he sat in the lotus position and entered into the concentration of Immeasurable Meanings. Heaven rained mandarava flowers and great mandarava flowers, and scattered them over the Buddha and the great assembly.\n\nThe whole Buddha world quaked in six different ways. At that time all in the assembly — monks, nuns, laymen, laywomen, gods, dragons, spirits — all gazed at the Buddha with a single mind.\n\n— Lotus Sutra, Chapter 1: Introduction (trans. Burton Watson)",
+    "pantheons": []
   },
   {
     "id": "tibetan-book-dead-samye",
@@ -511,11 +583,13 @@
     "lat": 29.3289,
     "lng": 91.5064,
     "category": "literary-location",
-    "tradition": "Buddhist",
     "description": "Tibet's first monastery, founded by Padmasambhava in the 8th century. The Bardo Thodol, attributed to him, maps the soul's journey through the intermediate states between death and rebirth.",
     "region": "Tibet",
     "readUrl": "https://sacred-texts.com/bud/tib/index.htm",
-    "excerpt": "O nobly-born, listen with full attention, without being distracted: There are six states of Bardo, namely: the natural state of Bardo while in the womb; the Bardo of the dream-state; the Bardo of ecstatic equilibrium while in deep meditation; the Bardo of the moment of death; the Bardo of the experiencing of Reality; the Bardo of seeking rebirth.\n\nO nobly-born, that which is called death hath now come. Thou art departing from this world, but thou art not the only one; death cometh to all. Do not cling to this life. Even though thou clingeth, thou hast not the power to remain here.\n\nRemember the clear light, the pure clear white light from which everything in the universe comes, to which everything in the universe returns; the original nature of your own mind. The natural state of the universe unmanifest. Let go into the clear light, trust it, merge with it. It is your own true nature, it is home.\n\n— Bardo Thodol (trans. W.Y. Evans-Wentz)"
+    "excerpt": "O nobly-born, listen with full attention, without being distracted: There are six states of Bardo, namely: the natural state of Bardo while in the womb; the Bardo of the dream-state; the Bardo of ecstatic equilibrium while in deep meditation; the Bardo of the moment of death; the Bardo of the experiencing of Reality; the Bardo of seeking rebirth.\n\nO nobly-born, that which is called death hath now come. Thou art departing from this world, but thou art not the only one; death cometh to all. Do not cling to this life. Even though thou clingeth, thou hast not the power to remain here.\n\nRemember the clear light, the pure clear white light from which everything in the universe comes, to which everything in the universe returns; the original nature of your own mind. The natural state of the universe unmanifest. Let go into the clear light, trust it, merge with it. It is your own true nature, it is home.\n\n— Bardo Thodol (trans. W.Y. Evans-Wentz)",
+    "pantheons": [
+      "tibetan"
+    ]
   },
   {
     "id": "tao-te-ching-hangu",
@@ -524,12 +598,14 @@
     "lat": 34.52,
     "lng": 110.3,
     "category": "literary-location",
-    "tradition": "East Asian",
     "description": "Legend holds that Laozi, departing civilization on a water buffalo, was stopped at this mountain pass by a gatekeeper and asked to write down his wisdom. The result was the 5,000 characters of the Tao Te Ching.",
     "region": "Henan, China",
     "readUrl": "https://sacred-texts.com/tao/taote.htm",
     "wikisourcePage": "Tâo_Teh_King",
-    "excerpt": "The Tao that can be told is not the eternal Tao. The name that can be named is not the eternal name. The nameless is the beginning of heaven and earth. The named is the mother of ten thousand things.\n\nEver desireless, one can see the mystery. Ever desiring, one can see the manifestations. These two spring from the same source but differ in name; this appears as darkness. Darkness within darkness. The gate to all mystery.\n\n— Chapter 1\n\nUnder heaven all can see beauty as beauty only because there is ugliness. All can know good as good only because there is evil.\n\nTherefore having and not having arise together. Difficult and easy complement each other. Long and short contrast each other. High and low rest upon each other. Voice and sound harmonize each other. Front and back follow one another.\n\n— Tao Te Ching, Chapters 1–2 (trans. Gia-fu Feng & Jane English)"
+    "excerpt": "The Tao that can be told is not the eternal Tao. The name that can be named is not the eternal name. The nameless is the beginning of heaven and earth. The named is the mother of ten thousand things.\n\nEver desireless, one can see the mystery. Ever desiring, one can see the manifestations. These two spring from the same source but differ in name; this appears as darkness. Darkness within darkness. The gate to all mystery.\n\n— Chapter 1\n\nUnder heaven all can see beauty as beauty only because there is ugliness. All can know good as good only because there is evil.\n\nTherefore having and not having arise together. Difficult and easy complement each other. Long and short contrast each other. High and low rest upon each other. Voice and sound harmonize each other. Front and back follow one another.\n\n— Tao Te Ching, Chapters 1–2 (trans. Gia-fu Feng & Jane English)",
+    "pantheons": [
+      "chinese"
+    ]
   },
   {
     "id": "analects-qufu",
@@ -538,12 +614,14 @@
     "lat": 35.5969,
     "lng": 116.9913,
     "category": "literary-location",
-    "tradition": "East Asian",
     "description": "Birthplace and home of Confucius, where his disciples collected his sayings into the Analects. The Temple and Cemetery of Confucius here have been sites of pilgrimage for over two millennia.",
     "region": "Shandong, China",
     "readUrl": "https://sacred-texts.com/cfu/conf1.htm",
     "wikisourcePage": "The_Analects",
-    "excerpt": "The Master said, \"Is it not pleasant to learn with a constant perseverance and application? Is it not delightful to have friends coming from distant quarters? Is he not a man of complete virtue, who feels no discomposure though men may take no note of him?\"\n\nThe philosopher Yu said, \"They are few who, being filial and fraternal, are fond of offending against their superiors. There have been none, who, not liking to offend against their superiors, have been fond of stirring up confusion.\"\n\nThe Master said, \"Fine words and an insinuating appearance are seldom associated with true virtue.\"\n\nThe philosopher Tsang said, \"I daily examine myself on three points: — whether, in transacting business for others, I may have been not faithful; — whether, in intercourse with friends, I may have been not sincere; — whether I may have not mastered and practiced the instructions of my teacher.\"\n\n— Analerta, Book I (trans. James Legge)"
+    "excerpt": "The Master said, \"Is it not pleasant to learn with a constant perseverance and application? Is it not delightful to have friends coming from distant quarters? Is he not a man of complete virtue, who feels no discomposure though men may take no note of him?\"\n\nThe philosopher Yu said, \"They are few who, being filial and fraternal, are fond of offending against their superiors. There have been none, who, not liking to offend against their superiors, have been fond of stirring up confusion.\"\n\nThe Master said, \"Fine words and an insinuating appearance are seldom associated with true virtue.\"\n\nThe philosopher Tsang said, \"I daily examine myself on three points: — whether, in transacting business for others, I may have been not faithful; — whether, in intercourse with friends, I may have been not sincere; — whether I may have not mastered and practiced the instructions of my teacher.\"\n\n— Analerta, Book I (trans. James Legge)",
+    "pantheons": [
+      "chinese"
+    ]
   },
   {
     "id": "kojiki-nara",
@@ -552,12 +630,14 @@
     "lat": 34.6851,
     "lng": 135.8048,
     "category": "literary-location",
-    "tradition": "East Asian",
     "description": "Japan's oldest chronicle, compiled in 712 CE at the imperial court. It records the creation of the islands by Izanagi and Izanami, the sun goddess Amaterasu, and the divine ancestry of the emperors.",
     "region": "Japan",
     "readUrl": "https://sacred-texts.com/shi/kj/index.htm",
     "wikisourcePage": "Kojiki_(Chamberlain,_1882)",
-    "excerpt": "The names of the Deities that were born in the Plain of High Heaven when the Heaven and Earth began were the Deity Master-of-the-August-Center-of-Heaven, next the High-August-Producing-Wondrous Deity, next the Divine-Producing-Wondrous Deity. These three Deities were all Deities born alone, and hid their persons.\n\nThe names of the Deities that were born next from a thing that sprouted up like unto a reed-shoot when the earth, young and like unto floating oil, drifted about medusa-like, were the Pleasant-Reed-Shoot-Prince-Elder Deity, next the Heavenly-Eternally-Standing Deity. These two Deities were likewise born alone, and hid their persons.\n\nThe above five Deities are separate Heavenly Deities.\n\nHereupon all the Heavenly Deities commanded the two Deities His Augustness Izanagi and Her Augustness Izanami, ordering them to \"make, consolidate, and give birth to this drifting land.\" Granting to them a heavenly jewelled spear, they charged them thus.\n\n— Kojiki, Section I–IV (trans. Basil Hall Chamberlain)"
+    "excerpt": "The names of the Deities that were born in the Plain of High Heaven when the Heaven and Earth began were the Deity Master-of-the-August-Center-of-Heaven, next the High-August-Producing-Wondrous Deity, next the Divine-Producing-Wondrous Deity. These three Deities were all Deities born alone, and hid their persons.\n\nThe names of the Deities that were born next from a thing that sprouted up like unto a reed-shoot when the earth, young and like unto floating oil, drifted about medusa-like, were the Pleasant-Reed-Shoot-Prince-Elder Deity, next the Heavenly-Eternally-Standing Deity. These two Deities were likewise born alone, and hid their persons.\n\nThe above five Deities are separate Heavenly Deities.\n\nHereupon all the Heavenly Deities commanded the two Deities His Augustness Izanagi and Her Augustness Izanami, ordering them to \"make, consolidate, and give birth to this drifting land.\" Granting to them a heavenly jewelled spear, they charged them thus.\n\n— Kojiki, Section I–IV (trans. Basil Hall Chamberlain)",
+    "pantheons": [
+      "shinto"
+    ]
   },
   {
     "id": "avesta-bactria",
@@ -566,12 +646,14 @@
     "lat": 36.75,
     "lng": 66.9,
     "category": "literary-location",
-    "tradition": "Iranian",
     "description": "Region where Zoroaster is believed to have composed the Gathas, the oldest hymns of the Avesta. His vision of cosmic struggle between Ahura Mazda and Angra Mainyu shaped all subsequent dualistic theology.",
     "region": "Northern Afghanistan",
     "readUrl": "https://sacred-texts.com/zor/sbe31/index.htm",
     "wikisourcePage": "Sacred_Books_of_the_East/Volume_4",
-    "excerpt": "This I ask Thee, tell me truly, Ahura. Who is by generation the Father of Right, at the first? Who determined the path of sun and stars? Who is it by whom the moon waxes and wanes again? This, O Mazda, and yet more, I am fain to know.\n\nThis I ask Thee, tell me truly, Ahura. Who upheld the earth beneath and the firmament from falling? Who the waters and the plants? Who yoked swiftness to winds and clouds? Who is, O Mazda, creator of Good Thought?\n\nThis I ask Thee, tell me truly, Ahura. What artist made light and darkness? What artist made sleep and waking? Who made morning, noon, and night, that call the understanding man to his duty?\n\n— Gathas, Yasna 44 (trans. L.H. Mills)"
+    "excerpt": "This I ask Thee, tell me truly, Ahura. Who is by generation the Father of Right, at the first? Who determined the path of sun and stars? Who is it by whom the moon waxes and wanes again? This, O Mazda, and yet more, I am fain to know.\n\nThis I ask Thee, tell me truly, Ahura. Who upheld the earth beneath and the firmament from falling? Who the waters and the plants? Who yoked swiftness to winds and clouds? Who is, O Mazda, creator of Good Thought?\n\nThis I ask Thee, tell me truly, Ahura. What artist made light and darkness? What artist made sleep and waking? Who made morning, noon, and night, that call the understanding man to his duty?\n\n— Gathas, Yasna 44 (trans. L.H. Mills)",
+    "pantheons": [
+      "zoroastrian"
+    ]
   },
   {
     "id": "gilgamesh-uruk",
@@ -580,12 +662,14 @@
     "lat": 31.3225,
     "lng": 45.6375,
     "category": "literary-location",
-    "tradition": "Ancient Near East",
     "description": "The world's oldest epic poem, carved in cuneiform on clay tablets. Gilgamesh, king of Uruk, seeks immortality after the death of his friend Enkidu — the first written reckoning with mortality.",
     "region": "Iraq",
     "readUrl": "https://sacred-texts.com/ane/gilgamesh/index.htm",
     "wikisourcePage": "The_Epic_of_Gilgamish",
-    "excerpt": "He who has seen everything, I will make known to the lands. I will teach about him who experienced all things alike. Anu granted him the totality of knowledge of all. He saw the Secret, discovered the Hidden, he brought information of the time before the Flood.\n\nHe went on a distant journey, pushing himself to exhaustion, but then was brought to peace. He carved on a stone stela all of his toils, and built the wall of Uruk-Haven, the wall of the sacred Eanna Temple, the holy sanctuary.\n\nLook at its wall which gleams like copper, inspect its inner wall, the likes of which no one can equal! Take hold of the threshold stone — it dates from ancient times! Go close to the Eanna Temple, the residence of Ishtar, such as no later king or man ever equalled!\n\nGo up on the wall of Uruk and walk around, examine its foundation, inspect its brickwork thoroughly. Is not its masonry of baked brick? Did not the Seven Sages themselves lay out its plans?\n\n— Epic of Gilgamesh, Tablet I (trans. Maureen Gallery Kovacs)"
+    "excerpt": "He who has seen everything, I will make known to the lands. I will teach about him who experienced all things alike. Anu granted him the totality of knowledge of all. He saw the Secret, discovered the Hidden, he brought information of the time before the Flood.\n\nHe went on a distant journey, pushing himself to exhaustion, but then was brought to peace. He carved on a stone stela all of his toils, and built the wall of Uruk-Haven, the wall of the sacred Eanna Temple, the holy sanctuary.\n\nLook at its wall which gleams like copper, inspect its inner wall, the likes of which no one can equal! Take hold of the threshold stone — it dates from ancient times! Go close to the Eanna Temple, the residence of Ishtar, such as no later king or man ever equalled!\n\nGo up on the wall of Uruk and walk around, examine its foundation, inspect its brickwork thoroughly. Is not its masonry of baked brick? Did not the Seven Sages themselves lay out its plans?\n\n— Epic of Gilgamesh, Tablet I (trans. Maureen Gallery Kovacs)",
+    "pantheons": [
+      "sumerian"
+    ]
   },
   {
     "id": "enuma-elish-babylon",
@@ -594,11 +678,13 @@
     "lat": 32.5363,
     "lng": 44.4209,
     "category": "literary-location",
-    "tradition": "Ancient Near East",
     "description": "Babylonian creation epic recited at the New Year festival. Marduk slays the primordial sea-dragon Tiamat and fashions the cosmos from her body — the original myth of order emerging from chaos.",
     "region": "Iraq",
     "readUrl": "https://sacred-texts.com/ane/enuma.htm",
-    "excerpt": "When on high the heaven had not been named, firm ground below had not been called by name, naught but primordial Apsu, their begetter, and Mummu-Tiamat, she who bore them all, their waters commingling as a single body; no reed hut had been matted, no marsh land had appeared.\n\nWhen no gods whatever had been brought into being, uncalled by name, their destinies undetermined — then it was that the gods were formed within them.\n\nLahmu and Lahamu were brought forth, by name they were called. Before they had grown in age and stature, Anshar and Kishar were formed, surpassing the others. They prolonged the days, added on the years. Anu was their heir, of his fathers the rival; yea, Anshar's firstborn, Anu, was his equal.\n\n— Enuma Elish, Tablet I (trans. E.A. Speiser)"
+    "excerpt": "When on high the heaven had not been named, firm ground below had not been called by name, naught but primordial Apsu, their begetter, and Mummu-Tiamat, she who bore them all, their waters commingling as a single body; no reed hut had been matted, no marsh land had appeared.\n\nWhen no gods whatever had been brought into being, uncalled by name, their destinies undetermined — then it was that the gods were formed within them.\n\nLahmu and Lahamu were brought forth, by name they were called. Before they had grown in age and stature, Anshar and Kishar were formed, surpassing the others. They prolonged the days, added on the years. Anu was their heir, of his fathers the rival; yea, Anshar's firstborn, Anu, was his equal.\n\n— Enuma Elish, Tablet I (trans. E.A. Speiser)",
+    "pantheons": [
+      "babylonian"
+    ]
   },
   {
     "id": "popol-vuh-chichicastenango",
@@ -607,11 +693,13 @@
     "lat": 14.9433,
     "lng": -91.1117,
     "category": "literary-location",
-    "tradition": "Mesoamerican",
     "description": "The K'iche' Maya creation epic was preserved here by Francisco Ximénez in the early 18th century. It tells of the Hero Twins' descent to Xibalba and the creation of humanity from maize.",
     "region": "Guatemala",
     "readUrl": "https://sacred-texts.com/nam/pvuheng.htm",
-    "excerpt": "This is the beginning of the Ancient Word, here in this place called Quiché. Here we shall inscribe, we shall implant the Ancient Word, the potential and source for everything done in the citadel of Quiché, in the nation of Quiché people.\n\nThis is the account, here it is: Now it still ripples, now it still murmurs, ripples, it still sighs, still hums, and it is empty under the sky. Here follow the first words, the first eloquence:\n\nThere is not yet one person, one animal, bird, fish, crab, tree, rock, hollow, canyon, meadow, forest. Only the sky alone is there; the face of the earth is not clear. Only the sea alone is pooled under all the sky; there is nothing whatever gathered together. It is at rest; not a single thing stirs. It is held back, kept at rest under the sky.\n\nWhatever there is that might be is simply not there: only the pooled water, only the calm sea, only it alone is pooled. Whatever might be is simply not there: only murmurs, ripples, in the dark, in the night.\n\n— Popol Vuh, Part One (trans. Dennis Tedlock)"
+    "excerpt": "This is the beginning of the Ancient Word, here in this place called Quiché. Here we shall inscribe, we shall implant the Ancient Word, the potential and source for everything done in the citadel of Quiché, in the nation of Quiché people.\n\nThis is the account, here it is: Now it still ripples, now it still murmurs, ripples, it still sighs, still hums, and it is empty under the sky. Here follow the first words, the first eloquence:\n\nThere is not yet one person, one animal, bird, fish, crab, tree, rock, hollow, canyon, meadow, forest. Only the sky alone is there; the face of the earth is not clear. Only the sea alone is pooled under all the sky; there is nothing whatever gathered together. It is at rest; not a single thing stirs. It is held back, kept at rest under the sky.\n\nWhatever there is that might be is simply not there: only the pooled water, only the calm sea, only it alone is pooled. Whatever might be is simply not there: only murmurs, ripples, in the dark, in the night.\n\n— Popol Vuh, Part One (trans. Dennis Tedlock)",
+    "pantheons": [
+      "maya"
+    ]
   },
   {
     "id": "guru-granth-sahib-amritsar",
@@ -620,7 +708,6 @@
     "lat": 31.62,
     "lng": 74.8765,
     "category": "literary-location",
-    "tradition": "Sikh",
     "description": "The Golden Temple houses the Guru Granth Sahib, the living guru of Sikhism. Compiled by Guru Arjan in 1604, it contains hymns from Sikh gurus, Hindu saints, and Sufi poets — a scripture of radical inclusion.",
     "region": "Punjab, India",
     "streetView": {
@@ -629,7 +716,8 @@
     },
     "readUrl": "https://sacred-texts.com/skh/granth/index.htm",
     "wikisourcePage": "The_Sikh_Religion",
-    "excerpt": "There is One God. His Name is Truth. He is the Creator. He is without fear. He is without hate. He is timeless and without form. He is beyond death — the enlightened, self-existent.\n\nBy the Guru's grace He is known.\n\nHe was True in the beginning. He was True when the ages commenced. He is True now. And Nanak says He shall be True forever.\n\nBy thinking, He cannot be reduced to thought, even by thinking hundreds of thousands of times. By remaining silent, inner silence is not obtained, even by remaining lovingly absorbed deep within. The hunger of the hungry is not appeased, even by piling up loads of worldly goods. Hundreds of thousands of clever tricks, but not even one of them will go along with you in the end.\n\nSo how can you become truthful? And how can the veil of illusion be torn away? O Nanak, it is written that you shall obey the Hukam of His Command, and walk in the Way of His Will.\n\n— Japji Sahib, Mul Mantar and Pauri 1 (Guru Nanak)"
+    "excerpt": "There is One God. His Name is Truth. He is the Creator. He is without fear. He is without hate. He is timeless and without form. He is beyond death — the enlightened, self-existent.\n\nBy the Guru's grace He is known.\n\nHe was True in the beginning. He was True when the ages commenced. He is True now. And Nanak says He shall be True forever.\n\nBy thinking, He cannot be reduced to thought, even by thinking hundreds of thousands of times. By remaining silent, inner silence is not obtained, even by remaining lovingly absorbed deep within. The hunger of the hungry is not appeased, even by piling up loads of worldly goods. Hundreds of thousands of clever tricks, but not even one of them will go along with you in the end.\n\nSo how can you become truthful? And how can the veil of illusion be torn away? O Nanak, it is written that you shall obey the Hukam of His Command, and walk in the Way of His Will.\n\n— Japji Sahib, Mul Mantar and Pauri 1 (Guru Nanak)",
+    "pantheons": []
   },
   {
     "id": "agamas-pataliputra",
@@ -638,11 +726,11 @@
     "lat": 25.6093,
     "lng": 85.1376,
     "category": "literary-location",
-    "tradition": "Jain",
     "description": "At the Council of Pataliputra in the 3rd century BCE, Jain monks codified the teachings of Mahavira into the Agamas. These texts articulate the radical ethics of non-violence and the liberation of the soul.",
     "region": "Patna, India",
     "readUrl": "https://sacred-texts.com/jai/index.htm",
-    "excerpt": "All breathing, existing, living, sentient creatures should not be slain, nor treated with violence, nor abused, nor tormented, nor driven away. This is the pure, unchangeable, eternal law which the clever ones, who understand the world, have proclaimed.\n\nA wise man should not act sinfully toward animals, nor cause others to act so, nor allow others to act so. Knowing the course of the world, having learned and thoroughly understood the misery of the world, he should cease from all sinful action.\n\nHe who has overcome all attachment and hatred, who is free from all sins, who knows and sees all things — he is the Liberated One. He who is free from anger, pride, deceit, and greed, whose senses are controlled, who is free from worldly desires, and who has realized the Self — such a one is a sage.\n\n— Acharanga Sutra, Book I (adapted from Hermann Jacobi translation)"
+    "excerpt": "All breathing, existing, living, sentient creatures should not be slain, nor treated with violence, nor abused, nor tormented, nor driven away. This is the pure, unchangeable, eternal law which the clever ones, who understand the world, have proclaimed.\n\nA wise man should not act sinfully toward animals, nor cause others to act so, nor allow others to act so. Knowing the course of the world, having learned and thoroughly understood the misery of the world, he should cease from all sinful action.\n\nHe who has overcome all attachment and hatred, who is free from all sins, who knows and sees all things — he is the Liberated One. He who is free from anger, pride, deceit, and greed, whose senses are controlled, who is free from worldly desires, and who has realized the Self — such a one is a sage.\n\n— Acharanga Sutra, Book I (adapted from Hermann Jacobi translation)",
+    "pantheons": []
   },
   {
     "id": "parthenon",
@@ -657,7 +745,10 @@
     "streetView": {
       "heading": 150,
       "pitch": 15
-    }
+    },
+    "pantheons": [
+      "olympian"
+    ]
   },
   {
     "id": "hagia-sophia",
@@ -671,7 +762,11 @@
     "streetView": {
       "heading": 270,
       "pitch": 15
-    }
+    },
+    "pantheons": [
+      "olympian",
+      "roman"
+    ]
   },
   {
     "id": "vatican-st-peters",
@@ -685,7 +780,8 @@
     "streetView": {
       "heading": 90,
       "pitch": 20
-    }
+    },
+    "pantheons": []
   },
   {
     "id": "chartres",
@@ -699,7 +795,8 @@
     "streetView": {
       "heading": 180,
       "pitch": 15
-    }
+    },
+    "pantheons": []
   },
   {
     "id": "mont-saint-michel",
@@ -713,7 +810,8 @@
     "streetView": {
       "heading": 90,
       "pitch": 20
-    }
+    },
+    "pantheons": []
   },
   {
     "id": "meteora",
@@ -727,7 +825,8 @@
     "streetView": {
       "heading": 0,
       "pitch": 25
-    }
+    },
+    "pantheons": []
   },
   {
     "id": "santiago-compostela",
@@ -741,7 +840,8 @@
     "streetView": {
       "heading": 0,
       "pitch": 10
-    }
+    },
+    "pantheons": []
   },
   {
     "id": "avebury",
@@ -755,7 +855,8 @@
     "streetView": {
       "heading": 90,
       "pitch": 5
-    }
+    },
+    "pantheons": []
   },
   {
     "id": "carnac",
@@ -769,7 +870,8 @@
     "streetView": {
       "heading": 270,
       "pitch": 5
-    }
+    },
+    "pantheons": []
   },
   {
     "id": "petra",
@@ -783,7 +885,10 @@
     "streetView": {
       "heading": 180,
       "pitch": 15
-    }
+    },
+    "pantheons": [
+      "arabian"
+    ]
   },
   {
     "id": "baalbek",
@@ -797,7 +902,10 @@
     "streetView": {
       "heading": 90,
       "pitch": 10
-    }
+    },
+    "pantheons": [
+      "phoenician"
+    ]
   },
   {
     "id": "western-wall",
@@ -811,7 +919,8 @@
     "streetView": {
       "heading": 90,
       "pitch": 10
-    }
+    },
+    "pantheons": []
   },
   {
     "id": "church-holy-sepulchre",
@@ -826,7 +935,8 @@
     "streetView": {
       "heading": 180,
       "pitch": 10
-    }
+    },
+    "pantheons": []
   },
   {
     "id": "dome-of-the-rock",
@@ -841,7 +951,8 @@
     "streetView": {
       "heading": 0,
       "pitch": 15
-    }
+    },
+    "pantheons": []
   },
   {
     "id": "borobudur",
@@ -856,7 +967,10 @@
     "streetView": {
       "heading": 0,
       "pitch": 15
-    }
+    },
+    "pantheons": [
+      "javanese"
+    ]
   },
   {
     "id": "prambanan",
@@ -870,7 +984,11 @@
     "streetView": {
       "heading": 90,
       "pitch": 15
-    }
+    },
+    "pantheons": [
+      "javanese",
+      "hindu"
+    ]
   },
   {
     "id": "bagan",
@@ -884,7 +1002,8 @@
     "streetView": {
       "heading": 90,
       "pitch": 10
-    }
+    },
+    "pantheons": []
   },
   {
     "id": "boudhanath",
@@ -898,7 +1017,8 @@
     "streetView": {
       "heading": 180,
       "pitch": 15
-    }
+    },
+    "pantheons": []
   },
   {
     "id": "hampi",
@@ -912,7 +1032,10 @@
     "streetView": {
       "heading": 0,
       "pitch": 10
-    }
+    },
+    "pantheons": [
+      "hindu"
+    ]
   },
   {
     "id": "ellora",
@@ -926,7 +1049,10 @@
     "streetView": {
       "heading": 0,
       "pitch": 10
-    }
+    },
+    "pantheons": [
+      "hindu"
+    ]
   },
   {
     "id": "ajanta",
@@ -940,7 +1066,8 @@
     "streetView": {
       "heading": 90,
       "pitch": 5
-    }
+    },
+    "pantheons": []
   },
   {
     "id": "karnak",
@@ -955,7 +1082,10 @@
     "streetView": {
       "heading": 90,
       "pitch": 10
-    }
+    },
+    "pantheons": [
+      "egyptian"
+    ]
   },
   {
     "id": "abu-simbel",
@@ -969,7 +1099,10 @@
     "streetView": {
       "heading": 270,
       "pitch": 15
-    }
+    },
+    "pantheons": [
+      "egyptian"
+    ]
   },
   {
     "id": "valley-of-kings",
@@ -983,7 +1116,10 @@
     "streetView": {
       "heading": 180,
       "pitch": 10
-    }
+    },
+    "pantheons": [
+      "egyptian"
+    ]
   },
   {
     "id": "lalibela",
@@ -997,7 +1133,8 @@
     "streetView": {
       "heading": 0,
       "pitch": 10
-    }
+    },
+    "pantheons": []
   },
   {
     "id": "machu-picchu",
@@ -1011,7 +1148,10 @@
     "streetView": {
       "heading": 0,
       "pitch": 15
-    }
+    },
+    "pantheons": [
+      "inca"
+    ]
   },
   {
     "id": "chichen-itza",
@@ -1025,7 +1165,10 @@
     "streetView": {
       "heading": 0,
       "pitch": 15
-    }
+    },
+    "pantheons": [
+      "maya"
+    ]
   },
   {
     "id": "tulum",
@@ -1039,7 +1182,10 @@
     "streetView": {
       "heading": 90,
       "pitch": 10
-    }
+    },
+    "pantheons": [
+      "maya"
+    ]
   },
   {
     "id": "tikal",
@@ -1053,11 +1199,14 @@
     "streetView": {
       "heading": 180,
       "pitch": 20
-    }
+    },
+    "pantheons": [
+      "maya"
+    ]
   },
   {
     "id": "easter-island",
-    "name": "Rapa Nui (Easter Island)",
+    "name": "Rapa Nui",
     "era": "c. 1250–1500 CE",
     "lat": -27.1127,
     "lng": -109.3497,
@@ -1067,7 +1216,8 @@
     "streetView": {
       "heading": 270,
       "pitch": 5
-    }
+    },
+    "pantheons": []
   },
   {
     "id": "sigiriya",
@@ -1081,7 +1231,8 @@
     "streetView": {
       "heading": 0,
       "pitch": 25
-    }
+    },
+    "pantheons": []
   },
   {
     "id": "persepolis",
@@ -1095,7 +1246,10 @@
     "streetView": {
       "heading": 0,
       "pitch": 10
-    }
+    },
+    "pantheons": [
+      "zoroastrian"
+    ]
   },
   {
     "id": "gobekli-tepe",
@@ -1109,7 +1263,8 @@
     "streetView": {
       "heading": 90,
       "pitch": 10
-    }
+    },
+    "pantheons": []
   },
   {
     "id": "ephesus",
@@ -1123,7 +1278,10 @@
     "streetView": {
       "heading": 180,
       "pitch": 10
-    }
+    },
+    "pantheons": [
+      "olympian"
+    ]
   },
   {
     "id": "meiji-shrine",
@@ -1137,7 +1295,10 @@
     "streetView": {
       "heading": 0,
       "pitch": 5
-    }
+    },
+    "pantheons": [
+      "shinto"
+    ]
   },
   {
     "id": "ise-grand-shrine",
@@ -1152,7 +1313,10 @@
     "streetView": {
       "heading": 0,
       "pitch": 5
-    }
+    },
+    "pantheons": [
+      "shinto"
+    ]
   },
   {
     "id": "potala-palace",
@@ -1167,7 +1331,10 @@
     "streetView": {
       "heading": 0,
       "pitch": 15
-    }
+    },
+    "pantheons": [
+      "tibetan"
+    ]
   },
   {
     "id": "temple-of-heaven",
@@ -1182,7 +1349,10 @@
     "streetView": {
       "heading": 0,
       "pitch": 15
-    }
+    },
+    "pantheons": [
+      "chinese"
+    ]
   },
   {
     "id": "great-zimbabwe",
@@ -1196,7 +1366,8 @@
     "streetView": {
       "heading": 90,
       "pitch": 5
-    }
+    },
+    "pantheons": []
   },
   {
     "id": "serpent-mound",
@@ -1210,7 +1381,8 @@
     "streetView": {
       "heading": 90,
       "pitch": 10
-    }
+    },
+    "pantheons": []
   },
   {
     "id": "cahokia",
@@ -1224,7 +1396,8 @@
     "streetView": {
       "heading": 0,
       "pitch": 10
-    }
+    },
+    "pantheons": []
   },
   {
     "id": "temple-of-solomon",
@@ -1240,7 +1413,8 @@
     "streetView": {
       "heading": 0,
       "pitch": 15
-    }
+    },
+    "pantheons": []
   },
   {
     "id": "mahabodhi",
@@ -1256,7 +1430,8 @@
     "streetView": {
       "heading": 0,
       "pitch": 15
-    }
+    },
+    "pantheons": []
   },
   {
     "id": "brihadeeswarar",
@@ -1271,7 +1446,10 @@
     "streetView": {
       "heading": 0,
       "pitch": 15
-    }
+    },
+    "pantheons": [
+      "hindu"
+    ]
   },
   {
     "id": "library-of-alexandria",
@@ -1283,86 +1461,112 @@
     "isLibrary": true,
     "description": "The ancient Library of Alexandria was the greatest repository of knowledge in the classical world. Founded in the 3rd century BCE under Ptolemy I Soter, it held hundreds of thousands of scrolls spanning philosophy, science, mathematics, medicine, astronomy, literature, and theology. Scholars from across the Mediterranean gathered here — Euclid, Eratosthenes, Callimachus, Apollonius, Aristarchus, Hero, Ptolemy. Its destruction, gradual rather than singular, remains one of the most symbolic losses in human history. What follows is a curated collection of texts connected to the Library — works written, copied, studied, or housed within its walls.",
     "region": "Egypt",
-    "tradition": "Hellenistic",
     "streetView": {
       "heading": 0,
       "pitch": 10
-    }
+    },
+    "pantheons": [
+      "olympian"
+    ]
   },
   {
     "id": "cadbury-camelot",
-    "name": "Cadbury Castle (Camelot)",
-    "era": "12th century – 15th century CE",
+    "name": "Camelot",
+    "era": "c. 1170–1485 CE",
     "lat": 51.0225,
     "lng": -2.5283,
     "category": "literary-location",
-    "tradition": "European",
     "description": "Iron Age hillfort in Somerset long identified with Camelot. John Leland wrote in the 1540s that locals called it 'Camallate' and believed it to be Arthur's court. Excavations in the 1960s uncovered a major post-Roman refortification datable to the late 5th century — exactly the period assigned to a historical Arthur.",
     "region": "England",
     "streetView": {
       "heading": 90,
       "pitch": 10
-    }
+    },
+    "pantheons": [
+      "arthurian"
+    ],
+    "readUrl": "https://sacred-texts.com/neu/arthur/index.htm",
+    "wikisourcePage": "Le_Morte_d'Arthur",
+    "excerpt": "Then the king established all his knights, and gave them that were of lands not rich, he gave them lands, and charged them never to do outrageousity nor murder, and always to flee treason; also, by no means to be cruel, but to give mercy unto him that asketh mercy, upon pain of forfeiture of their worship and lordship of King Arthur for evermore; and always to do ladies, damosels, and gentlewomen succour, upon pain of death. Also, that no man take no battles in a wrongful quarrel for no law, ne for no world's goods.\n\n— Sir Thomas Malory, Le Morte d'Arthur, Book III"
   },
   {
     "id": "caerleon-amphitheatre",
     "name": "Caerleon Amphitheatre",
-    "era": "12th century – 15th century CE",
+    "era": "c. 1136 CE",
     "lat": 51.6119,
     "lng": -2.9525,
     "category": "literary-location",
-    "tradition": "European",
     "description": "Roman legionary amphitheatre at Isca Augusta in south Wales. Geoffrey of Monmouth placed Arthur's plenary court at the 'City of Legions' and the amphitheatre's round shape led later antiquaries to identify it as the original Round Table. The ruins sit beside the Roman baths and barracks of the Second Augustan Legion.",
     "region": "Wales",
     "streetView": {
       "heading": 180,
       "pitch": 10
-    }
+    },
+    "pantheons": [
+      "celtic-welsh",
+      "arthurian"
+    ],
+    "readUrl": "https://sacred-texts.com/neu/arthur/index.htm",
+    "excerpt": "Arthur then began to increase his personal entourage by inviting very distinguished men from far-distant kingdoms to join it. In this way he developed such a code of courtliness in his household that he inspired peoples living far away to imitate him. The result was that even the man of noblest birth, once he was roused to rivalry, thought nothing at all of himself unless he wore his arms and dressed in the same way as Arthur's knights. At last the fame of Arthur's generosity and bravery spread to the very ends of the earth.\n\n— Geoffrey of Monmouth, Historia Regum Britanniae, Book IX"
   },
   {
     "id": "snowdonia-dinas-emrys",
     "name": "Snowdonia — Dinas Emrys",
-    "era": "12th century – 15th century CE",
+    "era": "c. 830–1136 CE",
     "lat": 53.0133,
     "lng": -4.0475,
     "category": "literary-location",
-    "tradition": "European",
     "description": "Rocky hilltop fortress in Snowdonia where, according to Nennius and Geoffrey of Monmouth, the boy Merlin (Ambrosius) revealed two dragons — red and white — fighting beneath Vortigern's collapsing tower. The red dragon became the symbol of Wales. Excavations confirmed a post-Roman occupation.",
     "region": "Wales",
     "streetView": {
       "heading": 270,
       "pitch": 15
-    }
+    },
+    "pantheons": [
+      "celtic-welsh",
+      "arthurian"
+    ],
+    "readUrl": "https://sacred-texts.com/neu/arthur/index.htm",
+    "excerpt": "Then the boy said to the king: \"Order your men to dig into the pool, and at the bottom you will find two hollow stones, and in them two dragons asleep.\" The king ordered the pool to be drained, and there at the bottom lay two stones, and within them a red dragon and a white, and when they were exposed they began to fight, and the white drove the red to the edge of the pool, but then the red recovered and drove the white back. The boy said: \"The red dragon is your people, and the white is the Saxon race that has seized your land — but in time the red will prevail.\"\n\n— Nennius, Historia Brittonum (adapted); cf. Geoffrey of Monmouth, Book VII"
   },
   {
     "id": "llangollen-valle-crucis",
     "name": "Llangollen — Valle Crucis Abbey",
-    "era": "12th century – 15th century CE",
+    "era": "c. 9th century CE",
     "lat": 52.9773,
     "lng": -3.1873,
     "category": "literary-location",
-    "tradition": "European",
     "description": "Cistercian abbey in the Dee valley near the Pillar of Eliseg, a 9th-century cross inscribed with a genealogy tracing the kings of Powys back to Vortigern and Magnus Maximus. Medieval Welsh poets gathered in Llangollen and the Dee valley features in the Mabinogion. The landscape is saturated with Arthurian and bardic memory.",
     "region": "Wales",
     "streetView": {
       "heading": 90,
       "pitch": 10
-    }
+    },
+    "pantheons": [
+      "celtic-welsh",
+      "arthurian"
+    ],
+    "readUrl": "https://sacred-texts.com/neu/arthur/index.htm",
+    "excerpt": "The Pillar of Eliseg, raised by Cyngen ap Cadell in the early ninth century to honor his great-grandfather, traces a genealogy that reaches back through Vortigern to the Roman Magnus Maximus — and claims descent from the blessed Germanus. Here in the Vale of the Cross, between the abbey and the pillar, the Arthurian bloodline meets the historical record and both dissolve into inscription and weathered stone."
   },
   {
     "id": "carlisle-castle",
     "name": "Carlisle Castle",
-    "era": "12th century – 15th century CE",
+    "era": "c. 1400 CE",
     "lat": 54.8966,
     "lng": -2.9453,
     "category": "literary-location",
-    "tradition": "European",
     "description": "Border fortress identified in French and English romances as Arthur's northern court. In Chrétien de Troyes and the Vulgate Cycle, Arthur frequently holds court at 'Carduel' — Carlisle. The castle sits on the site of a Roman fort at the western end of Hadrian's Wall, linking it to the military frontier zone where a historical Arthur may have operated.",
     "region": "England",
     "streetView": {
       "heading": 180,
       "pitch": 10
-    }
+    },
+    "pantheons": [
+      "arthurian"
+    ],
+    "readUrl": "https://sacred-texts.com/neu/arthur/index.htm",
+    "excerpt": "In the most royal town of Carlisle one Christmastide, King Arthur lay with his lords — the fairest company of knights beneath heaven, the comeliest ladies that ever drew breath, and the most courteous king that ever held court. For these were the richest of their time on this earth, and each one in that hall had a name men still know.\n\n— Sir Gawain and the Green Knight, Fitt I (paraphrase from the original Middle English)"
   },
   {
     "id": "chesters-roman-fort",
@@ -1371,43 +1575,53 @@
     "lat": 55.0275,
     "lng": -2.1328,
     "category": "literary-location",
-    "tradition": "European",
     "description": "Best-preserved Roman cavalry fort on Hadrian's Wall, at the crossing of the North Tyne. If Arthur was a post-Roman war leader defending Britain's northern frontier, forts like Chesters — with their cavalry barracks and bathhouse — would have been his operational bases. The Wall itself appears in Arthurian tradition as the boundary between civilization and the wild north.",
     "region": "England",
     "streetView": {
       "heading": 0,
       "pitch": 10
-    }
+    },
+    "pantheons": [
+      "roman"
+    ]
   },
   {
     "id": "winchester-round-table",
     "name": "Winchester — The Round Table",
-    "era": "12th century – 15th century CE",
+    "era": "c. 1290 CE",
     "lat": 51.0612,
     "lng": -1.3194,
     "category": "literary-location",
-    "tradition": "European",
     "description": "The Great Hall of Winchester Castle houses the Winchester Round Table, a massive painted oak table dating to the 13th century. Malory named Winchester as Camelot, and Edward I displayed the table as a relic of Arthur's court. Henry VIII had it repainted with a Tudor rose at its center. Winchester was the ancient capital of Wessex and England's rival to London.",
     "region": "England",
     "streetView": {
       "heading": 90,
       "pitch": 10
-    }
+    },
+    "pantheons": [
+      "arthurian"
+    ],
+    "readUrl": "https://sacred-texts.com/neu/arthur/index.htm",
+    "excerpt": "And when Merlin had ordained the Round Table he said, By them which are fellows of the Table Round the truth of the Holy Grail shall be well known. And men asked him how they should know who would achieve the Holy Grail. Then Merlin said there should be three white bulls that should achieve it, and the two should be maidens, and the third should be chaste. And that one of the three should pass his father as much as the lion passeth the leopard.\n\n— Sir Thomas Malory, Le Morte d'Arthur, Book XIV"
   },
   {
     "id": "edinburgh-arthurs-seat",
     "name": "Edinburgh — Arthur's Seat",
-    "era": "12th century – 15th century CE",
+    "era": "c. 600 CE",
     "lat": 55.9445,
     "lng": -3.1615,
     "category": "literary-location",
-    "tradition": "European",
     "description": "Volcanic peak rising above Edinburgh, named for King Arthur since at least the 15th century. The hill's strategic position overlooking the Firth of Forth connects it to the northern Arthurian tradition in which Arthur fights Pictish and Saxon invaders across the Scottish lowlands. The nearby chapel ruin atop the crag adds to the site's mythic atmosphere.",
     "region": "Scotland",
     "streetView": {
       "heading": 180,
       "pitch": 20
-    }
+    },
+    "pantheons": [
+      "arthurian"
+    ],
+    "readUrl": "https://sacred-texts.com/neu/arthur/index.htm",
+    "excerpt": "The crag-seated hill rising above the Firth, which the people call Arthur's Seat — one of several peaks across Britain claimed as the great king's resting place or throne. The tradition persists: wherever the land rises dramatically, Arthur sat and surveyed his kingdom. Y Gododdin, the sixth-century Welsh poem composed in Edinburgh's own Old North, names Arthur as the measure against which all warriors are judged — and found wanting.\n\n— Aneirin, Y Gododdin (c. 600 CE)"
   },
   {
     "id": "glastonbury-abbey",
@@ -1416,59 +1630,73 @@
     "lat": 51.1484,
     "lng": -2.7146,
     "category": "sacred-site",
-    "tradition": "European",
     "description": "Ruins of the great abbey where, in 1191, monks claimed to have discovered the graves of Arthur and Guinevere — a cross inscribed 'HIC IACET SEPULTUS INCLITUS REX ARTHURIUS.' Whether genuine or a medieval publicity stunt, the discovery cemented Glastonbury's identity as Avalon. Joseph of Arimathea is also said to have brought the Holy Grail here.",
     "region": "England",
     "streetView": {
       "heading": 270,
       "pitch": 5
-    }
+    },
+    "pantheons": [
+      "arthurian"
+    ]
   },
   {
     "id": "glastonbury-chalice-well",
     "name": "Glastonbury — Chalice Well",
-    "era": "nature",
+    "era": "c. 1191 CE",
     "lat": 51.1437,
     "lng": -2.6962,
     "category": "sacred-site",
-    "tradition": "European",
     "description": "Iron-red spring at the foot of Glastonbury Tor, flowing continuously for at least two thousand years. Legend holds that Joseph of Arimathea hid the Holy Grail here, staining the water red. The well's cover bears the Vesica Piscis — two interlocking circles. The gardens remain a place of pilgrimage and contemplation.",
     "region": "England",
     "streetView": {
       "heading": 0,
       "pitch": 5
-    }
+    },
+    "pantheons": [
+      "arthurian"
+    ]
   },
   {
     "id": "tintagel-castle",
     "name": "Tintagel Castle Ruins",
-    "era": "12th century – 15th century CE",
+    "era": "c. 1136 CE",
     "lat": 50.6684,
     "lng": -4.7581,
     "category": "literary-location",
-    "tradition": "European",
     "description": "Ruined cliff-top castle on the north Cornish coast, built by Richard Earl of Cornwall in the 1230s on a site already associated with Arthur. Geoffrey of Monmouth named Tintagel as the place of Arthur's conception, where Uther Pendragon visited Igraine disguised by Merlin's magic. Excavations have revealed a wealthy post-Roman trading settlement beneath the medieval remains.",
     "region": "England",
     "streetView": {
       "heading": 270,
       "pitch": 15
-    }
+    },
+    "pantheons": [
+      "celtic-welsh",
+      "arthurian"
+    ],
+    "readUrl": "https://sacred-texts.com/neu/arthur/index.htm",
+    "wikisourcePage": "Le_Morte_d'Arthur",
+    "excerpt": "It befell in the days of Uther Pendragon, when he was king of all England, and so reigned, that there was a mighty duke in Cornwall that held war against him long time. And the duke was called the Duke of Tintagil. So by means of great war, Uther sent for this duke, charging him to bring his wife with him, for she was called a fair lady, and a passing wise, and her name was called Igraine.\n\n— Sir Thomas Malory, Le Morte d'Arthur, Book I"
   },
   {
     "id": "tintagel-merlins-cave",
     "name": "Tintagel — Merlin's Cave",
-    "era": "12th century – 15th century CE",
+    "era": "c. 1136 CE",
     "lat": 50.6672,
     "lng": -4.757,
     "category": "literary-location",
-    "tradition": "European",
     "description": "Sea cave beneath Tintagel Castle, accessible at low tide. In Tennyson's Idylls of the King, Merlin finds the infant Arthur washed ashore here in a basket among the waves — 'And so the babe was brought to Merlin, who bore him to Sir Ector's hall.' The cave cuts entirely through the headland, and at certain tides the sea fills it with a hollow roar.",
     "region": "England",
     "streetView": {
       "heading": 180,
       "pitch": 10
     },
-    "excerpt": "And down the wave and in the flame was borne\nA naked babe, and rode to Merlin's feet,\nWho stoopt and caught the babe, and cried \"The King!\nHere is an heir for Uther!\"\n\n— Alfred, Lord Tennyson, Idylls of the King, \"The Coming of Arthur\""
+    "excerpt": "And down the wave and in the flame was borne\nA naked babe, and rode to Merlin's feet,\nWho stoopt and caught the babe, and cried \"The King!\nHere is an heir for Uther!\"\n\n— Alfred, Lord Tennyson, Idylls of the King, \"The Coming of Arthur\"",
+    "pantheons": [
+      "celtic-welsh",
+      "arthurian"
+    ],
+    "readUrl": "https://sacred-texts.com/neu/arthur/index.htm"
   },
   {
     "id": "hadrians-wall",
@@ -1477,13 +1705,15 @@
     "lat": 55.0238,
     "lng": -2.3604,
     "category": "literary-location",
-    "tradition": "European",
     "description": "The Roman frontier wall stretching 73 miles from coast to coast across northern England. In Arthurian tradition the Wall marks the boundary between the civilized south and the wild lands beyond. Nennius lists Arthur's battles along the northern frontier, and several — the River Dubglas, the Caledonian Wood — suggest campaigns in Wall country. The landscape of forts, milecastles, and crags is the most plausible setting for a historical Arthur.",
     "region": "England",
     "streetView": {
       "heading": 90,
       "pitch": 10
-    }
+    },
+    "pantheons": [
+      "roman"
+    ]
   },
   {
     "id": "rosslyn-chapel",
@@ -1492,13 +1722,15 @@
     "lat": 55.8554,
     "lng": -3.1601,
     "category": "sacred-site",
-    "tradition": "European",
     "description": "Fifteenth-century chapel south of Edinburgh, built by William Sinclair, Earl of Orkney, and encrusted with the most extraordinary stone carving in Britain. Every surface teems with Green Men, angels, dragons, and botanical motifs — including plants from the Americas carved decades before Columbus sailed. The chapel has been linked to the Knights Templar, the Holy Grail, and Freemasonry. A carved 'Apprentice Pillar' supposedly conceals a sacred relic. Whether or not the Grail rests here, Rosslyn is a genuine stone encyclopedia of medieval esoteric symbolism.",
     "region": "Scotland",
     "streetView": {
       "heading": 180,
       "pitch": 10
-    }
+    },
+    "pantheons": [
+      "arthurian"
+    ]
   },
   {
     "id": "museum-of-london",
@@ -1507,24 +1739,27 @@
     "lat": 51.5176,
     "lng": -0.0967,
     "category": "literary-location",
-    "tradition": "European",
     "description": "Museum tracing London's history from prehistory to the present, built on the edge of the Roman and medieval city wall. Its collections include Roman Londinium artifacts, Saxon and medieval finds, and material bearing on Geoffrey of Monmouth's claim that London was founded by Brutus of Troy — 'New Troy,' or Trinovantum. The museum connects the mythic origins of Britain's capital to its archaeological reality.",
     "region": "England",
     "streetView": {
       "heading": 0,
       "pitch": 10
-    }
+    },
+    "pantheons": []
   },
   {
     "id": "north-pole",
-    "name": "North Pole (Axis Mundi)",
+    "name": "Axis Mundi",
     "mythicCenter": true,
     "era": "mythic",
     "lat": 90,
     "lng": 0,
-    "category": "mythic-location",
+    "category": "sacred-site",
     "description": "The geographic top of the world, identified across traditions as the supreme axis mundi. In Hindu cosmology it is Mount Meru, the pillar around which the heavens revolve. Greek myth placed Hyperborea here — a paradise beyond the north wind where Apollo dwelt in eternal light. Norse tradition set the World Tree Yggdrasil at the cosmic pole, and Iranian texts describe Mount Hara Berezaiti at the centre of the earth. The Pole Star directly overhead marks this spot as the still point around which the entire sky turns.",
-    "region": "Arctic"
+    "region": "Arctic",
+    "pantheons": [
+      "global"
+    ]
   },
   {
     "id": "dilmun",
@@ -1532,13 +1767,14 @@
     "era": "c. 3000–600 BCE",
     "lat": 25.293,
     "lng": 51.531,
-    "category": "mythic-location",
+    "category": "sacred-site",
     "description": "The Sumerian paradise — a pure, clean, bright land where the sun rises. In the Epic of Gilgamesh, Dilmun is the garden of the gods where Utnapishtim dwells after surviving the Great Flood. The Enki and Ninhursag myth describes it as a place where there is no sickness, old age, or death, watered by Enki's sweet springs. Ancient Gulf civilisation flourished here as a trade hub linking Mesopotamia, the Indus Valley, and Arabia.",
-    "region": "Qatar"
+    "region": "Qatar",
+    "pantheons": []
   },
   {
     "id": "jericho",
-    "name": "Jericho (Tell es-Sultan)",
+    "name": "Jericho",
     "era": "c. 9000 BCE",
     "lat": 31.871,
     "lng": 35.444,
@@ -1548,7 +1784,8 @@
     "streetView": {
       "heading": 90,
       "pitch": 5
-    }
+    },
+    "pantheons": []
   },
   {
     "id": "mehrgarh",
@@ -1558,7 +1795,8 @@
     "lng": 67.6164,
     "category": "sacred-site",
     "description": "Earliest farming settlement in South Asia, ancestor of the entire Indus Valley Civilization. The people of Mehrgarh cultivated wheat and barley, domesticated cattle, and practiced the world's first known dentistry — drilling teeth with flint-tipped bow drills. They were also the first to cultivate cotton. A 4,000-year continuum of occupation traces the slow emergence of complex society on the subcontinent.",
-    "region": "Balochistan, Pakistan"
+    "region": "Balochistan, Pakistan",
+    "pantheons": []
   },
   {
     "id": "jiahu",
@@ -1568,7 +1806,8 @@
     "lng": 113.6667,
     "category": "sacred-site",
     "description": "Neolithic Chinese settlement that produced the world's oldest playable musical instruments — bone flutes carved from the wing bones of red-crowned cranes, tuned to a pentatonic scale still recognizable as music 9,000 years later. Jiahu also yielded the earliest known fermented beverage (a rice-honey-hawthorn wine) and symbols on tortoise shells that may be the earliest ancestors of Chinese writing.",
-    "region": "Henan, China"
+    "region": "Henan, China",
+    "pantheons": []
   },
   {
     "id": "ain-ghazal",
@@ -1582,7 +1821,8 @@
     "streetView": {
       "heading": 0,
       "pitch": 5
-    }
+    },
+    "pantheons": []
   },
   {
     "id": "lepenski-vir",
@@ -1596,7 +1836,8 @@
     "streetView": {
       "heading": 180,
       "pitch": 10
-    }
+    },
+    "pantheons": []
   },
   {
     "id": "varna-necropolis",
@@ -1610,7 +1851,8 @@
     "streetView": {
       "heading": 90,
       "pitch": 5
-    }
+    },
+    "pantheons": []
   },
   {
     "id": "eridu",
@@ -1620,7 +1862,10 @@
     "lng": 45.9958,
     "category": "sacred-site",
     "description": "The Sumerian King List records that \"when kingship descended from heaven, it descended to Eridu\" — making it the first city in Mesopotamian tradition. Sacred to Enki (Ea), god of wisdom and the sweet underground waters (abzu). Excavations revealed eighteen successive temples built one atop another over four millennia, each on the ruins of the last, a physical record of continuous worship from mud-brick shrine to ziggurat.",
-    "region": "Iraq"
+    "region": "Iraq",
+    "pantheons": [
+      "sumerian"
+    ]
   },
   {
     "id": "vinca",
@@ -1634,17 +1879,19 @@
     "streetView": {
       "heading": 0,
       "pitch": 5
-    }
+    },
+    "pantheons": []
   },
   {
     "id": "trypillia",
-    "name": "Trypillia (Cucuteni-Trypillia)",
+    "name": "Trypillia",
     "era": "c. 5500–2750 BCE",
     "lat": 49.45,
     "lng": 31.5667,
     "category": "sacred-site",
     "description": "The Cucuteni-Trypillia culture built the largest settlements on Earth between 4100 and 3600 BCE — mega-sites of up to 15,000 people, larger than contemporary Mesopotamian cities. Most remarkably, they periodically burned their own settlements to the ground and rebuilt them in the same location, possibly as ritual renewal. Their painted ceramics and clay figurines reveal a sophisticated symbolic world.",
-    "region": "Ukraine"
+    "region": "Ukraine",
+    "pantheons": []
   },
   {
     "id": "khirokitia",
@@ -1658,27 +1905,32 @@
     "streetView": {
       "heading": 180,
       "pitch": 10
-    }
+    },
+    "pantheons": []
   },
   {
     "id": "uruk-city",
-    "name": "Uruk (City)",
+    "name": "Uruk",
     "era": "c. 4000–3100 BCE",
     "lat": 31.3225,
     "lng": 45.6375,
     "category": "sacred-site",
     "description": "The world's first true city, growing to 40,000 people by 3100 BCE — the largest human settlement that had ever existed. Uruk gave the world cuneiform writing, cylinder seals, monumental temple architecture, and the concept of urban life itself. The White Temple and Eanna precinct were the first buildings designed to overwhelm with scale. Gilgamesh was its legendary king, but the city's real achievement was inventing civilization.",
-    "region": "Iraq"
+    "region": "Iraq",
+    "pantheons": [
+      "sumerian"
+    ]
   },
   {
     "id": "tell-brak",
-    "name": "Tell Brak (Nagar)",
+    "name": "Nagar",
     "era": "c. 4000–1500 BCE",
     "lat": 36.67,
     "lng": 41.06,
     "category": "sacred-site",
     "description": "One of the world's first cities, rivaling Uruk in antiquity. The \"Eye Temple\" (c. 3500 BCE) contained thousands of small alabaster figurines with enormous staring eyes — mass-produced votive offerings that represent the earliest known example of standardized production. Tell Brak was a major urban center on the trade routes between Mesopotamia and Anatolia, thriving for over two millennia.",
-    "region": "Syria"
+    "region": "Syria",
+    "pantheons": []
   },
   {
     "id": "susa",
@@ -1692,7 +1944,10 @@
     "streetView": {
       "heading": 0,
       "pitch": 5
-    }
+    },
+    "pantheons": [
+      "elamite"
+    ]
   },
   {
     "id": "sialk",
@@ -1702,7 +1957,8 @@
     "lng": 51.41,
     "category": "sacred-site",
     "description": "Prehistoric mound site on the Iranian plateau, one of the key sites for understanding early metallurgy — the technological transition that gives the Copper Age its name. Sialk's earliest levels contain some of the oldest known evidence of copper smelting. Later proto-Elamite levels feature a stepped mudbrick platform that may be an ancestor of the Mesopotamian ziggurat.",
-    "region": "Iran"
+    "region": "Iran",
+    "pantheons": []
   },
   {
     "id": "beer-sheva",
@@ -1716,17 +1972,21 @@
     "streetView": {
       "heading": 90,
       "pitch": 5
-    }
+    },
+    "pantheons": []
   },
   {
     "id": "hierakonpolis",
-    "name": "Hierakonpolis (Nekhen)",
+    "name": "Nekhen",
     "era": "c. 3500–2686 BCE",
     "lat": 25.0986,
     "lng": 32.7789,
     "category": "sacred-site",
     "description": "Capital of predynastic Upper Egypt and birthplace of pharaonic civilization. The Narmer Palette, depicting the unification of Egypt under one ruler, was found here — the founding document of Egyptian history. Hierakonpolis contained the earliest known Egyptian temple, the oldest known zoo, and the world's oldest known brewery (producing beer for ritual purposes). The falcon god Horus was worshipped here before any pyramid was built.",
-    "region": "Egypt"
+    "region": "Egypt",
+    "pantheons": [
+      "egyptian"
+    ]
   },
   {
     "id": "skara-brae",
@@ -1740,7 +2000,8 @@
     "streetView": {
       "heading": 270,
       "pitch": 5
-    }
+    },
+    "pantheons": []
   },
   {
     "id": "abydos",
@@ -1754,7 +2015,10 @@
     "streetView": {
       "heading": 0,
       "pitch": 10
-    }
+    },
+    "pantheons": [
+      "egyptian"
+    ]
   },
   {
     "id": "hagar-qim",
@@ -1768,7 +2032,8 @@
     "streetView": {
       "heading": 180,
       "pitch": 10
-    }
+    },
+    "pantheons": []
   },
   {
     "id": "harappa",
@@ -1778,7 +2043,8 @@
     "lng": 72.865,
     "category": "sacred-site",
     "description": "One of the first urban centers of the Indus Valley Civilization, which at its height encompassed five million people across an area larger than ancient Egypt and Mesopotamia combined. Harappa's grid-planned streets, standardized weights and measures, advanced drainage, and massive granaries reveal a sophisticated society. Most remarkably, no palaces, no temples, and no evidence of warfare have been found — a great civilization that may have governed itself without kings.",
-    "region": "Punjab, Pakistan"
+    "region": "Punjab, Pakistan",
+    "pantheons": []
   },
   {
     "id": "hattusa",
@@ -1792,21 +2058,27 @@
     "streetView": {
       "heading": 0,
       "pitch": 10
-    }
+    },
+    "pantheons": [
+      "hittite"
+    ]
   },
   {
     "id": "nile-source",
-    "name": "Nile Source (Lake Victoria)",
+    "name": "Source of the Nile",
     "era": "nature",
     "lat": -0.3476,
     "lng": 32.6339,
     "category": "sacred-site",
     "description": "Africa's longest river begins here at Lake Victoria, then flows north 6,650 km through swamp, savanna, and desert — the only corridor of water in the Sahara. The annual flood deposited black silt across the valley floor. Every civilization along its banks — Nubia, Kush, Kemet — rose from that rhythm. The Egyptians called the flood Hapi and worshipped it as a god.",
-    "region": "Uganda"
+    "region": "Uganda",
+    "pantheons": [
+      "egyptian"
+    ]
   },
   {
     "id": "ganges-source",
-    "name": "Ganges Source (Gaumukh)",
+    "name": "Source of the Ganges",
     "era": "nature",
     "lat": 30.9262,
     "lng": 79.0842,
@@ -1816,7 +2088,10 @@
     "streetView": {
       "heading": 0,
       "pitch": 15
-    }
+    },
+    "pantheons": [
+      "vedic"
+    ]
   },
   {
     "id": "tigris-euphrates-confluence",
@@ -1826,13 +2101,16 @@
     "lng": 47.4378,
     "category": "sacred-site",
     "description": "Two rivers born in the mountains of eastern Turkey flow southeast for 1,800 km and merge into the Shatt al-Arab waterway before reaching the Persian Gulf. The marshlands at their junction are among the most fertile wetlands on Earth. Sumer, the world's first civilization, arose between them. Genesis placed the Garden of Eden at their source.",
-    "region": "Iraq"
+    "region": "Iraq",
+    "pantheons": [
+      "sumerian"
+    ]
   },
   {
     "id": "mt-etna",
     "name": "Mount Etna",
     "era": "nature",
-    "lat": 37.7510,
+    "lat": 37.751,
     "lng": 14.9934,
     "category": "sacred-site",
     "description": "Europe's tallest and most active volcano, erupting almost continuously for 500,000 years. The Greeks placed Hephaestus's forge inside it; the Romans imprisoned Typhon beneath it. Pindar, Aeschylus, and Virgil all wrote of its fire. The mountain was making smoke long before anyone invented gods to blame.",
@@ -1840,12 +2118,14 @@
     "streetView": {
       "heading": 180,
       "pitch": 25
-    }
+    },
+    "pantheons": [
+      "roman"
+    ]
   },
   {
     "id": "kilauea",
     "name": "Kilauea",
-    "pantheon": "hawaiian",
     "era": "nature",
     "lat": 19.4069,
     "lng": -155.2834,
@@ -1855,7 +2135,10 @@
     "streetView": {
       "heading": 220,
       "pitch": 10
-    }
+    },
+    "pantheons": [
+      "hawaiian"
+    ]
   },
   {
     "id": "giants-causeway",
@@ -1869,25 +2152,31 @@
     "streetView": {
       "heading": 0,
       "pitch": 5
-    }
+    },
+    "pantheons": [
+      "celtic-irish"
+    ]
   },
   {
     "id": "kata-tjuta",
-    "name": "Kata Tjuta (The Olgas)",
+    "name": "Kata Tjuta",
     "era": "nature",
     "lat": -25.3054,
-    "lng": 130.7360,
+    "lng": 130.736,
     "category": "sacred-site",
     "description": "Thirty-six rock domes rising from the red desert, companion formation to Uluru 25 km east. Sacred to the Anangu people — many of the Dreamtime stories here are restricted knowledge, not for outsiders. The highest dome, Mount Olga, stands 546 meters above the plain. The wind through the Valley of the Winds sounds like breath.",
     "region": "Australia",
     "streetView": {
       "heading": 90,
       "pitch": 10
-    }
+    },
+    "pantheons": [
+      "aboriginal"
+    ]
   },
   {
     "id": "delphi-gorge",
-    "name": "Delphi Gorge (Mount Parnassus)",
+    "name": "Mount Parnassus",
     "era": "nature",
     "lat": 38.4792,
     "lng": 22.4864,
@@ -1897,26 +2186,31 @@
     "streetView": {
       "heading": 180,
       "pitch": 15
-    }
+    },
+    "pantheons": [
+      "olympian"
+    ]
   },
   {
     "id": "vesuvius",
     "name": "Mount Vesuvius",
     "era": "nature",
-    "lat": 40.8210,
-    "lng": 14.4260,
+    "lat": 40.821,
+    "lng": 14.426,
     "category": "sacred-site",
     "description": "A stratovolcano on the Bay of Naples, 1,281 meters high, the only active volcano on mainland Europe. Its fertile slopes drew dense settlement — vineyards, orchards, cities. On August 24, 79 CE, it buried Pompeii and Herculaneum under six meters of ash in eighteen hours. Pliny the Elder sailed toward the eruption and died. His nephew watched from across the bay and wrote the first detailed eyewitness account of a volcanic eruption in Western literature.",
     "region": "Italy",
     "streetView": {
       "heading": 200,
       "pitch": 15
-    }
+    },
+    "pantheons": [
+      "roman"
+    ]
   },
   {
     "id": "popocatepetl",
     "name": "Popocatépetl",
-    "pantheon": "aztec",
     "era": "nature",
     "lat": 19.0225,
     "lng": -98.6278,
@@ -1926,7 +2220,10 @@
     "streetView": {
       "heading": 0,
       "pitch": 20
-    }
+    },
+    "pantheons": [
+      "aztec"
+    ]
   },
   {
     "id": "kilimanjaro",
@@ -1940,26 +2237,29 @@
     "streetView": {
       "heading": 180,
       "pitch": 20
-    }
+    },
+    "pantheons": []
   },
   {
     "id": "everest",
-    "name": "Mount Everest (Chomolungma)",
+    "name": "Chomolungma",
     "era": "nature",
     "lat": 27.9881,
-    "lng": 86.9250,
+    "lng": 86.925,
     "category": "sacred-site",
     "description": "The highest point on Earth at 8,849 meters, still rising as the Indian plate pushes into Asia. Tibetans call it Chomolungma — 'Goddess Mother of the World.' The Sherpa consider the summit sacred and leave offerings there. When George Mallory was asked why he wanted to climb it, he reportedly said, 'Because it's there' — then disappeared into cloud near the top in 1924. His body was found 75 years later, 300 meters below the summit.",
     "region": "Nepal / Tibet",
     "streetView": {
       "heading": 0,
       "pitch": 30
-    }
+    },
+    "pantheons": [
+      "tibetan"
+    ]
   },
   {
     "id": "tongariro",
     "name": "Tongariro",
-    "pantheon": "maori",
     "era": "nature",
     "lat": -39.1578,
     "lng": 175.6425,
@@ -1969,35 +2269,44 @@
     "streetView": {
       "heading": 180,
       "pitch": 15
-    }
+    },
+    "pantheons": [
+      "maori"
+    ]
   },
   {
     "id": "krakatoa",
-    "name": "Krakatoa (Anak Krakatau)",
+    "name": "Krakatoa",
     "era": "nature",
     "lat": -6.1021,
-    "lng": 105.4230,
+    "lng": 105.423,
     "category": "sacred-site",
     "description": "A volcanic island in the Sunda Strait between Java and Sumatra. In 1883 it produced the loudest sound in recorded history — heard 4,800 km away in Alice Springs. The eruption ejected 25 cubic km of rock, generated 30-meter tsunamis, and lowered global temperatures by 1.2°C for five years. The original island destroyed itself. Anak Krakatau — 'Child of Krakatoa' — emerged from the caldera in 1927 and is still growing.",
-    "region": "Indonesia"
+    "region": "Indonesia",
+    "pantheons": [
+      "javanese"
+    ]
   },
   {
     "id": "santorini-caldera",
     "name": "Santorini Caldera",
     "era": "nature",
-    "lat": 36.4040,
-    "lng": 25.3960,
+    "lat": 36.404,
+    "lng": 25.396,
     "category": "sacred-site",
     "description": "A flooded volcanic caldera in the Aegean Sea, 11 km across. Around 1600 BCE, the Minoan eruption — one of the largest in human history — blew the center of the island into the sea. The resulting tsunami devastated Crete and may have ended Minoan civilization. Some scholars believe Plato's Atlantis was a cultural memory of this event: an advanced island nation destroyed overnight by the sea.",
     "region": "Greece",
     "streetView": {
       "heading": 270,
       "pitch": 10
-    }
+    },
+    "pantheons": [
+      "minoan"
+    ]
   },
   {
     "id": "devils-tower",
-    "name": "Devil's Tower (Bear Lodge)",
+    "name": "Bear Lodge",
     "era": "nature",
     "lat": 44.5902,
     "lng": -104.7146,
@@ -2007,7 +2316,10 @@
     "streetView": {
       "heading": 180,
       "pitch": 25
-    }
+    },
+    "pantheons": [
+      "lakota"
+    ]
   },
   {
     "id": "table-mountain",
@@ -2021,7 +2333,8 @@
     "streetView": {
       "heading": 0,
       "pitch": 20
-    }
+    },
+    "pantheons": []
   },
   {
     "id": "denali",
@@ -2031,7 +2344,8 @@
     "lng": -151.0074,
     "category": "sacred-site",
     "description": "The highest peak in North America at 6,190 meters, rising from a base elevation of only 600 meters — the tallest mountain face on Earth from base to summit. The Koyukon Athabaskan name means 'the Great One.' Its mass generates its own weather systems. On clear days the mountain is visible from 200 km away. The Athabaskan people tracked the movement of caribou herds by watching how clouds formed around the peak.",
-    "region": "United States"
+    "region": "United States",
+    "pantheons": []
   },
   {
     "id": "amazon-river",
@@ -2045,17 +2359,21 @@
     "streetView": {
       "heading": 90,
       "pitch": 0
-    }
+    },
+    "pantheons": []
   },
   {
     "id": "yellow-river",
-    "name": "Yellow River (Huang He)",
+    "name": "Yellow River",
     "era": "nature",
-    "lat": 35.0500,
+    "lat": 35.05,
     "lng": 110.2667,
     "category": "sacred-site",
     "description": "China's second-longest river, 5,464 km, carrying more sediment than any other river on Earth — the loess gives it its yellow color and built the North China Plain over millennia. It has changed course catastrophically at least twenty-six times in recorded history, earning the name 'China's Sorrow.' Yet the earliest Chinese civilizations — Yangshao, Longshan, Shang — all arose along its banks. The river that destroyed the most also created the most.",
-    "region": "China"
+    "region": "China",
+    "pantheons": [
+      "chinese"
+    ]
   },
   {
     "id": "jordan-river",
@@ -2069,11 +2387,12 @@
     "streetView": {
       "heading": 90,
       "pitch": 0
-    }
+    },
+    "pantheons": []
   },
   {
     "id": "danube",
-    "name": "Danube (Iron Gates)",
+    "name": "Danube",
     "era": "nature",
     "lat": 44.6725,
     "lng": 22.2986,
@@ -2083,7 +2402,8 @@
     "streetView": {
       "heading": 0,
       "pitch": 10
-    }
+    },
+    "pantheons": []
   },
   {
     "id": "mississippi-river",
@@ -2093,60 +2413,68 @@
     "lng": -95.2057,
     "category": "sacred-site",
     "description": "The central artery of North America, 3,766 km from Lake Itasca in Minnesota to the Gulf of Mexico, draining 31 US states and two Canadian provinces. The Ojibwe name Misi-ziibi means 'Great River.' The river built the Mississippi Delta — 25,000 square km of new land from carried sediment. The mound-building cultures at Cahokia used the river as their highway. Mark Twain learned to read its currents as a steamboat pilot and later mapped the American character through its stories.",
-    "region": "United States"
+    "region": "United States",
+    "pantheons": []
   },
   {
     "id": "lake-baikal",
     "name": "Lake Baikal",
     "era": "nature",
     "lat": 53.5587,
-    "lng": 108.1650,
+    "lng": 108.165,
     "category": "sacred-site",
     "description": "The deepest lake on Earth at 1,642 meters and the oldest at 25 million years, holding 20% of the world's unfrozen surface fresh water. Over 2,500 species live here, two-thirds found nowhere else — including the nerpa, the world's only freshwater seal. The Buryat people call it 'Sacred Sea' and believe a dragon lives in its depths. In winter the ice is so clear you can see 40 meters down.",
     "region": "Russia",
     "streetView": {
       "heading": 0,
       "pitch": 5
-    }
+    },
+    "pantheons": [
+      "mongolian"
+    ]
   },
   {
     "id": "lake-titicaca",
     "name": "Lake Titicaca",
-    "pantheon": "inca",
     "era": "nature",
-    "lat": -15.7500,
-    "lng": -69.3500,
+    "lat": -15.75,
+    "lng": -69.35,
     "category": "sacred-site",
     "description": "The highest navigable lake in the world at 3,812 meters in the Andes, straddling Peru and Bolivia. Its deep blue water — 281 meters at the deepest point — sits in a basin formed by tectonic uplift. The Inca believed the sun god Inti was born on the Island of the Sun in its center. The Uros people still live on floating islands made of totora reeds, rebuilt continuously as the bottom layers decay into the lake.",
-    "region": "Peru / Bolivia"
+    "region": "Peru / Bolivia",
+    "pantheons": [
+      "inca"
+    ]
   },
   {
     "id": "dead-sea",
     "name": "Dead Sea",
     "era": "nature",
-    "lat": 31.5000,
-    "lng": 35.5000,
+    "lat": 31.5,
+    "lng": 35.5,
     "category": "sacred-site",
     "description": "The lowest point on Earth's surface, 430 meters below sea level, sitting in the Great Rift Valley. Its water is 34% salt — nearly ten times the ocean — so dense that the human body cannot sink. Nothing larger than microbes survives in it. The shores are receding at a meter per year. Lot's wife supposedly looked back toward Sodom and turned to salt. The Dead Sea Scrolls were found in caves along its northwest shore.",
     "region": "Israel / Jordan",
     "streetView": {
       "heading": 90,
       "pitch": 5
-    }
+    },
+    "pantheons": []
   },
   {
     "id": "crater-lake",
     "name": "Crater Lake",
     "era": "nature",
     "lat": 42.9446,
-    "lng": -122.1090,
+    "lng": -122.109,
     "category": "sacred-site",
     "description": "The deepest lake in the United States at 594 meters, filling the caldera of Mount Mazama, which collapsed in a catastrophic eruption around 5700 BCE. No rivers feed it — only rain and snowmelt, making it one of the clearest bodies of water on Earth. The Klamath people witnessed the eruption and passed the story down: a battle between Llao, spirit of the underworld, and Skell, spirit of the sky. The mountain fell. Water filled the wound.",
     "region": "United States",
     "streetView": {
       "heading": 180,
       "pitch": 10
-    }
+    },
+    "pantheons": []
   },
   {
     "id": "niagara-falls",
@@ -2160,11 +2488,14 @@
     "streetView": {
       "heading": 180,
       "pitch": 10
-    }
+    },
+    "pantheons": [
+      "haudenosaunee"
+    ]
   },
   {
     "id": "victoria-falls",
-    "name": "Victoria Falls (Mosi-oa-Tunya)",
+    "name": "Mosi-oa-Tunya",
     "era": "nature",
     "lat": -17.9243,
     "lng": 25.8572,
@@ -2174,7 +2505,8 @@
     "streetView": {
       "heading": 0,
       "pitch": 10
-    }
+    },
+    "pantheons": []
   },
   {
     "id": "iguazu-falls",
@@ -2188,7 +2520,10 @@
     "streetView": {
       "heading": 180,
       "pitch": 15
-    }
+    },
+    "pantheons": [
+      "guarani"
+    ]
   },
   {
     "id": "grand-canyon",
@@ -2202,7 +2537,11 @@
     "streetView": {
       "heading": 0,
       "pitch": -10
-    }
+    },
+    "pantheons": [
+      "hopi",
+      "navajo"
+    ]
   },
   {
     "id": "ha-long-bay",
@@ -2216,7 +2555,10 @@
     "streetView": {
       "heading": 180,
       "pitch": 5
-    }
+    },
+    "pantheons": [
+      "vietnamese"
+    ]
   },
   {
     "id": "cappadocia",
@@ -2230,17 +2572,19 @@
     "streetView": {
       "heading": 0,
       "pitch": 10
-    }
+    },
+    "pantheons": []
   },
   {
     "id": "tassili-najjer",
     "name": "Tassili n'Ajjer",
     "era": "nature",
-    "lat": 25.5000,
-    "lng": 9.0000,
+    "lat": 25.5,
+    "lng": 9,
     "category": "sacred-site",
     "description": "A sandstone plateau in the central Sahara, 72,000 square km of eroded rock forests, natural arches, and deep canyons — sculpted by wind and water when the Sahara was green. Over 15,000 rock paintings and engravings, some 12,000 years old, show giraffes, hippos, cattle, and swimmers in a landscape now utterly dry. The art is a record of climate change observed in real time by the people who lived through it.",
-    "region": "Algeria"
+    "region": "Algeria",
+    "pantheons": []
   },
   {
     "id": "mammoth-cave",
@@ -2250,7 +2594,8 @@
     "lng": -86.1005,
     "category": "sacred-site",
     "description": "The longest known cave system on Earth — over 680 km of surveyed passages carved by water through 330-million-year-old limestone. New passages are still being discovered. Indigenous peoples explored it with reed torches over 4,000 years ago; their mummified remains and footprints are still inside. Enslaved people were later forced to give tours by torchlight. The cave's total length exceeds the next three longest caves combined.",
-    "region": "United States"
+    "region": "United States",
+    "pantheons": []
   },
   {
     "id": "fingals-cave",
@@ -2264,27 +2609,33 @@
     "streetView": {
       "heading": 90,
       "pitch": 5
-    }
+    },
+    "pantheons": [
+      "celtic-irish"
+    ]
   },
   {
     "id": "sacred-cenote",
-    "name": "Sacred Cenote (Chichén Itzá)",
+    "name": "Sacred Cenote",
     "era": "nature",
-    "lat": 20.6910,
-    "lng": -88.5690,
+    "lat": 20.691,
+    "lng": -88.569,
     "category": "sacred-site",
     "description": "A natural sinkhole 60 meters in diameter and 27 meters deep, formed when the limestone ceiling of an underground river collapsed. The Yucatán Peninsula is riddled with cenotes — they were the only source of fresh water in a land with no surface rivers. The Maya considered them entrances to Xibalba, the underworld. Dredging of the Sacred Cenote at Chichén Itzá has recovered jade, gold, pottery, and human remains — offerings dropped into the water for over a thousand years.",
     "region": "Mexico",
     "streetView": {
       "heading": 0,
       "pitch": 20
-    }
+    },
+    "pantheons": [
+      "maya"
+    ]
   },
   {
     "id": "yellowstone",
     "name": "Yellowstone",
     "era": "nature",
-    "lat": 44.4280,
+    "lat": 44.428,
     "lng": -110.5885,
     "category": "sacred-site",
     "description": "A supervolcano caldera 72 km wide sitting atop a mantle plume that has erupted catastrophically three times in 2.1 million years. It contains two-thirds of the world's geysers — Old Faithful erupts roughly every 90 minutes — along with hot springs, mud pots, and fumaroles across 9,000 square km. The Crow, Shoshone, and Bannock peoples used its thermal features for millennia. When the first white explorers described what they saw, nobody believed them.",
@@ -2292,7 +2643,8 @@
     "streetView": {
       "heading": 0,
       "pitch": 5
-    }
+    },
+    "pantheons": []
   },
   {
     "id": "pamukkale",
@@ -2306,7 +2658,10 @@
     "streetView": {
       "heading": 180,
       "pitch": 10
-    }
+    },
+    "pantheons": [
+      "olympian"
+    ]
   },
   {
     "id": "great-barrier-reef",
@@ -2316,43 +2671,51 @@
     "lng": 147.6992,
     "category": "sacred-site",
     "description": "The largest living structure on Earth — 2,300 km of coral reef off Queensland, visible from space. Built by billions of tiny polyps over 500,000 years, it supports 1,500 species of fish, 400 types of coral, and 4,000 species of mollusk. The Aboriginal and Torres Strait Islander peoples have fished its waters for over 60,000 years. Their oral histories include accounts of sea level rise at the end of the last ice age — stories that match the geological record.",
-    "region": "Australia"
+    "region": "Australia",
+    "pantheons": [
+      "aboriginal"
+    ]
   },
   {
     "id": "thingvellir",
     "name": "Þingvellir",
     "era": "nature",
     "lat": 64.2559,
-    "lng": -21.1290,
+    "lng": -21.129,
     "category": "sacred-site",
     "description": "A rift valley in southwestern Iceland where the North American and Eurasian tectonic plates pull apart at two centimeters per year — the seam of the world, visible and walkable. The Almannagjá gorge drops between basalt walls into a flat plain beside Þingvallavatn, Iceland's largest lake. In 930 CE the Icelandic settlers chose this place for the Althing, the world's oldest surviving parliament. The Lögrétta (law council) met on a raised rock in the rift. Disputes were settled, outlaws declared, and in the year 1000 the Lawspeaker stood here and decided Iceland would convert to Christianity — then walked home past the waterfall Öxarárfoss. The rift still widens. The parliament still meets.",
     "region": "Iceland",
-    "pantheon": "norse",
     "streetView": {
       "heading": 90,
       "pitch": 5
-    }
+    },
+    "pantheons": [
+      "norse"
+    ]
   },
   {
     "id": "skellig-michael",
     "name": "Skellig Michael",
     "era": "nature",
-    "lat": 51.7700,
-    "lng": -10.5390,
+    "lat": 51.77,
+    "lng": -10.539,
     "category": "sacred-site",
     "description": "A jagged pyramidal rock rising 218 meters from the North Atlantic, 12 km off the Kerry coast. Two peaks connected by a narrow saddle, battered by storms for millions of years. In the 6th century, monks climbed the 618 stone steps to the summit and built beehive huts where they lived for 600 years — one of the most extreme acts of religious devotion in history. Gannets and puffins still nest on the cliffs. The rock was the final scene in Star Wars: The Force Awakens.",
     "region": "Ireland",
     "streetView": {
       "heading": 270,
       "pitch": 15
-    }
+    },
+    "pantheons": [
+      "celtic-irish"
+    ]
   },
   {
     "id": "cusco",
-    "name": "Cusco (Qosqo)",
+    "name": "Qosqo",
     "mythicCenter": true,
     "era": "c. 1200–1533 CE",
-    "lat": -13.5170,
+    "lat": -13.517,
     "lng": -71.9785,
     "category": "sacred-site",
     "description": "The Quechua name means 'navel.' The Inca Empire — Tawantinsuyu, 'the four quarters together' — radiated from this city in the four cardinal directions, making Cusco the literal hub of the known world. Forty-one ceque lines extended outward from the Coricancha (Temple of the Sun) to 328 huacas across the landscape, one of the most geometrically precise sacred geographies ever constructed. The Intihuatana stones — 'hitching posts of the sun' — were designed to anchor the sun to the earth at this center point. The Spanish built their cathedral directly on top of the Coricancha's foundations. The walls held.",
@@ -2360,11 +2723,14 @@
     "streetView": {
       "heading": 0,
       "pitch": 10
-    }
+    },
+    "pantheons": [
+      "inca"
+    ]
   },
   {
     "id": "rome-capitoline",
-    "name": "Rome (Capitoline Hill)",
+    "name": "Capitoline Hill",
     "mythicCenter": true,
     "era": "c. 753 BCE – present",
     "lat": 41.8931,
@@ -2375,13 +2741,15 @@
     "streetView": {
       "heading": 180,
       "pitch": 10
-    }
+    },
+    "pantheons": [
+      "roman"
+    ]
   },
   {
     "id": "mount-tai",
-    "name": "Mount Tai (Taishan)",
+    "name": "Mount Tai",
     "mythicCenter": true,
-    "pantheon": "chinese",
     "era": "c. 219 BCE – present",
     "lat": 36.2521,
     "lng": 117.1009,
@@ -2391,23 +2759,28 @@
     "streetView": {
       "heading": 0,
       "pitch": 20
-    }
+    },
+    "pantheons": [
+      "chinese"
+    ]
   },
   {
     "id": "ile-ife",
     "name": "Ile-Ife",
     "mythicCenter": true,
-    "pantheon": "yoruba",
     "era": "c. 500–1400 CE",
-    "lat": 7.4800,
-    "lng": 4.5600,
+    "lat": 7.48,
+    "lng": 4.56,
     "category": "sacred-site",
     "description": "The Yoruba omphalos — the place where the world was created. In Yoruba cosmogony, Oduduwa descended from heaven on a chain carrying a calabash of earth, a cockerel, and a palm nut. He poured the earth onto the primordial waters; the cockerel scratched it outward, creating land; the palm nut grew into the tree of life. The name Ile-Ife means 'place of spreading' — the navel from which the earth expanded. The remarkable Ife bronze and terracotta heads from the 12th–14th century attest to a civilization that understood itself as the origin point of humanity. The Ooni of Ife remains the spiritual head of Yoruba religion. The diaspora traditions — Candomblé, Santería, Vodou — carry this cosmology worldwide.",
-    "region": "Nigeria"
+    "region": "Nigeria",
+    "pantheons": [
+      "yoruba"
+    ]
   },
   {
     "id": "puri-jagannath",
-    "name": "Puri (Jagannath Temple)",
+    "name": "Jagannath Temple",
     "mythicCenter": true,
     "era": "c. 12th century CE",
     "lat": 19.8048,
@@ -2419,26 +2792,30 @@
     "streetView": {
       "heading": 90,
       "pitch": 15
-    }
+    },
+    "pantheons": [
+      "hindu"
+    ]
   },
   {
     "id": "externsteine",
     "name": "Externsteine",
     "mythicCenter": true,
     "era": "mythic",
-    "lat": 51.8680,
-    "lng": 8.9170,
+    "lat": 51.868,
+    "lng": 8.917,
     "category": "sacred-site",
     "description": "Five sandstone pillars rising from the Teutoburg Forest floor, the most dramatic natural rock formation in northern Germany. A chapel carved into the summit has a circular window aligned to the summer solstice sunrise. A 12th-century relief carved into the rock depicts the Descent from the Cross with a bent Irminsul — the Saxon world-tree, the pillar holding up the sky — beneath the cross, widely interpreted as Christianity triumphing over the Germanic axis mundi at the very site where it stood. Charlemagne destroyed the Irminsul at nearby Eresburg in 772 CE. If this was its location, Externsteine was the axis mundi of pre-Christian northern Europe — the place where Yggdrasil was understood to stand.",
     "region": "Germany",
     "streetView": {
       "heading": 0,
       "pitch": 20
-    }
+    },
+    "pantheons": []
   },
   {
     "id": "axum",
-    "name": "Axum (Aksum)",
+    "name": "Aksum",
     "mythicCenter": true,
     "era": "c. 100–940 CE",
     "lat": 14.1308,
@@ -2449,17 +2826,1210 @@
     "streetView": {
       "heading": 180,
       "pitch": 10
-    }
+    },
+    "pantheons": []
   },
   {
     "id": "benin-city",
     "name": "Benin City",
     "mythicCenter": true,
     "era": "c. 1180–1897 CE",
-    "lat": 6.3350,
-    "lng": 5.6270,
+    "lat": 6.335,
+    "lng": 5.627,
     "category": "sacred-site",
     "description": "Center of the Edo Kingdom, surrounded by a network of earthen walls and moats that extended over 16,000 km — four times the length of the Great Wall of China, the largest earthwork in the world. The Oba's palace was the cosmic center of the Edo world, where the divine king mediated between the human realm and the spirit world. Benin's bronze plaques — over a thousand, cast by the lost-wax method — recorded court history, ritual, and cosmology on the palace walls. When the British sacked the city in 1897 and looted the bronzes, they were stunned by the sophistication. The bronzes are still being returned.",
-    "region": "Nigeria"
+    "region": "Nigeria",
+    "pantheons": []
+  },
+  {
+    "id": "mount-hermon",
+    "name": "Mount Hermon",
+    "era": "nature",
+    "lat": 33.4167,
+    "lng": 35.8571,
+    "category": "sacred-site",
+    "description": "The highest peak in the Levant at 2,814 meters, straddling modern Lebanon, Syria, and Israel. Snow-fed springs at its base create the Jordan River. In Canaanite religion it was a dwelling place of the gods — the summit held a temple to Baal Hermon. The Book of Enoch names it as the mountain where the Watchers descended from heaven. For the cultures between Mesopotamia and Egypt, Hermon was their Olympus.",
+    "region": "Lebanon / Syria",
+    "pantheons": [
+      "canaanite"
+    ]
+  },
+  {
+    "id": "lake-inari",
+    "name": "Lake Inari",
+    "era": "nature",
+    "lat": 69.0756,
+    "lng": 27.0167,
+    "category": "sacred-site",
+    "description": "Finland's third-largest lake, 1,040 square kilometers of dark water scattered with over 3,000 islands above the Arctic Circle. The island of Ukonsaari — 'Ukko's Island,' named for the Finnish sky god — was a sacrificial site for the Sámi and Finns for millennia. Burnt bone and metal offerings have been found in its rock clefts. In the Kalevala tradition, this is the edge of the world, where the boreal forest meets the tundra and the northern lights still seem like messages.",
+    "region": "Finland",
+    "pantheons": [
+      "finnish"
+    ]
+  },
+  {
+    "id": "mount-triglav",
+    "name": "Mount Triglav",
+    "era": "nature",
+    "lat": 46.3786,
+    "lng": 13.8364,
+    "category": "sacred-site",
+    "description": "The highest peak in the Julian Alps at 2,864 meters, named after the three-headed Slavic god Triglav who ruled sky, earth, and underworld. The mountain appears on the Slovenian flag and coat of arms. Every Slovenian is expected to climb it once in their lifetime. Before Christianity, Slavic peoples across Central Europe venerated three-faced idols of Triglav at Stettin, Wolin, and Brandenburg — but the mountain that bore his name outlasted every shrine.",
+    "region": "Slovenia",
+    "pantheons": [
+      "slavic"
+    ]
+  },
+  {
+    "id": "mount-damavand",
+    "name": "Mount Damavand",
+    "era": "nature",
+    "lat": 35.9516,
+    "lng": 52.1095,
+    "category": "sacred-site",
+    "description": "The highest peak in Iran and the Middle East at 5,610 meters, a dormant stratovolcano in the Alborz range still venting sulfurous fumes from its summit. In Zoroastrian mythology, the three-headed dragon Azi Dahaka is chained inside it until the end of time. In the Shahnameh, the hero Fereydun defeats the tyrant Zahhak and imprisons him within the mountain. Damavand is the Persian Olympus — the place where cosmic evil is contained, not destroyed, because even the gods knew some forces can only be bound.",
+    "region": "Iran",
+    "pantheons": [
+      "zoroastrian"
+    ]
+  },
+  {
+    "id": "hallasan",
+    "name": "Hallasan",
+    "era": "nature",
+    "lat": 33.3625,
+    "lng": 126.5333,
+    "category": "sacred-site",
+    "description": "A 1,947-meter shield volcano on Jeju Island with a crater lake called Baengnokdam — 'White Deer Lake' — where spirits were said to descend on white deer. In Korean creation myth, Grandmother Seolmundae created Jeju Island and Hallasan from handfuls of earth. The mountain is central to Korean shamanic tradition (muism) and was historically a place of exile, pilgrimage, and encounter with the spirit world.",
+    "region": "South Korea",
+    "pantheons": [
+      "korean"
+    ]
+  },
+  {
+    "id": "curonian-spit",
+    "name": "Curonian Spit",
+    "era": "nature",
+    "lat": 55.2833,
+    "lng": 20.95,
+    "category": "sacred-site",
+    "description": "A 98-kilometer sand dune peninsula separating the Curonian Lagoon from the Baltic Sea, shared by Lithuania and Russia. Shifting dunes up to 60 meters high bury and unbury forests — entire villages have been swallowed. The Hill of Witches (Raganų kalnas) preserves Baltic mythological figures in wood sculpture along its forest paths. Before the Teutonic Knights arrived, the Baltic peoples maintained sacred groves along this coast where Perkūnas the thunder god was honored with perpetual fires.",
+    "region": "Lithuania / Russia",
+    "pantheons": [
+      "baltic"
+    ]
+  },
+  {
+    "id": "namtso-lake",
+    "name": "Namtso",
+    "era": "nature",
+    "lat": 30.75,
+    "lng": 90.5833,
+    "category": "sacred-site",
+    "description": "One of the highest saltwater lakes on Earth at 4,718 meters elevation, stretching 70 kilometers across the Tibetan Plateau with water so blue it looks invented. In Bön tradition — Tibet's pre-Buddhist religion — Namtso is the body of a goddess, and the five islands in the lake are her manifest forms. Pilgrims circumambulate the lake in the Year of the Sheep, a circuit of 280 kilometers that takes weeks on foot.",
+    "region": "Tibet / China",
+    "pantheons": [
+      "tibetan"
+    ]
+  },
+  {
+    "id": "mount-erciyes",
+    "name": "Mount Erciyes",
+    "era": "nature",
+    "lat": 38.5319,
+    "lng": 35.4469,
+    "category": "sacred-site",
+    "description": "A 3,917-meter stratovolcano in central Anatolia, the highest peak in Cappadocia. Its eruptions created the soft tuff that wind and water carved into Cappadocia's fairy chimneys. The Hittites — who ruled Anatolia for 500 years from nearby Hattusa — would have seen Erciyes on the horizon during every temple ceremony. Roman coins from Caesarea (modern Kayseri, at the mountain's foot) depict the volcano with fire at its summit.",
+    "region": "Turkey",
+    "pantheons": [
+      "hittite"
+    ]
+  },
+  {
+    "id": "lake-nokoue",
+    "name": "Lake Nokoué",
+    "era": "nature",
+    "lat": 6.4167,
+    "lng": 2.4167,
+    "category": "sacred-site",
+    "description": "A large coastal lagoon near the historic center of the Kingdom of Dahomey, where the stilt village of Ganvié — 'the Venice of Africa' — has stood for 400 years. Built on the water as refuge from Dahomey slave raids, Ganvié became a living temple to the water vodun. The lake connects to the Atlantic through a narrow channel, brackish water mingling with fresh — a liminal space that mirrors Vodun's theology of crossroads between the visible and spirit worlds.",
+    "region": "Benin",
+    "pantheons": [
+      "fon"
+    ]
+  },
+  {
+    "id": "lake-bosomtwe",
+    "name": "Lake Bosomtwe",
+    "era": "nature",
+    "lat": 6.5042,
+    "lng": -1.4125,
+    "category": "sacred-site",
+    "description": "A perfectly circular lake 10.5 kilometers across, formed by a meteorite impact roughly 1.07 million years ago — the only natural lake in Ghana. The Ashanti consider it sacred: the spirits of the dead come here to bid farewell to the god Twi. Fishing is done only with wooden planks, never boats or metal hooks, out of respect for the lake spirit. A meteorite crater where a culture sends its dead — the cosmic and the human meeting in the same bowl of water.",
+    "region": "Ghana",
+    "pantheons": [
+      "akan"
+    ]
+  },
+  {
+    "id": "shiprock",
+    "name": "Tsé Bitʼaʼí",
+    "era": "nature",
+    "lat": 36.6886,
+    "lng": -108.8367,
+    "category": "sacred-site",
+    "description": "A 483-meter volcanic neck rising from the New Mexico desert — the exposed throat of a 30-million-year-old volcano, its walls radiating in stone dikes like wings. The Navajo name Tsé Bitʼaʼí means 'Rock with Wings.' In the creation story, a great bird carried the Diné people from the north to safety. Climbing it is forbidden by the Navajo Nation. Two people died on it in 1939, and the rock has been closed to climbers since — the mountain keeps its own counsel.",
+    "region": "United States",
+    "pantheons": [
+      "navajo"
+    ]
+  },
+  {
+    "id": "ilulissat-icefjord",
+    "name": "Ilulissat Icefjord",
+    "era": "nature",
+    "lat": 69.1833,
+    "lng": -51.1,
+    "category": "sacred-site",
+    "description": "Where the Sermeq Kujalleq glacier in western Greenland calves icebergs into a 40-kilometer fjord — one of the fastest-moving and most productive glacier fronts in the Northern Hemisphere. Icebergs taller than buildings grind through the fjord mouth into Disko Bay. Inuit settlements here date back 4,000 years. This is the landscape that shaped the Inuit understanding of Sila — the breath and intelligence of the world itself — a place where the Earth is visibly alive and breaking apart.",
+    "region": "Greenland",
+    "pantheons": [
+      "inuit"
+    ]
+  },
+  {
+    "id": "san-francisco-peaks",
+    "name": "Nuvatukyaʼovi",
+    "era": "nature",
+    "lat": 35.3464,
+    "lng": -111.6783,
+    "category": "sacred-site",
+    "description": "A volcanic mountain range near Flagstaff, Arizona, rising to 3,852 meters — the remains of a stratovolcano that once stood over 4,800 meters before its summit collapsed. In Hopi belief, this is the home of the kachina spirits for half the year, from July to December. It is one of four sacred mountains marking the boundaries of the Hopi world. The Hopi, Navajo, Havasupai, and Hualapai all hold the peaks sacred, though they don't always agree on what lives there.",
+    "region": "United States",
+    "pantheons": [
+      "hopi"
+    ]
+  },
+  {
+    "id": "manitoulin-island",
+    "name": "Manitoulin Island",
+    "era": "nature",
+    "lat": 45.75,
+    "lng": -82,
+    "category": "sacred-site",
+    "description": "The largest freshwater island in the world, 2,766 square kilometers in Lake Huron. The name means 'Spirit Island' in Anishinaabemowin — the home of Gitche Manitou, the Great Spirit. The island contains over 100 inland lakes, some of which contain their own islands — an island in a lake on an island in a lake. The Odawa and Ojibwe have held powwows here for centuries. The Wikwemikong reserve on its eastern peninsula is one of the few unceded First Nations territories in Canada.",
+    "region": "Canada",
+    "pantheons": [
+      "algonquin"
+    ]
+  },
+  {
+    "id": "villarrica-volcano",
+    "name": "Ruka Pillan",
+    "era": "nature",
+    "lat": -39.4208,
+    "lng": -71.9392,
+    "category": "sacred-site",
+    "description": "One of South America's most active volcanoes at 2,847 meters in Chile's Lake District, with a permanent lava lake in its crater. The Mapuche name Ruka Pillan means 'House of the Spirits' — the dwelling of the pillanes, ancestor spirits who manifest as volcanic eruptions. The volcano has erupted over 50 times since 1558. The Mapuche, who resisted both the Inca and the Spanish longer than any other indigenous South American nation, read the mountain's mood as communication from the dead.",
+    "region": "Chile",
+    "pantheons": [
+      "mapuche"
+    ]
+  },
+  {
+    "id": "el-yunque",
+    "name": "El Yunque",
+    "era": "nature",
+    "lat": 18.3186,
+    "lng": -65.7832,
+    "category": "sacred-site",
+    "description": "A 1,065-meter peak in the only tropical rainforest in the US National Forest System, receiving over 200 inches of rain annually. The Taíno name comes from 'yukiyú' — the benevolent god of the ceiba tree who lived on the mountain and protected the people from hurricanes. When the wind god Juracán struck, Yukiyú stood on this summit and held him back. The mountain catches Atlantic trade winds and splits them. It is still, functionally, doing what the myth described.",
+    "region": "Puerto Rico",
+    "pantheons": [
+      "taino"
+    ]
+  },
+  {
+    "id": "mount-kazbek",
+    "name": "Mount Kazbek",
+    "era": "nature",
+    "lat": 42.6861,
+    "lng": 44.5144,
+    "category": "sacred-site",
+    "description": "A 5,054-meter dormant stratovolcano in the Greater Caucasus, one of the highest peaks in Georgia. In Georgian mythology, the hero Amirani — the Caucasian Prometheus — was chained to its slopes for defying the gods, and an eagle ate his liver daily. The Betlemi cave at 4,100 meters on its flank once held a treasury of sacred objects. The Georgian name Mkinvartsveri means 'Freezing Cold Peak.' The Greek and Georgian Prometheus stories are close enough that some scholars think they share a common Caucasian source.",
+    "region": "Georgia",
+    "pantheons": [
+      "georgian"
+    ]
+  },
+  {
+    "id": "mount-toubkal",
+    "name": "Mount Toubkal",
+    "era": "nature",
+    "lat": 31.0597,
+    "lng": -7.9147,
+    "category": "sacred-site",
+    "description": "The highest peak in the Atlas Mountains and in all of North Africa at 4,167 meters. The Atlas range — the geological spine of the Amazigh (Berber) world — may have given its name to the Titan Atlas, or the reverse; scholars still argue. The Amazigh have lived in these mountains for at least 5,000 years, leaving rock carvings and an oral tradition that predates writing. Toubkal rises above the red city of Marrakech like the original throne of a god who never needed a temple.",
+    "region": "Morocco",
+    "pantheons": [
+      "berber"
+    ]
+  },
+  {
+    "id": "anboto",
+    "name": "Anboto",
+    "era": "nature",
+    "lat": 43.0528,
+    "lng": -2.5958,
+    "category": "sacred-site",
+    "description": "A 1,331-meter limestone peak in the Urkiola range of the Basque Country, riddled with caves. This is the home of Mari — the supreme goddess of the Basque pantheon, older than any Indo-European religion in Europe. She is said to dwell in a cave on Anboto's summit and move between mountain peaks to control the weather. When she lives on Anboto, storms come; when she crosses to Aizkorri, the weather clears. The Basque language has no known relatives. Neither does their goddess.",
+    "region": "Spain",
+    "pantheons": [
+      "basque"
+    ]
+  },
+  {
+    "id": "lake-bolsena",
+    "name": "Lake Bolsena",
+    "era": "nature",
+    "lat": 42.5933,
+    "lng": 11.9333,
+    "category": "sacred-site",
+    "description": "The largest volcanic crater lake in Europe at 114 square kilometers, in the heart of ancient Etruria. The Fanum Voltumnae — the central religious shrine where all twelve Etruscan city-states gathered annually — was in this region. The Etruscans were obsessed with reading signs: lightning patterns, bird flight, the entrails of sheep. They built their civilization on this volcanic caldera and spent centuries asking it what would happen next. Rome conquered them and kept their priests.",
+    "region": "Italy",
+    "pantheons": [
+      "etruscan"
+    ]
+  },
+  {
+    "id": "tonle-sap",
+    "name": "Tonlé Sap",
+    "era": "nature",
+    "lat": 12.8333,
+    "lng": 104.0833,
+    "category": "sacred-site",
+    "description": "Southeast Asia's largest freshwater lake, which seasonally expands from 2,500 to 16,000 square kilometers when the Mekong River reverses its flow — the only major river in the world that changes direction. This annual flood-and-retreat cycle was the ecological engine of the Khmer Empire: the fish, the rice, the water management that built Angkor. The Naga King of Khmer mythology controls these waters. The Hindu deities arrived from India but the water was already sacred.",
+    "region": "Cambodia",
+    "pantheons": [
+      "khmer"
+    ]
+  },
+  {
+    "id": "drakensberg",
+    "name": "uKhahlamba-Drakensberg",
+    "era": "nature",
+    "lat": -29.3667,
+    "lng": 29.3833,
+    "category": "sacred-site",
+    "description": "A 1,000-kilometer basalt escarpment forming the eastern wall of South Africa, rising to 3,482 meters. The Zulu name uKhahlamba means 'Barrier of Spears.' The caves and overhangs hold 35,000 San rock paintings spanning 3,000 years — the largest collection of rock art in Africa. Two peoples, two mythologies, one mountain range: the San painted their spirit journeys on the walls, and the Zulu later named the peaks after their own cosmology. The rock holds both.",
+    "region": "South Africa",
+    "pantheons": [
+      "zulu"
+    ]
+  },
+  {
+    "id": "tsodilo-hills",
+    "name": "Tsodilo Hills",
+    "era": "nature",
+    "lat": -18.75,
+    "lng": 21.7333,
+    "category": "sacred-site",
+    "description": "Four quartzite hills rising from the Kalahari Desert in Botswana, holding over 4,500 rock paintings — the densest concentration of rock art in the world. The San call the largest hill the 'Male' and the second the 'Female.' Archaeological evidence suggests continuous spiritual practice here for over 100,000 years, making it possibly the longest-used sacred site on Earth. The San say this is where the gods lowered the first people to the ground. There are footprints in the rock they say prove it.",
+    "region": "Botswana",
+    "pantheons": [
+      "san"
+    ]
+  },
+  {
+    "id": "mount-silisili",
+    "name": "Mount Silisili",
+    "era": "nature",
+    "lat": -13.6167,
+    "lng": -172.5333,
+    "category": "sacred-site",
+    "description": "The highest point in Samoa at 1,858 meters on the island of Savaiʻi — which many scholars identify as the legendary Hawaiki, the ancestral homeland from which all Polynesian peoples dispersed across the Pacific. If that identification is correct, this mountain stands on the island where the greatest migration in human history began: people in double-hulled canoes reading stars and swells to find every habitable island in the Pacific Ocean.",
+    "region": "Samoa",
+    "pantheons": [
+      "samoan"
+    ]
+  },
+  {
+    "id": "mount-temehani",
+    "name": "Mount Temehani",
+    "era": "nature",
+    "lat": -16.8333,
+    "lng": -151.45,
+    "category": "sacred-site",
+    "description": "A volcanic plateau on the island of Raʻiātea in French Polynesia — the island whose ancient name 'Havaiʻi' gave its name to the Hawaiian Islands 4,000 kilometers away. Raʻiātea was the spiritual center of Eastern Polynesia and the launching point for migrations to New Zealand, Hawaii, and Easter Island. The Tiare Apetahi flower grows only on Mount Temehani's summit and nowhere else on Earth. The Tahitians say it is the hand of a beautiful woman reaching for her lost lover.",
+    "region": "French Polynesia",
+    "pantheons": [
+      "tahitian"
+    ]
+  },
+  {
+    "id": "byblos",
+    "name": "Byblos",
+    "era": "nature",
+    "lat": 34.1217,
+    "lng": 35.6517,
+    "category": "sacred-site",
+    "description": "One of the oldest continuously inhabited cities on Earth. The Phoenicians launched their cedar ships from this coast, carrying Astarte and Adonis across the Mediterranean. The river Adonis still runs red with iron oxide each spring — the ancients called it the blood of the dying god.",
+    "region": "Lebanon",
+    "pantheons": [
+      "phoenician"
+    ]
+  },
+  {
+    "id": "cachoeira-de-oxum",
+    "name": "Cachoeira de Oxum",
+    "era": "nature",
+    "lat": -12.57,
+    "lng": -41.36,
+    "category": "sacred-site",
+    "description": "Deep in Bahia's Chapada Diamantina, this waterfall is sacred to Oxum, the orixá of sweet water, love, and gold. Where the Yoruba river goddess crossed the Atlantic and found new water to inhabit — the theology survived the Middle Passage by finding new geography.",
+    "region": "Brazil",
+    "pantheons": [
+      "candoble"
+    ]
+  },
+  {
+    "id": "ssezibwa-falls",
+    "name": "Ssezibwa Falls",
+    "era": "nature",
+    "lat": 0.53,
+    "lng": 32.81,
+    "category": "sacred-site",
+    "description": "Born from the body of Nakangu Tebatuusa, who gave birth to water instead of children. The Baganda say the twin falls are the twins she carried. Sacred to the Kingdom of Buganda for centuries — the lubaale spirits still receive offerings at its base.",
+    "region": "Uganda",
+    "pantheons": [
+      "buganda"
+    ]
+  },
+  {
+    "id": "ogbunike-caves",
+    "name": "Ogbunike Caves",
+    "era": "nature",
+    "lat": 6.18,
+    "lng": 6.88,
+    "category": "sacred-site",
+    "description": "A network of caves sacred to the Igbo people, where the earth goddess Ala is said to dwell in the deep chambers. The annual Ime Oba festival brings devotees underground — one of the few places where Odinani earth-worship is literally subterranean.",
+    "region": "Nigeria",
+    "pantheons": [
+      "igbo"
+    ]
+  },
+  {
+    "id": "lake-guatavita",
+    "name": "Lake Guatavita",
+    "era": "nature",
+    "lat": 4.97,
+    "lng": -73.77,
+    "category": "sacred-site",
+    "description": "The circular crater lake where Muisca kings coated themselves in gold dust and dove into the water as offerings to the goddess Bachué. The Spaniards called it El Dorado. They drained the lake three times looking for gold. The gold was never the point.",
+    "region": "Colombia",
+    "pantheons": [
+      "muisca"
+    ]
+  },
+  {
+    "id": "saana-fell",
+    "name": "Saana Fell",
+    "era": "nature",
+    "lat": 69.04,
+    "lng": 20.85,
+    "category": "sacred-site",
+    "description": "A sacred mountain in Sámi cosmology, one of the sieidi — natural formations inhabited by spirits. The Sámi saw the divine not in temples but in the land itself: fell-tops, springs, and unusual stones where the noaidi drums mapped the spirit world onto geography.",
+    "region": "Finland",
+    "pantheons": [
+      "sami"
+    ]
+  },
+  {
+    "id": "mande-mountains",
+    "name": "Mandé Mountains",
+    "era": "nature",
+    "lat": 12.1,
+    "lng": -8.56,
+    "category": "sacred-site",
+    "description": "The highland source region of the Mande peoples, where the epic of Sunjata begins. Faro the water spirit shaped the Niger River from these slopes, and Amma's twin creation still echoes in the Komo society initiations that have transmitted cosmological knowledge for centuries.",
+    "region": "Mali",
+    "pantheons": [
+      "mande"
+    ]
+  },
+  {
+    "id": "doi-suthep",
+    "name": "Doi Suthep",
+    "era": "nature",
+    "lat": 18.8148,
+    "lng": 98.9217,
+    "category": "sacred-site",
+    "description": "The sacred mountain above Chiang Mai where a white elephant carrying a Buddha relic climbed to the summit and died, marking the temple site. But before Buddhism arrived, the Phi spirits already inhabited this peak — the temple is a layer on older, animist geography.",
+    "region": "Thailand",
+    "pantheons": [
+      "thai"
+    ]
+  },
+  {
+    "id": "mount-merapi",
+    "name": "Mount Merapi",
+    "era": "nature",
+    "lat": -7.5407,
+    "lng": 110.4457,
+    "category": "sacred-site",
+    "description": "Java's most active volcano, erupting roughly every five years. In Kejawen cosmology it is the nail that holds Java to the earth. Nyai Roro Kidul, Queen of the Southern Sea, faces Merapi from the Indian Ocean — the island balanced between fire above and water below.",
+    "region": "Indonesia",
+    "pantheons": [
+      "javanese"
+    ]
+  },
+  {
+    "id": "bandiagara-escarpment",
+    "name": "Bandiagara Escarpment",
+    "era": "nature",
+    "lat": 14.35,
+    "lng": -3.58,
+    "category": "sacred-site",
+    "description": "A 150-kilometer sandstone cliff in Mali where the Dogon built their villages into the rock face. Amma created the world from a cosmic egg here, and the Nommo water spirits still descend during the Sigui ceremony that comes once every sixty years.",
+    "region": "Mali",
+    "pantheons": [
+      "dogon"
+    ]
+  },
+  {
+    "id": "lake-akan",
+    "name": "Lake Akan",
+    "era": "nature",
+    "lat": 43.45,
+    "lng": 144.1,
+    "category": "sacred-site",
+    "description": "A volcanic caldera lake in eastern Hokkaido, sacred in Ainu cosmology. The kamuy — gods who wear animal bodies like clothing — gather here. Kamuy Fuchi, the fire goddess, receives every prayer first from the hearth, then sends it onward. The marimo algae balls the lake produces are living sacred objects.",
+    "region": "Japan",
+    "pantheons": [
+      "ainu"
+    ]
+  },
+  {
+    "id": "panoias-sanctuary",
+    "name": "Panóias Rock Sanctuary",
+    "era": "nature",
+    "lat": 41.29,
+    "lng": -7.75,
+    "category": "sacred-site",
+    "description": "A granite outcrop in northern Portugal carved with ritual basins and Latin-Lusitanian inscriptions. The oldest layers predate Rome — Endovélico, the indigenous healing god, has more dedicatory inscriptions than most Roman deities. The rock itself was the temple.",
+    "region": "Portugal",
+    "pantheons": [
+      "celtiberian"
+    ]
+  },
+  {
+    "id": "haamonga-a-maui",
+    "name": "Haʻamonga ʻa Maui",
+    "era": "nature",
+    "lat": -21.14,
+    "lng": -175.04,
+    "category": "sacred-site",
+    "description": "A coral limestone trilithon erected around 1200 CE — Tonga's Stonehenge. Tradition says Maui carried the two uprights on his shoulders across the sea. Astronomical alignments mark solstices. The Tuʻi Tonga divine kings ruled from nearby, their authority rooted in Tangaloa's descent line.",
+    "region": "Tonga",
+    "pantheons": [
+      "tongan"
+    ]
+  },
+  {
+    "id": "saut-deau-waterfall",
+    "name": "Saut-d'Eau Waterfall",
+    "era": "nature",
+    "lat": 18.83,
+    "lng": -72.22,
+    "category": "sacred-site",
+    "description": "Every July thousands of pilgrims climb to this waterfall in Haiti's mountains to bathe in waters sacred to Erzulie, the lwa of love. Catholic saints and Vodou spirits meet at the cascade — the theology that crossed the Atlantic in the holds of slave ships found new water to inhabit.",
+    "region": "Haiti",
+    "pantheons": [
+      "haitian-vodou"
+    ]
+  },
+  {
+    "id": "nakauvadra-range",
+    "name": "Nakauvadra Range",
+    "era": "nature",
+    "lat": -17.62,
+    "lng": 177.95,
+    "category": "sacred-site",
+    "description": "The mountain range on Viti Levu where the great serpent Degei coils in his cave, and from which the first Fijians descended. The oldest Melanesian origin site — where the ancestor-gods emerged before spreading across the Pacific's western islands.",
+    "region": "Fiji",
+    "pantheons": [
+      "melanesian"
+    ]
+  },
+  {
+    "id": "ambohimanga",
+    "name": "Ambohimanga",
+    "era": "nature",
+    "lat": -18.76,
+    "lng": 47.56,
+    "category": "sacred-site",
+    "description": "The sacred royal hill of Madagascar, where Merina kings were entombed and the razana — the ancestral dead — continue to govern the living. Austronesian voyagers and African cosmology met on this island and produced something that exists nowhere else on Earth.",
+    "region": "Madagascar",
+    "pantheons": [
+      "malagasy"
+    ]
+  },
+  {
+    "id": "madain-salih",
+    "name": "Hegra",
+    "era": "nature",
+    "lat": 26.79,
+    "lng": 37.95,
+    "category": "sacred-site",
+    "description": "Nabataean temple-tombs carved into sandstone in the Arabian desert. Before Islam, this peninsula worshipped al-Lat, al-Uzza, and Manat — the three daughters of Allah mentioned in the Quran. The Ka'ba held 360 idols. These cliffs held the gods before the desert forgot them.",
+    "region": "Saudi Arabia",
+    "pantheons": [
+      "arabian"
+    ]
+  },
+  {
+    "id": "mount-pinatubo",
+    "name": "Mount Pinatubo",
+    "era": "nature",
+    "lat": 15.14,
+    "lng": 120.35,
+    "category": "sacred-site",
+    "description": "Sacred mountain of Luzon where Aeta and Tagalog spirits dwell. When it erupted in 1991, it was the second-largest volcanic eruption of the 20th century. The Aeta had been listening to the mountain's warnings for weeks. Bathala's house proved it was still occupied.",
+    "region": "Philippines",
+    "pantheons": [
+      "filipino"
+    ]
+  },
+  {
+    "id": "midas-city",
+    "name": "Midas City",
+    "era": "nature",
+    "lat": 39.35,
+    "lng": 30.69,
+    "category": "sacred-site",
+    "description": "A monumental Phrygian rock-cut shrine in the highlands of Anatolia, carved with the geometric facade of Matar — the Mother. Cybele's worship began in these mountains before spreading to Greece and Rome, becoming the first Eastern mystery cult officially adopted by the Roman Senate.",
+    "region": "Turkey",
+    "pantheons": [
+      "phrygian"
+    ]
+  },
+  {
+    "id": "yeavering",
+    "name": "Ad Gefrin",
+    "era": "nature",
+    "lat": 55.54,
+    "lng": -2.13,
+    "category": "sacred-site",
+    "description": "An Anglo-Saxon royal ritual site in Northumberland, excavated to reveal a great hall and temple structure. Before Augustine's mission reached the north, Woden and Thunor were worshipped here. Bede recorded its conversion — but the place-names across England still carry the old gods' signatures.",
+    "region": "England",
+    "pantheons": [
+      "anglo-saxon"
+    ]
+  },
+  {
+    "id": "knossos",
+    "name": "Knossos Palace",
+    "era": "nature",
+    "lat": 35.3,
+    "lng": 25.16,
+    "category": "sacred-site",
+    "description": "The Labyrinth itself — center of Minoan ritual life on Crete for two thousand years before the Olympians existed. Bull-leapers, snake goddesses, and the double-axe. The civilization that preceded Greece and haunted it with the memory of a religion it could never fully recover.",
+    "region": "Greece",
+    "pantheons": [
+      "minoan"
+    ]
+  },
+  {
+    "id": "monte-alban",
+    "name": "Monte Albán",
+    "era": "nature",
+    "lat": 17.04,
+    "lng": -96.77,
+    "category": "sacred-site",
+    "description": "The Zapotec ceremonial capital in the Oaxaca Valley, built on a leveled mountain top around 500 BCE. Cocijo the lightning god received offerings here for a thousand years. The Cloud People carved their own writing system, their own calendar, their own cosmos — parallel to but distinct from the Maya.",
+    "region": "Mexico",
+    "pantheons": [
+      "zapotec"
+    ]
+  },
+  {
+    "id": "bear-butte",
+    "name": "Noahvose",
+    "era": "nature",
+    "lat": 44.47,
+    "lng": -103.43,
+    "category": "sacred-site",
+    "description": "The sacred mountain of the Cheyenne, where Sweet Medicine received the four Sacred Arrows and the laws that would govern the people. A volcanic laccolith rising from the Plains — the land itself handing down a constitution. Still an active vision quest site, still contested ground.",
+    "region": "South Dakota",
+    "pantheons": [
+      "cheyenne"
+    ]
+  },
+  {
+    "id": "kituwah-mound",
+    "name": "Kituwah Mound",
+    "era": "nature",
+    "lat": 35.44,
+    "lng": -83.36,
+    "category": "sacred-site",
+    "description": "The Mother Town of the Cherokee, where the eternal fire was kept. All Cherokee towns traced their sacred fire back to this mound beside the Tuckasegee River. The Eastern Band reacquired it in 1996 — one of the few cases where a people bought back their own origin point.",
+    "region": "North Carolina",
+    "pantheons": [
+      "cherokee"
+    ]
+  },
+  {
+    "id": "chogha-zanbil",
+    "name": "Chogha Zanbil Ziggurat",
+    "era": "nature",
+    "lat": 32.01,
+    "lng": 48.52,
+    "category": "sacred-site",
+    "description": "The best-preserved ziggurat in the world, built by King Untash-Napirisha around 1250 BCE for the god Inshushinak. Elam — the fourth great civilization of the ancient Near East, alongside Sumer, Babylon, and Hatti — left its largest surviving monument in this stepped tower rising from the Khuzestan plain.",
+    "region": "Iran",
+    "pantheons": [
+      "elamite"
+    ]
+  },
+  {
+    "id": "broceliande",
+    "name": "Brocéliande",
+    "era": "c. 1170–1230 CE",
+    "lat": 48.0072,
+    "lng": -2.2356,
+    "category": "literary-location",
+    "description": "The enchanted forest of Arthurian romance, identified with the Forêt de Paimpont in Brittany. Where Merlin was imprisoned by Viviane beneath a hawthorn tree or in a tower of air. The fountain of Barenton, deep in the wood, was said to summon storms when water was poured on its stone. Chrétien de Troyes set the knight Yvain's adventures here. The forest represents the wilderness beyond the court — where enchantment, transformation, and encounters with the otherworld await any knight who rides beneath the canopy alone.",
+    "region": "France",
+    "streetView": {
+      "heading": 0,
+      "pitch": 10
+    },
+    "readUrl": "https://sacred-texts.com/neu/arthur/index.htm",
+    "excerpt": "Then Merlin fell in a dotage on the damosel that King Pellinore brought to court, and she was one of the damosels of the lake, that hight Nimue. But Merlin would let her have no rest, but always he would be with her. And she was afeared of him because he was a devil's son, and she could not be rid of him by no means. And so on a time it happed that Merlin showed to her in a rock where was a great wonder, and wrought by enchantment, that went under a great stone. So by her subtle working she made Merlin to go under that stone to let her wit of the marvels there; but she wrought so there for him that he came never out for all the craft he could do.\n\n— Sir Thomas Malory, Le Morte d'Arthur, Book IV",
+    "pantheons": [
+      "arthurian"
+    ]
+  },
+  {
+    "id": "dozmary-pool",
+    "name": "Dozmary Pool",
+    "era": "c. 1485 CE",
+    "lat": 50.5275,
+    "lng": -4.5825,
+    "category": "literary-location",
+    "description": "A remote moorland lake on Bodmin Moor, claimed as the water into which Sir Bedivere cast Excalibur after Arthur's final battle. The arm clothed in white samite rose from the surface, caught the sword, brandished it thrice, and drew it under. One of several lakes in Britain that claim this tradition — Llyn Llydaw on Snowdon is another — but Dozmary's isolation on the open moor gives it a desolation that fits the story's grief.",
+    "region": "England",
+    "streetView": {
+      "heading": 180,
+      "pitch": 5
+    },
+    "readUrl": "https://sacred-texts.com/neu/arthur/index.htm",
+    "wikisourcePage": "Le_Morte_d'Arthur",
+    "excerpt": "Then Sir Bedivere departed, and went to the sword, and lightly took it up, and went to the water side; and there he bound the girdle about the hilts, and then he threw the sword as far into the water as he might; and there came an arm and an hand above the water and met it, and caught it, and so shook it thrice and brandished, and then vanished away the hand with the sword in the water.\n\n— Sir Thomas Malory, Le Morte d'Arthur, Book XXI",
+    "pantheons": [
+      "arthurian"
+    ]
+  },
+  {
+    "id": "corbenic-bamburgh",
+    "name": "Bamburgh Castle",
+    "era": "5th–6th century CE",
+    "lat": 55.6089,
+    "lng": -1.7099,
+    "category": "literary-location",
+    "description": "The great coastal fortress of Northumbria, identified by some Arthurian scholars with Joyous Garde — Lancelot's own castle — and by others with Corbenic, the castle of the Grail. In Malory, Joyous Garde was where Lancelot brought Guinevere after rescuing her from the stake, and where he was eventually buried. The fortress sits on a basalt outcrop above the North Sea, and the sixth-century kings who held it — including the historical figures behind some Arthurian connections — ruled from a hall whose foundations lie beneath the Norman keep.",
+    "region": "England",
+    "streetView": {
+      "heading": 90,
+      "pitch": 10
+    },
+    "readUrl": "https://sacred-texts.com/neu/arthur/index.htm",
+    "excerpt": "And some men say in many parts of England that King Arthur is not dead, but had by the will of our Lord Jesu into another place; and men say that he shall come again, and he shall win the holy cross. I will not say it shall be so, but rather I will say: here in this world he changed his life. But many men say that there is written upon his tomb this verse: HIC IACET ARTHURUS, REX QUONDAM, REXQUE FUTURUS.\n\n— Sir Thomas Malory, Le Morte d'Arthur, Book XXI",
+    "pantheons": [
+      "arthurian"
+    ]
+  },
+  {
+    "id": "troyes",
+    "name": "Troyes",
+    "era": "c. 1170–1190 CE",
+    "lat": 48.2973,
+    "lng": 4.0744,
+    "category": "literary-location",
+    "description": "The Champagne court city where Chrétien de Troyes wrote under the patronage of Countess Marie de Champagne. Here, in the 1170s–1180s, the Arthurian romance was invented as a literary form. Chrétien created Lancelot in Le Chevalier de la Charrette, named Camelot for the first time, and — most consequentially — introduced the Holy Grail in Le Conte du Graal (c. 1190), the unfinished romance of Perceval. He died before finishing it. The poem breaks off mid-sentence, and the next three centuries of European literature were spent trying to complete what he started.",
+    "region": "France",
+    "streetView": {
+      "heading": 0,
+      "pitch": 10
+    },
+    "readUrl": "https://sacred-texts.com/neu/arthur/index.htm",
+    "excerpt": "Perceval watched them pass before him, and he did not dare to ask whom one served with the grail, for in his heart he kept the words of the wise gentleman. He feared that if he asked it would be taken as a rudeness, and so he held his peace. He did not know that by failing to ask, a kingdom would remain waste, and a king would go unhealed.\n\n— Chrétien de Troyes, Le Conte du Graal (c. 1190), paraphrase",
+    "pantheons": [
+      "arthurian"
+    ]
+  },
+  {
+    "id": "wolframs-eschenbach",
+    "name": "Wolframs-Eschenbach",
+    "era": "c. 1200–1210 CE",
+    "lat": 49.2271,
+    "lng": 10.7264,
+    "category": "literary-location",
+    "description": "The Franconian town that claims Wolfram von Eschenbach, author of Parzival — the greatest Grail romance and one of the masterworks of medieval literature. Written c. 1200–1210, Parzival transforms Chrétien's unfinished Perceval into a complete spiritual biography: the fool who fails the Grail question, wanders for years in despair, rages against God, and finally learns that the Grail is not won by purity alone but by compassion born of suffering. Wolfram renamed the Grail castle Munsalvaesche and made the Grail itself a stone — lapsit exillis — not a cup. His Grail is guarded by Templars. His wounded king is Anfortas. His telling insists that the Islamic world belongs inside the story, not outside it: Parzival's half-brother Feirefiz, son of their father Gahmuret and the Moorish queen Belakane, arrives at the Grail bearing a skin of black and white.",
+    "region": "Germany",
+    "streetView": {
+      "heading": 0,
+      "pitch": 10
+    },
+    "readUrl": "https://sacred-texts.com/neu/arthur/index.htm",
+    "excerpt": "If vacillation dwell with the heart, the soul will rue it. Shame and honor clash where the courage of a steadfast man is motley like the magpie. But such a man may yet make merry, for Heaven and Hell have equal part in him. Inconstancy's companion is black all over and takes on the hue of darkness, while the man of steady purpose holds to the white.\n\n— Wolfram von Eschenbach, Parzival, Book I (trans. A.T. Hatto)",
+    "pantheons": [
+      "arthurian"
+    ]
+  },
+  {
+    "id": "montsegur",
+    "name": "Montségur",
+    "era": "1244 CE",
+    "lat": 42.876,
+    "lng": 1.8314,
+    "category": "sacred-site",
+    "description": "The Cathar fortress in the Ariège Pyrenees, besieged and burned by the Albigensian Crusade in 1244. Over two hundred Cathar perfecti walked into the flames rather than recant. In the twentieth century, Otto Rahn and others identified Montségur with Wolfram's Munsalvaesche — the Grail castle on the mountain. The identification is historically unsound but mythologically potent: a mountaintop citadel guarding a sacred object, destroyed by orthodox power, its treasure smuggled out the night before the fall by four men who descended the cliff face in darkness. Whether that treasure was the Grail, the Cathar funds, or nothing at all, the story rhymes with every Grail narrative — the sacred thing that slips away at the moment of its apparent destruction.",
+    "region": "France",
+    "streetView": {
+      "heading": 180,
+      "pitch": 20
+    },
+    "pantheons": [
+      "arthurian"
+    ]
+  },
+  {
+    "id": "mont-saint-michel",
+    "name": "Mont-Saint-Michel",
+    "era": "c. 1136 CE",
+    "lat": 48.6361,
+    "lng": -1.5115,
+    "category": "literary-location",
+    "description": "The tidal island abbey off the Normandy coast where, in Geoffrey of Monmouth's Historia, Arthur fights and kills a giant who had carried off Helena, niece of Duke Hoel of Brittany. The giant roasted pigs on the summit and wore a cloak woven from the beards of kings he had slain. Arthur climbed the rock alone and fought him hand to hand. The episode sits between Arthur's continental campaign against Rome and his return to Britain to face Mordred — a hero's last monster before the final reckoning. The eighth-century abbey, rising from the sea on its granite pillar, needed no embellishment to look like a place where such things could happen.",
+    "region": "France",
+    "streetView": {
+      "heading": 90,
+      "pitch": 15
+    },
+    "readUrl": "https://sacred-texts.com/neu/arthur/index.htm",
+    "excerpt": "Arthur drew his sword Caliburn, calling upon the name of the Blessed Virgin. He rushed at the giant with all speed and struck him on the forehead with his full force, so that the blade sank in between his brows and the blood gushed forth. But the giant was not killed. He struck back at Arthur with his club, and Arthur raised his shield just in time, and drove Caliburn through the creature's skull.\n\n— Geoffrey of Monmouth, Historia Regum Britanniae, Book X (paraphrase)",
+    "pantheons": [
+      "arthurian"
+    ]
+  },
+  {
+    "id": "montserrat",
+    "name": "Montserrat",
+    "era": "c. 1882 CE",
+    "lat": 41.5933,
+    "lng": 1.8382,
+    "category": "sacred-site",
+    "description": "The serrated mountain monastery near Barcelona, home to the Black Madonna of Montserrat — La Moreneta — venerated since the twelfth century. Wagner identified Montserrat with Monsalvat, the Grail temple in his opera Parsifal (1882), and the mountain's jagged silhouette does look like a ruined castle of the gods. The Benedictine monastery, founded in 1025, houses one of Europe's oldest boys' choirs and a library of medieval manuscripts. The Grail connection is Wagner's invention, not Wolfram's, but it took hold: pilgrims have climbed this mountain looking for the cup ever since.",
+    "region": "Spain",
+    "streetView": {
+      "heading": 0,
+      "pitch": 20
+    },
+    "pantheons": [
+      "arthurian"
+    ]
+  },
+  {
+    "id": "valencia-holy-grail",
+    "name": "Valencia Cathedral — The Holy Chalice",
+    "era": "c. 1st century CE (tradition)",
+    "lat": 39.4753,
+    "lng": -0.3755,
+    "category": "sacred-site",
+    "description": "The Cathedral of Valencia houses the Santo Cáliz — the agate cup that the Catholic Church has acknowledged as a plausible candidate for the historical chalice of the Last Supper. The cup's upper portion is a first-century Roman agate vessel consistent with Palestinian workshop traditions. Tradition holds it was brought to Rome by Saint Peter, sent to Huesca during the Diocletian persecution, hidden in the Pyrenean monasteries of San Juan de la Peña during the Moorish conquest, and delivered to Valencia in 1424. Whether or not it is the historical cup, it is the object that most plausibly connects the liturgical relic tradition to the literary Grail — the vessel that served at the table of the last supper, carried west, hidden in mountain churches, sought by knights.",
+    "region": "Spain",
+    "streetView": {
+      "heading": 0,
+      "pitch": 10
+    },
+    "pantheons": [
+      "arthurian"
+    ]
+  },
+  {
+    "id": "san-juan-de-la-pena",
+    "name": "San Juan de la Peña",
+    "era": "c. 920 CE",
+    "lat": 42.5083,
+    "lng": -0.6633,
+    "category": "sacred-site",
+    "description": "The monastery built into the cliff face in the Aragonese Pyrenees, where the Holy Chalice was allegedly kept for three centuries before its transfer to Valencia. Founded in the early tenth century, the lower church is carved directly into the rock — a cave become a chapel. The Romanesque cloister, open on one side to the void below the cliff, holds carved capitals depicting Genesis, the life of Christ, and scenes that some have read as Grail imagery. The monastery sits on the pilgrimage route and served as the royal pantheon of the early Aragonese kings. If the Santo Cáliz followed the path tradition claims — Rome to Huesca to the mountains — this is where it waited out the centuries.",
+    "region": "Spain",
+    "streetView": {
+      "heading": 0,
+      "pitch": 15
+    },
+    "pantheons": [
+      "arthurian"
+    ]
+  },
+  {
+    "id": "fecamp-abbey",
+    "name": "Fécamp Abbey — The Precious Blood",
+    "era": "c. 1170 CE",
+    "lat": 49.7578,
+    "lng": 0.3737,
+    "category": "sacred-site",
+    "description": "The Benedictine abbey in Normandy that housed the relic of the Precious Blood — Christ's blood preserved in a fig-wood trunk, said to have washed ashore on the Normandy coast. The abbey's Holy Blood tradition predates and likely influenced the Grail romances: Robert de Boron, who first identified the Grail as the cup of the Last Supper in his Joseph d'Arimathie (c. 1200), may have known the Fécamp legend. The connection between the vessel that caught Christ's blood and the vessel sought by knights begins here — in a Norman coastal town where relics arrived by sea and stories traveled with the pilgrims.",
+    "region": "France",
+    "streetView": {
+      "heading": 0,
+      "pitch": 10
+    },
+    "readUrl": "https://sacred-texts.com/neu/arthur/index.htm",
+    "excerpt": "And when Joseph of Arimathea received the body of Our Lord from the Cross, he took the vessel in which Our Lord had made his sacrament, and therein he received the blood that ran from His body. And from that time forward the vessel was called the Holy Grail.\n\n— Robert de Boron, Joseph d'Arimathie (c. 1200), paraphrase",
+    "pantheons": [
+      "arthurian"
+    ]
+  },
+  {
+    "id": "oxford-geoffrey",
+    "name": "Oxford — Geoffrey of Monmouth",
+    "era": "c. 1136 CE",
+    "lat": 51.752,
+    "lng": -1.2577,
+    "category": "literary-location",
+    "description": "The city where Geoffrey of Monmouth composed the Historia Regum Britanniae (c. 1136), the text that launched the Arthurian tradition into European consciousness. Geoffrey was a cleric associated with St George's College within Oxford Castle. He claimed to be translating a very ancient book in the British tongue — no such book has ever been found. What he actually did was take fragments from Nennius, Gildas, Welsh genealogies, and his own invention, and forge them into a chronicle that gave Arthur a biography: his conception at Tintagel through Merlin's magic, his coronation, his conquest of much of Europe, and his final battle against Mordred. Within a generation, the Historia had been translated into French, Norman, and eventually every literary language in Europe. Arthur as we know him begins here.",
+    "region": "England",
+    "streetView": {
+      "heading": 0,
+      "pitch": 10
+    },
+    "readUrl": "https://sacred-texts.com/neu/arthur/index.htm",
+    "excerpt": "Walter, Archdeacon of Oxford, a man learned in the art of public speaking and well informed about the history of foreign countries, presented me with a certain very ancient book written in the British language. This book, attractively composed to form a consecutive and orderly narrative, set out all the deeds of these men, from Brutus, the first King of the Britons, down to Cadwallader, the son of Cadwallo.\n\n— Geoffrey of Monmouth, Historia Regum Britanniae, Dedication (c. 1136)",
+    "pantheons": [
+      "arthurian"
+    ]
+  },
+  {
+    "id": "glastonbury-tor",
+    "name": "Glastonbury Tor",
+    "era": "c. 1191 CE",
+    "lat": 51.1442,
+    "lng": -2.6987,
+    "category": "sacred-site",
+    "description": "The terraced hill that rises above the Somerset Levels — visible for miles, shaped by ancient trackways that spiral to its summit, crowned by the roofless tower of St Michael's church. In 1191, the monks of Glastonbury Abbey claimed to have discovered the graves of Arthur and Guinevere in the cemetery — a lead cross inscribed HIC IACET SEPULTUS INCLITUS REX ARTHURUS. The discovery was almost certainly staged to raise funds after a fire destroyed the abbey, but it permanently welded Glastonbury to the Arthurian map. The Tor itself, surrounded by wetlands that in winter made it an island, became the Isle of Avalon — the place between worlds where the wounded king was carried to be healed. The spiral terracing may be prehistoric, possibly a three-dimensional labyrinth walked as a ritual path.",
+    "region": "England",
+    "streetView": {
+      "heading": 0,
+      "pitch": 20
+    },
+    "pantheons": [
+      "arthurian"
+    ]
+  },
+  {
+    "id": "winchester-cathedral",
+    "name": "Winchester Cathedral",
+    "era": "c. 1485 CE",
+    "lat": 51.0607,
+    "lng": -1.3131,
+    "category": "literary-location",
+    "description": "Winchester — the old Saxon capital — was sometimes identified as Camelot itself. In 1485, William Caxton printed Le Morte d'Arthur from his Westminster press, the first major Arthurian work in English print, compiled by Sir Thomas Malory from French and English sources while imprisoned. The Winchester Manuscript of the Morte, discovered in the Winchester College library in 1934 by W.F. Oakeshott, is the only manuscript copy and differs significantly from Caxton's printed edition. It is the closest we have to what Malory actually wrote. The cathedral and the castle's Great Hall — where the Round Table hangs — together make Winchester the city where the Arthurian tradition was both displayed and preserved.",
+    "region": "England",
+    "streetView": {
+      "heading": 0,
+      "pitch": 10
+    },
+    "readUrl": "https://sacred-texts.com/neu/arthur/index.htm",
+    "wikisourcePage": "Le_Morte_d'Arthur",
+    "excerpt": "I, according to my copy, have done set it in imprint, to the intent that noble men may see and learn the noble acts of chivalry, the gentle and virtuous deeds that some knights used in those days, by which they came to honour, and how they that were vicious were punished and oft put to shame and rebuke.\n\n— William Caxton, Preface to Le Morte d'Arthur (1485)",
+    "pantheons": [
+      "arthurian"
+    ]
+  },
+  {
+    "id": "myra-st-nicholas",
+    "name": "Myra — Church of St. Nicholas",
+    "era": "4th century CE",
+    "lat": 36.2592,
+    "lng": 29.9837,
+    "category": "sacred-site",
+    "description": "The Lycian city of Myra — modern Demre, on the Turkish Mediterranean coast — is where Nicholas served as bishop in the early fourth century. The historical Nicholas was present at the Council of Nicaea (325 CE), reportedly slapped Arius during the theological debate, and became legendary for secret gift-giving: gold coins tossed through a window to save three sisters from destitution, the story that seeded fifteen centuries of mythmaking. His church, built over his tomb in the sixth century, was a major pilgrimage site until Italian sailors stole his relics in 1087 and carried them to Bari. The transformation from a fourth-century Anatolian bishop to a flying, chimney-descending, reindeer-driving figure in a red suit is one of the longest mythological evolutions on record — Sinterklaas in the Netherlands, Father Christmas in England, Père Noël in France, and finally Santa Claus, reshaped by Clement Clarke Moore, Thomas Nast, and Coca-Cola into the figure the entire world now recognizes.",
+    "region": "Turkey",
+    "streetView": {
+      "heading": 90,
+      "pitch": 10
+    },
+    "pantheons": [
+      "global"
+    ]
+  },
+  {
+    "id": "bari-st-nicholas",
+    "name": "Bari — Basilica of St. Nicholas",
+    "era": "1087 CE",
+    "lat": 41.1286,
+    "lng": 16.8719,
+    "category": "sacred-site",
+    "description": "In 1087, sailors from Bari broke into St. Nicholas's tomb in Myra and carried his bones to southern Italy, where the Basilica di San Nicola was built to house them. The theft was called a translatio — a holy rescue — and it made Bari one of the great pilgrimage destinations of medieval Christendom. Nicholas's cult spread from here through the Norman world and up into northern Europe, where the Dutch transformed him into Sinterklaas. The myrrh that still seeps from his bones — the manna di San Nicola — is collected each year on his feast day, May 9. The relics are in the crypt, below Romanesque columns and a silver-sheathed altar. The man in the tomb gave secret gifts to the poor. Nineteen centuries later, the whole world still tells versions of that story every December.",
+    "region": "Italy",
+    "streetView": {
+      "heading": 0,
+      "pitch": 10
+    },
+    "pantheons": [
+      "global",
+      "roman"
+    ]
+  },
+  {
+    "id": "rovaniemi-santa",
+    "name": "Rovaniemi — Santa Claus Village",
+    "era": "1985 CE",
+    "lat": 66.5436,
+    "lng": 25.8471,
+    "category": "sacred-site",
+    "description": "On the Arctic Circle in Finnish Lapland, the village that formalized the North Pole myth into a physical place. Eleanor Roosevelt visited Rovaniemi in 1950 during its postwar reconstruction; Finland declared it Santa's official hometown in 1985. The village sits exactly on the 66°33' line, with Santa's Post Office receiving hundreds of thousands of letters annually from children worldwide. The Finnish Santa — Joulupukki, the \"Yule Goat\" — predates the American version and carries traces of older Scandinavian midwinter traditions: the straw goat, the Yule log, the returning dead. What Rovaniemi did was give the global myth a postal address.",
+    "region": "Finland",
+    "streetView": {
+      "heading": 0,
+      "pitch": 10
+    },
+    "pantheons": [
+      "global",
+      "finnish"
+    ]
+  },
+  {
+    "id": "bethlehem-nativity",
+    "name": "Bethlehem — Church of the Nativity",
+    "era": "c. 4th century CE",
+    "lat": 31.7043,
+    "lng": 35.2076,
+    "category": "sacred-site",
+    "description": "The oldest continuously operating church in the world, built by Constantine in 326 CE over the cave tradition identifies as the birthplace of Jesus. The silver star on the grotto floor marks the spot — Hic de Virgine Maria Jesus Christus natus est. The date December 25 was likely fixed in the fourth century to absorb Sol Invictus, the Roman feast of the unconquered sun, itself overlaying still older solstice observances. The church survived the Persian invasion of 614 because the Sassanid soldiers recognized the Magi on the façade mosaic as Persian and spared it. Bethlehem is where the historical event — whatever it was — met the mythological need for a divine birth at the darkest point of the year, and the two became inseparable.",
+    "region": "Palestine",
+    "streetView": {
+      "heading": 0,
+      "pitch": 10
+    },
+    "pantheons": [
+      "global"
+    ]
+  },
+  {
+    "id": "strasbourg-christmas-market",
+    "name": "Strasbourg — Christkindelsmärik",
+    "era": "1570 CE",
+    "lat": 48.5815,
+    "lng": 7.751,
+    "category": "sacred-site",
+    "description": "The oldest documented Christmas market in Europe, established in 1570 on the cathedral square. The Protestant Reformation had banned St. Nicholas's feast, so the Strasbourg authorities moved the gift-giving to Christmas Eve and invented the Christkindel — the Christ Child — as the gift-bringer. The Christkindel was a girl in white with a golden crown, not an infant — a Protestant replacement for a Catholic saint that became its own mythos. From Strasbourg the Christmas market tradition spread across the German-speaking world and eventually globally. The Alsatian city, perched between French and German culture, is where the modern Christmas as a commercial, atmospheric, light-filled winter festival was born.",
+    "region": "France",
+    "streetView": {
+      "heading": 0,
+      "pitch": 10
+    },
+    "pantheons": [
+      "global"
+    ]
+  },
+  {
+    "id": "tlachtga-hill-of-ward",
+    "name": "Tlachtga — Hill of Ward",
+    "era": "c. 1st century BCE onwards",
+    "lat": 53.5465,
+    "lng": -6.7306,
+    "category": "sacred-site",
+    "description": "The hill in County Meath where the great Samhain fire was lit each year on October 31, visible across the central Irish plain. All other fires in Ireland were extinguished and relit from Tlachtga's flame — the land died and was reborn in a single night. The hill is named for the druidess Tlachtga, daughter of Mog Ruith, who was raped by the three sons of Simon Magus and died giving birth to triplets on this summit. Her story binds the site to sacrifice, forced transformation, and the terrible cost of knowledge carried back from foreign lands. Archaeological excavation has confirmed a large ritual enclosure with evidence of burning. Tlachtga was the fire. The Hill of Tara, twelve kilometers east, was the feast. Together they formed the two poles of Samhain — death and sovereignty, ending and beginning, the hinge of the Celtic year.",
+    "region": "Ireland",
+    "streetView": {
+      "heading": 0,
+      "pitch": 10
+    },
+    "pantheons": [
+      "global",
+      "celtic-irish"
+    ]
+  },
+  {
+    "id": "oweynagat-rathcroghan",
+    "name": "Oweynagat — Cave of the Cats",
+    "era": "c. 1st century BCE",
+    "lat": 53.7987,
+    "lng": -8.3106,
+    "category": "sacred-site",
+    "description": "The cave entrance at Rathcroghan in County Roscommon — Cruachan, the royal seat of Connacht — identified in Irish mythology as a gate to the otherworld. At Samhain, the cave opened and creatures poured forth: the Morrígan emerged in her chariot, flocks of red birds whose breath withered crops, herds of pigs that could not be counted, and a three-headed monster called the Ellén Trechend. The Táin Bó Cúailnge begins with Medb and Ailill in their bed at Cruachan, arguing about whose possessions are greater. The cave itself is a narrow limestone passage, partially man-made, with an ogham inscription at its entrance. It is Ireland's gate to hell — and the original haunted house.",
+    "region": "Ireland",
+    "streetView": {
+      "heading": 0,
+      "pitch": 5
+    },
+    "pantheons": [
+      "global",
+      "celtic-irish"
+    ]
+  },
+  {
+    "id": "derry-halloween",
+    "name": "Derry — Halloween Capital",
+    "era": "Samhain tradition",
+    "lat": 54.9966,
+    "lng": -7.3086,
+    "category": "sacred-site",
+    "description": "The walled city on the River Foyle hosts the largest Halloween celebration in Europe — a direct descendant of Samhain traditions that never fully died in the northwest of Ireland. The festival draws tens of thousands annually for parades, fireworks from the city walls, and a carnival atmosphere that retains the old structure: bonfires, costumes, the returning dead. The tradition survived here because Ulster's rural communities maintained Samhain customs — turnip lanterns, guising, divination games — through centuries when the Church tried to absorb them into All Saints' and All Souls' Day. When Irish emigrants carried these customs to America, the turnip became a pumpkin and Samhain became Halloween. Derry is where the thread runs unbroken.",
+    "region": "Ireland",
+    "streetView": {
+      "heading": 0,
+      "pitch": 10
+    },
+    "pantheons": [
+      "global",
+      "celtic-irish"
+    ]
+  },
+  {
+    "id": "salem-halloween",
+    "name": "Salem",
+    "era": "1692 CE",
+    "lat": 42.5195,
+    "lng": -70.8967,
+    "category": "sacred-site",
+    "description": "The Massachusetts town where, in 1692, accusations of witchcraft led to the execution of twenty people and the imprisonment of nearly two hundred. The Salem witch trials became the American origin myth for Halloween — not because the trials happened at Halloween (they ran from February to October), but because Salem gave America its own witch mythology, independent of the Irish Samhain tradition the immigrants brought. The town leaned into it: October in Salem is now a month-long festival drawing over a million visitors. The Witch Trials Memorial, the Peabody Essex Museum, and the kitschy commercial strip coexist uneasily. Salem is where Puritan terror of the supernatural was recycled into entertainment — a very American transformation, turning collective guilt into a tourist economy.",
+    "region": "United States",
+    "streetView": {
+      "heading": 0,
+      "pitch": 10
+    },
+    "pantheons": [
+      "global"
+    ]
+  },
+  {
+    "id": "sleepy-hollow",
+    "name": "Sleepy Hollow",
+    "era": "1820 CE",
+    "lat": 41.0859,
+    "lng": -73.8587,
+    "category": "literary-location",
+    "description": "The village on the Hudson River — originally North Tarrytown — that Washington Irving immortalized in \"The Legend of Sleepy Hollow\" (1820). The Headless Horseman, a Hessian soldier decapitated by a cannonball during the Revolutionary War, rides through the hollow each night searching for his head. Irving's story transplanted European ghost traditions onto American soil and created the first homegrown American Halloween mythology. The Old Dutch Church and its burial ground, the bridge where Ichabod Crane met the Horseman, and the Sleepy Hollow Cemetery (where Irving himself is buried) form a landscape that functions as a literary pilgrimage site every October.",
+    "region": "United States",
+    "streetView": {
+      "heading": 0,
+      "pitch": 10
+    },
+    "readUrl": "https://sacred-texts.com/ame/index.htm",
+    "excerpt": "The dominant spirit, however, that haunts this enchanted region, and seems to be commander-in-chief of all the powers of the air, is the apparition of a figure on horseback, without a head. It is said by some to be the ghost of a Hessian trooper, whose head had been carried away by a cannon-ball, in some nameless battle during the Revolutionary War, and who is ever and anon seen by the country folk hurrying along in the gloom of night, as if on the wings of the wind.\n\n— Washington Irving, \"The Legend of Sleepy Hollow\" (1820)",
+    "pantheons": [
+      "global"
+    ]
+  },
+  {
+    "id": "mixquic-day-of-dead",
+    "name": "Mixquic — San Andrés",
+    "era": "pre-Columbian / syncretic",
+    "lat": 19.2264,
+    "lng": -98.9608,
+    "category": "sacred-site",
+    "description": "The island village in the chinampas south of Mexico City where the Día de los Muertos observance is among the oldest and most traditional in Mexico. On the night of November 1–2, families clean and decorate the graves in the churchyard cemetery, lay paths of marigold petals (cempasúchil) to guide the dead home, build ofrendas with the favorite foods of the departed, and keep vigil through the night by candlelight. The practice fuses Aztec beliefs about Mictlán — the underworld where the dead reside — with Catholic All Saints' and All Souls' Day. The Aztec festival of the dead was originally held in August and lasted a full month; the Spanish moved it to November to align with the Christian calendar. What survived the syncretism is the core conviction: the dead are not gone. They return when invited. You set a place for them at the table.",
+    "region": "Mexico",
+    "streetView": {
+      "heading": 0,
+      "pitch": 10
+    },
+    "pantheons": [
+      "global",
+      "aztec"
+    ]
+  },
+  {
+    "id": "janitzio-patzcuaro",
+    "name": "Janitzio Island — Lake Pátzcuaro",
+    "era": "pre-Columbian / syncretic",
+    "lat": 19.5736,
+    "lng": -101.6444,
+    "category": "sacred-site",
+    "description": "The island in Lake Pátzcuaro, Michoacán, where the Purépecha people's Night of the Dead is perhaps the most visually striking observance in Mexico. On November 1, fishermen paddle canoes across the lake by torchlight while women and children keep vigil in the hilltop cemetery, surrounded by thousands of candles and marigolds. The Purépecha — who were never conquered by the Aztecs — maintained their own death traditions independent of Nahuatl culture. Their observance predates the Spanish arrival and was never fully Christianized. UNESCO recognized the broader Día de los Muertos tradition as Intangible Cultural Heritage in 2003, but Janitzio is where the image lives: the lake, the candles, the boats in the dark, the dead welcomed home across the water.",
+    "region": "Mexico",
+    "streetView": {
+      "heading": 0,
+      "pitch": 10
+    },
+    "pantheons": [
+      "global",
+      "aztec"
+    ]
+  },
+  {
+    "id": "rome-temple-janus",
+    "name": "Rome — Temple of Janus",
+    "era": "c. 153 BCE",
+    "lat": 41.8924,
+    "lng": 12.4854,
+    "category": "sacred-site",
+    "description": "The double-gated temple in the Roman Forum whose doors stood open in time of war and closed in peace — closed only twice before Augustus. Janus, the two-faced god who looks simultaneously forward and backward, gave his name to January when the Roman calendar was reorganized in 153 BCE to begin on January 1 instead of March 1. He presides over all transitions: doorways, beginnings, endings, the passage between states. Every New Year's celebration worldwide descends, through the Roman calendar's adoption by the Julian and then Gregorian systems, from Janus's threshold. The temple's location in the Forum, between the Senate and the market, placed the god of transitions at the center of civic life. When the doors were shut, it meant the world was at peace. The doors were almost never shut.",
+    "region": "Italy",
+    "streetView": {
+      "heading": 0,
+      "pitch": 10
+    },
+    "pantheons": [
+      "global",
+      "roman"
+    ]
+  },
+  {
+    "id": "edinburgh-hogmanay",
+    "name": "Edinburgh — Hogmanay",
+    "era": "Norse/Scottish tradition",
+    "lat": 55.9533,
+    "lng": -3.1883,
+    "category": "sacred-site",
+    "description": "Scotland's New Year celebration is the largest street festival in the UK and one of the great fire festivals of northern Europe. Hogmanay descends from Norse Yule traditions carried to Scotland by the Vikings — the word itself may derive from Old Norse hoggunott (\"slaughter night\") or Old French aguillanneuf (\"to the new year\"). The traditions — first-footing (the first visitor across the threshold after midnight must be a dark-haired man carrying coal, bread, salt, and whisky), the fireball ceremony in Stonehaven, the torchlight procession down the Royal Mile — are all threshold rituals: ensuring that what crosses into the new year is lucky, warm, fed, and slightly drunk. Scotland's emphasis on New Year over Christmas dates to the Reformation, when the Kirk banned Christmas celebrations as papist excess, and the midwinter energy migrated to December 31.",
+    "region": "Scotland",
+    "streetView": {
+      "heading": 0,
+      "pitch": 10
+    },
+    "pantheons": [
+      "global",
+      "norse"
+    ]
+  },
+  {
+    "id": "times-square-new-year",
+    "name": "Times Square — The Ball Drop",
+    "era": "1907 CE",
+    "lat": 40.758,
+    "lng": -73.9855,
+    "category": "sacred-site",
+    "description": "The intersection at 42nd Street and Broadway where, since 1907, a illuminated ball has descended a flagpole at midnight on December 31. The first ball was iron and wood, five feet in diameter, lit with one hundred 25-watt bulbs. The tradition was invented by Adolph Ochs, publisher of the New York Times, as a replacement for a fireworks display that the city had banned. What he created, accidentally, was the modern world's equivalent of the Samhain bonfire or the Janus threshold — a single visual event, witnessed simultaneously by a million people in the street and now over a billion on screens, that marks the exact moment of transition. The countdown, the kiss, the confetti — these are ritual behaviors performed by people who would not call them rituals. Times Square is where the secular world conducts its new year's ceremony and pretends it isn't one.",
+    "region": "United States",
+    "streetView": {
+      "heading": 0,
+      "pitch": 10
+    },
+    "pantheons": [
+      "global"
+    ]
+  },
+  {
+    "id": "sydney-harbour-nye",
+    "name": "Sydney Harbour — New Year's Eve",
+    "era": "1976 CE",
+    "lat": -33.8568,
+    "lng": 151.2153,
+    "category": "sacred-site",
+    "description": "The harbour where the first major New Year's fireworks display of each calendar year detonates over the Bridge and Opera House — watched live by over a million people on the foreshore and broadcast to the world as the opening act of the global midnight relay. Sydney's display, which began as a modest bicentennial rehearsal in 1976 and grew into an annual institution, functions as the planet's clock: when Sydney's fireworks go off, the world knows the new year has started. The image — the Bridge as a scaffold for light, the harbour reflecting it — is now as iconographic as the Times Square ball. That two of the world's primary New Year's rituals involve descending light (the ball) and ascending light (the fireworks) may not be accidental. Both are solar return ceremonies stripped of their theology and restaged as spectacle.",
+    "region": "Australia",
+    "streetView": {
+      "heading": 0,
+      "pitch": 10
+    },
+    "pantheons": [
+      "global"
+    ]
   }
 ]

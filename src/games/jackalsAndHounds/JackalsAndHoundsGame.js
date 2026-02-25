@@ -294,20 +294,96 @@ function JackalsAndHoundsGame({
   );
 
   const renderBoard = () => (
-    <svg viewBox="0 0 300 500" style={{ width: '100%', maxWidth: 300, display: 'block', margin: '0 auto' }}>
+    <svg className="game-board-svg" viewBox="0 0 300 500">
+      <defs>
+        <linearGradient id="jh-bg" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stopColor="#3a2f1e" />
+          <stop offset="50%" stopColor="#2a1f14" />
+          <stop offset="100%" stopColor="#1a1510" />
+        </linearGradient>
+        <radialGradient id="jh-hole-depth" cx="45%" cy="40%" r="50%">
+          <stop offset="0%" stopColor="#5a4a30" />
+          <stop offset="100%" stopColor="#3a2a18" />
+        </radialGradient>
+        <radialGradient id="jh-piece-gold" cx="40%" cy="35%">
+          <stop offset="0%" stopColor="#e8c878" />
+          <stop offset="100%" stopColor="#a88832" />
+        </radialGradient>
+        <radialGradient id="jh-piece-steel" cx="40%" cy="35%">
+          <stop offset="0%" stopColor="#a8b8d8" />
+          <stop offset="100%" stopColor="#5a6f94" />
+        </radialGradient>
+        <filter id="jh-shortcut-glow">
+          <feGaussianBlur stdDeviation="1.5" result="blur" />
+          <feMerge>
+            <feMergeNode in="blur" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
+      </defs>
+
       {/* Background */}
-      <rect x="0" y="0" width="300" height="500" fill="#2a1f14" rx="10" />
+      <rect x="0" y="0" width="300" height="500" fill="url(#jh-bg)" rx="10" />
 
       {/* Decorative palm tree between columns */}
-      <g opacity="0.35">
-        {/* Trunk */}
-        <rect x="145" y="80" width="10" height="350" fill="#6b4226" rx="3" />
-        {/* Fronds */}
-        <ellipse cx="150" cy="75" rx="40" ry="15" fill="#4a7a3a" transform="rotate(-15 150 75)" />
-        <ellipse cx="150" cy="75" rx="40" ry="15" fill="#4a7a3a" transform="rotate(15 150 75)" />
-        <ellipse cx="150" cy="70" rx="35" ry="12" fill="#5a8a4a" transform="rotate(-40 150 70)" />
-        <ellipse cx="150" cy="70" rx="35" ry="12" fill="#5a8a4a" transform="rotate(40 150 70)" />
-        <ellipse cx="150" cy="65" rx="30" ry="10" fill="#6a9a5a" />
+      <g opacity="0.5" style={{ pointerEvents: 'none' }}>
+        {/* Trunk — slight S-curve with taper */}
+        <path
+          d="M 148 430 Q 144 320 150 220 Q 154 140 150 80"
+          fill="none" stroke="#8b5e3c" strokeWidth="11" strokeLinecap="round"
+        />
+        <path
+          d="M 148 430 Q 144 320 150 220 Q 154 140 150 80"
+          fill="none" stroke="#6b4226" strokeWidth="8" strokeLinecap="round"
+        />
+        {/* Bark texture lines */}
+        {[110, 140, 170, 200, 235, 270, 305, 340, 370, 400].map((y, i) => {
+          const xOff = (i % 2 === 0 ? -1 : 1) * 0.5;
+          return (
+            <line key={`bark-${i}`}
+              x1={144 + xOff} y1={y} x2={156 + xOff} y2={y + 2}
+              stroke="#5a3018" strokeWidth="0.8" opacity="0.5"
+            />
+          );
+        })}
+        {/* Fronds — individual leaf shapes with midrib */}
+        {[
+          { angle: -70, len: 52, curve: -20 },
+          { angle: -35, len: 55, curve: -15 },
+          { angle: -10, len: 48, curve: 8 },
+          { angle: 15, len: 54, curve: 12 },
+          { angle: 40, len: 50, curve: 18 },
+          { angle: 70, len: 48, curve: 22 },
+          { angle: -55, len: 42, curve: -25 },
+          { angle: 55, len: 44, curve: 20 },
+        ].map(({ angle, len, curve }, i) => {
+          const rad = (angle * Math.PI) / 180;
+          const cx = 150;
+          const cy = 78;
+          const tipX = cx + Math.cos(rad) * len;
+          const tipY = cy + Math.sin(rad) * len;
+          const cpX = cx + Math.cos(rad) * len * 0.5 + curve;
+          const cpY = cy + Math.sin(rad) * len * 0.5 - 8;
+          const green = i < 4 ? '#4a8a3a' : i < 6 ? '#5a9a4a' : '#3a7a2a';
+          return (
+            <g key={`frond-${i}`}>
+              {/* Leaf outline */}
+              <path
+                d={`M ${cx} ${cy} Q ${cpX - 4} ${cpY - 3} ${tipX} ${tipY} Q ${cpX + 4} ${cpY + 3} ${cx} ${cy}`}
+                fill={green} opacity="0.7" stroke="#2a5a1a" strokeWidth="0.5"
+              />
+              {/* Midrib */}
+              <path
+                d={`M ${cx} ${cy} Q ${cpX} ${cpY} ${tipX} ${tipY}`}
+                fill="none" stroke="#2a5a1a" strokeWidth="0.7" opacity="0.6"
+              />
+            </g>
+          );
+        })}
+        {/* Coconuts */}
+        <circle cx={146} cy={83} r={3} fill="#8b6914" stroke="#5a4410" strokeWidth="0.5" />
+        <circle cx={154} cy={85} r={2.8} fill="#7a5c12" stroke="#5a4410" strokeWidth="0.5" />
+        <circle cx={150} cy={87} r={2.5} fill="#9a7a20" stroke="#5a4410" strokeWidth="0.5" />
       </g>
 
       {/* Shortcut connections */}
@@ -329,7 +405,8 @@ function JackalsAndHoundsGame({
               stroke="#d4a84b"
               strokeWidth="2"
               strokeDasharray="4 3"
-              opacity="0.4"
+              opacity="0.5"
+              filter="url(#jh-shortcut-glow)"
             />
           );
         });
@@ -376,10 +453,10 @@ function JackalsAndHoundsGame({
                 cx={x}
                 cy={y}
                 r={isShortcut ? 7 : 5}
-                fill={isShortcut ? '#3a3a1a' : '#3a3a2a'}
-                stroke={isShortcut ? '#d4a84b' : '#6a6a4a'}
+                fill={isShortcut ? '#3a3018' : 'url(#jh-hole-depth)'}
+                stroke={isShortcut ? '#d4a84b' : '#6a5a3a'}
                 strokeWidth={isShortcut ? 1.5 : 1}
-                opacity="0.8"
+                opacity="0.9"
               />
               {hole === 1 && (
                 <text x={x} y={y + 18} textAnchor="middle" fontSize="8" fill="#888">1</text>
@@ -411,8 +488,8 @@ function JackalsAndHoundsGame({
               cx={x + offset}
               cy={y}
               r={5}
-              fill={PLAYER_COLORS[pIdx]}
-              stroke="#fff"
+              fill={pIdx === 0 ? 'url(#jh-piece-gold)' : 'url(#jh-piece-steel)'}
+              stroke={pIdx === 0 ? '#a88832' : '#5a6f94'}
               strokeWidth="1.5"
               style={{
                 cursor: (gamePhase === 'selectPiece' && pIdx === currentPlayer && validMoves.includes(pieceIdx) && isPlayerTurn)
@@ -509,6 +586,15 @@ function JackalsAndHoundsGame({
       gameName="Jackals &amp; Hounds"
       onExit={onExit}
       onReset={isOnline ? null : handleReset}
+      gamePhase={gamePhase}
+      winner={winner !== null ? playerNames[winner] : null}
+      currentPlayer={currentPlayer}
+      playerNames={playerNames}
+      turnCount={turnCount}
+      onRoll={gamePhase === 'roll' && winner === null && isPlayerTurn ? handleRoll : null}
+      diceDisplay={diceValue ? <D6Display value={diceValue} /> : null}
+      message={isOnline && !isMyTurn && !winner ? "Waiting for opponent's move..." : message}
+      playerStatus={renderPieceStatus()}
       moveLog={moveLog}
       rules={GAME_BOOK['jackals-and-hounds'].rules}
       secrets={GAME_BOOK['jackals-and-hounds'].secrets}
@@ -518,46 +604,7 @@ function JackalsAndHoundsGame({
       isMyTurn={isMyTurn}
       chatPanel={isOnline ? <MultiplayerChat messages={chatMessages || []} onSend={sendChat} myUid={matchData?.players?.[myPlayerIndex]?.uid} /> : null}
     >
-      <div style={{ textAlign: 'center', marginBottom: 8 }}>
-        <div style={{ color: '#b0a080', fontSize: 13, marginBottom: 4 }}>
-          Turn {turnCount + 1} &mdash;{' '}
-          <span style={{ color: PLAYER_COLORS[currentPlayer] }}>{playerNames[currentPlayer]}</span>
-          {winner !== null && (
-            <span style={{ color: '#ffd700', marginLeft: 8 }}>
-              {playerNames[winner]} wins!
-            </span>
-          )}
-        </div>
-        <div style={{ color: '#d0c8a8', fontSize: 12, minHeight: 18 }}>
-          {isOnline && !isMyTurn && !winner ? "Waiting for opponent's move..." : message}
-        </div>
-      </div>
-
       {renderBoard()}
-      {renderPieceStatus()}
-
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 16, marginTop: 12 }}>
-        <D6Display value={diceValue} />
-        {gamePhase === 'roll' && winner === null && (isPlayerTurn || isOnline) && (
-          <button
-            onClick={handleRoll}
-            disabled={isOnline && !isMyTurn}
-            style={{
-              background: (isOnline && !isMyTurn) ? '#666' : '#c9a961',
-              color: '#1a1a2e',
-              border: 'none',
-              borderRadius: 8,
-              padding: '8px 24px',
-              fontWeight: 'bold',
-              fontSize: 14,
-              cursor: (isOnline && !isMyTurn) ? 'not-allowed' : 'pointer',
-              opacity: (isOnline && !isMyTurn) ? 0.5 : 1,
-            }}
-          >
-            Roll Die
-          </button>
-        )}
-      </div>
     </GameShell>
   );
 }

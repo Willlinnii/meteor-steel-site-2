@@ -10,6 +10,7 @@ import ZodiacSphere from './ZodiacSphere';
 import CardinalMarker3D from './CardinalMarker3D';
 import EarthDayNight3D from './EarthDayNight3D';
 import InfoPanel3D from './InfoPanel3D';
+import BeyondRings3D from './BeyondRings3D';
 import useOrbitalAnimation from './useOrbitalAnimation';
 import {
   ORBITS_3D,
@@ -95,6 +96,10 @@ export default function OrbitalScene({
   onSelectEarth,
   selectedStar,
   onSelectStar,
+  beyondRings,
+  selectedBeyondRing,
+  onSelectBeyondRing,
+  activePerspective,
   infoPanelContent,
   cameraAR,
   arPassthrough,
@@ -146,7 +151,7 @@ export default function OrbitalScene({
       {clockMode && <ClockHands3D clockMode={clockMode} showClock={showClock !== false} />}
 
       {/* Zodiac ring */}
-      <ZodiacSphere selectedSign={selectedSign} onSelectSign={onSelectSign} zodiacMode={zodiacMode} selectedStar={selectedStar} onSelectStar={onSelectStar} activeCulture={activeCulture} />
+      <ZodiacSphere selectedSign={selectedSign} onSelectSign={onSelectSign} zodiacMode={zodiacMode} selectedStar={selectedStar} onSelectStar={onSelectStar} activeCulture={activeCulture} highlightAll={selectedBeyondRing === 'fixedStars'} />
 
       {/* Cardinal markers */}
       {resolvedCardinals.map(c => (
@@ -160,6 +165,16 @@ export default function OrbitalScene({
           onClick={() => onSelectCardinal(selectedCardinal === c.id ? null : c.id)}
         />
       ))}
+
+      {/* Beyond rings (World Soul, Nous, Source) */}
+      {beyondRings && beyondRings.length > 0 && (
+        <BeyondRings3D
+          beyondRings={beyondRings}
+          selectedBeyondRing={selectedBeyondRing}
+          onSelectBeyondRing={onSelectBeyondRing}
+          activePerspective={activePerspective}
+        />
+      )}
 
       {/* Orbit rings */}
       {orbitData.map(o => (

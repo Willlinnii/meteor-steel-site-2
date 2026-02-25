@@ -243,41 +243,26 @@ function MehenGame({
     setMoveLog([]);
   }, []);
 
-  // Build spiral path for the serpent body
-  const buildSerpentPath = () => {
-    const outerRadius = 220;
-    const innerRadius = 30;
-    const cx = 250;
-    const cy = 250;
-    let d = '';
-    // Inward spiral
-    for (let i = 0; i <= 200; i++) {
-      const t = i / 200; // 0 to 1
-      const pos = t * 40;
-      const angle = pos * (4 * Math.PI / 40);
-      const radius = outerRadius - (outerRadius - innerRadius) * (pos / 40);
-      const x = cx + radius * Math.cos(angle);
-      const y = cy + radius * Math.sin(angle);
-      d += (i === 0 ? 'M' : 'L') + `${x.toFixed(2)},${y.toFixed(2)} `;
-    }
-    return d;
-  };
+  // Spiral constants — 7 coils, touching
+  const REVOLUTIONS = 7;
+  const OUTER_R = 220;
+  const INNER_R = 30;
+  const CX = 250;
+  const CY = 250;
+  const RING_SPACING = (OUTER_R - INNER_R) / REVOLUTIONS; // ~27px
+  const BODY_W = RING_SPACING; // touching coils
+  const STEPS = 500; // high resolution for smooth spiral
 
-  const buildReturnPath = () => {
-    const outerRadius = 220;
-    const innerRadius = 30;
-    const cx = 250;
-    const cy = 250;
-    const angleOffset = Math.PI / 40;
+  // Build spiral path for the serpent body (single serpent, 7 coils)
+  const buildSerpentPath = () => {
     let d = '';
-    // Outward spiral (drawn from center out)
-    for (let i = 0; i <= 200; i++) {
-      const t = i / 200;
-      const effectivePos = t * 40; // 0 = center, 40 = outer
-      const angle = effectivePos * (4 * Math.PI / 40) + angleOffset;
-      const radius = outerRadius - (outerRadius - innerRadius) * (effectivePos / 40);
-      const x = cx + radius * Math.cos(angle);
-      const y = cy + radius * Math.sin(angle);
+    for (let i = 0; i <= STEPS; i++) {
+      const t = i / STEPS;
+      const pos = t * 40;
+      const angle = pos * (REVOLUTIONS * 2 * Math.PI / 40);
+      const radius = OUTER_R - (OUTER_R - INNER_R) * (pos / 40);
+      const x = CX + radius * Math.cos(angle);
+      const y = CY + radius * Math.sin(angle);
       d += (i === 0 ? 'M' : 'L') + `${x.toFixed(2)},${y.toFixed(2)} `;
     }
     return d;
@@ -291,46 +276,169 @@ function MehenGame({
   const isPlayerTurn = isOnline ? isMyTurn : (!isAI || currentPlayer === 0);
 
   const renderBoard = () => (
-    <svg viewBox="0 0 500 500" style={{ width: '100%', maxWidth: 500, display: 'block', margin: '0 auto' }}>
-      {/* Background */}
-      <rect x="0" y="0" width="500" height="500" fill="#2a1f14" rx="12" />
+    <svg className="game-board-svg" viewBox="0 0 500 500">
+      <defs>
+        <radialGradient id="mehen-bg" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stopColor="#3a2f1e" />
+          <stop offset="100%" stopColor="#1a1510" />
+        </radialGradient>
+        <radialGradient id="mehen-solar" cx="45%" cy="40%" r="50%">
+          <stop offset="0%" stopColor="#c9a961" />
+          <stop offset="60%" stopColor="#8b6914" />
+          <stop offset="100%" stopColor="#5a4410" />
+        </radialGradient>
+        <linearGradient id="mehen-serpent-in" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#6a9a4a" />
+          <stop offset="100%" stopColor="#3a5a2a" />
+        </linearGradient>
+        <radialGradient id="mehen-piece-gold" cx="40%" cy="35%">
+          <stop offset="0%" stopColor="#e8c878" />
+          <stop offset="100%" stopColor="#a88832" />
+        </radialGradient>
+        <radialGradient id="mehen-piece-steel" cx="40%" cy="35%">
+          <stop offset="0%" stopColor="#a8b8d8" />
+          <stop offset="100%" stopColor="#5a6f94" />
+        </radialGradient>
+        <filter id="mehen-head-glow">
+          <feGaussianBlur stdDeviation="2" result="blur" />
+          <feMerge>
+            <feMergeNode in="blur" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
+      </defs>
 
-      {/* Serpent head at outer start */}
-      <circle cx={mehenPositionToSVG(1).x} cy={mehenPositionToSVG(1).y} r="10" fill="#5a7a3a" />
-      <text
-        x={mehenPositionToSVG(1).x}
-        y={mehenPositionToSVG(1).y + 4}
-        textAnchor="middle"
-        fontSize="10"
-        fill="#fff"
-      >S</text>
+      {/* No rectangular background — the serpent coil IS the board */}
 
-      {/* Serpent body - inward spiral */}
+      {/* Serpent body — single coiled serpent, 7 rings, touching */}
+      {/* Dark outline (slightly wider than body to form coil borders) */}
+      <path
+        d={buildSerpentPath()}
+        fill="none"
+        stroke="#1a2a10"
+        strokeWidth={BODY_W + 2}
+        strokeLinecap="round"
+        opacity="0.6"
+      />
+      {/* Main body */}
       <path
         className="mehen-serpent"
         d={buildSerpentPath()}
         fill="none"
-        stroke="#5a7a3a"
-        strokeWidth="14"
+        stroke="#4a7a2a"
+        strokeWidth={BODY_W - 2}
         strokeLinecap="round"
-        opacity="0.5"
+        opacity="0.6"
       />
-
-      {/* Return path - outward spiral */}
+      {/* Belly stripe (lighter center) */}
       <path
-        className="mehen-serpent"
-        d={buildReturnPath()}
+        d={buildSerpentPath()}
         fill="none"
-        stroke="#7a5a3a"
-        strokeWidth="10"
+        stroke="#8aba6a"
+        strokeWidth={5}
         strokeLinecap="round"
-        opacity="0.35"
-        strokeDasharray="6 4"
+        opacity="0.25"
       />
+      {/* Scale marks along spiral */}
+      {(() => {
+        const marks = [];
+        const scaleCount = 160;
+        const angularSpeed = REVOLUTIONS * 2 * Math.PI / 40;
+        const dRadius = -(OUTER_R - INNER_R) / 40;
+        for (let i = 1; i < scaleCount; i++) {
+          const t = i / scaleCount;
+          const pos = t * 40;
+          const angle = pos * angularSpeed;
+          const radius = OUTER_R - (OUTER_R - INNER_R) * (pos / 40);
+          const x = CX + radius * Math.cos(angle);
+          const y = CY + radius * Math.sin(angle);
+          const tangentX = dRadius * Math.cos(angle) - radius * Math.sin(angle) * angularSpeed;
+          const tangentY = dRadius * Math.sin(angle) + radius * Math.cos(angle) * angularSpeed;
+          const tLen = Math.sqrt(tangentX * tangentX + tangentY * tangentY) || 1;
+          const nx = -tangentY / tLen;
+          const ny = tangentX / tLen;
+          const scaleSize = BODY_W * 0.4;
+          marks.push(
+            <path
+              key={`scale-${i}`}
+              d={`M ${x + nx * scaleSize} ${y + ny * scaleSize} L ${x + tangentX / tLen * 2.5} ${y + tangentY / tLen * 2.5} L ${x - nx * scaleSize} ${y - ny * scaleSize} L ${x - tangentX / tLen * 2.5} ${y - tangentY / tLen * 2.5} Z`}
+              fill="none"
+              stroke="#2a4a1a"
+              strokeWidth="0.5"
+              opacity="0.35"
+            />
+          );
+        }
+        return marks;
+      })()}
 
-      {/* Center marker */}
-      <circle cx={250} cy={250} r={18} fill="#8b6914" opacity="0.6" />
-      <text x={250} y={254} textAnchor="middle" fontSize="10" fill="#fff">Center</text>
+      {/* Pointed tail at outer edge (near spiral start) */}
+      {(() => {
+        // Tail at the outermost point of the spiral
+        const outerR = OUTER_R;
+        const tailX = CX + outerR;
+        const tailY = CY;
+        // Tangent at start of spiral points roughly "up" (perpendicular to radius)
+        const tipX = tailX + 12;
+        const tipY = tailY;
+        return (
+          <path
+            d={`M ${tailX} ${tailY - 5} L ${tipX} ${tipY} L ${tailX} ${tailY + 5}`}
+            fill="#4a7a2a" opacity="0.6"
+          />
+        );
+      })()}
+
+      {/* Serpent head at center — mouth of the coil */}
+      {(() => {
+        // Head sits at the innermost end of the spiral
+        // Compute the inner end point (t=1, pos=40)
+        const innerAngle = 40 * (REVOLUTIONS * 2 * Math.PI / 40);
+        const headX = CX + INNER_R * Math.cos(innerAngle);
+        const headY = CY + INNER_R * Math.sin(innerAngle);
+        // Tangent direction at inner end (pointing inward along spiral)
+        const prevAngle = 39 * (REVOLUTIONS * 2 * Math.PI / 40);
+        const prevR = OUTER_R - (OUTER_R - INNER_R) * (39 / 40);
+        const prevX = CX + prevR * Math.cos(prevAngle);
+        const prevY = CY + prevR * Math.sin(prevAngle);
+        const hdx = headX - prevX;
+        const hdy = headY - prevY;
+        const hDist = Math.sqrt(hdx * hdx + hdy * hdy) || 1;
+        const hux = hdx / hDist;
+        const huy = hdy / hDist;
+        const hpx = -huy;
+        const hpy = hux;
+        const headAngle = Math.atan2(huy, hux) * 180 / Math.PI;
+        const hw = BODY_W * 0.6;
+        const hh = BODY_W * 0.4;
+        // Tongue extends in the direction the serpent is facing (toward center)
+        const tongueX = headX + hux * (hw + 3);
+        const tongueY = headY + huy * (hw + 3);
+        return (
+          <g filter="url(#mehen-head-glow)">
+            <ellipse
+              cx={headX} cy={headY}
+              rx={hw} ry={hh}
+              fill="#5a7a3a"
+              transform={`rotate(${headAngle} ${headX} ${headY})`}
+            />
+            {/* Eyes */}
+            <circle cx={headX + hpx * (hh * 0.55) + hux * 2} cy={headY + hpy * (hh * 0.55) + huy * 2} r="2.2" fill="#fff" />
+            <circle cx={headX + hpx * (hh * 0.55) + hux * 2} cy={headY + hpy * (hh * 0.55) + huy * 2} r="1.1" fill="#1a1a00" />
+            <circle cx={headX - hpx * (hh * 0.55) + hux * 2} cy={headY - hpy * (hh * 0.55) + huy * 2} r="2.2" fill="#fff" />
+            <circle cx={headX - hpx * (hh * 0.55) + hux * 2} cy={headY - hpy * (hh * 0.55) + huy * 2} r="1.1" fill="#1a1a00" />
+            {/* Forked tongue */}
+            <line x1={headX} y1={headY} x2={tongueX} y2={tongueY}
+              stroke="#cc3030" strokeWidth="1.2" />
+            <line x1={tongueX} y1={tongueY}
+              x2={tongueX + hux * 3 + hpx * 3} y2={tongueY + huy * 3 + hpy * 3}
+              stroke="#cc3030" strokeWidth="0.8" />
+            <line x1={tongueX} y1={tongueY}
+              x2={tongueX + hux * 3 - hpx * 3} y2={tongueY + huy * 3 - hpy * 3}
+              stroke="#cc3030" strokeWidth="0.8" />
+          </g>
+        );
+      })()}
 
       {/* Spaces along inward spiral */}
       {Array.from({ length: 40 }, (_, i) => {
@@ -342,11 +450,11 @@ function MehenGame({
             className="mehen-space"
             cx={x}
             cy={y}
-            r={5}
-            fill="#3a3a2a"
-            stroke="#6a6a4a"
-            strokeWidth="1"
-            opacity="0.7"
+            r={3.5}
+            fill="#3a3420"
+            stroke="#6a5a3a"
+            strokeWidth="0.8"
+            opacity="0.85"
           />
         );
       })}
@@ -361,11 +469,11 @@ function MehenGame({
             className="mehen-space"
             cx={x}
             cy={y}
-            r={4}
-            fill="#2a2a3a"
-            stroke="#5a5a7a"
-            strokeWidth="1"
-            opacity="0.6"
+            r={3}
+            fill="#302820"
+            stroke="#5a4a3a"
+            strokeWidth="0.7"
+            opacity="0.7"
           />
         );
       })}
@@ -375,16 +483,16 @@ function MehenGame({
         playerPieces.map((pos, pieceIdx) => {
           if (pos === 0 || pos === TOTAL_SPACES) return null; // not on board or finished
           const { x, y } = mehenPositionToSVG(pos);
-          const offset = pIdx === 0 ? -4 : 4;
+          const offset = pIdx === 0 ? -3 : 3;
           return (
             <circle
               key={`piece-${pIdx}-${pieceIdx}`}
               className="board-piece"
               cx={x + offset}
               cy={y}
-              r={6}
-              fill={PLAYER_COLORS[pIdx]}
-              stroke="#fff"
+              r={4.5}
+              fill={pIdx === 0 ? 'url(#mehen-piece-gold)' : 'url(#mehen-piece-steel)'}
+              stroke={pIdx === 0 ? '#a88832' : '#5a6f94'}
               strokeWidth="1.5"
               style={{ cursor: (gamePhase === 'selectPiece' && pIdx === currentPlayer && validMoves.includes(pieceIdx) && isPlayerTurn) ? 'pointer' : 'default' }}
               onClick={() => {
@@ -409,7 +517,7 @@ function MehenGame({
             className="board-move-target"
             cx={x}
             cy={y}
-            r={8}
+            r={6}
             fill="none"
             stroke="#fff"
             strokeWidth="2"
@@ -464,6 +572,15 @@ function MehenGame({
       gameName="Mehen"
       onExit={onExit}
       onReset={isOnline ? null : handleReset}
+      gamePhase={gamePhase}
+      winner={winner !== null ? playerNames[winner] : null}
+      currentPlayer={currentPlayer}
+      playerNames={playerNames}
+      turnCount={turnCount}
+      onRoll={gamePhase === 'roll' && winner === null && isPlayerTurn ? handleRoll : null}
+      diceDisplay={diceValue ? <D6Display value={diceValue} /> : null}
+      message={isOnline && !isMyTurn && !winner ? "Waiting for opponent's move..." : message}
+      playerStatus={renderPieceStatus()}
       moveLog={moveLog}
       rules={GAME_BOOK['mehen'].rules}
       secrets={GAME_BOOK['mehen'].secrets}
@@ -473,45 +590,7 @@ function MehenGame({
       isMyTurn={isMyTurn}
       chatPanel={isOnline ? <MultiplayerChat messages={chatMessages || []} onSend={sendChat} myUid={matchData?.players?.[myPlayerIndex]?.uid} /> : null}
     >
-      <div style={{ textAlign: 'center', marginBottom: 8 }}>
-        <div style={{ color: '#b0a080', fontSize: 13, marginBottom: 4 }}>
-          Turn {turnCount + 1} &mdash;{' '}
-          <span style={{ color: PLAYER_COLORS[currentPlayer] }}>{playerNames[currentPlayer]}</span>
-          {winner !== null && (
-            <span style={{ color: '#ffd700', marginLeft: 8 }}>
-              {playerNames[winner]} wins!
-            </span>
-          )}
-        </div>
-        <div style={{ color: '#d0c8a8', fontSize: 12, minHeight: 18 }}>
-          {isOnline && !isMyTurn && !winner ? "Waiting for opponent's move..." : message}
-        </div>
-      </div>
-
       {renderBoard()}
-      {renderPieceStatus()}
-
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 16, marginTop: 12 }}>
-        <D6Display value={diceValue} />
-        {gamePhase === 'roll' && winner === null && isPlayerTurn && (
-          <button
-            onClick={handleRoll}
-            disabled={isOnline && !isMyTurn}
-            style={{
-              background: (isOnline && !isMyTurn) ? '#666' : '#c9a961',
-              color: '#1a1a2e',
-              border: 'none',
-              borderRadius: 8,
-              padding: '8px 24px',
-              fontWeight: 'bold',
-              fontSize: 14,
-              cursor: (isOnline && !isMyTurn) ? 'not-allowed' : 'pointer',
-            }}
-          >
-            Roll Die
-          </button>
-        )}
-      </div>
     </GameShell>
   );
 }

@@ -1,0 +1,127 @@
+{
+  "id": "canaanite",
+  "name": "The Elohim",
+  "description": "The divine assembly of Canaan, rooted in the Bronze Age city of Ugarit and anchored to Mount Hermon — the Levantine Olympus, where the gods convened in council and where, in later tradition, the Watchers descended. These are the deities whose clay tablet literature, excavated at Ras Shamra since 1929, revealed the religious world that biblical monotheism defined itself against — and never fully escaped.",
+  "deities": [
+    {
+      "id": "el",
+      "name": "El",
+      "title": "Father of the Gods",
+      "group": "supreme",
+      "description": "The patriarch of the Canaanite pantheon, called 'ab adam — Father of Humanity — and Bull El, the benevolent ancient who dwells at the source of the two rivers, where the freshwater deep meets the salt sea. In the Ugaritic texts (KTU 1.1–1.6), El presides over the divine council on Mount Hermon, rendering judgment among the gods from his tent at the cosmic headwaters. He is depicted as a grey-bearded figure seated on a throne, wise rather than warlike, dispensing authority rather than wielding it directly. His epithets — the Kind, the Compassionate — mark him as a creator god who has stepped back from active rule, delegating storm and war to his sons while he arbitrates their disputes. When Baal petitions for a palace, El grants it. When Anat threatens him with violence, he yields with calculated irony. He is the father whose power lies in legitimacy rather than force. The Hebrew word Elohim — the standard biblical term for God — derives directly from his name. El Shaddai, El Elyon, El Olam: these are not abstractions but titles of this specific deity, absorbed into Israelite religion so completely that the seams only show under philological scrutiny. The bull is his animal. His consort is Asherah. The mountain is his throne. Every time the Bible says 'God,' it uses a Canaanite word for a Canaanite deity whose clay tablet portrait was buried at Ugarit for three thousand years before French archaeologists dug it up in 1929.",
+      "animals": ["Bull"],
+      "consorts": ["Asherah"],
+      "colors": ["White", "Grey"]
+    },
+    {
+      "id": "asherah",
+      "name": "Asherah",
+      "title": "Mother of the Gods, Queen of the Sea",
+      "group": "supreme",
+      "description": "Athirat of the Sea — consort of El, mother of the seventy divine sons who comprise the pantheon, and the most suppressed deity in biblical history. In the Ugaritic texts she is Rabat Athirat Yam, Lady Who Treads on the Sea, a figure of maternal authority who intercedes with El on behalf of the younger gods. When Baal needs El's permission to build his palace, it is Asherah who makes the case, riding her donkey to the cosmic tent at the headwaters. She is no passive consort: she has her own cult, her own fishermen devotees, her own sacred groves. The Baal Cycle (KTU 1.4) shows her negotiating divine politics with the shrewdness of a seasoned diplomat. Her symbol is the sacred tree or wooden pole — the asherah — planted beside altars throughout Canaan and, as the Hebrew Bible reluctantly admits, inside the Jerusalem Temple itself. 2 Kings 21:7 records that Manasseh placed an asherah image in Yahweh's house. 2 Kings 23:6 records Josiah dragging it out. Kuntillet Ajrud inscriptions from the 8th century BCE bless the reader by 'Yahweh and his Asherah,' suggesting that for centuries ordinary Israelites understood her as God's wife. The reformers who wrote Deuteronomy and Kings spent enormous energy cutting down her poles and forbidding her worship — which is itself evidence of how deeply rooted she was. You do not legislate against something no one does. She is the divine feminine that monotheism amputated, and her ghost haunts the Wisdom literature, the Shekinah, and every tradition that sensed something missing.",
+      "animals": ["Lion", "Serpent"],
+      "consorts": ["El"],
+      "vegetation": ["Sacred tree (the asherah pole)"],
+      "colors": ["Sea-green", "Gold"]
+    },
+    {
+      "id": "baal-hadad",
+      "name": "Baal Hadad",
+      "title": "God of Storm, Rain, and Fertility",
+      "group": "supreme",
+      "description": "The central hero of Ugaritic literature and the deity the Bible most despised. Baal — 'Lord' — is Hadad the storm god, Rider of the Clouds, who wields thunder and lightning from his palace on Mount Saphon (Jebel Aqra, visible from Ugarit). The Baal Cycle, the longest and most sophisticated Ugaritic narrative (KTU 1.1–1.6), follows his wars against Yam (Sea/Chaos) and Mot (Death) in a pattern that prefigures every dying-and-rising god tradition in the Mediterranean. He defeats Yam with two divine maces forged by Kothar-wa-Khasis, then demands a palace from El — because a god without a house has no standing. He gets the palace. Then Mot comes for him. Baal descends to Death's throat, and the earth goes sterile. No rain falls. Anat recovers his body, and eventually he returns — and the rains resume. This cycle of death, absence, and return mapped directly onto the Levantine agricultural year: the dry summer when Baal was dead, the autumn rains when he returned. The biblical prophets understood the threat perfectly. Elijah's contest on Mount Carmel (1 Kings 18) is a direct challenge to Baal's core claim — that he sends the rain. 'Cry louder,' Elijah taunts the prophets of Baal, 'perhaps he is sleeping.' The Hebrew word for Baal was so dangerous that scribes replaced it with bosheth (shame) in personal names: Ishbaal became Ishbosheth, Meribbaal became Mephibosheth. His animal is the bull calf. His weapon is the thunderbolt. His death and resurrection predate the Christian narrative by over a millennium — and the pattern itself is older than Ugarit.",
+      "animals": ["Bull", "Bull calf"],
+      "weapons": ["Yagrush and Ayamur (twin divine maces)", "Thunderbolt"],
+      "consorts": ["Anat (sister-consort in Ugaritic tradition)"],
+      "colors": ["Storm-dark blue", "Silver"]
+    },
+    {
+      "id": "anat",
+      "name": "Anat",
+      "title": "Goddess of War and the Hunt",
+      "group": "supreme",
+      "description": "The most ferocious deity in the Ugaritic texts — virgin warrior, devoted sister of Baal, and the goddess who wades through blood to her knees and laughs. The Baal Cycle (KTU 1.3) contains her most famous scene: she slaughters warriors in her palace, wading through gore up to her thighs, tying severed heads to her belt and hands to her waist, then washes herself and returns to her normal life. The text presents this not as aberration but as her nature — violence as liturgy. When Baal is killed by Mot, it is Anat who goes to the underworld, seizes Death himself, and destroys him: she cleaves him with a sword, winnows him with a fan, burns him with fire, grinds him with millstones, and scatters him in a field for birds to eat (KTU 1.6). Every verb is an agricultural processing term — she threshes Death like grain. The Epic of Aqhat (KTU 1.17–1.19) shows her other face: she covets the hero Aqhat's composite bow, offers him immortality for it, and when he refuses — telling her that bows are for men, not women — she has him killed by her agent Yatpan. She is no abstract war principle. She has desires, rages, grief, and a vindictive streak that makes the Olympians look restrained. Her virginity (btlt, 'maiden') is not sexual innocence but inviolability — no male conquers her. She is called 'Sister of Baal' and their relationship carries an intimacy the texts leave deliberately ambiguous. Her disappearance from later Levantine religion, absorbed partly into Astarte and partly into Athena (through Phoenician transmission), erased one of the ancient world's most vivid literary characters.",
+      "animals": ["Falcon", "Heifer"],
+      "weapons": ["Sword", "Bow", "Mace"],
+      "consorts": ["Baal Hadad (brother, ambiguously intimate)"],
+      "colors": ["Blood-red", "White"]
+    },
+    {
+      "id": "mot",
+      "name": "Mot",
+      "title": "God of Death and the Underworld",
+      "group": "cosmic",
+      "description": "Death personified — not a custodian of the dead like Hades or Hel, but Death itself, a throat that swallows everything. In the Baal Cycle, Mot is the antagonist whose power even Baal cannot permanently defeat, only endure. His mouth stretches from earth to heaven; one lip touches the ground, the other the stars. When he invites Baal to descend, the invitation is a command: 'Come down into my throat.' Baal complies, and dies. The earth goes dry. The rains stop. El himself comes down from his throne, pours dust on his head, and mourns. Mot's realm is the underworld city of Motu, a pit from which there is no return — and yet the Baal Cycle insists on return. When Anat destroys Mot with agricultural violence — cutting, winnowing, burning, grinding — he comes back, because death always comes back. The two gods fight again, and the conflict is declared a draw by Shapash the sun goddess, who warns Mot that El will overturn his throne if he continues. Death backs down — not defeated but contained. This is not a triumphalist resurrection narrative. It is an honest accounting: death and life are locked in a cycle that neither wins. The Levantine dry season was Mot's reign, the autumn rains were Baal's return. The Hebrew Bible's consistent refusal to develop a robust afterlife theology may owe something to this inheritance — the Canaanite tradition understood death as a force too powerful for easy promises. Mot has no animal, no weapon, no color. He is the absence that defines every presence.",
+      "colors": ["Black", "Dust-brown"]
+    },
+    {
+      "id": "yam",
+      "name": "Yam",
+      "title": "God of the Sea and Chaos",
+      "group": "cosmic",
+      "description": "Prince Sea, Judge River — Yam-Nahar — the primordial chaos that the storm god must defeat for civilization to exist. In the Baal Cycle (KTU 1.2), Yam is El's favored son, appointed ruler over the gods, and his envoys arrive at the divine assembly demanding that Baal be surrendered as a slave. The gods cower — all except Baal, who stands and fights. Armed with the twin maces Yagrush ('Chaser') and Ayamur ('Driver'), forged by Kothar-wa-Khasis, Baal strikes Yam twice: the first blow staggers him, the second scatters him. 'Yam is dead! Baal reigns!' the text declares. But Yam is the sea, and the sea does not stay defeated. The combat myth — the chaoskampf, the storm god defeating the sea serpent — is the foundational narrative pattern of the ancient Near East. It surfaces in Marduk's battle with Tiamat in Enuma Elish, in Indra's slaying of Vritra, and unmistakably in the Hebrew Bible: Yahweh's mastery over the sea (Psalm 74:13-14), his crushing of Leviathan and Rahab (Isaiah 51:9), the parting of the Red Sea. The priestly authors of Genesis 1 drained this combat of its mythological drama — the deep (tehom, cognate with Tiamat) is simply there, and God's spirit moves over it — but the Psalms and prophets kept the combat imagery alive. Yam is often identified with Lotan, the seven-headed sea serpent (KTU 1.5), who is the direct ancestor of the biblical Leviathan. His domain is not evil but untamed force — the ocean before anyone built a harbor.",
+      "animals": ["Lotan/Litan (seven-headed sea serpent)"],
+      "weapons": ["Waves", "Flood"],
+      "colors": ["Deep sea blue", "Foam-white"]
+    },
+    {
+      "id": "shapash",
+      "name": "Shapash",
+      "title": "Goddess of the Sun",
+      "group": "cosmic",
+      "description": "The Torch of the Gods — Shapash, the Ugaritic sun deity, is female, a fact that disrupts assumptions about gendered divinity in the ancient Near East. She traverses the sky by day and the underworld by night, making her the only deity who moves freely between the realms of the living and the dead. In the Baal Cycle, this unique access makes her indispensable. When Baal dies and descends to Mot's underworld, it is Shapash who retrieves his body and carries it back to the surface for burial on Mount Saphon. When Baal and Mot fight their final inconclusive battle (KTU 1.6), it is Shapash who intervenes as arbiter, warning Mot that El will strip his kingship if he does not relent. She is not the most powerful deity, but she is the most mobile and the most informed — the one who sees everything because she lights every realm. Her dual nature — celestial glory by day, underworld traveler by night — anticipates the Egyptian theology of Re's nocturnal journey through the Duat and connects to the universal pattern of the sun's symbolic death and rebirth each dawn. In the KTU texts she is addressed with formulaic reverence: 'Shapash, you rule the Rephaim' — the shades of the dead. The Hebrew Bible's deliberate masculinization of the sun (shemesh is grammatically masculine in Hebrew, though the Ugaritic cognate shapash is feminine) may reflect a conscious theological correction, distancing Yahwistic religion from a goddess whose authority derived from seeing into death itself.",
+      "animals": ["Horse (solar chariot associations)"],
+      "colors": ["Gold", "White", "Amber"]
+    },
+    {
+      "id": "yarikh",
+      "name": "Yarikh",
+      "title": "God of the Moon",
+      "group": "cosmic",
+      "description": "The Illuminator of the Heavens — Yarikh, the moon god of Ugarit, whose name survives in the city of Jericho (Yeriho, 'Moon City') and whose cult was among the oldest and most widespread in the Levant. The KTU texts preserve a wedding hymn (KTU 1.24) in which Yarikh pays an enormous bride-price to the moon goddess Nikkal-wa-Ib, daughter of the summer fruit god Khirkhib — a text that doubles as both mythology and a liturgical template for actual Ugaritic marriage ceremonies. The bride-price includes a thousand shekels of silver, ten thousand of gold, and lapis lazuli — the blue stone associated with night sky across Mesopotamia. Yarikh is a god of cycles and timekeeping: the lunar calendar governed Canaanite agricultural and religious life, and the month (Ugaritic yrh, from the same root as his name) was the fundamental unit of sacred time. His light is borrowed, reflected — the faithful mirror of a greater source — and this quality made moon deities across the ancient world patrons of oaths, measurement, and the marking of boundaries. The Mesopotamian moon god Sin (Nanna), worshipped at Ur and Harran, is Yarikh's close cognate, and Abraham's journey from Ur to Harran to Canaan traces a path between three major moon-god cult centers. Silver is his metal, as it is for every lunar deity in the ancient world. His crescent became the most enduring religious symbol in the Levant — outlasting the culture that first carved it into cylinder seals four thousand years ago.",
+      "animals": ["Bull (crescent horns as lunar symbol)"],
+      "consorts": ["Nikkal-wa-Ib"],
+      "colors": ["Silver", "Lapis blue"],
+      "metals": ["Silver"]
+    },
+    {
+      "id": "astarte",
+      "name": "Astarte",
+      "title": "Goddess of Love and War",
+      "group": "cultural",
+      "description": "Ashtart in Ugaritic, Ashtoreth in the Hebrew Bible, Astarte in Greek — the great goddess of the eastern Mediterranean whose worship spanned from the Bronze Age through the Roman period and whose name the biblical authors deliberately vocalized with the vowels of bosheth (shame) to produce 'Ashtoreth.' She is the Canaanite heir to Mesopotamian Inanna/Ishtar: a deity of sexual love, fertility, and war whose dual nature — erotic and violent — ancient cultures understood as complementary rather than contradictory. At Ugarit she appears alongside Anat as a warrior goddess (KTU 1.2), and in the Astarte Papyrus (Egyptian) she confronts Yam the sea god on behalf of the divine assembly. Phoenician colonists carried her worship across the Mediterranean: she was the chief goddess of Sidon and Tyre, and her temples at Kition (Cyprus), Carthage, Motya, and Eryx shaped the religious landscape of the entire ancient western Mediterranean. The Greeks identified her with Aphrodite — the Aphrodite of Paphos on Cyprus was almost certainly Astarte first. Her sacred animals include the dove and the lion, love and violence in a single iconographic program. 1 Kings 11:5 accuses Solomon himself of following 'Ashtoreth, goddess of the Sidonians,' and the Deuteronomistic historian treats this as the central sin that fractured his kingdom. Her connection to the planet Venus — the morning and evening star — links her to the universal pattern of the dual-aspected love goddess. She embodies a theology that insists desire and destruction flow from the same source, a claim that psychoanalysis would independently rediscover three thousand years later.",
+      "animals": ["Dove", "Lion"],
+      "consorts": ["Baal (in some Phoenician traditions)"],
+      "colors": ["Red", "Gold"],
+      "weapons": ["Spear", "Shield"]
+    },
+    {
+      "id": "dagon",
+      "name": "Dagon",
+      "title": "God of Grain and Agriculture",
+      "group": "cultural",
+      "description": "Father of Baal and one of the oldest deities in the Levantine record, attested at Ebla by 2500 BCE — a thousand years before the Ugaritic texts were composed. His name derives from dagan, 'grain,' making him a personification of the cultivated earth's bounty. At Ugarit, Baal is repeatedly called 'Son of Dagon' (bn dgn), establishing the theological genealogy: the storm that brings rain is the son of the grain that rain nourishes, a closed ecological loop expressed as divine kinship. Dagon's cult centers at Tuttul (on the Euphrates) and later at Ashdod and Gaza made him a major deity of both inland Syria and the Philistine coast. The Hebrew Bible preserves him primarily through the story of the Ark of the Covenant in Dagon's temple at Ashdod (1 Samuel 5): the Philistines place the captured Ark beside Dagon's statue, and each morning they find Dagon fallen face-down before it, finally with his head and hands broken off on the threshold. The narrative is polemical — Yahweh humiliating a rival — but it inadvertently preserves evidence of Dagon's importance: you do not write a humiliation scene for a minor deity. Medieval commentators mistakenly derived his name from dag ('fish') and depicted him as a fish-god, a misidentification that persists in popular culture but has no basis in the Ugaritic or archaeological record. He is grain, not fish. The confusion itself is instructive: when a tradition is suppressed, even its name gets garbled. Dagon reminds us that agriculture was the original technology of civilization, and the peoples of the Levant knew it was sacred enough to deserve a god.",
+      "vegetation": ["Wheat", "Barley", "Grain"],
+      "colors": ["Golden wheat", "Earth-brown"]
+    },
+    {
+      "id": "kothar-wa-khasis",
+      "name": "Kothar-wa-Khasis",
+      "title": "The Divine Craftsman",
+      "group": "cultural",
+      "description": "The Skillful and Wise One — Canaanite Hephaestus, the divine artisan whose name is a compound meaning 'Skilled-and-Clever.' He lives far from Ugarit, in Caphtor (Crete) or Memphis (Egypt), depending on the text — a detail that locates the sources of craft knowledge in the two great technological civilizations the Levant traded with. In the Baal Cycle he is the indispensable maker. When Baal needs weapons to fight Yam, Kothar forges the twin maces Yagrush and Ayamur — naming them prophetically, declaring that they will drive the sea god from his throne before they are even wielded (KTU 1.2). When Baal receives permission to build his palace on Mount Saphon, Kothar is the architect, and the two gods argue over the design: Kothar wants a window in the palace, Baal refuses, fearing that Mot or Yam might enter through it. Kothar insists. The window is eventually installed — and through it Baal sends his thunder across the earth. The craftsman was right. This narrative pattern — the maker who understands the design better than the warrior who commissions it — resonates across cultures: Hephaestus arming Achilles, Wayland forging Beowulf's mail, Tolkien's Feanor creating the Silmarils. Kothar also invents the bow coveted by Anat in the Aqhat epic, the composite bow that drives the entire plot. The Phoenicians, heirs to Canaanite culture, were renowned throughout the ancient world as master craftsmen — the builders of Solomon's Temple, according to the Bible itself (1 Kings 7). Kothar is their patron in the mythological register: the principle that making things well is a form of divine knowledge.",
+      "weapons": ["Yagrush and Ayamur (the twin maces he forged for Baal)", "Divine bow (from the Aqhat epic)"],
+      "colors": ["Bronze", "Fire-orange"]
+    },
+    {
+      "id": "resheph",
+      "name": "Resheph",
+      "title": "God of Plague and Protection",
+      "group": "cultural",
+      "description": "The Lord of the Arrow — Resheph, god of plague, war, and the apotropaic power that turns pestilence away. His name means 'flame' or 'burning,' and he embodies the terrifying ambivalence of disease deities across the ancient world: the god who sends the plague is the only god who can stop it. Attested from Ebla (c. 2400 BCE) through the Hellenistic period, Resheph had one of the longest continuous cult histories in the Levant. At Ugarit he appears in offering lists and ritual texts (KTU 1.91, 1.148) receiving sacrifices alongside the major gods. Egyptian sources are equally rich — Amenhotep II dedicated a stele to Resheph as a war god, and he appears in New Kingdom iconography wearing the White Crown of Upper Egypt with a gazelle head affixed to it, carrying a shield and spear, a deity imported through Canaan and adopted into the Egyptian military pantheon. His arrows are pestilence — the same imagery the Iliad uses for Apollo, who sends plague arrows into the Greek camp in Book 1, and the same conceptual framework behind the biblical 'arrows of Yahweh' (Deuteronomy 32:23-24, Habakkuk 3:5). Habakkuk 3:5 is explicit: 'Before him went pestilence, and resheph went forth at his feet,' using his name as a common noun for plague while preserving the divine echo. The gazelle on his crown is his identifying animal — swift, sharp-eyed, associated with the desert margins where plague emerged. He is the god of the liminal space between health and catastrophe, and every culture that understood infectious disease as divine archery — from Apollo to Rudra to the plague saints of medieval Europe — was working in Resheph's theological tradition.",
+      "animals": ["Gazelle"],
+      "weapons": ["Bow and plague-arrows", "Shield", "Spear"],
+      "colors": ["Flame-red", "Black"]
+    }
+  ]
+}

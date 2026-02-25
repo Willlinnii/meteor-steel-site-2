@@ -43,28 +43,33 @@ const namedStarKeys = new Set(
 );
 
 // Project zodiac constellation stars + lines onto the inner cylinder wall
-function ZodiacStarDots() {
+function ZodiacStarDots({ clipToWall }) {
   const { pointsGeo, linesGeo } = useMemo(() => {
     const zodiacIds = new Set(Object.values(ZODIAC_CONSTELLATION_MAP));
     const uniqueKeys = new Set();
     const starPositions = [];
     const linePositions = [];
     const R = ZODIAC_RADIUS - 0.05;
+    const halfWall = WALL_HEIGHT / 2;
 
     for (const constellation of constellationsData) {
       if (!zodiacIds.has(constellation.id)) continue;
       for (const [[lon1, lat1], [lon2, lat2]] of constellation.lines) {
+        const p1 = projectToCylinder(lon1, lat1, R);
+        const p2 = projectToCylinder(lon2, lat2, R);
+        // When clipping, skip line segments where either endpoint is outside the wall
+        if (clipToWall && (Math.abs(p1[1]) > halfWall || Math.abs(p2[1]) > halfWall)) continue;
         // Star dots (deduplicated, skip named stars — they render individually)
-        for (const [lon, lat] of [[lon1, lat1], [lon2, lat2]]) {
+        for (const [pos, lon, lat] of [[p1, lon1, lat1], [p2, lon2, lat2]]) {
           const key = `${lon},${lat}`;
           if (uniqueKeys.has(key)) continue;
           uniqueKeys.add(key);
           if (namedStarKeys.has(key)) continue;
-          starPositions.push(...projectToCylinder(lon, lat, R));
+          starPositions.push(...pos);
         }
         // Constellation lines
-        linePositions.push(...projectToCylinder(lon1, lat1, R));
-        linePositions.push(...projectToCylinder(lon2, lat2, R));
+        linePositions.push(...p1);
+        linePositions.push(...p2);
       }
     }
 
@@ -73,7 +78,7 @@ function ZodiacStarDots() {
     const lGeo = new THREE.BufferGeometry();
     lGeo.setAttribute('position', new THREE.Float32BufferAttribute(linePositions, 3));
     return { pointsGeo: pGeo, linesGeo: lGeo };
-  }, []);
+  }, [clipToWall]);
 
   const sprite = useMemo(() => {
     const canvas = document.createElement('canvas');
@@ -115,7 +120,7 @@ function ZodiacStarDots() {
 }
 
 // Build one 30° arc segment as a vertical cylinder wall
-function WheelSegment({ index, selected, hovered, onClick, onHover, onUnhover }) {
+function WheelSegment({ index, selected, hovered, highlightAll, onClick, onHover, onUnhover }) {
   const thetaStart = useMemo(() => -((index + 1) * 30) * Math.PI / 180, [index]);
 
   // Visual wall (open-ended, no caps)
@@ -132,23 +137,26 @@ function WheelSegment({ index, selected, hovered, onClick, onHover, onUnhover })
     );
   }, [thetaStart]);
 
+  const lit = highlightAll || selected;
   const baseOpacity = 0.35;
-  const opacity = selected ? 0.75 : hovered ? 0.7 : baseOpacity;
-  const color = selected ? '#ffd700' : hovered ? '#f0c040' : '#c9a961';
-  const emissive = selected ? '#ffd700' : hovered ? '#f0c040' : '#c9a961';
-  const emissiveIntensity = selected ? 0.6 : hovered ? 0.5 : 0.1;
+  const opacity = lit ? 0.7 : hovered ? 0.7 : baseOpacity;
+  const color = lit ? '#f0c040' : hovered ? '#f0c040' : '#c9a961';
+  const emissive = lit ? '#f0c040' : hovered ? '#f0c040' : '#c9a961';
+  const emissiveIntensity = lit ? 0.5 : hovered ? 0.5 : 0.1;
 
   return (
     <group>
       {/* Invisible hit-area with caps for reliable hover/click detection */}
-      <mesh
-        geometry={hitGeo}
-        onClick={(e) => { e.stopPropagation(); onClick(); }}
-        onPointerOver={(e) => { e.stopPropagation(); onHover(); document.body.style.cursor = 'pointer'; }}
-        onPointerOut={() => { onUnhover(); document.body.style.cursor = 'auto'; }}
-      >
-        <meshBasicMaterial transparent opacity={0} depthWrite={false} side={THREE.DoubleSide} />
-      </mesh>
+      {!highlightAll && (
+        <mesh
+          geometry={hitGeo}
+          onClick={(e) => { e.stopPropagation(); onClick(); }}
+          onPointerOver={(e) => { e.stopPropagation(); onHover(); document.body.style.cursor = 'pointer'; }}
+          onPointerOut={() => { onUnhover(); document.body.style.cursor = 'auto'; }}
+        >
+          <meshBasicMaterial transparent opacity={0} depthWrite={false} side={THREE.DoubleSide} />
+        </mesh>
+      )}
       {/* Visible wall */}
       <mesh geometry={wallGeo}>
         <meshStandardMaterial
@@ -203,7 +211,7 @@ function ZodiacDivider({ index }) {
 }
 
 // Labels on the outer face of the cylinder wall
-function ZodiacLabel({ sign, symbol, index, selected, hovered, onClick, onHover, onUnhover }) {
+function ZodiacLabel({ sign, symbol, index, selected, hovered, highlightAll, onClick, onHover, onUnhover }) {
   const centerAngleDeg = -(index * 30 + 15);
   const centerAngleRad = (centerAngleDeg * Math.PI) / 180;
 
@@ -212,7 +220,7 @@ function ZodiacLabel({ sign, symbol, index, selected, hovered, onClick, onHover,
   const z = r * Math.sin(centerAngleRad);
   const lookAngle = Math.atan2(z, x);
 
-  const color = selected ? '#f0c040' : hovered ? '#c9a961' : 'rgba(201, 169, 97, 0.7)';
+  const color = (highlightAll || selected) ? '#f0c040' : hovered ? '#c9a961' : 'rgba(201, 169, 97, 0.7)';
 
   return (
     <group
@@ -220,15 +228,17 @@ function ZodiacLabel({ sign, symbol, index, selected, hovered, onClick, onHover,
       rotation={[0, -lookAngle + Math.PI / 2, 0]}
     >
       {/* Invisible hit-area mesh behind text for reliable click detection */}
-      <mesh
-        position={[0, 0, -0.01]}
-        onClick={(e) => { e.stopPropagation(); onClick(); }}
-        onPointerOver={(e) => { e.stopPropagation(); onHover(); document.body.style.cursor = 'pointer'; }}
-        onPointerOut={() => { onUnhover(); document.body.style.cursor = 'auto'; }}
-      >
-        <planeGeometry args={[1.4, 1.8]} />
-        <meshBasicMaterial transparent opacity={0} side={THREE.DoubleSide} depthWrite={false} />
-      </mesh>
+      {!highlightAll && (
+        <mesh
+          position={[0, 0, -0.01]}
+          onClick={(e) => { e.stopPropagation(); onClick(); }}
+          onPointerOver={(e) => { e.stopPropagation(); onHover(); document.body.style.cursor = 'pointer'; }}
+          onPointerOut={() => { onUnhover(); document.body.style.cursor = 'auto'; }}
+        >
+          <planeGeometry args={[1.4, 1.8]} />
+          <meshBasicMaterial transparent opacity={0} side={THREE.DoubleSide} depthWrite={false} />
+        </mesh>
+      )}
 
       {/* Symbol */}
       <Text
@@ -255,7 +265,7 @@ function ZodiacLabel({ sign, symbol, index, selected, hovered, onClick, onHover,
       </Text>
 
       {/* Selection glow ring */}
-      {selected && (
+      {selected && !highlightAll && (
         <mesh>
           <ringGeometry args={[0.7, 0.85, 24]} />
           <meshBasicMaterial color="#f0c040" transparent opacity={0.3} side={THREE.DoubleSide} depthWrite={false} />
@@ -273,7 +283,7 @@ function getLahiriAyanamsa() {
   return 23.853 + (fracYear - 2000) * 0.01397;
 }
 
-export default function ZodiacSphere({ selectedSign, onSelectSign, zodiacMode, selectedStar, onSelectStar, activeCulture }) {
+export default function ZodiacSphere({ selectedSign, onSelectSign, zodiacMode, selectedStar, onSelectStar, activeCulture, highlightAll, clipToWall, hideLabels }) {
   const [hoveredIndex, setHoveredIndex] = useState(null);
 
   // Resolve culture-specific zodiac sign names
@@ -316,6 +326,7 @@ export default function ZodiacSphere({ selectedSign, onSelectSign, zodiacMode, s
             index={i}
             selected={selectedSign === z.sign}
             hovered={hoveredIndex === i}
+            highlightAll={highlightAll}
             onClick={() => handleClick(z.sign)}
             onHover={() => setHoveredIndex(i)}
             onUnhover={() => setHoveredIndex(null)}
@@ -328,7 +339,7 @@ export default function ZodiacSphere({ selectedSign, onSelectSign, zodiacMode, s
         ))}
 
         {/* Sign labels on the outer wall face */}
-        {ZODIAC.map((z, i) => (
+        {!hideLabels && ZODIAC.map((z, i) => (
           <ZodiacLabel
             key={z.sign}
             sign={getZodiacName(z.sign)}
@@ -336,6 +347,7 @@ export default function ZodiacSphere({ selectedSign, onSelectSign, zodiacMode, s
             index={i}
             selected={selectedSign === z.sign}
             hovered={hoveredIndex === i}
+            highlightAll={highlightAll}
             onClick={() => handleClick(z.sign)}
             onHover={() => setHoveredIndex(i)}
             onUnhover={() => setHoveredIndex(null)}
@@ -344,10 +356,15 @@ export default function ZodiacSphere({ selectedSign, onSelectSign, zodiacMode, s
       </group>
 
       {/* Constellation stars stay fixed (not affected by sidereal/tropical toggle) */}
-      <ZodiacStarDots />
+      <ZodiacStarDots clipToWall={clipToWall} />
 
       {/* Named stars — individually rendered with labels and interaction */}
-      {NAMED_STARS.map(star => (
+      {NAMED_STARS.filter(star => {
+        if (!clipToWall) return true;
+        const { beta } = equatorialToEcliptic(star.lonDeg, star.latDeg);
+        const y = (ZODIAC_RADIUS - 0.05) * Math.tan(beta);
+        return Math.abs(y) <= WALL_HEIGHT / 2;
+      }).map(star => (
         <NamedStar3D
           key={star.name}
           star={star}

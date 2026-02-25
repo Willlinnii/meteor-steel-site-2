@@ -416,7 +416,30 @@ export default function PachisiGame({
       rules={GAME_BOOK['pachisi'].rules}
       secrets={GAME_BOOK['pachisi'].secrets}
     >
-      <svg className="game-board-svg" viewBox={`0 0 ${BOARD_PX} ${BOARD_PX}`} style={{ maxWidth: 500 }}>
+      <svg className="game-board-svg" viewBox={`0 0 ${BOARD_PX} ${BOARD_PX}`}>
+        <defs>
+          <radialGradient id="pachisi-piece-gold" cx="40%" cy="35%">
+            <stop offset="0%" stopColor="#e8c878" />
+            <stop offset="100%" stopColor="#a88832" />
+          </radialGradient>
+          <radialGradient id="pachisi-piece-steel" cx="40%" cy="35%">
+            <stop offset="0%" stopColor="#a8b8d8" />
+            <stop offset="100%" stopColor="#5a6f94" />
+          </radialGradient>
+          <radialGradient id="pachisi-mandala" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stopColor="rgba(196, 113, 58, 0.4)" />
+            <stop offset="70%" stopColor="rgba(196, 113, 58, 0.1)" />
+            <stop offset="100%" stopColor="rgba(196, 113, 58, 0)" />
+          </radialGradient>
+          <filter id="pachisi-castle-glow">
+            <feGaussianBlur stdDeviation="1" result="blur" />
+            <feMerge>
+              <feMergeNode in="blur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+        </defs>
+
         {/* Board cells with home stretch coloring */}
         {boardCells.map(({ row, col }) => {
           const { x, y } = gridToSVG(row, col);
@@ -449,11 +472,11 @@ export default function PachisiGame({
             const grid = path[pos];
             const { x, y } = gridToSVG(grid.row, grid.col);
             return (
-              <g key={`castle-${player}-${pos}`}>
+              <g key={`castle-${player}-${pos}`} filter="url(#pachisi-castle-glow)">
                 <line x1={x - 5} y1={y - 5} x2={x + 5} y2={y + 5}
-                  stroke="var(--accent-gold)" strokeWidth="0.5" opacity="0.4" />
+                  stroke="var(--accent-gold)" strokeWidth="0.7" opacity="0.5" />
                 <line x1={x + 5} y1={y - 5} x2={x - 5} y2={y + 5}
-                  stroke="var(--accent-gold)" strokeWidth="0.5" opacity="0.4" />
+                  stroke="var(--accent-gold)" strokeWidth="0.7" opacity="0.5" />
               </g>
             );
           });
@@ -482,6 +505,14 @@ export default function PachisiGame({
           );
         })}
 
+        {/* Center mandala glow */}
+        <circle
+          cx={gridToSVG(9, 9).x}
+          cy={gridToSVG(9, 9).y}
+          r={CELL * 1.8}
+          fill="url(#pachisi-mandala)"
+        />
+
         {/* Center HOME label */}
         <text x={gridToSVG(9, 9).x} y={gridToSVG(9, 9).y + 3} textAnchor="middle"
           fontSize="7" fill="var(--accent-ember)" fontWeight="bold">
@@ -501,8 +532,8 @@ export default function PachisiGame({
                 cx={x + offset}
                 cy={y}
                 r={6}
-                fill={PLAYER_COLORS[player]}
-                stroke={isClickable ? 'var(--accent-ember)' : 'var(--bg-dark)'}
+                fill={player === 0 ? 'url(#pachisi-piece-gold)' : 'url(#pachisi-piece-steel)'}
+                stroke={isClickable ? 'var(--accent-ember)' : player === 0 ? '#a88832' : '#5a6f94'}
                 strokeWidth={isClickable ? 2 : 1}
                 className={`board-piece${isClickable ? ' board-piece-highlight' : ''}`}
                 onClick={() => isClickable && handlePieceClick(i)}
@@ -525,7 +556,7 @@ export default function PachisiGame({
                 cx={x}
                 cy={y}
                 r={7}
-                fill={PLAYER_COLORS[player]}
+                fill={player === 0 ? 'url(#pachisi-piece-gold)' : 'url(#pachisi-piece-steel)'}
                 stroke={isClickable ? 'var(--accent-ember)' : 'rgba(255,255,255,0.2)'}
                 strokeWidth={isClickable ? 2.5 : 1}
                 className={`board-piece${isClickable ? ' board-piece-highlight' : ''}`}

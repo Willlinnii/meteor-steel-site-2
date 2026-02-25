@@ -1,0 +1,146 @@
+{
+  "id": "norse",
+  "name": "The Æsir and Vanir",
+  "description": "The Norse pantheon comprises the warlike Æsir and the fertility-oriented Vanir, two divine tribes whose ancient conflict and eventual reconciliation mirror the volcanic tensions and verdant summers of Iceland itself. Þingvellir — where the Althing convened from 930 CE atop the rift between tectonic plates — stands as the earthly echo of the gods' own assembly at the Well of Urðr, a place where law, fate, and the raw geology of creation converge.",
+  "deities": [
+    {
+      "id": "odin",
+      "name": "Odin",
+      "title": "The Allfather",
+      "group": "aesir",
+      "description": "Odin is the supreme god of the Æsir, a restless seeker of wisdom who sacrificed his eye at Mímir's Well for a single draught of cosmic knowledge and hung himself on Yggdrasil for nine nights, pierced by his own spear, to wrest the secret of the runes from the abyss. The Prose Edda portrays him as the architect of Midgard, shaping the world from the body of the primordial giant Ymir with his brothers Vili and Vé — skull for the sky, blood for the seas, bones for the mountains. The Poetic Edda's Hávamál preserves his own voice dispensing hard-won counsel on cunning, hospitality, and the cost of knowledge, while the Grímnismál recounts his torment between two fires to reveal cosmological secrets. Two ravens, Huginn (Thought) and Muninn (Memory), fly out each dawn and return each evening to whisper the world's news into his ears; he worries most about Muninn. He wanders the nine worlds disguised as a one-eyed traveler in a wide-brimmed hat, gathering the heroic dead into Valhalla through his Valkyries to marshal them for the final battle. At Ragnarök he rides forth on Sleipnir against the wolf Fenrir and is swallowed whole, his death the price of a cosmos that must be destroyed to be reborn. To the Vikings he was the patron of kings, poets, and sorcerers — the god you called on when the stakes were existential. At Þingvellir, where chieftains gathered to speak law beneath open sky, Odin's presence lingers in the very premise: that wisdom is purchased through sacrifice, and that even gods submit to fate.",
+      "animals": ["ravens (Huginn and Muninn)", "wolves (Geri and Freki)", "eight-legged horse (Sleipnir)"],
+      "weapons": ["Gungnir (spear that never misses)"],
+      "consorts": ["Frigg"],
+      "colors": ["deep blue", "grey", "black"],
+      "metals": ["mercury (quicksilver)"]
+    },
+    {
+      "id": "thor",
+      "name": "Thor",
+      "title": "God of Thunder",
+      "group": "aesir",
+      "description": "Thor is the red-bearded son of Odin and the earth goddess Jörð, the most physically powerful of the Æsir and the tireless defender of both gods and humankind against the giants of Jötunheimr. His hammer Mjölnir, forged by the dwarven brothers Sindri and Brokkr while Loki sabotaged the bellows in fly form, is the most famous weapon in Norse mythology — it never misses its mark, returns to his hand after every throw, and can be shrunk small enough to hide beneath his shirt, though its handle is too short because of Loki's meddling. The Poetic Edda's Þrymskviða tells of Mjölnir's theft by the giant Þrymr and Thor's humiliating disguise as Freyja in a bridal veil to recover it, while the Prose Edda recounts his fishing expedition where he nearly hauled the World Serpent Jörmungandr from the ocean floor before his companion Hymir cut the line. He rides a chariot drawn by two goats, Tanngrisnir and Tanngnjóstr, whom he can slaughter and eat each night — as long as the bones remain unbroken, they regenerate by morning. At Ragnarök Thor and Jörmungandr finally meet on the field, and the god slays the serpent at last — then staggers nine steps from its venomous breath before falling dead. He was the god of the common farmer and sailor, the deity most frequently invoked in everyday life across Scandinavia and Iceland. Þingvellir's dramatic rift valley, split by the same tectonic forces that drive Iceland's volcanic thunder, feels like landscape shaped by his hammer — and the settlers who gathered there wore Thor's hammer pendants as tokens of protection and consecration.",
+      "animals": ["goats (Tanngrisnir and Tanngnjóstr)"],
+      "weapons": ["Mjölnir (hammer)", "Megingjörð (belt of strength)", "Járngreipr (iron gloves)"],
+      "consorts": ["Sif"],
+      "colors": ["red", "iron grey"],
+      "metals": ["iron"]
+    },
+    {
+      "id": "tyr",
+      "name": "Tyr",
+      "title": "God of War and Justice",
+      "group": "aesir",
+      "description": "Tyr is the one-handed god of war, law, and heroic glory, and his sacrifice is the moral backbone of the Norse cosmos. When the Æsir resolved to bind the monstrous wolf Fenrir with the magical fetter Gleipnir — smooth as silk, forged by dwarves from six impossible things: the sound of a cat's footfall, the beard of a woman, the roots of a mountain, the sinews of a bear, the breath of a fish, and the spittle of a bird — only Tyr had the courage to place his right hand in the beast's jaws as a pledge of good faith. When the wolf found himself trapped, Tyr lost the hand without flinching. The gods laughed; Tyr did not. The Poetic Edda and the Prose Edda both preserve this episode as the defining act of divine honor: a god who would rather lose a limb than break his word. Linguistic evidence suggests Tyr was once the supreme sky god of the proto-Germanic peoples — Tiwaz — cognate with the Vedic Dyaus and the Greek Zeus, before Odin eclipsed him in the cult's evolution. His rune ᛏ is shaped like an arrow pointing upward and was carved on sword hilts for victory. At Ragnarök Tyr faces the hellhound Garmr at the gates of Hel, and the two destroy each other. His role as divine lawgiver resonates powerfully at Þingvellir, where Icelandic chieftains submitted their disputes to legal procedure rather than bloodshed — the Althing itself was an institution that embodied Tyr's principle: that justice requires someone willing to pay the personal cost of upholding it.",
+      "animals": ["wolf (through his binding of Fenrir)"],
+      "weapons": ["sword (wielded with left hand after his sacrifice)"],
+      "colors": ["crimson", "steel grey"],
+      "metals": ["steel"]
+    },
+    {
+      "id": "baldur",
+      "name": "Baldur",
+      "title": "God of Light and Purity",
+      "group": "aesir",
+      "description": "Baldur is the most beloved of the Æsir, the radiant son of Odin and Frigg, so beautiful that light radiated from his body and the whitest flower was named after him. His death sets in motion the chain of events that leads to Ragnarök. The Prose Edda tells how Baldur was plagued by prophetic dreams of his own demise, prompting Frigg to travel the nine worlds and extract oaths from every substance in creation that none would harm her son — fire, water, iron, stone, disease, beast, and poison all swore. Every substance save the mistletoe, which she judged too young and slight to threaten anyone. Loki discovered this omission, fashioned a dart of mistletoe, and guided the blind god Höðr's hand to throw it. Baldur fell dead, and the world went silent. His funeral ship Hringhorni, the greatest vessel ever built, was set ablaze in the grandest pyre the nine worlds had known; his wife Nanna died of grief upon the pyre. Hermóðr rode Sleipnir to Hel's realm to beg for Baldur's return, and Hel agreed on the condition that every being in existence weep for him — but one giantess, Þökk, widely believed to be Loki in disguise, refused, and Baldur remained among the dead. He returns after Ragnarök to rule the renewed world that rises from the sea, making him the supreme symbol of hope and cyclical rebirth. In the long Icelandic winters, where light itself becomes precious and the sun barely clears the horizon for months, Baldur's myth carries the weight of seasonal grief and the promise that brilliance returns.",
+      "vegetation": ["mistletoe (his doom)", "chamomile (Baldur's brow)"],
+      "consorts": ["Nanna"],
+      "colors": ["white", "gold"]
+    },
+    {
+      "id": "heimdall",
+      "name": "Heimdall",
+      "title": "Guardian of Bifrost",
+      "group": "aesir",
+      "description": "Heimdall stands at the edge of heaven where the rainbow bridge Bifrost meets Asgard, the ever-vigilant sentinel whose senses are so acute he can hear grass growing and see to the ends of the earth by day or night. The Prose Edda describes him as born of nine mothers — often identified with the nine waves of the sea, the daughters of Ægir — and he requires less sleep than a bird. His teeth are gold, earning him the name Gullintanni, and he possesses the Gjallarhorn, whose blast will be heard across all nine worlds when he sounds it to announce the onset of Ragnarök. He has blown it only in warning; he will blow it once more at the end, and that note will wake the dead and summon every god to their final battle. The Poetic Edda's Rígsþula recounts how, under the name Rígr, he wandered Midgard and fathered the three classes of human society — thralls, freemen, and nobles — sleeping in succession with three couples, making him the divine ancestor of social order itself. At Ragnarök Heimdall and Loki, eternal antagonists — the guardian of boundaries and the god who transgresses every one — meet in single combat and slay each other, opposites annihilating at the end. His perpetual watchfulness mirrors the experience of Iceland's settlers, who built their society at the edge of the habitable world and depended on vigilance against both raiders and the unpredictable violence of their volcanic landscape. Þingvellir's lookout over Þingvallavatn carries something of Heimdall's post — the long watch at the boundary where two worlds meet.",
+      "animals": ["ram (his horse is Gulltoppr, the gold-maned)"],
+      "weapons": ["Gjallarhorn (resounding horn)", "Höfuð (sword)"],
+      "colors": ["rainbow spectrum", "white", "gold"],
+      "metals": ["gold"]
+    },
+    {
+      "id": "bragi",
+      "name": "Bragi",
+      "title": "God of Poetry",
+      "group": "aesir",
+      "description": "Bragi is the god of skaldic poetry, eloquence, and the art of the spoken word, often depicted as an elder figure with a long beard and runes carved on his tongue. The Prose Edda places him in Valhalla, where he greets fallen warriors with verses that honor their deeds and presides over the mead of poetry — the sacred drink brewed from the blood of Kvasir, the being born from the mingled saliva of the Æsir and Vanir at their peace-making. Whether Bragi originated as a deified version of the historical skald Bragi Boddason, the first known Norse poet whose name survives, or whether the poet took a divine name, remains one of the tantalizing ambiguities of Norse literary history. His role at feasts connects him to the ritual of the bragarfull, the solemn toast over which oaths were sworn — binding word to deed in a culture where reputation was the only currency that outlasted a life. In the Lokasenna, when Loki crashes the gods' feast and insults everyone, Bragi tries to keep the peace; Loki calls him the most cowardly of the Æsir. Bragi offers his sword, his horse, and a ring to buy peace, then says he would cut off Loki's head if they were outside the hall. The poet is not without teeth. He plays no recorded role in Ragnarök, which may itself be significant: poetry survives the destruction of the world, carried forward by those who remember the old verses. In Iceland, where the sagas and Eddas were preserved in manuscript while the rest of Scandinavia lost them, Bragi's domain proved more durable than Asgard itself. The lawspeaker at Þingvellir, who recited the entire legal code from memory each year, was Bragi's heir in practice if not in name.",
+      "consorts": ["Iðunn (keeper of the golden apples of immortality)"],
+      "vegetation": ["oak (associated with the mead hall)"],
+      "colors": ["amber", "deep gold"]
+    },
+    {
+      "id": "hodr",
+      "name": "Höðr",
+      "title": "The Blind God",
+      "group": "aesir",
+      "description": "Höðr is the blind god of the Æsir, a tragic figure whose single recorded act — the killing of his brother Baldur — reverberates through the entire mythological cycle and sets Ragnarök in motion. In the Prose Edda's account, the gods were amusing themselves by hurling objects at the invulnerable Baldur, laughing as everything bounced off him, when Loki approached Höðr, who stood apart because he could not see to aim and had no weapon. Loki placed the mistletoe dart in Höðr's hand and guided his throw, and the dart pierced Baldur's heart. The world went silent. Höðr was subsequently slain by Váli, a son Odin sired specifically for that act of vengeance — born and grown to manhood in a single day, the fastest and most terrible of divine reprisals. Yet the Poetic Edda's Völuspá prophesies that after Ragnarök, both Baldur and Höðr return together to inhabit the renewed world, reconciled beyond death, suggesting that Höðr's guilt was always understood as Loki's more than his own. Saxo Grammaticus offers an entirely different tradition in his Gesta Danorum, casting Höðr as a heroic warrior and rival of Baldur for the hand of Nanna, but the Eddic version dominates the mythological canon. Höðr embodies the Norse understanding that catastrophe often arrives through innocent hands, that the instrument of destruction may itself be blameless — a theme the Icelandic sagas would explore repeatedly in their accounts of feuds at places like Þingvellir, where decent people were drawn into cycles of violence not of their making.",
+      "colors": ["black", "dark grey"]
+    },
+    {
+      "id": "vidar",
+      "name": "Vidar",
+      "title": "The Silent God",
+      "group": "aesir",
+      "description": "Vidar is the silent, solitary son of Odin, nearly as strong as Thor, whose defining moment comes at the end of all things. He is called the Silent God, and the sources give almost no account of his activities before Ragnarök — he simply exists, waiting, growing in strength in his thick forest realm of Víði. His one great deed is the avenging of his father: when Fenrir swallows Odin at the final battle, Vidar steps forward, plants his impossibly thick shoe on the wolf's lower jaw, and tears the beast apart with his bare hands. The Prose Edda specifies that this shoe has been assembled since the beginning of time from leather scraps discarded by cobblers throughout history — a detail that prompted a folk tradition of leaving leather trimmings for Vidar's sake, so that when the end comes the shoe will be thick enough. He is one of the few gods who survive Ragnarök, inheriting the renewed world alongside his brother Váli and the returned Baldur and Höðr. His silence and patience make him a god of endurance, the embodiment of the principle that some purposes require a lifetime of quiet preparation before a single decisive act. In Iceland's landscape — where glaciers move imperceptibly and volcanic eruptions follow centuries of stillness — Vidar's character reads less like mythology and more like geology. The patient rift at Þingvellir widens two centimeters per year, silent and inexorable, very much in Vidar's mode.",
+      "weapons": ["thick shoe (his primary weapon against Fenrir)", "sword"],
+      "colors": ["forest green", "earth brown"]
+    },
+    {
+      "id": "freya",
+      "name": "Freya",
+      "title": "Goddess of Love and War",
+      "group": "vanir",
+      "description": "Freya is the foremost goddess of the Vanir, sovereign over love, fertility, seiðr magic, war, and death — a range of domains that makes her arguably the most complex deity in the Norse pantheon. She came to the Æsir as a hostage after the Æsir-Vanir War, the first war in the world, and became so central to their cosmos that she claims half of all warriors slain in battle, hosting them in her hall Sessrúmnir on the field of Fólkvangr — and she chooses before Odin receives his half in Valhalla. The Prose Edda describes her weeping tears of red gold for her lost husband Óðr, who wanders the world and never returns. She possesses Brísingamen, a magnificent golden necklace acquired from four dwarves, and rides a chariot drawn by two cats. She taught Odin the art of seiðr — ecstatic, trance-based magic considered deeply powerful but socially transgressive for men to practice — giving the Allfather access to a kind of knowledge he could not otherwise reach. Giants constantly seek her as a prize, and her refusal is the engine behind multiple myths, including the recovery of Mjölnir in the Þrymskviða, where her fury at the suggestion she marry the giant Þrymr shook the halls of Asgard and burst Brísingamen from her neck. Her fate at Ragnarök is unrecorded, which some scholars read as a sign of her survival. In Icelandic folk tradition she lingered long after Christianization, and the landscape around Þingvellir — where hot springs steam through moss-covered lava fields — carries the kind of sensuous, living energy that her worship celebrated.",
+      "animals": ["cats (chariot-pullers)", "falcon (her feathered cloak, Valshamr)", "boar (Hildisvíni)"],
+      "weapons": ["Brísingamen (necklace of power)", "seiðr magic"],
+      "consorts": ["Óðr"],
+      "vegetation": ["linden tree", "flax"],
+      "colors": ["gold", "red", "amber"],
+      "metals": ["gold"]
+    },
+    {
+      "id": "freyr",
+      "name": "Freyr",
+      "title": "God of Fertility and Prosperity",
+      "group": "vanir",
+      "description": "Freyr is the twin brother of Freya and the Vanir god of sunshine, rain, fertility, and peace — the deity most directly responsible for good harvests and prosperous seasons. Like his sister, he came to the Æsir as a hostage after the Æsir-Vanir War and was given Álfheimr, the realm of the light-elves, as a teething gift. His cult center at Old Uppsala in Sweden was the most important temple in the North. The Prose Edda recounts his most celebrated myth: he sat in Odin's high seat Hliðskjálf — which was forbidden to him — and glimpsed the giantess Gerðr in Jötunheimr, falling so desperately in love that he could not eat, sleep, or speak. He gave away his magical sword — a blade that could fight on its own against any foe — as part of the bride-price his servant Skírnir negotiated on his behalf. The Poetic Edda's Skírnismál dramatizes the wooing as a blend of love-sickness and coercion, raising questions the myths leave deliberately unresolved. This sacrifice proves fatal: at Ragnarök, when the fire giant Surtr comes with his flaming sword to burn the world, Freyr faces him unarmed and falls, fighting with an antler because he has nothing else. His ship Skíðblaðnir, built by dwarves, always catches a fair wind and folds small enough to fit in a pocket. His boar Gullinbursti, with bristles of gold that light up the darkest night, was another dwarven marvel. In Iceland, where the short growing season made fertility gods existentially important, Freyr's worship persisted stubbornly, and the assembly at Þingvellir coincided with midsummer — Freyr's own season, when the land briefly explodes into green.",
+      "animals": ["boar (Gullinbursti, golden-bristled)"],
+      "weapons": ["magical sword (given away for love)", "antler (used at Ragnarök in its place)"],
+      "consorts": ["Gerðr"],
+      "vegetation": ["barley", "grain"],
+      "colors": ["green", "golden yellow"],
+      "metals": ["gold"]
+    },
+    {
+      "id": "njord",
+      "name": "Njord",
+      "title": "God of the Sea",
+      "group": "vanir",
+      "description": "Njord is the Vanir god of the sea, wind, fishing, and wealth, the father of Freyr and Freya, and one of the foremost hostages exchanged after the Æsir-Vanir War — the first war in the world, fought because the Æsir burned a Vanir sorceress named Gullveig three times and she rose three times from the flames. He dwells at Nóatún, the shipyard by the sea, and governs the prosperity that comes from maritime skill — fishing, trade, and safe voyaging. The Prose Edda recounts his ill-fated marriage to the giantess Skaði, who came to Asgard demanding compensation for the gods' killing of her father Þjazi and was offered a husband chosen by his feet. She chose the most beautiful feet, expecting Baldur; they belonged to Njord, whose feet were washed clean by the sea. They tried to live together — nine nights in his Nóatún by the crashing waves, nine nights in her Þrymheimr among the howling wolves. He could not bear the wolves; she could not bear the gulls. They separated. The sea and the mountain cannot share a bed. It is one of the most human stories in Norse mythology — two people who are not wrong, just incompatible. Njord's role at Ragnarök is ambiguous; the Prose Edda says he returns to the Vanir when the worlds are destroyed, suggesting he survives the cataclysm. For Icelandic settlers who crossed the North Atlantic in open boats and depended on fishing for survival, Njord was among the most practically vital deities. The lake at Þingvellir — Þingvallavatn, Iceland's largest natural lake, fed by glacial water filtered through lava rock — carries his quiet jurisdiction, and the Arctic char that sustained the assembly's attendees were gifts from his domain.",
+      "animals": ["gulls", "sea birds"],
+      "consorts": ["Skaði (estranged)"],
+      "colors": ["sea blue", "silver-white"],
+      "metals": ["silver"]
+    },
+    {
+      "id": "loki",
+      "name": "Loki",
+      "title": "The Trickster",
+      "group": "other",
+      "description": "Loki is the trickster of the Norse cosmos, a shape-shifting, boundary-dissolving figure who is neither fully Æsir nor giant but moves between both worlds as blood-brother to Odin through a pact older than the surviving myths. He is the son of the giant Fárbauti and Laufey, and his children are the three monsters that will end the world: the wolf Fenrir, who will swallow Odin; the World Serpent Jörmungandr, who will poison Thor; and the death goddess Hel, who rules over all who die outside of battle. The Prose Edda preserves his most characteristic episodes: he orchestrated the death of Baldur through guile and mistletoe, guiding blind Höðr's hand and then disguising himself as the giantess Þökk who refused to weep; he cut off Sif's golden hair and then arranged for the dwarves to forge replacements, along with Mjölnir, Gungnir, Skíðblaðnir, and Gullinbursti — the greatest treasures of the gods exist because Loki caused a problem and then half-fixed it; and he once transformed into a mare, mated with the stallion Svaðilfari, and gave birth to Sleipnir. The Poetic Edda's Lokasenna shows him at his most corrosive, crashing the gods' feast to hurl accusations at each deity in turn — many of them embarrassingly true. After Baldur's death the gods bound Loki beneath the earth with the entrails of his own son Narfi, a serpent dripping venom onto his face for eternity. His wife Sigyn holds a bowl to catch the venom; when she turns to empty it, the drops hit his face and he writhes so violently the earth shakes — that is what earthquakes are. At Ragnarök he breaks free, captains the ship Naglfar made of dead men's fingernails, and leads the armies of the dead against the gods; he and Heimdall slay each other. Iceland's volcanic geology — where the earth itself is unstable, prone to sudden fissures and eruptions — has always invited comparison to Loki bound and straining. At Þingvellir, where the continental plates visibly pull apart, the trickster's restlessness is literally underfoot.",
+      "animals": ["salmon (his transformation when fleeing the gods)", "fly", "mare (as Sleipnir's mother)"],
+      "colors": ["fire orange", "black"]
+    },
+    {
+      "id": "hel",
+      "name": "Hel",
+      "title": "Queen of the Dead",
+      "group": "other",
+      "description": "Hel is the daughter of Loki and the giantess Angrboða, ruler of the realm that shares her name — Helheimr, the underworld domain where those who die of illness, old age, or misfortune are received, everyone who does not fall in battle. The Prose Edda describes her as half-living, half-dead in appearance, with one side of her body the color of flesh and the other the blue-black of a corpse. When the gods recognized the threat posed by Loki's monstrous children, Odin cast each into a different realm: Fenrir was bound, Jörmungandr was thrown into the sea encircling the world, and Hel was given authority over the dead in Niflheimr, the world of ice and mist at the lowest root of Yggdrasil. Her hall is called Éljúðnir (misery), her dish is Hungr (hunger), her knife is Sultr (famine), her bed is Kör (sick-bed), and her threshold is Fallandaforað (stumbling-block) — a grim catalogue that strips death of any glamour. She is not evil in the way later Christian retellings made her; she is implacable. When Hermóðr rode to her realm on Sleipnir to beg for Baldur's return, Hel set a condition she likely knew would fail: if every thing in creation weeps for him, he may go. Everything wept — except Loki in disguise. She kept Baldur. Not out of cruelty, but because the condition was not met. She holds what she holds. At Ragnarök her ship carries the dead to war against the gods. Unlike the heroic death cults of Valhalla and Fólkvangr, Hel's realm acknowledges the ordinary, unglamorous majority of dying — the death that comes not on a battlefield but in a bed. In Iceland, where harsh winters and famine were perennial threats and many deaths were inglorious, Hel's domain was not a punishment but simply the destination most people expected. The lava fields around Þingvellir — twisted, dark, and covered in deep moss that softens every edge — carry her quality: the beautiful surface over the cold stone beneath.",
+      "animals": ["Garmr (the hound who guards Hel's gate)"],
+      "colors": ["half-black, half-flesh", "pale green", "bone-white"],
+      "metals": ["lead"]
+    }
+  ]
+}

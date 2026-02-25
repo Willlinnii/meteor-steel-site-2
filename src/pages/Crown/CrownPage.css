@@ -1,0 +1,167 @@
+.crown-page {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  background: #0a0a14;
+  overflow: hidden;
+}
+
+/* ── Birthday input bar ────────────────────────────────────────────── */
+
+.crown-birthday-bar {
+  position: absolute;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 1.25rem;
+  background: rgba(10, 10, 20, 0.75);
+  border: 1px solid rgba(201, 169, 97, 0.3);
+  border-radius: 8px;
+  backdrop-filter: blur(8px);
+}
+
+/* ── Date type selector ────────────────────────────────────────────── */
+
+.crown-date-types {
+  display: flex;
+  gap: 0.2rem;
+}
+
+.crown-date-type-btn {
+  background: transparent;
+  border: 1px solid rgba(201, 169, 97, 0.2);
+  color: rgba(201, 169, 97, 0.4);
+  padding: 0.25rem 0.6rem;
+  font-size: 0.7rem;
+  border-radius: 4px;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-family: inherit;
+  transition: border-color 0.2s, color 0.2s, background 0.2s;
+}
+
+.crown-date-type-btn:hover {
+  border-color: #c9a961;
+  color: #c9a961;
+}
+
+.crown-date-type-btn.active {
+  border-color: #c9a961;
+  color: #f0c040;
+  background: rgba(201, 169, 97, 0.12);
+}
+
+.crown-date-type-btn.has-date {
+  color: rgba(201, 169, 97, 0.7);
+}
+
+.crown-date-type-btn.has-date.active {
+  color: #f0c040;
+}
+
+.crown-date-input {
+  background: rgba(201, 169, 97, 0.08);
+  border: 1px solid rgba(201, 169, 97, 0.3);
+  border-radius: 4px;
+  color: #f0e0b0;
+  padding: 0.35rem 0.6rem;
+  font-size: 0.85rem;
+  font-family: inherit;
+  outline: none;
+  cursor: pointer;
+}
+
+.crown-date-input:focus {
+  border-color: rgba(240, 192, 64, 0.6);
+}
+
+/* Style the date picker icon */
+.crown-date-input::-webkit-calendar-picker-indicator {
+  filter: invert(0.7) sepia(1) saturate(3) hue-rotate(10deg);
+  cursor: pointer;
+}
+
+.crown-clear-btn {
+  background: transparent;
+  border: 1px solid rgba(201, 169, 97, 0.4);
+  color: #c9a961;
+  padding: 0.3rem 0.75rem;
+  font-size: 0.75rem;
+  border-radius: 4px;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.crown-clear-btn:hover {
+  border-color: #f0c040;
+  color: #f0c040;
+}
+
+/* ── Mode toggle ──────────────────────────────────────────────────── */
+
+.crown-mode-divider {
+  width: 1px;
+  height: 1.2rem;
+  background: rgba(201, 169, 97, 0.25);
+}
+
+.crown-mode-toggle {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.crown-mode-btn {
+  background: transparent;
+  border: 1px solid rgba(201, 169, 97, 0.3);
+  color: rgba(201, 169, 97, 0.5);
+  width: 2rem;
+  height: 2rem;
+  font-size: 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.2s, color 0.2s, background 0.2s;
+}
+
+.crown-mode-btn:hover {
+  border-color: #f0c040;
+  color: #f0c040;
+}
+
+.crown-mode-btn.active {
+  border-color: #c9a961;
+  color: #f0c040;
+  background: rgba(201, 169, 97, 0.12);
+}
+
+/* ── Error state ───────────────────────────────────────────────────── */
+
+.crown-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  color: #c9a961;
+  background: #0a0a14;
+  font-family: inherit;
+}
+
+.crown-error button {
+  margin-top: 1rem;
+  padding: 0.5rem 1.5rem;
+  background: transparent;
+  border: 1px solid #c9a961;
+  color: #c9a961;
+  cursor: pointer;
+  border-radius: 4px;
+}

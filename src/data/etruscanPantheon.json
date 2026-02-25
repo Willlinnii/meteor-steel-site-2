@@ -1,0 +1,153 @@
+{
+  "id": "etruscan",
+  "name": "The Ais",
+  "description": "The Ais — the Etruscan word for gods — gathered at Fanum Voltumnae, the federal sanctuary of the twelve city-states of the Etruscan League, somewhere near the volcanic caldera that is now Lake Bolsena, Europe's largest crater lake. This was a civilization that read the will of the gods in the lobes of sheep livers using a bronze model divided into sixteen divine sectors, wrapped their only surviving book around a mummy in Zagreb, and painted their tombs with banquets and dancers and dolphins — all underground, with the dead, as though death were not an ending but a continuation of the party. Their language, written in a Greek-derived alphabet, is only partially deciphered; we can read many words but cannot fully reconstruct the theology behind them, which means the Ais remain half-visible, speaking to us through mirrors, tombs, and entrails.",
+  "deities": [
+    {
+      "id": "tinia",
+      "name": "Tinia",
+      "title": "King of the Gods",
+      "group": "supreme",
+      "description": "Tinia held the sky and the thunderbolt, and the Romans called him Jupiter, but the equivalence obscures what was distinctly Etruscan about him. The bronze Piacenza Liver — a life-sized model of a sheep's liver discovered in 1877, dating to the late second or early first century BCE, now in the Palazzo Farnese — divides its surface into forty regions assigned to different deities, and Tinia occupies three of them, more than any other god. He was not simply the supreme deity; he was the god whose will was read in the entrails of sacrificed animals, the patron of the haruspices, the diviners who formed the most distinctive priestly class in the ancient Mediterranean. The Etrusca disciplina — the body of religious knowledge the Romans attributed to the Etruscans and consulted well into the imperial period — held that Tinia alone wielded three types of thunderbolt. The first he could hurl at his own discretion as a warning. The second required the consent of a council of twelve gods. The third, the most destructive, required the consent of a higher group of shrouded deities called the Dii Involuti — the Veiled Gods — whose identities were themselves a mystery, superior even to Tinia. This is remarkable: the king of the gods could not act alone at the highest level of force. Sovereignty was constitutionally limited by a divine council whose members were hidden. No Greek or Roman theology imposed this kind of check on its supreme deity. Mirror engravings from Praeneste and Vulci show Tinia enthroned, bearded, holding the thunderbolt, sometimes flanked by Uni and Menrva in the triad the Romans would adopt wholesale as the Capitoline Three. But the Tinia of the Piacenza Liver is not a patriarch presiding unchecked. He is an executive constrained by higher and invisible authority — a theological structure that suggests the Etruscans understood power as inherently distributed, never absolute, always answerable to forces that remain veiled even to the one who wields the lightning.",
+      "animals": ["eagle"],
+      "weapons": ["three types of thunderbolt"],
+      "consorts": ["Uni"],
+      "colors": ["white", "gold", "storm-blue"]
+    },
+    {
+      "id": "uni",
+      "name": "Uni",
+      "title": "Queen of the Gods",
+      "group": "supreme",
+      "description": "Uni was the queen of the Etruscan pantheon, partner of Tinia and mother of Hercle (Hercules) in some traditions, and the Romans identified her with Juno — but the identification undersells her. Inscriptions from the great sanctuary at Pyrgi, the port of Caere (modern Cerveteri), discovered in 1964, include the famous Pyrgi Tablets: three gold sheets, two in Etruscan and one in Phoenician, recording a dedication to Uni-Astarte by the ruler Thefarie Velianas around 500 BCE. This is one of the most important bilingual texts in Mediterranean archaeology, and it equates Uni not with Hera or Juno but with Astarte — the Phoenician goddess of sexuality, war, and sovereign power. The Phoenician text describes a sacred precinct with ritual functions that suggest temple prostitution or sacred marriage rites, a practice associated with Near Eastern fertility cults but entirely foreign to the Greek and Roman understanding of Hera/Juno. Uni at Pyrgi was worshipped with a Near Eastern face, which means the Etruscans maintained theological connections to the Levant that bypassed Greece entirely. Tomb paintings at Tarquinia and bronze mirror engravings show her veiled, regal, sometimes nursing. The Liber Linteus — the linen book preserved as mummy wrappings in Zagreb, the longest surviving Etruscan text — contains ritual instructions mentioning Uni in the context of calendrical ceremonies, though the fragmentary state of Etruscan linguistic knowledge means we cannot reconstruct the full liturgy. What survives is enough to see that Uni was not a Greek goddess with an Etruscan accent. She was a Mediterranean syncretism: Italic sovereignty merged with Semitic fertility and power, worshipped at a port city where Etruscan and Phoenician traders met. She suggests that the Etruscans thought of divinity as something that crossed cultural boundaries — that the gods of Tyre and the gods of Caere might be the same force wearing different names.",
+      "animals": ["peacock", "goat"],
+      "weapons": ["scepter"],
+      "consorts": ["Tinia"],
+      "colors": ["royal blue", "gold", "white"]
+    },
+    {
+      "id": "menrva",
+      "name": "Menrva",
+      "title": "Goddess of Wisdom and War",
+      "group": "supreme",
+      "description": "Menrva completed the supreme triad alongside Tinia and Uni, and the Romans took her directly — name, function, and cult — as Minerva. But in Etruria, she was far more prominent than Athena was in most Greek city-states. She appears on more engraved bronze mirrors than almost any other deity, often shown armed with spear and aegis, sometimes in scenes that have no parallel in Greek mythology: on one famous mirror from Praeneste, she presides over the birth of the hero Maris from a jar, a scene that belongs to no Greek mythological cycle and may represent a lost Etruscan narrative. On another, she appears with Hercle and other figures in compositions that suggest an Etruscan mythological tradition that was related to but independent of the Greek. At the great federal sanctuary of Fanum Voltumnae, where the twelve Etruscan city-states sent representatives for annual assemblies and games near Lake Bolsena's volcanic caldera, Menrva was one of the primary deities honored. The votive bronzes found at Etruscan sanctuaries frequently depict armed warriors alongside images of Menrva, suggesting she was patron of the military aristocracy. The Piacenza Liver assigns her a sector adjacent to Tinia, confirming her high position in the divine hierarchy used for haruspicy. What distinguishes her from Athena is not function — both are wisdom-and-war goddesses — but cultural weight. In Etruria, Menrva was not one deity among twelve equals; she was one of the three supreme powers, co-sovereign with the king and queen of the gods. The Romans adopted this triad for the Capitoline — Jupiter, Juno, Minerva — which means the political theology of the Roman Republic's most sacred temple was Etruscan in origin. When a Roman consul climbed the Capitoline to take his vows, he was enacting an Etruscan ritual architecture. Menrva is the proof that Etruscan religion was not a footnote to Greek mythology but a source tradition that shaped Rome directly.",
+      "animals": ["owl"],
+      "weapons": ["spear", "aegis", "shield"],
+      "consorts": ["none"],
+      "colors": ["olive green", "gold"]
+    },
+    {
+      "id": "aplu",
+      "name": "Aplu",
+      "title": "God of Light and Plague",
+      "group": "celestial",
+      "description": "Aplu is the Etruscan Apollo, and his name is simply a borrowing of the Greek Apollon, which tells you something immediate: unlike the supreme triad, whose names are indigenous Etruscan, Aplu came from across the water. But the Etruscans did not simply import him. The most famous Etruscan sculpture in existence — the Apollo of Veii, a life-sized painted terracotta figure from around 510 BCE, now in the Villa Giulia in Rome — shows him striding forward with an archaic smile and a dynamism that has no parallel in contemporary Greek sculpture. He was part of an acrotorial group on the roof of the Portonaccio Temple at Veii, depicting the struggle for the Ceryneian Hind between Hercle and Aplu, and the sheer physical confidence of the figure — weight forward, drapery clinging, painted in vivid color — represents Etruscan art at its most distinctive. This is not Greek restraint or Roman gravity; it is an Etruscan aesthetic that valued movement, surface, and color in a way that both neighbors found somewhat unsettling. Pliny the Elder records that the best coroplasts (terracotta sculptors) in the ancient world were Etruscan, and the Apollo of Veii proves it. On the Piacenza Liver, Aplu occupies a clearly defined sector, and his role in Etruscan divination appears linked to the interpretation of portents involving light, plague, and purification — functions that mirror his Greek identity but were embedded in the specifically Etruscan system of reading the divine will through organic signs. At Lake Bolsena, where volcanic soil and hot springs mark the caldera's edge, the Etruscan settlements around the lake — Velzna (Volsinii), Bisenzio, the island towns — worshipped their gods in a landscape where the earth itself steamed and glowed. Aplu, the god of light, presided over a world where light came from below as well as above.",
+      "animals": ["raven", "dolphin"],
+      "weapons": ["bow", "lyre"],
+      "consorts": ["Artumes (Diana)"],
+      "colors": ["gold", "terracotta red"]
+    },
+    {
+      "id": "turan",
+      "name": "Turan",
+      "title": "Goddess of Love and Vitality",
+      "group": "celestial",
+      "description": "Turan is the Etruscan Venus, but her name — likely related to the Etruscan verb 'to give' — suggests a deity whose domain was broader than erotic love. She is the most frequently depicted goddess on Etruscan bronze mirrors, those remarkable engraved hand mirrors produced in the thousands from the fifth through third centuries BCE, now scattered across museums from the Vatican to the British Museum. On these mirrors, Turan appears in intimate scenes: bathing, adorning herself, embracing her lover Atunis (Adonis), attending divine marriages, sometimes naked, sometimes draped, almost always surrounded by attendant figures identified by Etruscan inscriptions that allow us to reconstruct her mythological network. Her attendants include Zipna, Munthuch, and Evan — female figures with no Greek equivalents, suggesting an Etruscan theology of feminine companionship around the love goddess that goes beyond anything in Aphrodite's retinue. Tomb paintings at Tarquinia frequently depict banquet scenes where men and women recline together on dining couches, a practice that shocked Greek observers like Theopompus, who described Etruscan women as shamelessly sharing meals and wine with men who were not their husbands. Whether his account is accurate or polemical, it reflects a genuine cultural difference: Etruscan women had social visibility and legal standing that Greek women did not. Turan is the divine reflection of this. She is not a goddess of seduction or conquest but of mutual pleasure, displayed openly, celebrated on objects women held in their own hands. The mirrors themselves are the medium and the message: a woman looks at her own reflection while holding an image of the goddess of love on the reverse, and the act of seeing oneself becomes a devotional act. Turan models a civilization's relationship to desire that is neither Greek shame nor Roman contract but something more direct — pleasure as a gift, openly given.",
+      "animals": ["dove", "swan"],
+      "weapons": ["mirror", "wreath"],
+      "consorts": ["Atunis (Adonis)", "Laran (Mars)"],
+      "colors": ["rose", "sea-green", "gold"],
+      "vegetation": ["myrtle"]
+    },
+    {
+      "id": "fufluns",
+      "name": "Fufluns",
+      "title": "God of Wine and Vegetation",
+      "group": "celestial",
+      "description": "Fufluns — whose name has been tentatively connected to the Etruscan word for 'sprout' or 'shoot' — was the Etruscan Dionysus, but the Etruscans did not need to import ecstatic religion. The tomb paintings at Tarquinia are themselves a theology of the feast: the Tomb of the Leopards, the Tomb of the Augurs, the Tomb of the Triclinium — all depict vivid scenes of banqueting, wine-drinking, music, and dance, painted on the walls of underground chambers where the dead rested. Dancers leap with abandon. Musicians play double flutes and lyres. Revelers recline with wine cups raised. The colors are still vivid after twenty-five centuries — blues, reds, greens, ochres applied to wet plaster in a technique that anticipates fresco by a thousand years. These are not scenes of the afterlife as reward or punishment; they are scenes of life itself, placed underground to continue alongside the dead, as though the Etruscans believed that the dead still participated in the feast. Fufluns appears in mirror engravings and votive inscriptions, sometimes accompanied by the figure called Pachies (linked to Bacchus/Iacchus), and the Etruscan wine trade — which predated and influenced Roman viticulture — was one of the economic engines of central Italy. Etruscan amphorae have been found as far afield as southern France, and the volcanic soils around Lake Bolsena produced wines that later Roman writers praised. The caldera's mineral-rich earth, heated from below by residual volcanic activity, created growing conditions that the ancients attributed to divine favor. Fufluns was the divine patron of that fertility. But the deeper Etruscan insight is in the tomb paintings: the feast does not stop at death. Whatever boundary separates the living from the dead, wine crosses it. The Etruscans painted their dead into perpetual celebration, and Fufluns presided over a continuity that Greece and Rome, with their more rigid separation between the living and the dead, never quite achieved.",
+      "animals": ["leopard", "panther", "goat"],
+      "weapons": ["thyrsus", "kantharos (drinking cup)"],
+      "consorts": ["Areatha"],
+      "colors": ["purple", "vine green", "ochre"],
+      "vegetation": ["grapevine", "ivy"]
+    },
+    {
+      "id": "turms",
+      "name": "Turms",
+      "title": "The Messenger and Guide of Souls",
+      "group": "celestial",
+      "description": "Turms is the Etruscan Hermes, the messenger god, but in Etruria his function as psychopomp — guide of the dead — takes precedence over his Greek roles as trickster, thief, and merchant's patron. On Etruscan funerary art, Turms appears repeatedly escorting the deceased to the underworld, often depicted with the winged hat (tutulus) and caduceus familiar from Greek iconography but rendered in a distinctly Etruscan style: more solemn, less playful, a god whose primary business is transition rather than commerce. The Francois Tomb at Vulci, one of the most elaborately painted Etruscan tombs ever discovered (fourth century BCE), includes scenes of mythological violence alongside historical narrative, and Turms appears in the divine apparatus that structures the passage between worlds. On the Piacenza Liver, he occupies his assigned sector, embedded in the divinatory system that organized the Etruscan cosmos into readable zones. What makes Turms interesting is how the Etruscans shifted his emphasis. In Greece, Hermes was the god of boundaries, crossroads, and the space between categories — a liminal deity with a sense of humor. In Rome, Mercury was the god of commerce and communication. In Etruria, Turms was primarily the one who walked you from life to death. This specialization reflects the Etruscan preoccupation with death as a managed transition — not something that happened to you but something you were escorted through, with divine guidance and ritual precision. The haruspices read the will of the gods to know when and how death would come; Turms was the god who arrived to make the crossing navigable. He is the principle that no one goes alone, that the boundary between worlds is not a wall but a road, and that roads require guides.",
+      "animals": ["ram", "rooster"],
+      "weapons": ["caduceus", "winged sandals"],
+      "consorts": [],
+      "colors": ["yellow", "silver"]
+    },
+    {
+      "id": "sethlans",
+      "name": "Sethlans",
+      "title": "God of the Forge",
+      "group": "chthonic",
+      "description": "Sethlans is the Etruscan Hephaestus/Vulcan, the divine smith, and in a civilization built on metalwork he was no secondary figure. The Etruscans were the master metalworkers of pre-Roman Italy — their bronze mirrors, candelabra, armor, jewelry, and votive statuettes represent some of the finest metalwork in the ancient Mediterranean, and the iron deposits of Elba (which the Etruscans controlled) and the copper and tin resources they traded for across the western Mediterranean made metallurgy the economic foundation of their power. On Etruscan mirrors, Sethlans appears with his forge tools, sometimes in scenes depicting the creation of divine objects, sometimes alongside other gods in compositions that suggest a craftsman-god who was fully integrated into the divine council rather than marginalized as in Homer's portrayal of the limping, cuckolded Hephaestus. The Etruscans did not seem to share the Greek ambivalence about manual labor among the divine. The volcanic landscape of central Italy — Lake Bolsena's caldera, the sulfurous hot springs at Saturnia and Viterbo, the tufa plateaus where Etruscan cities perched — was itself a forge landscape, where heat and mineral wealth rose from below and the earth was visibly, tangibly being shaped by subterranean fire. Sethlans was the theological name for this geological reality. His name has no convincing Indo-European etymology, which suggests it may be one of the genuinely pre-Italic Etruscan words, belonging to whatever linguistic tradition the Etruscans carried before they encountered Greek and Italic cultures. He is the god who turns raw earth into civilization, heat into form, volcanic chaos into bronze that lasts millennia. The mirrors he patronized are still legible after twenty-five centuries — the god of the forge outlasts the gods of war.",
+      "animals": ["donkey"],
+      "weapons": ["hammer", "tongs", "anvil"],
+      "consorts": [],
+      "colors": ["bronze", "orange", "iron black"]
+    },
+    {
+      "id": "vanth",
+      "name": "Vanth",
+      "title": "Winged Goddess of Death's Threshold",
+      "group": "chthonic",
+      "description": "Vanth has no Greek or Roman equivalent. She is purely Etruscan — a beautiful, winged female figure who appears in tomb paintings and on sarcophagi escorting the dead to the underworld, carrying a torch to light the way and sometimes a scroll on which the deceased's fate is written. She does not judge. She does not punish. She does not reward. She accompanies. This is an extraordinary theological invention: a goddess whose entire function is the transition itself — not what comes before it (life, virtue, sin) and not what comes after (paradise, punishment, oblivion), but the crossing. She appears in the Francois Tomb at Vulci, in the Tomb of the Anina family at Tarquinia, on dozens of sarcophagi and urns from Chiusi and Volterra, always recognizable by her wings, her torch, and her calm, attentive face. Sometimes she appears alongside Charun, the Etruscan demon of death, and the contrast is deliberate: he is monstrous, she is serene. The dead are escorted by both terror and tenderness. Her wings connect her visually to Greek Nike (Victory) and to later Christian angels, and art historians have argued that the iconography of guardian angels descends in part from Vanth's image — the winged figure who stands beside you at the moment of death not as a judge but as a companion. What Vanth models psychologically is the possibility that the most frightening transition a human being faces — dying — might be met not with punishment or abandonment but with accompaniment. Every hospice worker, every palliative care nurse, every person who sits with the dying is performing Vanth's function. The Etruscans, the most death-saturated civilization in the ancient Mediterranean, did not imagine death as a solitary experience. They gave it a goddess whose only role was to be present — torch raised, wings spread, walking beside you into the dark.",
+      "animals": ["serpent (sometimes depicted with snakes)"],
+      "weapons": ["torch", "scroll of fate", "key"],
+      "consorts": [],
+      "colors": ["white", "pale gold", "midnight blue"]
+    },
+    {
+      "id": "charun",
+      "name": "Charun",
+      "title": "Demon of the Underworld Gate",
+      "group": "chthonic",
+      "description": "Charun takes his name from the Greek Charon, the ferryman of the dead, but the resemblance stops at the name. Greek Charon is a wizened old boatman who demands a coin for passage across the Styx — a bureaucratic inconvenience, essentially, a toll booth at the border of death. Etruscan Charun is a monster. In tomb paintings at Tarquinia and on sarcophagi from Vulci and Chiusi, he appears with blue-gray skin, a hooked nose like a vulture's beak, pointed ears, wild hair, and sometimes serpents coiling around his arms. He carries a massive hammer — not a tool but a weapon, the instrument with which he strikes the dying or guards the entrance to the underworld. His face is terrible. He is not evil in the moral sense; he is the physical reality of death stripped of all comfort, the thing that actually happens to the body, the cessation that no banquet painting can prettify. The Etruscans placed him in their tombs alongside Vanth, creating a paired escort: she is the gentle guide, he is the unyielding gatekeeper. You cannot enter death without facing both. The Tomb of the Blue Demons at Tarquinia (discovered in 1985) shows blue-skinned underworld figures with Charun's features in a landscape that includes both menace and beauty — a sea full of dolphins, trees, and simultaneously these terrible watchmen. This is the Etruscan genius: they did not sanitize death or demonize it absolutely. They held both realities in the same painted room. Charun evolved over time — earlier Etruscan art depicts death more gently, and Charun's terrifying form intensifies in the fourth and third centuries BCE, possibly reflecting the increasing violence and political collapse as Rome conquered Etruria city by city. The demon of death got worse as the civilization was dying. He is the honest face of mortality that every funerary tradition must eventually confront: not a passage, not a journey, not a metaphor, but a hammer.",
+      "animals": ["vulture", "serpent"],
+      "weapons": ["hammer (mallet)"],
+      "consorts": [],
+      "colors": ["blue-gray", "dark green", "black"]
+    },
+    {
+      "id": "tuchulcha",
+      "name": "Tuchulcha",
+      "title": "Underworld Demon",
+      "group": "chthonic",
+      "description": "Tuchulcha is the most disturbing figure in Etruscan art — a composite demon of the underworld depicted in the Tomb of Orcus II at Tarquinia (fourth century BCE), with the face of a vulture, the ears of a donkey, and wild serpents writhing from the head in place of hair. The figure appears in a scene where Theseus and Pirithous are trapped in the underworld, and Tuchulcha looms between them, a guardian or tormentor whose precise mythological function we cannot fully determine because the Etruscan texts that would explain the scene are lost. What we have is the image, and the image is enough. Tuchulcha belongs to no Greek or Roman mythology. The name has no convincing etymology in any known language. The visual composition — avian face, serpentine hair, animal ears — follows no Greek formula for depicting chthonic beings. This is something the Etruscans imagined on their own, a creature from a theological tradition that was not simply borrowed from its neighbors. The Tomb of Orcus paintings are among the finest in Etruscan art — technically accomplished, emotionally intense, clearly the work of a mature artistic tradition depicting its own religious content. Tuchulcha represents what the Etruscans saw waiting in the dark that neither Greece nor Rome saw, or at least did not paint. The partially deciphered state of the Etruscan language means we may never know the full mythology behind this figure — what role it played in the journey of the dead, what rituals addressed it, whether it was feared or propitiated or simply acknowledged. What remains is a demon with a vulture's face in a painted tomb, staring across millennia at anyone who descends to look, proof that the Etruscans had their own darkness and gave it its own face.",
+      "animals": ["vulture", "serpent", "donkey (ears)"],
+      "weapons": ["serpents (as instruments of torment)"],
+      "consorts": [],
+      "colors": ["sickly green", "ashen gray", "black"]
+    },
+    {
+      "id": "voltumna",
+      "name": "Voltumna",
+      "title": "Chief God of the Etruscan League",
+      "group": "uniquely_etruscan",
+      "description": "Voltumna — later Latinized as Vertumnus — was the chief deity of the Etruscan League, the confederation of twelve city-states (the dodecapolis) that sent representatives to an annual assembly at his sanctuary, the Fanum Voltumnae. Roman sources — Livy, Varro, Propertius — mention the sanctuary repeatedly, always in the context of pan-Etruscan political and religious gatherings, but its exact location has never been identified with certainty. The strongest archaeological candidate is a site near Orvieto (ancient Volsinii), perched on the tufa cliff above the Paglia valley, within sight of the volcanic caldera of Lake Bolsena. The annual gathering at Fanum Voltumnae was both political congress and religious festival: the city-states elected a common leader, held athletic games, and conducted rituals that bound the league together in shared worship. Varro describes Voltumna as the chief god of Etruria — deus Etruriae princeps — but provides almost no mythological detail, and the Etruscan sources that would explain his nature are lost. Propertius, in his fourth book of elegies, gives Vertumnus a speech in which the god describes himself as a shape-shifter — a deity who can take any form, who changes with the seasons, who is a farmer in summer and a soldier in autumn and a hunter in winter. Whether this reflects genuine Etruscan theology or Roman literary invention is debated. What is clear is that Voltumna was the god who represented Etruscan unity — the divine principle that held twelve independent, often quarrelsome city-states together in a shared identity. When Rome conquered the Etruscan cities one by one — Veii in 396 BCE, Volsinii in 264 BCE — it was not just military defeat but the dismantling of Voltumna's federation. The Romans reportedly removed the cult statue from Volsinii and brought it to Rome, a standard Roman practice of evocatio — summoning an enemy's god to switch sides. Voltumna is the god of a political form that Rome destroyed and then, ironically, perfected: the federation, the league, the union of distinct peoples under a shared sacred center. His sanctuary may lie under the volcanic soil of Bolsena, waiting to be found.",
+      "animals": [],
+      "weapons": [],
+      "consorts": [],
+      "colors": ["earth brown", "seasonal greens", "harvest gold"]
+    },
+    {
+      "id": "selvans",
+      "name": "Selvans",
+      "title": "God of Boundaries and Wild Places",
+      "group": "uniquely_etruscan",
+      "description": "Selvans — whose name is clearly related to the Latin Silvanus and to silva (forest) — was the Etruscan god of boundaries, borders, and the wild spaces between settled territories. Inscribed boundary stones (cippi) bearing his name have been found at Etruscan sites, marking the limits of sacred or civic space, and votive inscriptions from the sanctuary at Bolsena and other sites invoke him as a protector of territorial integrity. The Piacenza Liver assigns him a sector, confirming his place in the divinatory system, and his association with boundaries connects him to the most fundamental act of Etruscan religion: the ritual establishment of sacred space. The Etruscans were renowned in antiquity for their science of land surveying and boundary-setting. The Roman practice of limitatio — the formal division of conquered territory into grid squares — was attributed by Varro and other Roman sources to Etruscan origins, and the figure of the augur or haruspex marking out a templum (a ritually defined space in the sky or on the ground) is an Etruscan innovation that Rome adopted wholesale. Selvans governed the theology of this practice: the idea that space is not neutral, that every boundary is a sacred act, that to draw a line on the earth is to enact a divine decision about where civilization ends and wildness begins. The Etruscan cities themselves — Tarquinia, Cerveteri, Vulci, Orvieto — sat on tufa plateaus with sheer cliffs on multiple sides, natural boundaries that made the distinction between inside and outside, tame and wild, viscerally visible. Lake Bolsena's caldera rim is itself a boundary — the circular edge where the volcano's collapse created a natural enclosure, a bounded space formed by geological violence. Selvans is the god who says that the line between order and chaos is not natural but drawn, not permanent but maintained, and that someone must tend it or it dissolves. Every border guard, every property surveyor, every fence is in his service.",
+      "animals": ["wolf", "deer"],
+      "weapons": ["boundary stone (cippus)", "surveyor's staff"],
+      "consorts": [],
+      "colors": ["forest green", "stone gray", "earth brown"],
+      "vegetation": ["oak", "cypress"]
+    }
+  ]
+}

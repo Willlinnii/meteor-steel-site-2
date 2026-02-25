@@ -24,18 +24,279 @@ import MythicAgesTimeline, { parseEraString } from '../../components/MythicAgesT
 import '../Treasures/TreasuresPage.css';
 import ArchetypesPanel from '../../components/ArchetypesPanel';
 import olympianPantheon from '../../data/olympianPantheon.json';
+import hinduPantheon from '../../data/hinduPantheon.json';
+import norsePantheon from '../../data/norsePantheon.json';
+import shintoPantheon from '../../data/shintoPantheon.json';
+import aztecPantheon from '../../data/aztecPantheon.json';
+import hawaiianPantheon from '../../data/hawaiianPantheon.json';
+import maoriPantheon from '../../data/maoriPantheon.json';
+import incaPantheon from '../../data/incaPantheon.json';
+import yorubaPantheon from '../../data/yorubaPantheon.json';
+import chinesePantheon from '../../data/chinesePantheon.json';
+import egyptianPantheon from '../../data/egyptianPantheon.json';
+import sumerianPantheon from '../../data/sumerianPantheon.json';
+import celticIrishPantheon from '../../data/celticIrishPantheon.json';
+import romanPantheon from '../../data/romanPantheon.json';
+import mayaPantheon from '../../data/mayaPantheon.json';
+import zoroastrianPantheon from '../../data/zoroastrianPantheon.json';
+import slavicPantheon from '../../data/slavicPantheon.json';
+import finnishPantheon from '../../data/finnishPantheon.json';
+import canaanitePantheon from '../../data/canaanitePantheon.json';
+import koreanPantheon from '../../data/koreanPantheon.json';
+import navajoPantheon from '../../data/navajoPantheon.json';
+import hopiPantheon from '../../data/hopiPantheon.json';
+import lakotaPantheon from '../../data/lakotaPantheon.json';
+import aboriginalPantheon from '../../data/aboriginalPantheon.json';
+import fonPantheon from '../../data/fonPantheon.json';
+import mongolianPantheon from '../../data/mongolianPantheon.json';
+import armenianPantheon from '../../data/armenianPantheon.json';
+import celticWelshPantheon from '../../data/celticWelshPantheon.json';
+import balticPantheon from '../../data/balticPantheon.json';
+import akanPantheon from '../../data/akanPantheon.json';
+import haidaPantheon from '../../data/haidaPantheon.json';
+import mapuchePantheon from '../../data/mapuchePantheon.json';
+import algonquinPantheon from '../../data/algonquinPantheon.json';
+import guaraniPantheon from '../../data/guaraniPantheon.json';
+import inuitPantheon from '../../data/inuitPantheon.json';
+import hittitePantheon from '../../data/hittitePantheon.json';
+import etruscanPantheon from '../../data/etruscanPantheon.json';
+import georgianPantheon from '../../data/georgianPantheon.json';
+import basquePantheon from '../../data/basquePantheon.json';
+import berberPantheon from '../../data/berberPantheon.json';
+import tibetanPantheon from '../../data/tibetanPantheon.json';
+import haudenosauneePantheon from '../../data/haudenosauneePantheon.json';
+import tainoPantheon from '../../data/tainoPantheon.json';
+import samoanPantheon from '../../data/samoanPantheon.json';
+import tahitianPantheon from '../../data/tahitianPantheon.json';
+import zuluPantheon from '../../data/zuluPantheon.json';
+import sanPantheon from '../../data/sanPantheon.json';
+import khmerPantheon from '../../data/khmerPantheon.json';
+import vietnamesePantheon from '../../data/vietnamesePantheon.json';
+import vedicPantheon from '../../data/vedicPantheon.json';
+import babylonianPantheon from '../../data/babylonianPantheon.json';
+import phoenicianPantheon from '../../data/phoenicianPantheon.json';
+import candoblePantheon from '../../data/candoblePantheon.json';
+import bugandaPantheon from '../../data/bugandaPantheon.json';
+import igboPantheon from '../../data/igboPantheon.json';
+import muiscaPantheon from '../../data/muiscaPantheon.json';
+import samiPantheon from '../../data/samiPantheon.json';
+import mandePantheon from '../../data/mandePantheon.json';
+import thaiPantheon from '../../data/thaiPantheon.json';
+import javanesePantheon from '../../data/javanesePantheon.json';
+import dogonPantheon from '../../data/dogonPantheon.json';
+import scythianPantheon from '../../data/scythianPantheon.json';
+import ainuPantheon from '../../data/ainuPantheon.json';
+import celtiberianPantheon from '../../data/celtiberianPantheon.json';
+import tonganPantheon from '../../data/tonganPantheon.json';
+import haitianVodouPantheon from '../../data/haitianVodouPantheon.json';
+import melanesianPantheon from '../../data/melanesianPantheon.json';
+import malagasyPantheon from '../../data/malagasyPantheon.json';
+import arabianPantheon from '../../data/arabianPantheon.json';
+import filipinoPantheon from '../../data/filipinoPantheon.json';
+import phrygianPantheon from '../../data/phrygianPantheon.json';
+import angloSaxonPantheon from '../../data/angloSaxonPantheon.json';
+import minoanPantheon from '../../data/minoanPantheon.json';
+import zapotecPantheon from '../../data/zapotecPantheon.json';
+import cheyennePantheon from '../../data/cheyennePantheon.json';
+import cherokeePantheon from '../../data/cherokeePantheon.json';
+import elamitePantheon from '../../data/elamitePantheon.json';
+import arthurianPantheon from '../../data/arthurianPantheon.json';
 import './MythsPage.css';
 
-const PANTHEONS = { olympian: olympianPantheon };
+const PANTHEONS = {
+  olympian: olympianPantheon,
+  hindu: hinduPantheon,
+  norse: norsePantheon,
+  shinto: shintoPantheon,
+  aztec: aztecPantheon,
+  hawaiian: hawaiianPantheon,
+  maori: maoriPantheon,
+  inca: incaPantheon,
+  yoruba: yorubaPantheon,
+  chinese: chinesePantheon,
+  egyptian: egyptianPantheon,
+  sumerian: sumerianPantheon,
+  'celtic-irish': celticIrishPantheon,
+  roman: romanPantheon,
+  maya: mayaPantheon,
+  zoroastrian: zoroastrianPantheon,
+  slavic: slavicPantheon,
+  finnish: finnishPantheon,
+  canaanite: canaanitePantheon,
+  korean: koreanPantheon,
+  navajo: navajoPantheon,
+  hopi: hopiPantheon,
+  lakota: lakotaPantheon,
+  aboriginal: aboriginalPantheon,
+  fon: fonPantheon,
+  mongolian: mongolianPantheon,
+  armenian: armenianPantheon,
+  'celtic-welsh': celticWelshPantheon,
+  baltic: balticPantheon,
+  akan: akanPantheon,
+  haida: haidaPantheon,
+  mapuche: mapuchePantheon,
+  algonquin: algonquinPantheon,
+  guarani: guaraniPantheon,
+  inuit: inuitPantheon,
+  hittite: hittitePantheon,
+  etruscan: etruscanPantheon,
+  georgian: georgianPantheon,
+  basque: basquePantheon,
+  berber: berberPantheon,
+  tibetan: tibetanPantheon,
+  haudenosaunee: haudenosauneePantheon,
+  taino: tainoPantheon,
+  samoan: samoanPantheon,
+  tahitian: tahitianPantheon,
+  zulu: zuluPantheon,
+  san: sanPantheon,
+  khmer: khmerPantheon,
+  vietnamese: vietnamesePantheon,
+  vedic: vedicPantheon,
+  babylonian: babylonianPantheon,
+  phoenician: phoenicianPantheon,
+  candoble: candoblePantheon,
+  buganda: bugandaPantheon,
+  igbo: igboPantheon,
+  muisca: muiscaPantheon,
+  sami: samiPantheon,
+  mande: mandePantheon,
+  thai: thaiPantheon,
+  javanese: javanesePantheon,
+  dogon: dogonPantheon,
+  scythian: scythianPantheon,
+  ainu: ainuPantheon,
+  celtiberian: celtiberianPantheon,
+  tongan: tonganPantheon,
+  'haitian-vodou': haitianVodouPantheon,
+  melanesian: melanesianPantheon,
+  malagasy: malagasyPantheon,
+  arabian: arabianPantheon,
+  filipino: filipinoPantheon,
+  phrygian: phrygianPantheon,
+  'anglo-saxon': angloSaxonPantheon,
+  minoan: minoanPantheon,
+  zapotec: zapotecPantheon,
+  cheyenne: cheyennePantheon,
+  cherokee: cherokeePantheon,
+  elamite: elamitePantheon,
+  arthurian: arthurianPantheon,
+};
 
 const MythicEarthPage = lazy(() => import('../MythicEarth/MythicEarthPage'));
 
 const MYTHIC_EARTH_CATEGORIES = [
   { id: 'sacred-site', label: 'Sacred', color: '#c9a961' },
-  { id: 'mythic-location', label: 'Mythic', color: '#c4713a' },
   { id: 'literary-location', label: 'Literary', color: '#8b9dc3' },
   { id: 'temple', label: 'Temples', color: '#c47a5a' },
   { id: 'library', label: 'Libraries', color: '#a89060' },
+];
+
+const TRADITION_REGIONS = [
+  { region: 'Global', traditions: [
+    { id: 'global', label: 'Global' },
+  ]},
+  { region: 'Mediterranean', traditions: [
+    { id: 'olympian', label: 'Greek' },
+    { id: 'roman', label: 'Roman' },
+    { id: 'minoan', label: 'Minoan' },
+    { id: 'etruscan', label: 'Etruscan' },
+    { id: 'phrygian', label: 'Phrygian' },
+    { id: 'celtiberian', label: 'Iberian' },
+    { id: 'phoenician', label: 'Phoenician' },
+  ]},
+  { region: 'Near East', traditions: [
+    { id: 'sumerian', label: 'Sumerian' },
+    { id: 'babylonian', label: 'Babylonian' },
+    { id: 'hittite', label: 'Hittite' },
+    { id: 'elamite', label: 'Elamite' },
+    { id: 'canaanite', label: 'Canaanite' },
+    { id: 'arabian', label: 'Arabian' },
+    { id: 'zoroastrian', label: 'Zoroastrian' },
+  ]},
+  { region: 'Europe', traditions: [
+    { id: 'norse', label: 'Norse' },
+    { id: 'anglo-saxon', label: 'Anglo-Saxon' },
+    { id: 'arthurian', label: 'Arthurian' },
+    { id: 'celtic-irish', label: 'Irish' },
+    { id: 'celtic-welsh', label: 'Welsh' },
+    { id: 'slavic', label: 'Slavic' },
+    { id: 'finnish', label: 'Finnish' },
+    { id: 'sami', label: 'Sami' },
+    { id: 'baltic', label: 'Baltic' },
+    { id: 'basque', label: 'Basque' },
+    { id: 'georgian', label: 'Georgian' },
+    { id: 'armenian', label: 'Armenian' },
+  ]},
+  { region: 'Africa', traditions: [
+    { id: 'egyptian', label: 'Egyptian' },
+    { id: 'yoruba', label: 'Yoruba' },
+    { id: 'fon', label: 'Fon' },
+    { id: 'akan', label: 'Akan' },
+    { id: 'igbo', label: 'Igbo' },
+    { id: 'dogon', label: 'Dogon' },
+    { id: 'mande', label: 'Mande' },
+    { id: 'buganda', label: 'Buganda' },
+    { id: 'zulu', label: 'Zulu' },
+    { id: 'san', label: 'San' },
+    { id: 'berber', label: 'Berber' },
+    { id: 'malagasy', label: 'Malagasy' },
+  ]},
+  { region: 'South Asia', traditions: [
+    { id: 'hindu', label: 'Hindu' },
+    { id: 'vedic', label: 'Vedic' },
+    { id: 'tibetan', label: 'Tibetan' },
+  ]},
+  { region: 'East Asia', traditions: [
+    { id: 'chinese', label: 'Chinese' },
+    { id: 'shinto', label: 'Shinto' },
+    { id: 'korean', label: 'Korean' },
+    { id: 'ainu', label: 'Ainu' },
+    { id: 'mongolian', label: 'Mongolian' },
+  ]},
+  { region: 'Southeast Asia', traditions: [
+    { id: 'khmer', label: 'Khmer' },
+    { id: 'thai', label: 'Thai' },
+    { id: 'javanese', label: 'Javanese' },
+    { id: 'vietnamese', label: 'Vietnamese' },
+    { id: 'filipino', label: 'Filipino' },
+  ]},
+  { region: 'Americas', traditions: [
+    { id: 'aztec', label: 'Aztec' },
+    { id: 'maya', label: 'Maya' },
+    { id: 'zapotec', label: 'Zapotec' },
+    { id: 'inca', label: 'Inca' },
+    { id: 'muisca', label: 'Muisca' },
+    { id: 'navajo', label: 'Navajo' },
+    { id: 'hopi', label: 'Hopi' },
+    { id: 'lakota', label: 'Lakota' },
+    { id: 'cheyenne', label: 'Cheyenne' },
+    { id: 'cherokee', label: 'Cherokee' },
+    { id: 'haida', label: 'Haida' },
+    { id: 'algonquin', label: 'Algonquin' },
+    { id: 'haudenosaunee', label: 'Haudenosaunee' },
+    { id: 'inuit', label: 'Inuit' },
+    { id: 'taino', label: 'Taino' },
+    { id: 'mapuche', label: 'Mapuche' },
+    { id: 'guarani', label: 'Guarani' },
+  ]},
+  { region: 'Pacific', traditions: [
+    { id: 'hawaiian', label: 'Hawaiian' },
+    { id: 'maori', label: 'Maori' },
+    { id: 'samoan', label: 'Samoan' },
+    { id: 'tahitian', label: 'Tahitian' },
+    { id: 'tongan', label: 'Tongan' },
+    { id: 'melanesian', label: 'Melanesian' },
+    { id: 'aboriginal', label: 'Aboriginal' },
+  ]},
+  { region: 'Diaspora', traditions: [
+    { id: 'haitian-vodou', label: 'Haitian Vodou' },
+    { id: 'candoble', label: 'Candomble' },
+  ]},
+  { region: 'Steppe', traditions: [
+    { id: 'scythian', label: 'Scythian' },
+  ]},
 ];
 
 /* ── Text Reader (mirrors MythicEarthPage's internal TextReader) ── */
@@ -2099,6 +2360,9 @@ function MythsPage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showMySitesAdd, setShowMySitesAdd] = useState(false);
   const [activeTour, setActiveTour] = useState(null);
+  const [activeTradition, setActiveTradition] = useState('all');
+  const [traditionPanelOpen, setTraditionPanelOpen] = useState(false);
+  const [displayPantheonOverride, setDisplayPantheonOverride] = useState(null);
   const earthContentRef = useRef(null);
 
   const userSitesList = useMemo(
@@ -2125,6 +2389,24 @@ function MythsPage() {
     () => activeTour ? new Set(activeTour.siteIds) : null,
     [activeTour]
   );
+
+  const traditionCounts = useMemo(() => {
+    const counts = {};
+    mythicEarthSites.forEach(s => {
+      (s.pantheons || []).forEach(pid => {
+        counts[pid] = (counts[pid] || 0) + 1;
+      });
+    });
+    return counts;
+  }, []);
+
+  const displayPantheonId = useMemo(() => {
+    const p = selectedMythicSite?.pantheons;
+    if (!p?.length) return null;
+    if (displayPantheonOverride && p.includes(displayPantheonOverride)) return displayPantheonOverride;
+    if (activeTradition !== 'all' && p.includes(activeTradition)) return activeTradition;
+    return p[0];
+  }, [selectedMythicSite, activeTradition, displayPantheonOverride]);
 
   const [timelineRange, setTimelineRange] = useState([-13000, 2026]);
 
@@ -2193,8 +2475,10 @@ function MythsPage() {
               externalFilters={activeEarthFilters}
               externalTourSiteIds={tourSiteIds}
               externalTimelineRange={timelineRange}
+              externalTradition={activeTradition}
               onSiteSelect={(site) => {
                 setSelectedMythicSite(site);
+                setDisplayPantheonOverride(null);
                 if (site?.isTemple) setMythicEarthCategory('temple');
                 else if (site?.isLibrary) setMythicEarthCategory('library');
               }}
@@ -2204,6 +2488,16 @@ function MythsPage() {
 
           <div className="mythic-earth-content-area" ref={earthContentRef}>
             <div className="mythic-earth-categories">
+              <button
+                className={`mythic-earth-cat-btn tradition-dropdown-btn${activeTradition !== 'all' ? ' active' : ''}`}
+                style={{ '--cat-color': '#c9a961' }}
+                onClick={() => setTraditionPanelOpen(prev => !prev)}
+              >
+                {activeTradition === 'all'
+                  ? 'Myths'
+                  : TRADITION_REGIONS.flatMap(r => r.traditions).find(t => t.id === activeTradition)?.label || 'Myths'}
+                <span className="tradition-dropdown-arrow">{traditionPanelOpen ? '\u25B2' : '\u25BC'}</span>
+              </button>
               {MYTHIC_EARTH_CATEGORIES.map(cat => (
                 <button
                   key={cat.id}
@@ -2254,6 +2548,38 @@ function MythsPage() {
                 </button>
               )}
             </div>
+
+            {traditionPanelOpen && (
+              <div className="tradition-panel">
+                <button className={`tradition-panel-item${activeTradition === 'all' ? ' active' : ''}`}
+                  onClick={() => { setActiveTradition('all'); setTraditionPanelOpen(false); setSelectedMythicSite(null); }}>
+                  Myths <span className="tradition-count">{mythicEarthSites.length}</span>
+                </button>
+                {TRADITION_REGIONS.map(region => {
+                  const visible = region.traditions.filter(t => traditionCounts[t.id] > 0);
+                  if (!visible.length) return null;
+                  return (
+                    <React.Fragment key={region.region}>
+                      <div className="tradition-panel-region">{region.region}</div>
+                      {visible.map(t => (
+                        <button key={t.id}
+                          className={`tradition-panel-item${activeTradition === t.id ? ' active' : ''}`}
+                          onClick={() => {
+                            setActiveTradition(t.id);
+                            setTraditionPanelOpen(false);
+                            setSelectedMythicSite(null);
+                            setSelectedPantheonDeity(null);
+                            setDisplayPantheonOverride(null);
+                            trackElement(`myths.earth.tradition.${t.id}`);
+                          }}>
+                          {t.label} <span className="tradition-count">{traditionCounts[t.id]}</span>
+                        </button>
+                      ))}
+                    </React.Fragment>
+                  );
+                })}
+              </div>
+            )}
 
             {!selectedMythicSite && mythicEarthCategory !== 'tours' && mythicEarthCategory !== 'my-sites' && (
               <MythicAgesTimeline
@@ -2317,7 +2643,11 @@ function MythsPage() {
                     >
                       <span className="site-card-name">{site.name}</span>
                       <span className="site-card-region">{site.region}</span>
-                      {site.tradition && <span className="site-card-tradition">{site.tradition}</span>}
+                      {site.pantheons?.length > 0 && (
+                        <span className="site-card-tradition">
+                          {site.pantheons.map(pid => PANTHEONS[pid]?.name).filter(Boolean).join(', ')}
+                        </span>
+                      )}
                     </button>
                   ))}
                   {activeTour.siteIds.filter(id => !mythicEarthSites.find(s => s.id === id)).length > 0 && (
@@ -2368,8 +2698,8 @@ function MythsPage() {
               <LibrariesPanel trackElement={trackElement} timelineRange={timelineRange} />
             ) : selectedMythicSite ? (
               <div className="mythic-earth-site-detail">
-                <button className="mythic-earth-back" onClick={() => { setSelectedMythicSite(null); setSelectedPantheonDeity(null); }}>
-                  {'\u2190'} Back to {mythicEarthCategory === 'my-sites' ? 'My Sites' : (MYTHIC_EARTH_CATEGORIES.find(c => c.id === mythicEarthCategory)?.label || 'Sites')}
+                <button className="mythic-earth-back" onClick={() => { setSelectedMythicSite(null); setSelectedPantheonDeity(null); setDisplayPantheonOverride(null); }}>
+                  {'\u2190'} Back to {activeTradition !== 'all' ? (TRADITION_REGIONS.flatMap(r => r.traditions).find(t => t.id === activeTradition)?.label || 'Sites') : mythicEarthCategory === 'my-sites' ? 'My Sites' : (MYTHIC_EARTH_CATEGORIES.find(c => c.id === mythicEarthCategory)?.label || 'Sites')}
                 </button>
                 <h3>{selectedMythicSite.name}</h3>
                 <div className="mythic-earth-site-tags">
@@ -2379,8 +2709,10 @@ function MythsPage() {
                   >
                     {selectedMythicSite.isUserSite ? 'My Site' : (MYTHIC_EARTH_CATEGORIES.find(c => c.id === selectedMythicSite.category)?.label)}
                   </span>
-                  {selectedMythicSite.tradition && (
-                    <span className="mythic-earth-tag tradition">{selectedMythicSite.tradition}</span>
+                  {selectedMythicSite.pantheons?.length > 0 && selectedMythicSite.pantheons.some(pid => PANTHEONS[pid]) && (
+                    <span className="mythic-earth-tag tradition">
+                      {selectedMythicSite.pantheons.map(pid => PANTHEONS[pid]?.name).filter(Boolean).join(' / ')}
+                    </span>
                   )}
                   <span className="mythic-earth-tag region">{selectedMythicSite.region}</span>
                   {selectedMythicSite.era && selectedMythicSite.era !== 'mythic' && selectedMythicSite.era !== 'nature' && (
@@ -2432,18 +2764,33 @@ function MythsPage() {
                   </div>
                 ) : null}
 
-                {selectedMythicSite.pantheon && (
-                  <PantheonPanel
-                    pantheonId={selectedMythicSite.pantheon}
-                    selectedDeity={selectedPantheonDeity}
-                    onSelectDeity={setSelectedPantheonDeity}
-                  />
+                {displayPantheonId && (
+                  <>
+                    {selectedMythicSite.pantheons?.length > 1 && (
+                      <div className="pantheon-tradition-tabs">
+                        {selectedMythicSite.pantheons.filter(pid => PANTHEONS[pid]).map(pid => (
+                          <button key={pid} className={pid === displayPantheonId ? 'active' : ''}
+                            onClick={() => { setDisplayPantheonOverride(pid); setSelectedPantheonDeity(null); }}>
+                            {PANTHEONS[pid].name}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                    <PantheonPanel
+                      pantheonId={displayPantheonId}
+                      selectedDeity={selectedPantheonDeity}
+                      onSelectDeity={setSelectedPantheonDeity}
+                    />
+                  </>
                 )}
               </div>
             ) : (
               <div className="mythic-earth-site-grid">
                 {mythicEarthSites.filter(s => {
-                  if (s.category !== mythicEarthCategory) return false;
+                  if (activeTradition !== 'all') {
+                    if (!s.pantheons || !s.pantheons.includes(activeTradition)) return false;
+                  }
+                  if (activeTradition === 'all' && s.category !== mythicEarthCategory) return false;
                   const era = parseEraString(s.era);
                   if (!era) return true; // mythic/undated always show
                   return era.endYear >= timelineRange[0] && era.startYear <= timelineRange[1];
@@ -2451,11 +2798,15 @@ function MythsPage() {
                   <button
                     key={site.id}
                     className="mythic-earth-site-card"
-                    onClick={() => { setSelectedMythicSite(site); trackElement(`myths.earth.site.${site.id}`); }}
+                    onClick={() => { setSelectedMythicSite(site); setDisplayPantheonOverride(null); trackElement(`myths.earth.site.${site.id}`); }}
                   >
                     <span className="site-card-name">{site.name}</span>
                     <span className="site-card-region">{site.region}</span>
-                    {site.tradition && <span className="site-card-tradition">{site.tradition}</span>}
+                    {site.pantheons?.length > 0 && (
+                      <span className="site-card-tradition">
+                        {site.pantheons.map(pid => PANTHEONS[pid]?.name).filter(Boolean).join(', ')}
+                      </span>
+                    )}
                     {site.era && site.era !== 'mythic' && site.era !== 'nature' && <span className="site-card-era">{site.era}</span>}
                   </button>
                 ))}

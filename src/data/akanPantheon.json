@@ -1,0 +1,97 @@
+{
+  "id": "akan",
+  "name": "The Abosom",
+  "description": "The Akan and Ashanti peoples of Ghana built their theology around a single geographical fact: Lake Bosomtwe, the only natural lake in the country, sits inside a meteorite impact crater 10.5 kilometers wide, blasted into the earth 1.07 million years ago. The Ashanti declared this scar sacred — a portal to Asamando, the ancestral realm, where the souls of the dead come to bid farewell to the goddess Asase Yaa before passing on. The cosmic violence that created the lake became the threshold between worlds, and from this paradox the Akan built one of West Africa's most philosophically sophisticated religious systems: a supreme deity too vast for direct worship, a parliament of nature spirits (the abosom) who do the daily work of governing human affairs, and a trickster spider whose stories survived the Middle Passage and reshaped the folklore of the Americas.",
+  "deities": [
+    {
+      "id": "nyame",
+      "name": "Nyame",
+      "title": "The Supreme Sky God",
+      "group": "supreme",
+      "description": "Nyame is the Akan supreme deity — omniscient, omnipotent, self-created — but what makes Akan theology distinctive is that Nyame is not simply a big god at the top of a hierarchy. J.B. Danquah's 'The Akan Doctrine of God' (1944) demonstrated that the Akan operate with a trinitarian concept: Onyame (the infinite being), Onyankopon (the supreme deity as personally accessible god), and Odomankoma (the eternal creator of things). These are not three gods but three aspects of one reality — a philosophical structure Danquah argued was as sophisticated as anything in Western monotheism, developed independently. The name Nyame derives from 'nya' (to get) and 'me' (to be satisfied): the one whose possession satisfies completely. Nyame sent down the Golden Stool from heaven to the first Asante king Osei Tutu, binding political sovereignty to divine authority. The Adinkra symbol Gye Nyame — 'Except for God' — is the most ubiquitous symbol in Akan visual culture, found on cloth, architecture, and jewelry, asserting that nothing exists or happens without Nyame's knowledge. Yet Nyame withdrew from direct contact with humanity after being struck repeatedly by a woman pounding fufu with a long pestle. This is remarkable: the supreme god retreated not from rebellion or sin but from domestic irritation. The Akan recognized that the infinite and the everyday cannot occupy the same space, and rather than making that a tragedy, they made it the reason the abosom exist — intermediaries born from necessity, not failure. Gold is Nyame's color. The sun is Nyame's visible aspect. R.S. Rattray, whose fieldwork in the 1920s remains foundational, recorded that Nyame had no dedicated shrine because every space already belonged to this god.",
+      "animals": ["vulture (symbol of Odomankoma, the creator aspect)"],
+      "colors": ["gold", "white"]
+    },
+    {
+      "id": "asase-yaa",
+      "name": "Asase Yaa",
+      "title": "Earth Goddess, Mother of the Dead",
+      "group": "supreme",
+      "description": "Asase Yaa is the earth herself — Nyame's wife, the second being invoked in every Akan libation prayer, and the goddess who receives the dead at Lake Bosomtwe before they pass into Asamando. Her name means 'Earth born on Thursday,' and Thursday is her sacred day: Akan farmers traditionally do not till the soil on Thursdays, honoring the ground's right to rest. This is not symbolic. The Ashanti literally let the earth lie fallow one day in seven, a practice Rattray documented in 'Religion and Art in Ashanti' (1927) as deeply embedded in agricultural life. Asase Yaa's theological position is extraordinary — she has no temple, no priest, no shrine, yet she is arguably the most present deity in the Akan system because she is the ground itself. The dead are buried in her body. The crops grow from her body. The living walk on her body. She is the goddess of truth and moral balance, and oaths sworn on the earth are the most binding in Akan jurisprudence: a person who swears falsely by touching the ground calls Asase Yaa herself as witness. At Lake Bosomtwe, where the meteorite impact shattered the rock and water filled the wound, Asase Yaa presides over the final departure. The souls of the dead arrive at the crater's edge and bid their farewell. The most violent event in the geological history of this landscape — an asteroid strike — became the gentlest threshold in its theology: the place where the dead say goodbye. That inversion says something fundamental about how the Akan understood suffering and sanctity as inseparable.",
+      "animals": ["none — she is the ground all animals walk on"],
+      "colors": ["brown", "black (the fertile soil)"]
+    },
+    {
+      "id": "tano",
+      "name": "Tano",
+      "title": "The Great River God",
+      "group": "abosom",
+      "description": "Tano, whose true name is Ta Kora, is the most powerful of the abosom — the nature spirits who serve as intermediaries between Nyame and humanity. He is the god of the Tano River, the longest river in Ghana, and the leader of the atano, the entire class of water-born deities. His origin story is one of the great trickster narratives in African mythology: Nyame intended to give the fertile lands of the Ashanti region to his firstborn twin, Bia, and the barren coastal lands to Tano. But a messenger goat told Tano the plan, and Tano disguised himself as Bia, arrived first, and received the fertile inheritance. This act of cunning — the younger twin stealing the elder's birthright through disguise — echoes Jacob and Esau so precisely that comparative mythologists have spent decades on the parallel. Tano is not merely a water spirit. He is the abosom of war, thunder, and lightning in Asante tradition, and his worship was central to Ashanti military campaigns. His shrine is guarded by sacred baboons, and fish are considered his children. Rattray documented elaborate shrine complexes along the Tano River where priests entered trance states to channel his voice. Crocodiles, elephants, and goats are sacred to him, and the river's deep waters are symbolized by the color blue in ceremonial contexts. Tano represents a specific psychological truth: that the cleverest child, not the strongest or the firstborn, may be the one who inherits the future. The Akan enshrined cunning as a divine attribute long before the Greeks did it with Odysseus.",
+      "animals": ["baboon (shrine guardians)", "fish (his children)", "crocodile", "goat (the messenger)"],
+      "colors": ["blue", "white"]
+    },
+    {
+      "id": "bia",
+      "name": "Bia",
+      "title": "God of the Wilderness",
+      "group": "abosom",
+      "description": "Bia is the elder twin, the one who was cheated — the god of the Bia River, the abosom of the wilderness, wild animals, and the untamed bush. Where Tano governs the fertile, cultivated heartland of the Ashanti, Bia presides over everything beyond the boundary of the village: the forest, the uncultivated, the dangerous. His river flows through what is now western Ghana and into the Ivory Coast, and the lands Nyame originally assigned to Tano — the lesser, drier territory — became Bia's domain by default. He is not a villain in this story. The Akan do not condemn Bia for being tricked; they honor him as the god of what lies outside human control. Every culture has to draw a line between the tamed and the wild, and the Akan placed a god on each side. Bia governs the animals that do not serve humans, the plants that are not crops, the rivers that do not irrigate fields. His worship was strongest among hunters and those who traveled through forest, and offerings to Bia were made before any expedition into the bush. The psychological economy is clean: Tano rules what you cultivate, Bia rules what cultivates itself. Together, the twin brothers cover the entire landscape — one by strategy, the other by endurance — and neither can exist without the other. The Akan understood that civilization and wilderness are not opposed but twinned, born from the same parents, permanently in tension.",
+      "animals": ["wild forest animals — all of them"],
+      "colors": ["green", "brown"]
+    },
+    {
+      "id": "bosomtwe",
+      "name": "Bosomtwe",
+      "title": "Spirit of the Crater Lake",
+      "group": "abosom",
+      "description": "Bosomtwe is the spirit of Lake Bosomtwe itself — the meteorite crater lake that sits at the spiritual center of Ashanti cosmology. The name translates roughly to 'antelope god,' from a foundation myth in which a hunter named Akora Bompe followed a wounded antelope to a small pond, declared the water divine, and never returned to his town of Asamang. The lake that exists today is 8 kilometers across, roughly circular, and has no outlet — water enters only from rainfall and small streams, and leaves only by evaporation and seepage. It is the only natural lake in Ghana, and the Ashanti declared it so sacred that traditional law permits fishing only from wooden planks, never from boats. Metal is forbidden to touch the water. The geological reality is that 1.07 million years ago, a meteorite roughly 500 meters wide struck at this location, creating a crater 10.5 kilometers in diameter. The Ashanti did not know the word 'meteorite,' but they recognized the lake was singular — anomalous, circular, unlike any other body of water in the region — and concluded that its origin was divine. They were not wrong in the way that matters: something from outside the earth struck the earth here, and from the wound, a sacred place emerged. Bosomtwe is where the souls of the dead come to bid farewell before entering Asamando. The lake is the last threshold. What does it mean that the Akan placed their most sacred liminal space inside an impact crater? It means they understood, intuitively, that sanctity and catastrophe share an address.",
+      "animals": ["antelope (the foundation myth)", "fish (sacred, caught only by traditional methods)"],
+      "colors": ["deep blue", "green (the surrounding forest)"]
+    },
+    {
+      "id": "anansi",
+      "name": "Anansi",
+      "title": "The Spider Trickster",
+      "group": "cultural",
+      "description": "Anansi is the spider who owns all stories — and that is not a metaphor. In the foundational Akan myth, all stories originally belonged to Nyame, who kept them locked in a box in the sky. Anansi climbed up and asked to buy them. Nyame set an impossible price: bring me Onini the python, Osebo the leopard, the Mmoboro hornets, and Mmoatia the invisible fairy. Anansi caught them all through cunning — tricking the python into stretching along a branch to measure himself, luring the leopard into a pit, trapping the hornets with a water-soaked calabash, and capturing the fairy with a tar baby (yes, the same tar baby that resurfaces in Br'er Rabbit). Nyame, astonished, handed over the box. From that day, all stories are called Anansesem — spider stories. This is the single most important trickster narrative in the African diaspora. When enslaved Akan and Ashanti people were forced across the Atlantic during the Middle Passage, they could carry nothing — except stories. Anansi survived in the Caribbean as Anancy, in the American South as Aunt Nancy and as the structural ancestor of Br'er Rabbit. The figure of the small, physically weak creature who defeats the powerful through intelligence rather than force became a survival framework for enslaved people. Anansi is not a god of worship — he is a god of method. He teaches that the powerless can prevail if they are clever enough, patient enough, and willing to let the powerful underestimate them. The Akan made their most beloved divine figure not a warrior, not a king, not a creator, but a spider. That choice is a philosophical statement about what power actually is.",
+      "animals": ["spider"],
+      "colors": ["black", "yellow"]
+    },
+    {
+      "id": "asase-efua",
+      "name": "Asase Efua",
+      "title": "Earth Goddess of Fertility",
+      "group": "cultural",
+      "description": "Asase Efua is the Friday aspect of the earth — where Asase Yaa (Thursday Earth) governs death, truth, and the passage to Asamando, Asase Efua governs fertility, beauty, love, and the generative power of the soil. Among the Fante and certain other Akan subgroups, Friday is the earth's sacred day, and Asase Efua is depicted as young and beautiful, in sharp contrast to Asase Yaa's portrayal as an old woman. This split is not a contradiction; it is a theological precision. The Akan recognized that the earth does two things: it grows new life and it receives the dead. These are not the same function, and the Akan gave each function its own face, its own name, its own sacred day. Asase Efua presides over planting, procreation, and the love between partners — the forward-facing, generative aspect of the ground. Farmers in Fante regions traditionally rest their fields on Fridays and make offerings to ensure the next season's harvest. The two earth goddesses together form a complete cycle: Efua brings forth, Yaa takes back. Birth and burial happen in the same body. The Akan day-naming system (children are named for the day they are born) means that every person named Yaa or Efua carries the earth goddess in their identity. This is not decorative — it binds every individual to the theological cycle from birth. The earth is not a metaphor in Akan religion. It is a person. Two persons, in fact, depending on what it is doing.",
+      "animals": ["none specified — she shares Asase Yaa's domain"],
+      "colors": ["green", "red"]
+    },
+    {
+      "id": "bosompo",
+      "name": "Bosompo",
+      "title": "God of the Sea",
+      "group": "abosom",
+      "description": "Bosompo is the abosom of the sea — the oldest of the primordial spirits in some Akan traditions, predating even the river gods. While Tano and Bia govern freshwater, Bosompo governs the ocean, and his domain begins where the rivers end. Tuesday is his sacred day, and traditional fishing communities along the Ghanaian coast observe a fishing ban on Tuesdays, leaving the sea undisturbed. When the ocean is rough, catches are poor, or coastal erosion threatens villages, it is said that Bosompo is angry. His worship was strongest among the coastal Akan, particularly the Fante, and his priests mediated between fishing communities and the unpredictable power of the Atlantic. In some cosmogonic traditions, Bosompo married Abo (the primordial cluster of stones), and from their union the first abosom were born — making Bosompo and Abo the grandparents of all the nature spirits, including Tano and Bia. This places the sea at the origin of the Akan spirit world, which makes geographical sense for a people whose coastline faces the Gulf of Guinea and the open Atlantic. Bosompo represents what lies beyond the boundary of Bia's wilderness: if Tano governs the cultivated and Bia the wild, Bosompo governs the unhuman — the vast, salt expanse where no one lives, from which food comes unpredictably, and into which people sometimes vanish. The Tuesday prohibition is not superstition; it is a weekly reminder that the sea is not owned, only borrowed.",
+      "animals": ["whale", "fish"],
+      "colors": ["deep blue", "white (seafoam)"]
+    },
+    {
+      "id": "sasabonsam",
+      "name": "Sasabonsam",
+      "title": "The Forest Monster",
+      "group": "cultural",
+      "description": "Sasabonsam is the vampire-like creature of the deep forest — an enormous being with bat wings, bloodshot eyes, and iron teeth, who sits in the tops of okoume and silk-cotton trees with his legs dangling down and his feet pointing both ways so he can snatch unwary travelers from any direction. Rattray recorded Sasabonsam accounts from multiple Ashanti communities, and the consistency of the physical description across informants is striking: always the iron teeth, always the forward-and-backward feet, always the tree canopy as lair. He is not an abosom and not a god — he is the forest's own predator, the thing that exists because the bush is genuinely dangerous. Sasabonsam is often described as the source of power for obayifo, the Akan concept of witchcraft, and encounters with him were reported by hunters who ventured too deep, too far, too carelessly. He is a boundary enforcer: the forest has a limit beyond which human presence is not welcome, and Sasabonsam is the consequence of crossing it. Every culture needs a figure like this — an embodied 'do not go there' — and the Akan version is unusually specific and physically vivid. The iron teeth are a particularly interesting detail, given that iron was the Akan's most important worked metal: the monster's body contains the material of human industry, turned predatory. Sasabonsam is what happens when the tools you built to master nature show up in something that masters you.",
+      "animals": ["bat (his wings)", "silk-cotton tree (his lair)"],
+      "colors": ["red (bloodshot eyes)", "black"]
+    },
+    {
+      "id": "apo",
+      "name": "Apo",
+      "title": "God of Justice and Oaths",
+      "group": "abosom",
+      "description": "Apo — also referred to in some sources as Opo — is the abosom associated with justice, truth-telling, and the enforcement of oaths. In the Akan legal and spiritual system, the swearing of oaths was not a casual act but a cosmic one: to swear falsely was to invite spiritual destruction, and certain oaths invoked specific abosom as witnesses and enforcers. Apo occupied this juridical space, functioning as the divine mechanism that ensured consequences for dishonesty. The Akan concept of justice was not abstract — it was enforced through spiritual sanction. A person who broke an oath or spoke false testimony in a chief's court was understood to have offended not just the community but the abosom themselves, and Apo was the spirit most directly concerned with this offense. Rattray documented elaborate oath-swearing rituals in which the names of specific abosom were invoked to seal agreements, settle disputes, and bind parties to truthful conduct. The ntam, or great oath, was the most serious legal instrument in Ashanti society — more binding than any written contract — and breaking it could result in exile or death. Apo represents a concept that modern legal systems struggle with: that truth-telling is not merely a social contract but a spiritual obligation, and that the universe itself has an interest in whether you are honest. The Akan built this conviction into their governance structure at every level, from village disputes to the Asantehene's court. Justice, in the Akan system, is not a human invention imposed on chaos — it is a feature of reality, administered by spirits who predate any human institution.",
+      "animals": ["none specified"],
+      "colors": ["white (purity, truth)"]
+    }
+  ]
+}

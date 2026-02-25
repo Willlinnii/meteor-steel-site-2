@@ -1,0 +1,139 @@
+{
+  "id": "aztec",
+  "name": "The Aztec Gods",
+  "description": "The Mexica pantheon arose from the volcanic highlands of central Mexico, where the snow-capped peak of Popocatepetl stood as a living axis mundi between the thirteen heavens and the nine layers of Mictlan. These gods governed a cosmos of cyclical creation and destruction, each deity bound to the others through sacrifice, transformation, and the perpetual motion of the Five Suns.",
+  "deities": [
+    {
+      "id": "ometeotl",
+      "name": "Ometeotl",
+      "title": "The Dual God",
+      "group": "creator",
+      "description": "Ometeotl dwells in Omeyocan, the Place of Duality at the thirteenth and highest heaven, existing simultaneously as Ometecuhtli and Omecihuatl, the Lord and Lady of Duality. This primordial being preceded the Five Suns entirely, generating the four Tezcatlipocas who would go on to create and destroy successive worlds. Ometeotl is both fire and water, male and female, light and dark, the original unity from which all opposition and therefore all existence emerged. In the tonalpohualli, the 260-day sacred calendar, Ometeotl presides over the first day-sign and anchors the count of fate itself. The deity has no dedicated temple because every temple already belongs to this god by inheritance. Paired with Xiuhtecuhtli, the fire god, Ometeotl inhabits the hearth at the center of every Aztec home, the axis point around which family life turns. From the summit of Popocatepetl, where sulfurous vents breathe heat into freezing air and snow meets molten rock, the paradox of Ometeotl finds its most literal earthly expression. The twin volcanoes Popocatepetl and Iztaccihuatl, the Smoking Mountain and the White Woman, standing side by side across the pass, mirror the male-female duality at the heart of this god's nature. The Mexica understood that creation required contradiction held in tension, and Ometeotl was that tension given a name and a place above the sky.",
+      "animals": ["quetzal", "jaguar"],
+      "colors": ["black", "white", "red", "blue"],
+      "consorts": ["self-dual — Ometecuhtli and Omecihuatl are two faces of one being"]
+    },
+    {
+      "id": "quetzalcoatl",
+      "name": "Quetzalcoatl",
+      "title": "The Feathered Serpent",
+      "group": "creator",
+      "description": "Quetzalcoatl, the Precious Twin, governed the Second Sun, Ehecatonatiuh, the Wind Sun, until his rival Tezcatlipoca cast him down and a great wind scoured the world clean. He descended into Mictlan to retrieve the bones of the dead and, pricking his own flesh, bled upon them to give life to the people of the Fifth Sun. As Ehecatl, god of wind, he swept the path clear before the rains so that Tlaloc could nourish the earth. As Tlahuizcalpantecuhtli, he rose as Venus the Morning Star, disappearing into the underworld and returning transformed. The great temple-pyramid at Cholula, visible from the slopes of Popocatepetl on clear days, was the largest structure by volume in Mesoamerica and belonged to him. The volcano's fumaroles and the wind that pours down its flanks toward the Valley of Mexico were understood as his breath. Priests of Quetzalcoatl wore the ehecailacacozcatl, a cross-section of a conch shell at the breast, and blackened their skin with soot. As the priest-king Ce Acatl Topiltzin, he ruled Tula and forbade human sacrifice, teaching the arts, agriculture, and the calendar. Tezcatlipoca tricked him into drunkenness and shame, and Quetzalcoatl set himself on fire, his heart rising as the morning star, or else sailed east on a raft of serpents vowing to return. He is culture-bringer, inventor of the calendar, patron of learning, and the god who staked his kingdom on the principle that wisdom could replace blood.",
+      "animals": ["quetzal bird", "rattlesnake", "spider monkey"],
+      "weapons": ["ehecailacacozcatl (wind jewel — cut conch pectoral)", "atlatl"],
+      "consorts": ["Xochiquetzal", "Chalchiuhtlicue"],
+      "vegetation": ["maize", "cacao"],
+      "colors": ["white", "green", "red"]
+    },
+    {
+      "id": "tezcatlipoca",
+      "name": "Tezcatlipoca",
+      "title": "The Smoking Mirror",
+      "group": "creator",
+      "description": "Tezcatlipoca ruled the First Sun, Nahui Ocelotl, the Jaguar Sun, until Quetzalcoatl struck him into the water and jaguars devoured the world's giants. His obsidian mirror revealed all things and concealed all things; gazing into it, sorcerers could see distant events, and warriors could see nothing but smoke. He lost his left foot when the great earth-crocodile Cipactli bit it off during the creation of the land, and so he walks the night sky as the constellation Ursa Major, circling but never setting. He was the patron of the telpochcalli, the warrior schools, and of royal power itself, for no Mexica tlatoani ruled without his sanction. During Toxcatl, the most solemn festival of the year, a captive who had lived as Tezcatlipoca's embodiment for an entire year, treated as a god and given four wives representing four goddesses, climbed the temple steps, breaking a flute at each one, and was sacrificed. He is called Titlacauan, We Are His Slaves, and Yohualli Ehecatl, Night Wind, because he roams the crossroads after dark testing the hearts of mortals. The obsidian that formed his mirror came from volcanic flows, and the dark glass scattered on Popocatepetl's slopes was understood as his fragments, shards of the mirror that sees everything. He corrupted Quetzalcoatl at Tula through trickery and sorcery, driving him into exile. He is the necessary adversary, the night that gives the day its shape, the trickster whose chaos tests every structure the other gods build.",
+      "animals": ["jaguar", "turkey", "coyote"],
+      "weapons": ["obsidian mirror (tezcatl)", "tecpatl flint knife"],
+      "consorts": ["Xochiquetzal"],
+      "colors": ["black", "red", "yellow"],
+      "vegetation": ["tobacco"]
+    },
+    {
+      "id": "xipe-totec",
+      "name": "Xipe Totec",
+      "title": "The Flayed One",
+      "group": "creator",
+      "description": "Xipe Totec is the god who wears the skin of the sacrificed, and in doing so embodies the most unsettling truth of Mesoamerican theology: that new life requires the complete destruction of the old. He presided over the festival of Tlacaxipehualiztli in early spring, when priests donned the flayed skins of captives and wore them for twenty days until the skins rotted and peeled away, revealing fresh flesh beneath, just as the husk of a seed splits to release the new shoot. He was patron of goldsmiths, whose craft required melting and recasting, and of the ailment of skin diseases, which he both sent and cured. As the Red Tezcatlipoca, he governs the eastern quarter of the cosmos and the dawn direction. The gladiatorial sacrifice held in his honor, the Tlahuahuanaliztli, tied a captive to a stone and gave him a club edged with feathers instead of obsidian, then sent four fully armed jaguar and eagle warriors against him. The agricultural terraces carved into the foothills of Popocatepetl depended on his seasonal renewal; without the old growth dying back into the volcanic soil, no new planting could take root. His xipe-skin suit, painted yellow to represent gold and the maize husk, is among the most distinctive images in all Aztec iconography. He reminds the faithful that transformation is not gentle, that spring is built on the decomposition of winter, and that every act of creation is also an act of sacrifice.",
+      "animals": ["eagle", "dog"],
+      "weapons": ["chicahuaztli (rattle staff)", "shield"],
+      "colors": ["red", "yellow", "gold"],
+      "vegetation": ["maize"]
+    },
+    {
+      "id": "huitzilopochtli",
+      "name": "Huitzilopochtli",
+      "title": "God of Sun and War",
+      "group": "celestial",
+      "description": "Huitzilopochtli was born fully armed atop Coatepec, Serpent Mountain, the moment his mother Coatlicue was threatened by her four hundred sons, the Centzon Huitznahua, stars of the southern sky. He burst forth wielding Xiuhcoatl, the fire serpent, and dismembered his sister Coyolxauhqui, casting her body down the mountainside to become the moon. This myth was re-enacted architecturally at the Templo Mayor in Tenochtitlan, where a great stone disk of the dismembered Coyolxauhqui lay at the base of his pyramid staircase and sacrificial victims tumbled down the steps, retracing her fall. He was the tribal patron who guided the Mexica during their long migration from Aztlan, commanding them to settle where they found an eagle perched on a nopal cactus devouring a serpent, the image that now centers the Mexican flag. He demanded the nourishment of human hearts and blood to ensure the sun would rise each morning, not from cruelty but from cosmic obligation: the gods had died to set the sun in motion, and humanity inherited the debt. His festival, Panquetzaliztli, fell in the dry season when the sun was weakest and required the most feeding. From the Valley of Mexico, Popocatepetl's peak catches the first light of dawn before any other landmark, and the Mexica read this as Huitzilopochtli's daily victory, his fire striking the volcanic summit before descending to warm the basin below. He is the hummingbird of the left, the warrior who dies and is reborn as a bird to drink the nectar of battle.",
+      "animals": ["hummingbird", "eagle"],
+      "weapons": ["Xiuhcoatl (fire serpent)", "turquoise shield", "darts"],
+      "consorts": ["Xochiquetzal"],
+      "colors": ["blue", "yellow"],
+      "vegetation": ["nopal cactus"]
+    },
+    {
+      "id": "tonatiuh",
+      "name": "Tonatiuh",
+      "title": "The Sun God",
+      "group": "celestial",
+      "description": "Tonatiuh is the face at the center of the Sun Stone, tongue extended to receive blood, claws gripping human hearts, the god who is the Fifth Sun itself. At Teotihuacan, when the previous sun had been destroyed, the humble and diseased god Nanahuatzin threw himself into the great bonfire and rose as Tonatiuh, while the proud and beautiful Tecciztecatl hesitated and became only the moon, his brightness diminished by a rabbit flung into his face, which is why the Mexica saw a rabbit in the moon. But the new sun refused to move across the sky until all the other gods sacrificed themselves, their blood and hearts the fuel for his first transit. This established the cosmic debt: humanity inherited the obligation to keep the sun in motion through offerings of chalchiuhatl, the precious water of jade, which was blood. Tonatiuh governs the day-sign Ollin, Earthquake, and the Aztecs believed the Fifth Sun would end in catastrophic earthquakes, a belief given constant reinforcement by the seismic tremors emanating from Popocatepetl. The volcano's eruptions were visible proof that the earth could convulse and swallow a world. Every fifty-two years, during the New Fire Ceremony, the Mexica extinguished every flame in the empire and waited on the Hill of the Star to see whether the Pleiades would cross the meridian, confirming the sun would continue. Tonatiuh's face is not serene; it is the face of a god who knows his age will end, and who demands everything in the interim.",
+      "animals": ["eagle", "butterfly"],
+      "weapons": ["solar disk", "sacrificial knife"],
+      "colors": ["gold", "red", "orange"]
+    },
+    {
+      "id": "coyolxauhqui",
+      "name": "Coyolxauhqui",
+      "title": "Moon Goddess",
+      "group": "celestial",
+      "description": "Coyolxauhqui, She of the Bells on Her Cheeks, led the four hundred Huitznahua in an attack on their mother Coatlicue after learning she had become miraculously pregnant from a ball of hummingbird feathers that fell from the sky. Coyolxauhqui was the instigator, the war leader, the eldest daughter who convinced her brothers that their mother's pregnancy was a dishonor demanding death. But the child in the womb was Huitzilopochtli, who erupted forth fully formed and struck her with the Xiuhcoatl, severing her limbs and sending her body tumbling down Coatepec. Her dismembered form became the moon, and so each night she circles the sky in pieces, forever defeated, forever returning. The great basalt disk carved with her shattered body, discovered at the base of the Templo Mayor in 1978, is one of the most important archaeological finds in Mexican history, her limbs splayed outward, her torso severed, golden bells still carved at her cheeks. In the Valley of Mexico, the moon rises behind the twin volcanoes Popocatepetl and Iztaccihuatl, and the Mexica saw in this arrangement the eternal drama: the moon climbing the volcanic slopes only to be cast down again at dawn when her brother the sun erupts over the peaks. Her story encodes the daily astronomical cycle. She is the necessary opposition, the darkness that gives shape to light, the rebellion that justifies the solar order, the defeated sister who returns every evening to try again.",
+      "animals": ["rabbit", "owl"],
+      "colors": ["silver", "gold", "blue"]
+    },
+    {
+      "id": "tlaloc",
+      "name": "Tlaloc",
+      "title": "God of Rain and Lightning",
+      "group": "celestial",
+      "description": "Tlaloc is the goggle-eyed lord of rain, storms, lightning, and agricultural fertility, one of the oldest gods in Mesoamerica, worshipped under different names for more than two thousand years before the Mexica arrived in the Valley of Mexico. He shared the summit of the Templo Mayor with Huitzilopochtli, the two great pyramids standing side by side, war and rain, sun and water, the twin necessities of empire. Tlaloc kept four great jars at the corners of the world: from one came good rain for crops, from another blight, from the third frost, and from the fourth drought. His paradise, Tlalocan, received those who died by drowning, lightning strike, or water-related disease, and it was imagined as a green, lush garden of perpetual abundance. The clouds that gather daily around the summit of Popocatepetl were his most visible local manifestation; the Mexica maintained shrines on the volcano's slopes specifically to petition him, and child sacrifices during the month of Atlcahualo were carried to mountain peaks where the clouds formed, the children's tears a form of sympathetic magic to summon rain. His first wife was Xochiquetzal, goddess of beauty, whom Tezcatlipoca stole; his second wife was Chalchiuhtlicue, who governs the flowing waters that descend from his storms. His fanged mouth, his jade ornaments, and his lightning serpent are among the most recognizable symbols in all pre-Columbian art, and his cult persists in the mountains of central Mexico in the form of rain petitions made to this day.",
+      "animals": ["frog", "serpent", "heron", "jaguar"],
+      "weapons": ["lightning bolt", "four rain jars"],
+      "consorts": ["Chalchiuhtlicue", "Xochiquetzal"],
+      "vegetation": ["maize", "amaranth"],
+      "colors": ["blue", "green", "white"]
+    },
+    {
+      "id": "coatlicue",
+      "name": "Coatlicue",
+      "title": "Mother Earth",
+      "group": "earthly",
+      "description": "Coatlicue, She of the Serpent Skirt, is the earth mother whose colossal basalt statue in the Museo Nacional de Antropologia is perhaps the single most powerful sculpture to survive from the pre-Columbian world: a figure with two serpent heads forming a face where blood once spurted from her severed neck, a necklace of human hearts and severed hands with a skull pendant, clawed feet for digging graves, and a skirt of writhing snakes. She was doing penance at Coatepec, sweeping the temple, when a ball of hummingbird feathers fell from the sky and she tucked it into her waistband, becoming pregnant with Huitzilopochtli. Her daughter Coyolxauhqui and her four hundred sons attacked her for this perceived dishonor, and from the violence of that assault the solar god burst forth fully armed. Coatlicue is the earth that gives life and reclaims it, the ground that feeds and buries, the volcanic soil around Popocatepetl that is among the most fertile in Mexico precisely because it is made of ash and death. Her shrine at Tepeyac drew pilgrims long before the Spanish arrival, and when the Virgin of Guadalupe appeared at the same site, the continuity was not coincidence but inheritance. She is Tonantzin, Our Revered Mother. The Mexica did not sentimentalize her; they understood that the earth's generosity and the earth's violence are the same force, that the mother who creates is also the mouth that consumes.",
+      "animals": ["serpent", "eagle", "bat"],
+      "colors": ["black", "red", "green"],
+      "consorts": ["Mixcoatl (Cloud Serpent)"],
+      "vegetation": ["agave", "maize"]
+    },
+    {
+      "id": "mictlantecuhtli",
+      "name": "Mictlantecuhtli",
+      "title": "Lord of the Dead",
+      "group": "earthly",
+      "description": "Mictlantecuhtli rules Mictlan, the lowest of the nine underworld levels, where the vast majority of the dead arrive after a harrowing four-year journey past a wind of obsidian knives, clashing mountains, and a river that can only be crossed with the help of a yellow dog. He is depicted as a skeletal figure with a necklace of human eyeballs, his liver hanging exposed from an open ribcage, grinning the permanent grin of the skull because the dead always come to him in the end regardless of how they lived. When Quetzalcoatl descended to Mictlan to steal the bones of the previous humanity, Mictlantecuhtli agreed to release them but set traps: he gave Quetzalcoatl a solid conch with no holes to blow as a trumpet, and when the Feathered Serpent called worms to bore holes and bees to make it sound, the death lord ordered a pit dug in his path. A quail startled Quetzalcoatl, who dropped and shattered the bones, which is why humans come in different sizes. His consort Mictecacihuatl, the Lady of the Dead, is the ancestress of the modern Catrina figure and the spirit behind Dia de los Muertos. The volcanic caverns and lava tubes of Popocatepetl, descending into darkness and heat and sulfur, were understood as literal passages toward Mictlan; the mountain was not only an axis reaching toward heaven but a funnel descending toward death. His day-sign was the dog, itzcuintli, because the yellow xoloitzcuintli guided souls across the final river.",
+      "animals": ["owl", "bat", "spider", "yellow dog (xoloitzcuintli)"],
+      "consorts": ["Mictecacihuatl (Lady of the Dead)"],
+      "colors": ["white", "black", "red"],
+      "weapons": ["bone staff", "banner of sacrificial paper"]
+    },
+    {
+      "id": "xochiquetzal",
+      "name": "Xochiquetzal",
+      "title": "Goddess of Beauty and Flowers",
+      "group": "earthly",
+      "description": "Xochiquetzal, Precious Flower Quetzal Feather, is the goddess of beauty, love, pleasure, flowers, fertility, and the arts of weaving, embroidery, and featherwork. She dwelt in Tamoanchan, the paradise above the earth, surrounded by flowers, butterflies, and singing birds, eternally young, the only deity in the Aztec pantheon for whom aging is impossible. She was the first wife of Tlaloc before Tezcatlipoca abducted her, establishing one of the great enmities of the pantheon and the pattern of beauty stolen by darkness that echoes through world mythology from Persephone to Sita. She later became associated with Quetzalcoatl as well, making her the figure over whom the two great cosmic rivals contended. Young women honored her during the festival of Ochpaniztli, and her priestesses, the ahuianime, accompanied warriors as sacred companions. She presided over the day-sign Xochitl, Flower, the twentieth and final day of the trecena, and her influence governed all forms of creative beauty: weaving, sculpture, painting, song. The lower slopes of Popocatepetl, in the ecological zone between the snowline and the valley floor, burst with wildflowers during the rainy season, and these fields were considered her domain, places where her presence was tangible in color and fragrance. She is not merely ornamental; in the Aztec understanding, beauty and desire were cosmic forces as potent as war or rain, and Xochiquetzal was their sovereign.",
+      "animals": ["butterfly", "quetzal bird", "hummingbird"],
+      "vegetation": ["marigold", "dahlia", "magnolia", "all flowers"],
+      "consorts": ["Tlaloc", "Tezcatlipoca", "Quetzalcoatl"],
+      "colors": ["yellow", "green", "red"]
+    },
+    {
+      "id": "chalchiuhtlicue",
+      "name": "Chalchiuhtlicue",
+      "title": "Goddess of Water",
+      "group": "earthly",
+      "description": "Chalchiuhtlicue, She of the Jade Skirt, governed the Fourth Sun, Nahui Atl, the Water Sun, which ended when she wept tears of blood and the world was destroyed in a catastrophic flood that turned all surviving people into fish. She is the goddess of rivers, streams, lakes, and all terrestrial waters, distinguished from her consort Tlaloc who commands the rain that falls from above; her domain is the water that flows along the ground, pools in basins, and sustains daily life. She was the protector of childbirth, because the breaking of waters signaled new life, and midwives invoked her during every delivery, bathing the newborn in water consecrated in her name in a ritual the Spanish recognized with astonishment as resembling their own baptism. The great lakes of the Valley of Mexico, Texcoco, Xochimilco, and Chalco, were her body made visible, and the snowmelt rivers flowing down from Popocatepetl and Iztaccihuatl fed directly into her domain, making the twin volcanoes her source and origin. She wore a jade necklace and a skirt of green stone, and her shrines were placed at springs and riverbanks throughout the highlands. During the month of Etzalcualiztli, maize and beans were cooked together in her honor. She is the quiet, sustaining counterpart to Tlaloc's dramatic storms, the water that arrives not with thunder but with patience, carving valleys over centuries from volcanic rock.",
+      "animals": ["fish", "water serpent", "frog"],
+      "consorts": ["Tlaloc", "Quetzalcoatl"],
+      "vegetation": ["water lily", "reeds", "tule"],
+      "colors": ["jade green", "blue", "white"]
+    }
+  ]
+}

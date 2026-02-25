@@ -1,0 +1,138 @@
+{
+  "id": "shinto",
+  "name": "The Kami",
+  "description": "The divine spirits of the Japanese Shinto tradition, anchored to Mount Fuji. The kami are not distant rulers on a throne -- they inhabit rivers, rocks, storms, and rice fields. They are the sacred presence inside nature itself. From the primordial creators who stirred the ocean into islands, to the sun goddess whose imperial line still sits on the Chrysanthemum Throne, to the fox messengers guarding ten thousand vermilion gates, the Shinto pantheon is a living system: every shrine, every torii, every offering of rice and sake is a conversation between the human world and the world that was here first.",
+  "deities": [
+    {
+      "id": "izanagi",
+      "name": "Izanagi",
+      "title": "The Male Creator",
+      "group": "creation",
+      "description": "Primordial creator god, the male half of the first divine couple. Standing on the Floating Bridge of Heaven, he and Izanami thrust the jeweled spear Ame-no-nuboko into the churning chaos below and stirred. When they lifted the spear, brine dripped from its tip and hardened into Onogoro, the first island -- the seed from which the Japanese archipelago grew. Together they descended, built a palace, performed the first marriage rite around the Pillar of Heaven, and gave birth to the islands of Japan and the kami of wind, sea, trees, and mountains. But when Izanami died giving birth to the fire god Kagutsuchi, Izanagi's grief turned to rage -- he beheaded the infant with the sword Ame-no-ohabari, and from the blood and body sprang more kami of mountains, thunder, and rain. He descended into Yomi, the land of the dead, to bring Izanami back. She told him not to look at her. He lit a torch. What he saw -- her rotting, maggot-covered corpse surrounded by thunder demons -- sent him fleeing. She chased him to the border between worlds, and he sealed the passage with a boulder. They stood on opposite sides and dissolved their marriage. Then Izanagi went to the river mouth at Tachibana in Tsukushi and washed himself. From his left eye came Amaterasu, the sun. From his right eye, Tsukuyomi, the moon. From his nose, Susanoo, the storm. The three most important kami in the Shinto cosmos were born not from creation but from purification -- from a father trying to wash death off his skin. The Nihon Shoki preserves variant accounts of the creation, but in every telling Izanagi is the generative force whose acts of creation, destruction, and purification set the entire mythic cycle into motion.",
+      "animals": ["cormorant"],
+      "weapons": ["Ame-no-nuboko (Jeweled Spear of Heaven)", "Ame-no-ohabari (Sword of Heaven)", "Totsuka-no-Tsurugi (ten-span sword)"],
+      "consorts": ["Izanami"],
+      "colors": ["white", "silver"]
+    },
+    {
+      "id": "izanami",
+      "name": "Izanami",
+      "title": "The Female Creator",
+      "group": "creation",
+      "description": "Primordial creator goddess, the female half of the first divine couple and, after her death, queen of Yomi -- the Shinto underworld. She and Izanagi created the Japanese islands and gave birth to dozens of kami: gods of the sea, rivers, wind, trees, mountains, and plains. She was the generative force of the world itself. Then she gave birth to Kagutsuchi, the fire god, and the burning killed her. She descended to Yomi, the land of darkness and pollution, and became its ruler. When Izanagi came to retrieve her, she met him in the dark and told him she had already eaten the food of the underworld -- but she would ask the gods of Yomi for permission to leave. She made him promise not to look at her. He waited. He grew impatient. He broke a tooth from his comb, lit it as a torch, and saw her body crawling with maggots, eight thunder deities writhing in her decaying flesh. She screamed that he had shamed her. She sent the Ugly Females of Yomi and then the thunder gods and an army of warriors to chase him. He fled, hurling peaches behind him to slow his pursuers. At the pass between Yomi and the living world he rolled a massive boulder into the entrance. She stood on the far side and swore to kill a thousand people every day. He answered that he would cause fifteen hundred to be born. This exchange -- death promising to take, life promising to give more -- is the Shinto explanation for mortality itself. She remains in Yomi. Every death passes through her domain. Her shrines in the Kumano region and at Arashiyama honor her as the keeper of the threshold between the visible and invisible worlds.",
+      "animals": ["butterfly"],
+      "consorts": ["Izanagi"],
+      "colors": ["black", "dark purple"]
+    },
+    {
+      "id": "kagutsuchi",
+      "name": "Kagutsuchi",
+      "title": "God of Fire",
+      "group": "creation",
+      "description": "The fire kami whose birth is the primal catastrophe of Japanese mythology. Also called Ho-Musubi and Hinokagutsuchi, he emerged from Izanami's womb with flames so fierce they burned his mother to death, triggering the separation of the living world from the land of the dead and setting in motion the entire chain of events -- Izanagi's grief, the descent to Yomi, the purification, the birth of the three noble children -- that structures the Kojiki's creation narrative. In his fury and sorrow, Izanagi drew the great sword Ame-no-ohabari and cut Kagutsuchi into eight pieces. From the blood streaming down the blade sprang martial deities, the kami of mountains and valleys, and the thunder gods; from the dismembered body arose even more deities, including Oyamatsumi, the great mountain god who would become father of Konohanasakuya-hime, goddess of Mount Fuji. Kagutsuchi is thus a sacrificial figure whose violent end generates entire categories of divinity -- he is destruction that becomes creation, death that seeds new life. In Shinto practice, fire is both sacred purifier and existential danger, and Kagutsuchi embodies that duality completely. The Atago shrines across Japan are dedicated to fire prevention and invoke his power with respect rather than simple veneration. His connection to volcanic activity links him directly to the landscape of Mount Fuji and the broader Ring of Fire; the eruptions that shaped Japan's terrain are, in mythic terms, aftershocks of his birth. The autumn fire festivals throughout Japan ritually contain and honor the force he represents, acknowledging that civilization depends on the same element that nearly destroyed creation at its origin.",
+      "animals": ["salamander"],
+      "weapons": ["fire itself"],
+      "colors": ["red", "orange", "gold"],
+      "vegetation": ["charred wood", "ash"]
+    },
+    {
+      "id": "amaterasu",
+      "name": "Amaterasu",
+      "title": "Goddess of the Sun",
+      "group": "celestial",
+      "description": "Supreme deity of the Shinto pantheon, goddess of the sun and the universe, born from Izanagi's left eye as he purified himself after fleeing the underworld. She is the ruler of Takamagahara, the High Plain of Heaven, and the divine ancestor of the Japanese Imperial family -- an unbroken lineage the mythology traces from her grandson Ninigi's descent to earth to the present-day emperor. When her brother Susanoo rampaged through heaven -- destroying her rice paddies, flaying a divine horse and hurling it through the roof of her weaving hall, killing one of her attendants -- Amaterasu withdrew into the cave Ama-no-Iwato, and with her the light of the world vanished. The eight hundred myriad kami gathered outside. They placed the sacred mirror Yata no Kagami and the jewel string Yasakani no Magatama on a sakaki tree. The goddess Ame-no-Uzume performed a wild, ecstatic dance that made all the assembled kami roar with laughter. Amaterasu, curious, cracked the cave door open. She saw her own radiance reflected in the mirror and stepped out further. The strong-armed god Ame-no-Tajikarao pulled her fully out, and a shimenawa rope was stretched behind her so she could never retreat again. Light returned to the world. The sacred mirror, alongside the sword Kusanagi and the jewel necklace, form the three Imperial Regalia of Japan. The Grand Shrine at Ise, rebuilt every twenty years in an act of perpetual renewal, is her primary seat of worship and the spiritual heart of Japan. From Mount Fuji's summit, the goraikou -- the sunrise viewed above the clouds -- is understood as a direct encounter with Amaterasu's presence, making the mountain a pilgrimage site intimately linked to solar veneration. She is the light itself -- and the myth understands that even the sun can be wounded into hiding, and that what draws it back is not force but joy.",
+      "animals": ["rooster", "crow (Yatagarasu)"],
+      "colors": ["gold", "white", "crimson"],
+      "weapons": ["Yata no Kagami (Sacred Mirror)", "Yasakani no Magatama (jewel necklace)"],
+      "consorts": ["Tsukuyomi (estranged)"],
+      "vegetation": ["sakaki tree", "rice"]
+    },
+    {
+      "id": "tsukuyomi",
+      "name": "Tsukuyomi",
+      "title": "God of the Moon",
+      "group": "celestial",
+      "description": "Moon god, ruler of the night, born from Izanagi's right eye during the purification at Tachibana. Of the three noble children -- Amaterasu, Tsukuyomi, and Susanoo -- he is the most mysterious, the least storied, the one who exists primarily through absence. The Kojiki barely mentions him, while the Nihon Shoki preserves the key episode that defines his character. Amaterasu sent Tsukuyomi to represent her at a feast prepared by Uke Mochi, the food goddess. Uke Mochi produced the banquet by turning to the ocean and spitting out fish, facing the forest and coughing up game, turning to a rice paddy and vomiting boiled rice. Tsukuyomi was so revolted by how the food was produced that he drew his sword and killed her. From Uke Mochi's dead body sprang rice, millet, wheat, silkworms, and cattle -- the staples of civilization born from divine disgust and divine death. When Amaterasu learned what Tsukuyomi had done, she declared him a wicked god and vowed never to see him again. She moved to the day. He was banished to the night. Their estrangement became the structure of the sky itself -- the sun and moon eternally separated, sharing the heavens but never meeting. Tsukuyomi governs the tides, the calendar, and the silver light that illuminates without warmth. His worship is quieter and more private than that of his siblings, with shrines at Ise's Tsukiyomi-no-Miya and at Matsunoo-taisha in Kyoto. On Mount Fuji, the moonlit ascent -- tsukimi from the high stations -- carries an implicit invocation of Tsukuyomi's silver domain, where pilgrims walk between his world and Amaterasu's dawn.",
+      "animals": ["rabbit", "moth"],
+      "colors": ["silver", "white", "pale blue"],
+      "weapons": ["sword"],
+      "consorts": ["Amaterasu (estranged)"],
+      "vegetation": ["moonflower", "rice"]
+    },
+    {
+      "id": "susanoo",
+      "name": "Susanoo",
+      "title": "God of Storms and Sea",
+      "group": "celestial",
+      "description": "Storm god, wild disruptor, dragon-slayer, and -- after his banishment -- hero and protector of the earthly realm. Born from Izanagi's nose during the purification at Tachibana. From the beginning he was trouble. Instead of ruling the seas as his father commanded, he wept and raged, wanting only to visit his dead mother Izanami in the underworld. His weeping withered the mountains and dried the rivers. Izanagi banished him. Before leaving, Susanoo went to say goodbye to Amaterasu in heaven, and their meeting became a catastrophe: he destroyed her sacred rice fields, defecated in her ceremonial hall, and hurled a flayed piebald horse through the roof of her weaving room, killing an attendant. Amaterasu hid in the cave and the world went dark. The assembled kami expelled Susanoo from heaven, cut his beard and nails as punishment, and cast him down to earth. And here the myth pivots. In Izumo province he encountered an elderly couple weeping beside their last daughter, Kushinadahime -- seven of their eight daughters had been devoured by Yamata no Orochi, an enormous serpent with eight heads and eight tails, eyes red as winter cherries, and a body so vast that trees and moss grew on its back. Susanoo devised a plan: he had the couple brew sake, set out eight vats, and waited. The serpent came, drank from all eight vats with all eight heads, and passed out. Susanoo cut the beast apart. From the fourth tail he drew the sword Kusanagi no Tsurugi -- one of the three Imperial Regalia of Japan. He married Kushinadahime and settled in Izumo, composing what tradition holds as the first Japanese waka poem. His shrines dot the landscape from Yasaka Shrine in Kyoto to Hikawa Shrine in Saitama, and his storms are said to carve the very gullies on Mount Fuji's slopes. The exile who wrecked heaven became the hero who saved the earth.",
+      "animals": ["horse", "serpent"],
+      "colors": ["dark blue", "purple", "black"],
+      "weapons": ["Totsuka-no-Tsurugi (ten-span sword)", "Kusanagi no Tsurugi (drawn from the serpent's tail)"],
+      "consorts": ["Kushinadahime"],
+      "vegetation": ["pine"]
+    },
+    {
+      "id": "amenouzume",
+      "name": "Ame-no-Uzume",
+      "title": "Goddess of Dawn and Revelry",
+      "group": "celestial",
+      "description": "The shamaness of heaven whose ecstatic dance before the rock cave Ama-no-Iwato restores light to the world. When Amaterasu hides in the cave after Susanoo's rampage and all creation falls into darkness, the eight hundred myriad kami gather but cannot coax her out. Uzume overturns a washtub before the cave entrance and stamps upon it in a frenzied, divinely inspired dance, loosening her robes until her breasts and genitals are exposed. The assembled gods roar with laughter so enormous it shakes heaven, and Amaterasu, bewildered that anyone could be merry in a darkened world, cracks open the cave door to peer out -- at which point the strong-armed Ame-no-Tajikarao pulls her fully into the light. Uzume's dance is thus the hinge on which cosmic restoration turns: not force, not argument, but uninhibited joy and the sacred absurdity of a goddess stripping on an overturned tub while the universe holds its breath. She is honored as the patron of performing arts, mirth, and the sacred clowning tradition of kagura dance that persists at Shinto shrines to this day. The Kojiki also records her role in the descent of Ninigi-no-Mikoto to earth, where she confronts the fearsome road-guardian Sarutahiko at the crossroads of heaven and earth and, through charm and boldness rather than force, wins him as her husband. Their pairing -- the earthy, phallic road-guardian and the laughing sky-dancer -- encodes the Shinto principle that joy and audacity open paths that strength alone cannot. Her influence persists in shrine kagura performances across Japan, in the ribald humor woven into festival culture, and in the Noh and Kabuki traditions that trace their spiritual lineage back to her dance before the cave.",
+      "animals": ["wagtail"],
+      "consorts": ["Sarutahiko"],
+      "colors": ["pink", "red", "white"],
+      "vegetation": ["bamboo grass (sasa)"]
+    },
+    {
+      "id": "okuninushi",
+      "name": "\u014ckuninushi",
+      "title": "God of Nation-Building",
+      "group": "earthly",
+      "description": "God of nation-building, farming, medicine, and marriage -- the lord who built the earthly realm before ceding it to the descendants of Amaterasu. Descended from Susanoo (in some accounts his son, in others a sixth-generation descendant), his myth cycle is one of the richest in the Kojiki. As a young kami, he was tormented by his eighty jealous brothers, who killed him twice -- once by rolling a red-hot boulder onto him, once by crushing him in a split tree. Each time his mother petitioned the heavenly kami and he was restored. He encountered a skinned white hare on the beach at Inaba and, unlike his cruel brothers, showed it compassion, telling it to wash in fresh water and roll in cattail pollen. The hare, a divine messenger, prophesied that \u014ckuninushi would win the hand of Princess Yakami. He traveled to the underworld and met Susanoo, who subjected him to trials: sleeping in a room of snakes, then a room of centipedes and wasps, then being sent into a burning field. Each time Susanoo's daughter Suseri-hime helped him survive. He eventually escaped with Susanoo's great sword and bow, and Susanoo -- impressed despite himself -- shouted after him to use those weapons to defeat his brothers and build the land. And he did. \u014ckuninushi created the nation of Izumo, establishing agriculture and medicine, teaching humans to cure disease and grow crops. He ruled justly -- until Amaterasu sent her grandson Ninigi to claim the earth. The negotiation was called Kuni-yuzuri, the 'transfer of the land.' \u014ckuninushi agreed to give up the visible world on the condition that he would rule the invisible one -- the world of spirits, relationships, and the unseen bonds between people. This is why Izumo Taisha, his great shrine, is the place where all the kami gather every October to decide the coming year's marriages and fates. He traded political power for something deeper.",
+      "animals": ["rabbit", "mouse", "crocodile (wani)"],
+      "colors": ["green", "brown", "indigo"],
+      "weapons": ["Ikutachi (Sword of Life)", "Ikuyumi (Bow of Life)"],
+      "consorts": ["Suseri-hime", "Yagami-hime"]
+    },
+    {
+      "id": "inari",
+      "name": "Inari",
+      "title": "God/Goddess of Rice and Foxes",
+      "group": "earthly",
+      "description": "Kami of rice, fertility, tea, sake, agriculture, industry, and worldly success -- the most widely worshipped deity in Japan, enshrined at over thirty thousand locations, more than any other kami. Inari's gender is fluid and has been throughout history: depicted as a male elder carrying rice, as a young female food goddess, and as an androgynous bodhisattva. This ambiguity is not confusion but completeness -- Inari contains all forms because abundance itself takes every form. Inari's origins are layered: associated with the kami Ukanomitama, a food deity born from Susanoo and Kamu-Oichihime; with Toyouke, goddess of food at the Outer Shrine of Ise; and with the Buddhist figure Dakiniten, adding esoteric tantric dimensions. Inari's messengers are foxes (kitsune), white and supernatural, who guard the shrines and serve as intermediaries between the kami and worshippers. Fox statues flank every Inari shrine, often holding a key to the rice granary, a jewel (hoshi no tama, the fox's soul-gem), a sheaf of rice, or a scroll in their mouths. Fushimi Inari-taisha in Kyoto, the head shrine, is famous for its senbon torii -- thousands of vermilion gates donated by businesses and individuals, forming tunnels up the mountainside, each one an act of gratitude or petition for prosperity. To walk through them is to walk through centuries of human hope, each gate a prayer made physical. Inari's worship expanded from agriculture into commerce, smithing, fishing, and entertainment -- anywhere people sought to prosper. On the slopes approaching Mount Fuji, small Inari shrines with fox guardians mark the boundary between cultivated lowland and wild volcanic upland, invoking abundance at the edge of the untamed.",
+      "animals": ["fox (kitsune)"],
+      "colors": ["vermilion", "white", "gold"],
+      "vegetation": ["rice", "cedar", "tea"]
+    },
+    {
+      "id": "raijin",
+      "name": "Raijin",
+      "title": "God of Thunder",
+      "group": "earthly",
+      "description": "Thunder god, lord of storms, one of the most iconic figures in Japanese art. He carries a ring of connected drums on his back and creates thunder by beating them -- the sound that makes children cover their ears and that rice farmers once welcomed as a sign of rain. His appearance is fearsome: wild hair, demonic features, muscular body, often depicted mid-leap as though riding the thunderclap itself. He is one of the oldest kami, appearing in the Kojiki as one of the eight thunder deities born from Izanami's decaying body in the underworld -- thunder was literally born from death. Yet Raijin is not evil. In Shinto, storms are purifying. Lightning enriches the soil with nitrogen. The thunder that terrifies also feeds the rice. Raijin is almost always depicted alongside Fujin, the wind god -- the two of them framing temple gates like divine guardians, one with drums and one with a wind bag, chaos and movement personified as protectors. Their most famous depiction is the pair of painted screens by Tawaraya Sotatsu at Kennin-ji Temple (early 17th century), a national treasure: Raijin on the right, Fujin on the left, gold cloud between them, the entire cosmos compressed into two figures and the weather they produce. Historically, Raijin was credited alongside Fujin with the kamikaze -- the 'divine winds' that destroyed the Mongol invasion fleets in 1274 and 1281. Thunderstorms rolling across Suruga Bay and breaking against Mount Fuji's flanks were understood as Raijin's direct intervention in the landscape, his drums echoing off the volcanic cone in dramatic acoustic displays that reinforced the mountain's sacred character. Japanese parents traditionally tell children to hide their navels during thunderstorms -- Raijin, they say, likes to eat belly buttons. Fear made playful. Terror domesticated into bedtime stories.",
+      "animals": ["catfish (namazu)"],
+      "colors": ["red", "white", "gold"],
+      "weapons": ["ring of drums (taiko)", "drumsticks"]
+    },
+    {
+      "id": "fujin",
+      "name": "F\u016bjin",
+      "title": "God of Wind",
+      "group": "earthly",
+      "description": "Wind god, one of the most ancient kami, said to have been present at the creation of the world. When the primordial chaos was being shaped into land and sea, Fujin released the winds from his bag to clear the mists and make the world inhabitable. He carries an enormous bag of wind (kazebukuro) over his shoulders, and when he opens it, the winds pour out -- from gentle breezes that carry cherry blossom petals to typhoons that flatten coastlines. His appearance is unmistakable: wild green skin in many depictions, leopard-print clothing, untamed hair blown back by his own winds, and an expression somewhere between amusement and menace. He stands as the eternal counterpart to Raijin -- where Raijin brings the vertical force (lightning, thunder, the crack from sky to earth), Fujin brings the horizontal (wind, movement, the breath that crosses continents). Together they appear at the gates of Sanjusangendo in Kyoto and Sensoji in Tokyo, and in Sotatsu's famous pair of screens, each occupying their corner of the gold-cloud cosmos. Some scholars trace his iconography back through Greco-Buddhist art to the Greek wind god Boreas, whose image traveled east along the Silk Road into Japan -- making Fujin one of the great cultural travelers, a deity who walked across two thousand years and became Shinto. On Mount Fuji, the relentless winds above the tree line -- sometimes exceeding one hundred kilometers per hour -- are experienced by pilgrims as Fujin's direct presence, and the mountain's iconic lenticular cloud cap is understood as the visible form of his breath catching on the summit. The wind, after all, recognizes no borders.",
+      "animals": ["hawk"],
+      "colors": ["green", "grey", "pale blue"],
+      "weapons": ["kazebukuro (bag of winds)"]
+    },
+    {
+      "id": "konohanasakuyahime",
+      "name": "Konohanasakuya-hime",
+      "title": "Goddess of Mount Fuji",
+      "group": "earthly",
+      "description": "Princess of flowering trees, goddess of Mount Fuji, and the reason human life is beautiful but brief. Daughter of Oyamatsumi, the great god of mountains -- the same deity born from Kagutsuchi's dismembered body, linking her lineage directly back to the primal catastrophe of fire and death. When Amaterasu's grandson Ninigi descended from heaven to rule the earth, carrying the three Imperial Regalia, he met Konohanasakuya-hime and fell in love at once. Her father was overjoyed and offered both his daughters: Konohanasakuya-hime, whose beauty was like cherry blossoms, and her elder sister Iwanagahime, whose nature was like stone -- enduring, permanent, eternal. Ninigi looked at the two sisters and chose only the beautiful one. He sent Iwanagahime back. Oyamatsumi wept. He explained that he had offered both daughters so that Ninigi's descendants would be as beautiful as flowers and as enduring as rock. By rejecting the stone princess, Ninigi had chosen beauty over permanence. His descendants -- all of humanity descended from the imperial line -- would bloom magnificently and die quickly, like the cherry blossoms Konohanasakuya-hime embodied. This is the Shinto explanation for human mortality, and it is why cherry blossom viewing (hanami) carries such weight in Japan -- every petal falling is the original choice replaying. When Ninigi doubted that her child was his (she conceived after a single night), she sealed herself in a doorless birthing hut and set it ablaze, declaring that if the children were not divine they would perish. She and her three sons survived the fire unharmed, proving her faithfulness and her power. The Fujisan Hongu Sengen Taisha at Fuji's base is her principal shrine, and the network of Sengen shrines across Japan all honor her. She is the fire inside the mountain, the bloom on the branch, the beauty that does not last but is no less sacred for its passing.",
+      "animals": ["deer"],
+      "colors": ["pink", "white", "vermilion"],
+      "vegetation": ["cherry blossom (sakura)", "wisteria"],
+      "consorts": ["Ninigi-no-Mikoto"]
+    }
+  ]
+}

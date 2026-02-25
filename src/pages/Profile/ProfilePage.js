@@ -653,7 +653,29 @@ const { cards: storyCards, loaded: storyCardsLoaded } = useStoryCardSync();
       )}
 
       {/* Natal Chart Section */}
-      <h2 id="section-natal-chart" className="profile-section-title">Natal Chart</h2>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+        <h2 id="section-natal-chart" className="profile-section-title" style={{ margin: 0 }}>Natal Chart</h2>
+        {natalChart?.birthData && (
+          <button
+            className="profile-badge"
+            title="View your Crown"
+            onClick={() => {
+              const bd = natalChart.birthData;
+              const mm = String(bd.month).padStart(2, '0');
+              const dd = String(bd.day).padStart(2, '0');
+              navigate(`/crown?birthday=${bd.year}-${mm}-${dd}`);
+            }}
+            style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '0.25rem', fontSize: '1.2rem', lineHeight: 1, color: 'inherit', opacity: 0.8 }}
+          >
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+              <ellipse cx="12" cy="12" rx="9" ry="3.5" />
+              <ellipse cx="12" cy="12" rx="9" ry="3.5" transform="rotate(60 12 12)" />
+              <ellipse cx="12" cy="12" rx="9" ry="3.5" transform="rotate(120 12 12)" />
+              <circle cx="12" cy="12" r="2" />
+            </svg>
+          </button>
+        )}
+      </div>
       <NatalChartDisplay chart={natalChart} />
       <NatalChartInput existingChart={natalChart} onSave={updateNatalChart} />
 
@@ -1280,7 +1302,7 @@ All responses return { data, meta } JSON. GET /v1/ for full discovery.`}</pre>
                   </span>
                 </div>
                 <div className="profile-course-desc">
-                  {site.region}{site.tradition ? ` \u00B7 ${site.tradition}` : ''} {'\u00B7'} Added {new Date(site.addedAt).toLocaleDateString()}
+                  {site.region}{site.pantheons?.length > 0 ? ` \u00B7 ${site.pantheons.join(', ')}` : ''} {'\u00B7'} Added {new Date(site.addedAt).toLocaleDateString()}
                 </div>
                 <button
                   className="profile-update-btn"
@@ -1729,6 +1751,13 @@ function MentorSection({ effectiveMentorStatus, mentorEligible, qualifiedMentorT
           <button className="profile-setup-btn" onClick={() => navigate('/guild')} style={{ marginTop: 12 }}>
             Enter the Guild
           </button>
+
+          {/* Teacher Mode button */}
+          {effectiveMentorStatus === MENTOR_STATUS.ACTIVE && (
+            <button className="profile-setup-btn" onClick={() => navigate('/teacher')} style={{ marginTop: 8 }}>
+              Teacher Mode
+            </button>
+          )}
 
           {/* Consulting Setup */}
           <div className="guild-consulting-section" style={{ marginTop: 16 }}>

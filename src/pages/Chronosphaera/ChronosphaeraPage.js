@@ -571,6 +571,7 @@ export default function ChronosphaeraPage() {
   // Stop compass when leaving clock mode
   useEffect(() => { if (!clockMode && compass.active) compass.stopCompass(); }, [clockMode]); // eslint-disable-line react-hooks/exhaustive-deps
   const [zodiacMode, setZodiacMode] = useState('tropical');
+  const [showClock3D, setShowClock3D] = useState(true);
   const [showCalendar, setShowCalendar] = useState(() => location.pathname.endsWith('/calendar'));
   const [selectedMonth, setSelectedMonth] = useState(() => location.pathname.endsWith('/calendar') ? MONTHS[new Date().getMonth()] : null);
   const [activeMonthTab, setActiveMonthTab] = useState('stone');
@@ -1329,16 +1330,24 @@ export default function ChronosphaeraPage() {
   }
 
   return (
-    <div className={`chronosphaera-page chrono-${ambient.mode}`}>
+    <div className={`chronosphaera-page chrono-${ambient.mode}${view3D ? ' chrono-3d-active' : ''}`}>
       <div className="chrono-diagram-center">
         {view3D && hasSubscription('monomyth') && (
           <div className="chrono-view3d-controls">
             <button
-              className="view3d-toggle"
+              className="view3d-icon-btn"
               onClick={() => setClockMode(cm => cm === '24h' ? '12h' : '24h')}
-              title={`Switch to ${clockMode === '24h' ? '12h heliocentric' : '24h geocentric'}`}
+              title={clockMode === '24h' ? 'Geocentric (Earth-centered) — click for Heliocentric' : 'Heliocentric (Sun-centered) — click for Geocentric'}
             >
-              {clockMode === '24h' ? '24h' : '12h'}
+              {clockMode === '24h' ? '\u{1F30D}' : '\u2600\uFE0F'}
+            </button>
+            <button
+              className="view3d-icon-btn"
+              onClick={() => setShowClock3D(v => !v)}
+              title={showClock3D ? 'Hide clock hands' : 'Show clock hands'}
+              style={{ opacity: showClock3D ? 0.85 : 0.4 }}
+            >
+              {'\u{1F551}'}
             </button>
             <button
               className="view3d-toggle"
@@ -1368,6 +1377,7 @@ export default function ChronosphaeraPage() {
             <InlineScene3D
               clockMode={clockMode}
               zodiacMode={zodiacMode}
+              showClock={showClock3D}
               selectedPlanet={selectedPlanet}
               onSelectPlanet={(p) => { trackElement(`chronosphaera.planet.${p}`); setSelectedPlanet(p); setSelectedSign(null); setSelectedCardinal(null); setSelectedEarth(null); setSelectedMonth(null); setVideoUrl(null); setPersonaChatOpen(null); if (chakraViewMode) setActiveTab('body'); if (showMonomyth) { setSelectedMonomythStage(null); setMonomythModel(null); } setSelectedStarlightStage(null); setSelectedConstellation(null); }}
               selectedSign={selectedSign}
@@ -1418,6 +1428,10 @@ export default function ChronosphaeraPage() {
                 setSelectedMonomythStage(null);
                 setSelectedConstellation(null);
               }}
+              beyondRings={beyondRings}
+              selectedBeyondRing={selectedBeyondRing}
+              onSelectBeyondRing={handleSelectBeyondRing}
+              activePerspective={perspective.activePerspective}
             />
           </Suspense>
         ) : (
@@ -1809,9 +1823,6 @@ export default function ChronosphaeraPage() {
           ) : selectedPlanet && currentData ? (
             <>
               {renderPlanetWeekdayNav()}
-              <div className="chrono-heading">
-                <StageArrow items={planetNavItems} currentId={selectedPlanet} onSelect={setSelectedPlanet} getId={w => w.planet} getLabel={() => ''} />
-              </div>
               {showOrderInfo && chakraViewMode && ORDER_DESCRIPTIONS[chakraViewMode] && (
                 <div className="order-info-panel">
                   <h4>{ORDER_DESCRIPTIONS[chakraViewMode].title}</h4>
@@ -1983,9 +1994,6 @@ export default function ChronosphaeraPage() {
           ) : selectedPlanet && currentData ? (
             <>
               {renderPlanetWeekdayNav()}
-              <div className="chrono-heading">
-                <StageArrow items={planetNavItems} currentId={selectedPlanet} onSelect={setSelectedPlanet} getId={w => w.planet} getLabel={() => ''} />
-              </div>
               {showOrderInfo && chakraViewMode && ORDER_DESCRIPTIONS[chakraViewMode] && (
                 <div className="order-info-panel">
                   <h4>{ORDER_DESCRIPTIONS[chakraViewMode].title}</h4>
@@ -2407,9 +2415,6 @@ export default function ChronosphaeraPage() {
           {currentData && (
             <>
               {renderPlanetWeekdayNav()}
-              <div className="chrono-heading">
-                <StageArrow items={planetNavItems} currentId={selectedPlanet} onSelect={setSelectedPlanet} getId={w => w.planet} getLabel={() => ''} />
-              </div>
             </>
           )}
           {showOrderInfo && chakraViewMode && ORDER_DESCRIPTIONS[chakraViewMode] && (

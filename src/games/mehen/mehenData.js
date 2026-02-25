@@ -13,10 +13,12 @@ export const CENTER = 40;
  * @param {number} centerY - SVG center Y (default 250)
  * @returns {{ x: number, y: number }}
  */
-export function mehenPositionToSVG(pos, centerX = 250, centerY = 250) {
-  const outerRadius = 220;
-  const innerRadius = 30;
+// Spiral constants — 7 coils from outer to center
+const REVOLUTIONS = 7;
+const OUTER_RADIUS = 220;
+const INNER_RADIUS = 30;
 
+export function mehenPositionToSVG(pos, centerX = 250, centerY = 250) {
   let effectivePos;
   let angleOffset;
 
@@ -28,12 +30,12 @@ export function mehenPositionToSVG(pos, centerX = 250, centerY = 250) {
     // Outward spiral: position 41-80 mirrors back out
     // Use (80 - pos) so pos 41 is near center, pos 80 is near outer
     effectivePos = 80 - pos;
-    // Small angle offset so outward track doesn't overlap inward track
-    angleOffset = Math.PI / 40;
+    // Offset by half a coil width so outward spaces interleave with inward
+    angleOffset = Math.PI / REVOLUTIONS;
   }
 
-  const angle = effectivePos * (4 * Math.PI / 40);
-  const radius = outerRadius - (outerRadius - innerRadius) * (effectivePos / 40);
+  const angle = effectivePos * (REVOLUTIONS * 2 * Math.PI / 40);
+  const radius = OUTER_RADIUS - (OUTER_RADIUS - INNER_RADIUS) * (effectivePos / 40);
 
   const x = centerX + radius * Math.cos(angle + angleOffset);
   const y = centerY + radius * Math.sin(angle + angleOffset);

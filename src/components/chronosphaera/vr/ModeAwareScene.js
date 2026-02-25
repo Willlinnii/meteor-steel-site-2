@@ -58,6 +58,12 @@ export default function ModeAwareScene({
   // Clock/zodiac mode props
   clockMode,
   zodiacMode,
+  showClock,
+  // Beyond ring props
+  beyondRings,
+  selectedBeyondRing,
+  onSelectBeyondRing,
+  activePerspective,
 }) {
   // Derive orbital mode from clockMode when present
   const derivedMode = clockMode === '12h' ? 'heliocentric' : 'geocentric';
@@ -75,6 +81,11 @@ export default function ModeAwareScene({
     onSelectEarth,
     clockMode,
     zodiacMode,
+    showClock,
+    beyondRings,
+    selectedBeyondRing,
+    onSelectBeyondRing,
+    activePerspective,
   };
 
   // Medicine wheel mode — dedicated 3D scene

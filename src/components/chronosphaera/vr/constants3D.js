@@ -89,6 +89,16 @@ export const CLOCK_MARKER_RADIUS = 16; // just outside zodiac wall
 export const STAGE_RING_RADIUS = 17.4;
 export const MONTH_RING_RADIUS = 13.5;
 
+// Beyond ring radii (outside stage ring at 17.4, inside star map at 80)
+export const BEYOND_RING_RADII = {
+  worldSoul: 20,
+  nous: 23,
+  source: 26,
+};
+
+// Dodecahedron — the outermost cosmic shell, wrapping everything including stars
+export const DODECAHEDRON_RADIUS = 90;
+
 // Chakra column constants
 export const CHAKRA_COLORS = [
   '#9b59b6', // Crown — violet

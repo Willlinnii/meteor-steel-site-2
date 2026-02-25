@@ -30,7 +30,7 @@ function ClockHand({ length, width, color, angleRef }) {
   );
 }
 
-export default function ClockHands3D({ clockMode }) {
+export default function ClockHands3D({ clockMode, showClock = true }) {
   const hourAngleRef = useRef(0);
   const minuteAngleRef = useRef(0);
   const secondAngleRef = useRef(0);
@@ -97,31 +97,33 @@ export default function ClockHands3D({ clockMode }) {
         </Text>
       ))}
 
-      {/* Clock hands */}
-      <ClockHand
-        length={CLOCK_HAND_HOUR.length}
-        width={CLOCK_HAND_HOUR.width}
-        color={CLOCK_HAND_HOUR.color}
-        angleRef={hourAngleRef}
-      />
-      <ClockHand
-        length={CLOCK_HAND_MINUTE.length}
-        width={CLOCK_HAND_MINUTE.width}
-        color={CLOCK_HAND_MINUTE.color}
-        angleRef={minuteAngleRef}
-      />
-      <ClockHand
-        length={CLOCK_HAND_SECOND.length}
-        width={CLOCK_HAND_SECOND.width}
-        color={CLOCK_HAND_SECOND.color}
-        angleRef={secondAngleRef}
-      />
-
-      {/* Center hub */}
-      <mesh position={[0, 0.02, 0]}>
-        <sphereGeometry args={[0.15, 16, 16]} />
-        <meshBasicMaterial color="#c9a961" />
-      </mesh>
+      {/* Clock hands + hub — hidden when showClock is false */}
+      {showClock && (
+        <>
+          <ClockHand
+            length={CLOCK_HAND_HOUR.length}
+            width={CLOCK_HAND_HOUR.width}
+            color={CLOCK_HAND_HOUR.color}
+            angleRef={hourAngleRef}
+          />
+          <ClockHand
+            length={CLOCK_HAND_MINUTE.length}
+            width={CLOCK_HAND_MINUTE.width}
+            color={CLOCK_HAND_MINUTE.color}
+            angleRef={minuteAngleRef}
+          />
+          <ClockHand
+            length={CLOCK_HAND_SECOND.length}
+            width={CLOCK_HAND_SECOND.width}
+            color={CLOCK_HAND_SECOND.color}
+            angleRef={secondAngleRef}
+          />
+          <mesh position={[0, 0.02, 0]}>
+            <sphereGeometry args={[0.15, 16, 16]} />
+            <meshBasicMaterial color="#c9a961" />
+          </mesh>
+        </>
+      )}
     </group>
   );
 }

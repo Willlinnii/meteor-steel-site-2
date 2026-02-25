@@ -1,0 +1,126 @@
+{
+  "id": "hawaiian",
+  "name": "The Hawaiian Akua",
+  "description": "The gods and goddesses of the Hawaiian Islands, anchored to Kīlauea — the most active volcano on Earth, home of Pele, and the living threshold between creation and destruction. The Hawaiian pantheon is organized around four great gods (nā akua) brought by Polynesian voyagers from Kahiki, a royal family of volcanic deities rooted in the landscape itself, and a constellation of demigods and ancestral figures whose stories are preserved in oli (chant) and hula. Unlike pantheons frozen in scripture, these gods live in ongoing geological activity: every eruption is Pele's breath, every new land her body cooling into stone, every wave Namakaokahai's answer. The kapu system organized all of life around their sacred divisions — Kū governed the luakini heiau (war temples), Lono ruled the Makahiki festival season, Kāne oversaw fresh water and procreation, Kanaloa held the deep ocean and the paths of the dead. When the kapu system was formally abolished in 1819, the gods did not leave; they moved deeper into the land itself.",
+  "deities": [
+    {
+      "id": "kane",
+      "name": "Kāne",
+      "title": "God of Creation and Sunlight",
+      "group": "major",
+      "description": "The chief of the four great gods and the source of life itself. Kāne is the god of sunlight, fresh water, and creation — the force that called the world into being from pō, the primordial darkness. In the Kumulipo, the great Hawaiian creation chant of over two thousand lines, Kāne is the generative principle that moves through all living things, the light that first separated from darkness. He does not require human sacrifice; his worship centers on springs, streams, and the upland forests where rain gathers — the wai (fresh water) that gives Hawai'i its name. His sacred sites are the heiau dedicated to healing and agriculture, not war. Together with Kū and Lono, he formed the male triad that governed the kapu calendar, but where Kū demanded blood and Lono demanded peace, Kāne simply demanded presence — attention to the living water that sustains all things. He is paired with Kanaloa in many chants, the two traveling together as complementary forces: Kāne strikes his staff into rock and fresh water springs forth, while Kanaloa governs the salt ocean that surrounds the islands. At Kīlauea, Kāne's presence is felt in the steam vents where groundwater meets magma — fresh water and volcanic fire meeting at the threshold of creation, the exact point where his domain intersects with Pele's.",
+      "animals": ["Pueo (Hawaiian owl)", "Gecko (mo'o)"],
+      "vegetation": ["Koa tree", "'Awa (kava)", "Bamboo", "Sugar cane"],
+      "colors": ["Yellow", "White"],
+      "consorts": ["Haumea (in some traditions)"]
+    },
+    {
+      "id": "ku",
+      "name": "Kū",
+      "title": "God of War and Prosperity",
+      "group": "major",
+      "description": "The god of war, politics, fishing, and the deep forest — the masculine force of upright action, his very name meaning 'to stand.' Kū manifests in over forty named forms: Kū-ka'ili-moku, the snatcher of islands, was the war god carried by Kamehameha I during his campaign to unite the Hawaiian Islands; Kū-'ula-kai governed deep-sea fishing; Kū-mauna ruled the mountain forests where the great koa trees grew for canoe-building. His worship required the luakini heiau, the most sacred class of temple, where human sacrifice was offered during times of war — the highest kapu in the islands. The feathered war god image, its mouth ringed with dog teeth, its head crowned with yellow feathers, was carried into battle and consulted through priestly ritual before any military campaign could begin. Yet Kū was not only destruction. He governed the forests that provided canoe timber, building material, and medicinal plants — the practical resources that sustained the ali'i (chiefs) and their people. His season alternated with Lono's: when the Makahiki season ended and the war season began, Kū's temples reopened and the kapu restrictions shifted. At Kīlauea, Kū's presence echoes in the volcanic rock that forms the island's foundation — the raw, upthrust stone that stands against the ocean, land literally rising from the sea floor in an act of geological defiance.",
+      "animals": ["Dog", "'Io (Hawaiian hawk)"],
+      "weapons": ["Lei-o-mano (shark-tooth weapon)", "Pololu (long spear)", "Pahoa (dagger)", "Feathered god image (Kū-ka'ili-moku)"],
+      "vegetation": ["Koa tree", "'Ōhi'a lehua", "Coconut", "Breadfruit"],
+      "colors": ["Red", "Black"]
+    },
+    {
+      "id": "lono",
+      "name": "Lono",
+      "title": "God of Peace, Agriculture, and Fertility",
+      "group": "major",
+      "description": "The god of agriculture, rainfall, peace, and the fertile earth — the force that feeds the islands. Lono presides over the Makahiki season, the four-month period from roughly October to February when warfare was suspended, taxes were collected in the form of food and craft goods, and the people devoted themselves to athletic competitions, hula, feasting, and renewal. His symbol, the lonomakua — a tall crosspiece draped with white kapa cloth and feather garlands — was carried clockwise around each island during Makahiki, collecting offerings and marking the god's passage through the land. When Captain James Cook arrived in Kealakekua Bay in January 1779, during the Makahiki season and sailing clockwise around Hawai'i Island, many Hawaiians initially received him as a manifestation of Lono — a recognition that ended violently when Cook returned after the season had closed and Kū's kapu had resumed. Lono governs the clouds that build against Mauna Kea and Mauna Loa, the rains that feed the taro lo'i, the sweet potato fields, and the breadfruit groves. He is the sound of thunder and the deep fertility of volcanic soil — the ash from Kīlauea's eruptions that weathers into some of the richest agricultural earth in the Pacific. His connection to Kīlauea is indirect but essential: the volcano destroys, and Lono governs what grows back. The cycle of eruption and regrowth is Pele and Lono in conversation across centuries.",
+      "animals": ["Pig (Pua'a)", "Pacific golden plover (Kōlea)"],
+      "vegetation": ["Kalo (taro)", "'Uala (sweet potato)", "'Ulu (breadfruit)", "Coconut"],
+      "colors": ["White", "Green"],
+      "consorts": ["Laka (goddess of hula, in some traditions)"]
+    },
+    {
+      "id": "kanaloa",
+      "name": "Kanaloa",
+      "title": "God of the Ocean and Underworld",
+      "group": "major",
+      "description": "The god of the deep ocean, the squid, the underworld, and the long voyaging paths between islands — the complementary darkness to Kāne's light. Kanaloa is the most mysterious of the four great gods, governing the realms that lie below: the deep sea where sunlight cannot reach, the currents that connect the Polynesian triangle, and the pathways to the afterlife. In many chants he travels with Kāne as an inseparable pair — Kāne-and-Kanaloa — striking open fresh water springs across the islands, Kāne providing the sweet water while Kanaloa marks it with the salt of the surrounding sea. His primary kinolau (body form) is the he'e, the octopus, whose intelligence and adaptability in the deep ocean mirrors Kanaloa's dominion over hidden knowledge. Some missionary-era interpretations attempted to cast Kanaloa as a Satanic figure — the dark god opposed to Kāne's light — but this dualism is foreign to Hawaiian theology. Kanaloa is not evil; he is depth. He governs what is below the surface, including the ancestral knowledge that navigators carried in memory across thousands of miles of open Pacific. At Kīlauea, Kanaloa's domain begins where the lava meets the sea — the explosive littoral boundary where molten rock pours into his ocean, creating new land in clouds of hydrochloric acid and steam called laze. That violent meeting point, where Pele's fire enters Kanaloa's water, is one of the most sacred and dangerous thresholds in Hawaiian cosmology.",
+      "animals": ["He'e (octopus)", "Squid", "Whale"],
+      "vegetation": ["Niu (coconut)", "Limu (seaweed)"],
+      "colors": ["Deep blue", "Black"]
+    },
+    {
+      "id": "pele",
+      "name": "Pele",
+      "title": "Goddess of Fire and Volcanoes",
+      "group": "family",
+      "description": "Pelehonuamea — Pele who shapes the sacred land — goddess of fire, lightning, wind, and volcanoes, the most vivid and actively worshipped deity in the Hawaiian Islands. She lives in Halema'uma'u crater at the summit of Kīlauea, and every eruption is her direct action — not metaphor, not symbol, but Pele moving through the landscape in real time. She arrived in Hawai'i from Kahiki (the ancestral homeland, likely Tahiti), fleeing her elder sister Namakaokahai, goddess of the sea, who pursued her in rage after Pele seduced her husband. Pele dug fire pits on each island as she moved southeast down the chain — each extinct volcano marks a place where Namaka found her and extinguished her flames — until she reached Kīlauea on the Big Island, where she finally dug deep enough to resist the sea. She appears to travelers as a beautiful young woman or an ancient crone with white hair, often accompanied by a small white dog, and woe to anyone who refuses her hospitality. The 'ōhi'a lehua blossom is sacred to her: legend holds that she turned a young man named 'Ōhi'a into a gnarled tree when he refused her love, and the other gods took pity and turned his beloved Lehua into the red blossom so they would never be separated — to pick a lehua flower is to separate the lovers, and it will rain. Her presence is not historical; it is geological and ongoing. The 2018 eruption that destroyed hundreds of homes in Leilani Estates was Pele moving through the lower East Rift Zone. Offerings of 'ōhelo berries, ti leaves, and gin are still left at the crater's edge. Hair-like strands of volcanic glass are called Pele's hair; teardrop-shaped lava droplets are Pele's tears.",
+      "animals": ["White dog", "'Alae 'ula (Hawaiian moorhen)"],
+      "vegetation": ["'Ōhi'a lehua", "'Ōhelo berries", "Ti leaf (kī)"],
+      "colors": ["Red", "Orange", "Black"],
+      "weapons": ["Pā'oa (digging stick to open the earth)", "Volcanic fire", "Lightning"],
+      "consorts": ["Kamapua'a (pig demigod, rival-lover)", "Lohiau (mortal chief of Kaua'i)"]
+    },
+    {
+      "id": "hiiaka",
+      "name": "Hi'iaka",
+      "title": "Goddess of Hula and Medicine",
+      "group": "family",
+      "description": "Hi'iakaikapoliopele — Hi'iaka in the bosom of Pele — the youngest and most beloved sister of the fire goddess, born as an egg that Pele carried under her arm during the long voyage from Kahiki and warmed with her own body heat. She is the goddess of hula, medicinal plants, and the 'ōhi'a lehua groves that colonize new lava flows — the first life that returns after Pele's destruction. Her epic journey to Kaua'i to fetch Pele's lover Lohiau is one of the longest and most complex narratives in Hawaiian oral literature, preserved across hundreds of chants: Pele sent her youngest sister on the errand, giving her forty days, and Hi'iaka battled mo'o (giant lizards), navigated treacherous landscapes, and resisted her own growing love for Lohiau out of loyalty to Pele. When she returned late and found Pele had killed her beloved friend Hōpoe in jealous rage and turned her into a stone, Hi'iaka embraced Lohiau openly in defiance. The story cycles through betrayal, loyalty, grief, and reconciliation — the full emotional range of the monomyth compressed into a family drama between sisters. She is the patron of the hula hālau, and her chants are among the most sacred in the repertoire. At Kīlauea, she is the ecological succession itself — the lichens, ferns, and 'ōhi'a seedlings that take root on cooling lava, the living proof that destruction is never the end of the story. Every hula dancer who performs at the crater's edge is reenacting the relationship between the sisters — devotion, betrayal, power, forgiveness, and the refusal to be consumed.",
+      "animals": ["Mo'o (lizard, as adversary)", "Palaoa (whale)"],
+      "vegetation": ["'Ōhi'a lehua", "Lama (native persimmon)", "Palapalai fern"],
+      "colors": ["Green", "Red"]
+    },
+    {
+      "id": "namakaokahai",
+      "name": "Namakaokahai",
+      "title": "Goddess of the Sea",
+      "group": "family",
+      "description": "The elder sister of Pele and goddess of the sea — the original antagonist in the volcanic creation myth of the Hawaiian Islands. Namakaokahai's rage toward Pele is the engine that drives the entire chain of islands into existence: when Pele seduced Namaka's husband in the ancestral homeland, Namaka pursued her across the Pacific, and at each island where Pele tried to establish a fire pit, Namaka found her and quenched the flames with ocean waves. The progression moves from northwest to southeast — Ni'ihau, Kaua'i, O'ahu, Moloka'i, Maui — each island's volcanic extinction marking a battle that Namaka won. On Maui, at the great crater of Haleakalā, Namaka finally caught Pele and tore her body apart, scattering her bones across the landscape in a formation still known as Nā Iwi o Pele (the bones of Pele). But Pele's spirit survived, moving to Hawai'i Island and digging Kīlauea deep enough to resist the sea. The ongoing conflict between fire and water at the ocean entry points — where lava flows reach the coast and Namaka's waves shatter them into black sand — is the sisters' battle continuing in geological time. This narrative encodes real geology with striking precision: the Hawaiian Islands were formed by a volcanic hotspot beneath the Pacific Plate, and as the plate moves northwest, each island is carried away from the hotspot and its volcano goes extinct — exactly the pattern of Pele's retreat. Namaka is not a villain; she is the necessary counterforce. Without her, Pele would burn unchecked. Without Pele, Namaka's ocean would have no new land to shape. Together they build the islands: fire extends, water erodes, and the coastline is their ongoing negotiation.",
+      "animals": ["Sea turtle (Honu)", "Shark", "Nai'a (dolphin)"],
+      "vegetation": ["Limu (seaweed)"],
+      "colors": ["Blue", "White (sea foam)", "Green"]
+    },
+    {
+      "id": "poliahu",
+      "name": "Poli'ahu",
+      "title": "Snow Goddess of Mauna Kea",
+      "group": "family",
+      "description": "The snow goddess who dwells on the summit of Mauna Kea, the tallest mountain in the Hawaiian Islands and, measured from its base on the ocean floor, the tallest mountain on Earth. Poli'ahu is one of the four snow goddesses — along with Lilinoe (goddess of fine rain and mist), Waiau (goddess of the summit lake), and Ka-houpo-o-Kāne (the bosom of Kāne) — who govern the frozen upper reaches where snow falls in winter and the sacred Lake Waiau sits near the summit at nearly 13,000 feet. She is Pele's rival on the Big Island itself, and their competition is one of the great dramatic pairings in Hawaiian mythology: fire against ice, lowland against summit, eruption against stillness. In one famous story, Poli'ahu and Pele competed in a hōlua sledding race on the slopes of Mauna Kea. Pele, disguised as a stranger, grew furious when she began to lose and split the earth open with rivers of lava. Poli'ahu unfurled her snow mantle and drove the fire back, freezing the lava in place — the hardened flows on Mauna Kea's flanks are said to mark the boundary where their powers met. The geological record confirms this: lava flows on Mauna Kea are interlayered with glacial deposits from ice ages, a literal record of fire and ice alternating on the same mountain. Her domain represents the other pole of Hawai'i's volcanic landscape: where Kīlauea is active, explosive, and coastal, Mauna Kea is dormant, contemplative, and sky-touching. The mountain's summit, now home to some of the world's most powerful astronomical observatories, remains sacred — Poli'ahu's kapa cloth is the snow that still falls there each winter, her presence felt in the cold thin air above the cloud line.",
+      "animals": ["Pueo (Hawaiian owl)"],
+      "vegetation": ["Māmane tree", "Silversword ('Āhinahina)"],
+      "colors": ["White", "Silver", "Pale blue"],
+      "consorts": ["Various ali'i who sought her favor — known for her beauty and composure"]
+    },
+    {
+      "id": "maui",
+      "name": "Māui",
+      "title": "The Trickster Demigod",
+      "group": "other",
+      "description": "Māui-tikitiki-a-Taranga — the great trickster demigod whose exploits span the entire Polynesian world from Aotearoa to Hawai'i. He is the culture hero who fished up islands from the ocean floor using a magic fishhook baited with his own blood and the jawbone of his ancestor, pulled the sky higher so people could stand upright, snared the sun to slow its passage across the sky so his mother Hina could dry her kapa cloth, and stole fire from the 'alae 'ula (mud hen) by tricking the bird into revealing which stick to rub. He is not a god but something more relatable — a youngest child, undersized and underestimated, who wins through cleverness rather than power. His fishhook, Manaiakalani, pulled the Hawaiian Islands from the sea floor; when his brothers paddled too fast and looked back against his instructions, the line snapped, leaving the islands scattered rather than joined as one great landmass. His death, in the Polynesian-wide version, came when he tried to crawl through the body of the goddess of death, Hine-nui-te-pō, to win immortality for humanity — a fantail bird laughed at the sight, waking the goddess, and she crushed him. He failed, and so humans die. The trickster who solved every other problem could not solve the last one. At Kīlauea, Māui's presence lives in the fire itself: the 'alae 'ula whose secret he stole — which stick makes fire, which is the feint — connects him directly to Pele's domain. The red mark on the moorhen's forehead is where Māui struck the bird to force its confession. Haleakalā on Maui island bears his name: the House of the Sun, where he snared the sun god Lā with ropes braided from his sister's hair.",
+      "animals": ["'Alae 'ula (Hawaiian moorhen)", "Fantail bird"],
+      "weapons": ["Manaiakalani (magic fishhook)", "Snare ropes", "Jawbone of his ancestor"],
+      "vegetation": ["Hau tree (for fire-making)", "'Olonā (cordage fiber)"],
+      "colors": ["Brown", "Red"]
+    },
+    {
+      "id": "papa",
+      "name": "Papa",
+      "title": "Earth Mother",
+      "group": "other",
+      "description": "Papahānaumoku — Papa who gives birth to islands — the Earth Mother whose union with the sky father Wākea produced the Hawaiian Islands, the taro plant, and the Hawaiian people. She is the foundation, the bedrock, the strata of basalt that forms the ocean floor and rises through volcanic action into land. In the Kumulipo and related genealogical chants, Papa and Wākea's lineage extends unbroken from the creation of the islands to the ruling ali'i — the chiefs claimed direct descent from this primordial couple, making political authority inseparable from cosmological order. Their first child, born as a stillborn mass, was buried and grew into the first kalo (taro) plant, named Hāloa — long stalk. Their second child, also named Hāloa, was the first human being. This makes taro the elder sibling of humanity, which is why the plant is treated with such reverence in Hawaiian culture — to tend taro is to care for your older brother. To eat poi is to be nourished by family. The relationship between Papa and Wākea was not without conflict: Wākea's infidelity (he took their daughter Ho'ohōkūkalani as a second wife, which produced the taro-child) led Papa to leave him and take another husband, then return — a cycle of separation and reunion that mirrors the seasonal separation of earth and sky. At Kīlauea, Papa is the ground itself — the accumulated layers of lava flow upon lava flow, each eruption adding another stratum to her body. She is not dramatic like Pele; she is what remains after the fire cools, the quiet solidity that holds everything up. When Hawaiian sovereignty advocates speak of their relationship to the 'āina (land), they are speaking genealogy — Papa is the ground they stand on, and they are her descendants.",
+      "animals": ["Honu (green sea turtle)"],
+      "vegetation": ["Kalo (taro)", "Wauke (paper mulberry, for kapa)"],
+      "colors": ["Brown", "Green", "Black"],
+      "consorts": ["Wākea (Sky Father)"]
+    },
+    {
+      "id": "wakea",
+      "name": "Wākea",
+      "title": "Sky Father",
+      "group": "other",
+      "description": "The sky father whose embrace of Papa, the Earth Mother, produced the islands, the taro, and the ali'i lineage that governed Hawaiian society for centuries. Wākea is the vast dome of the sky — the celestial realm from which rain falls, stars navigate, and the sun traverses its daily arc. His union with Papa is the foundational marriage of Hawaiian cosmology, but it is his transgression that establishes the most important social structures: when Wākea desired his daughter Ho'ohōkūkalani, he invented the kapu system itself — specifically the 'ai kapu, the sacred eating restrictions that separated men and women at meals — as a pretext to be alone with her, away from Papa's watchful presence. The child of this union was born deformed, buried, and became the first taro plant. The second child was the first human. The kapu system that Wākea invented to cover his adultery became the organizing principle of all Hawaiian society until 1819, when Ka'ahumanu and Liholiho deliberately ate together in public, breaking the 'ai kapu and collapsing the entire religious structure in a single meal. The origin of death also traces to Wākea: when Papa left him, mortality entered the world — their separation is the original loss. Wākea's connection to Kīlauea is atmospheric: the volcanic gases that rise from the crater — the vog that blankets the Kona coast, the sulfur dioxide that creates the haze — enter his domain the moment they leave the earth. The volcanic plume is the boundary where Papa ends and Wākea begins, earth exhaling into sky. His genealogy is recited in the ko'ihonua (genealogical chants) at the most solemn ceremonies — births of ali'i children, temple consecrations, and the Makahiki.",
+      "animals": ["'Iwa (great frigatebird)", "Kōlea (Pacific golden plover)"],
+      "vegetation": ["Kukui (candlenut tree, state tree of Hawai'i)"],
+      "colors": ["Blue", "White", "Gold"],
+      "consorts": ["Papa (Earth Mother)", "Ho'ohōkūkalani (their daughter — union produced taro and the first human)"]
+    }
+  ]
+}

@@ -31,6 +31,7 @@ import elementsData from '../../data/chronosphaeraElements.json';
 import planetaryCultures from '../../data/chronosphaeraPlanetaryCultures.json';
 import dayNightData from '../../data/dayNight.json';
 import NAMED_STARS from '../../data/zodiacNamedStars';
+import { BEYOND_RINGS, FIXED_STARS_RING } from '../../data/chronosphaeraBeyondRings';
 
 function findByMetal(arr, metal) {
   return arr.find(item => item.metal === metal) || null;
@@ -221,6 +222,7 @@ export default function ChronosphaeraVRPage() {
   const [selectedCardinal, setSelectedCardinal] = useState(null);
   const [selectedStar, setSelectedStar] = useState(null);
   const [selectedEarth, setSelectedEarth] = useState(null);
+  const [selectedBeyondRing, setSelectedBeyondRing] = useState(null);
   const [activeTab, setActiveTab] = useState('overview');
   const [activeCulture, setActiveCulture] = useState('Greek');
   const [panelOpen, setPanelOpen] = useState(true);
@@ -243,6 +245,23 @@ export default function ChronosphaeraVRPage() {
     const culture = PERSPECTIVE_TO_CULTURE[perspective.activePerspective];
     if (culture) setActiveCulture(culture);
   }, [perspective.activePerspective]);
+
+  // Which beyond rings the current tradition supports
+  const beyondRings = useMemo(() => {
+    if (!perspective.activePerspective) return [];
+    return BEYOND_RINGS
+      .filter(ring => ring.traditions[perspective.activePerspective])
+      .map(ring => ring.id);
+  }, [perspective.activePerspective]);
+
+  // Shape beyond-ring vault data for panel display
+  const beyondPerspectiveData = useMemo(() => {
+    if (!selectedBeyondRing) return null;
+    const raw = perspective.getBeyondData(selectedBeyondRing);
+    if (!raw) return null;
+    const { label, ...data } = raw;
+    return { key: label, data, epochName: null };
+  }, [selectedBeyondRing, perspective.getBeyondData]);
 
   // WebXR store — created once, shared with CelestialScene
   const xrStore = useMemo(() => createXRStore(), []);
@@ -430,6 +449,7 @@ export default function ChronosphaeraVRPage() {
     setSelectedCardinal(null);
     setSelectedStar(null);
     setSelectedEarth(null);
+    setSelectedBeyondRing(null);
     setActiveTab('overview');
     setPanelOpen(true);
   };
@@ -439,6 +459,7 @@ export default function ChronosphaeraVRPage() {
     setSelectedCardinal(null);
     setSelectedStar(null);
     setSelectedEarth(null);
+    setSelectedBeyondRing(null);
     setPanelOpen(true);
   };
   const handleSelectCardinal = (c) => {
@@ -447,6 +468,7 @@ export default function ChronosphaeraVRPage() {
     setSelectedSign(null);
     setSelectedStar(null);
     setSelectedEarth(null);
+    setSelectedBeyondRing(null);
     setPanelOpen(true);
   };
   const handleSelectStar = (starName) => {
@@ -455,6 +477,7 @@ export default function ChronosphaeraVRPage() {
     setSelectedSign(null);
     setSelectedCardinal(null);
     setSelectedEarth(null);
+    setSelectedBeyondRing(null);
     setPanelOpen(true);
   };
   const handleSelectEarth = (e) => {
@@ -463,11 +486,22 @@ export default function ChronosphaeraVRPage() {
     setSelectedSign(null);
     setSelectedCardinal(null);
     setSelectedStar(null);
+    setSelectedBeyondRing(null);
+    setPanelOpen(true);
+  };
+  const handleSelectBeyondRing = (ringId) => {
+    track('chronosphaera.beyond.' + ringId);
+    setSelectedBeyondRing(prev => prev === ringId ? null : ringId);
+    setSelectedPlanet(null);
+    setSelectedSign(null);
+    setSelectedCardinal(null);
+    setSelectedStar(null);
+    setSelectedEarth(null);
     setPanelOpen(true);
   };
 
   // Determine what to show in the panel
-  const hasSelection = selectedSign || selectedCardinal || selectedStar || selectedEarth || selectedPlanet;
+  const hasSelection = selectedSign || selectedCardinal || selectedStar || selectedEarth || selectedPlanet || selectedBeyondRing;
   const currentData = mergedData[selectedPlanet] || null;
 
   // Panel heading
@@ -508,6 +542,30 @@ export default function ChronosphaeraVRPage() {
       <CultureSelector activeCulture={activeCulture} onSelectCulture={setActiveCulture} />
       <DayNightContent side={selectedEarth} activeCulture={activeCulture} />
     </div>
+  ) : selectedBeyondRing ? (
+    <div className="metal-detail-panel">
+      {beyondPerspectiveData ? (
+        <MetalDetailPanel
+          data={null}
+          activeTab={activeTab}
+          onSelectTab={setActiveTab}
+          activeCulture={activeCulture}
+          onSelectCulture={setActiveCulture}
+          activePerspective={perspective.activePerspective}
+          perspectiveData={beyondPerspectiveData}
+          perspectiveTabs={perspective.perspectiveTabs}
+          activeTradition={perspective.activeTradition}
+          perspectiveLabel={perspective.perspectiveLabel}
+          orderLabel={perspective.orderLabel}
+          onSelectPerspective={perspective.setActivePerspective}
+          populatedPerspectives={perspective.populated}
+        />
+      ) : (
+        <div className="tab-content">
+          <p className="chrono-empty">No data for this ring in the current tradition.</p>
+        </div>
+      )}
+    </div>
   ) : currentData ? (
     <>
       <MetalDetailPanel
@@ -540,6 +598,13 @@ export default function ChronosphaeraVRPage() {
   } else if (selectedEarth) {
     panelHeading = `Earth \u00B7 ${selectedEarth === 'day' ? 'Day' : 'Night'}`;
     panelSub = selectedEarth === 'day' ? 'Daylight' : 'Night Shadow';
+  } else if (selectedBeyondRing) {
+    const ringDef = selectedBeyondRing === 'fixedStars'
+      ? FIXED_STARS_RING
+      : BEYOND_RINGS.find(r => r.id === selectedBeyondRing);
+    const tradData = ringDef?.traditions?.[perspective.activePerspective];
+    panelHeading = tradData?.label || ringDef?.label || selectedBeyondRing;
+    panelSub = `${ringDef?.subtitle || ''} \u00B7 ${perspective.perspectiveLabel}`;
   } else if (currentData) {
     panelHeading = `${currentData.core.planet} \u2014 ${currentData.core.metal}`;
     panelSub = `${currentData.core.day} \u00B7 ${currentData.core.sin} / ${currentData.core.virtue}`;
@@ -572,6 +637,10 @@ export default function ChronosphaeraVRPage() {
           onSelectEarth={handleSelectEarth}
           selectedStar={selectedStar}
           onSelectStar={handleSelectStar}
+          beyondRings={beyondRings}
+          selectedBeyondRing={selectedBeyondRing}
+          onSelectBeyondRing={handleSelectBeyondRing}
+          activePerspective={perspective.activePerspective}
           infoPanelContent={cameraAR && hasSelection ? panelContent : null}
           xrStore={xrStore}
           cameraAR={cameraAR}

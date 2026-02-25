@@ -9,6 +9,7 @@ import {
   OpenStreetMapImageryProvider,
   BoundingSphere, Cartographic,
   Math as CesiumMath, HeadingPitchRoll,
+  JulianDate, ScreenSpaceEventHandler, ScreenSpaceEventType,
 } from 'cesium';
 import 'cesium/Build/Cesium/Widgets/widgets.css';
 import sites from '../../data/mythicEarthSites.json';
@@ -40,7 +41,6 @@ try {
 
 const CATEGORIES = [
   { id: 'sacred-site', label: 'Sacred Sites', singular: 'Sacred Site', color: '#c9a961' },
-  { id: 'mythic-location', label: 'Mythic Locations', singular: 'Mythic Location', color: '#c4713a' },
   { id: 'literary-location', label: 'Literary Locations', singular: 'Literary Location', color: '#8b9dc3' },
   { id: 'temple', label: 'Temples', singular: 'Temple', color: '#c47a5a' },
   { id: 'library', label: 'Library', singular: 'Library', color: '#a89060' },
@@ -314,8 +314,13 @@ function SiteDetail({ site, isPilgrimage, onTogglePilgrimage, isLoggedIn, onDele
         <span className={`mythic-earth-detail-tag ${site.category}`}>
           {cat?.singular}
         </span>
-        {site.tradition && (
-          <span className="mythic-earth-detail-tag tradition">{site.tradition}</span>
+        {site.pantheons?.length > 0 && (
+          <span className="mythic-earth-detail-tag tradition">
+            {site.pantheons.map(pid => {
+              const label = pid.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+              return label;
+            }).join(' / ')}
+          </span>
         )}
         <span className="mythic-earth-detail-tag region">{site.region}</span>
         {site.isUserSite && (
@@ -444,10 +449,11 @@ function MovementDetail({ movement }) {
   );
 }
 
-function MythicEarthGlobe({ activeFilters, timelineRange, onSelectSite, onReady, highlightedSiteIds, cameraAR, vrSupported, onViewerReady, initialLocation, activeTab, onSelectMovement, showPilgrimagesOnly, pilgrimageIds, extraSites }) {
+function MythicEarthGlobe({ activeFilters, timelineRange, traditionFilter, onSelectSite, onReady, highlightedSiteIds, cameraAR, vrSupported, onViewerReady, initialLocation, activeTab, onSelectMovement, showPilgrimagesOnly, pilgrimageIds, extraSites }) {
   const viewerRef = useRef(null);
   const readyFired = useRef(false);
   const geoApplied = useRef(false);
+  const userInteractingRef = useRef(false);
 
   const highlightSet = useMemo(
     () => new Set(highlightedSiteIds || []),
@@ -457,6 +463,9 @@ function MythicEarthGlobe({ activeFilters, timelineRange, onSelectSite, onReady,
   const filteredSites = useMemo(() => {
     const curated = sites.filter(s => {
       if (!activeFilters.has(s.category)) return false;
+      if (traditionFilter && traditionFilter !== 'all') {
+        if (!s.pantheons || !s.pantheons.includes(traditionFilter)) return false;
+      }
       if (showPilgrimagesOnly && pilgrimageIds && !pilgrimageIds.has(s.id)) return false;
       if (timelineRange) {
         const era = parseEraString(s.era);
@@ -466,12 +475,13 @@ function MythicEarthGlobe({ activeFilters, timelineRange, onSelectSite, onReady,
     });
     const userList = (extraSites || []).filter(s => activeFilters.has(s.category));
     return [...curated, ...userList];
-  }, [activeFilters, showPilgrimagesOnly, pilgrimageIds, extraSites, timelineRange]);
+  }, [activeFilters, showPilgrimagesOnly, pilgrimageIds, extraSites, timelineRange, traditionFilter]);
 
   const handleClick = useCallback((site) => {
     onSelectSite(site);
     if (viewerRef.current?.cesiumElement) {
       const viewer = viewerRef.current.cesiumElement;
+      userInteractingRef.current = true;
       viewer.camera.flyTo({
         destination: Cartesian3.fromDegrees(site.lng, site.lat, 800000),
         duration: 1.5,
@@ -483,6 +493,7 @@ function MythicEarthGlobe({ activeFilters, timelineRange, onSelectSite, onReady,
     if (onSelectMovement) onSelectMovement(movement);
     if (viewerRef.current?.cesiumElement) {
       const viewer = viewerRef.current.cesiumElement;
+      userInteractingRef.current = true;
       viewer.camera.flyTo({
         destination: Cartesian3.fromDegrees(movement.lng, movement.lat, 800000),
         duration: 1.5,
@@ -497,13 +508,68 @@ function MythicEarthGlobe({ activeFilters, timelineRange, onSelectSite, onReady,
     if (!viewer) return;
     readyFired.current = true;
 
-    // Center globe on user's IP-based location (instant, no animation)
-    if (initialLocation && !geoApplied.current) {
-      geoApplied.current = true;
-      viewer.camera.setView({
-        destination: Cartesian3.fromDegrees(initialLocation.lng, initialLocation.lat, 20000000),
-      });
-    }
+    // Center on subsolar longitude (sunrise on right, sunset on left)
+    const now = new Date();
+    const utcHours = now.getUTCHours() + now.getUTCMinutes() / 60;
+    const subsolarLng = ((12 - utcHours) * 15 + 540) % 360 - 180;
+    const lat = initialLocation ? initialLocation.lat : 20;
+    if (initialLocation) geoApplied.current = true;
+    viewer.camera.setView({
+      destination: Cartesian3.fromDegrees(subsolarLng, lat, 20000000),
+    });
+
+    // Enable real-time sun lighting
+    viewer.clock.currentTime = JulianDate.now();
+    viewer.clock.shouldAnimate = true;
+    viewer.scene.globe.enableLighting = true;
+
+    // Auto-rotation: Earth rotates 360° in 86400s
+    let resumeTimeout = null;
+    const ROTATION_RATE = (2 * Math.PI) / 86400;
+    let lastRotateTime = null;
+
+    const rotationListener = () => {
+      if (userInteractingRef.current) return;
+      const t = Date.now();
+      if (!lastRotateTime) { lastRotateTime = t; return; }
+      const dt = (t - lastRotateTime) / 1000;
+      lastRotateTime = t;
+      viewer.camera.rotateRight(ROTATION_RATE * dt);
+    };
+    viewer.scene.preRender.addEventListener(rotationListener);
+    lastRotateTime = Date.now();
+
+    // Interaction detection: pause rotation on grab, resume after 8s
+    const handler = new ScreenSpaceEventHandler(viewer.canvas);
+    const startInteracting = () => {
+      userInteractingRef.current = true;
+      lastRotateTime = null;
+      if (resumeTimeout) clearTimeout(resumeTimeout);
+    };
+    const stopInteracting = () => {
+      if (resumeTimeout) clearTimeout(resumeTimeout);
+      resumeTimeout = setTimeout(() => {
+        userInteractingRef.current = false;
+        lastRotateTime = Date.now();
+      }, 8000);
+    };
+
+    handler.setInputAction(startInteracting, ScreenSpaceEventType.LEFT_DOWN);
+    handler.setInputAction(stopInteracting, ScreenSpaceEventType.LEFT_UP);
+    handler.setInputAction(startInteracting, ScreenSpaceEventType.MIDDLE_DOWN);
+    handler.setInputAction(stopInteracting, ScreenSpaceEventType.MIDDLE_UP);
+    handler.setInputAction(startInteracting, ScreenSpaceEventType.RIGHT_DOWN);
+    handler.setInputAction(stopInteracting, ScreenSpaceEventType.RIGHT_UP);
+    handler.setInputAction(() => { startInteracting(); stopInteracting(); }, ScreenSpaceEventType.WHEEL);
+    handler.setInputAction(startInteracting, ScreenSpaceEventType.PINCH_START);
+    handler.setInputAction(stopInteracting, ScreenSpaceEventType.PINCH_END);
+
+    // Store cleanup refs
+    viewer._rotationCleanup = () => {
+      viewer.scene.preRender.removeEventListener(rotationListener);
+      handler.destroy();
+      if (resumeTimeout) clearTimeout(resumeTimeout);
+    };
 
     // Ensure touch events work on mobile by setting touch-action on the canvas
     const canvas = viewer.canvas;
@@ -514,6 +580,7 @@ function MythicEarthGlobe({ activeFilters, timelineRange, onSelectSite, onReady,
     if (onReady) {
       onReady({
         flyTo(site) {
+          userInteractingRef.current = true;
           viewer.camera.flyTo({
             destination: Cartesian3.fromDegrees(site.lng, site.lat, 800000),
             duration: 1.5,
@@ -521,6 +588,7 @@ function MythicEarthGlobe({ activeFilters, timelineRange, onSelectSite, onReady,
         },
         flyToMultiple(siteList) {
           if (siteList.length === 0) return;
+          userInteractingRef.current = true;
           if (siteList.length === 1) {
             viewer.camera.flyTo({
               destination: Cartesian3.fromDegrees(siteList[0].lng, siteList[0].lat, 800000),
@@ -539,16 +607,27 @@ function MythicEarthGlobe({ activeFilters, timelineRange, onSelectSite, onReady,
     }
   });
 
-  // Apply geo-centering if location arrives after viewer was already initialized
+  // Apply geo-latitude if location arrives after viewer was already initialized
   useEffect(() => {
     if (geoApplied.current || !initialLocation) return;
     const viewer = viewerRef.current?.cesiumElement;
     if (!viewer) return;
     geoApplied.current = true;
+    const now = new Date();
+    const utcHours = now.getUTCHours() + now.getUTCMinutes() / 60;
+    const subsolarLng = ((12 - utcHours) * 15 + 540) % 360 - 180;
     viewer.camera.setView({
-      destination: Cartesian3.fromDegrees(initialLocation.lng, initialLocation.lat, 20000000),
+      destination: Cartesian3.fromDegrees(subsolarLng, initialLocation.lat, 20000000),
     });
   }, [initialLocation]);
+
+  // Cleanup rotation listener and event handler on unmount
+  useEffect(() => {
+    return () => {
+      const v = viewerRef.current?.cesiumElement;
+      if (v?._rotationCleanup) v._rotationCleanup();
+    };
+  }, []);
 
   // Make Cesium scene transparent in AR mode
   useEffect(() => {
@@ -709,7 +788,7 @@ function MythicEarthSearch({ onSelectSite, globeApi, onHighlight, activeTab, onS
       matches = allSites.filter(s =>
         s.name.toLowerCase().includes(lower) ||
         s.region.toLowerCase().includes(lower) ||
-        (s.tradition && s.tradition.toLowerCase().includes(lower)) ||
+        (s.pantheons && s.pantheons.some(p => p.toLowerCase().includes(lower))) ||
         s.category.replace(/-/g, ' ').includes(lower)
       ).slice(0, 8);
     }
@@ -940,7 +1019,7 @@ function AddSiteForm({ onAdd, onCancel }) {
   );
 }
 
-function MythicEarthPage({ embedded, onSiteSelect: onSiteSelectExternal, externalSite, externalFilters, externalTourSiteIds, externalTimelineRange }) {
+function MythicEarthPage({ embedded, onSiteSelect: onSiteSelectExternal, externalSite, externalFilters, externalTourSiteIds, externalTimelineRange, externalTradition }) {
   const { track } = usePageTracking('mythic-earth');
   const { xrMode } = useXRMode();
   const { user } = useAuth();
@@ -1254,6 +1333,7 @@ function MythicEarthPage({ embedded, onSiteSelect: onSiteSelectExternal, externa
           <MythicEarthGlobe
             activeFilters={embedded && externalFilters ? externalFilters : activeFilters}
             timelineRange={embedded ? externalTimelineRange : null}
+            traditionFilter={embedded ? externalTradition : null}
             onSelectSite={handleSelectSite}
             onReady={handleGlobeReady}
             highlightedSiteIds={highlightedSiteIds}

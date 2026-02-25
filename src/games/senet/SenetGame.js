@@ -281,13 +281,53 @@ function SenetBoard({
   ];
 
   return (
-    <div style={{ position: 'relative' }}>
+    <div style={{ position: 'relative', width: '100%' }}>
       <svg
+        className="game-board-svg"
         viewBox={`0 0 ${BOARD_W} ${BOARD_H + 40}`}
-        width={BOARD_W}
-        height={BOARD_H + 40}
-        style={{ display: 'block', margin: '0 auto', maxWidth: '100%' }}
       >
+        <defs>
+          <linearGradient id="senet-sand-light" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#e8d5a3" />
+            <stop offset="100%" stopColor="#d4c090" />
+          </linearGradient>
+          <linearGradient id="senet-sand-dark" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#d4c090" />
+            <stop offset="100%" stopColor="#c0a870" />
+          </linearGradient>
+          <linearGradient id="senet-special" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#d4c5a0" />
+            <stop offset="100%" stopColor="#c0b080" />
+          </linearGradient>
+          <radialGradient id="senet-piece-gold" cx="40%" cy="35%">
+            <stop offset="0%" stopColor="#e8c878" />
+            <stop offset="100%" stopColor="#a88832" />
+          </radialGradient>
+          <radialGradient id="senet-piece-steel" cx="40%" cy="35%">
+            <stop offset="0%" stopColor="#a8b8d8" />
+            <stop offset="100%" stopColor="#5a6f94" />
+          </radialGradient>
+          <filter id="senet-special-glow">
+            <feGaussianBlur stdDeviation="2" result="blur" />
+            <feMerge>
+              <feMergeNode in="blur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+        </defs>
+
+        {/* Board background with rounded corners */}
+        <rect
+          x={PADDING - 2}
+          y={PADDING - 2}
+          width={CELL_W * 10 + 4}
+          height={CELL_H * 3 + 4}
+          fill="rgba(139, 115, 85, 0.15)"
+          rx="4"
+          stroke="rgba(139, 115, 85, 0.3)"
+          strokeWidth="1"
+        />
+
         {/* Board cells */}
         {Array.from({ length: 30 }, (_, i) => {
           const pos = i + 1;
@@ -298,9 +338,9 @@ function SenetBoard({
           const isLight = (grid.row + grid.col) % 2 === 0;
           const isTarget = targetSet.has(pos);
 
-          let fill = isLight ? '#f5e6c8' : '#e8d5a3';
-          if (isSpecial) fill = '#d4c5a0';
-          if (isTarget) fill = '#a8d8a8';
+          let fill = isLight ? 'url(#senet-sand-light)' : 'url(#senet-sand-dark)';
+          if (isSpecial) fill = 'url(#senet-special)';
+          if (isTarget) fill = 'rgba(196, 113, 58, 0.3)';
 
           const className = [
             'board-cell',
@@ -353,7 +393,7 @@ function SenetBoard({
                   cy={y + CELL_H / 2}
                   r={8}
                   fill="none"
-                  stroke="#4a4"
+                  stroke="var(--accent-ember)"
                   strokeWidth={2}
                   strokeDasharray="3,2"
                 />
@@ -397,8 +437,8 @@ function SenetBoard({
                   cx={center.x}
                   cy={center.y}
                   r={14}
-                  fill={PLAYER_COLORS[pIdx]}
-                  stroke={isSelected ? '#fff' : '#555'}
+                  fill={pIdx === 0 ? 'url(#senet-piece-gold)' : 'url(#senet-piece-steel)'}
+                  stroke={isSelected ? '#fff' : pIdx === 0 ? '#a88832' : '#5a6f94'}
                   strokeWidth={isSelected ? 3 : 1.5}
                   opacity={0.92}
                 />
@@ -441,8 +481,8 @@ function SenetBoard({
               y={PADDING + CELL_H}
               width={CELL_W - 10}
               height={CELL_H}
-              fill="#a8d8a8"
-              stroke="#4a4"
+              fill="rgba(196, 113, 58, 0.25)"
+              stroke="var(--accent-ember)"
               strokeWidth={2}
               strokeDasharray="3,2"
               rx={4}
@@ -452,7 +492,7 @@ function SenetBoard({
               y={PADDING + CELL_H + CELL_H / 2 + 4}
               textAnchor="middle"
               fontSize="10"
-              fill="#4a4"
+              fill="var(--accent-ember)"
             >
               OFF
             </text>
@@ -764,6 +804,19 @@ export default function SenetGame({
       turnCount={turnCount}
       onExit={onExit}
       onReset={isOnline ? null : resetGame}
+      onRoll={gamePhase === 'rolling' && isHumanTurn ? handleRoll : null}
+      diceDisplay={diceResult ? (
+        <div style={{ textAlign: 'center' }}>
+          <StickDiceDisplay result={diceResult} />
+          <div style={{ fontSize: 13, marginTop: 4 }}>
+            Roll: <strong>{diceResult.effectiveTotal}</strong>
+            {grantsExtraTurn(diceResult.effectiveTotal) && (
+              <span style={{ color: '#b8860b', marginLeft: 6 }}>(extra turn)</span>
+            )}
+          </div>
+        </div>
+      ) : null}
+      message={displayMessage}
       onForfeit={isOnline ? onForfeit : undefined}
       onPlayerClick={isOnline ? onPlayerClick : undefined}
       isOnline={isOnline}
@@ -773,15 +826,6 @@ export default function SenetGame({
       rules={GAME_BOOK['senet'].rules}
       secrets={GAME_BOOK['senet'].secrets}
     >
-      <div style={{ textAlign: 'center', marginBottom: 8 }}>
-        <div style={{ fontSize: 14, fontWeight: 600, marginBottom: 4 }}>
-          {statusText}
-        </div>
-        <div style={{ fontSize: 13, color: '#666', minHeight: 20 }}>
-          {displayMessage}
-        </div>
-      </div>
-
       <SenetBoard
         pieces={pieces}
         currentPlayer={currentPlayer}
@@ -791,60 +835,6 @@ export default function SenetGame({
         gamePhase={gamePhase}
         labels={labels}
       />
-
-      <div style={{ textAlign: 'center', marginTop: 12 }}>
-        {/* Dice area */}
-        {diceResult && (
-          <div style={{ marginBottom: 8 }}>
-            <StickDiceDisplay result={diceResult} />
-            <div style={{ fontSize: 13, marginTop: 4 }}>
-              Roll: <strong>{diceResult.effectiveTotal}</strong>
-              {grantsExtraTurn(diceResult.effectiveTotal) && (
-                <span style={{ color: '#b8860b', marginLeft: 6 }}>
-                  (extra turn)
-                </span>
-              )}
-            </div>
-          </div>
-        )}
-
-        {/* Roll button */}
-        {gamePhase === 'rolling' && isHumanTurn && (
-          <button
-            onClick={handleRoll}
-            style={{
-              padding: '8px 24px',
-              fontSize: 14,
-              cursor: 'pointer',
-              backgroundColor: PLAYER_COLORS[currentPlayer],
-              color: currentPlayer === 0 ? '#3a2a0a' : '#1a2540',
-              border: '1px solid #888',
-              borderRadius: 4,
-              fontWeight: 600,
-            }}
-          >
-            Roll Sticks
-          </button>
-        )}
-
-        {/* Game over - only show Play Again for offline */}
-        {gamePhase === 'gameover' && !isOnline && (
-          <button
-            onClick={resetGame}
-            style={{
-              padding: '8px 24px',
-              fontSize: 14,
-              cursor: 'pointer',
-              backgroundColor: '#ddd',
-              border: '1px solid #888',
-              borderRadius: 4,
-              marginTop: 8,
-            }}
-          >
-            Play Again
-          </button>
-        )}
-      </div>
 
       {/* Special squares legend */}
       <div

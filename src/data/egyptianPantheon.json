@@ -1,0 +1,228 @@
+{
+  "id": "egyptian",
+  "name": "The Netjeru",
+  "description": "The gods of Egypt are inseparable from the Nile — the single river that made civilization possible in a landscape that would otherwise be uninhabitable desert. Every year the flood deposited black silt across the valley floor, and from that narrow fertile strip arose a theology of cyclical renewal, death, and resurrection that persisted for three thousand years.",
+  "deities": [
+    {
+      "id": "ra",
+      "name": "Ra",
+      "title": "The Sun God",
+      "group": "primordial",
+      "description": "Ra is the supreme solar deity of Egypt, the self-created god who emerged from the primordial waters of Nun and spoke the world into existence. The Pyramid Texts — the oldest religious writings on earth, carved inside the pyramids at Saqqara around 2400 BCE — describe his daily journey across the sky in the Mandjet (day barque) and his nightly passage through the Duat, the underworld, in the Mesektet (night barque), where he battles the chaos serpent Apophis every night and wins every time, emerging reborn at dawn. By the New Kingdom he had merged with Amun to become Amun-Ra, the king of the gods worshipped at the vast Karnak temple complex, whose hypostyle hall — 134 columns, each 23 meters tall — was designed to feel like standing inside a stone papyrus marsh at the moment of creation. The pharaoh was called 'Son of Ra' from the Fifth Dynasty onward, binding political authority to solar theology. Ra's aging and vulnerability — in one Middle Kingdom text, Isis tricks his secret name from him by having a serpent bite him — makes him unusual among supreme gods: powerful enough to sustain the cosmos, old enough to be outwitted. He models something real about authority: it sustains the world and is also fragile, dependent on renewal, never permanent.",
+      "animals": ["Falcon", "Scarab beetle (Khepri, his morning form)", "Ram (his evening form)"],
+      "colors": ["Gold", "Red"],
+      "metals": ["Gold"],
+      "consorts": ["Hathor (in some traditions)"]
+    },
+    {
+      "id": "atum",
+      "name": "Atum",
+      "title": "The First God",
+      "group": "primordial",
+      "description": "Atum is the original creator in the Heliopolitan cosmogony — the god who existed before existence, who stood on the primordial mound (the benben) that rose from the waters of Nun and brought the first gods into being through an act of self-generation. The Pyramid Texts describe this act variously as masturbation, spitting, or sneezing — the Egyptians were not prudish about cosmogony. From his body came Shu (air) and Tefnut (moisture), who in turn produced Geb (earth) and Nut (sky), completing the Ennead of Heliopolis. Atum is often depicted as an old man wearing the double crown of Upper and Lower Egypt, or as a serpent — the form he will take at the end of time when creation dissolves back into the primordial waters. Coffin Text Spell 1130 has Atum declare that he will eventually destroy everything he made and return to his serpent form in the waters of Nun, with only Osiris beside him. This is remarkable: a creation theology that includes its own undoing, a god who builds the cosmos knowing it will end. The benben stone at Heliopolis, the original mound of creation, gave its shape to every obelisk and pyramid tip in Egypt. Atum models the psychological truth that every act of creation begins in formlessness, and that the one who starts something carries within them the knowledge of its eventual dissolution.",
+      "animals": ["Serpent", "Ichneumon (mongoose)"],
+      "colors": ["Black (the fertile Nile silt)", "Gold"]
+    },
+    {
+      "id": "ptah",
+      "name": "Ptah",
+      "title": "The Craftsman Creator",
+      "group": "primordial",
+      "description": "Ptah is the creator god of Memphis, Egypt's first capital, and his theology represents one of the most sophisticated intellectual achievements of the ancient world. The Shabaka Stone — a basalt slab from around 710 BCE, now in the British Museum, though badly damaged from being used as a millstone — preserves a much older Memphite text in which Ptah creates the world through thought and speech: he conceives every thing in his heart and brings it into being by naming it. This is creation through logos, the word-as-act, predating the Gospel of John's 'In the beginning was the Word' by over two millennia. Ptah stands wrapped tightly in a mummiform shroud, holding a composite scepter that combines the djed (stability), was (power), and ankh (life), and wears a skullcap rather than any crown — a craftsman, not a king. He was patron of architects, sculptors, metalworkers, and shipbuilders, and the high priest of Ptah bore the title 'Greatest of the Directors of Craftsmanship.' The Greeks identified him with Hephaestus. His consort Sekhmet and his son Nefertum formed the Memphite Triad. Ptah speaks to the part of human experience where making is thinking — where the act of building, writing, shaping with hands is itself a form of cognition, not a lesser one.",
+      "animals": ["Apis bull (his living manifestation on earth)"],
+      "colors": ["Blue", "Green"],
+      "metals": ["All metals — patron of metalworkers"],
+      "weapons": ["Was-djed-ankh composite scepter"],
+      "consorts": ["Sekhmet"]
+    },
+    {
+      "id": "nut",
+      "name": "Nut",
+      "title": "Goddess of the Sky",
+      "group": "primordial",
+      "description": "Nut is the sky itself — depicted as a woman arching her body over the earth, her fingertips and toes touching the horizon at the four cardinal points, her star-covered belly forming the vault of heaven. Each evening she swallows the sun at the western horizon; each morning she gives birth to it in the east. The Pyramid Texts address her directly: 'O Great One who became sky... you have filled every place with your beauty.' Her body is the surface on which the stars are painted, and the Milky Way was understood as her spine or her river of celestial milk. The sarcophagus lid in many royal tombs bears her image — the dead placed inside her body for rebirth, exactly as Ra passes through her each night. The temple ceiling at Dendera preserves one of the most beautiful surviving depictions: Nut elongated across the full span, swallowing and birthing the sun in a continuous loop. Her father Shu (air) holds her aloft, separating her from her husband Geb (earth), with whom she was locked in a permanent embrace until Ra ordered them apart. Ra also cursed her so she could not give birth on any day of the year; Thoth gambled with the moon and won five extra days, during which Nut bore Osiris, Isis, Set, Nephthys, and Horus the Elder. She is the most literal sky goddess in any pantheon — not a metaphor, not a ruler of the sky, but the sky wearing a woman's form. She models the human impulse to see the cosmos as a body, to make the impersonal intimate.",
+      "animals": ["Cow (in her celestial form)", "Sow (in funerary contexts, nursing the stars)"],
+      "colors": ["Deep blue", "Black (night sky)"],
+      "consorts": ["Geb"]
+    },
+    {
+      "id": "geb",
+      "name": "Geb",
+      "title": "God of the Earth",
+      "group": "primordial",
+      "description": "Geb is the earth — depicted as a man lying on his side beneath Nut's arching body, often with green or brown skin and vegetation sprouting from his limbs. His laughter causes earthquakes. The Pyramid Texts call him 'the heir of the gods' and identify him as the first divine king of Egypt, from whom the pharaoh's right to rule ultimately descends. After Ra's retirement from the earth, Geb inherited the throne and passed it to Osiris, establishing the line of divine succession that legitimized every pharaoh in Egyptian history. His goose — the 'Great Cackler' — was said to have laid the cosmic egg from which the sun emerged at creation, one of several competing origin stories the Egyptians held simultaneously without apparent discomfort. In the Ennead of Heliopolis he is son of Shu and Tefnut, husband of Nut, father of Osiris, Isis, Set, and Nephthys. His body holds the dead in tombs and also produces the crops that feed the living — making him the deity who most directly embodies the Nile Valley's essential bargain: the earth both buries and sustains. Minerals, precious stones, and the fertile black soil (kemet, from which Egypt takes its name) are all his domain. He models the ground as a living thing — not inert matter but a body with moods, generosity, and appetite.",
+      "animals": ["Goose (the Great Cackler)", "Hare"],
+      "colors": ["Green", "Brown"],
+      "vegetation": ["Barley", "All crops (the earth's produce)"],
+      "consorts": ["Nut"]
+    },
+    {
+      "id": "shu",
+      "name": "Shu",
+      "title": "God of Air and Light",
+      "group": "primordial",
+      "description": "Shu is the atmosphere — the god of air, wind, sunlight, and the dry luminous space between earth and sky. His most enduring image is the one carved and painted in tombs and temples across three millennia: Shu standing between Geb and Nut, arms raised, holding the sky-goddess aloft and separating her from the earth-god below. This single act — the creation of breathable space — is arguably the most fundamental act of ordering in Egyptian cosmology. Before Shu, earth and sky were locked together; after him, there was room to live. The Coffin Texts give him solar associations, calling him the 'life in the nostrils' and identifying him with the light that fills the space he creates. He and his twin sister Tefnut were the first beings produced by Atum at Heliopolis — Shu from a sneeze, Tefnut from spittle, according to the Pyramid Texts. When Tefnut once fled to Nubia in rage, the land dried and darkened until Shu (or in some versions, Thoth) persuaded her to return, restoring moisture and order. He is depicted wearing an ostrich feather, the hieroglyph for his name and for the concept of lightness. Shu is the god of the space you need to think, the air you need to breathe, the distance between things that makes them distinct — separation as a creative act rather than a loss.",
+      "animals": ["Lion (paired with Tefnut as the Twin Lions at Heliopolis)"],
+      "colors": ["White", "Light blue"],
+      "consorts": ["Tefnut"]
+    },
+    {
+      "id": "tefnut",
+      "name": "Tefnut",
+      "title": "Goddess of Moisture",
+      "group": "primordial",
+      "description": "Tefnut is the goddess of moisture, dew, rain, and the wet half of the primordial pair — Shu's twin and complement, the dampness without which his dry air would be lifeless. Together they form the first couple in the Heliopolitan cosmogony, produced by Atum through self-generation. The Pyramid Texts describe their creation matter-of-factly: 'Atum sneezed and Shu came forth; Atum spat and Tefnut came forth.' Her most significant myth is the Flight of the Solar Eye — recorded in multiple versions from the Coffin Texts through Graeco-Roman temple inscriptions at Philae and Dendera — in which Tefnut, identified with the Eye of Ra, quarrels with her father and flees south to the Nubian desert in leonine rage. Her absence causes drought and disorder; the land withers. Thoth (or Shu, depending on the version) is sent to coax her home with stories, flattery, and promises. When she returns, the Nile floods, the crops grow, and Egypt celebrates with festivals of music, wine, and dancing. The myth is transparently a narrative of the Nile's annual inundation — the moisture that returns from the south and makes life possible — but it also encodes something about how communities understand temperament: the volatile, powerful force that sustains everything when present and devastates when absent. Tefnut is the rain in a country where it almost never rains, which makes her both rare and essential.",
+      "animals": ["Lioness", "Cobra (uraeus)"],
+      "colors": ["Dark blue", "Green"],
+      "consorts": ["Shu"]
+    },
+    {
+      "id": "osiris",
+      "name": "Osiris",
+      "title": "God of the Dead and Resurrection",
+      "group": "osirian",
+      "description": "Osiris is the murdered king, the dismembered god, the first mummy — the figure at the center of the most important myth cycle in Egyptian religion. The fullest ancient account comes from Plutarch's De Iside et Osiride, but the story is embedded in Egyptian sources from the Pyramid Texts onward: Osiris ruled Egypt as a just and civilizing king, teaching humanity agriculture and law. His brother Set, consumed by jealousy, tricked him into lying in a coffin at a feast, sealed it, and threw it into the Nile. Isis recovered the body, but Set found it again, tore it into fourteen (or sixteen) pieces, and scattered them across Egypt. Isis searched the length of the Nile, recovered every piece except the phallus (eaten by an oxyrhynchus fish), reassembled him, fashioned a replacement, and conceived Horus posthumously. Osiris became lord of the Duat, the underworld, where he presides over the Weighing of the Heart in the Hall of Two Truths — the scene depicted in Chapter 125 of the Book of the Dead and most famously in the Papyrus of Ani. The dead person's heart is weighed against Ma'at's feather; Osiris sits enthroned behind the scales, wrapped in white linen, skin green or black as the fertile Nile mud. His death and reassembly mirror the Nile cycle itself — the river recedes, the land dies, the flood returns, and from the black silt new life grows. Every Egyptian who hoped for an afterlife hoped to 'become Osiris.' He models what every human culture must reckon with: that renewal requires dismemberment, that something must be taken apart before it can come back in a new form.",
+      "animals": ["Ram", "Bull"],
+      "colors": ["Green (rebirth)", "Black (fertile Nile silt)", "White (mummy wrappings)"],
+      "vegetation": ["Grain (Osiris beds — seed trays shaped like the god, placed in tombs)", "Lotus"],
+      "weapons": ["Crook and flail (symbols of kingship)"],
+      "consorts": ["Isis"]
+    },
+    {
+      "id": "isis",
+      "name": "Isis",
+      "title": "Goddess of Magic and Motherhood",
+      "group": "osirian",
+      "description": "Isis — Aset in Egyptian — is the most widely worshipped goddess of the ancient world, whose cult eventually spread from the Nile Delta to Roman Britain and persisted until the sixth century CE, longer than many of the gods she outlasted. Her power comes not from brute divine force but from intelligence, persistence, and magic (heka). The Pyramid Texts already identify her as 'great of magic,' and a Middle Kingdom text tells how she tricked Ra himself: she collected his saliva as he drooled in old age, mixed it with earth to create a serpent, and when it bit him, she refused to heal him until he revealed his secret name — the source of his power. With that name she became the most powerful magician in creation. Her defining act is the recovery of Osiris: traveling the length of the Nile to find every dismembered piece of her husband, reassembling him, and conceiving Horus through magic performed on the reconstructed body. She then raised Horus in hiding in the papyrus marshes of the Delta, protecting him from Set with spells and cunning until he was old enough to reclaim the throne. The temple at Philae, her greatest sanctuary, was the last functioning pagan temple in Egypt, not closed until 537 CE by Justinian. The image of Isis nursing Horus became the iconographic template for the Virgin and Child in early Christian art — the connection is direct and well-documented. Isis models the power of devotion that refuses to accept loss as final, the intelligence that outwits even supreme authority, and the fierce protectiveness that builds a future from ruins.",
+      "animals": ["Kite (the bird whose cry was her mourning)", "Scorpion (her protectors during Horus's infancy)", "Cobra"],
+      "colors": ["Blue", "Gold", "White"],
+      "metals": ["Gold"],
+      "vegetation": ["Papyrus", "Lotus"],
+      "weapons": ["Tyet knot (Knot of Isis, a protective amulet)", "Magic (heka)"],
+      "consorts": ["Osiris"]
+    },
+    {
+      "id": "set",
+      "name": "Set",
+      "title": "God of Chaos and Storms",
+      "group": "osirian",
+      "description": "Set is the most theologically complex figure in the Egyptian pantheon — murderer of Osiris, enemy of Horus, lord of the red desert, storms, foreigners, and disorder, yet also the defender of Ra's solar barque against the chaos serpent Apophis during the nightly journey through the Duat. The Pyramid Texts already contain both roles: Set the antagonist and Set the necessary protector. He kills his brother, dismembers the body, scatters the pieces — the primal act of violence in Egyptian myth. In the Contendings of Horus and Set, a New Kingdom text preserved on Papyrus Chester Beatty I, the two gods battle for the throne of Egypt in a series of contests that veer between epic and absurd (at one point Set is tricked into eating Horus's semen on a lettuce leaf, and the gods adjudicate). The trial lasts eighty years. Horus eventually wins, but Set is not destroyed — he is assigned to the sky, to thunder and storms, to the desert margins. Under the Nineteenth and Twentieth Dynasties, the Seti and Ramesses kings openly honored him, and the Hyksos identified him with their storm god Baal. His animal — the 'Set animal,' or sha — defies zoological identification: long curved snout, square-tipped ears, forked tail. No living species matches it. Set models the psychological reality that disorder and destruction are not things to be eliminated but forces to be placed — given a role, a boundary, a function. Chaos serves creation when it has a post.",
+      "animals": ["Set animal (sha — unidentified)", "Hippopotamus", "Crocodile", "Donkey"],
+      "colors": ["Red (the desert, blood, destruction)"],
+      "consorts": ["Nephthys"]
+    },
+    {
+      "id": "nephthys",
+      "name": "Nephthys",
+      "title": "Goddess of the Night",
+      "group": "osirian",
+      "description": "Nephthys — Nebet-Het, 'Lady of the House' — is the shadow twin of Isis, the darker and less celebrated sister who nonetheless plays an essential role in the Osiris myth and in Egyptian funerary practice. She was Set's wife but sided with her sister after Osiris's murder, helping Isis search for the dismembered body and joining in the ritual mourning that reanimated him. The Pyramid Texts pair them constantly: 'Isis and Nephthys, the two kites' — the mourning birds whose cries over the dead became the model for professional female mourners (the dryt) at Egyptian funerals. In the Lamentations of Isis and Nephthys, a Late Period ritual text, the two sisters perform antiphonal songs of grief over the body of Osiris, calling him back from death. Nephthys also bore Anubis — in most traditions by Osiris, not Set — making her relationship to both brothers genuinely complicated. She stands at the foot of the coffin while Isis stands at the head; she guards the canopic jar containing the lungs (under the protection of Hapy, one of the Four Sons of Horus). She is associated with twilight, the edges of the desert, the transitional spaces where the cultivated land meets the barren — the liminal zones. Nephthys models the role of the loyal witness, the one who stays present during the worst of it, who does the work of grief alongside others without needing to be the center of the story.",
+      "animals": ["Kite (paired with Isis in mourning flight)"],
+      "colors": ["Black", "Dark red"],
+      "consorts": ["Set"]
+    },
+    {
+      "id": "horus",
+      "name": "Horus",
+      "title": "God of Kingship",
+      "group": "osirian",
+      "description": "Horus is the falcon god, the divine king, the avenger of his father — and the theological foundation of Egyptian pharaonic rule for three thousand years. Every living pharaoh was Horus incarnate; every dead pharaoh became Osiris. This is not metaphor — it was operative state theology from the earliest dynasties through the Roman period. The Pyramid Texts, the oldest, already encode this: 'The king is Horus.' His myth centers on the Contendings of Horus and Set, the eighty-year legal and physical battle for the throne after Osiris's murder. During the struggle, Set tore out Horus's left eye (the moon); Thoth or Hathor restored it. The restored Eye of Horus — the wedjat — became the most ubiquitous protective amulet in Egyptian history, found in tombs, on jewelry, on the prows of ships. It is also the origin of the Rx symbol on modern prescriptions, through a chain of transmission from Egyptian to Greek medical practice. Horus exists in multiple forms that the Egyptians kept distinct: Horus the Elder (Haroeris), a cosmic falcon-sky god whose eyes are the sun and moon; Horus the Child (Harpocrates), the vulnerable infant hidden in the Delta marshes; and Horus son of Isis (Harsiese), the avenger. At Edfu, his great temple — one of the best preserved in Egypt — his cult celebrated the annual victory over Set in a ritual drama. Horus models legitimate succession and the willingness to fight for what was taken — not out of ambition but out of justice, the son restoring what was broken.",
+      "animals": ["Falcon", "The wedjat eye"],
+      "colors": ["Blue", "Gold", "White"],
+      "metals": ["Iron (meteoritic iron, called 'metal of heaven' — bja n pt)"],
+      "weapons": ["Spear (used against Set in hippopotamus form)", "Was scepter"],
+      "consorts": ["Hathor"]
+    },
+    {
+      "id": "anubis",
+      "name": "Anubis",
+      "title": "God of Embalming and the Dead",
+      "group": "osirian",
+      "description": "Anubis — Inpu in Egyptian — is the jackal-headed god of mummification, cemeteries, and the passage between life and death. Before Osiris's rise to prominence in the Middle Kingdom, Anubis was the primary god of the dead, and the Pyramid Texts still reflect this older stratum: 'Anubis, who is upon his mountain' and 'Anubis, foremost of the divine booth (the embalming tent).' He invented mummification by embalming the body of Osiris — the first mummy — and he presides over the Opening of the Mouth ceremony, the ritual that restored the senses to the dead so they could eat, drink, and speak in the afterlife. In the Weighing of the Heart scene from the Book of the Dead, Anubis is the one who adjusts the scales and steadies the balance, ensuring accuracy — not judging, but measuring. Ammit, the devourer, waits beside the scales; Osiris sits enthroned behind; but Anubis operates the mechanism. He is the technician of death. His association with jackals is practical: jackals prowled the desert cemeteries at the edge of the Nile Valley, and the Egyptians, rather than seeing them as desecrators, transformed them into guardians. The black color of his canine head is not the color of any living jackal — it is the color of the embalming resins and the fertile Nile mud, linking death to preservation and renewal. He is the son of Nephthys (and Osiris, in most traditions), raised by Isis. Anubis models the human need for someone to tend the boundary between living and dead with precision and care — not the judge, but the one who makes sure the process is done right.",
+      "animals": ["Jackal (or African golden wolf)", "Dog"],
+      "colors": ["Black (embalming resin and Nile silt)", "Gold"],
+      "metals": ["Gold (funerary masks)"],
+      "weapons": ["Embalming tools", "Flail"]
+    },
+    {
+      "id": "thoth",
+      "name": "Thoth",
+      "title": "God of Wisdom and Writing",
+      "group": "celestial",
+      "description": "Thoth — Djehuty in Egyptian — is the ibis-headed god of writing, knowledge, mathematics, the moon, and the mediation of disputes. He invented hieroglyphs, which the Egyptians called medu netjer, 'words of the god.' He is the scribe of the gods, the recorder of the Weighing of the Heart in the Hall of Two Truths, standing beside the scales in the Papyrus of Ani with his reed pen and palette, writing down the result. He gambled with the moon (Khonsu, in Theban tradition) and won five extra days of light — the five epagomenal days that completed the 365-day calendar — enabling Nut to give birth to her five children despite Ra's curse. He restored the Eye of Horus after Set tore it out, and his mathematical calculation of the pieces gave rise to the Horus-eye fractions used in Egyptian measurement. His cult center was Hermopolis (Khmunu, 'City of Eight'), where an alternative creation myth held that eight primordial deities — the Ogdoad — existed before creation in four male-female pairs representing darkness, hiddenness, infinity, and formlessness. The Greeks identified him with Hermes, producing the syncretic figure Hermes Trismegistus, 'Thrice-Great Hermes,' whose attributed writings — the Hermetica — profoundly influenced Renaissance philosophy, alchemy, and Western esotericism. Thoth models the power of recording — the insight that knowledge becomes real when it is written, that the act of notation is itself a creative and preservative force.",
+      "animals": ["Ibis", "Baboon"],
+      "colors": ["Silver (the moon)", "White"],
+      "metals": ["Silver"],
+      "weapons": ["Reed pen and palette (scribal tools)"],
+      "consorts": ["Seshat (goddess of measurement and record-keeping)", "Ma'at (in some traditions)"]
+    },
+    {
+      "id": "hathor",
+      "name": "Hathor",
+      "title": "Goddess of Love, Beauty, and Music",
+      "group": "celestial",
+      "description": "Hathor — Het-Heru, 'House of Horus' — is the cow-goddess of love, beauty, music, dance, fertility, and drunkenness, and she is one of the oldest deities in Egypt, attested from the Early Dynastic period. Her temple at Dendera, largely built in the Ptolemaic and Roman periods but on a site sacred to her for millennia, contains the most extraordinary Hathor columns in Egypt: massive faces of the goddess on all four sides of the capitals, her cow ears and heavy wig repeated in stone over and over in the hypostyle hall. She carries the sistrum, a bronze rattle whose sound was believed to drive away evil, and her priests and priestesses were musicians. She is identified with the Eye of Ra — in the myth of the Destruction of Mankind, Ra sends her to punish a rebellious humanity, and she slaughters so enthusiastically that Ra, alarmed, has to flood a field with beer dyed red to look like blood. She drinks it, becomes drunk, and forgets her mission. Humanity survives because of beer. The Festival of Drunkenness, celebrated in her honor, reenacted this myth with real beer and real intoxication. She welcomed the dead into the western afterlife, emerging from the sycamore fig tree on the Theban hills to offer food and water to the newly arrived. Seven Hathors appeared at every birth to prophesy the child's fate. She models the intertwining of pleasure and danger — the recognition that ecstasy and destruction are closer than we like to admit, and that sometimes the thing that saves us is the thing that distracts us from our worst impulses.",
+      "animals": ["Cow", "Lioness (in her destructive Eye of Ra form)"],
+      "colors": ["Turquoise", "Gold", "Red"],
+      "metals": ["Copper", "Gold"],
+      "vegetation": ["Sycamore fig", "Papyrus"],
+      "weapons": ["Sistrum (sacred rattle)", "Menat necklace"],
+      "consorts": ["Horus (at Edfu)", "Ra (as his Eye)"]
+    },
+    {
+      "id": "sekhmet",
+      "name": "Sekhmet",
+      "title": "Goddess of War and Healing",
+      "group": "celestial",
+      "description": "Sekhmet — 'The Powerful One' — is the lioness-headed goddess of war, plague, and healing, and the theological logic of her dual nature is precise: the same force that brings disease also cures it. Her priests were among the earliest physicians in Egypt, and the Edwin Smith Papyrus — the oldest known surgical treatise, circa 1600 BCE — comes from a tradition associated with her priesthood. She is the wrathful form of Hathor, the Eye of Ra dispatched to destroy humanity, and her bloodlust was so extreme that it nearly ended the species. The Mut temple precinct at Karnak contained hundreds of Sekhmet statues — Amenhotep III commissioned at least 730, one for each day and night of the year — as a monumental act of appeasement, surrounding himself with her image to absorb and channel her fury. Her breath created the desert. Plague was her weapon; prayers to her were prophylaxis. She was Ptah's consort in the Memphite Triad, pairing the craftsman-creator with the destroying force — a theological marriage of making and unmaking. Her festivals involved heavy drinking, echoing the myth where beer saved humanity from her rage. Sekhmet models the oldest medical insight: that healing and harming are the same power directed differently, and that the physician who understands the disease is the one who can cure it.",
+      "animals": ["Lioness"],
+      "colors": ["Red", "Orange"],
+      "weapons": ["Arrows of plague", "Flaming breath"],
+      "consorts": ["Ptah"]
+    },
+    {
+      "id": "bastet",
+      "name": "Bastet",
+      "title": "Goddess of Home and Cats",
+      "group": "celestial",
+      "description": "Bastet began as a fierce lioness goddess, nearly indistinguishable from Sekhmet, and gradually softened — in art, theology, and popular devotion — into the cat-headed protector of the home, fertility, and women's concerns. By the Late Period, her cult center at Bubastis (Tell Basta) in the eastern Delta hosted one of the largest religious festivals in Egypt. Herodotus visited around 450 BCE and reported, with evident amazement, that 700,000 people attended, consuming more wine during the festival than in the rest of the year combined, with women lifting their skirts and shouting obscenities from boats in a ritual he found baffling but clearly effective. The shift from lioness to domestic cat tracks a larger theological pattern: the wild destructive feminine force (Sekhmet, the Eye of Ra) is not eliminated but domesticated, made approachable, given a place in the household. Egyptians mummified cats by the millions — the catacombs at Bubastis and Saqqara contained vast deposits, many killed deliberately as votive offerings, an uncomfortable fact about the cult. Bastet carried the sistrum and the aegis, linking her to Hathor. She protected against evil spirits and disease, particularly those threatening pregnant women and infants. She models the way cultures take something powerful and dangerous — the predator — and reshape it into something intimate, turning the lioness into the cat on the hearth without entirely forgetting what the cat still is.",
+      "animals": ["Cat (domestic)", "Lioness (early form)"],
+      "colors": ["Green", "Gold"],
+      "weapons": ["Sistrum", "Aegis"],
+      "vegetation": ["Catnip (nepeta)"]
+    },
+    {
+      "id": "maat",
+      "name": "Ma'at",
+      "title": "Goddess of Truth and Cosmic Order",
+      "group": "celestial",
+      "description": "Ma'at is both a goddess and a concept — truth, justice, cosmic order, the correct functioning of the universe — and the Egyptians did not distinguish between these. She is depicted as a woman wearing a single ostrich feather on her head, the same feather against which the heart of the dead is weighed in the Hall of Two Truths in Chapter 125 of the Book of the Dead. If the heart is lighter than or equal to the feather, the deceased passes into the afterlife; if heavier, Ammit devours it, and the person suffers a second, permanent death. The pharaoh's primary duty was to maintain Ma'at — to uphold truth and order against isfet (chaos, falsehood, injustice). This was not abstract ethics: Ma'at was the operating system of the cosmos. Without her, the sun would not rise, the Nile would not flood, the crops would not grow. Temple reliefs show the pharaoh presenting a small figure of Ma'at to the gods — offering reality itself back to its makers, promising that the human world is being kept in proper order. She has no dramatic myths, no quarrels, no lovers, no adventures. She is the standard against which everything else is measured. Her simplicity is the point. Ma'at models the human intuition that there is a right way the world works, and that when things go wrong it is because someone deviated from it — not a rule imposed from outside but a pattern inherent in the structure of things.",
+      "animals": ["Ostrich (the feather)"],
+      "colors": ["White", "Gold"],
+      "consorts": ["Thoth (in some traditions)"]
+    },
+    {
+      "id": "sobek",
+      "name": "Sobek",
+      "title": "God of the Nile and Crocodiles",
+      "group": "celestial",
+      "description": "Sobek is the crocodile god — lord of the Nile's waters, protector of the pharaoh, and embodiment of the river's terrifying fertility. His cult was strongest in the Fayum Oasis, where a canal from the Nile created a lush depression in the desert, and at Kom Ombo in Upper Egypt, where his temple shares space with Horus the Elder in one of the only double temples in Egypt. The Pyramid Texts already invoke him: 'Sobek, son of Neith, who came from the leg, who came from the tail, who came from the inundation.' Living crocodiles were kept in temple pools, adorned with gold earrings and bracelets, fed choice meats, and mummified after death with extraordinary care — thousands of crocodile mummies have been found at the Fayum and at Kom Ombo. Herodotus and Strabo both described the practice with a mixture of fascination and disbelief. Sobek's theological significance lies in the paradox he embodies: the Nile was Egypt's lifeline, and the crocodile was the Nile's apex predator. To worship the crocodile was to acknowledge that the source of life is also the source of death — that the river feeds and drowns, irrigates and floods. In some New Kingdom texts Sobek is identified with Ra-Sobek, absorbing solar aspects, while in the Osiris myth he is sometimes cast as having retrieved pieces of Osiris's body from the river. He models the ancient recognition that you cannot separate the gift from the danger, that the thing you depend on most is also the thing that can destroy you.",
+      "animals": ["Crocodile"],
+      "colors": ["Green", "Dark blue"],
+      "metals": ["Gold (adorned on living sacred crocodiles)"],
+      "vegetation": ["Papyrus", "Lotus"],
+      "consorts": ["Renenutet (in Fayum tradition)", "Hathor (in some traditions)"]
+    },
+    {
+      "id": "khnum",
+      "name": "Khnum",
+      "title": "The Potter God",
+      "group": "celestial",
+      "description": "Khnum is the ram-headed god of the Nile's source — or what the Egyptians believed was its source: the cataracts near Elephantine Island at Aswan, where the river surges through granite outcrops at the southern border of Egypt proper. His temple at Elephantine, one of the oldest cult sites in Egypt, positioned him as the controller of the inundation itself. He turned the caverns beneath the cataracts to release the annual flood. The Famine Stela at Sehel Island, carved in the Ptolemaic period but set in the reign of the Third Dynasty pharaoh Djoser, tells how Khnum ended a seven-year famine by agreeing to release the waters after the king restored his temple. But Khnum's most distinctive role is as potter: he fashions every human being and their ka (spiritual double) on his potter's wheel before birth, shaping the child in the womb from Nile clay. The Westcar Papyrus describes him attending royal births, and the Birth Colonnade at Hatshepsut's mortuary temple at Deir el-Bahari shows Khnum at his wheel forming the future queen and her ka side by side. He wears the Atef crown or horizontal spiraling horns, and his sacred animal is the ram — specifically the earlier flat-horned Ovis longipes, later replaced in iconography by the curved-horned Ovis aries. Khnum models the intimacy of creation at the most individual scale — not the cosmic burst of Ra or the intellectual word of Ptah, but the patient, hands-on shaping of each particular life, one at a time, on a wheel that never stops turning.",
+      "animals": ["Ram (Ovis longipes, the flat-horned variety)"],
+      "colors": ["Brown", "Ochre", "Blue"],
+      "vegetation": ["Lotus"],
+      "consorts": ["Satis (goddess of the inundation)", "Anuket (goddess of the cataracts)"]
+    }
+  ]
+}

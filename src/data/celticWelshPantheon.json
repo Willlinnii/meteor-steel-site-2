@@ -1,0 +1,138 @@
+{
+  "id": "celtic-welsh",
+  "name": "The Children of Dôn and Llŷr",
+  "description": "The Welsh mythological tradition survives primarily through the Four Branches of the Mabinogi, preserved in the White Book of Rhydderch (c. 1350) and the Red Book of Hergest (c. 1400), medieval manuscripts recording oral traditions centuries older. Yr Wyddfa — Snowdon — is the mountain where Vortigern's tower kept collapsing until the boy Merlin revealed two dragons fighting beneath it, one red, one white, locked in eternal combat under the stone. This is a pantheon rooted in transformation, wrongful punishment, and the strange logic of enchantment, where gods become animals, women are made from flowers, and a severed head entertains its companions for eighty-seven years.",
+  "deities": [
+    {
+      "id": "arianrhod",
+      "name": "Arianrhod",
+      "title": "Goddess of the Silver Wheel",
+      "group": "don",
+      "description": "Arianrhod ferch Dôn is the keeper of the revolving castle Caer Sidi — the Silver Wheel, spinning in the northern sky, identified with the Corona Borealis. In the Fourth Branch of the Mabinogi, Math fab Mathonwy requires a virgin footholder, and Arianrhod is brought forward to be tested. She steps over Math's magic wand and immediately drops two children — Dylan, who swims to the sea the moment he is named, and a small form that Gwydion snatches up and hides in a chest. The humiliation is public and total. Arianrhod responds not with submission but with three curses on the hidden child: he shall have no name unless she gives it, he shall bear no arms unless she arms him, he shall have no wife of any human race. Each curse is a refusal of maternal acknowledgment — and each one Gwydion defeats through trickery, disguise, and illusion. The name she inadvertently gives is Lleu Llaw Gyffes, 'the bright one of the skillful hand.' What makes Arianrhod remarkable in comparative mythology is that she is neither villain nor victim. She is a woman who was publicly shamed and who weaponizes the only power left to her — the power to withhold recognition. Her story asks a question that psychology would not formally articulate for another eight hundred years: what happens when a mother refuses to see her child? The Silver Wheel turns regardless, indifferent to human need, marking fate in the circumpolar stars that never set.",
+      "animals": ["owl (Blodeuwedd's transformation, connected through Lleu's story)"],
+      "colors": ["silver", "white"],
+      "consorts": ["none named in the Mabinogi — her autonomy is the point"]
+    },
+    {
+      "id": "gwydion",
+      "name": "Gwydion",
+      "title": "The Magician-Warrior",
+      "group": "don",
+      "description": "Gwydion fab Dôn is the great enchanter of the Fourth Branch, a figure who operates through illusion, language, and strategic deception. He engineers a war with Pryderi of Dyfed by conjuring illusory horses and hounds from fungus to trade for Pryderi's magical pigs, a gift from Annwn. When the enchantment fades and the illusions revert to toadstools, the resulting war costs Pryderi his life. But Gwydion's own punishment comes first. For aiding his brother Gilfaethwy in the rape of Math's footholder Goewin, Math transforms them both into mating pairs of animals for three years — deer, boar, wolf — each year swapping which brother bears the young. Not death, not exile, but forced experience of the other's position, including pregnancy and birth. After his penance, Gwydion becomes Lleu's protector and foster-father, outwitting Arianrhod's curses through elaborate disguises and commissioning Blodeuedd — the woman made of flowers — as a wife for Lleu. That creation, too, ends in betrayal and transformation. The poem Cad Goddeu (The Battle of the Trees) describes Gwydion animating the trees of the forest to fight as warriors — birch, alder, willow, oak — each with its own character. His magic in the Mabinogi is never cost-free. Every illusion generates real consequences; every trick produces genuine suffering. He is brilliant, morally compromised, and indispensable. The text does not ask you to admire him. It asks you to watch what cleverness costs.",
+      "animals": ["deer, boar, wolf (his punishment forms)"],
+      "weapons": ["magic wand", "illusion"],
+      "consorts": ["none — his relationships are defined by manipulation rather than partnership"],
+      "colors": ["deep blue", "grey"]
+    },
+    {
+      "id": "math",
+      "name": "Math fab Mathonwy",
+      "title": "King and Sorcerer",
+      "group": "don",
+      "description": "Math son of Mathonwy is the lord of Gwynedd and the most powerful magician in the Four Branches, but his power comes with a peculiar constraint: unless he is at war, his feet must rest in the lap of a virgin, or he will die. This is not decoration. The footholder requirement is the narrative engine of the entire Fourth Branch — when Gilfaethwy desires the current footholder Goewin, Gwydion engineers a war to draw Math away, and the resulting crime and punishment cascade drives every event that follows. Math's response to the crime is immediate and structural: he marries Goewin to restore her honor and status, then punishes his nephews with the animal transformations. He does not rage. He reconfigures the social order to account for the damage. When Arianrhod fails the virginity test, it is Math's wand she steps over — the instrument of truth that strips away pretense. When Lleu needs a wife, Math and Gwydion conjure Blodeuedd from the flowers of oak, broom, and meadowsweet. Math represents sovereignty that depends on an intimate, ritualized connection to sanctity. The king's power is not self-sustaining. It requires physical contact with something uncorrupted. Remove that contact and the king weakens — a political theology expressed as bodily fact, resonating with the broader Celtic understanding that the land's fertility depends on the rightness of the ruler.",
+      "weapons": ["magic wand (the instrument of truth and transformation)"],
+      "colors": ["purple", "deep gold"]
+    },
+    {
+      "id": "lleu",
+      "name": "Lleu Llaw Gyffes",
+      "title": "The Bright One of the Skillful Hand",
+      "group": "don",
+      "description": "Lleu Llaw Gyffes — cognate with the Irish Lugh Lámfada and the Gaulish Lugus — is the solar hero of the Fourth Branch, but the Welsh tradition strips away the triumphalism that attaches to his Irish counterpart. He enters the story as a nameless thing snatched from the floor by Gwydion, grows unnaturally fast, and has his identity constructed through trickery against his own mother's wishes. Arianrhod's three curses mean that every marker of personhood — name, arms, wife — must be stolen for him. His wife Blodeuedd, made from flowers, falls in love with Gronw Pebr and conspires to murder Lleu. The method of his killing is hedged with impossible conditions: he can be killed neither indoors nor outdoors, neither on horseback nor on foot, neither clothed nor naked — standing with one foot on a cauldron's rim and one on a goat's back, struck by a spear forged only during Sunday mass. Blodeuedd extracts these conditions by feigning concern for his safety. When the spear strikes, Lleu transforms into an eagle and flies to a tree, rotting and shedding maggots until Gwydion sings him back into human form with three englynion. He recovers, reclaims his territory, and takes vengeance. Blodeuedd is turned into an owl — condemned to hunt alone in darkness, shunned by all other birds. The story maps a complete death-and-resurrection cycle, but the Welsh version emphasizes vulnerability over glory. Lleu's brightness needs others to sustain it.",
+      "animals": ["eagle (his transformed state)", "owl (Blodeuedd's punishment form)"],
+      "weapons": ["spear"],
+      "consorts": ["Blodeuedd (the woman made of flowers — oak, broom, meadowsweet)"],
+      "colors": ["gold", "bright white"]
+    },
+    {
+      "id": "dylan",
+      "name": "Dylan Eil Ton",
+      "title": "Son of the Wave",
+      "group": "don",
+      "description": "Dylan Eil Ton appears for only a few sentences in the Fourth Branch and yet leaves a permanent mark on the Welsh landscape. When Arianrhod steps over Math's wand and drops two forms, the first is a sturdy boy. He is baptized and named Dylan, and the moment he receives his name he makes for the sea and takes on its nature, swimming as well as any fish. No wave ever broke beneath him. He is killed by his uncle Govannon — the divine smith, cognate with the Irish Goibniu — with a blow whose cause the text never explains. One of the great silences of the Mabinogi. The waves' lamentation for Dylan is said to be the sound of the sea rushing up the River Conway, and coastal features in northwest Wales bear his name. The Triads list his death as one of the Three Unfortunate Blows of the Island of Britain. He represents something the Mabinogi values but cannot hold: the figure who belongs entirely to nature, who was never meant for the human world's systems of naming, arming, and marrying that his twin Lleu must navigate. Dylan touches culture for one instant — the act of baptism — and immediately returns to the elemental. His murder by a kinsman, unexplained and unmotivated, reads as the violence culture inevitably commits against what is purely natural. The sea mourns because it lost one of its own to a name.",
+      "animals": ["fish", "seabirds (associated through coastal lore)"],
+      "colors": ["sea green", "deep blue", "foam white"]
+    },
+    {
+      "id": "branwen",
+      "name": "Branwen",
+      "title": "The Beautiful Crow",
+      "group": "llyr",
+      "description": "Branwen ferch Llŷr is the central figure of the Second Branch, and her story is one of the most devastating in medieval European literature. She is given in marriage to Matholwch, king of Ireland, to seal a peace. But her half-brother Efnysien, who was not consulted, mutilates Matholwch's horses, and though Brân compensates with gifts including the Cauldron of Rebirth, the damage festers. In Ireland, Branwen is punished for the insult she never committed: driven to the kitchen, where the butcher strikes her on the ear each day with his bloody hands. She endures this for three years. The Triads name her one of the Three Great Queens of Britain. She trains a starling to carry a message across the Irish Sea to Brân, and her brother raises the entire island of Britain in a war of rescue that destroys both nations. Seven men survive from Britain; none from Ireland. When Branwen lands on Anglesey and looks back at the devastation on both shores, she dies of a broken heart. 'A great heart broke within her,' the text says. She is buried on the banks of the Alaw. Branwen's story is about the person on whom consequences land, not the person who caused them. She is the peace offering, the human currency exchanged between men, absorbing the full cost of their failures. Her psychological portrait — endurance, silence, the trained starling as her only agency — has no parallel in contemporary medieval literature.",
+      "animals": ["starling (her messenger)", "crow (her name: brân = crow, wen = white/blessed)"],
+      "colors": ["white", "black", "blood red"]
+    },
+    {
+      "id": "bran",
+      "name": "Brân the Blessed",
+      "title": "The Giant King",
+      "group": "llyr",
+      "description": "Bendigeidfran — Brân the Blessed — is the giant king of Britain in the Second Branch, so vast that no house or ship can contain him. When he crosses the Irish Sea to rescue Branwen, he wades, carrying his musicians on his back while the fleet sails beside him. The war annihilates both armies. The Irish reanimate their dead with the Cauldron of Rebirth until Efnysien destroys it from within, breaking his own heart. Brân is wounded in the foot by a poisoned spear — a wound that echoes into the Arthurian Fisher King — and commands his seven surviving companions to cut off his head. The severed head remains alive and eloquent, entertaining them for eighty-seven years at Harlech and Gwales in an enchanted feast where time stops and grief cannot touch them, until someone opens the forbidden door facing Cornwall and all the sorrow crashes in at once. Brân commands them to bury his head at the White Hill in London, facing France, to protect Britain from invasion. The Triads say Arthur later dug it up, declaring Britain needed no protection but his own arm. Brân's talking head is the Welsh imagination at its strangest: wisdom outliving the body, the dead king's counsel persisting, a threshold between grief and forgetting that enchantment can hold open but never permanently. The eighty-seven years at Gwales is the Mabinogi's most psychologically precise image — the long denial before loss becomes real.",
+      "animals": ["raven/crow (brân = crow in Welsh)", "wren (linked through Celtic bird-lore)"],
+      "weapons": ["none — his body is the weapon; his head is the talisman"],
+      "consorts": ["none named"],
+      "colors": ["black", "deep green", "bone white"]
+    },
+    {
+      "id": "manawydan",
+      "name": "Manawydan fab Llŷr",
+      "title": "God of the Sea and Craft",
+      "group": "llyr",
+      "description": "Manawydan son of Llŷr is the protagonist of the Third Branch, and he is unlike almost every other divine figure in Celtic mythology: he does not fight his way out of trouble. One of the seven who survived the war in Ireland, after the enchantment of Brân's talking head breaks and grief floods in, Manawydan has no kingdom — Caswallon son of Beli has usurped Britain. Pryderi offers him the lordship of Dyfed and the hand of Rhiannon; Manawydan accepts both. When a magical mist descends and empties the land of all people and livestock, Manawydan does not quest for a magical solution. He takes up craft — saddler, shield-maker, shoemaker — and each time his work is so excellent that local craftsmen drive him out of jealousy. His response is always to move on. When Pryderi and Rhiannon are trapped in an enchanted fortress, Manawydan plants wheat. When mice devour his crop, he catches one and threatens to hang it, and this single act of precise, patient leverage breaks the entire enchantment — the mouse is the pregnant wife of the sorcerer Llwyd, who had cursed Dyfed to avenge an old wrong. His cognate Manannán mac Lir in Irish tradition is a magnificent sea god with a chariot of waves and a cloak of mist. The Welsh version defeats enchantment by planting grain and threatening a rodent. It is one of the great demythologizations in world literature — and it works because the patience is real.",
+      "animals": ["mice (the instrument of his victory)", "horses (through his marriage to Rhiannon)"],
+      "colors": ["sea grey", "brown", "earth tones"],
+      "consorts": ["Rhiannon"]
+    },
+    {
+      "id": "nisien-efnysien",
+      "name": "Nisien and Efnysien",
+      "title": "The Twin Brothers of Peace and Strife",
+      "group": "llyr",
+      "description": "Nisien and Efnysien are the half-brothers of Brân, Branwen, and Manawydan — sons of Euroswydd and Penarddun. The Second Branch introduces them with absolute economy: Nisien could make peace between two armies; Efnysien could set two brothers at war when they were most loving. That is all the characterization the text provides, and it is enough. When Branwen is given in marriage to Matholwch without Efnysien's consent, he mutilates the Irish king's horses — cutting lips to teeth, ears to skull, tails to spine — not because he loves Branwen but because he was excluded from the decision. The insult sets in motion the chain of humiliations that leads to Branwen's punishment and the war that annihilates both kingdoms. Yet in the final battle, when the Irish use the Cauldron of Rebirth to reanimate their dead and the situation becomes hopeless, it is Efnysien who resolves it. He lies among the Irish corpses, is thrown into the cauldron, and stretches himself until it shatters — his heart bursting with the effort. The agent of destruction becomes the instrument of salvation. It costs him everything. Nisien, by contrast, does nothing in the narrative. He is the road not taken, the peace that was available and unused, present as a structural silence. Together they are the Mabinogi's most economical statement about human nature: the capacity for reconciliation and the capacity for catastrophic damage exist in the same family, and choosing which one speaks is the only decision that matters.",
+      "colors": ["white and black (the duality)", "blood red (the cost)"]
+    },
+    {
+      "id": "rhiannon",
+      "name": "Rhiannon",
+      "title": "Goddess of Horses and the Otherworld",
+      "group": "other",
+      "description": "Rhiannon first appears in the First Branch riding a pale horse past the mound of Arberth, and no rider can catch her — until Pwyll simply asks her to stop. She has come from the Otherworld to find him, rejecting the suitor her family chose. After marrying Pwyll and bearing their son, disaster: the infant disappears, and the women attending the birth, terrified of punishment, smear dog's blood on Rhiannon's face and claim she devoured her own child. Rhiannon does not protest. She accepts the punishment: to sit at the mounting block for seven years, tell every visitor what she has supposedly done, and offer to carry them on her back into the court like a horse. She does this. Pryderi is eventually found and restored, but the text lingers on those years of penance with unflinching attention. She becomes the beast of burden she is falsely said to have become — the monstrous mother — and endures it in silence. Her association with horses connects her to the Gaulish Epona and the Irish Macha, who cursed the Ulstermen with birth-pangs for forcing her to race while pregnant. These horse-goddesses share a pattern: sovereignty, humiliation, endurance, revelation of innocence. The Birds of Rhiannon, mentioned in the Second Branch, could sing the dead to sleep and wake the living. That she chooses silence is the detail that makes the First Branch one of the most psychologically acute texts of the European Middle Ages.",
+      "animals": ["white horse", "Birds of Rhiannon (enchanted songbirds)", "dogs (through the false accusation)"],
+      "consorts": ["Pwyll (first husband, Lord of Dyfed)", "Manawydan fab Llŷr (second husband)"],
+      "colors": ["white", "pale gold", "green"]
+    },
+    {
+      "id": "pryderi",
+      "name": "Pryderi",
+      "title": "Son of Rhiannon, Lord of Dyfed",
+      "group": "other",
+      "description": "Pryderi fab Pwyll is the only character who appears in all Four Branches, and his arc follows the trajectory of a human life: miraculous birth, abduction, fostering, inheritance, marriage, war, enchantment, death. He is stolen from his mother's side on the night of his birth by a monstrous claw — the same force raiding the foals of Teyrnon Twrf Liant every May Eve. Teyrnon finds the infant alongside a newborn colt, raises him, and eventually recognizes his parentage. Rhiannon names him Pryderi — 'anxiety' — because his loss was her worry and his return ended it. He inherits Dyfed, marries Cigfa, and gives his mother in marriage to Manawydan. In the Third Branch, he is lured into an enchanted fortress by a golden bowl and frozen in place, trapped alongside Rhiannon while Manawydan works patiently to break the spell. In the Fourth Branch, Gwydion tricks him out of the magical pigs of Annwn using conjured illusions, and in the resulting war Pryderi is killed in single combat — magician against warrior, and the magician wins. His death is not heroic in the conventional sense: he is outmatched by someone who fights with enchantment rather than skill. His life is shaped by forces he does not control — abduction, his mother's suffering, Dyfed's enchantment, Gwydion's deception. He is the Mabinogi's mortal protagonist, the character whose experience is most like the reader's: someone trying to act honorably within circumstances never of his making.",
+      "animals": ["horses (born alongside a foal)", "pigs (the magical swine of Annwn that cost him his life)"],
+      "weapons": ["sword"],
+      "consorts": ["Cigfa"],
+      "colors": ["brown", "gold", "earth tones"]
+    },
+    {
+      "id": "gwyn-ap-nudd",
+      "name": "Gwyn ap Nudd",
+      "title": "King of Annwn, Lord of the Wild Hunt",
+      "group": "other",
+      "description": "Gwyn ap Nudd is the king of Annwn — the Welsh Otherworld, not a realm of the dead in the Christian sense but a parallel world of beauty, feasting, and timelessness, located sometimes beneath the earth, sometimes across the sea, sometimes in the hollow hills. In Culhwch and Olwen, God has placed in Gwyn the spirit of the demons of Annwn to prevent them from destroying the world. He is both jailer and king — the figure who contains darkness by ruling it. He fights Gwythyr fab Greidawl every May Day for Creiddylad ferch Lludd, and this combat must repeat every Calan Mai until Judgment Day — an annual ritual echoing the seasonal struggle between summer and winter across Indo-European tradition. The Cŵn Annwn — red-eared, white-bodied hounds of the Otherworld — run before him on the Wild Hunt, and their baying grows quieter the closer they approach, a detail of inverted sound that is one of the most unnerving images in Welsh folklore. In the Black Book of Carmarthen, a dialogue poem gives Gwyn a voice of terrible authority: he has been present at every great battle of the mythological age, witnessing slaughter without aging. He knows where every warrior fell. He is the memory of violence without the mercy of forgetting. Yr Wyddfa's summit, wreathed in cloud more days than not, was one of the landscapes associated with his passage between worlds.",
+      "animals": ["Cŵn Annwn (white hounds with red ears)", "horse (black)"],
+      "weapons": ["sword"],
+      "consorts": ["Creiddylad ferch Lludd (fought over annually with Gwythyr)"],
+      "colors": ["white", "red (the hounds' ears)", "black"]
+    },
+    {
+      "id": "cerridwen",
+      "name": "Cerridwen",
+      "title": "Goddess of the Cauldron and Transformation",
+      "group": "other",
+      "description": "Cerridwen is the keeper of the Cauldron of Inspiration (Awen), and her story — preserved in the Tale of Taliesin — is the most complete transformation myth in Welsh literature. She has two children: the beautiful Creirwy and the hideous Morfran (Afagddu, 'utter darkness'). To compensate, she brews a potion of inspiration, gathering herbs according to the Pheryllt and setting a boy named Gwion Bach to stir it for a year and a day. Three drops splash onto Gwion's thumb; he receives all the knowledge intended for Morfran. Cerridwen pursues him in a shape-shifting chase: he becomes a hare, she a greyhound; a fish, an otter; a bird, a hawk; a grain of wheat, a black hen — and she swallows him. Nine months later she gives birth to him, so beautiful she cannot kill him. She sews him into a leather bag and throws him into the sea. He is found in a salmon weir by Elphin, who names him Taliesin — 'radiant brow' — the greatest poet of the Britons. The story is alchemical: the cauldron, the year-long brew, the accidental illumination, the dissolution through elemental forms, the rebirth. Cerridwen is not evil. She is a mother trying to give her disadvantaged son a gift, and the universe redirects it. Her cauldron surfaces across Welsh tradition as a vessel of rebirth — the same vessel that becomes the Grail in Arthurian romance. She is the initiator: the force that dissolves the old form so the new can emerge.",
+      "animals": ["greyhound", "otter", "hawk", "black hen (her pursuit forms)", "sow (associated in later folk tradition)"],
+      "weapons": ["the Cauldron of Awen (Inspiration)"],
+      "vegetation": ["herbs of the Pheryllt (unnamed, gathered by astrological timing)"],
+      "colors": ["black", "deep green", "cauldron-fire gold"]
+    }
+  ]
+}

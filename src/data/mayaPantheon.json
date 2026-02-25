@@ -1,0 +1,148 @@
+{
+  "id": "maya",
+  "name": "The K'uhul",
+  "description": "The Maya understood divinity as k'uhul — a sacred force flowing through blood, breath, sap, and stone. Their gods inhabited a layered cosmos of thirteen heavens and nine underworld levels, connected by the great ceiba tree whose roots drank from the waters below. At Chichén Itzá, the Sacred Cenote plunged sixty feet through limestone to dark water, a geological aperture the Maya recognized as a mouth of Xibalba itself — the place where offerings, prayers, and the dead passed from the middle world into the realm beneath.",
+  "deities": [
+    {
+      "id": "itzamna",
+      "name": "Itzamna",
+      "title": "The Supreme Creator",
+      "group": "creator",
+      "description": "Itzamna is the aged lord at the apex of the Maya cosmos, depicted on Late Classic polychrome ceramics as a toothless old man with a Roman nose, sunken cheeks, and a square eye marked with the ik' (wind/breath) glyph. The Dresden Codex shows him seated on a celestial throne pouring water from an inverted vessel, the original rain before Chaac inherited the duty. He invented writing, the calendar, and cacao cultivation — three technologies the Maya considered inseparable from civilization itself. His name, parsed from the glyphs, likely means 'Iguana House' or 'Lizard House,' placing the supreme creator inside a reptilian body, a cold-blooded architect of a world built on scales and patience. At Chichén Itzá, the astronomers who calibrated the Caracol observatory worked under his patronage, aligning their instruments with Venus stations and solstice markers. His consort Ix Chel governed the other half of creation — medicine, weaving, childbirth — making their pairing a division of knowledge rather than merely of gender. Itzamna never appears as a warrior. He does not carry weapons. In a pantheon saturated with sacrifice and blood, the supreme creator's defining attribute is that he taught people how to read. The psychological implication is striking: the Maya placed literacy and astronomical calculation, not martial power, at the origin of their cosmic order. The god who made the world did so with a codex, not a blade.",
+      "animals": ["iguana", "hummingbird", "deer"],
+      "colors": ["white", "sky blue"],
+      "consorts": ["Ix Chel"]
+    },
+    {
+      "id": "ix-chel",
+      "name": "Ix Chel",
+      "title": "Goddess of the Moon, Medicine, and Weaving",
+      "group": "creator",
+      "description": "Ix Chel appears in two distinct aspects across Maya art: the young lunar goddess, beautiful and fertile, associated with sexuality, weaving, and the waxing moon; and the aged Chak Chel, the Old Red Goddess, depicted on painted ceramics as a fearsome crone with jaguar claws, a writhing serpent headdress, and an inverted water jar from which she unleashes floods. The Madrid Codex shows her at her backstrap loom, the threads of creation pulled taut between her body and the cosmic frame. Her island sanctuary at Cozumel drew pilgrims from across the Maya world, women especially traveling by sea to petition her for safe childbirth. At the Sacred Cenote at Chichén Itzá, jade figurines of female deities were cast into the water as offerings, many bearing her iconographic markers. She is the patroness of midwives, herbalists, and diviners — the keepers of practical knowledge that sustained communities between wars and harvests. Her dual nature tracks the moon's own duality: the bright crescent that guides night travelers and the dark phase associated with menstruation, transformation, and the dangerous passage between states. The Maya did not separate medicine from weaving from lunar observation; Ix Chel held all three because to them these were a single discipline: reading the pattern, diagnosing the disruption, restoring the thread. Every healer was, in her tradition, also an astronomer.",
+      "animals": ["rabbit", "jaguar", "serpent"],
+      "colors": ["red", "white", "silver"],
+      "consorts": ["Itzamna"],
+      "vegetation": ["cotton"]
+    },
+    {
+      "id": "kukulkan",
+      "name": "Kukulkan",
+      "title": "The Feathered Serpent",
+      "group": "creator",
+      "description": "Kukulkan is the Maya iteration of the Feathered Serpent, cognate with the Aztec Quetzalcoatl but distinct in cult and expression. At Chichén Itzá, his presence is architectural before it is mythological: the El Castillo pyramid produces, at every spring and autumn equinox, a shadow-play of seven triangles of light descending the northern balustrade to meet the carved serpent head at the base, a phenomenon so precisely engineered that it has drawn crowds for over a thousand years. The pyramid has 365 steps, 91 per side plus the temple platform, encoding the solar year in stone. Feathered serpent columns at the Temple of the Warriors show his form at monumental scale — rattlesnake bodies fringed with quetzal plumage, creatures that should not exist but that unite earth (serpent) and sky (bird) into a single theological statement. The Postclassic sources associate him with wind, Venus, and the introduction of new arts and governance to Yucatán. Some accounts describe a historical Kukulkan who arrived from the west and reorganized the political structure of the city. The cenote sits within walking distance of El Castillo, and the processional sacbe (raised white road) that connects them suggests a ritual circuit linking the sky god's pyramid to the underworld's mouth. What the Maya built at Chichén Itzá was a theology you could walk through: from the serpent of light descending the pyramid at equinox to the dark water where the serpent's domain continued below the limestone.",
+      "animals": ["quetzal bird", "rattlesnake"],
+      "colors": ["green", "turquoise", "white"],
+      "weapons": ["wind", "lightning"]
+    },
+    {
+      "id": "kinich-ahau",
+      "name": "K'inich Ahau",
+      "title": "The Sun God",
+      "group": "creator",
+      "description": "K'inich Ahau, the Sun-Eyed Lord, is depicted with large square eyes, a prominent aquiline nose, filed teeth arranged in the k'in (sun/day) glyph pattern, and the distinctive cross-eyed gaze the Maya considered a mark of divine beauty — they hung beads before infants' eyes to encourage it. He traverses the sky by day as a resplendent lord and at nightfall enters Xibalba, transforming into the Jaguar God of the Underworld, his solar brilliance becoming the spotted pelt of the nocturnal predator. This is not metaphor; the Maya recorded it as astronomical fact mapped onto biology. The sun enters the earth the way a jaguar enters the forest: by changing its skin. At Palenque, K'inich Janaab Pakal, the greatest of the Classic kings, took this god's name and was buried with a jade mosaic mask that merged his face with the solar deity's, descending into his sarcophagus along a psychoduct designed to channel his spirit downward — into the earth, through the underworld, and back to the sky. The Sacred Cenote at Chichén Itzá faces the equinox sunrise, and gold disks recovered from its depths bear repoussé images of solar warfare, the sun god presiding over scenes of battle and sacrifice. Each morning's sunrise was not automatic; it was the sun's successful emergence from the underworld, a victory earned through nightly combat with the Lords of Death. The Maya watched it happen from the cenote's edge, standing at the border between the world of light and the waters that swallowed it.",
+      "animals": ["macaw", "jaguar (night aspect)", "eagle"],
+      "colors": ["gold", "red", "orange"],
+      "consorts": ["Ix Chel (in some traditions)"]
+    },
+    {
+      "id": "chaac",
+      "name": "Chaac",
+      "title": "God of Rain and Lightning",
+      "group": "creator",
+      "description": "Chaac is the long-nosed, fanged rain god whose face appears more frequently in Maya architecture than any other deity. The facades of Puuc-style buildings at Uxmal and Kabáh are stacked floor to ceiling with his hook-nosed stone masks, hundreds of Chaac faces peering from limestone as if the rain god were embedded in the geology. He wields a lightning axe and splits open the stone of the sky to release water. There are four Chaacs stationed at the four cardinal directions, each associated with a color: red east, white north, black west, yellow south. The Yucatan Peninsula has no surface rivers. The limestone karst absorbs all rainfall into an underground aquifer accessed only through cenotes. This geological fact made Chaac not merely important but existential; without his rain filling the underground reserves, every city died. The Sacred Cenote at Chichen Itza was, in the most literal sense, Chaac's collection basin. Offerings cast into its waters — jade, gold, copal, and human sacrifices, mostly children and young adults according to the physical anthropology of recovered remains — were directed to him as much as to the lords below. The cha-chaac ceremony, still performed in Yucatec Maya villages today, stations four boys at the corners of a milpa field croaking like frogs to summon rain. It has been continuous for a thousand years. Where water hides underground, the rain god decides whether it surfaces.",
+      "animals": ["frog", "serpent", "turtle"],
+      "weapons": ["lightning axe (stone axe)", "K'awiil scepter"],
+      "colors": ["blue", "red", "white", "black", "yellow"],
+      "vegetation": ["maize"]
+    },
+    {
+      "id": "ah-puch",
+      "name": "Ah Puch",
+      "title": "God of Death",
+      "group": "xibalba",
+      "description": "Ah Puch, also known as Kisin ('The Flatulent One' — the Maya associated decomposition gases with his presence), is the skeletal lord of the ninth and lowest level of Xibalba. The Dresden Codex shows him as a bloated corpse with a distended belly marked with death spots, wearing a collar of disembodied eyes, his own skull exposed where flesh has rotted away. He presides over the condition of death itself, distinct from the Lords of Xibalba who govern death's bureaucracy. His owl messengers, the moan birds, announced death's approach; when one perched on a house, the family prepared for loss. Classic Maya funerary ceramics show him dancing with other death gods, capering amid bones and eyeballs with a glee that reads less as malice than as professional enthusiasm. At the Sacred Cenote, his domain begins at the waterline. The dark zone below, where sunlight cannot penetrate and the cold water column drops into cave systems, was the physical entry to his realm. Archaeologists have recovered human remains from the cenote's bottom showing no signs of violence prior to the fall — the water itself was the instrument. The Maya did not fear Ah Puch the way European cultures feared Satan; they negotiated with him. Death was not evil but a station, a place you passed through, and if your family left the right offerings, the passage was navigable. He stank, he grinned, he danced — but he was honest about what he was.",
+      "animals": ["owl (moan bird)", "dog", "vulture"],
+      "colors": ["black", "yellow", "white (bone)"],
+      "consorts": ["Ixtab (in some traditions)"]
+    },
+    {
+      "id": "hun-hunahpu",
+      "name": "Hun Hunahpu",
+      "title": "Father of the Hero Twins",
+      "group": "xibalba",
+      "description": "Hun Hunahpu is the father whose death makes the Hero Twins' story possible — the original ballplayer who descended to Xibalba with his brother Vucub Hunahpu, summoned by the Lords of the Underworld because the noise of their ball game disturbed the death gods below. The Popol Vuh records their defeat in clinical detail: they failed the trials of the Dark House, the Razor House, the Cold House, the Jaguar House, and the Bat House. The Lords sacrificed them and buried their bodies beneath the ball court, but hung Hun Hunahpu's severed head in a calabash tree as a trophy. When the maiden Xquic, daughter of a Xibalba lord, approached the tree, the skull spat into her hand, impregnating her with the Hero Twins. This is the Maya annunciation: divinity transmitted through saliva, through a skull that is also a fruit, through a dead man who is not finished. The calabash gourd, round and pale, became the visual cognate of the skull, and the Maya saw both when they looked at either. At the Sacred Cenote, severed heads were among the offerings — not as brutality but as theological recapitulation, placing the skull in the watery underworld, at the root of the tree, where the cycle of death and conception could begin again. Hun Hunahpu is not a hero. He is the failed first attempt, the father who could not defeat death but whose defeat gave death a weakness: the twins who would return and learn from his mistakes.",
+      "animals": ["calabash tree (his skull)"],
+      "colors": ["green (maize)", "white (bone)"],
+      "consorts": ["Xquic (Blood Moon maiden — mother of his sons)", "Xbaquiyalo (first wife)"]
+    },
+    {
+      "id": "hunahpu",
+      "name": "Hunahpu",
+      "title": "Hero Twin of the Sun",
+      "group": "xibalba",
+      "description": "Hunahpu, whose name means 'One Blowgunner,' is the elder Hero Twin whose journey through Xibalba with his brother Xbalanque constitutes the central narrative of the Popol Vuh. The twins grew up as hunters, dispatching the vain bird-demon Vucub Caquix (Seven Macaw) by shooting him in the jaw with a blowgun pellet, then enlisting two old gods disguised as healers to pull out his jeweled teeth and gouge out his jeweled eyes, reducing his false sun to nothing. Summoned to Xibalba like their father, the twins succeeded where he had failed — not through strength but through intelligence. They sent a mosquito ahead as a spy, which bit each Lord of Xibalba in sequence, causing them to cry out their own names. This gave the twins the critical knowledge their father lacked: in Xibalba, knowing a lord's name gave power over him. When the lords burned them to ash, the twins had arranged for their bones to be ground and scattered in the river, from which they regenerated as catfish, then as wandering performers. They danced the miracle of sacrifice-and-resurrection before the lords — cutting each other to pieces and restoring life — until the lords demanded to experience it themselves. The twins obliged the first half and declined the second. Hunahpu rose as the sun. The ball courts at Chichen Itza echo the court where the game between life and death was played. The twins' lesson is specific: the underworld is beatable, but only if you study it first.",
+      "animals": ["mosquito (spy)", "catfish (reborn form)", "macaw"],
+      "weapons": ["blowgun", "rubber ball"],
+      "colors": ["red", "black (body paint — large spots)"]
+    },
+    {
+      "id": "xbalanque",
+      "name": "Xbalanque",
+      "title": "Hero Twin of the Moon",
+      "group": "xibalba",
+      "description": "Xbalanque, the Jaguar Sun, is the younger Hero Twin, depicted in Classic Maya art with patches of jaguar skin on his cheeks and body — his name likely derives from 'balam' (jaguar) and 'k'in' (sun/day), making him the nocturnal complement to his brother's solar identity. Where Hunahpu is the strategist, Xbalanque is the trickster. In the Popol Vuh, it is Xbalanque who devises the rabbit trick during the ball game in Xibalba: when Hunahpu's head is taken by the lords and used as a ball, Xbalanque substitutes a carved squash on his brother's neck and convinces a rabbit to bounce along the sideline at the critical moment, distracting the lords so he can recover the real head. The deception works because Xbalanque understands that Xibalba's power depends on spectacle, and spectacle can be hijacked. After defeating the lords, Xbalanque rose as the full moon, and the Maya tracked his cycles with the same precision they applied to every celestial body. His jaguar aspect connects him to the night sun, the transformed K'inich Ahau who passes through the underworld in feline form. At the cenote's edge, where the water surface acts as a mirror between worlds, Xbalanque's domain begins — the reflected, the lunar, the trickster light that operates by indirection. The twins' partnership encodes a truth the Maya considered foundational: the direct confrontation (Hunahpu, the sun) requires the oblique strategy (Xbalanque, the moon). You need both to survive the underworld.",
+      "animals": ["jaguar", "rabbit (the trick)", "deer"],
+      "weapons": ["blowgun", "rubber ball"],
+      "colors": ["black (body paint — jaguar patches)", "white"]
+    },
+    {
+      "id": "lords-of-xibalba",
+      "name": "The Lords of Xibalba",
+      "title": "Rulers of the Underworld",
+      "group": "xibalba",
+      "description": "The Popol Vuh names the Lords of Xibalba in pairs, each governing a specific mode of death: One Death and Seven Death rule the council; Scab Stripper and Blood Gatherer cause fatal bloodletting diseases; Flying Scab and Gathered Blood produce pus and infection; Bone Scepter and Skull Scepter cause emaciation; Wing and Packstrap cause sudden death on the road; Bandage and Bloody Teeth cause uncontrollable hemorrhaging. This is not mythology abstracted from reality — it is epidemiology organized as theology. The Maya faced every one of these deaths daily, and by naming the agents, they converted anonymous suffering into a system that could be studied, propitiated, and defeated. Xibalba is described as a functioning bureaucracy: the lords sit on thrones, receive visitors, administer trials, and follow protocols exploitable by anyone clever enough to learn the rules. The six houses of trial — Dark House, Razor House, Cold House, Jaguar House, Fire House, Bat House — test specific human capacities: endurance of darkness, pain, cold, predation, burning, and the terror of unseen things. The Sacred Cenote was the most prominent entrance to this bureaucracy in the northern lowlands: a vertical shaft through limestone into dark water, precisely the passage the Popol Vuh describes. What the Maya mapped onto their underworld was not chaos but order — a death with departments, procedures, and vulnerabilities. Even mortality can be administered, and what can be administered can be outmaneuvered.",
+      "animals": ["owl (messengers)", "bat", "jaguar"],
+      "colors": ["black", "red", "bone white"]
+    },
+    {
+      "id": "yum-kaax",
+      "name": "Yum Kaax",
+      "title": "God of Maize and Agriculture",
+      "group": "earthly",
+      "description": "Yum Kaax, the Lord of the Forest, is the young maize god whose death and resurrection constitute the agricultural theology at the center of Maya civilization. On Classic period ceramics and the carved lintels of Palenque, he appears as an idealized youth with an elongated, flattened forehead (achieved through cranial modification in infancy), a maize ear emerging from the cleft in his head, and flowing hair rendered as corn silk. His body is the maize plant. His death is the harvest. His burial in the earth is the planting. His emergence is the green shoot. The Popol Vuh's Hero Twins journey is, at its deepest layer, the story of recovering their father Hun Hunahpu, who is also the maize god — buried beneath the ball court, he must be retrieved from the underworld so agriculture can continue. The Maya creation narrative states that humanity itself was made from maize dough after failed attempts with mud and wood; humans are literally corn, and the maize god is literally the substance of human flesh. At Chichen Itza, agricultural terraces depended on the cenote system for irrigation during the dry season. His youth is permanent and cyclical — always being born, always dying, always reborn — and the Maya understood this not as metaphor but as observable fact. You plant, it grows, you harvest, the field dies, you plant again. The god who governs this process does not age because the process itself does not age.",
+      "animals": ["quetzal", "toad"],
+      "colors": ["green", "yellow", "jade"],
+      "vegetation": ["maize", "cacao", "squash"]
+    },
+    {
+      "id": "ek-chuaj",
+      "name": "Ek Chuaj",
+      "title": "God of Commerce",
+      "group": "earthly",
+      "description": "Ek Chuaj, the Black Scorpion, is the Maya god of merchants, cacao, and war — three domains the Maya considered aspects of a single activity, since long-distance trade required armed caravans, and cacao beans served as both luxury commodity and currency. The Madrid Codex depicts him as a black-skinned figure with a pendulous lower lip, carrying a merchant's pack supported by a tumpline across his forehead, walking the trade roads between cities. He is God M in the Schellhas classification, and painted ceramics show him amid cacao pods, overseeing the preparation of the frothy chocolate drink reserved for elites. Cacao beans were so valuable that counterfeiters filled empty pods with mud. Chichen Itza sat at the junction of major trade routes connecting the coast, where salt was harvested, to the interior, where jade, obsidian, and quetzal feathers moved through merchant networks spanning Honduras to central Mexico. The cenote itself received trade goods as offerings — gold disks from Central America, turquoise from what is now the American Southwest, jade from Guatemala's Motagua Valley — making the Sacred Cenote a map of the Maya commercial world deposited in a single hole. Ek Chuaj's dual role as god of merchants and god of war reflects a truth about trade routes that remains current: commerce requires the credible threat of force, and the merchant who cannot defend his goods will not arrive. The Maya gave both functions to the same god.",
+      "animals": ["scorpion"],
+      "colors": ["black", "brown"],
+      "weapons": ["spear", "merchant's pack"],
+      "vegetation": ["cacao"]
+    },
+    {
+      "id": "ixtab",
+      "name": "Ixtab",
+      "title": "Goddess of Suicide and the Afterlife",
+      "group": "earthly",
+      "description": "Ixtab, the Rope Woman, is depicted in the Dresden Codex as a female figure hanging by a noose from the sky, her eyes closed in death, a black circle of decomposition on her cheek. She receives those who die by hanging — which in Maya belief was an honorable death granting direct passage to paradise, bypassing the trials of Xibalba entirely. Warriors who died in battle, women who died in childbirth, sacrificial victims, and suicides by hanging all went to the shade of the great ceiba tree in the sky, where food and rest were eternal. This theological position is jarring to modern sensibility, but the Maya logic is internally consistent: the manner of death determined the afterlife destination, not moral behavior during life, and certain deaths were understood as sacrificial acts earning immediate reward. Bishop Diego de Landa recorded with evident bafflement that the Maya of Yucatan considered hanging a desirable death in certain circumstances. At the Sacred Cenote, some offerings appear to have been voluntary — individuals who entered the water as devotion rather than being thrown. The distinction mattered theologically: a willing sacrifice was self-offering, governed by Ixtab's promise. Her existence records a culture that categorized deaths not by cause but by meaning, and believed the manner of your ending could be chosen and consecrated. She is not a goddess of despair. She is a goddess of passage, and the rope is the road.",
+      "animals": ["spider (weaver of threads)"],
+      "colors": ["black", "blue"]
+    },
+    {
+      "id": "buluc-chabtan",
+      "name": "Buluc Chabtan",
+      "title": "God of War and Sacrifice",
+      "group": "earthly",
+      "description": "Buluc Chabtan, God F in the Schellhas classification, appears in the codices with a thick black line running down his cheek from eye to jaw and a burning torch thrust into the thatch roof of a house — the signature act of Maya warfare, where victory was marked by burning the enemy's temple. He is the patron of violent death and human sacrifice, the god invoked before raids and the deity to whom captives were dedicated before their hearts were cut from their chests. The Bonampak murals, painted around 790 CE and preserved under limestone accretion for twelve centuries, show warfare under his auspices: warriors in jaguar pelts grasping captives by the hair, fingernails torn out, blood dripping down throne steps. This is the most detailed visual record of Maya warfare that survives, and the artists painted the pain on the captives' faces. At Chichen Itza, the Great Ball Court's carved panels depict the decapitation of a ballplayer, seven serpents of blood erupting from his neck, one transforming into a vine bearing fruit. Buluc Chabtan governed this zone where violence and fertility merged: the sacrifice that fed the fields, the war that fed the gods. The Sacred Cenote received human sacrifices under his watch, and the bones recovered from its depths show this was not symbolic. He is the deity who makes modern admiration of the Maya uncomfortable, and that discomfort is historically necessary.",
+      "animals": ["jaguar", "vulture"],
+      "weapons": ["obsidian-edged war club (macuahuitl analog)", "flint knife", "burning torch"],
+      "colors": ["black", "red", "yellow"]
+    }
+  ]
+}

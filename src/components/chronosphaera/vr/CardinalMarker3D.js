@@ -68,6 +68,16 @@ export default function CardinalMarker3D({ id, label, angle, symbol, selected, o
 
       {/* Label text */}
       <group position={[lx, 0, lz]} rotation={[0, -lookAngle + Math.PI / 2, 0]}>
+        {/* Invisible hit-area mesh behind text for reliable click detection */}
+        <mesh
+          position={[0, 0, -0.01]}
+          onClick={(e) => { e.stopPropagation(); onClick(); }}
+          onPointerOver={(e) => { e.stopPropagation(); setHovered(true); document.body.style.cursor = 'pointer'; }}
+          onPointerOut={() => { setHovered(false); document.body.style.cursor = 'auto'; }}
+        >
+          <planeGeometry args={[1.8, 0.4]} />
+          <meshBasicMaterial transparent opacity={0} side={THREE.DoubleSide} depthWrite={false} />
+        </mesh>
         <Text
           fontSize={0.22}
           color={color}

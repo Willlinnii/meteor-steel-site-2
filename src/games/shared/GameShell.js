@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 
 export default function GameShell({
   gameName,
@@ -20,6 +20,8 @@ export default function GameShell({
   moveLog,
   rules,
   secrets,
+  instruction,
+  playerStatus,
   // Multiplayer props
   chatPanel,
   onForfeit,
@@ -28,18 +30,33 @@ export default function GameShell({
   isMyTurn,
 }) {
   const logRef = useRef(null);
-  const [openPanel, setOpenPanel] = useState(null); // 'rules' | 'secrets' | null
+  const shellRef = useRef(null);
+  const [openPanel, setOpenPanel] = useState(null);
+  const [isFullscreen, setIsFullscreen] = useState(false);
 
   useEffect(() => {
     if (logRef.current) logRef.current.scrollTop = logRef.current.scrollHeight;
   }, [moveLog]);
 
-  const restartFn = onRestart || onReset;
-  const isRolling = gamePhase === 'rolling' && winner === null && winner !== 0;
-  const hasPlayers = players && players.length > 0;
-  const hasControls = onRoll || diceDisplay || extraInfo;
+  useEffect(() => {
+    const onFSChange = () => {
+      setIsFullscreen(!!document.fullscreenElement);
+    };
+    document.addEventListener('fullscreenchange', onFSChange);
+    return () => document.removeEventListener('fullscreenchange', onFSChange);
+  }, []);
 
-  // Determine winner display name
+  const toggleFullscreen = useCallback(() => {
+    if (!document.fullscreenElement && shellRef.current) {
+      shellRef.current.requestFullscreen().catch(() => {});
+    } else if (document.fullscreenElement) {
+      document.exitFullscreen().catch(() => {});
+    }
+  }, []);
+
+  const restartFn = onRestart || onReset;
+  const hasPlayers = players && players.length > 0;
+
   let winnerName = null;
   if (winner !== null && winner !== undefined) {
     if (typeof winner === 'string') {
@@ -51,15 +68,60 @@ export default function GameShell({
     }
   }
 
+  const getInstruction = () => {
+    if (instruction) return instruction;
+
+    if (winnerName) {
+      return `${winnerName} has won the game! Press Restart for a rematch, or use the back arrow to return to the game room.`;
+    }
+    if (isOnline && !isMyTurn) {
+      return "It\u2019s your opponent\u2019s turn. Watch the board and wait for them to finish their move.";
+    }
+
+    const lines = [];
+    const pName = playerNames?.[currentPlayer] || (hasPlayers && players[currentPlayer]?.name);
+    if (pName && turnCount !== undefined) {
+      lines.push(`Turn ${(turnCount || 0) + 1} \u2014 ${pName}'s move.`);
+    }
+
+    if (onRoll) {
+      lines.push('Click the dice area to roll and determine your next move.');
+    } else if (gamePhase === 'selectPiece' || gamePhase === 'moving' || gamePhase === 'move') {
+      lines.push('Choose which piece to move. Highlighted pieces or squares show your valid options.');
+    }
+
+    const msg = extraInfo || message;
+    if (msg) lines.push(msg);
+
+    return lines.join(' ') || 'Take your turn.';
+  };
+
+  // Generate default player readout from players prop
+  const getDefaultPlayerStatus = () => {
+    if (!hasPlayers) return null;
+    return (
+      <div style={{ display: 'flex', justifyContent: 'center', gap: 24 }}>
+        {players.map((p, i) => (
+          <div key={i} style={{ textAlign: 'center', opacity: currentPlayer === i ? 1 : 0.6 }}>
+            <span className="player-dot" style={{ background: p.color, width: 10, height: 10, display: 'inline-block', borderRadius: '50%', marginRight: 6 }} />
+            <span style={{ color: p.color, fontWeight: currentPlayer === i ? 'bold' : 'normal', fontSize: '0.85rem' }}>{p.name}</span>
+            {currentPlayer === i && <span style={{ color: 'var(--text-secondary)', fontSize: '0.75rem', marginLeft: 6 }}>(active)</span>}
+          </div>
+        ))}
+      </div>
+    );
+  };
+
   const togglePanel = (panel) => {
     setOpenPanel(prev => prev === panel ? null : panel);
   };
 
   return (
-    <div className="game-shell">
+    <div className={`game-shell${isFullscreen ? ' game-shell-fullscreen' : ''}`} ref={shellRef}>
+      {/* Compact header bar */}
       <div className="game-shell-header">
         <button className="game-shell-back" onClick={onExit} title="Back to games">
-          &#8592; Games
+          &#8592;
         </button>
         <h2 className="game-shell-title">{gameName}</h2>
         {turnCount !== undefined && (
@@ -67,58 +129,29 @@ export default function GameShell({
         )}
       </div>
 
-      {hasPlayers && (
-        <div className="game-shell-players">
-          {players.map((p, i) => (
-            <div
-              key={i}
-              className={`game-shell-player${currentPlayer === i ? ' active' : ''}${winner === i ? ' winner' : ''}${onPlayerClick ? ' clickable' : ''}`}
-              onClick={onPlayerClick ? () => onPlayerClick(i) : undefined}
-            >
-              <span className="player-dot" style={{ background: p.color }} />
-              <span className="player-name">{p.name}</span>
-            </div>
-          ))}
-        </div>
-      )}
-
+      {/* Board */}
       <div className="game-shell-board">
         {children}
       </div>
 
-      {hasControls && (
-        <div className="game-shell-controls">
-          {diceDisplay && (
-            <div className="game-shell-dice-area">
-              {diceDisplay}
-            </div>
-          )}
-          {(extraInfo || message) && (
-            <div className="game-shell-extra">{extraInfo || message}</div>
-          )}
-          <div className="game-shell-buttons">
-            {onRoll && (
-              <button
-                className="game-btn game-btn-roll"
-                onClick={onRoll}
-                disabled={!isRolling || (isOnline && !isMyTurn)}
-              >
-                {isOnline && !isMyTurn ? 'Waiting...' : 'Roll Dice'}
-              </button>
-            )}
-            {restartFn && (
-              <button className="game-btn game-btn-restart" onClick={restartFn}>
-                Restart
-              </button>
-            )}
-            {onForfeit && !winnerName && (
-              <button className="game-btn game-btn-forfeit" onClick={onForfeit}>
-                Forfeit
-              </button>
-            )}
+      {/* Dice area — clickable to roll */}
+      <div
+        className={`game-shell-dice-bar${onRoll ? ' roll-ready' : ''}`}
+        onClick={onRoll || undefined}
+        role={onRoll ? 'button' : undefined}
+        tabIndex={onRoll ? 0 : undefined}
+      >
+        {diceDisplay || (
+          <div className="game-shell-dice-placeholder">
+            {onRoll
+              ? (isOnline && !isMyTurn ? 'Waiting\u2026' : 'Roll')
+              : (message || extraInfo || '\u00A0')}
           </div>
-        </div>
-      )}
+        )}
+        {onRoll && diceDisplay && (
+          <div className="game-shell-roll-hint">tap to roll</div>
+        )}
+      </div>
 
       {moveLog && moveLog.length > 0 && (
         <div className="game-move-log" ref={logRef}>
@@ -130,49 +163,88 @@ export default function GameShell({
 
       {chatPanel}
 
-      {(rules || secrets) && (
-        <div className="game-book-section">
-          <div className="game-book-toggles">
-            {rules && (
-              <button
-                className={`game-book-toggle${openPanel === 'rules' ? ' active' : ''}`}
-                onClick={() => togglePanel('rules')}
-              >
-                Rules
-              </button>
-            )}
-            {secrets && (
-              <button
-                className={`game-book-toggle game-book-toggle-secrets${openPanel === 'secrets' ? ' active' : ''}`}
-                onClick={() => togglePanel('secrets')}
-              >
-                Secrets
-              </button>
-            )}
-          </div>
-
-          {openPanel === 'rules' && rules && (
-            <div className="game-book-panel">
-              <ul className="game-book-rules">
-                {rules.map((rule, i) => (
-                  <li key={i}>{rule}</li>
-                ))}
-              </ul>
-            </div>
+      {/* Four toggle buttons: Instructions, Players, Rules, Secrets */}
+      <div className="game-book-section">
+        <div className="game-book-toggles">
+          <button
+            className={`game-book-toggle game-book-toggle-instructions${openPanel === 'instructions' ? ' active' : ''}`}
+            onClick={() => togglePanel('instructions')}
+          >
+            Instructions
+          </button>
+          <button
+            className={`game-book-toggle game-book-toggle-players${openPanel === 'players' ? ' active' : ''}`}
+            onClick={() => togglePanel('players')}
+          >
+            Players
+          </button>
+          {rules && (
+            <button
+              className={`game-book-toggle${openPanel === 'rules' ? ' active' : ''}`}
+              onClick={() => togglePanel('rules')}
+            >
+              Rules
+            </button>
           )}
-
-          {openPanel === 'secrets' && secrets && (
-            <div className="game-book-panel game-book-panel-secrets">
-              {secrets.map((secret, i) => (
-                <div key={i} className="game-book-secret">
-                  <h4 className="game-book-secret-heading">{secret.heading}</h4>
-                  <p className="game-book-secret-text">{secret.text}</p>
-                </div>
-              ))}
-            </div>
+          {secrets && (
+            <button
+              className={`game-book-toggle game-book-toggle-secrets${openPanel === 'secrets' ? ' active' : ''}`}
+              onClick={() => togglePanel('secrets')}
+            >
+              Secrets
+            </button>
           )}
         </div>
-      )}
+
+        {openPanel === 'instructions' && (
+          <div className="game-book-panel game-book-panel-instructions">
+            <p className="game-book-instruction-text">{getInstruction()}</p>
+          </div>
+        )}
+
+        {openPanel === 'players' && (
+          <div className="game-book-panel game-book-panel-players">
+            {playerStatus || getDefaultPlayerStatus() || (
+              <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', margin: 0 }}>No player information available.</p>
+            )}
+          </div>
+        )}
+
+        {openPanel === 'rules' && rules && (
+          <div className="game-book-panel">
+            <ul className="game-book-rules">
+              {rules.map((rule, i) => (
+                <li key={i}>{rule}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        {openPanel === 'secrets' && secrets && (
+          <div className="game-book-panel game-book-panel-secrets">
+            {secrets.map((secret, i) => (
+              <div key={i} className="game-book-secret">
+                <h4 className="game-book-secret-heading">{secret.heading}</h4>
+                <p className="game-book-secret-text">{secret.text}</p>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Restart / Forfeit below panel */}
+        <div className="game-shell-bottom-actions">
+          {restartFn && (
+            <button className="game-btn game-btn-restart" onClick={restartFn}>
+              Restart
+            </button>
+          )}
+          {onForfeit && !winnerName && (
+            <button className="game-btn game-btn-forfeit" onClick={onForfeit}>
+              Forfeit
+            </button>
+          )}
+        </div>
+      </div>
 
       {winnerName && (
         <div className="game-over-overlay">
@@ -191,6 +263,15 @@ export default function GameShell({
           </div>
         </div>
       )}
+
+      {/* Fixed fullscreen button — stacked above Atlas chat button */}
+      <button
+        className={`game-fullscreen-fab${isFullscreen ? ' active' : ''}`}
+        onClick={toggleFullscreen}
+        title={isFullscreen ? 'Exit fullscreen' : 'Fullscreen'}
+      >
+        {isFullscreen ? '\u2715' : '\u26F6'}
+      </button>
     </div>
   );
 }
