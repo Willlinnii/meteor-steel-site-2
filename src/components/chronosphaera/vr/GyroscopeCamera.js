@@ -96,14 +96,15 @@ export default function GyroscopeCamera({ joystickRef, flyToTarget, onFlyComplet
     };
   }, [gl]);
 
-  // Device orientation
+  // Device orientation — guard against null, NaN, and non-finite values
   const onOrientation = useCallback((e) => {
-    if (e.alpha != null) {
-      alpha.current = e.alpha;
-      beta.current = e.beta;
-      gamma.current = e.gamma;
-      hasData.current = true;
-    }
+    const a = e.alpha, b = e.beta, g = e.gamma;
+    if (a == null || b == null || g == null) return;
+    if (!Number.isFinite(a) || !Number.isFinite(b) || !Number.isFinite(g)) return;
+    alpha.current = a;
+    beta.current = b;
+    gamma.current = g;
+    hasData.current = true;
   }, []);
 
   useEffect(() => {
@@ -123,7 +124,10 @@ export default function GyroscopeCamera({ joystickRef, flyToTarget, onFlyComplet
             window.addEventListener('deviceorientation', onOrientation);
           }
         })
-        .catch(() => {});
+        .catch(() => {
+          // Permission failed — fall back to non-gyro (OrbitControls will handle)
+          console.warn('Gyroscope permission denied or unavailable');
+        });
     } else {
       // Non-iOS: no permission API, just attach
       window.addEventListener('deviceorientation', onOrientation);
@@ -154,6 +158,9 @@ export default function GyroscopeCamera({ joystickRef, flyToTarget, onFlyComplet
       const g = THREE.MathUtils.degToRad(gamma.current);
       const orient = THREE.MathUtils.degToRad(screenOrient.current);
 
+      // Skip frame if any value went bad (e.g. sensor glitch)
+      if (!Number.isFinite(a) || !Number.isFinite(b) || !Number.isFinite(g)) return;
+
       euler.current.set(b, a, -g, 'YXZ');
       quat.current.setFromEuler(euler.current);
 
@@ -164,10 +171,13 @@ export default function GyroscopeCamera({ joystickRef, flyToTarget, onFlyComplet
       q2.setFromAxisAngle(new THREE.Vector3(0, 0, 1), -orient);
       quat.current.multiply(q2);
 
-      camera.quaternion.copy(quat.current);
+      // Final NaN guard — don't apply a corrupt quaternion to the camera
+      if (Number.isFinite(quat.current.x)) {
+        camera.quaternion.copy(quat.current);
+      }
 
       // Extract heading (Y rotation) for joystick movement direction
-      const e = new THREE.Euler().setFromQuaternion(quat.current, 'YXZ');
+      const e = new THREE.Euler().setFromQuaternion(camera.quaternion, 'YXZ');
       headingRef.current = e.y;
     }
 

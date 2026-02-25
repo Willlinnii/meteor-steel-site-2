@@ -1403,7 +1403,7 @@ All responses return { data, meta } JSON. GET /v1/ for full discovery.`}</pre>
               <img src="/logo192.png" alt="Mythouse" className="profile-install-card-icon" />
               <div className="profile-install-card-info">
                 <div className="profile-install-card-name">Mythouse</div>
-                <div className="profile-install-card-tagline">Meteor Steel Mythology Archive</div>
+                <div className="profile-install-card-tagline">The Story Atlas</div>
                 <div className="profile-install-card-meta">Free &middot; Works offline &middot; Always up to date</div>
               </div>
             </div>

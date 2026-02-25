@@ -1,10 +1,37 @@
-import React, { Suspense, useRef, useEffect } from 'react';
+import React, { Suspense, useRef, useEffect, Component } from 'react';
 import { Canvas, useThree } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import { XR, useXR } from '@react-three/xr';
 import OrbitalScene from './OrbitalScene';
 import GyroscopeCamera from './GyroscopeCamera';
 import './CelestialScene.css';
+
+// Error boundary: catches 3D/gyroscope crashes and shows a recovery option
+class SceneErrorBoundary extends Component {
+  state = { hasError: false, error: null };
+
+  static getDerivedStateFromError(error) {
+    return { hasError: true, error };
+  }
+
+  componentDidCatch(error, info) {
+    console.warn('CelestialScene crashed:', error, info?.componentStack);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="celestial-scene-error">
+          <p>The 3D view encountered a problem.</p>
+          <button onClick={() => this.setState({ hasError: false, error: null })}>
+            Try Again
+          </button>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
 
 function SceneFallback() {
   return null;
@@ -75,6 +102,7 @@ export default function CelestialScene({
   orientationGranted,
   clockMode,
   zodiacMode,
+  showClock,
 }) {
   const internalCamPosRef = useRef({ x: 0, y: 0, z: 0 });
   const internalPanelLockedRef = useRef(false);
@@ -82,6 +110,7 @@ export default function CelestialScene({
 
   return (
     <div className={`celestial-scene-container${cameraAR ? ' ar-mode' : ''}`} style={cameraAR ? { background: 'transparent' } : undefined}>
+      <SceneErrorBoundary>
       <Canvas
         camera={{ position: [0, 8, 20], fov: 60, near: 0.1, far: 200 }}
         gl={{ antialias: true, alpha: true }}
@@ -110,6 +139,7 @@ export default function CelestialScene({
                 onPanelLock={onPanelLock}
                 clockMode={clockMode}
                 zodiacMode={zodiacMode}
+                showClock={showClock}
               />
             </ARScaleWrapper>
             <ConditionalOrbitControls cameraAR={cameraAR} />
@@ -126,6 +156,7 @@ export default function CelestialScene({
           </Suspense>
         </XR>
       </Canvas>
+      </SceneErrorBoundary>
     </div>
   );
 }

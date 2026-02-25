@@ -192,7 +192,9 @@ export default function PanoViewer({ src, type = 'image' }) {
     if (needsPermission && !useGyro) {
       DeviceOrientationEvent.requestPermission()
         .then(s => { if (s === 'granted') setUseGyro(true); })
-        .catch(() => {});
+        .catch(() => {
+          console.warn('Gyro permission denied in PanoViewer');
+        });
     } else {
       setUseGyro(g => !g);
     }
