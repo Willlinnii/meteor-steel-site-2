@@ -13,6 +13,8 @@ import { usePageTracking } from '../../coursework/CourseworkContext';
 import MetalDetailPanel from '../../components/chronosphaera/MetalDetailPanel';
 import CultureSelector from '../../components/chronosphaera/CultureSelector';
 import TarotCardContent from '../../components/chronosphaera/TarotCardContent';
+import usePerspective, { PERSPECTIVE_TO_CULTURE } from '../../components/chronosphaera/usePerspective';
+import { PerspectivePicker, CultureTimelineBar } from '../../components/chronosphaera/MetalContentTabs';
 
 import coreData from '../../data/chronosphaera.json';
 import deitiesData from '../../data/chronosphaeraDeities.json';
@@ -28,6 +30,7 @@ import cardinalsData from '../../data/chronosphaeraCardinals.json';
 import elementsData from '../../data/chronosphaeraElements.json';
 import planetaryCultures from '../../data/chronosphaeraPlanetaryCultures.json';
 import dayNightData from '../../data/dayNight.json';
+import NAMED_STARS from '../../data/zodiacNamedStars';
 
 function findByMetal(arr, metal) {
   return arr.find(item => item.metal === metal) || null;
@@ -210,15 +213,36 @@ export default function ChronosphaeraVRPage() {
 
   const [clockMode, setClockMode] = useState('24h');        // '24h' | '12h'
   const [zodiacMode, setZodiacMode] = useState('sidereal');  // 'sidereal' | 'tropical'
+  const [showClock3D, setShowClock3D] = useState(true);
   // Derive orbital mode from clockMode
   const mode = clockMode === '24h' ? ORBITAL_MODES.GEOCENTRIC : ORBITAL_MODES.HELIOCENTRIC;
   const [selectedPlanet, setSelectedPlanet] = useState('Sun');
   const [selectedSign, setSelectedSign] = useState(null);
   const [selectedCardinal, setSelectedCardinal] = useState(null);
+  const [selectedStar, setSelectedStar] = useState(null);
   const [selectedEarth, setSelectedEarth] = useState(null);
   const [activeTab, setActiveTab] = useState('overview');
   const [activeCulture, setActiveCulture] = useState('Greek');
   const [panelOpen, setPanelOpen] = useState(true);
+
+  // Perspective system — tradition lens drives astronomical settings + culture
+  const perspective = usePerspective(selectedPlanet);
+
+  // Auto-set clockMode from tradition's centerModel
+  useEffect(() => {
+    setClockMode(perspective.clockMode);
+  }, [perspective.clockMode]);
+
+  // Auto-set zodiacMode from tradition's zodiacFrame
+  useEffect(() => {
+    setZodiacMode(perspective.zodiacFrame);
+  }, [perspective.zodiacFrame]);
+
+  // Auto-set activeCulture from perspective → culture mapping
+  useEffect(() => {
+    const culture = PERSPECTIVE_TO_CULTURE[perspective.activePerspective];
+    if (culture) setActiveCulture(culture);
+  }, [perspective.activePerspective]);
 
   // WebXR store — created once, shared with CelestialScene
   const xrStore = useMemo(() => createXRStore(), []);
@@ -404,6 +428,7 @@ export default function ChronosphaeraVRPage() {
     setSelectedPlanet(p);
     setSelectedSign(null);
     setSelectedCardinal(null);
+    setSelectedStar(null);
     setSelectedEarth(null);
     setActiveTab('overview');
     setPanelOpen(true);
@@ -412,6 +437,7 @@ export default function ChronosphaeraVRPage() {
     track('zodiac.' + sign);
     setSelectedSign(sign);
     setSelectedCardinal(null);
+    setSelectedStar(null);
     setSelectedEarth(null);
     setPanelOpen(true);
   };
@@ -419,6 +445,15 @@ export default function ChronosphaeraVRPage() {
     track('cardinal.' + c);
     setSelectedCardinal(c);
     setSelectedSign(null);
+    setSelectedStar(null);
+    setSelectedEarth(null);
+    setPanelOpen(true);
+  };
+  const handleSelectStar = (starName) => {
+    if (starName) track('chronosphaera.star.' + starName);
+    setSelectedStar(starName);
+    setSelectedSign(null);
+    setSelectedCardinal(null);
     setSelectedEarth(null);
     setPanelOpen(true);
   };
@@ -427,15 +462,18 @@ export default function ChronosphaeraVRPage() {
     setSelectedEarth(e);
     setSelectedSign(null);
     setSelectedCardinal(null);
+    setSelectedStar(null);
     setPanelOpen(true);
   };
 
   // Determine what to show in the panel
-  const hasSelection = selectedSign || selectedCardinal || selectedEarth || selectedPlanet;
+  const hasSelection = selectedSign || selectedCardinal || selectedStar || selectedEarth || selectedPlanet;
   const currentData = mergedData[selectedPlanet] || null;
 
   // Panel heading
   // Build panel content for both side panel and 3D AR panel
+  const selectedStarData = selectedStar ? NAMED_STARS.find(s => s.name === selectedStar) : null;
+
   const panelContent = selectedSign ? (
     <div className="metal-detail-panel">
       <CultureSelector activeCulture={activeCulture} onSelectCulture={setActiveCulture} />
@@ -445,6 +483,25 @@ export default function ChronosphaeraVRPage() {
     <div className="metal-detail-panel">
       <CultureSelector activeCulture={activeCulture} onSelectCulture={setActiveCulture} />
       <CardinalContent cardinalId={selectedCardinal} activeCulture={activeCulture} />
+    </div>
+  ) : selectedStarData ? (
+    <div className="metal-detail-panel">
+      <div className="tab-content">
+        <div className="overview-grid">
+          <div className="overview-item"><span className="ov-label">Magnitude</span><span className="ov-value">{selectedStarData.magnitude}</span></div>
+          <div className="overview-item"><span className="ov-label">Constellation</span><span className="ov-value">{selectedStarData.constellation}</span></div>
+          {selectedStarData.isRoyalStar && (
+            <div className="overview-item"><span className="ov-label">Royal Star</span><span className="ov-value" style={{ color: '#f0c040' }}>Watcher of Persia</span></div>
+          )}
+          {selectedStarData.isCluster && (
+            <div className="overview-item"><span className="ov-label">Type</span><span className="ov-value">Open Cluster</span></div>
+          )}
+        </div>
+        <div className="modern-section">
+          <h5>Mythology</h5>
+          <p>{selectedStarData.mythology}</p>
+        </div>
+      </div>
     </div>
   ) : selectedEarth ? (
     <div className="metal-detail-panel">
@@ -477,6 +534,9 @@ export default function ChronosphaeraVRPage() {
   } else if (selectedCardinal) {
     panelHeading = cardinalsData[selectedCardinal]?.label || selectedCardinal;
     panelSub = 'Cardinal Point';
+  } else if (selectedStarData) {
+    panelHeading = selectedStarData.name;
+    panelSub = selectedStarData.designation;
   } else if (selectedEarth) {
     panelHeading = `Earth \u00B7 ${selectedEarth === 'day' ? 'Day' : 'Night'}`;
     panelSub = selectedEarth === 'day' ? 'Daylight' : 'Night Shadow';
@@ -510,6 +570,8 @@ export default function ChronosphaeraVRPage() {
           onSelectCardinal={handleSelectCardinal}
           selectedEarth={selectedEarth}
           onSelectEarth={handleSelectEarth}
+          selectedStar={selectedStar}
+          onSelectStar={handleSelectStar}
           infoPanelContent={cameraAR && hasSelection ? panelContent : null}
           xrStore={xrStore}
           cameraAR={cameraAR}
@@ -524,6 +586,8 @@ export default function ChronosphaeraVRPage() {
           orientationGranted={orientationGranted}
           clockMode={clockMode}
           zodiacMode={zodiacMode}
+          showClock={showClock3D}
+          activeCulture={activeCulture}
         />
 
         {/* AR navigation overlays — hidden when full-screen panel is open */}
@@ -565,12 +629,15 @@ export default function ChronosphaeraVRPage() {
         </Link>
 
         <div className="celestial-mode-label">
-          {clockMode === '24h' ? '24h Geocentric' : '12h Heliocentric'} &middot; {zodiacMode === 'sidereal' ? 'Sidereal' : 'Tropical'}
+          {clockMode === '24h' ? 'Geocentric' : 'Heliocentric'} &middot; {zodiacMode === 'sidereal' ? 'Sidereal' : 'Tropical'}
         </div>
 
         <div className="celestial-controls">
-          <button className="celestial-btn" onClick={toggleClockMode} title={`Switch to ${clockMode === '24h' ? '12h' : '24h'} mode`}>
-            {clockMode === '24h' ? '24h' : '12h'}
+          <button className="celestial-icon-btn" onClick={toggleClockMode} title={clockMode === '24h' ? 'Geocentric (Earth-centered) — click for Heliocentric' : 'Heliocentric (Sun-centered) — click for Geocentric'}>
+            {clockMode === '24h' ? '\u{1F30D}' : '\u2600\uFE0F'}
+          </button>
+          <button className="celestial-icon-btn" onClick={() => setShowClock3D(v => !v)} title={showClock3D ? 'Hide clock hands' : 'Show clock hands'} style={{ opacity: showClock3D ? 0.85 : 0.4 }}>
+            {'\u{1F551}'}
           </button>
           <button className="celestial-btn" onClick={toggleZodiacMode} title={`Switch to ${zodiacMode === 'sidereal' ? 'tropical' : 'sidereal'}`}>
             {zodiacMode === 'sidereal' ? 'Sidereal' : 'Tropical'}
@@ -666,6 +733,19 @@ export default function ChronosphaeraVRPage() {
           <button className="celestial-panel-close" onClick={() => setPanelOpen(false)} title="Close panel">
             &times;
           </button>
+        </div>
+
+        <div className="celestial-panel-perspective">
+          <PerspectivePicker
+            activePerspective={perspective.activePerspective}
+            onSelectPerspective={perspective.setActivePerspective}
+            populatedPerspectives={perspective.populated}
+            perspectiveLabel={perspective.perspectiveLabel}
+          />
+          <CultureTimelineBar
+            activeCulture={activeCulture}
+            onSelectCulture={setActiveCulture}
+          />
         </div>
 
         <div className="celestial-panel-body">

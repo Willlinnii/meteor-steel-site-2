@@ -361,6 +361,15 @@
   color: #f0c040;
 }
 
+.celestial-panel-perspective {
+  padding: 8px 18px 4px;
+  border-bottom: 1px solid rgba(201, 169, 97, 0.15);
+}
+
+.celestial-panel-perspective .perspective-picker {
+  margin-bottom: 6px;
+}
+
 .celestial-panel-body {
   flex: 1;
   overflow-y: auto;

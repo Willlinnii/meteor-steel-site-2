@@ -484,4 +484,52 @@ export default function usePerspective(selectedPlanet) {
   };
 }
 
+// Map each vault perspective ID to a CultureSelector culture name
+export const PERSPECTIVE_TO_CULTURE = {
+  mythouse: 'Atlas',
+  // Ancient Near East
+  sumerian: 'Babylonian',
+  babylon: 'Babylonian',
+  assyrian: 'Babylonian',
+  phoenician: 'Babylonian',
+  genesis: 'Babylonian',
+  // Classical / Greek
+  pythagorean: 'Greek',
+  plato: 'Greek',
+  'corpus-hermeticum': 'Greek',
+  ptolemaic: 'Greek',
+  gnostic: 'Greek',
+  neoplatonist: 'Greek',
+  // Roman
+  mithraic: 'Roman',
+  // Vedic / Theosophical
+  vedic: 'Vedic',
+  blavatsky: 'Vedic',
+  'besant-theosophy': 'Vedic',
+  'leadbeater-theosophy': 'Vedic',
+  // Islamic
+  'al-farabi': 'Islamic',
+  'ikhwan-al-safa': 'Islamic',
+  sabians: 'Islamic',
+  // Norse
+  norse: 'Norse',
+  tolkien: 'Norse',
+  // Medieval / Esoteric
+  kabbalah: 'Medieval',
+  dante: 'Medieval',
+  tarot: 'Medieval',
+  agrippa: 'Medieval',
+  paracelsus: 'Medieval',
+  'john-dee': 'Medieval',
+  ficino: 'Medieval',
+  rosicrucian: 'Medieval',
+  'golden-dawn': 'Medieval',
+  steiner: 'Medieval',
+  // Modern (default to Greek for cross-tradition synthesists)
+  kepler: 'Greek',
+  'manly-p-hall': 'Greek',
+  'perennial-philosophy': 'Greek',
+  'ra-law-of-one': 'Greek',
+};
+
 export { META_KEYS, SELF_KEYS, DANTE_REALM_KEYS, TAB_LABEL_OVERRIDES, CYCLE_ORDER, camelToTitle };

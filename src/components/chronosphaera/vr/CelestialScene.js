@@ -1,7 +1,7 @@
 import React, { Suspense, useRef, useEffect, Component } from 'react';
 import { Canvas, useThree } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
-import { XR, useXR } from '@react-three/xr';
+import { XR, useXR, XROrigin, useXRControllerLocomotion } from '@react-three/xr';
 import OrbitalScene from './OrbitalScene';
 import GyroscopeCamera from './GyroscopeCamera';
 import './CelestialScene.css';
@@ -66,15 +66,26 @@ function ConditionalOrbitControls({ cameraAR }) {
   );
 }
 
-// Scale wrapper: WebXR uses 0.08 (room-scale), camera-AR uses 1.0 (camera moves through scene)
-function ARScaleWrapper({ children, cameraAR }) {
+// VR locomotion wrapper: thumbstick movement in VR, passthrough otherwise
+function VRScene({ children }) {
+  const originRef = useRef(null);
   const isPresenting = useXR((state) => state.session != null);
+
+  // Left thumbstick = move, right thumbstick = smooth turn (only active in VR)
+  useXRControllerLocomotion(
+    originRef,
+    isPresenting ? { speed: 1 } : false,
+    isPresenting ? { type: 'smooth', speed: 1.5, deadZone: 0.15 } : false,
+    'left'
+  );
+
   const scale = isPresenting ? 0.08 : 1;
   const y = isPresenting ? -0.5 : 0;
+
   return (
-    <group scale={[scale, scale, scale]} position={[0, y, 0]}>
+    <XROrigin ref={originRef} scale={[scale, scale, scale]} position={[0, y, 0]}>
       {children}
-    </group>
+    </XROrigin>
   );
 }
 
@@ -88,6 +99,8 @@ export default function CelestialScene({
   onSelectCardinal,
   selectedEarth,
   onSelectEarth,
+  selectedStar,
+  onSelectStar,
   infoPanelContent,
   xrStore,
   cameraAR,
@@ -103,6 +116,7 @@ export default function CelestialScene({
   clockMode,
   zodiacMode,
   showClock,
+  activeCulture,
 }) {
   const internalCamPosRef = useRef({ x: 0, y: 0, z: 0 });
   const internalPanelLockedRef = useRef(false);
@@ -120,7 +134,7 @@ export default function CelestialScene({
         <ClearColorManager cameraAR={cameraAR} />
         <XR store={xrStore}>
           <Suspense fallback={<SceneFallback />}>
-            <ARScaleWrapper cameraAR={cameraAR}>
+            <VRScene>
               <OrbitalScene
                 mode={mode}
                 selectedPlanet={selectedPlanet}
@@ -131,6 +145,8 @@ export default function CelestialScene({
                 onSelectCardinal={onSelectCardinal}
                 selectedEarth={selectedEarth}
                 onSelectEarth={onSelectEarth}
+                selectedStar={selectedStar}
+                onSelectStar={onSelectStar}
                 infoPanelContent={infoPanelContent}
                 cameraAR={cameraAR}
                 arPassthrough={arPassthrough}
@@ -140,8 +156,9 @@ export default function CelestialScene({
                 clockMode={clockMode}
                 zodiacMode={zodiacMode}
                 showClock={showClock}
+                activeCulture={activeCulture}
               />
-            </ARScaleWrapper>
+            </VRScene>
             <ConditionalOrbitControls cameraAR={cameraAR} />
             {cameraAR && (
               <GyroscopeCamera

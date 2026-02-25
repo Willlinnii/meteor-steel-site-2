@@ -411,6 +411,8 @@ function PerspectivePicker({ activePerspective, onSelectPerspective, populatedPe
   );
 }
 
+export { PerspectivePicker, TimelineBar };
+
 export default function MetalContentTabs({ activeTab, onSelectTab, playlistUrl, videoActive, onToggleVideo, onTogglePersonaChat, personaChatActive, getTabClass, onToggleYBR, ybrActive, perspectiveLabel, orderLabel, onSelectPerspective, activePerspective, populatedPerspectives, tabs }) {
   const { forgeMode } = useStoryForge();
   const { ybrMode } = useYBRMode();

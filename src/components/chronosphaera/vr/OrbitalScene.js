@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useMemo } from 'react';
 import { useFrame } from '@react-three/fiber';
 import Planet3D from './Planet3D';
 import AnimatedPlanet from './AnimatedPlanet';
@@ -18,6 +18,12 @@ import {
   CARDINALS,
   ORBITAL_MODES,
 } from './constants3D';
+import cardinalsData from '../../../data/chronosphaeraCardinals.json';
+
+const CULTURE_KEY_MAP = {
+  Roman: 'roman', Greek: 'greek', Norse: 'norse',
+  Babylonian: 'babylonian', Vedic: 'vedic', Islamic: 'islamic', Medieval: 'medieval',
+};
 
 // Sun point light that tracks animated position
 function SunLight({ anglesRef, isHelio, orbitRadius }) {
@@ -87,6 +93,8 @@ export default function OrbitalScene({
   onSelectCardinal,
   selectedEarth,
   onSelectEarth,
+  selectedStar,
+  onSelectStar,
   infoPanelContent,
   cameraAR,
   arPassthrough,
@@ -95,6 +103,8 @@ export default function OrbitalScene({
   onPanelLock,
   clockMode,
   zodiacMode,
+  showClock,
+  activeCulture,
   children,
 }) {
   const { anglesRef, moonPhaseRef } = useOrbitalAnimation(mode, clockMode);
@@ -113,6 +123,16 @@ export default function OrbitalScene({
   // Sun orbit radius for the light tracker
   const sunOrbitR = ORBITS_3D.find(o => o.planet === 'Sun')?.radius || 8;
 
+  // Resolve culture-specific cardinal labels
+  const cultureKey = CULTURE_KEY_MAP[activeCulture];
+  const resolvedCardinals = useMemo(() => {
+    return CARDINALS.map(c => {
+      if (!cultureKey || activeCulture === 'Atlas') return c;
+      const cultureName = cardinalsData[c.id]?.cultures?.[cultureKey]?.name;
+      return cultureName ? { ...c, label: cultureName.split(' (')[0] } : c;
+    });
+  }, [cultureKey, activeCulture]);
+
   return (
     <>
       {/* Lighting */}
@@ -122,14 +142,14 @@ export default function OrbitalScene({
       {/* Real star map — hidden in passthrough mode so only artifacts show over camera */}
       {!arPassthrough && <StarMap3D cameraAR={cameraAR} />}
 
-      {/* Clock hands */}
-      {clockMode && <ClockHands3D clockMode={clockMode} />}
+      {/* Clock hands + hour markers */}
+      {clockMode && <ClockHands3D clockMode={clockMode} showClock={showClock !== false} />}
 
       {/* Zodiac ring */}
-      <ZodiacSphere selectedSign={selectedSign} onSelectSign={onSelectSign} />
+      <ZodiacSphere selectedSign={selectedSign} onSelectSign={onSelectSign} zodiacMode={zodiacMode} selectedStar={selectedStar} onSelectStar={onSelectStar} activeCulture={activeCulture} />
 
       {/* Cardinal markers */}
-      {CARDINALS.map(c => (
+      {resolvedCardinals.map(c => (
         <CardinalMarker3D
           key={c.id}
           id={c.id}
