@@ -7842,15 +7842,62 @@ function ConsultingManagerSection() {
 // ARCHITECTURE GOVERNANCE — Specs, tests, schema, CSS audit
 // ═══════════════════════════════════════════════════════════════
 
-const ARCH_ONTOLOGY = {
-  'Monomyth Stages': { count: 8, source: 'monomyth.json', ids: 'golden-age, falling-star, impact-crater, forge, quenching, integration, drawing, new-age' },
-  'Planets': { count: 7, source: 'chronosphaera.json', ids: 'Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn' },
-  'Zodiac Signs': { count: 12, source: 'chronosphaeraZodiac.json', ids: 'Aries through Pisces' },
-  'Elements': { count: 4, source: 'chronosphaeraElements.json', ids: 'Fire, Earth, Air, Water' },
-  'Cardinal Directions': { count: 4, source: 'chronosphaeraCardinals.json', ids: 'vernal-equinox, summer-solstice, autumnal-equinox, winter-solstice' },
+const ARCH_PATTERN_FAMILIES = {
+  'The Octave (8)': {
+    desc: 'Narrative Spine \u2014 all share 8 monomyth stage IDs',
+    members: [
+      { name: 'Monomyth Stages', count: 8, source: 'monomyth.json' },
+      { name: 'Steel Process', count: 8, source: 'steelProcess.json' },
+      { name: 'Synthesis', count: 8, source: 'synthesis.json' },
+      { name: 'Stage Overviews', count: '8+1', source: 'stageOverviews.json' },
+      { name: 'Psychles', count: 8, source: 'monomythPsychles.json' },
+      { name: 'Fallen Starlight', count: 8, source: 'fallenStarlight.json' },
+      { name: 'Natural Cycles', count: '6\u00d78', source: 'monomythCycles.json' },
+      { name: 'Theoretical Models', count: '20\u00d78', source: 'monomythModels.json' },
+      { name: 'Mythic Figures', count: '100+\u00d78', source: 'figures.json' },
+      { name: 'Journeys (8-stop)', count: '6\u00d78', source: 'journeyDefs.js' },
+    ],
+  },
+  'The Heptad (7)': {
+    desc: 'Cosmological Spine \u2014 all indexed by 7 classical planets',
+    members: [
+      { name: 'Planets', count: 7, source: 'chronosphaera.json' },
+      { name: 'Metals', count: 7, source: 'chronosphaera.json (.metal)' },
+      { name: 'Days', count: 7, source: 'chronosphaera.json (.day)' },
+      { name: 'Sins', count: 7, source: 'chronosphaera.json (.sin)' },
+      { name: 'Virtues', count: 7, source: 'chronosphaera.json (.virtue)' },
+      { name: 'Chakras', count: 7, source: 'chronosphaera.json (.body.chakra)' },
+      { name: 'Organs', count: 7, source: 'chronosphaera.json (.body.organ)' },
+      { name: 'Archetypes', count: 7, source: 'chronosphaeraArchetypes.json' },
+      { name: 'Sephiroth', count: 7, source: 'chronosphaeraHebrew.json' },
+    ],
+  },
+  'The Quaternary (4)': {
+    desc: 'Elemental Spine \u2014 4-directional and elemental patterns',
+    members: [
+      { name: 'Elements', count: 4, source: 'chronosphaeraElements.json' },
+      { name: 'Cardinal Directions', count: 4, source: 'chronosphaeraCardinals.json' },
+      { name: 'Medicine Wheels', count: '4/tradition', source: 'medicineWheels.json' },
+    ],
+  },
+  'The Dodecad (12)': {
+    desc: 'Zodiacal Cycle \u2014 12-fold patterns',
+    members: [
+      { name: 'Zodiac Signs', count: 12, source: 'chronosphaeraZodiac.json' },
+      { name: 'Calendar Months', count: 12, source: 'mythicCalendar.json' },
+    ],
+  },
+  'The Cosmic (26)': {
+    desc: 'Master Journey \u2014 7 ascending + 12 zodiac + 7 descending',
+    members: [
+      { name: 'Yellow Brick Road', count: '7+12+7', source: 'yellowBrickRoad.json' },
+    ],
+  },
+};
+
+const ARCH_OTHER_ENTITIES = {
   'Constellations': { count: 88, source: 'constellations.json' },
   'Pantheons': { count: 78, source: '*Pantheon.json (78 files)' },
-  'Mythic Figures': { count: '100+', source: 'figures.json' },
   'Journeys': { count: 9, source: 'journeyDefs.js' },
   'Courses': { count: 11, source: 'courseEngine.js' },
   'Ranks': { count: 7, source: 'profileEngine.js' },
@@ -7896,7 +7943,7 @@ const ARCH_INVARIANTS = [
 ];
 
 const ARCH_DOCS = [
-  { name: 'Ontology Spec v1', file: 'architecture/ontology_spec_v1.md', desc: 'Canonical entity inventory — what exists, counts, fields, relationships' },
+  { name: 'Ontology Spec v1.1', file: 'architecture/ontology_spec_v1.md', desc: 'Pattern families (8/7/4/12/26), entity inventory, relationships, invariants' },
   { name: 'System Enforcement Map', file: 'architecture/system_enforcement_map.md', desc: 'What is protected by tests and what is not' },
   { name: 'UI Contract', file: 'architecture/ui_contract.json', desc: 'Layout invariants, routes, design tokens, CSS rules' },
   { name: 'Schema Versioning', file: 'architecture/schema_versioning.md', desc: 'Semantic versioning rules, migration procedures, Firestore impact' },
@@ -7957,8 +8004,8 @@ function ArchitectureSection() {
           <div style={S.grid}>
             <div style={S.card}>
               <div style={S.label}>Schema Version</div>
-              <div style={{ ...S.value, fontSize: '1.1rem', fontFamily: 'Cinzel, serif' }}>v1.0.0</div>
-              <div style={S.small}>Established 2026-02-27</div>
+              <div style={{ ...S.value, fontSize: '1.1rem', fontFamily: 'Cinzel, serif' }}>v1.1.0</div>
+              <div style={S.small}>v1.1: Pattern families (2026-02-27)</div>
             </div>
             <div style={S.card}>
               <div style={S.label}>Test Coverage</div>
@@ -7991,19 +8038,40 @@ function ArchitectureSection() {
 
       {tab === 'ontology' && (
         <>
-          <h3 style={S.subhead}>Canonical Entity Inventory</h3>
-          <p style={S.small}>Source of truth: <span style={S.mono}>architecture/ontology_spec_v1.md</span></p>
+          <h3 style={S.subhead}>Pattern Families</h3>
+          <p style={S.small}>Source of truth: <span style={S.mono}>architecture/ontology_spec_v1.md</span> (v1.1)</p>
+          {Object.entries(ARCH_PATTERN_FAMILIES).map(([familyName, family]) => (
+            <div key={familyName} style={{ marginBottom: 20 }}>
+              <div style={{ ...S.label, fontSize: '0.9rem', marginBottom: 2 }}>{familyName}</div>
+              <div style={{ ...S.small, marginBottom: 8, fontStyle: 'italic' }}>{family.desc}</div>
+              <table style={S.table}>
+                <thead>
+                  <tr><th style={S.th}>Sequence</th><th style={S.th}>Count</th><th style={S.th}>Source</th></tr>
+                </thead>
+                <tbody>
+                  {family.members.map((m) => (
+                    <tr key={m.name}>
+                      <td style={S.td}>{m.name}</td>
+                      <td style={{ ...S.td, fontFamily: 'monospace', color: 'rgba(218,165,32,0.8)' }}>{m.count}</td>
+                      <td style={{ ...S.td, ...S.mono }}>{m.source}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ))}
+
+          <h3 style={{ ...S.subhead, marginTop: 24 }}>Other Entities</h3>
           <table style={S.table}>
             <thead>
-              <tr><th style={S.th}>Entity</th><th style={S.th}>Count</th><th style={S.th}>Source</th><th style={S.th}>IDs / Notes</th></tr>
+              <tr><th style={S.th}>Entity</th><th style={S.th}>Count</th><th style={S.th}>Source</th></tr>
             </thead>
             <tbody>
-              {Object.entries(ARCH_ONTOLOGY).map(([name, info]) => (
+              {Object.entries(ARCH_OTHER_ENTITIES).map(([name, info]) => (
                 <tr key={name}>
                   <td style={S.td}>{name}</td>
                   <td style={{ ...S.td, fontFamily: 'monospace', color: 'rgba(218,165,32,0.8)' }}>{info.count}</td>
                   <td style={{ ...S.td, ...S.mono }}>{info.source}</td>
-                  <td style={{ ...S.td, ...S.small }}>{info.ids || '—'}</td>
                 </tr>
               ))}
             </tbody>

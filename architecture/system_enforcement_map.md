@@ -125,7 +125,22 @@
 | Challenge modes (3 tests) | Valid mode values (wheel/cosmic), cosmic=3 levels, wheel=1 level |
 | Intro/completion text (2 tests) | Every journey has intro array + completion string |
 
-**Status: ENFORCED in CI** — GitHub Actions runs all 43 tests on push/PR to main.
+### `src/tests/dataIntegrity.test.js` (261+ tests)
+
+| Test Group | What It Protects |
+|---|---|
+| Canonical entity counts (12 tests) | 7 planets, 12 zodiac, 4 elements, 4 cardinals, 8 monomyth, 88 constellations, 26 YBR, 12 calendar, library, medicine wheels |
+| Planet data integrity (3 tests) | Required fields, planet name set, unique metals |
+| Zodiac data integrity (2 tests) | Sign/element fields, standard 12 names |
+| Monomyth data integrity (2 tests) | Stage IDs match expected set, each value is string |
+| Sacred sites (2 tests) | 200+ entries, name + coordinates per site |
+| Pantheon files (4 tests) | 78 files discovered, valid JSON, 3+ deities, name fields |
+| Figures (4 tests) | Array with 10+ figures, name/id fields, 8 stage keys per figure |
+| **Octave pattern integrity (14 tests)** | steelProcess 8 keys, synthesis 8 keys, stageOverviews 8+1 keys, psychles 8 keys, fallenStarlight titles/chapters 8 keys each, 6 cycles with 8 stages each, 20+ models with 8 stages each, required fields and non-empty strings |
+| **Heptad pattern integrity (7 tests)** | 7 unique metals, days, sins, virtues, chakras, organs; every planet has body.chakra + body.organ |
+| **Journey pattern integrity (5 tests)** | 6 journeys have 8 stops, planetary has 7, zodiac has 12, cosmic uses YBR (26), 9 total definitions |
+
+**Status: ENFORCED in CI** — GitHub Actions runs all tests on push/PR to main.
 
 ---
 

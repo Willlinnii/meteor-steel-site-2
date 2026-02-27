@@ -20,6 +20,13 @@ if (process.env.NODE_ENV === 'development') {
     elementsSchema,
     cardinalsSchema,
     figuresSchema,
+    steelProcessSchema,
+    synthesisSchema,
+    stageOverviewsSchema,
+    psychlesSchema,
+    fallenStarlightSchema,
+    cyclesSchema,
+    modelsSchema,
   } = require('./dataSchemas');
 
   // Canonical data imports
@@ -29,6 +36,13 @@ if (process.env.NODE_ENV === 'development') {
   const elements = require('../data/chronosphaeraElements.json');
   const cardinals = require('../data/chronosphaeraCardinals.json');
   const figures = require('../data/figures.json');
+  const steelProcess = require('../data/steelProcess.json');
+  const synthesis = require('../data/synthesis.json');
+  const stageOverviews = require('../data/stageOverviews.json');
+  const psychles = require('../data/monomythPsychles.json');
+  const fallenStarlight = require('../data/fallenStarlight.json');
+  const cycles = require('../data/monomythCycles.json');
+  const models = require('../data/monomythModels.json');
 
   // Run all validations
   validateOnLoad('planets (chronosphaera.json)', planets, planetsSchema);
@@ -37,6 +51,13 @@ if (process.env.NODE_ENV === 'development') {
   validateOnLoad('elements (chronosphaeraElements.json)', elements, elementsSchema);
   validateOnLoad('cardinals (chronosphaeraCardinals.json)', cardinals, cardinalsSchema);
   validateOnLoad('figures (figures.json)', figures, figuresSchema);
+  validateOnLoad('steelProcess (steelProcess.json)', steelProcess, steelProcessSchema);
+  validateOnLoad('synthesis (synthesis.json)', synthesis, synthesisSchema);
+  validateOnLoad('stageOverviews (stageOverviews.json)', stageOverviews, stageOverviewsSchema);
+  validateOnLoad('psychles (monomythPsychles.json)', psychles, psychlesSchema);
+  validateOnLoad('fallenStarlight (fallenStarlight.json)', fallenStarlight, fallenStarlightSchema);
+  validateOnLoad('cycles (monomythCycles.json)', cycles, cyclesSchema);
+  validateOnLoad('models (monomythModels.json)', models, modelsSchema);
 
   // eslint-disable-next-line no-console
   console.log(

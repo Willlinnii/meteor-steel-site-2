@@ -27,6 +27,18 @@ const mythSalonLibrary = require('../data/mythSalonLibrary.json');
 const mythicCalendar = require('../data/mythicCalendar.json');
 const medicineWheels = require('../data/medicineWheels.json');
 
+// Octave pattern files (8-sequences)
+const steelProcess = require('../data/steelProcess.json');
+const synthesis = require('../data/synthesis.json');
+const stageOverviews = require('../data/stageOverviews.json');
+const monomythPsychles = require('../data/monomythPsychles.json');
+const fallenStarlight = require('../data/fallenStarlight.json');
+const monomythCycles = require('../data/monomythCycles.json');
+const monomythModels = require('../data/monomythModels.json');
+
+// Journey definitions (JS module)
+const JOURNEY_DEFS = require('../data/journeyDefs.js').default || require('../data/journeyDefs.js');
+
 // ---------------------------------------------------------------------------
 // 1. Canonical entity counts
 // ---------------------------------------------------------------------------
@@ -243,5 +255,201 @@ describe('Figures data integrity', () => {
       const stageKeys = Object.keys(fig.stages);
       expect(stageKeys).toEqual(expect.arrayContaining(expectedStageIds));
     });
+  });
+});
+
+// ---------------------------------------------------------------------------
+// 8. Octave pattern integrity (8-sequences)
+// ---------------------------------------------------------------------------
+describe('Octave pattern integrity (8-sequences)', () => {
+  const STAGE_IDS = [
+    'golden-age', 'falling-star', 'impact-crater', 'forge',
+    'quenching', 'integration', 'drawing', 'new-age',
+  ];
+
+  test('steelProcess.json has 8 keys matching stage IDs', () => {
+    const keys = Object.keys(steelProcess);
+    expect(keys).toHaveLength(8);
+    expect(keys).toEqual(expect.arrayContaining(STAGE_IDS));
+    expect(STAGE_IDS).toEqual(expect.arrayContaining(keys));
+  });
+
+  test('synthesis.json has 8 keys matching stage IDs', () => {
+    const keys = Object.keys(synthesis);
+    expect(keys).toHaveLength(8);
+    expect(keys).toEqual(expect.arrayContaining(STAGE_IDS));
+    expect(STAGE_IDS).toEqual(expect.arrayContaining(keys));
+  });
+
+  test('stageOverviews.json has 8 stage keys plus overview', () => {
+    const keys = Object.keys(stageOverviews);
+    expect(keys).toHaveLength(9);
+    expect(keys).toEqual(expect.arrayContaining([...STAGE_IDS, 'overview']));
+  });
+
+  test('monomythPsychles.json has 8 keys matching stage IDs', () => {
+    const keys = Object.keys(monomythPsychles);
+    expect(keys).toHaveLength(8);
+    expect(keys).toEqual(expect.arrayContaining(STAGE_IDS));
+    expect(STAGE_IDS).toEqual(expect.arrayContaining(keys));
+  });
+
+  test('fallenStarlight.json titles has 8 keys matching stage IDs', () => {
+    const keys = Object.keys(fallenStarlight.titles);
+    expect(keys).toHaveLength(8);
+    expect(keys).toEqual(expect.arrayContaining(STAGE_IDS));
+    expect(STAGE_IDS).toEqual(expect.arrayContaining(keys));
+  });
+
+  test('fallenStarlight.json chapters has 8 keys matching stage IDs', () => {
+    const keys = Object.keys(fallenStarlight.chapters);
+    expect(keys).toHaveLength(8);
+    expect(keys).toEqual(expect.arrayContaining(STAGE_IDS));
+    expect(STAGE_IDS).toEqual(expect.arrayContaining(keys));
+  });
+
+  test('monomythCycles.json has exactly 6 cycles', () => {
+    expect(monomythCycles.cycles).toHaveLength(6);
+  });
+
+  test('each cycle has 8 stages', () => {
+    monomythCycles.cycles.forEach((cycle) => {
+      expect(cycle.stages).toHaveLength(8);
+    });
+  });
+
+  test('each cycle has required fields (id, title, stages)', () => {
+    monomythCycles.cycles.forEach((cycle) => {
+      expect(cycle).toHaveProperty('id');
+      expect(cycle).toHaveProperty('title');
+      expect(cycle).toHaveProperty('stages');
+      expect(typeof cycle.id).toBe('string');
+      expect(typeof cycle.title).toBe('string');
+      expect(Array.isArray(cycle.stages)).toBe(true);
+    });
+  });
+
+  test('monomythModels.json has 20+ models', () => {
+    expect(monomythModels.models.length).toBeGreaterThanOrEqual(20);
+  });
+
+  test('each model has 8 stages', () => {
+    monomythModels.models.forEach((model) => {
+      expect(model.stages).toHaveLength(8);
+    });
+  });
+
+  test('each model has required fields (id, theorist, stages)', () => {
+    monomythModels.models.forEach((model) => {
+      expect(model).toHaveProperty('id');
+      expect(model).toHaveProperty('theorist');
+      expect(model).toHaveProperty('stages');
+      expect(typeof model.id).toBe('string');
+      expect(typeof model.theorist).toBe('string');
+      expect(Array.isArray(model.stages)).toBe(true);
+    });
+  });
+
+  test('each model stage is a non-empty string or null (intentional gap)', () => {
+    monomythModels.models.forEach((model) => {
+      model.stages.forEach((stage) => {
+        if (stage !== null) {
+          expect(typeof stage).toBe('string');
+          expect(stage.length).toBeGreaterThan(0);
+        }
+      });
+    });
+  });
+
+  test('each cycle stage is a non-empty string', () => {
+    monomythCycles.cycles.forEach((cycle) => {
+      cycle.stages.forEach((stage) => {
+        expect(typeof stage).toBe('string');
+        expect(stage.length).toBeGreaterThan(0);
+      });
+    });
+  });
+});
+
+// ---------------------------------------------------------------------------
+// 9. Heptad pattern integrity (7-correspondences)
+// ---------------------------------------------------------------------------
+describe('Heptad pattern integrity (7-correspondences)', () => {
+  test('7 unique metals across planets', () => {
+    const metals = planets.map(p => p.metal);
+    expect(metals).toHaveLength(7);
+    expect(new Set(metals).size).toBe(7);
+  });
+
+  test('7 unique days across planets', () => {
+    const days = planets.map(p => p.day);
+    expect(days).toHaveLength(7);
+    expect(new Set(days).size).toBe(7);
+  });
+
+  test('7 unique sins across planets', () => {
+    const sins = planets.map(p => p.sin);
+    expect(sins).toHaveLength(7);
+    expect(new Set(sins).size).toBe(7);
+  });
+
+  test('7 unique virtues across planets', () => {
+    const virtues = planets.map(p => p.virtue);
+    expect(virtues).toHaveLength(7);
+    expect(new Set(virtues).size).toBe(7);
+  });
+
+  test('every planet has body.chakra and body.organ', () => {
+    planets.forEach((p) => {
+      expect(p).toHaveProperty('body');
+      expect(p.body).toHaveProperty('chakra');
+      expect(p.body).toHaveProperty('organ');
+      expect(typeof p.body.chakra).toBe('string');
+      expect(typeof p.body.organ).toBe('string');
+    });
+  });
+
+  test('7 unique chakras across planets', () => {
+    const chakras = planets.map(p => p.body.chakra);
+    expect(new Set(chakras).size).toBe(7);
+  });
+
+  test('7 unique organs across planets', () => {
+    const organs = planets.map(p => p.body.organ);
+    expect(new Set(organs).size).toBe(7);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// 10. Journey pattern integrity
+// ---------------------------------------------------------------------------
+describe('Journey pattern integrity', () => {
+  const eightStopJourneys = ['monomyth', 'meteor-steel', 'fused', 'consulting-storyteller', 'consulting-seeker', 'consulting-brand'];
+
+  test.each(eightStopJourneys)('%s journey has exactly 8 stops', (journeyId) => {
+    const journey = JOURNEY_DEFS[journeyId];
+    expect(journey).toBeDefined();
+    expect(journey.stages).toHaveLength(8);
+  });
+
+  test('planetary journey has exactly 7 stops', () => {
+    expect(JOURNEY_DEFS.planetary).toBeDefined();
+    expect(JOURNEY_DEFS.planetary.stages).toHaveLength(7);
+  });
+
+  test('zodiac journey has exactly 12 stops', () => {
+    expect(JOURNEY_DEFS.zodiac).toBeDefined();
+    expect(JOURNEY_DEFS.zodiac.stages).toHaveLength(12);
+  });
+
+  test('cosmic journey uses yellowBrickRoad (26 stops)', () => {
+    expect(JOURNEY_DEFS.cosmic).toBeDefined();
+    expect(JOURNEY_DEFS.cosmic.stagesSource).toBe('yellowBrickRoad');
+    // stages is null at definition time — loaded at runtime from yellowBrickRoad.json
+    expect(yellowBrickRoad.journeySequence).toHaveLength(26);
+  });
+
+  test('9 total journey definitions', () => {
+    expect(Object.keys(JOURNEY_DEFS)).toHaveLength(9);
   });
 });

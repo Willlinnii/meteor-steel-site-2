@@ -1,12 +1,16 @@
-# Ontology Specification v1.0
+# Ontology Specification v1.1
 
 > The canonical entity inventory for Mythouse — The Story Atlas.
 >
 > This document defines what exists, where it lives, and how entities relate.
 > Changes to entity structure require a version bump and migration plan.
 >
-> Version: 1.0
+> Version: 1.1
 > Date: 2026-02-27
+>
+> **v1.1 changelog:** Restructured Entity Inventory into Pattern Families to surface
+> the fractal architecture — the same numbers (8, 7, 4, 12, 26) recur across
+> narrative, cosmological, and structural layers. All entities preserved; no renames or removals.
 
 ---
 
@@ -24,34 +28,83 @@ All data in this system falls into one of three layers:
 
 ---
 
-## Entity Inventory
+## Pattern Families
 
-### Narrative Structure (The Spine)
+The site's data is organized around repeating number patterns that form a fractal architecture. The same numbers — 8, 7, 4, 12, 26 — recur as pattern families across narrative, cosmological, and structural layers. These are the two top-level organizing spines:
 
-| Entity | Canonical Source | Count | Required Fields | Relationships |
-|---|---|---|---|---|
-| **Monomyth Stage** | `src/data/monomyth.json` | 8 | id, name, atlas, psychles, forms, scripts, myths | Has theorists, myths, films, cycles, depth |
-| **Theorist** | `src/data/monomythTheorists.json` | ~30 | id, name, bio, books | Mapped to stages |
-| **Theoretical Model** | `src/data/monomythModels.json` | 20+ | id, name, description | Mapped to stages |
-| **Mythic Figure** | `src/data/figures.json` | 100+ | id, name, stage, culture | Belongs to stage, culture |
-| **Natural Cycle** | `src/data/monomythCycles.json` | 6 | id, name, stages | Maps to 8-stage cycle |
-| **Film Reference** | `src/data/monomythFilms.json` | 50+ | id, title, stages | Mapped to stages |
-| **Mythic Example** | `src/data/monomythMyths.json` | 30+ | id, name, stages | Mapped to stages |
-| **Synthesis** | `src/data/synthesis.json` | 8 entries | stage, layers | Connects all layers per stage |
-| **Steel Process** | `src/data/steelProcess.json` | 7 steps | id, label | Parallel to monomyth stages |
+- **The Octave (8)** — Narrative spine. All share the 8 monomyth stage IDs.
+- **The Heptad (7)** — Cosmological spine. All indexed by the 7 classical planets.
 
-### Cosmological Structure
+Below them: the Quaternary (4), Dodecad (12), and Cosmic (26 = 7+12+7).
 
-| Entity | Canonical Source | Count | Required Fields | Relationships |
-|---|---|---|---|---|
-| **Planet** | `src/data/chronosphaera.json` | 7 | number, metal, planet, day, sin, deities | Has element, deities, zodiac rulers, body parts |
-| **Zodiac Sign** | `src/data/chronosphaeraZodiac.json` | 12 | id, name, element, ruler | Ruled by planet, belongs to element |
-| **Element** | `src/data/chronosphaeraElements.json` | 4 | id, name, qualities | Contains zodiac signs |
-| **Cardinal Direction** | `src/data/chronosphaeraCardinals.json` | 4 | id, name, season | Marks seasonal thresholds |
-| **Constellation** | `src/data/constellations.json` + `constellationContent.json` | 88 | id, name, mythology | Independent (some overlap zodiac) |
-| **Calendar Month** | `src/data/mythicCalendar.json` | 12 | month, birthstone, flower | Links to zodiac, cultural holidays |
-| **Day/Night Polarity** | `src/data/dayNight.json` | Paired entries | — | Cross-cultural archetype pairs |
-| **Medicine Wheel** | `src/data/medicineWheels.json` + `medicineWheelContent.json` | Multiple traditions | id, tradition | 4-directional per tradition |
+### The Octave (8) — Narrative Spine
+
+All 8-sequences share the same stage IDs: `golden-age, falling-star, impact-crater, forge, quenching, integration, drawing, new-age`
+
+| Sequence | Canonical Source | Shape | Count |
+|---|---|---|---|
+| **Monomyth Stages** | `src/data/monomyth.json` | Object keyed by 8 stage IDs | 8 |
+| **Steel Process** | `src/data/steelProcess.json` | Object keyed by 8 stage IDs | 8 |
+| **Synthesis** | `src/data/synthesis.json` | Object keyed by 8 stage IDs | 8 |
+| **Stage Overviews** | `src/data/stageOverviews.json` | Object keyed by 8 stage IDs + `overview` | 8+1 |
+| **Psychles** | `src/data/monomythPsychles.json` | Object keyed by 8 stage IDs | 8 |
+| **Fallen Starlight** | `src/data/fallenStarlight.json` | `titles` + `chapters`, each keyed by 8 stage IDs | 8 |
+| **Natural Cycles** | `src/data/monomythCycles.json` | `cycles` array, 6 cycles, each with 8-item `stages` array | 6 x 8 |
+| **Theoretical Models** | `src/data/monomythModels.json` | `models` array, 20 models, each with 8-item `stages` array | 20 x 8 |
+| **Mythic Figures** | `src/data/figures.json` | Array of 100+ figures, each with `stages` object (8 keys) | 100+ x 8 |
+| **Journeys (8-stop)** | `src/data/journeyDefs.js` | monomyth, meteor-steel, fused, consulting-storyteller, consulting-seeker, consulting-brand | 6 x 8 |
+
+### The Heptad (7) — Cosmological Spine
+
+All indexed by 7 classical planets: Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn
+
+| Correspondence | Canonical Source | Access Path |
+|---|---|---|
+| **Planets** | `src/data/chronosphaera.json` | Array of 7 planet objects |
+| **Metals** | `src/data/chronosphaera.json` | `.metal` (Gold, Silver, Mercury, Copper, Iron, Tin, Lead) |
+| **Days of Week** | `src/data/chronosphaera.json` | `.day` (Sunday through Saturday) |
+| **Sins** | `src/data/chronosphaera.json` | `.sin` (Pride, Envy, Greed, Lust, Wrath, Gluttony, Sloth) |
+| **Virtues** | `src/data/chronosphaera.json` | `.virtue` (Humility, Gratitude, Patience, Charity, Temperance, Chastity, Diligence) |
+| **Chakras** | `src/data/chronosphaera.json` | `.body.chakra` (Crown through Root) |
+| **Organs** | `src/data/chronosphaera.json` | `.body.organ` (Skin, Brain, Lungs, Kidneys, Heart, Liver, Spleen) |
+| **Archetypes** | `src/data/chronosphaeraArchetypes.json` | 7 archetypal patterns per planet |
+| **Sephiroth** | `src/data/chronosphaeraHebrew.json` | Hebrew mystical correspondences |
+| **Deities (per culture)** | `src/data/chronosphaeraDeities.json` | Multi-culture deity mappings per planet |
+| **Planetary Journey** | `src/data/journeyDefs.js` | `PLANETARY_STAGES` — 7-stop ascending journey |
+
+### The Quaternary (4) — Elemental Spine
+
+| Sequence | Canonical Source | IDs |
+|---|---|---|
+| **Elements** | `src/data/chronosphaeraElements.json` | Fire, Earth, Air, Water |
+| **Cardinal Directions** | `src/data/chronosphaeraCardinals.json` | vernal-equinox, summer-solstice, autumnal-equinox, winter-solstice |
+| **Medicine Wheels** | `src/data/medicineWheels.json` + `medicineWheelContent.json` | Multiple 4-directional traditions |
+| **Zodiac Triplicities** | Derived: 3 signs per element | Fire: Aries/Leo/Sagittarius, etc. |
+
+### The Dodecad (12) — Zodiacal Cycle
+
+| Sequence | Canonical Source | Notes |
+|---|---|---|
+| **Zodiac Signs** | `src/data/chronosphaeraZodiac.json` | 12 signs with element + ruler |
+| **Calendar Months** | `src/data/mythicCalendar.json` | 12 months with birthstone, flower, holidays |
+| **Zodiac Journey** | `src/data/journeyDefs.js` | `ZODIAC_STAGES` — 12-stop journey |
+
+### The Cosmic (26 = 7+12+7) — Master Journey
+
+| Sequence | Canonical Source | Structure |
+|---|---|---|
+| **Yellow Brick Road** | `src/data/yellowBrickRoad.json` | 7 ascending planets + 12 zodiac + 7 descending planets |
+| **Cosmic Journey** | `src/data/journeyDefs.js` | 26-stop, 3 levels per stop |
+
+### Other Entities
+
+| Entity | Canonical Source | Count | Notes |
+|---|---|---|---|
+| **Theorist** | `src/data/monomythTheorists.json` | ~30 | Mapped to stages |
+| **Film Reference** | `src/data/monomythFilms.json` | 50+ | Mapped to stages |
+| **Mythic Example** | `src/data/monomythMyths.json` | 30+ | Mapped to stages |
+| **Constellation** | `src/data/constellations.json` + `constellationContent.json` | 88 | Independent (some overlap zodiac) |
+| **Day/Night Polarity** | `src/data/dayNight.json` | Paired entries | Cross-cultural archetype pairs |
 
 ### Enrichment Files (Planet System)
 

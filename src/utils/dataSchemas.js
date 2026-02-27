@@ -100,6 +100,92 @@ export const figuresSchema = {
   },
 };
 
+// ---- Octave pattern schemas (8-sequences) ----
+
+/**
+ * 8 steel process stages — steelProcess.json
+ * Object keyed by stage ID, each value is a long-form string.
+ */
+export const steelProcessSchema = {
+  type: 'object',
+  exactKeys: STAGE_IDS,
+  valueType: 'string',
+};
+
+/**
+ * 8 synthesis entries — synthesis.json
+ * Object keyed by stage ID, each value is a long-form string.
+ */
+export const synthesisSchema = {
+  type: 'object',
+  exactKeys: STAGE_IDS,
+  valueType: 'string',
+};
+
+/**
+ * 8+1 stage overviews — stageOverviews.json
+ * Object keyed by 8 stage IDs plus 'overview'.
+ */
+export const stageOverviewsSchema = {
+  type: 'object',
+  requiredKeys: [...STAGE_IDS, 'overview'],
+  valueType: 'string',
+};
+
+/**
+ * 8 psychosomatic correspondences — monomythPsychles.json
+ * Object keyed by stage ID.
+ */
+export const psychlesSchema = {
+  type: 'object',
+  exactKeys: STAGE_IDS,
+};
+
+/**
+ * 8 chapters of Fallen Starlight — fallenStarlight.json
+ * Object with `titles` and `chapters`, each keyed by 8 stage IDs.
+ */
+export const fallenStarlightSchema = {
+  type: 'object',
+  requiredKeys: ['titles', 'chapters'],
+  childSchemas: {
+    titles: { type: 'object', exactKeys: STAGE_IDS, valueType: 'string' },
+    chapters: { type: 'object', exactKeys: STAGE_IDS, valueType: 'string' },
+  },
+};
+
+/**
+ * 6 natural cycles — monomythCycles.json
+ * Object with `cycles` array, each cycle has id, title, and 8-item stages array.
+ */
+export const cyclesSchema = {
+  type: 'object',
+  requiredKeys: ['cycles'],
+  childSchemas: {
+    cycles: {
+      type: 'array',
+      exactLength: 6,
+      itemShape: { id: 'string', title: 'string', stages: 'array' },
+    },
+  },
+};
+
+/**
+ * 20+ theoretical models — monomythModels.json
+ * Object with `models` array, each model has id, theorist, and 8-item stages array.
+ */
+export const modelsSchema = {
+  type: 'object',
+  requiredKeys: ['models'],
+  childSchemas: {
+    models: {
+      type: 'array',
+      minLength: 20,
+      itemShape: { id: 'string', theorist: 'string', stages: 'array' },
+    },
+  },
+};
+
 // ---- Exports for convenience ----
 
 export const ALL_SCHEMAS = {
@@ -109,4 +195,11 @@ export const ALL_SCHEMAS = {
   elements: elementsSchema,
   cardinals: cardinalsSchema,
   figures: figuresSchema,
+  steelProcess: steelProcessSchema,
+  synthesis: synthesisSchema,
+  stageOverviews: stageOverviewsSchema,
+  psychles: psychlesSchema,
+  fallenStarlight: fallenStarlightSchema,
+  cycles: cyclesSchema,
+  models: modelsSchema,
 };
