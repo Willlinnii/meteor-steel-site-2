@@ -624,6 +624,7 @@ const SECTION_GROUPS = [
     { id: 'coursework', label: 'Coursework' },
     { id: 'curated-products', label: 'Curated Products' },
     { id: '360-media', label: '360 Media' },
+    { id: 'architecture', label: 'Architecture' },
   ]},
   { group: 'Discover', children: [
     { id: 'discover-main', label: 'Main Discover \u2197', href: '/discover' },
@@ -7837,6 +7838,316 @@ function ConsultingManagerSection() {
   );
 }
 
+// ═══════════════════════════════════════════════════════════════
+// ARCHITECTURE GOVERNANCE — Specs, tests, schema, CSS audit
+// ═══════════════════════════════════════════════════════════════
+
+const ARCH_ONTOLOGY = {
+  'Monomyth Stages': { count: 8, source: 'monomyth.json', ids: 'golden-age, falling-star, impact-crater, forge, quenching, integration, drawing, new-age' },
+  'Planets': { count: 7, source: 'chronosphaera.json', ids: 'Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn' },
+  'Zodiac Signs': { count: 12, source: 'chronosphaeraZodiac.json', ids: 'Aries through Pisces' },
+  'Elements': { count: 4, source: 'chronosphaeraElements.json', ids: 'Fire, Earth, Air, Water' },
+  'Cardinal Directions': { count: 4, source: 'chronosphaeraCardinals.json', ids: 'vernal-equinox, summer-solstice, autumnal-equinox, winter-solstice' },
+  'Constellations': { count: 88, source: 'constellations.json' },
+  'Pantheons': { count: 78, source: '*Pantheon.json (78 files)' },
+  'Mythic Figures': { count: '100+', source: 'figures.json' },
+  'Journeys': { count: 9, source: 'journeyDefs.js' },
+  'Courses': { count: 11, source: 'courseEngine.js' },
+  'Ranks': { count: 7, source: 'profileEngine.js' },
+  'Stripe Products': { count: '20+', source: 'stripeProducts.js' },
+};
+
+const ARCH_TESTS = [
+  { suite: 'dataIntegrity.test.js', tests: 261, covers: 'Entity counts, field shapes, pantheon validation, sacred sites, figures' },
+  { suite: 'routeExistence.test.js', tests: 41, covers: 'All lazy + static page imports resolve' },
+  { suite: 'featureExistence.test.js', tests: 171, covers: 'Page directories, shared components, context providers' },
+  { suite: 'apiHandlers.test.js', tests: 49, covers: 'Stripe products, tier config, content index, mentor routing' },
+  { suite: 'courseEngine.test.js', tests: 35, covers: 'Course definitions, requirement types, completion logic' },
+  { suite: 'journeyDefs.test.js', tests: 14, covers: 'Journey configs, stop counts, challenge modes' },
+];
+
+const ARCH_CSS_STATUS = {
+  appCssLines: 3160,
+  appCssOriginal: 7691,
+  extracted: [
+    { file: 'ProfilePage.css', lines: 3162, page: 'Profile' },
+    { file: 'GuildPage.css', lines: 585, page: 'Guild' },
+    { file: 'StoryForge.css', lines: 799, page: 'Story Forge' },
+  ],
+  remaining: [
+    { section: 'MentorDirectory', lines: '~447', priority: 'Next' },
+    { section: 'FallenStarlight', lines: '~224', priority: 'Next' },
+    { section: 'Home/CircleNav', lines: '~769', priority: 'Deferred (generic selectors need renaming)' },
+    { section: 'Store Modal', lines: '~219', priority: 'Low' },
+  ],
+};
+
+const ARCH_INVARIANTS = [
+  '8 monomyth stages — IDs and order are locked',
+  '7 classical planets — cannot add or remove',
+  '12 zodiac signs — element and ruler assignments fixed',
+  '4 elements — Fire, Earth, Air, Water',
+  '4 cardinal directions — seasonal thresholds',
+  '"Chronosphaera" naming — never "metals" or "seven-metals"',
+  'Element IDs use dot-path convention (e.g. monomyth.theorists.forge.campbell)',
+  'Pantheons are per-culture, never merged',
+  'Generative content never writes to canonical data',
+  'Vercel function limit: 12 (Hobby plan)',
+];
+
+const ARCH_DOCS = [
+  { name: 'Ontology Spec v1', file: 'architecture/ontology_spec_v1.md', desc: 'Canonical entity inventory — what exists, counts, fields, relationships' },
+  { name: 'System Enforcement Map', file: 'architecture/system_enforcement_map.md', desc: 'What is protected by tests and what is not' },
+  { name: 'UI Contract', file: 'architecture/ui_contract.json', desc: 'Layout invariants, routes, design tokens, CSS rules' },
+  { name: 'Schema Versioning', file: 'architecture/schema_versioning.md', desc: 'Semantic versioning rules, migration procedures, Firestore impact' },
+  { name: 'CSS Audit', file: 'architecture/css_audit.md', desc: 'App.css inventory, extraction plan, compliance check' },
+  { name: 'CLAUDE.md', file: 'CLAUDE.md', desc: '9 governance rules for AI — schema changes, layout, CSS, naming, limits' },
+];
+
+function ArchitectureSection() {
+  const [tab, setTab] = useState('overview');
+  const S = {
+    wrap: { padding: '32px 24px', maxWidth: 960 },
+    heading: { fontFamily: 'Cinzel, serif', color: 'rgba(218,165,32,0.9)', fontSize: '1.4rem', marginBottom: 8 },
+    subhead: { fontFamily: 'Cinzel, serif', color: '#ddd', fontSize: '1rem', marginBottom: 10 },
+    desc: { color: '#aaa', fontSize: '0.85rem', lineHeight: 1.6, marginBottom: 20 },
+    tabs: { display: 'flex', gap: 0, borderBottom: '1px solid var(--border-subtle)', marginBottom: 24 },
+    tab: (active) => ({
+      padding: '8px 16px', fontSize: '0.8rem', fontFamily: 'Cinzel, serif',
+      background: active ? 'rgba(218,165,32,0.12)' : 'transparent',
+      border: 'none', borderBottom: active ? '2px solid rgba(218,165,32,0.7)' : '2px solid transparent',
+      color: active ? 'rgba(218,165,32,0.9)' : '#888', cursor: 'pointer', transition: 'all 0.2s',
+    }),
+    card: { background: 'rgba(26,26,36,0.7)', border: '1px solid rgba(218,165,32,0.15)', borderRadius: 8, padding: '12px 14px', marginBottom: 10 },
+    grid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 12 },
+    label: { fontFamily: 'Cinzel, serif', fontSize: '0.82rem', color: 'rgba(218,165,32,0.8)', marginBottom: 4 },
+    value: { fontSize: '0.85rem', color: '#ccc', lineHeight: 1.4 },
+    small: { fontSize: '0.78rem', color: '#999', lineHeight: 1.4 },
+    mono: { fontFamily: 'monospace', fontSize: '0.78rem', color: 'rgba(139,157,195,0.8)' },
+    badge: (color) => ({
+      display: 'inline-block', padding: '2px 8px', borderRadius: 4, fontSize: '0.72rem', fontWeight: 600,
+      background: `${color}22`, color: color, border: `1px solid ${color}44`,
+    }),
+    table: { width: '100%', borderCollapse: 'collapse', fontSize: '0.82rem' },
+    th: { textAlign: 'left', padding: '8px 10px', borderBottom: '1px solid rgba(218,165,32,0.2)', color: 'rgba(218,165,32,0.7)', fontFamily: 'Cinzel, serif', fontSize: '0.78rem' },
+    td: { padding: '7px 10px', borderBottom: '1px solid rgba(255,255,255,0.05)', color: '#bbb' },
+  };
+
+  const totalTests = ARCH_TESTS.reduce((s, t) => s + t.tests, 0);
+  const reduction = Math.round((1 - ARCH_CSS_STATUS.appCssLines / ARCH_CSS_STATUS.appCssOriginal) * 100);
+
+  return (
+    <div className="admin-section-content" style={S.wrap}>
+      <h2 style={S.heading}>Architecture Governance</h2>
+      <p style={S.desc}>
+        Canonical specs, test coverage, schema rules, and CSS modularization status.
+        These govern what AI can and cannot change.
+      </p>
+
+      <div style={S.tabs}>
+        {['overview', 'ontology', 'tests', 'css', 'docs'].map(t => (
+          <button key={t} style={S.tab(tab === t)} onClick={() => setTab(t)}>
+            {t === 'overview' ? 'Overview' : t === 'ontology' ? 'Ontology' : t === 'tests' ? 'Tests' : t === 'css' ? 'CSS Audit' : 'Docs'}
+          </button>
+        ))}
+      </div>
+
+      {tab === 'overview' && (
+        <>
+          <div style={S.grid}>
+            <div style={S.card}>
+              <div style={S.label}>Schema Version</div>
+              <div style={{ ...S.value, fontSize: '1.1rem', fontFamily: 'Cinzel, serif' }}>v1.0.0</div>
+              <div style={S.small}>Established 2026-02-27</div>
+            </div>
+            <div style={S.card}>
+              <div style={S.label}>Test Coverage</div>
+              <div style={{ ...S.value, fontSize: '1.1rem', fontFamily: 'Cinzel, serif' }}>{totalTests} tests</div>
+              <div style={S.small}>6 suites — data, routes, features, API, courses, journeys</div>
+            </div>
+            <div style={S.card}>
+              <div style={S.label}>App.css</div>
+              <div style={{ ...S.value, fontSize: '1.1rem', fontFamily: 'Cinzel, serif' }}>{ARCH_CSS_STATUS.appCssLines.toLocaleString()} lines</div>
+              <div style={S.small}>Down from {ARCH_CSS_STATUS.appCssOriginal.toLocaleString()} ({reduction}% extracted)</div>
+            </div>
+            <div style={S.card}>
+              <div style={S.label}>Vercel Functions</div>
+              <div style={{ ...S.value, fontSize: '1.1rem', fontFamily: 'Cinzel, serif' }}>12 / 12</div>
+              <div style={S.small}>Hobby plan limit — consolidate before adding</div>
+            </div>
+          </div>
+
+          <h3 style={{ ...S.subhead, marginTop: 24 }}>Protected Invariants</h3>
+          <div style={{ ...S.card, padding: 0 }}>
+            {ARCH_INVARIANTS.map((inv, i) => (
+              <div key={i} style={{ padding: '8px 14px', borderBottom: i < ARCH_INVARIANTS.length - 1 ? '1px solid rgba(255,255,255,0.04)' : 'none', display: 'flex', gap: 10, alignItems: 'baseline' }}>
+                <span style={S.badge('#c9a961')}>{i + 1}</span>
+                <span style={S.small}>{inv}</span>
+              </div>
+            ))}
+          </div>
+        </>
+      )}
+
+      {tab === 'ontology' && (
+        <>
+          <h3 style={S.subhead}>Canonical Entity Inventory</h3>
+          <p style={S.small}>Source of truth: <span style={S.mono}>architecture/ontology_spec_v1.md</span></p>
+          <table style={S.table}>
+            <thead>
+              <tr><th style={S.th}>Entity</th><th style={S.th}>Count</th><th style={S.th}>Source</th><th style={S.th}>IDs / Notes</th></tr>
+            </thead>
+            <tbody>
+              {Object.entries(ARCH_ONTOLOGY).map(([name, info]) => (
+                <tr key={name}>
+                  <td style={S.td}>{name}</td>
+                  <td style={{ ...S.td, fontFamily: 'monospace', color: 'rgba(218,165,32,0.8)' }}>{info.count}</td>
+                  <td style={{ ...S.td, ...S.mono }}>{info.source}</td>
+                  <td style={{ ...S.td, ...S.small }}>{info.ids || '—'}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+
+          <h3 style={{ ...S.subhead, marginTop: 28 }}>Data Authority Layers</h3>
+          <div style={S.grid}>
+            <div style={S.card}>
+              <div style={S.label}>Canonical</div>
+              <div style={S.small}>Core ontology. Structured, versioned, tested. AI must propose changes, human approves.</div>
+            </div>
+            <div style={S.card}>
+              <div style={S.label}>Overlay</div>
+              <div style={S.small}>User-generated enrichment. Writings, story cards, teacher syllabi, feed posts.</div>
+            </div>
+            <div style={S.card}>
+              <div style={S.label}>Generative</div>
+              <div style={S.small}>AI-produced. Ephemeral unless promoted. Atlas chat, persona dialogues, natal interpretations.</div>
+            </div>
+          </div>
+        </>
+      )}
+
+      {tab === 'tests' && (
+        <>
+          <h3 style={S.subhead}>Test Suites ({totalTests} total)</h3>
+          <table style={S.table}>
+            <thead>
+              <tr><th style={S.th}>Suite</th><th style={S.th}>Tests</th><th style={S.th}>Covers</th></tr>
+            </thead>
+            <tbody>
+              {ARCH_TESTS.map(t => (
+                <tr key={t.suite}>
+                  <td style={{ ...S.td, ...S.mono }}>{t.suite}</td>
+                  <td style={{ ...S.td, fontFamily: 'monospace', color: 'rgba(218,165,32,0.8)', textAlign: 'center' }}>{t.tests}</td>
+                  <td style={{ ...S.td, ...S.small }}>{t.covers}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+
+          <h3 style={{ ...S.subhead, marginTop: 28 }}>Enforcement Pipeline</h3>
+          <div style={S.grid}>
+            <div style={S.card}>
+              <div style={S.label}>Pre-commit Hook</div>
+              <div style={S.small}>husky + lint-staged — runs related tests for staged .js/.jsx files, data integrity tests for .json changes</div>
+            </div>
+            <div style={S.card}>
+              <div style={S.label}>GitHub Actions CI</div>
+              <div style={S.small}>.github/workflows/ci.yml — runs full test suite on every push/PR to main</div>
+            </div>
+            <div style={S.card}>
+              <div style={S.label}>Dev Runtime Validation</div>
+              <div style={S.small}>validateCanonicalData.js — checks entity shapes on app startup (dev only, zero prod overhead)</div>
+            </div>
+          </div>
+        </>
+      )}
+
+      {tab === 'css' && (
+        <>
+          <h3 style={S.subhead}>CSS Modularization Progress</h3>
+          <div style={{ ...S.card, display: 'flex', alignItems: 'center', gap: 16, marginBottom: 20 }}>
+            <div style={{ flex: 1 }}>
+              <div style={{ height: 8, borderRadius: 4, background: 'rgba(255,255,255,0.08)', overflow: 'hidden' }}>
+                <div style={{ height: '100%', width: `${reduction}%`, background: 'linear-gradient(90deg, rgba(218,165,32,0.6), rgba(218,165,32,0.9))', borderRadius: 4 }} />
+              </div>
+            </div>
+            <div style={{ ...S.value, fontFamily: 'Cinzel, serif', whiteSpace: 'nowrap' }}>{reduction}% extracted</div>
+          </div>
+
+          <h4 style={{ ...S.label, marginBottom: 8 }}>Completed Extractions</h4>
+          <table style={S.table}>
+            <thead>
+              <tr><th style={S.th}>File</th><th style={S.th}>Lines</th><th style={S.th}>Page</th></tr>
+            </thead>
+            <tbody>
+              {ARCH_CSS_STATUS.extracted.map(e => (
+                <tr key={e.file}>
+                  <td style={{ ...S.td, ...S.mono }}>{e.file}</td>
+                  <td style={{ ...S.td, textAlign: 'center', color: '#8f8' }}>{e.lines.toLocaleString()}</td>
+                  <td style={S.td}>{e.page}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+
+          <h4 style={{ ...S.label, marginTop: 20, marginBottom: 8 }}>Remaining in App.css</h4>
+          <table style={S.table}>
+            <thead>
+              <tr><th style={S.th}>Section</th><th style={S.th}>~Lines</th><th style={S.th}>Priority</th></tr>
+            </thead>
+            <tbody>
+              {ARCH_CSS_STATUS.remaining.map(r => (
+                <tr key={r.section}>
+                  <td style={S.td}>{r.section}</td>
+                  <td style={{ ...S.td, textAlign: 'center' }}>{r.lines}</td>
+                  <td style={{ ...S.td, ...S.small }}>{r.priority}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </>
+      )}
+
+      {tab === 'docs' && (
+        <>
+          <h3 style={S.subhead}>Architecture Documents</h3>
+          <p style={S.small}>These files live in the repository. AI agents are required to check them before making structural changes.</p>
+          {ARCH_DOCS.map(d => (
+            <div key={d.file} style={{ ...S.card, marginBottom: 10 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 4 }}>
+                <div style={S.label}>{d.name}</div>
+                <div style={S.mono}>{d.file}</div>
+              </div>
+              <div style={S.small}>{d.desc}</div>
+            </div>
+          ))}
+
+          <h3 style={{ ...S.subhead, marginTop: 28 }}>AI Governance Rules (from CLAUDE.md)</h3>
+          <div style={{ ...S.card, padding: 0 }}>
+            {[
+              'No silent schema changes — propose first, reference ontology spec',
+              'No layout mutations without checking ui_contract.json',
+              'No new styles in App.css — use page-scoped CSS files',
+              'All changes must pass tests (565+ tests)',
+              'Canonical data lives in src/data/ — no inline datasets',
+              'Naming: "Chronosphaera" not "metals" or "seven-metals"',
+              'Generative content never writes to canonical data automatically',
+              'Vercel function limit: 12 — consolidate before adding',
+              'Paywall bypass is active (temporary) — do not remove override',
+            ].map((rule, i) => (
+              <div key={i} style={{ padding: '8px 14px', borderBottom: i < 8 ? '1px solid rgba(255,255,255,0.04)' : 'none', display: 'flex', gap: 10, alignItems: 'baseline' }}>
+                <span style={S.badge('#8b9dc3')}>{i + 1}</span>
+                <span style={S.small}>{rule}</span>
+              </div>
+            ))}
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
 function AdminPage() {
   const [activeSection, setActiveSection] = useState('plan');
   const [openGroup, setOpenGroup] = useState('Business');
@@ -7922,6 +8233,7 @@ function AdminPage() {
       {activeSection === 'coursework' && <CourseworkManagerSection />}
       {activeSection === 'curated-products' && <CuratedProductsSection />}
       {activeSection === '360-media' && <Media360Section />}
+      {activeSection === 'architecture' && <ArchitectureSection />}
       {activeSection === 'subscribers' && <SubscribersSection />}
       {activeSection === 'mentors' && <MentorManagerSection />}
       {activeSection === 'consulting' && <ConsultingManagerSection />}
