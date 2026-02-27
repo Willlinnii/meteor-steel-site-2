@@ -164,6 +164,34 @@
 | Core contexts exist (12 tests) | AuthContext, ProfileContext, CourseworkContext, WritingsContext — file exists, can be required, exports provider + hook |
 | Layout structure integrity (10 tests) | SiteHeader, SiteNav, SiteFooter defined with correct HTML elements and CSS classes; ErrorBoundary wraps Routes; layout order enforced (header → nav → boundary → footer); ChatPanel included |
 
+### `src/hooks/__tests__/useMultiLevelJourney.test.js` (22 tests)
+
+| Test Group | What It Protects |
+|---|---|
+| Initialization & Reset (5 tests) | Hook state machine starts clean, resets fully |
+| Navigation (5 tests) | Stop progression, boundary at last stop, journey completion |
+| recordResult (7 tests) | Multi-level progress tracking, message accumulation, pass idempotency |
+| Completion Checks (5 tests) | isStopComplete (all levels), completedStops counter |
+
+### `src/hooks/__tests__/useWheelJourney.test.js` (17 tests)
+
+| Test Group | What It Protects |
+|---|---|
+| Initialization & Reset (5 tests) | Single-level hook state machine |
+| Navigation (4 tests) | Stop progression, journey completion |
+| recordResult (5 tests) | Single-level progress, pass idempotency |
+| Completion Checks (3 tests) | isStopComplete, completedStops |
+
+### `src/hooks/__tests__/useYellowBrickRoad.test.js` (16 tests)
+
+| Test Group | What It Protects |
+|---|---|
+| Data Integrity (3 tests) | 26-stop sequence from yellowBrickRoad.json |
+| Initialization & Reset (3 tests) | Cosmic journey state machine |
+| Navigation (4 tests) | Cosmic journey progression, boundary at stop 25 |
+| getCurrentStop (3 tests) | Stop object retrieval, bounds checking |
+| recordChallengeResult & Completion (3 tests) | 3-level challenge tracking |
+
 ### Runtime schema validation (13 schemas)
 
 | Schema | File Validated | Enforcement |
@@ -171,7 +199,7 @@
 | planets, zodiac, monomyth, elements, cardinals, figures | Core ontology entities | Dev-mode console warnings via `validateCanonicalData.js` |
 | steelProcess, synthesis, stageOverviews, psychles, fallenStarlight, cycles, models | Octave pattern files | Dev-mode console warnings via `validateCanonicalData.js` |
 
-**Total: 606 tests across 6 suites + 13 runtime schemas**
+**Total: 661 tests across 9 suites + 13 runtime schemas**
 
 **Status: ENFORCED in CI** — GitHub Actions runs all tests on push/PR to main. Pre-commit hooks (lint-staged) run related tests on staged files.
 

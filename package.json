@@ -60,6 +60,7 @@
   },
   "proxy": "https://meteor-steel-site-2.vercel.app",
   "devDependencies": {
+    "@testing-library/react": "^16.3.2",
     "husky": "^9.1.7",
     "lint-staged": "^16.2.7",
     "mammoth": "^1.11.0",
