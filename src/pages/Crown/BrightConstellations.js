@@ -63,8 +63,9 @@ function arcSegments(lon1, lat1, lon2, lat2, R) {
   return pts;
 }
 
-export default function BrightConstellations({ radius }) {
+export default function BrightConstellations({ radius, wallHeight }) {
   const R = radius || (ZODIAC_RADIUS - 0.05);
+  const halfWall = (wallHeight || WALL_HEIGHT) / 2;
 
   const { pointsGeo, linesGeo } = useMemo(() => {
     const zodiacIds = new Set(Object.values(ZODIAC_CONSTELLATION_MAP));
@@ -77,7 +78,7 @@ export default function BrightConstellations({ radius }) {
       for (const [[lon1, lat1], [lon2, lat2]] of constellation.lines) {
         const p1 = projectToCylinder(lon1, lat1, R);
         const p2 = projectToCylinder(lon2, lat2, R);
-        if (Math.abs(p1[1]) > HALF_WALL || Math.abs(p2[1]) > HALF_WALL) continue;
+        if (Math.abs(p1[1]) > halfWall || Math.abs(p2[1]) > halfWall) continue;
         for (const [pos, lon, lat] of [[p1, lon1, lat1], [p2, lon2, lat2]]) {
           const key = `${lon},${lat}`;
           if (uniqueKeys.has(key)) continue;
@@ -98,7 +99,7 @@ export default function BrightConstellations({ radius }) {
     const lGeo = new THREE.BufferGeometry();
     lGeo.setAttribute('position', new THREE.Float32BufferAttribute(linePositions, 3));
     return { pointsGeo: pGeo, linesGeo: lGeo };
-  }, [R]);
+  }, [R, halfWall]);
 
   // Bright core star sprite
   const sprite = useMemo(() => {

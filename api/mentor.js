@@ -2,6 +2,7 @@ const admin = require('firebase-admin');
 const { getMentorTypeInfo } = require('./_lib/mentorTypes');
 const { getAnthropicClient, getUserKeys } = require('./_lib/llm');
 const { ensureFirebaseAdmin, getUidFromRequest } = require('./_lib/auth');
+const { getContentCatalog, searchContent } = require('./_lib/contentIndex');
 
 // Model config
 const MODELS = {
@@ -17,12 +18,64 @@ const MAX_BIO_LENGTH = 500;
 // Valid consulting types (mirrors consultingEngine.js CONSULTING_TYPES)
 const VALID_CONSULTING_TYPES = new Set(['character', 'narrative', 'coaching', 'media', 'adventure']);
 
-// All valid actions across admin, directory, pairing, and consulting
+// ── Guild constants ──
+const MAX_TITLE_LENGTH = 200;
+const MAX_BODY_LENGTH = 10000;
+const MAX_IMAGES = 4;
+const REQUIRED_MENTOR_COURSES = ['monomyth-explorer', 'celestial-clocks-explorer', 'atlas-conversationalist'];
+
+// ── Consulting engagement stage templates ──
+const STAGE_TEMPLATES = {
+  storyteller: [
+    { id: 'seed', label: 'The Seed', description: 'What wants to be born? The raw impulse.' },
+    { id: 'call', label: 'The Call', description: 'The vision clarifies. What story is asking to be told?' },
+    { id: 'descent', label: 'The Descent', description: 'Into material. Research, gathering, immersion.' },
+    { id: 'forge', label: 'The Forge', description: 'Active creation. Heat and hammer.' },
+    { id: 'quench', label: 'The Quench', description: 'Stepping back. Letting it cool. First reflection.' },
+    { id: 'polish', label: 'The Polish', description: 'Refinement. Craft applied to raw creation.' },
+    { id: 'offering', label: 'The Offering', description: 'Preparation for the world. Framing, context, courage.' },
+    { id: 'release', label: 'The Release', description: 'Letting it go. The work enters the world.' },
+  ],
+  artist: null,
+  creator: null,
+  seeker: [
+    { id: 'ordinary-world', label: 'Ordinary World', description: 'Where you are. The known ground.' },
+    { id: 'call', label: 'The Call', description: "What's pulling you. The disturbance." },
+    { id: 'threshold', label: 'The Threshold', description: 'What you must leave behind to answer.' },
+    { id: 'trials', label: 'The Trials', description: 'What you face. The tests that shape you.' },
+    { id: 'abyss', label: 'The Abyss', description: 'The deepest point. What dies so something can live.' },
+    { id: 'return', label: 'The Return', description: 'What you bring back. The boon.' },
+    { id: 'integration', label: 'Integration', description: 'Making it real in daily life.' },
+    { id: 'renewal', label: 'Renewal', description: "The new ordinary world. Who you've become." },
+  ],
+  brand: [
+    { id: 'origin', label: 'Origin', description: 'Where you came from. The founding myth.' },
+    { id: 'identity', label: 'Identity', description: 'Who you are. The archetypal core.' },
+    { id: 'shadow', label: 'Shadow', description: 'What you avoid. The unspoken story.' },
+    { id: 'transformation', label: 'Transformation', description: "What's changing. The threshold you're crossing." },
+    { id: 'voice', label: 'Voice', description: 'How you speak. The narrative language.' },
+    { id: 'story', label: 'Story', description: 'The story you tell. The myth you carry.' },
+    { id: 'culture', label: 'Culture', description: 'How the story lives in your people.' },
+    { id: 'legacy', label: 'Legacy', description: 'What you leave behind. The myth that outlasts you.' },
+  ],
+  leader: null,
+};
+
+function getStagesForClientType(clientType) {
+  const key = clientType || 'seeker';
+  const template = STAGE_TEMPLATES[key] || STAGE_TEMPLATES[key === 'artist' || key === 'creator' ? 'storyteller' : key === 'leader' ? 'brand' : 'seeker'];
+  return (template || STAGE_TEMPLATES.seeker).map((s, i) => ({ ...s, status: i === 0 ? 'active' : 'pending' }));
+}
+
+// All valid actions across admin, directory, pairing, consulting, guild, and engagements
 const ADMIN_ACTIONS = ['approve', 'reject', 'screen'];
 const DIRECTORY_ACTIONS = ['update-bio', 'update-capacity', 'publish', 'unpublish', 'update-consulting-availability'];
 const PAIRING_ACTIONS = ['pairing-request', 'pairing-accept', 'pairing-decline', 'pairing-end'];
 const CONSULTING_ACTIONS = ['consulting-request', 'consulting-accept', 'consulting-decline'];
-const ALL_ACTIONS = [...ADMIN_ACTIONS, ...DIRECTORY_ACTIONS, ...PAIRING_ACTIONS, ...CONSULTING_ACTIONS];
+const GUILD_ACTIONS = ['create-post', 'create-reply', 'vote', 'delete-post', 'delete-reply', 'pin-post', 'cleanup-match'];
+const ENGAGEMENT_ACTIONS = ['create-engagement', 'get-engagement', 'list-engagements', 'update-engagement-status', 'save-session', 'get-sessions', 'assign-practitioner', 'list-practitioner-engagements', 'list-practitioners'];
+const TEACHER_ACTIONS = ['get-catalog', 'parse-syllabus'];
+const ALL_ACTIONS = [...ADMIN_ACTIONS, ...DIRECTORY_ACTIONS, ...PAIRING_ACTIONS, ...CONSULTING_ACTIONS, ...GUILD_ACTIONS, ...ENGAGEMENT_ACTIONS, ...TEACHER_ACTIONS];
 
 module.exports = async (req, res) => {
   if (req.method !== 'POST') {
@@ -84,6 +137,8 @@ module.exports = async (req, res) => {
     return handleDirectory(req, res, uid);
   } else if (PAIRING_ACTIONS.includes(action)) {
     return handlePairing(req, res, uid);
+  } else if (TEACHER_ACTIONS.includes(action)) {
+    return handleTeacher(req, res, uid);
   } else {
     return handleConsulting(req, res, uid);
   }
@@ -737,6 +792,103 @@ async function handleConsulting(req, res, uid) {
     }
   } catch (err) {
     console.error('Consulting request error:', err?.message);
+    return res.status(500).json({ error: `Something went wrong: ${err?.message || 'Unknown error'}` });
+  }
+}
+
+// ============================================================
+// TEACHER: get-catalog, parse-syllabus
+// ============================================================
+
+async function handleTeacher(req, res, uid) {
+  const { action } = req.body || {};
+
+  try {
+    // ── get-catalog ──
+    if (action === 'get-catalog') {
+      const catalog = getContentCatalog();
+      return res.status(200).json({ catalog });
+    }
+
+    // ── parse-syllabus ──
+    if (action === 'parse-syllabus') {
+      const { syllabusText } = req.body;
+      if (!syllabusText || syllabusText.length < 50) {
+        return res.status(400).json({ error: 'Syllabus text must be at least 50 characters.' });
+      }
+
+      // Phase A — LLM entity extraction
+      const { anthropicKey } = await getUserKeys(uid);
+      const client = getAnthropicClient(anthropicKey);
+
+      const extraction = await client.messages.create({
+        model: 'claude-haiku-4-5-20251001',
+        max_tokens: 4096,
+        system: `You are a syllabus parser for a mythology education platform. Extract every mythological figure, deity, sacred place, book title, author, hero's journey concept, culture/civilization, astronomical term (planet, zodiac sign, constellation), ancient game, film, theorist, archetype, or related concept from the syllabus text.
+
+Return a JSON array of objects. Each object has:
+- "text": the entity as it appears in the syllabus
+- "type": one of "deity", "place", "book", "author", "concept", "culture", "planet", "zodiac", "constellation", "game", "film", "theorist", "archetype", "stage", "other"
+- "searchTerms": array of 1-3 search strings to find this in a content database (include the main name plus any alternate names or related terms)
+
+Return ONLY the JSON array, no other text. If no entities found, return [].`,
+        messages: [
+          { role: 'user', content: syllabusText.slice(0, 12000) },
+        ],
+      });
+
+      let parsedItems = [];
+      try {
+        const raw = (extraction.content[0]?.text || '').trim();
+        // Strip markdown code fences if present
+        const cleaned = raw.replace(/^```(?:json)?\s*/, '').replace(/\s*```$/, '');
+        parsedItems = JSON.parse(cleaned);
+        if (!Array.isArray(parsedItems)) parsedItems = [];
+      } catch {
+        return res.status(200).json({
+          parsedItems: [],
+          matchedItems: [],
+          unmatchedItems: [{ text: 'LLM response could not be parsed', reason: 'Invalid JSON from extraction' }],
+        });
+      }
+
+      // Phase B — Content matching
+      const matchedItems = [];
+      const unmatchedItems = [];
+      const seenContentIds = new Set();
+
+      for (const entity of parsedItems) {
+        const terms = entity.searchTerms || [entity.text];
+        const results = searchContent(terms);
+
+        // Take the top result if score >= 5
+        const top = results.find(r => r.score >= 5 && !seenContentIds.has(r.id));
+
+        if (top) {
+          seenContentIds.add(top.id);
+          matchedItems.push({
+            contentId: top.id,
+            category: top.category,
+            name: top.name,
+            route: top.route,
+            score: top.score,
+            matchedFrom: entity.text,
+          });
+        } else {
+          unmatchedItems.push({
+            text: entity.text,
+            type: entity.type,
+            reason: results.length > 0 ? 'Low confidence match' : 'No content found',
+          });
+        }
+      }
+
+      return res.status(200).json({ parsedItems, matchedItems, unmatchedItems });
+    }
+
+    return res.status(400).json({ error: 'Unhandled action.' });
+  } catch (err) {
+    console.error('Teacher API error:', err?.message);
     return res.status(500).json({ error: `Something went wrong: ${err?.message || 'Unknown error'}` });
   }
 }

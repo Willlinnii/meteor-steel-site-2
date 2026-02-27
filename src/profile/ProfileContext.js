@@ -650,6 +650,173 @@ export function ProfileProvider({ children }) {
     }
   }, [user]);
 
+  // Update ring size
+  const updateRingSize = useCallback(async (size) => {
+    if (!user || !firebaseConfigured || !db) return;
+
+    setProfileData(prev => ({ ...prev, ringSize: size }));
+
+    try {
+      const ref = doc(db, 'users', user.uid, 'meta', 'profile');
+      await setDoc(ref, { ringSize: size, updatedAt: serverTimestamp() }, { merge: true });
+    } catch (err) {
+      console.error('Failed to update ring size:', err);
+    }
+  }, [user]);
+
+  // Update ring form (ring, bracelet, belt, armband, crown)
+  const updateRingForm = useCallback(async (form) => {
+    if (!user || !firebaseConfigured || !db) return;
+
+    setProfileData(prev => ({ ...prev, ringForm: form }));
+
+    try {
+      const ref = doc(db, 'users', user.uid, 'meta', 'profile');
+      await setDoc(ref, { ringForm: form, updatedAt: serverTimestamp() }, { merge: true });
+    } catch (err) {
+      console.error('Failed to update ring form:', err);
+    }
+  }, [user]);
+
+  // Update ring metal
+  const updateRingMetal = useCallback(async (metal) => {
+    if (!user || !firebaseConfigured || !db) return;
+
+    setProfileData(prev => ({ ...prev, ringMetal: metal }));
+
+    try {
+      const ref = doc(db, 'users', user.uid, 'meta', 'profile');
+      await setDoc(ref, { ringMetal: metal, updatedAt: serverTimestamp() }, { merge: true });
+    } catch (err) {
+      console.error('Failed to update ring metal:', err);
+    }
+  }, [user]);
+
+  // Update ring layout (astronomical vs navaratna)
+  const updateRingLayout = useCallback(async (layout) => {
+    if (!user || !firebaseConfigured || !db) return;
+
+    setProfileData(prev => ({ ...prev, ringLayout: layout }));
+
+    try {
+      const ref = doc(db, 'users', user.uid, 'meta', 'profile');
+      await setDoc(ref, { ringLayout: layout, updatedAt: serverTimestamp() }, { merge: true });
+    } catch (err) {
+      console.error('Failed to update ring layout:', err);
+    }
+  }, [user]);
+
+  // Update ring mode (heliocentric / geocentric / birthstone)
+  const updateRingMode = useCallback(async (mode) => {
+    if (!user || !firebaseConfigured || !db) return;
+
+    setProfileData(prev => ({ ...prev, ringMode: mode }));
+
+    try {
+      const ref = doc(db, 'users', user.uid, 'meta', 'profile');
+      await setDoc(ref, { ringMode: mode, updatedAt: serverTimestamp() }, { merge: true });
+    } catch (err) {
+      console.error('Failed to update ring mode:', err);
+    }
+  }, [user]);
+
+  // Update ring zodiac mode (tropical / sidereal)
+  const updateRingZodiacMode = useCallback(async (zodiacMode) => {
+    if (!user || !firebaseConfigured || !db) return;
+
+    setProfileData(prev => ({ ...prev, ringZodiacMode: zodiacMode }));
+
+    try {
+      const ref = doc(db, 'users', user.uid, 'meta', 'profile');
+      await setDoc(ref, { ringZodiacMode: zodiacMode, updatedAt: serverTimestamp() }, { merge: true });
+    } catch (err) {
+      console.error('Failed to update ring zodiac mode:', err);
+    }
+  }, [user]);
+
+  // Update dodecahedron mode (stars / roman / die)
+  const updateDodecMode = useCallback(async (mode) => {
+    if (!user || !firebaseConfigured || !db) return;
+
+    setProfileData(prev => ({ ...prev, dodecMode: mode }));
+
+    try {
+      const ref = doc(db, 'users', user.uid, 'meta', 'profile');
+      await setDoc(ref, { dodecMode: mode, updatedAt: serverTimestamp() }, { merge: true });
+    } catch (err) {
+      console.error('Failed to update dodec mode:', err);
+    }
+  }, [user]);
+
+  // Update dodecahedron lantern lit state
+  const updateDodecLit = useCallback(async (lit) => {
+    if (!user || !firebaseConfigured || !db) return;
+
+    setProfileData(prev => ({ ...prev, dodecLit: lit }));
+
+    try {
+      const ref = doc(db, 'users', user.uid, 'meta', 'profile');
+      await setDoc(ref, { dodecLit: lit, updatedAt: serverTimestamp() }, { merge: true });
+    } catch (err) {
+      console.error('Failed to update dodec lit:', err);
+    }
+  }, [user]);
+
+  // Update dodecahedron calculator open state
+  const updateDodecCalcOpen = useCallback(async (calcOpen) => {
+    if (!user || !firebaseConfigured || !db) return;
+
+    setProfileData(prev => ({ ...prev, dodecCalcOpen: calcOpen }));
+
+    try {
+      const ref = doc(db, 'users', user.uid, 'meta', 'profile');
+      await setDoc(ref, { dodecCalcOpen: calcOpen, updatedAt: serverTimestamp() }, { merge: true });
+    } catch (err) {
+      console.error('Failed to update dodec calc open:', err);
+    }
+  }, [user]);
+
+  // Update per-form jewelry config (size, date, dateType)
+  const updateJewelryConfig = useCallback(async (formKey, patch) => {
+    if (!user || !firebaseConfigured || !db) return;
+
+    setProfileData(prev => ({
+      ...prev,
+      jewelryConfig: {
+        ...prev?.jewelryConfig,
+        [formKey]: {
+          ...(prev?.jewelryConfig?.[formKey] || {}),
+          ...patch,
+        },
+      },
+    }));
+
+    try {
+      const ref = doc(db, 'users', user.uid, 'meta', 'profile');
+      const updates = { updatedAt: serverTimestamp() };
+      for (const [key, val] of Object.entries(patch)) {
+        updates[`jewelryConfig.${formKey}.${key}`] = val;
+      }
+      await setDoc(ref, updates, { merge: true });
+    } catch (err) {
+      console.error('Failed to update jewelry config:', err);
+    }
+  }, [user]);
+
+  // Update community profile mode (all, teaching, research, media)
+  const updateProfileMode = useCallback(async (mode) => {
+    if (!user || !firebaseConfigured || !db) return;
+
+    setProfileData(prev => ({ ...prev, profileMode: mode }));
+
+    try {
+      const ref = doc(db, 'users', user.uid, 'meta', 'profile');
+      await setDoc(ref, { profileMode: mode, updatedAt: serverTimestamp() }, { merge: true });
+    } catch (err) {
+      console.error('Failed to update profile mode:', err);
+    }
+  }, [user]);
+
   // Update lucky number
   const updateLuckyNumber = useCallback(async (num) => {
     if (!user || !firebaseConfigured || !db) return;
@@ -679,17 +846,35 @@ export function ProfileProvider({ children }) {
   }, [user]);
 
   // Subscriptions (read-only — flags written by Stripe webhook only)
-  const subscriptions = useMemo(() => profileData?.subscriptions || {}, [profileData?.subscriptions]);
+  // TODO: Temporary full-access override — remove when ready to enforce paid access
+  const ALL_SUBSCRIPTION_IDS = useMemo(() => ({
+    'developer-api': true, 'master-key': true, 'ybr': true, 'forge': true,
+    'coursework': true, 'monomyth': true, 'teaching': true,
+  }), []);
+  const subscriptions = useMemo(() => ({
+    ...ALL_SUBSCRIPTION_IDS,
+    ...(profileData?.subscriptions || {}),
+  }), [profileData?.subscriptions, ALL_SUBSCRIPTION_IDS]);
 
   const hasSubscription = useCallback((id) => {
-    return !!(profileDataRef.current?.subscriptions || {})[id];
+    return true;
   }, []);
 
   // Purchases (read-only — flags written by Stripe webhook only)
-  const purchases = useMemo(() => profileData?.purchases || {}, [profileData?.purchases]);
+  // TODO: Temporary full-access override — remove when ready to enforce paid access
+  const ALL_PURCHASE_IDS = useMemo(() => ({
+    'fallen-starlight': true, 'story-of-stories': true, 'starlight-bundle': true,
+    'medicine-wheel': true, 'consulting-single': true, 'consulting-4pack': true,
+    'consulting-8pack': true, 'consulting-certification': true,
+    'retreat-day': true, 'retreat-weekend': true, 'retreat-week': true,
+  }), []);
+  const purchases = useMemo(() => ({
+    ...ALL_PURCHASE_IDS,
+    ...(profileData?.purchases || {}),
+  }), [profileData?.purchases, ALL_PURCHASE_IDS]);
 
   const hasPurchase = useCallback((id) => {
-    return !!(profileDataRef.current?.purchases || {})[id];
+    return true;
   }, []);
 
   // Refresh profile data (e.g. after handle registration, free purchase activation)
@@ -1009,7 +1194,36 @@ export function ProfileProvider({ children }) {
   const natalChart = profileData?.natalChart || null;
   const numerologyName = profileData?.numerologyName || null;
   const luckyNumber = profileData?.luckyNumber ?? null;
+  const ringSize = profileData?.ringSize ?? null;
+  const ringForm = profileData?.ringForm || 'ring';
+  const ringMetal = profileData?.ringMetal || 'gold';
+  const ringLayout = profileData?.ringLayout || 'astronomical';
+  const ringMode = profileData?.ringMode || 'heliocentric';
+  const ringZodiacMode = profileData?.ringZodiacMode || 'tropical';
+  const dodecMode = profileData?.dodecMode || 'stars';
+  const dodecLit = profileData?.dodecLit ?? true;
+  const dodecCalcOpen = profileData?.dodecCalcOpen ?? false;
   const personalStory = profileData?.personalStory || null;
+
+  // Per-form jewelry config with backward compat
+  const jewelryConfig = useMemo(() => {
+    const stored = profileData?.jewelryConfig || {};
+    const defaults = { size: null, date: '', dateType: 'birthday' };
+    const config = {};
+    for (const key of ['ring', 'bracelet', 'armband', 'belt', 'crown']) {
+      if (stored[key]) {
+        config[key] = { ...defaults, ...stored[key] };
+      } else if (key === 'ring') {
+        // Seed ring from legacy fields
+        const bd = profileData?.natalChart?.birthData;
+        const date = bd ? `${bd.year}-${String(bd.month).padStart(2, '0')}-${String(bd.day).padStart(2, '0')}` : '';
+        config[key] = { size: profileData?.ringSize ?? null, date, dateType: 'birthday' };
+      } else {
+        config[key] = { ...defaults };
+      }
+    }
+    return config;
+  }, [profileData]);
 
   const value = useMemo(() => ({
     profileData,
@@ -1087,11 +1301,26 @@ export function ProfileProvider({ children }) {
     savePersonalStory,
     curatorApproved,
     updateCuratorStatus,
+    ringSize,
+    updateRingSize,
+    ringForm,
+    updateRingForm,
+    ringMetal,
+    updateRingMetal,
+    ringLayout,
+    updateRingLayout,
+    ringMode,
+    updateRingMode,
+    ringZodiacMode,
+    updateRingZodiacMode,
+    jewelryConfig,
+    updateJewelryConfig,
   }), [
     profileData, earnedRanks, highestRank, activeCredentials, hasProfile, loaded, handle,
     natalChart, numerologyName, subscriptions, hasSubscription, purchases, hasPurchase,
     hasStripeAccount, initiateCheckout, openBillingPortal, updateCredentials,
     updateNatalChart, updateNumerologyName, luckyNumber, updateLuckyNumber,
+    ringSize, updateRingSize, ringForm, updateRingForm, ringMetal, updateRingMetal, ringLayout, updateRingLayout, ringMode, updateRingMode, ringZodiacMode, updateRingZodiacMode, jewelryConfig, updateJewelryConfig,
     completeOnboarding, refreshProfile, mentorData, qualifiedMentorTypes, mentorEligible,
     mentorCoursesComplete, effectiveMentorStatus, submitMentorApplication, acceptMentorContract,
     updateMentorStatus, mentorPairings, pairingCategories, updateMentorBio, updateMentorCapacity,

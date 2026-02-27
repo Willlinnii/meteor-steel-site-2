@@ -6,18 +6,6 @@
   min-height: 100vh;
 }
 
-.teacher-page h1 {
-  font-size: 1.6rem;
-  color: var(--accent-gold, #c8a84a);
-  margin-bottom: 6px;
-}
-
-.teacher-subtitle {
-  color: var(--text-secondary, #a09882);
-  font-size: 0.92rem;
-  margin-bottom: 28px;
-}
-
 /* ── Auth gate ── */
 .teacher-auth-gate {
   text-align: center;
@@ -30,20 +18,231 @@
   margin-bottom: 12px;
 }
 
-/* ── Syllabus Input Section ── */
-.teacher-section {
+/* ══════════════════════════════════════
+   Syllabus Document
+   ══════════════════════════════════════ */
+
+.syllabus-document {
   background: var(--surface-2, rgba(255,255,255,0.04));
   border: 1px solid var(--border-subtle, rgba(255,255,255,0.08));
-  border-radius: 10px;
-  padding: 20px;
-  margin-bottom: 24px;
+  border-radius: 4px;
+  padding: 40px 36px;
 }
 
-.teacher-section-title {
+/* ── Syllabus Header ── */
+.syllabus-header {
+  text-align: center;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--border-subtle, rgba(255,255,255,0.1));
+  margin-bottom: 28px;
+}
+
+.syllabus-institution {
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 2.5px;
+  color: var(--text-secondary, #a09882);
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+.syllabus-institution:empty {
+  display: none;
+}
+
+.syllabus-title {
+  font-size: 1.4rem;
+  color: var(--accent-gold, #c8a84a);
+  margin: 0 0 12px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.syllabus-placeholder {
+  opacity: 0.35;
+}
+
+.syllabus-meta-row {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-secondary, #a09882);
+  margin-bottom: 8px;
+}
+
+.syllabus-meta-sep {
+  margin: 0 10px;
+  opacity: 0.4;
+}
+
+.syllabus-subtitle {
+  font-size: 0.88rem;
+  color: var(--text-secondary, #a09882);
+  margin: 8px 0 4px;
+}
+
+.syllabus-header-actions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+/* ── Syllabus Sections ── */
+.syllabus-section {
+  padding-bottom: 24px;
+  margin-bottom: 24px;
+  border-bottom: 1px solid var(--border-subtle, rgba(255,255,255,0.06));
+}
+
+.syllabus-section:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.syllabus-section-heading {
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--accent-gold, #c8a84a);
+  margin: 0 0 6px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--accent-gold, rgba(200, 168, 74, 0.3));
+  font-weight: 600;
+}
+
+.syllabus-body-text {
+  font-size: 0.88rem;
+  color: var(--text-primary, #e8e0d0);
+  line-height: 1.6;
+  margin: 10px 0 0;
+  white-space: pre-wrap;
+}
+
+/* ── Empty State (inside document) ── */
+.syllabus-empty-content {
+  text-align: center;
+  padding: 32px 0 8px;
+}
+
+/* ── Syllabus Actions (save/clear) ── */
+.syllabus-actions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  padding-top: 24px;
+  margin-top: 24px;
+  border-top: 1px solid var(--border-subtle, rgba(255,255,255,0.1));
+}
+
+/* ══════════════════════════════════════
+   Upload Button
+   ══════════════════════════════════════ */
+
+.teacher-upload-btn {
+  padding: 8px 18px;
+  background: transparent;
+  border: 1.5px solid var(--accent-gold, #c8a84a);
+  color: var(--accent-gold, #c8a84a);
+  border-radius: 8px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.teacher-upload-btn:hover {
+  background: var(--accent-gold, #c8a84a);
+  color: #1a1a1a;
+}
+
+/* ══════════════════════════════════════
+   Modal
+   ══════════════════════════════════════ */
+
+.teacher-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.teacher-modal {
+  position: relative;
+  width: 100%;
+  max-width: 640px;
+  max-height: 85vh;
+  overflow-y: auto;
+  background: var(--surface-2, #1e1b18);
+  border: 1px solid var(--border-subtle, rgba(255,255,255,0.12));
+  border-radius: 12px;
+  padding: 28px 24px;
+}
+
+.teacher-modal-close {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  background: none;
+  border: none;
+  color: var(--text-secondary, #a09882);
+  font-size: 1.1rem;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.teacher-modal-close:hover {
+  color: var(--text-primary, #e8e0d0);
+  background: rgba(255,255,255,0.08);
+}
+
+.teacher-modal-title {
   font-size: 1.1rem;
   color: var(--accent-gold, #c8a84a);
-  margin: 0 0 14px;
+  margin: 0 0 18px;
 }
+
+.teacher-modal-row-2col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.teacher-modal-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 18px 0 14px;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-secondary, #a09882);
+}
+
+.teacher-modal-divider::before,
+.teacher-modal-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border-subtle, rgba(255,255,255,0.1));
+}
+
+.teacher-modal-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+/* ══════════════════════════════════════
+   Form Inputs
+   ══════════════════════════════════════ */
 
 .teacher-input-row {
   margin-bottom: 12px;
@@ -80,6 +279,10 @@
   font-family: inherit;
   resize: vertical;
   box-sizing: border-box;
+}
+
+.teacher-textarea-sm {
+  min-height: 80px;
 }
 
 .teacher-textarea:focus,
@@ -149,7 +352,10 @@
   cursor: not-allowed;
 }
 
-/* ── Loading ── */
+/* ══════════════════════════════════════
+   Loading / Error / Spinner
+   ══════════════════════════════════════ */
+
 .teacher-loading {
   display: flex;
   align-items: center;
@@ -172,7 +378,6 @@
   to { transform: rotate(360deg); }
 }
 
-/* ── Error ── */
 .teacher-error {
   background: rgba(224, 96, 48, 0.12);
   border: 1px solid rgba(224, 96, 48, 0.3);
@@ -183,12 +388,28 @@
   margin-bottom: 16px;
 }
 
-/* ── Match Review Section ── */
+/* ══════════════════════════════════════
+   Content Map — Match Groups
+   ══════════════════════════════════════ */
+
+.teacher-match-stats {
+  font-size: 0.85rem;
+  color: var(--text-secondary, #a09882);
+  margin-bottom: 14px;
+}
+
+.teacher-match-stats strong {
+  color: var(--accent-gold, #c8a84a);
+}
+
 .teacher-match-group {
   margin-bottom: 16px;
 }
 
 .teacher-match-group-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   font-size: 0.85rem;
   color: var(--text-secondary, #a09882);
   text-transform: uppercase;
@@ -196,6 +417,22 @@
   margin-bottom: 8px;
   padding-bottom: 4px;
   border-bottom: 1px solid var(--border-subtle, rgba(255,255,255,0.06));
+}
+
+.teacher-match-group-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  background: var(--accent-gold, #c8a84a);
+  color: #1a1a1a;
+  font-size: 0.72rem;
+  font-weight: 700;
+  border-radius: 10px;
+  text-transform: none;
+  letter-spacing: 0;
 }
 
 .teacher-match-item {
@@ -257,19 +494,9 @@
   background: rgba(224, 96, 48, 0.12);
 }
 
-/* ── Unmatched section ── */
-.teacher-unmatched {
-  background: rgba(200, 168, 74, 0.06);
-  border: 1px solid rgba(200, 168, 74, 0.15);
-  border-radius: 8px;
-  padding: 14px;
-  margin-bottom: 16px;
-}
-
-.teacher-unmatched-title {
-  font-size: 0.9rem;
-  color: var(--accent-gold, #c8a84a);
-  margin: 0 0 10px;
+/* ── Unmatched list ── */
+.teacher-unmatched-list {
+  margin-top: 10px;
 }
 
 .teacher-unmatched-item {
@@ -283,7 +510,43 @@
   border-bottom: none;
 }
 
-/* ── Manual Add (autocomplete) ── */
+/* ── Empty categories (ghost pills) ── */
+.teacher-empty-categories {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+  max-width: 560px;
+  margin: 0 auto;
+}
+
+.teacher-empty-cat-tag {
+  font-size: 0.75rem;
+  padding: 3px 10px;
+  background: var(--surface-1, rgba(255,255,255,0.06));
+  border: 1px solid var(--border-subtle, rgba(255,255,255,0.08));
+  border-radius: 12px;
+  color: var(--text-secondary, #a09882);
+  opacity: 0.5;
+}
+
+.teacher-empty-cat-more {
+  color: var(--accent-gold, #c8a84a);
+  border-color: rgba(200, 168, 74, 0.25);
+  opacity: 0.6;
+}
+
+.teacher-empty {
+  text-align: center;
+  padding: 24px;
+  color: var(--text-secondary, #a09882);
+  font-size: 0.88rem;
+}
+
+/* ══════════════════════════════════════
+   Manual Add (autocomplete)
+   ══════════════════════════════════════ */
+
 .teacher-manual-add {
   position: relative;
   margin-top: 12px;
@@ -336,7 +599,23 @@
   margin-left: 6px;
 }
 
-/* ── Saved Courses ── */
+/* ══════════════════════════════════════
+   Saved Courses (outside document)
+   ══════════════════════════════════════ */
+
+.teacher-courses-section {
+  margin-top: 32px;
+}
+
+.teacher-courses-heading {
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--text-secondary, #a09882);
+  margin: 0 0 12px;
+  font-weight: 600;
+}
+
 .teacher-course-card {
   display: flex;
   align-items: center;
@@ -385,6 +664,10 @@
   background: rgba(224, 96, 48, 0.12);
 }
 
+/* ══════════════════════════════════════
+   Buttons
+   ══════════════════════════════════════ */
+
 .teacher-save-btn {
   padding: 8px 18px;
   background: var(--accent-gold, #c8a84a);
@@ -413,40 +696,31 @@
   border-radius: 6px;
   font-size: 0.85rem;
   cursor: pointer;
-  margin-right: 8px;
 }
 
 .teacher-back-btn:hover {
   background: rgba(255,255,255,0.06);
 }
 
-.teacher-actions-row {
-  display: flex;
-  gap: 8px;
-  margin-top: 16px;
-}
+/* ══════════════════════════════════════
+   Responsive
+   ══════════════════════════════════════ */
 
-.teacher-empty {
-  text-align: center;
-  padding: 24px;
-  color: var(--text-secondary, #a09882);
-  font-size: 0.88rem;
-}
-
-.teacher-match-stats {
-  font-size: 0.85rem;
-  color: var(--text-secondary, #a09882);
-  margin-bottom: 14px;
-}
-
-.teacher-match-stats strong {
-  color: var(--accent-gold, #c8a84a);
-}
-
-/* ── Responsive ── */
 @media (max-width: 600px) {
   .teacher-page {
     padding: 70px 12px 40px;
+  }
+
+  .syllabus-document {
+    padding: 24px 16px;
+  }
+
+  .syllabus-title {
+    font-size: 1.2rem;
+  }
+
+  .syllabus-meta-row {
+    font-size: 0.72rem;
   }
 
   .teacher-match-item {
@@ -457,5 +731,24 @@
 
   .teacher-match-arrow {
     display: none;
+  }
+
+  .teacher-modal {
+    max-height: 90vh;
+    padding: 20px 16px;
+  }
+
+  .teacher-modal-row-2col {
+    grid-template-columns: 1fr;
+  }
+
+  .syllabus-header-actions {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .syllabus-actions {
+    flex-direction: column;
+    align-items: center;
   }
 }

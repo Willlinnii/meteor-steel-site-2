@@ -3112,6 +3112,70 @@ body {
   border-bottom: 1px solid var(--border-subtle);
 }
 
+.profile-ring-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  background: none;
+  border: 1px solid rgba(201, 169, 97, 0.25);
+  border-radius: 6px;
+  padding: 0.2rem 0.5rem 0.2rem 0.25rem;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.profile-ring-btn:hover {
+  border-color: var(--accent-gold);
+  background: rgba(201, 169, 97, 0.08);
+}
+
+.profile-ring-btn-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--accent-gold);
+  white-space: nowrap;
+}
+
+.profile-ring-size-inline {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-left: auto;
+}
+
+.profile-ring-size-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-secondary);
+  opacity: 0.7;
+}
+
+.profile-ring-size-input {
+  width: 3rem;
+  background: rgba(201, 169, 97, 0.06);
+  border: 1px solid var(--border-subtle);
+  border-radius: 4px;
+  color: var(--text-primary);
+  padding: 0.2rem 0.3rem;
+  font-size: 0.8rem;
+  font-family: inherit;
+  text-align: center;
+  outline: none;
+  -moz-appearance: textfield;
+}
+
+.profile-ring-size-input::-webkit-inner-spin-button,
+.profile-ring-size-input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.profile-ring-size-input:focus {
+  border-color: var(--accent-gold);
+}
+
 .profile-subsection-title {
   font-family: 'Cinzel', serif;
   color: var(--text-secondary);
@@ -4946,6 +5010,113 @@ body {
   color: var(--text-secondary);
 }
 
+/* ── Cultural traditions selector ── */
+.natal-cultures {
+  margin: 16px 0;
+}
+.natal-cultures-heading {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #c9a961;
+  letter-spacing: 0.03em;
+  margin-bottom: 10px;
+}
+.natal-cultures-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-bottom: 12px;
+}
+.natal-culture-tab {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  padding: 5px 10px;
+  font-size: 0.68rem;
+  font-family: inherit;
+  letter-spacing: 0.03em;
+  color: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s, background 0.2s;
+}
+.natal-culture-tab:hover {
+  color: rgba(255, 255, 255, 0.8);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+.natal-culture-tab.active {
+  color: #c9a961;
+  border-color: rgba(201, 169, 97, 0.4);
+  background: rgba(201, 169, 97, 0.08);
+}
+.natal-culture-detail {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 8px;
+  padding: 12px 14px;
+}
+.natal-culture-name {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 4px;
+}
+.natal-culture-myth {
+  font-size: 0.75rem;
+  font-style: italic;
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 6px;
+}
+.natal-culture-desc {
+  font-size: 0.75rem;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.6);
+}
+.natal-tab-arrow {
+  font-size: 0.6em;
+  opacity: 0.4;
+  margin-left: 3px;
+  vertical-align: middle;
+  transition: opacity 0.2s;
+}
+.natal-mode-tab.active .natal-tab-arrow {
+  opacity: 0.7;
+}
+.natal-culture-dropdown {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin: -8px 0 14px;
+  padding: 0 4px;
+}
+.natal-culture-option {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  padding: 5px 12px;
+  font-size: 0.68rem;
+  font-family: inherit;
+  letter-spacing: 0.03em;
+  color: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s, background 0.2s;
+}
+.natal-culture-option:hover {
+  color: rgba(255, 255, 255, 0.8);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+.natal-culture-option.active {
+  color: #c9a961;
+  border-color: rgba(201, 169, 97, 0.4);
+  background: rgba(201, 169, 97, 0.08);
+}
+.natal-culture-reading {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin-bottom: 14px;
+}
+
 .natal-planets-grid {
   display: flex;
   flex-direction: column;
@@ -5555,6 +5726,27 @@ body {
   text-transform: uppercase;
   color: var(--text-secondary);
   margin-bottom: 10px;
+}
+.natal-aspects-toggle {
+  cursor: pointer;
+  user-select: none;
+  transition: color 0.2s;
+}
+.natal-aspects-toggle:hover {
+  color: #c9a961;
+}
+.natal-aspects-count {
+  opacity: 0.5;
+  font-size: 0.65rem;
+}
+.natal-aspects-arrow {
+  display: inline-block;
+  font-size: 0.7rem;
+  margin-left: 4px;
+  transition: transform 0.2s;
+}
+.natal-aspects-arrow.open {
+  transform: rotate(180deg);
 }
 
 .natal-transit-aspect {

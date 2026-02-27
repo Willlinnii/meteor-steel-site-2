@@ -1,0 +1,347 @@
+.artbook-page {
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  min-height: 100vh;
+  background: #050510;
+  overflow-y: auto;
+}
+
+/* ── 3D Canvas wrapper ─────────────────────────────────────────────── */
+
+.artbook-canvas-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  flex-shrink: 0;
+}
+
+/* ── Error state ───────────────────────────────────────────────────── */
+
+.artbook-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  color: #c9a961;
+  background: #050510;
+  font-family: inherit;
+}
+
+.artbook-error button {
+  margin-top: 1rem;
+  padding: 0.5rem 1.5rem;
+  background: transparent;
+  border: 1px solid #c9a961;
+  color: #c9a961;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+/* ── Mode toggle — pinned above Atlas chat button ────────────────── */
+
+.artbook-mode-btn {
+  position: fixed;
+  bottom: 72px;
+  right: 24px;
+  z-index: 1000;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1.5px solid #c9a961;
+  background: rgba(5, 5, 16, 0.6);
+  backdrop-filter: blur(6px);
+  color: #c9a961;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  transition: background 0.2s, box-shadow 0.2s;
+}
+
+.artbook-mode-btn:hover {
+  box-shadow: 0 0 10px rgba(201, 169, 97, 0.45);
+}
+
+/* ── Starlight toggle — pinned above mode toggle ─────────────────── */
+
+.artbook-starlight-btn {
+  position: fixed;
+  bottom: 120px;
+  right: 24px;
+  z-index: 1000;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid rgba(196, 113, 58, 0.4);
+  background: rgba(5, 5, 16, 0.6);
+  backdrop-filter: blur(6px);
+  color: rgba(196, 113, 58, 0.7);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  opacity: 0.7;
+  transition: all 0.3s ease;
+}
+
+.artbook-starlight-btn:hover {
+  opacity: 1;
+  background: rgba(196, 113, 58, 0.1);
+  box-shadow: 0 0 10px rgba(196, 113, 58, 0.3);
+}
+
+.artbook-starlight-btn.active {
+  opacity: 1;
+  color: #c4713a;
+  border-color: rgba(196, 113, 58, 0.6);
+  background: rgba(196, 113, 58, 0.12);
+  box-shadow: 0 0 12px rgba(196, 113, 58, 0.4);
+}
+
+.artbook-starlight-btn.stories {
+  color: #8b9dc3;
+  border-color: rgba(139, 157, 195, 0.6);
+  background: rgba(139, 157, 195, 0.12);
+  box-shadow: 0 0 12px rgba(139, 157, 195, 0.4);
+}
+
+.artbook-starlight-btn.disabled {
+  opacity: 0.35;
+  color: rgba(150, 150, 150, 0.6);
+  border-color: rgba(150, 150, 150, 0.3);
+  cursor: default;
+}
+
+.artbook-starlight-btn.disabled:hover {
+  opacity: 0.5;
+  background: rgba(150, 150, 150, 0.05);
+  box-shadow: none;
+}
+
+/* ── Extended world toggle — pinned above starlight toggle ────────── */
+
+.artbook-world-btn {
+  position: fixed;
+  bottom: 168px;
+  right: 24px;
+  z-index: 1000;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(201, 169, 97, 0.4);
+  background: rgba(5, 5, 16, 0.6);
+  backdrop-filter: blur(6px);
+  color: rgba(201, 169, 97, 0.7);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  opacity: 0.7;
+  transition: all 0.3s ease;
+}
+
+.artbook-world-btn:hover {
+  opacity: 1;
+  background: rgba(201, 169, 97, 0.1);
+  box-shadow: 0 0 10px rgba(201, 169, 97, 0.3);
+}
+
+.artbook-world-btn.active {
+  opacity: 1;
+  color: #c9a961;
+  border-color: rgba(201, 169, 97, 0.6);
+  background: rgba(201, 169, 97, 0.12);
+  box-shadow: 0 0 12px rgba(201, 169, 97, 0.4);
+}
+
+/* ── Camera toggle — bottom left ──────────────────────────────────── */
+
+.artbook-camera-btn {
+  position: fixed;
+  bottom: 24px;
+  left: 24px;
+  z-index: 1100;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, 0.5);
+  background: rgba(5, 5, 16, 0.7);
+  backdrop-filter: blur(6px);
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  transition: background 0.2s, box-shadow 0.2s, color 0.2s, border-color 0.2s;
+}
+
+.artbook-camera-btn:hover {
+  border-color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.artbook-camera-btn.active {
+  border-color: #e05030;
+  color: #e05030;
+  box-shadow: 0 0 12px rgba(224, 80, 48, 0.4);
+}
+
+/* ── Weekday selector bar ──────────────────────────────────────────── */
+
+.artbook-weekday-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 999;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 16px;
+  background: rgba(5, 5, 16, 0.85);
+  backdrop-filter: blur(8px);
+  border-top: 1px solid rgba(201, 169, 97, 0.15);
+  animation: artbook-nav-in 0.3s ease-out;
+}
+
+@keyframes artbook-nav-in {
+  from { opacity: 0; transform: translateY(100%); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.artbook-weekday-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 36px;
+  padding: 0 14px;
+  border-radius: 18px;
+  border: 1.5px solid var(--btn-color, #888);
+  background: rgba(5, 5, 16, 0.5);
+  color: var(--btn-color, #888);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  transition: background 0.2s, box-shadow 0.2s, padding 0.2s;
+  white-space: nowrap;
+}
+
+.artbook-weekday-btn:hover {
+  box-shadow: 0 0 10px color-mix(in srgb, var(--btn-color, #888) 50%, transparent);
+}
+
+.artbook-weekday-btn.active {
+  background: var(--btn-color, #888);
+  color: #050510;
+  box-shadow: 0 0 14px color-mix(in srgb, var(--btn-color, #888) 60%, transparent);
+}
+
+.artbook-weekday-label {
+  font-size: 13px;
+}
+
+.artbook-weekday-day {
+  font-size: 11px;
+  opacity: 0.85;
+  font-weight: 400;
+}
+
+/* ── Content area ──────────────────────────────────────────────────── */
+
+.artbook-content {
+  padding: 0 16px 80px;
+}
+
+/* ── Responsive ────────────────────────────────────────────────────── */
+
+@media (max-width: 600px) {
+  .artbook-canvas-wrapper {
+    height: 100vh;
+  }
+
+  .artbook-world-btn {
+    bottom: 160px;
+    right: 16px;
+    width: 36px;
+    height: 36px;
+  }
+
+  .artbook-starlight-btn {
+    bottom: 112px;
+    right: 16px;
+    width: 36px;
+    height: 36px;
+  }
+
+  .artbook-mode-btn {
+    bottom: 68px;
+    right: 16px;
+    width: 36px;
+    height: 36px;
+  }
+
+  .artbook-camera-btn {
+    bottom: 20px;
+    left: 16px;
+    width: 36px;
+    height: 36px;
+  }
+
+  .artbook-weekday-nav {
+    gap: 4px;
+    padding: 10px 8px;
+    overflow-x: auto;
+    justify-content: flex-start;
+  }
+
+  .artbook-weekday-btn {
+    padding: 0 10px;
+    height: 32px;
+    font-size: 12px;
+  }
+}
+
+/* ── Lullaby audio + poem styles ──────────────────────────────────── */
+
+.modern-section.sos-poem {
+  text-align: center;
+  border-left: none;
+  background: none;
+  font-style: italic;
+}
+
+.modern-section.sos-poem p {
+  margin-bottom: 0.5em;
+}
+
+.sos-audio-control {
+  margin-bottom: 20px;
+}
+
+.sos-play-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  margin: 0 auto;
+  border-radius: 50%;
+  border: 1px solid #c9a961;
+  background: rgba(201, 169, 97, 0.08);
+  color: #c9a961;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.sos-play-btn:hover {
+  background: rgba(201, 169, 97, 0.18);
+  box-shadow: 0 0 14px rgba(201, 169, 97, 0.25);
+}

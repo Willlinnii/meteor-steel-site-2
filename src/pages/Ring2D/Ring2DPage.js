@@ -1,33 +1,16 @@
-import React, { Suspense, useState, useEffect, useRef, useMemo, Component } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
-import { Canvas } from '@react-three/fiber';
-import { OrbitControls } from '@react-three/drei';
 import { useProfile } from '../../profile/ProfileContext';
-import CrownScene from './CrownScene';
-import { BIRTHSTONE_KEYS } from './Gemstone3D';
+import usePlanetData from '../../hooks/usePlanetData';
+import MetalDetailPanel from '../../components/chronosphaera/MetalDetailPanel';
+import RingDiagram2D from './RingDiagram2D';
+import { BIRTHSTONE_KEYS } from '../Crown/Gemstone3D';
 import mythicCalendar from '../../data/mythicCalendar.json';
+import zodiacData from '../../data/chronosphaeraZodiac.json';
+import cardinalsData from '../../data/chronosphaeraCardinals.json';
 import RingButton from '../../components/RingButton';
-import './CrownPage.css';
-
-class SceneErrorBoundary extends Component {
-  state = { hasError: false };
-
-  static getDerivedStateFromError() {
-    return { hasError: true };
-  }
-
-  render() {
-    if (this.state.hasError) {
-      return (
-        <div className="crown-error">
-          <p>The 3D view encountered a problem.</p>
-          <button onClick={() => this.setState({ hasError: false })}>Try Again</button>
-        </div>
-      );
-    }
-    return this.props.children;
-  }
-}
+import '../Crown/CrownPage.css';
+import './Ring2DPage.css';
 
 const DATE_TYPES = [
   { key: 'birthday',    label: 'Birthday' },
@@ -62,13 +45,26 @@ function parseDate(val) {
   return new Date(y, m - 1, d);
 }
 
-export default function CrownPage() {
+export default function Ring2DPage() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const { natalChart, ringSize, updateRingSize, ringForm, updateRingForm, ringMetal, updateRingMetal, ringLayout, updateRingLayout, ringMode, updateRingMode, ringZodiacMode, updateRingZodiacMode, jewelryConfig, updateJewelryConfig } = useProfile();
+  const { natalChart, ringForm, updateRingForm, ringMetal, updateRingMetal, ringLayout, updateRingLayout, ringMode, updateRingMode, ringZodiacMode, updateRingZodiacMode, jewelryConfig, updateJewelryConfig } = useProfile();
   const formConfig = jewelryConfig?.[ringForm] || { size: null, date: '', dateType: 'birthday' };
+  const mergedData = usePlanetData();
+
+  // Selection state
   const [selectedPlanet, setSelectedPlanet] = useState(null);
+  const [hoveredPlanet, setHoveredPlanet] = useState(null);
+  const [selectedSign, setSelectedSign] = useState(null);
   const [selectedCardinal, setSelectedCardinal] = useState(null);
+  const [activeTab, setActiveTab] = useState('overview');
+  const [activeCulture, setActiveCulture] = useState(null);
+  const mode = ringMode;
+  const setMode = updateRingMode;
+  const zodiacMode = ringZodiacMode;
+  const setZodiacMode = updateRingZodiacMode;
+
+  // Date/form state
   const [dates, setDates] = useState({ birthday: '', engagement: '', wedding: '', anniversary: '', secret: '', other: '' });
   const [activeDateType, setActiveDateType] = useState('birthday');
   const [dateDropOpen, setDateDropOpen] = useState(false);
@@ -77,31 +73,20 @@ export default function CrownPage() {
   const datePickerRef = useRef(null);
   const formPickerRef = useRef(null);
   const metalPickerRef = useRef(null);
-  const mode = ringMode;
-  const setMode = updateRingMode;
-  const zodiacMode = ringZodiacMode;
-  const setZodiacMode = updateRingZodiacMode;
-  const [autoRotate, setAutoRotate] = useState(true);
 
   // Close dropdowns on outside click
   useEffect(() => {
     if (!dateDropOpen && !formDropOpen && !metalDropOpen) return;
     const handleClick = (e) => {
-      if (dateDropOpen && datePickerRef.current && !datePickerRef.current.contains(e.target)) {
-        setDateDropOpen(false);
-      }
-      if (formDropOpen && formPickerRef.current && !formPickerRef.current.contains(e.target)) {
-        setFormDropOpen(false);
-      }
-      if (metalDropOpen && metalPickerRef.current && !metalPickerRef.current.contains(e.target)) {
-        setMetalDropOpen(false);
-      }
+      if (dateDropOpen && datePickerRef.current && !datePickerRef.current.contains(e.target)) setDateDropOpen(false);
+      if (formDropOpen && formPickerRef.current && !formPickerRef.current.contains(e.target)) setFormDropOpen(false);
+      if (metalDropOpen && metalPickerRef.current && !metalPickerRef.current.contains(e.target)) setMetalDropOpen(false);
     };
     document.addEventListener('mousedown', handleClick);
     return () => document.removeEventListener('mousedown', handleClick);
   }, [dateDropOpen, formDropOpen, metalDropOpen]);
 
-  // URL param takes priority, then natal chart from profile
+  // URL param / natal chart birthday
   useEffect(() => {
     const bd = searchParams.get('birthday');
     if (bd && /^\d{4}-\d{2}-\d{2}$/.test(bd)) {
@@ -114,33 +99,23 @@ export default function CrownPage() {
     }
   }, [searchParams, natalChart]);
 
-  // Load per-form date config when form changes
+  // Load per-form date config
   useEffect(() => {
     const fc = jewelryConfig?.[ringForm];
     if (!fc) return;
     setActiveDateType(fc.dateType || 'birthday');
-    if (fc.date) {
-      setDates(prev => ({ ...prev, [fc.dateType || 'birthday']: fc.date }));
-    }
+    if (fc.date) setDates(prev => ({ ...prev, [fc.dateType || 'birthday']: fc.date }));
   }, [ringForm, jewelryConfig]);
 
-  // Apply form/metal/layout from URL params (deep-link from store),
-  // otherwise default to 'ring' on plain /ring navigation
+  // Apply form/metal/layout from URL params
   useEffect(() => {
     const formParam = searchParams.get('form');
     const metalParam = searchParams.get('metal');
     const layoutParam = searchParams.get('layout');
-    if (formParam && FORM_TYPES.some(f => f.key === formParam)) {
-      updateRingForm(formParam);
-    } else {
-      updateRingForm('ring');
-    }
-    if (metalParam && METAL_TYPES.some(m => m.key === metalParam)) {
-      updateRingMetal(metalParam);
-    }
-    if (layoutParam && (layoutParam === 'astronomical' || layoutParam === 'navaratna')) {
-      updateRingLayout(layoutParam);
-    }
+    if (formParam && FORM_TYPES.some(f => f.key === formParam)) updateRingForm(formParam);
+    else updateRingForm('ring');
+    if (metalParam && METAL_TYPES.some(m => m.key === metalParam)) updateRingMetal(metalParam);
+    if (layoutParam && (layoutParam === 'astronomical' || layoutParam === 'navaratna')) updateRingLayout(layoutParam);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleDateChange = (e) => {
@@ -157,35 +132,135 @@ export default function CrownPage() {
   const activeInput = dates[activeDateType];
   const activeDate = parseDate(activeInput);
 
-  // Derive birthstone from birthday month; fall back to active date if no birthday entered
   const birthstone = useMemo(() => {
     const bd = parseDate(dates.birthday) || activeDate;
     if (!bd) return null;
-    const monthIndex = bd.getMonth();
-    const entry = mythicCalendar[monthIndex];
+    const entry = mythicCalendar[bd.getMonth()];
     if (!entry || !entry.stone) return null;
     const name = entry.stone.name;
     const key = BIRTHSTONE_KEYS[name];
     return key ? { name, key } : null;
   }, [dates.birthday, activeDate]);
 
-  // Fallback: if birthday is cleared while in birthstone mode, revert to geocentric
+  // Fallback: if birthday is cleared while in birthstone mode, revert to heliocentric
   useEffect(() => {
-    if (mode === 'birthstone' && !birthstone) {
-      setMode('geocentric');
-    }
+    if (mode === 'birthstone' && !birthstone) setMode('heliocentric');
   }, [birthstone, mode]);
 
   // Default bracelet to geocentric
   useEffect(() => {
-    if (ringForm === 'bracelet' && mode === 'heliocentric') {
-      setMode('geocentric');
-    }
+    if (ringForm === 'bracelet' && mode === 'heliocentric') setMode('geocentric');
   }, [ringForm]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  // Clear selections when switching
+  const handleSelectPlanet = (p) => {
+    setSelectedPlanet(prev => prev === p ? null : p);
+    setSelectedSign(null);
+    setSelectedCardinal(null);
+    setActiveTab('overview');
+  };
+  const handleSelectSign = (s) => {
+    setSelectedSign(prev => prev === s ? null : s);
+    setSelectedPlanet(null);
+    setSelectedCardinal(null);
+  };
+  const handleSelectCardinal = (c) => {
+    setSelectedCardinal(prev => prev === c ? null : c);
+    setSelectedPlanet(null);
+    setSelectedSign(null);
+  };
+
+  const currentData = selectedPlanet ? (mergedData[selectedPlanet] || null) : null;
+
+  // Build URL params string for navigation
+  const buildParams = () => {
+    const params = new URLSearchParams();
+    if (ringForm) params.set('form', ringForm);
+    if (ringMetal) params.set('metal', ringMetal);
+    if (ringLayout) params.set('layout', ringLayout);
+    if (dates[activeDateType]) {
+      params.set('birthday', dates[activeDateType]);
+    }
+    return params.toString();
+  };
+
+  const hasContent = selectedPlanet || selectedSign || selectedCardinal;
+
   return (
-    <div className="crown-page">
-      {/* Birthday input overlay */}
+    <div className="ring2d-page">
+      <RingButton />
+      <div className="ring2d-diagram-area">
+        <RingDiagram2D
+          birthDate={activeDate}
+          mode={mode}
+          zodiacMode={zodiacMode}
+          selectedPlanet={selectedPlanet}
+          onSelectPlanet={handleSelectPlanet}
+          hoveredPlanet={hoveredPlanet}
+          onHoverPlanet={setHoveredPlanet}
+          selectedSign={selectedSign}
+          onSelectSign={handleSelectSign}
+          selectedCardinal={selectedCardinal}
+          onSelectCardinal={handleSelectCardinal}
+        />
+      </div>
+
+      {/* Content panel */}
+      {hasContent && (
+        <div className="ring2d-content">
+          {selectedPlanet && currentData && (
+            <>
+              <h2 className="chrono-heading">
+                <span className="chrono-heading-title-row">{selectedPlanet}</span>
+                <span className="chrono-sub">{currentData.core?.metal || ''}</span>
+              </h2>
+              <div className="container">
+                <div id="content-container">
+                  <MetalDetailPanel
+                    data={currentData}
+                    activeTab={activeTab}
+                    onSelectTab={setActiveTab}
+                    activeCulture={activeCulture}
+                    onSelectCulture={setActiveCulture}
+                  />
+                </div>
+              </div>
+            </>
+          )}
+          {selectedSign && (
+            <>
+              <h2 className="chrono-heading">
+                <span className="chrono-heading-title-row">{selectedSign}</span>
+                <span className="chrono-sub">{zodiacData.find(z => z.sign === selectedSign)?.archetype || 'Zodiac'}</span>
+              </h2>
+              <div className="container">
+                <div id="content-container">
+                  <ZodiacContent sign={selectedSign} />
+                </div>
+              </div>
+            </>
+          )}
+          {selectedCardinal && (
+            <>
+              <h2 className="chrono-heading">
+                <span className="chrono-heading-title-row">{cardinalsData[selectedCardinal]?.label || selectedCardinal}</span>
+                <span className="chrono-sub">Cardinal Point</span>
+              </h2>
+              <div className="container">
+                <div id="content-container">
+                  <CardinalContent id={selectedCardinal} />
+                </div>
+              </div>
+            </>
+          )}
+        </div>
+      )}
+
+      {birthstone && (
+        <div className="crown-birthstone-label">{birthstone.name}</div>
+      )}
+
+      {/* Settings bar — matches CrownPage exactly */}
       <div className="crown-birthday-bar">
         <div className="crown-date-picker" ref={formPickerRef}>
           <button
@@ -384,60 +459,52 @@ export default function CrownPage() {
         </button>
         <button
           className="ring2d-view-toggle"
-          title="Switch to 2D view"
-          onClick={() => {
-            const params = new URLSearchParams();
-            if (ringForm) params.set('form', ringForm);
-            if (ringMetal) params.set('metal', ringMetal);
-            if (ringLayout) params.set('layout', ringLayout);
-            if (dates[activeDateType]) params.set('birthday', dates[activeDateType]);
-            navigate(`/ring/2d?${params.toString()}`);
-          }}
+          title="Switch to 3D view"
+          onClick={() => navigate(`/ring?${buildParams()}`)}
         >
-          2D
+          3D
         </button>
       </div>
+    </div>
+  );
+}
 
-      {mode === 'birthstone' && birthstone && (
-        <div className="crown-birthstone-label">{birthstone.name}</div>
-      )}
+/* ── Inline content components ────────────────────────────────────── */
 
-      <RingButton />
+function ZodiacContent({ sign }) {
+  const z = zodiacData.find(d => d.sign === sign);
+  if (!z) return <p className="chrono-empty">No data for {sign}.</p>;
 
-      <SceneErrorBoundary>
-        <Canvas
-          camera={{ position: [0, 0, 42], fov: 60, near: 0.1, far: 200 }}
-          gl={{ antialias: true }}
-          dpr={[1, 2]}
-        >
-          <Suspense fallback={null}>
-            <CrownScene
-              birthDate={activeDate}
-              selectedPlanet={selectedPlanet}
-              onSelectPlanet={(p) => setSelectedPlanet(selectedPlanet === p ? null : p)}
-              selectedCardinal={selectedCardinal}
-              onSelectCardinal={setSelectedCardinal}
-              mode={mode}
-              zodiacMode={zodiacMode}
-              birthstoneKey={birthstone?.key || null}
-              metal={ringMetal}
-              form={ringForm}
-              layout={ringLayout}
-            />
-            <OrbitControls
-              autoRotate={autoRotate}
-              autoRotateSpeed={0.5}
-              onStart={() => setAutoRotate(false)}
-              enableDamping
-              dampingFactor={0.05}
-              minDistance={5}
-              maxDistance={50}
-              maxPolarAngle={Math.PI}
-              target={[0, 0, 0]}
-            />
-          </Suspense>
-        </Canvas>
-      </SceneErrorBoundary>
+  return (
+    <div className="metal-detail-panel">
+      <div className="tab-content">
+        {z.dates && <p style={{ color: 'rgba(201,169,97,0.7)', fontSize: '0.85rem', marginBottom: '0.5rem' }}>{z.dates}</p>}
+        {z.element && <p style={{ color: 'rgba(201,169,97,0.8)', fontSize: '0.85rem' }}>Element: {z.element} &middot; Quality: {z.quality || ''}</p>}
+        {z.ruling_planet && <p style={{ color: 'rgba(201,169,97,0.8)', fontSize: '0.85rem', marginBottom: '0.75rem' }}>Ruling Planet: {z.ruling_planet}</p>}
+        {z.archetype && <p style={{ color: '#c9a961', fontStyle: 'italic', marginBottom: '0.75rem' }}>{z.archetype}</p>}
+        {z.description && <p style={{ color: '#d0c8b0', lineHeight: 1.6 }}>{z.description}</p>}
+        {z.cultures && Object.entries(z.cultures).map(([culture, data]) => (
+          <div key={culture} style={{ marginTop: '0.75rem' }}>
+            <h5 style={{ color: '#c9a961', fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{culture}</h5>
+            {data.name && <p style={{ color: '#d0c8b0' }}><strong>{data.name}</strong>{data.description ? ` \u2014 ${data.description}` : ''}</p>}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function CardinalContent({ id }) {
+  const data = cardinalsData[id];
+  if (!data) return <p className="chrono-empty">No data for this cardinal point.</p>;
+
+  return (
+    <div className="metal-detail-panel">
+      <div className="tab-content">
+        {data.date && <p style={{ color: 'rgba(201,169,97,0.7)', fontSize: '0.85rem', marginBottom: '0.5rem' }}>{data.date}</p>}
+        {data.description && <p style={{ color: '#d0c8b0', lineHeight: 1.6 }}>{data.description}</p>}
+        {data.significance && <p style={{ color: '#d0c8b0', lineHeight: 1.6, marginTop: '0.5rem' }}>{data.significance}</p>}
+      </div>
     </div>
   );
 }

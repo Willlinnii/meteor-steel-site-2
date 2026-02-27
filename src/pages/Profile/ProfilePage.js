@@ -106,6 +106,20 @@ const SUBSCRIPTIONS = [
     description: 'The hero\'s journey ring and the metallurgical transformation narrative on the Chronosphaera.',
     details: 'Activates the eight-stage monomyth ring and the meteor steel metallurgical overlay on the Chronosphaera. Toggle between the hero\'s journey stages and their correspondence to the ancient art of steel-making.',
   },
+  {
+    id: 'teaching', name: 'Teaching', price: '$25/mo',
+    icon: (
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+        <path d="M9 7h6" />
+        <path d="M9 11h6" />
+        <path d="M9 15h4" />
+      </svg>
+    ),
+    description: 'Map your syllabus to Mythouse content and build course footprints for your students.',
+    hasCustomContent: true,
+  },
 ];
 
 const PURCHASES = [
@@ -168,7 +182,7 @@ const PURCHASES = [
 export default function ProfilePage() {
   const { user, signOut } = useAuth();
   const { getCourseStates, completedCourses, certificateData, allCourses } = useCoursework();
-  const { earnedRanks, highestRank, activeCredentials, hasProfile, loaded: profileLoaded, handle, natalChart, updateNatalChart, numerologyName, updateNumerologyName, luckyNumber, updateLuckyNumber, subscriptions, purchases, hasStripeAccount, initiateCheckout, openBillingPortal, refreshProfile, mentorData, qualifiedMentorTypes, mentorEligible, mentorCoursesComplete, effectiveMentorStatus, pairingCategories, updateMentorBio, updateMentorCapacity, publishToDirectory, unpublishFromDirectory, respondToPairing, endPairing, photoURL, consultingData, consultingCategories, updateProfilePhoto, respondToConsulting, apiKeys, saveApiKey, removeApiKey, hasAnthropicKey, hasOpenaiKey, mythouseApiKey, hasMythouseKey, generateMythouseKey, regenerateMythouseKey, social, updateSocial, pilgrimages, pilgrimagesLoaded, removePilgrimage, personalStory, savePersonalStory, curatorApproved } = useProfile();
+  const { earnedRanks, highestRank, activeCredentials, hasProfile, loaded: profileLoaded, handle, natalChart, updateNatalChart, numerologyName, updateNumerologyName, luckyNumber, updateLuckyNumber, subscriptions, purchases, hasStripeAccount, initiateCheckout, openBillingPortal, refreshProfile, mentorData, qualifiedMentorTypes, mentorEligible, mentorCoursesComplete, effectiveMentorStatus, pairingCategories, updateMentorBio, updateMentorCapacity, publishToDirectory, unpublishFromDirectory, respondToPairing, endPairing, photoURL, consultingData, consultingCategories, updateProfilePhoto, respondToConsulting, apiKeys, saveApiKey, removeApiKey, hasAnthropicKey, hasOpenaiKey, mythouseApiKey, hasMythouseKey, generateMythouseKey, regenerateMythouseKey, social, updateSocial, pilgrimages, pilgrimagesLoaded, removePilgrimage, personalStory, savePersonalStory, curatorApproved, ringSize, updateRingSize } = useProfile();
 const { cards: storyCards, loaded: storyCardsLoaded } = useStoryCardSync();
   const navigate = useNavigate();
   const location = useLocation();
@@ -657,23 +671,58 @@ const { cards: storyCards, loaded: storyCardsLoaded } = useStoryCardSync();
         <h2 id="section-natal-chart" className="profile-section-title" style={{ margin: 0 }}>Natal Chart</h2>
         {natalChart?.birthData && (
           <button
-            className="profile-badge"
-            title="View your Crown"
+            className="profile-ring-btn"
+            title="My Rings"
             onClick={() => {
               const bd = natalChart.birthData;
               const mm = String(bd.month).padStart(2, '0');
               const dd = String(bd.day).padStart(2, '0');
-              navigate(`/crown?birthday=${bd.year}-${mm}-${dd}`);
+              navigate(`/ring?birthday=${bd.year}-${mm}-${dd}`);
             }}
-            style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '0.25rem', fontSize: '1.2rem', lineHeight: 1, color: 'inherit', opacity: 0.8 }}
           >
-            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-              <ellipse cx="12" cy="12" rx="9" ry="3.5" />
-              <ellipse cx="12" cy="12" rx="9" ry="3.5" transform="rotate(60 12 12)" />
-              <ellipse cx="12" cy="12" rx="9" ry="3.5" transform="rotate(120 12 12)" />
-              <circle cx="12" cy="12" r="2" />
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none">
+              <defs>
+                <linearGradient id="crGold" x1="4" y1="4" x2="20" y2="20">
+                  <stop offset="0%" stopColor="#f5e6a8" />
+                  <stop offset="35%" stopColor="#d4a830" />
+                  <stop offset="65%" stopColor="#8a6e1e" />
+                  <stop offset="100%" stopColor="#c9a040" />
+                </linearGradient>
+                <radialGradient id="crRuby" cx="50%" cy="35%">
+                  <stop offset="0%" stopColor="#ff3050" />
+                  <stop offset="100%" stopColor="#a00820" />
+                </radialGradient>
+              </defs>
+              <circle cx="12" cy="12" r="7.5" stroke="url(#crGold)" strokeWidth="2.2" />
+              <circle cx="12" cy="4.2" r="2" fill="url(#crRuby)" />
+              <circle cx="12" cy="4.2" r="2" fill="none" stroke="#f5e6a8" strokeWidth="0.3" opacity="0.5" />
+              <circle cx="17.3" cy="7.5" r="1.15" fill="#1ba34a" />
+              <circle cx="19.1" cy="13.5" r="1.15" fill="#d8deff" />
+              <circle cx="15" cy="18.4" r="1.15" fill="#e05030" />
+              <circle cx="9" cy="18.4" r="1.15" fill="#e8b820" />
+              <circle cx="4.9" cy="13.5" r="1.15" fill="#1838a0" />
+              <circle cx="6.7" cy="7.5" r="1.15" fill="#eae6de" />
             </svg>
+            <span className="profile-ring-btn-label">My Rings</span>
           </button>
+        )}
+        {natalChart?.birthData && (
+          <span className="profile-ring-size-inline">
+            <label className="profile-ring-size-label">Ring size</label>
+            <input
+              type="number"
+              className="profile-ring-size-input"
+              min="1"
+              max="16"
+              step="0.5"
+              placeholder="—"
+              value={ringSize ?? ''}
+              onChange={(e) => {
+                const v = e.target.value;
+                updateRingSize(v === '' ? null : parseFloat(v));
+              }}
+            />
+          </span>
         )}
       </div>
       <NatalChartDisplay chart={natalChart} />
@@ -1131,6 +1180,17 @@ All responses return { data, meta } JSON. GET /v1/ for full discovery.`}</pre>
                             Embed the full Mythouse Engine into your creations. Your users experience the mythic intelligence live — not just data, but the reasoning and connections behind it.
                           </p>
                         </div>
+                      </>
+                    ) : sub.hasCustomContent && sub.id === 'teaching' ? (
+                      <>
+                        <p>Upload or paste a syllabus and Mythouse will match your course topics to its content — myths, archetypes, planetary correspondences, games, and more. Save the resulting footprint so your students can follow along on the site as they study.</p>
+                        <button
+                          className="profile-stripe-btn subscribe"
+                          style={{ marginTop: 12, display: 'inline-block' }}
+                          onClick={() => navigate('/teacher')}
+                        >
+                          Open Teacher Mode &rarr;
+                        </button>
                       </>
                     ) : sub.details}
                   </div>
@@ -2490,15 +2550,17 @@ function NatalChartDisplay({ chart }) {
   const hasBirthData = chart?.planets?.length > 0;
   const [natalMode, setNatalMode] = useState('tropical');
   const [expandedInfo, setExpandedInfo] = useState(null);
-  const [chartMode, setChartMode] = useState('live');
+  const [aspectsOpen, setAspectsOpen] = useState({});
+  const [activeCulture, setActiveCulture] = useState(null);
+  const [cultureDropdownOpen, setCultureDropdownOpen] = useState(false);
+  const [chartMode, setChartMode] = useState(hasBirthData ? 'transits' : 'live');
   const [liveSky, setLiveSky] = useState(null);
-  const [liveMode, setLiveMode] = useState(hasBirthData ? 'transits' : 'sky-now');
+  // liveMode removed — chartMode now covers all three states directly
   const hadBirthDataOnMount = useRef(hasBirthData);
   const birthYear = chart?.birthData?.year || 2000;
   const isSidereal = natalMode === 'sidereal';
 
-  const handleLiveToggle = useCallback(async () => {
-    setChartMode('live');
+  const fetchLiveSky = useCallback(async () => {
     if (!liveSky) {
       try {
         const res = await fetch('/api/celestial');
@@ -2510,16 +2572,21 @@ function NatalChartDisplay({ chart }) {
     }
   }, [liveSky]);
 
-  // Auto-fetch sky data on mount (defaults to live view)
+  const handleLiveToggle = useCallback(async () => {
+    setChartMode('live');
+    fetchLiveSky();
+  }, [fetchLiveSky]);
+
+  // Auto-fetch sky data on mount
   useEffect(() => {
-    handleLiveToggle();
+    fetchLiveSky();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // When birth data first appears, switch to transits
   useEffect(() => {
     if (!hadBirthDataOnMount.current && chart?.planets?.length > 0) {
-      setLiveMode('transits');
+      setChartMode('transits');
       hadBirthDataOnMount.current = true;
     }
   }, [chart]);
@@ -2552,33 +2619,71 @@ function NatalChartDisplay({ chart }) {
 
   return (
     <div className="natal-chart-display">
-      {/* Birth Chart / Sky Now toggle */}
+      {/* Birth Chart / Sky Now / Transits toggle */}
       <div className="natal-chart-mode-toggle">
-        {hasBirthData && <button className={`natal-chart-mode-btn${chartMode === 'birth' ? ' active' : ''}`} onClick={() => setChartMode('birth')}>My Birth Chart</button>}
-        <button className={`natal-chart-mode-btn${chartMode === 'live' ? ' active' : ''}`} onClick={handleLiveToggle}>The Sky Right Now</button>
+        {hasBirthData && <button className={`natal-chart-mode-btn${chartMode === 'birth' ? ' active' : ''}`} onClick={() => setChartMode('birth')}>Birth Chart</button>}
+        <button className={`natal-chart-mode-btn${chartMode === 'live' ? ' active' : ''}`} onClick={handleLiveToggle}>Sky Right Now</button>
+        {hasBirthData && <button className={`natal-chart-mode-btn${chartMode === 'transits' ? ' active' : ''}`} onClick={() => { setChartMode('transits'); fetchLiveSky(); }}>Transits</button>}
       </div>
 
-      {chartMode === 'birth' ? (<>
-      {/* Tropical / Sidereal / Chinese tabs */}
+      {/* Tropical / Sidereal / Chinese / Synthesis tabs — shared across all modes */}
       <div className="natal-mode-tabs">
         <button
           className={`natal-mode-tab${natalMode === 'tropical' ? ' active' : ''}`}
-          onClick={() => setNatalMode('tropical')}
-        >Tropical</button>
+          onClick={() => {
+            if (natalMode === 'tropical') { setCultureDropdownOpen(prev => !prev); }
+            else { setNatalMode('tropical'); setCultureDropdownOpen(false); setActiveCulture(null); }
+          }}
+        >Tropical <span className="natal-tab-arrow">&#9662;</span></button>
         <button
           className={`natal-mode-tab${natalMode === 'sidereal' ? ' active' : ''}`}
-          onClick={() => setNatalMode('sidereal')}
-        >Sidereal</button>
+          onClick={() => {
+            if (natalMode === 'sidereal') { setCultureDropdownOpen(prev => !prev); }
+            else { setNatalMode('sidereal'); setCultureDropdownOpen(false); setActiveCulture(null); }
+          }}
+        >Sidereal <span className="natal-tab-arrow">&#9662;</span></button>
         <button
           className={`natal-mode-tab${natalMode === 'chinese' ? ' active' : ''}`}
-          onClick={() => setNatalMode('chinese')}
+          onClick={() => { setNatalMode('chinese'); setCultureDropdownOpen(false); setActiveCulture(null); }}
         >Chinese</button>
         <button
           className={`natal-mode-tab${natalMode === 'synthesis' ? ' active' : ''}`}
-          onClick={() => setNatalMode('synthesis')}
+          onClick={() => { setNatalMode('synthesis'); setCultureDropdownOpen(false); setActiveCulture(null); }}
         >Synthesis</button>
       </div>
 
+      {/* Culture sub-options dropdown */}
+      {cultureDropdownOpen && (natalMode === 'tropical' || natalMode === 'sidereal') && (
+        <div className="natal-culture-dropdown">
+          {(natalMode === 'tropical'
+            ? [{ key: 'greek', label: 'Greek' }, { key: 'roman', label: 'Roman' }, { key: 'islamic', label: 'Islamic' }, { key: 'medieval', label: 'Medieval' }]
+            : [{ key: 'vedic', label: 'Vedic' }, { key: 'babylonian', label: 'Babylonian' }, { key: 'norse', label: 'Norse' }]
+          ).map(({ key, label }) => (
+            <button key={key} className={`natal-culture-option${activeCulture === key ? ' active' : ''}`}
+              onClick={() => { setActiveCulture(prev => prev === key ? null : key); setCultureDropdownOpen(false); }}
+            >{label}</button>
+          ))}
+        </div>
+      )}
+
+      {/* Culture sign reading when a sub-culture is selected */}
+      {activeCulture && (natalMode === 'tropical' || natalMode === 'sidereal') && (() => {
+        const signForCulture = natalMode === 'sidereal'
+          ? (chartMode === 'birth' ? (chart?.planets?.map(p => { const s = toSiderealSign(p.longitude, birthYear); return { ...p, sign: s.sign }; }).find(p => p.name === 'Sun')?.sign) : currentSidSun)
+          : (chartMode === 'birth' ? chart?.planets?.find(p => p.name === 'Sun')?.sign : currentTropSun);
+        const zData = signForCulture ? chronosphaeraZodiac.find(z => z.sign === signForCulture) : null;
+        const culture = zData?.cultures?.[activeCulture];
+        if (!culture) return null;
+        return (
+          <div className="natal-culture-reading">
+            <div className="natal-culture-name">{culture.name}</div>
+            {culture.myth && <div className="natal-culture-myth">{culture.myth}</div>}
+            {culture.description && <div className="natal-culture-desc">{culture.description}</div>}
+          </div>
+        );
+      })()}
+
+      {chartMode === 'birth' ? (<>
       {natalMode === 'chinese' ? (
         chart.chinese ? (() => {
           const { animal, element } = chart.chinese;
@@ -2919,67 +3024,333 @@ function NatalChartDisplay({ chart }) {
           )}
         </>
       )}
-      </>) : (
-        <>
-          {/* Sky Now / Transits tabs */}
-          <div className="natal-mode-tabs">
-            <button
-              className={`natal-mode-tab${liveMode === 'sky-now' ? ' active' : ''}`}
-              onClick={() => setLiveMode('sky-now')}
-            >Sky Now</button>
-            {hasBirthData && <button
-              className={`natal-mode-tab${liveMode === 'transits' ? ' active' : ''}`}
-              onClick={() => setLiveMode('transits')}
-            >Transits</button>}
-          </div>
+      </>) : chartMode === 'live' ? (
+        !liveSky ? (
+          <div className="natal-sky-now-loading">Loading current sky...</div>
+        ) : natalMode === 'chinese' ? (() => {
+          const now = new Date();
+          const cYear = now.getFullYear();
+          const cMonth = now.getMonth() + 1;
+          const cHour = now.getHours();
+          const details = getChineseDetails({ year: cYear, month: cMonth, hour: cHour });
+          const { stem, branch, innerAnimal, secretAnimal } = details;
+          const animal = branch.animal;
+          const element = stem.element;
+          const fixedEl = CHINESE_FIXED_ELEMENT[animal];
+          const lucky = CHINESE_LUCKY[animal];
+          const compatibles = CHINESE_COMPATIBLES[animal] || [];
+          const incompatible = CHINESE_INCOMPATIBLES[animal];
+          const toggleInfo = (key) => setExpandedInfo(prev => prev === key ? null : key);
+          return (
+            <div className="natal-chinese-tab">
+              <div className="natal-chinese-hero">
+                <div className="natal-chinese-emoji">{CHINESE_ANIMAL_EMOJIS[animal] || ''}</div>
+                <div className="natal-chinese-pillar">{element} {animal}</div>
+                <div className="natal-chinese-polarity">{stem.polarity} &middot; {stem.char}{branch.char}</div>
+                <div className="natal-chinese-card-detail" style={{ marginTop: 4, opacity: 0.6 }}>Year of the {animal} ({cYear})</div>
+              </div>
 
-          {!liveSky ? (
-            <div className="natal-sky-now-loading">Loading current sky...</div>
-          ) : liveMode === 'sky-now' ? (
-            <div className="natal-sky-now-tab">
-              {/* Hero cards: current tropical + sidereal Sun */}
-              <div className="natal-synthesis-wheels">
-                <div className="natal-synthesis-wheel-card">
-                  <div className="natal-synthesis-wheel-label">Current Sky</div>
-                  <div className="natal-synthesis-wheel-subtitle">The Embodied Energy</div>
-                  <div className="natal-synthesis-wheel-symbol">{ZODIAC_SYMBOLS[currentTropSun] || ''}</div>
-                  <div className="natal-synthesis-wheel-sign">{currentTropSun}</div>
-                  {(() => {
-                    const z = chronosphaeraZodiac.find(zz => zz.sign === currentTropSun);
-                    return z ? (
-                      <>
-                        <div className="natal-synthesis-wheel-archetype">{z.archetype}</div>
-                        <div className="natal-synthesis-wheel-detail">{z.modality} {z.element}</div>
-                      </>
-                    ) : null;
-                  })()}
+              <div className="natal-chinese-pillar-row">
+                <div className={`natal-chinese-pillar-card natal-chinese-clickable${expandedInfo === 'heavenly-stem' ? ' expanded' : ''}`} onClick={() => toggleInfo('heavenly-stem')}>
+                  <div className="natal-chinese-card-label">Heavenly Stem <span className="natal-chinese-info-hint">?</span></div>
+                  <div className="natal-chinese-pillar-char">{stem.char}</div>
+                  <div className="natal-chinese-card-value">{stem.name}</div>
+                  <div className="natal-chinese-card-detail">{stem.element} {stem.polarity}</div>
+                  {expandedInfo === 'heavenly-stem' && <div className="natal-chinese-info-text">{CHINESE_INFO['heavenly-stem']}</div>}
                 </div>
-                <div className="natal-synthesis-wheel-card">
-                  <div className="natal-synthesis-wheel-label">Stellar Sky</div>
-                  <div className="natal-synthesis-wheel-subtitle">The Timeless Current</div>
-                  <div className="natal-synthesis-wheel-symbol">{ZODIAC_SYMBOLS[currentSidSun] || ''}</div>
-                  <div className="natal-synthesis-wheel-sign">{currentSidSun}</div>
-                  {(() => {
-                    const constAbbr = SIGN_TO_CONSTELLATION[currentSidSun];
-                    const constellation = constAbbr ? constellationContent[constAbbr] : null;
-                    return constellation ? (
-                      <>
-                        <div className="natal-synthesis-wheel-archetype">{constellation.name}</div>
-                        <div className="natal-synthesis-wheel-detail">{constellation.brightestStar}</div>
-                      </>
-                    ) : null;
-                  })()}
+                <div className={`natal-chinese-pillar-card natal-chinese-clickable${expandedInfo === 'earthly-branch' ? ' expanded' : ''}`} onClick={() => toggleInfo('earthly-branch')}>
+                  <div className="natal-chinese-card-label">Earthly Branch <span className="natal-chinese-info-hint">?</span></div>
+                  <div className="natal-chinese-pillar-char">{branch.char}</div>
+                  <div className="natal-chinese-card-value">{branch.name}</div>
+                  <div className="natal-chinese-card-detail">{branch.animal}</div>
+                  {expandedInfo === 'earthly-branch' && <div className="natal-chinese-info-text">{CHINESE_INFO['earthly-branch']}</div>}
                 </div>
               </div>
 
-              {/* Dual-column planetary table */}
-              <div className="natal-synthesis-planet-table">
-                <div className="natal-synthesis-table-header">
-                  <span className="natal-synthesis-table-planet">Planet</span>
-                  <span className="natal-synthesis-table-col">Tropical</span>
-                  <span className="natal-synthesis-table-col">Sidereal</span>
+              <div className="natal-chinese-cards">
+                <div className={`natal-chinese-card natal-chinese-clickable${expandedInfo === 'year-animal' ? ' expanded' : ''}`} onClick={() => toggleInfo('year-animal')}>
+                  <div className="natal-chinese-card-label">Year Animal <span className="natal-chinese-info-hint">?</span></div>
+                  <div className="natal-chinese-card-value">{animal}</div>
+                  <div className="natal-chinese-card-detail">{CHINESE_TRAITS[animal]}</div>
+                  <div className="natal-chinese-card-sub">Fixed element: <span style={{ color: CHINESE_ELEMENT_COLORS[fixedEl] }}>{fixedEl}</span></div>
+                  {expandedInfo === 'year-animal' && <div className="natal-chinese-info-text">{CHINESE_INFO['year-animal']}</div>}
                 </div>
-                {liveSkyDual.map(p => (
+                <div className={`natal-chinese-card natal-chinese-clickable${expandedInfo === 'year-element' ? ' expanded' : ''}`} onClick={() => toggleInfo('year-element')}>
+                  <div className="natal-chinese-card-label">Year Element <span className="natal-chinese-info-hint">?</span></div>
+                  <div className="natal-chinese-card-value" style={{ color: CHINESE_ELEMENT_COLORS[element] }}>{element}</div>
+                  <div className="natal-chinese-card-detail">{CHINESE_ELEMENT_TRAITS[element]}</div>
+                  {expandedInfo === 'year-element' && <div className="natal-chinese-info-text">{CHINESE_INFO['year-element']}</div>}
+                </div>
+                <div className={`natal-chinese-card natal-chinese-clickable${expandedInfo === 'inner-animal' ? ' expanded' : ''}`} onClick={() => toggleInfo('inner-animal')}>
+                  <div className="natal-chinese-card-label">Month Animal <span className="natal-chinese-info-hint">?</span></div>
+                  <div className="natal-chinese-card-value">{innerAnimal}</div>
+                  <div className="natal-chinese-card-emoji">{CHINESE_ANIMAL_EMOJIS[innerAnimal]}</div>
+                  {expandedInfo === 'inner-animal' && <div className="natal-chinese-info-text">{CHINESE_INFO['inner-animal']}</div>}
+                </div>
+                <div className={`natal-chinese-card natal-chinese-clickable${expandedInfo === 'secret-animal' ? ' expanded' : ''}`} onClick={() => toggleInfo('secret-animal')}>
+                  <div className="natal-chinese-card-label">Hour Animal <span className="natal-chinese-info-hint">?</span></div>
+                  <div className="natal-chinese-card-value">{secretAnimal}</div>
+                  <div className="natal-chinese-card-emoji">{CHINESE_ANIMAL_EMOJIS[secretAnimal]}</div>
+                  {expandedInfo === 'secret-animal' && <div className="natal-chinese-info-text">{CHINESE_INFO['secret-animal']}</div>}
+                </div>
+              </div>
+
+              {lucky && (
+                <div className={`natal-chinese-lucky natal-chinese-clickable${expandedInfo === 'lucky' ? ' expanded' : ''}`} onClick={() => toggleInfo('lucky')}>
+                  <div className="natal-chinese-lucky-title">Lucky Associations <span className="natal-chinese-info-hint">?</span></div>
+                  <div className="natal-chinese-lucky-grid">
+                    <div className="natal-chinese-lucky-item">
+                      <span className="natal-chinese-lucky-key">Numbers</span>
+                      <span className="natal-chinese-lucky-val">{lucky.numbers.join(', ')}</span>
+                    </div>
+                    <div className="natal-chinese-lucky-item">
+                      <span className="natal-chinese-lucky-key">Colors</span>
+                      <span className="natal-chinese-lucky-val">{lucky.colors.join(', ')}</span>
+                    </div>
+                    <div className="natal-chinese-lucky-item">
+                      <span className="natal-chinese-lucky-key">Flower</span>
+                      <span className="natal-chinese-lucky-val">{lucky.flower}</span>
+                    </div>
+                  </div>
+                  {expandedInfo === 'lucky' && <div className="natal-chinese-info-text">{CHINESE_INFO['lucky']}</div>}
+                </div>
+              )}
+
+              <div className={`natal-chinese-compat natal-chinese-clickable${expandedInfo === 'compatibility' ? ' expanded' : ''}`} onClick={() => toggleInfo('compatibility')}>
+                <div className="natal-chinese-compat-label">Most Compatible <span className="natal-chinese-info-hint">?</span></div>
+                <div className="natal-chinese-compat-list">
+                  {compatibles.map(a => (
+                    <span key={a} className="natal-chinese-compat-tag">
+                      {CHINESE_ANIMAL_EMOJIS[a]} {a}
+                    </span>
+                  ))}
+                </div>
+                {incompatible && (
+                  <div className="natal-chinese-compat-clash">
+                    Challenging match: {CHINESE_ANIMAL_EMOJIS[incompatible]} {incompatible}
+                  </div>
+                )}
+                {expandedInfo === 'compatibility' && <div className="natal-chinese-info-text">{CHINESE_INFO['compatibility']}</div>}
+              </div>
+            </div>
+          );
+        })() : natalMode === 'synthesis' ? (
+          <div className="natal-sky-now-tab">
+            {/* Dual hero cards: tropical + sidereal Sun */}
+            <div className="natal-synthesis-wheels">
+              <div className="natal-synthesis-wheel-card">
+                <div className="natal-synthesis-wheel-label">Current Sky</div>
+                <div className="natal-synthesis-wheel-subtitle">The Embodied Energy</div>
+                <div className="natal-synthesis-wheel-symbol">{ZODIAC_SYMBOLS[currentTropSun] || ''}</div>
+                <div className="natal-synthesis-wheel-sign">{currentTropSun}</div>
+                {(() => {
+                  const z = chronosphaeraZodiac.find(zz => zz.sign === currentTropSun);
+                  return z ? (
+                    <>
+                      <div className="natal-synthesis-wheel-archetype">{z.archetype}</div>
+                      <div className="natal-synthesis-wheel-detail">{z.modality} {z.element}</div>
+                    </>
+                  ) : null;
+                })()}
+              </div>
+              <div className="natal-synthesis-wheel-card">
+                <div className="natal-synthesis-wheel-label">Stellar Sky</div>
+                <div className="natal-synthesis-wheel-subtitle">The Timeless Current</div>
+                <div className="natal-synthesis-wheel-symbol">{ZODIAC_SYMBOLS[currentSidSun] || ''}</div>
+                <div className="natal-synthesis-wheel-sign">{currentSidSun}</div>
+                {(() => {
+                  const constAbbr = SIGN_TO_CONSTELLATION[currentSidSun];
+                  const constellation = constAbbr ? constellationContent[constAbbr] : null;
+                  return constellation ? (
+                    <>
+                      <div className="natal-synthesis-wheel-archetype">{constellation.name}</div>
+                      <div className="natal-synthesis-wheel-detail">{constellation.brightestStar}</div>
+                    </>
+                  ) : null;
+                })()}
+              </div>
+            </div>
+
+            {/* Dual-column planetary table */}
+            <div className="natal-synthesis-planet-table">
+              <div className="natal-synthesis-table-header">
+                <span className="natal-synthesis-table-planet">Planet</span>
+                <span className="natal-synthesis-table-col">Tropical</span>
+                <span className="natal-synthesis-table-col">Sidereal</span>
+              </div>
+              {liveSkyDual.map(p => (
+                <div key={p.name} className="natal-synthesis-table-row">
+                  <span className="natal-synthesis-table-planet">
+                    <span className="natal-planet-symbol">{PLANET_SYMBOLS[p.name] || ''}</span> {p.name}
+                  </span>
+                  <span className="natal-synthesis-table-col">
+                    {ZODIAC_SYMBOLS[p.sign] || ''} {p.sign} {p.degree}&deg;
+                  </span>
+                  <span className="natal-synthesis-table-col">
+                    {ZODIAC_SYMBOLS[p.sidSign] || ''} {p.sidSign} {p.sidDegree}&deg;
+                  </span>
+                </div>
+              ))}
+            </div>
+
+            {/* Current aspects (collapsible) */}
+            {liveSky.aspects?.length > 0 && (
+              <div className="natal-transit-aspects">
+                <div className="natal-transit-aspects-title natal-aspects-toggle" onClick={() => setAspectsOpen(prev => ({ ...prev, current: !prev.current }))}>
+                  Current Aspects <span className="natal-aspects-count">({liveSky.aspects.length})</span> <span className={`natal-aspects-arrow${aspectsOpen.current ? ' open' : ''}`}>&#9662;</span>
+                </div>
+                {aspectsOpen.current && liveSky.aspects.map((a, i) => (
+                  <div key={i} className="natal-transit-aspect">
+                    <span className="natal-planet-symbol">{PLANET_SYMBOLS[a.planet1]}</span> {a.planet1} {a.aspect.toLowerCase()} <span className="natal-planet-symbol">{PLANET_SYMBOLS[a.planet2]}</span> {a.planet2} <span className="natal-transit-orb">(orb {a.orb}&deg;)</span>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Narrative reading */}
+            <div className="natal-synthesis-narrative">
+              <div className="natal-synthesis-narrative-title">The Sky Right Now</div>
+              {skyNowNarrative.map((para, i) => (
+                <p key={i} className="natal-synthesis-narrative-para">{para}</p>
+              ))}
+            </div>
+
+            <div className="natal-sky-now-timestamp">
+              Computed {new Date(liveSky.timestamp).toLocaleString()}
+            </div>
+          </div>
+        ) : (
+          <div className="natal-sky-now-tab">
+            {/* Sun hero card */}
+            <div className="natal-big-three">
+              {(() => {
+                const useSid = natalMode === 'sidereal';
+                const sunSign = useSid ? currentSidSun : currentTropSun;
+                const sunPlanet = useSid
+                  ? liveSkyDual.find(p => p.name === 'Sun')
+                  : liveSky.planets.find(p => p.name === 'Sun');
+                const moonPlanet = useSid
+                  ? liveSkyDual.find(p => p.name === 'Moon')
+                  : liveSky.planets.find(p => p.name === 'Moon');
+                const moonSign = useSid ? moonPlanet?.sidSign : moonPlanet?.sign;
+                return (
+                  <>
+                    {sunPlanet && (
+                      <div className="natal-big-three-card">
+                        <div className="natal-big-three-symbol">{ZODIAC_SYMBOLS[sunSign] || ''}</div>
+                        <div className="natal-big-three-label">Sun</div>
+                        <div className="natal-big-three-sign">{sunSign}</div>
+                        <div className="natal-big-three-degree">{useSid ? sunPlanet.sidDegree : sunPlanet.degree}&deg;</div>
+                      </div>
+                    )}
+                    {moonPlanet && (
+                      <div className="natal-big-three-card">
+                        <div className="natal-big-three-symbol">{ZODIAC_SYMBOLS[moonSign] || ''}</div>
+                        <div className="natal-big-three-label">Moon</div>
+                        <div className="natal-big-three-sign">{moonSign}</div>
+                        <div className="natal-big-three-degree">{useSid ? moonPlanet.sidDegree : moonPlanet.degree}&deg;</div>
+                      </div>
+                    )}
+                  </>
+                );
+              })()}
+            </div>
+
+            {/* Planet positions */}
+            <div className="natal-planets-grid">
+              {(natalMode === 'sidereal' ? liveSkyDual : liveSky.planets)?.map(p => {
+                const sign = natalMode === 'sidereal' ? p.sidSign : p.sign;
+                const deg = natalMode === 'sidereal' ? p.sidDegree : p.degree;
+                return (
+                  <div key={p.name} className="natal-planet-row">
+                    <span className="natal-planet-symbol">{PLANET_SYMBOLS[p.name] || ''}</span>
+                    <span className="natal-planet-name">{p.name}</span>
+                    <span className="natal-planet-metal">{PLANET_METALS[p.name]}</span>
+                    <span className="natal-planet-sign">{ZODIAC_SYMBOLS[sign] || ''} {sign} {deg}&deg;</span>
+                    <span className="natal-planet-house">&mdash;</span>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Current aspects (collapsible) */}
+            {liveSky.aspects?.length > 0 && (
+              <div className="natal-transit-aspects">
+                <div className="natal-transit-aspects-title natal-aspects-toggle" onClick={() => setAspectsOpen(prev => ({ ...prev, current: !prev.current }))}>
+                  Current Aspects <span className="natal-aspects-count">({liveSky.aspects.length})</span> <span className={`natal-aspects-arrow${aspectsOpen.current ? ' open' : ''}`}>&#9662;</span>
+                </div>
+                {aspectsOpen.current && liveSky.aspects.map((a, i) => (
+                  <div key={i} className="natal-transit-aspect">
+                    <span className="natal-planet-symbol">{PLANET_SYMBOLS[a.planet1]}</span> {a.planet1} {a.aspect.toLowerCase()} <span className="natal-planet-symbol">{PLANET_SYMBOLS[a.planet2]}</span> {a.planet2} <span className="natal-transit-orb">(orb {a.orb}&deg;)</span>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            <div className="natal-sky-now-timestamp">
+              Computed {new Date(liveSky.timestamp).toLocaleString()}
+            </div>
+          </div>
+        )
+      ) : chartMode === 'transits' ? (
+        !liveSky ? (
+          <div className="natal-sky-now-loading">Loading current sky...</div>
+        ) : natalMode === 'chinese' ? (() => {
+          const now = new Date();
+          const cYear = now.getFullYear();
+          const birthDetails = chart?.birthData ? getChineseDetails(chart.birthData) : null;
+          const currentDetails = getChineseDetails({ year: cYear, month: now.getMonth() + 1, hour: now.getHours() });
+          const birthAnimal = birthDetails?.branch?.animal;
+          const birthElement = birthDetails?.stem?.element;
+          const currentAnimal = currentDetails.branch.animal;
+          const currentElement = currentDetails.stem.element;
+          const toggleInfo = (key) => setExpandedInfo(prev => prev === key ? null : key);
+          return (
+            <div className="natal-chinese-tab">
+              <div className="natal-synthesis-wheels">
+                <div className="natal-synthesis-wheel-card">
+                  <div className="natal-synthesis-wheel-label">Your Birth Year</div>
+                  <div className="natal-synthesis-wheel-symbol">{CHINESE_ANIMAL_EMOJIS[birthAnimal] || '?'}</div>
+                  <div className="natal-synthesis-wheel-sign">{birthElement || '?'} {birthAnimal || '?'}</div>
+                  {birthDetails && (
+                    <div className="natal-synthesis-wheel-detail">{birthDetails.stem.polarity} &middot; {birthDetails.stem.char}{birthDetails.branch.char}</div>
+                  )}
+                </div>
+                <div className="natal-synthesis-wheel-card">
+                  <div className="natal-synthesis-wheel-label">Current Year ({cYear})</div>
+                  <div className="natal-synthesis-wheel-symbol">{CHINESE_ANIMAL_EMOJIS[currentAnimal] || ''}</div>
+                  <div className="natal-synthesis-wheel-sign">{currentElement} {currentAnimal}</div>
+                  <div className="natal-synthesis-wheel-detail">{currentDetails.stem.polarity} &middot; {currentDetails.stem.char}{currentDetails.branch.char}</div>
+                </div>
+              </div>
+
+              {birthAnimal && (
+                <div className={`natal-chinese-compat natal-chinese-clickable${expandedInfo === 'transit-compat' ? ' expanded' : ''}`} onClick={() => toggleInfo('transit-compat')}>
+                  <div className="natal-chinese-compat-label">Year Compatibility <span className="natal-chinese-info-hint">?</span></div>
+                  <div className="natal-chinese-card-detail" style={{ marginTop: 8 }}>
+                    {(CHINESE_COMPATIBLES[birthAnimal] || []).includes(currentAnimal)
+                      ? `The ${currentAnimal} year harmonizes well with your ${birthAnimal} nature.`
+                      : CHINESE_INCOMPATIBLES[birthAnimal] === currentAnimal
+                      ? `The ${currentAnimal} year challenges your ${birthAnimal} nature \u2014 a year of growth through friction.`
+                      : `The ${currentAnimal} year is a neutral match for your ${birthAnimal} nature.`}
+                  </div>
+                  {expandedInfo === 'transit-compat' && <div className="natal-chinese-info-text">In Chinese astrology, certain animal signs naturally harmonize while others clash. Compatible animals share similar rhythms and values. Challenging matches create friction that can catalyze growth. Neutral years offer steady energy without strong push or pull.</div>}
+                </div>
+              )}
+            </div>
+          );
+        })() : natalMode === 'synthesis' ? (
+          <div className="natal-transits-tab">
+            {/* Dual-column: Natal (both systems) vs Transit (both systems) */}
+            <div className="natal-synthesis-planet-table">
+              <div className="natal-synthesis-table-header">
+                <span className="natal-synthesis-table-planet">Planet</span>
+                <span className="natal-synthesis-table-col">Natal</span>
+                <span className="natal-synthesis-table-col">Transit</span>
+              </div>
+              {chart?.planets?.map(p => {
+                const transit = liveSky.planets.find(t => t.name === p.name);
+                return (
                   <div key={p.name} className="natal-synthesis-table-row">
                     <span className="natal-synthesis-table-planet">
                       <span className="natal-planet-symbol">{PLANET_SYMBOLS[p.name] || ''}</span> {p.name}
@@ -2988,95 +3359,110 @@ function NatalChartDisplay({ chart }) {
                       {ZODIAC_SYMBOLS[p.sign] || ''} {p.sign} {p.degree}&deg;
                     </span>
                     <span className="natal-synthesis-table-col">
-                      {ZODIAC_SYMBOLS[p.sidSign] || ''} {p.sidSign} {p.sidDegree}&deg;
+                      {transit ? <>{ZODIAC_SYMBOLS[transit.sign] || ''} {transit.sign} {transit.degree}&deg;</> : '\u2014'}
                     </span>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Cross-chart aspects (collapsible) */}
+            {crossAspects.length > 0 && (
+              <div className="natal-transit-aspects">
+                <div className="natal-transit-aspects-title natal-aspects-toggle" onClick={() => setAspectsOpen(prev => ({ ...prev, transit: !prev.transit }))}>
+                  Transit Aspects to Your Chart <span className="natal-aspects-count">({crossAspects.length})</span> <span className={`natal-aspects-arrow${aspectsOpen.transit ? ' open' : ''}`}>&#9662;</span>
+                </div>
+                {aspectsOpen.transit && crossAspects.map((a, i) => (
+                  <div key={i} className="natal-transit-aspect">
+                    <span className="natal-planet-symbol">{PLANET_SYMBOLS[a.transitPlanet]}</span> Transit {a.transitPlanet} {a.aspect.toLowerCase()} your <span className="natal-planet-symbol">{PLANET_SYMBOLS[a.natalPlanet]}</span> {a.natalPlanet} <span className="natal-transit-orb">(orb {a.orb}&deg;)</span>
+                    {TRANSIT_ASPECT_MEANING[a.aspect] && (
+                      <span className="natal-transit-meaning"> &mdash; {TRANSIT_ASPECT_MEANING[a.aspect]}</span>
+                    )}
                   </div>
                 ))}
               </div>
+            )}
 
-              {/* Current aspects */}
-              {liveSky.aspects?.length > 0 && (
-                <div className="natal-transit-aspects">
-                  <div className="natal-transit-aspects-title">Current Aspects</div>
-                  {liveSky.aspects.map((a, i) => (
-                    <div key={i} className="natal-transit-aspect">
-                      <span className="natal-planet-symbol">{PLANET_SYMBOLS[a.planet1]}</span> {a.planet1} {a.aspect.toLowerCase()} <span className="natal-planet-symbol">{PLANET_SYMBOLS[a.planet2]}</span> {a.planet2} <span className="natal-transit-orb">(orb {a.orb}&deg;)</span>
-                    </div>
-                  ))}
-                </div>
-              )}
-
-              {/* Narrative reading */}
+            {/* Transit narrative */}
+            {transitNarrative.length > 0 && (
               <div className="natal-synthesis-narrative">
-                <div className="natal-synthesis-narrative-title">The Sky Right Now</div>
-                {skyNowNarrative.map((para, i) => (
+                <div className="natal-synthesis-narrative-title">Your Transit Weather</div>
+                {transitNarrative.map((para, i) => (
                   <p key={i} className="natal-synthesis-narrative-para">{para}</p>
                 ))}
               </div>
+            )}
 
-              <div className="natal-sky-now-timestamp">
-                Computed {new Date(liveSky.timestamp).toLocaleString()}
-              </div>
+            <div className="natal-sky-now-timestamp">
+              Computed {new Date(liveSky.timestamp).toLocaleString()}
             </div>
-          ) : (
-            <div className="natal-transits-tab">
-              {/* Three-column table: Planet | Natal | Transit */}
-              <div className="natal-synthesis-planet-table">
-                <div className="natal-synthesis-table-header">
-                  <span className="natal-synthesis-table-planet">Planet</span>
-                  <span className="natal-synthesis-table-col">Natal</span>
-                  <span className="natal-synthesis-table-col">Transit</span>
-                </div>
-                {chart?.planets?.map(p => {
-                  const transit = liveSky.planets.find(t => t.name === p.name);
-                  return (
-                    <div key={p.name} className="natal-synthesis-table-row">
-                      <span className="natal-synthesis-table-planet">
-                        <span className="natal-planet-symbol">{PLANET_SYMBOLS[p.name] || ''}</span> {p.name}
-                      </span>
-                      <span className="natal-synthesis-table-col">
-                        {ZODIAC_SYMBOLS[p.sign] || ''} {p.sign} {p.degree}&deg;
-                      </span>
-                      <span className="natal-synthesis-table-col">
-                        {transit ? <>{ZODIAC_SYMBOLS[transit.sign] || ''} {transit.sign} {transit.degree}&deg;</> : '\u2014'}
-                      </span>
+          </div>
+        ) : (
+          <div className="natal-transits-tab">
+            {/* Natal vs Transit table — tropical or sidereal depending on tab */}
+            {(() => {
+              const useSid = natalMode === 'sidereal';
+              const natalPlanets = useSid
+                ? chart?.planets?.map(p => {
+                    const s = toSiderealSign(p.longitude, birthYear);
+                    return { ...p, sign: s.sign, degree: s.degree };
+                  })
+                : chart?.planets;
+              const transitPlanets = useSid ? liveSkyDual : liveSky.planets;
+              return (
+                <>
+                  <div className="natal-synthesis-planet-table">
+                    <div className="natal-synthesis-table-header">
+                      <span className="natal-synthesis-table-planet">Planet</span>
+                      <span className="natal-synthesis-table-col">Natal</span>
+                      <span className="natal-synthesis-table-col">Transit</span>
                     </div>
-                  );
-                })}
-              </div>
+                    {natalPlanets?.map(p => {
+                      const tr = transitPlanets.find(t => t.name === p.name);
+                      const trSign = useSid ? tr?.sidSign : tr?.sign;
+                      const trDeg = useSid ? tr?.sidDegree : tr?.degree;
+                      return (
+                        <div key={p.name} className="natal-synthesis-table-row">
+                          <span className="natal-synthesis-table-planet">
+                            <span className="natal-planet-symbol">{PLANET_SYMBOLS[p.name] || ''}</span> {p.name}
+                          </span>
+                          <span className="natal-synthesis-table-col">
+                            {ZODIAC_SYMBOLS[p.sign] || ''} {p.sign} {p.degree}&deg;
+                          </span>
+                          <span className="natal-synthesis-table-col">
+                            {tr ? <>{ZODIAC_SYMBOLS[trSign] || ''} {trSign} {trDeg}&deg;</> : '\u2014'}
+                          </span>
+                        </div>
+                      );
+                    })}
+                  </div>
 
-              {/* Cross-chart aspects */}
-              {crossAspects.length > 0 && (
-                <div className="natal-transit-aspects">
-                  <div className="natal-transit-aspects-title">Transit Aspects to Your Chart</div>
-                  {crossAspects.map((a, i) => (
-                    <div key={i} className="natal-transit-aspect">
-                      <span className="natal-planet-symbol">{PLANET_SYMBOLS[a.transitPlanet]}</span> Transit {a.transitPlanet} {a.aspect.toLowerCase()} your <span className="natal-planet-symbol">{PLANET_SYMBOLS[a.natalPlanet]}</span> {a.natalPlanet} <span className="natal-transit-orb">(orb {a.orb}&deg;)</span>
-                      {TRANSIT_ASPECT_MEANING[a.aspect] && (
-                        <span className="natal-transit-meaning"> &mdash; {TRANSIT_ASPECT_MEANING[a.aspect]}</span>
-                      )}
+                  {/* Cross-chart aspects (collapsible) */}
+                  {crossAspects.length > 0 && (
+                    <div className="natal-transit-aspects">
+                      <div className="natal-transit-aspects-title natal-aspects-toggle" onClick={() => setAspectsOpen(prev => ({ ...prev, transit: !prev.transit }))}>
+                        Transit Aspects to Your Chart <span className="natal-aspects-count">({crossAspects.length})</span> <span className={`natal-aspects-arrow${aspectsOpen.transit ? ' open' : ''}`}>&#9662;</span>
+                      </div>
+                      {aspectsOpen.transit && crossAspects.map((a, i) => (
+                        <div key={i} className="natal-transit-aspect">
+                          <span className="natal-planet-symbol">{PLANET_SYMBOLS[a.transitPlanet]}</span> Transit {a.transitPlanet} {a.aspect.toLowerCase()} your <span className="natal-planet-symbol">{PLANET_SYMBOLS[a.natalPlanet]}</span> {a.natalPlanet} <span className="natal-transit-orb">(orb {a.orb}&deg;)</span>
+                          {TRANSIT_ASPECT_MEANING[a.aspect] && (
+                            <span className="natal-transit-meaning"> &mdash; {TRANSIT_ASPECT_MEANING[a.aspect]}</span>
+                          )}
+                        </div>
+                      ))}
                     </div>
-                  ))}
-                </div>
-              )}
+                  )}
+                </>
+              );
+            })()}
 
-              {/* Transit narrative — Atlas reading */}
-              {transitNarrative.length > 0 && (
-                <div className="natal-synthesis-narrative">
-                  <div className="natal-synthesis-narrative-title">Your Transit Weather</div>
-                  {transitNarrative.map((para, i) => (
-                    <p key={i} className="natal-synthesis-narrative-para">{para}</p>
-                  ))}
-                </div>
-              )}
-
-              <div className="natal-sky-now-timestamp">
-                Computed {new Date(liveSky.timestamp).toLocaleString()}
-              </div>
+            <div className="natal-sky-now-timestamp">
+              Computed {new Date(liveSky.timestamp).toLocaleString()}
             </div>
-          )}
-        </>
-      )}
+          </div>
+        )
+      ) : null}
     </div>
   );
 }

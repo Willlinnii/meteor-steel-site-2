@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../auth/AuthContext';
+import { buildPriceMatrix } from '../../utils/jewelryPricing';
 
 // Client-side catalog — mirrors api/_lib/stripeProducts.js
 const CATALOG = [
@@ -20,10 +21,26 @@ const CATALOG = [
 ];
 
 const DICE_PRODUCTS = [
-  { key: 'cosmic-d12', label: 'Cosmic D12', price: '$45', cents: 4500,
-    description: 'The cosmos mapped onto a dodecahedron die. Twelve faces, twelve constellations.' },
-  { key: 'obsidian-d12', label: 'Obsidian Edition', price: '$195', cents: 19500,
-    description: 'Hand-cut obsidian d12 — volcanic glass with the night sky carved in.' },
+  { key: 'd12', faces: 12,
+    ore: { label: 'Obsidian D12', material: 'Ore', price: '$195', cents: 19500, iconKey: 'obsidian-d12',
+      description: 'Hand-cut obsidian d12 — volcanic glass with the night sky carved in.' },
+    std: { label: 'Cosmic D12', material: 'Cosmic', price: '$5', cents: 500, iconKey: 'cosmic-d12',
+      description: 'The cosmos mapped onto a dodecahedron. Twelve faces, twelve constellations.' } },
+  { key: 'set', bundle: true,
+    ore: { label: 'Platonic Set', material: 'Ore', price: '$275', cents: 27500, iconKey: 'platonic-set',
+      description: 'All five Platonic solids in mineral stone. The complete geometry of the cosmos.' },
+    std: { label: 'Platonic Set', material: 'Cosmic', price: '$25', cents: 2500, iconKey: 'platonic-set',
+      description: 'All five Platonic solids. The complete geometry of the cosmos in your hand.' } },
+  { key: 'd6', faces: 6, label: 'Galena D6', price: '$35', cents: 3500, iconKey: 'galena-d6',
+    description: 'Lead ore cube — Saturn\'s mineral carved into the six-faced solid of Earth.' },
+  { key: 'd20', faces: 20, label: 'Malachite D20', price: '$65', cents: 6500, iconKey: 'malachite-d20',
+    description: 'Green copper carbonate icosahedron — Venus\'s stone shaped into the solid of Water.' },
+  { key: 'd4', faces: 4, label: 'Quartz D4', price: '$40', cents: 4000, iconKey: 'quartz-d4',
+    description: 'Clear quartz tetrahedron — the simplest solid, the element of Fire, cut from crystal.' },
+  { key: 'd8', faces: 8, label: 'Cinnabar D8', price: '$55', cents: 5500, iconKey: 'cinnabar-d8',
+    description: 'Mercury\'s ore octahedron — the red mineral of quicksilver shaped into the solid of Air.' },
+  { key: 'd12-magnetite', faces: 12, label: 'Magnetite D12', price: '$80', cents: 8000, iconKey: 'magnetite-d12',
+    description: 'Magnetic iron ore dodecahedron — twelve faces for twelve constellations, the solid of the Cosmos.' },
 ];
 
 const JEWELRY_FORMS = [
@@ -43,24 +60,89 @@ const GROUPS = [
   { id: 'subscriptions', title: 'Subscriptions', subtitle: 'Ongoing access to tools, courses, and journeys' },
   { id: 'books', title: 'Books', subtitle: 'Original works on mythology and narrative' },
   { id: 'adornments', title: 'Adornments', subtitle: 'Celestial jewelry configured to your birth chart' },
-  { id: 'dice', title: 'Dice', subtitle: 'Play dice with the cosmos' },
+  { id: 'dice', title: 'Dice', subtitle: 'The five Platonic solids carved from mineral stone' },
   { id: 'donations', title: 'Support', subtitle: 'Contribute to cultural preservation' },
 ];
 
 const UTM_SESSION_KEY = 'mythouse_utm';
 
-function DiceIcon({ size = 48 }) {
-  const gold = '#c9a961';
-  return (
-    <svg viewBox="0 0 48 48" width={size} height={size} fill="none">
-      <path d="M24 6 L40 16 L34 36 L14 36 L8 16 Z" stroke={gold} strokeWidth="2" fill="white" fillOpacity="0.1" />
-      <circle cx="24" cy="14" r="2" fill={gold} />
-      <circle cx="31" cy="20" r="2" fill={gold} />
-      <circle cx="17" cy="20" r="2" fill={gold} />
-      <circle cx="28" cy="30" r="2" fill={gold} />
-      <circle cx="20" cy="30" r="2" fill={gold} />
-    </svg>
-  );
+const DICE_COLORS = {
+  'cosmic-d12':    '#c9a961',  // gold accent
+  'obsidian-d12':  '#1a1a22',  // obsidian black
+  'galena-d6':     '#5a5a62',  // lead-grey
+  'malachite-d20': '#2d8a56',  // malachite green
+  'quartz-d4':     '#d4d8e0',  // clear quartz
+  'cinnabar-d8':   '#c03020',  // cinnabar red
+  'magnetite-d12': '#3a3a42',  // dark iron
+  'platonic-set':  '#c9a961',  // gold accent
+};
+
+function DiceIcon({ diceKey, size = 48 }) {
+  const stroke = DICE_COLORS[diceKey] || '#c9a961';
+  const fill = stroke;
+  const icons = {
+    'cosmic-d12': ( // Dodecahedron — gold constellation lines
+      <svg viewBox="0 0 48 48" width={size} height={size} fill="none">
+        <path d="M24 6 L40 16 L36 34 L12 34 L8 16 Z" stroke={stroke} strokeWidth="2" fill={fill} fillOpacity="0.15" />
+        <circle cx="24" cy="10" r="1.5" fill={stroke} />
+        <circle cx="36" cy="18" r="1.5" fill={stroke} />
+        <circle cx="32" cy="32" r="1.5" fill={stroke} />
+        <circle cx="16" cy="32" r="1.5" fill={stroke} />
+        <circle cx="12" cy="18" r="1.5" fill={stroke} />
+      </svg>
+    ),
+    'obsidian-d12': ( // Dodecahedron — dark with star points
+      <svg viewBox="0 0 48 48" width={size} height={size} fill="none">
+        <path d="M24 6 L40 16 L36 34 L12 34 L8 16 Z" stroke="#4a4a5a" strokeWidth="2" fill={fill} fillOpacity="0.4" />
+        <path d="M24 6 L20 20 L8 16 M20 20 L12 34 M20 20 L36 34 M20 20 L40 16" stroke="#4a4a5a" strokeWidth="0.8" opacity="0.35" />
+        <circle cx="24" cy="14" r="1" fill="#e8e0ff" opacity="0.8" />
+        <circle cx="30" cy="24" r="0.8" fill="#e8e0ff" opacity="0.6" />
+        <circle cx="18" cy="28" r="0.8" fill="#e8e0ff" opacity="0.6" />
+      </svg>
+    ),
+    'galena-d6': ( // Cube
+      <svg viewBox="0 0 48 48" width={size} height={size} fill="none">
+        <path d="M14 14 L34 14 L34 34 L14 34 Z" stroke={stroke} strokeWidth="2" fill={fill} fillOpacity="0.15" />
+        <path d="M14 14 L22 8 L42 8 L34 14" stroke={stroke} strokeWidth="1.5" fill={fill} fillOpacity="0.08" />
+        <path d="M34 14 L42 8 L42 28 L34 34" stroke={stroke} strokeWidth="1.5" fill={fill} fillOpacity="0.08" />
+      </svg>
+    ),
+    'malachite-d20': ( // Icosahedron (simplified)
+      <svg viewBox="0 0 48 48" width={size} height={size} fill="none">
+        <path d="M24 4 L40 16 L36 36 L12 36 L8 16 Z" stroke={stroke} strokeWidth="2" fill={fill} fillOpacity="0.15" />
+        <path d="M24 4 L8 16 M24 4 L40 16 M8 16 L12 36 M40 16 L36 36 M12 36 L36 36" stroke={stroke} strokeWidth="1" opacity="0.5" />
+        <path d="M24 4 L24 44 M8 16 L36 36 M40 16 L12 36" stroke={stroke} strokeWidth="0.8" opacity="0.3" />
+      </svg>
+    ),
+    'quartz-d4': ( // Tetrahedron
+      <svg viewBox="0 0 48 48" width={size} height={size} fill="none">
+        <path d="M24 6 L40 38 L8 38 Z" stroke={stroke} strokeWidth="2" fill={fill} fillOpacity="0.12" />
+        <path d="M24 6 L28 22 M8 38 L28 22 M40 38 L28 22" stroke={stroke} strokeWidth="1" opacity="0.4" />
+      </svg>
+    ),
+    'cinnabar-d8': ( // Octahedron
+      <svg viewBox="0 0 48 48" width={size} height={size} fill="none">
+        <path d="M24 6 L40 24 L24 42 L8 24 Z" stroke={stroke} strokeWidth="2" fill={fill} fillOpacity="0.15" />
+        <path d="M8 24 L40 24" stroke={stroke} strokeWidth="1.5" opacity="0.5" />
+      </svg>
+    ),
+    'magnetite-d12': ( // Dodecahedron (simplified pentagon)
+      <svg viewBox="0 0 48 48" width={size} height={size} fill="none">
+        <path d="M24 6 L40 16 L36 34 L12 34 L8 16 Z" stroke={stroke} strokeWidth="2" fill={fill} fillOpacity="0.15" />
+        <path d="M24 6 L20 20 L8 16 M20 20 L12 34 M20 20 L36 34 M20 20 L40 16" stroke={stroke} strokeWidth="0.8" opacity="0.35" />
+      </svg>
+    ),
+    'platonic-set': ( // All five nested
+      <svg viewBox="0 0 48 48" width={size} height={size} fill="none">
+        <path d="M24 6 L40 38 L8 38 Z" stroke="#d4d8e0" strokeWidth="1" opacity="0.5" />
+        <path d="M24 8 L38 24 L24 40 L10 24 Z" stroke="#c03020" strokeWidth="1" opacity="0.5" />
+        <path d="M16 16 L32 16 L32 32 L16 32 Z" stroke="#5a5a62" strokeWidth="1" opacity="0.5" />
+        <path d="M24 10 L36 18 L33 34 L15 34 L12 18 Z" stroke="#3a3a42" strokeWidth="1.5" opacity="0.7" />
+        <path d="M24 14 L34 20 L30 32 L18 32 L14 20 Z" stroke="#2d8a56" strokeWidth="1" opacity="0.5" />
+      </svg>
+    ),
+  };
+  return icons[diceKey] || icons['platonic-set'];
 }
 
 function JewelryFormIcon({ formKey, size = 48 }) {
@@ -128,16 +210,10 @@ export default function StorePage({ profile }) {
   const utmCampaign = searchParams.get('utm_campaign');
   const utmContent = searchParams.get('utm_content');
 
-  // Dynamic jewelry pricing
-  const [pricingData, setPricingData] = useState(null);
+  // Jewelry pricing — computed client-side, no API call needed
+  const pricingData = useMemo(() => buildPriceMatrix(), []);
+  const [diceMaterials, setDiceMaterials] = useState({});  // { d12: 'ore', d6: 'std', ... }
   const activeMetal = metalParam || profile?.ringMetal || null;
-
-  useEffect(() => {
-    fetch('/api/jewelry-pricing')
-      .then(r => r.ok ? r.json() : null)
-      .then(data => { if (data) setPricingData(data); })
-      .catch(() => {});
-  }, []);
 
   const getJewelryPrice = (formKey) => {
     if (!pricingData || !activeMetal) return null;
@@ -247,6 +323,8 @@ export default function StorePage({ profile }) {
     jewelryBtns: { marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: 6, width: '100%' },
     cardDetails: { display: 'flex', flexDirection: 'column', gap: 2, margin: '4px 0' },
     detailLine: { fontSize: '0.68rem', color: 'var(--accent-gold, #c9a961)', opacity: 0.7 },
+    diceMatBtn: { padding: '3px 8px', fontSize: '0.62rem', fontWeight: 600, borderRadius: 4, border: '1px solid rgba(255,255,255,0.1)', background: 'transparent', color: 'var(--text-secondary, #8a8a9a)', cursor: 'pointer', transition: 'all 0.2s' },
+    diceMatActive: { borderColor: 'rgba(201,169,97,0.5)', background: 'rgba(201,169,97,0.15)', color: 'var(--accent-gold, #c9a961)' },
   };
 
   return (
@@ -341,27 +419,52 @@ export default function StorePage({ profile }) {
               <h2 style={S.groupTitle}>{group.title}</h2>
               <p style={S.groupSubtitle}>{group.subtitle}</p>
               <div style={S.jewelryRow}>
-                {DICE_PRODUCTS.map(dice => (
-                  <div
-                    key={dice.key}
-                    style={{ ...S.jewelryCard, flex: '0 0 200px', ...(isDiceHighlighted ? S.jewelryCardActive : {}) }}
-                  >
-                    <div style={S.jewelryIcon}>
-                      <DiceIcon />
+                {DICE_PRODUCTS.map(dice => {
+                  const hasToggle = dice.ore && dice.std;
+                  const mat = hasToggle ? (diceMaterials[dice.key] || 'ore') : null;
+                  const label = hasToggle ? dice[mat].label : dice.label;
+                  const desc = hasToggle ? dice[mat].description : dice.description;
+                  const price = hasToggle ? dice[mat].price : dice.price;
+                  const iconKey = hasToggle ? dice[mat].iconKey : dice.iconKey;
+                  const purchaseId = hasToggle ? `dice-${dice.key}-${mat}` : `dice-${dice.key}`;
+                  return (
+                    <div
+                      key={dice.key}
+                      style={{ ...S.jewelryCard, flex: '0 0 160px', ...(isDiceHighlighted ? S.jewelryCardActive : {}) }}
+                    >
+                      <div style={S.jewelryIcon}>
+                        <DiceIcon diceKey={iconKey} />
+                      </div>
+                      <h3 style={S.jewelryLabel}>
+                        {label}
+                        {dice.bundle && <span style={S.bundleBadge}>Set</span>}
+                      </h3>
+                      {dice.faces && <p style={{ fontSize: '0.68rem', color: 'var(--accent-gold, #c9a961)', margin: 0, opacity: 0.7 }}>{dice.faces} faces</p>}
+                      {hasToggle && (
+                        <div style={{ display: 'flex', gap: 4, margin: '4px 0' }}>
+                          <button
+                            style={{ ...S.diceMatBtn, ...(mat === 'ore' ? S.diceMatActive : {}) }}
+                            onClick={() => setDiceMaterials(prev => ({ ...prev, [dice.key]: 'ore' }))}
+                          >{dice.ore.material}</button>
+                          <button
+                            style={{ ...S.diceMatBtn, ...(mat === 'std' ? S.diceMatActive : {}) }}
+                            onClick={() => setDiceMaterials(prev => ({ ...prev, [dice.key]: 'std' }))}
+                          >{dice.std.material}</button>
+                        </div>
+                      )}
+                      <p style={S.jewelryDesc}>{desc}</p>
+                      <p style={S.jewelryPrice}>{price}</p>
+                      <div style={S.jewelryBtns}>
+                        <button
+                          style={S.jewelryBuyBtn}
+                          onClick={() => handlePurchase({ id: purchaseId, mode: 'purchase', name: label })}
+                        >
+                          Buy
+                        </button>
+                      </div>
                     </div>
-                    <h3 style={S.jewelryLabel}>{dice.label}</h3>
-                    <p style={S.jewelryDesc}>{dice.description}</p>
-                    <p style={S.jewelryPrice}>{dice.price}</p>
-                    <div style={S.jewelryBtns}>
-                      <button
-                        style={S.jewelryBuyBtn}
-                        onClick={() => handlePurchase({ id: dice.key, mode: 'purchase', name: dice.label })}
-                      >
-                        Buy
-                      </button>
-                    </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
           );

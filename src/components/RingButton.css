@@ -1,0 +1,66 @@
+.ring-button {
+  position: fixed;
+  bottom: 76px;
+  right: 24px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid #c9a961;
+  background: var(--bg-medium, #1a1a2e);
+  color: #c9a961;
+  cursor: pointer;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 16px rgba(201, 169, 97, 0.3), 0 0 32px rgba(201, 169, 97, 0.1);
+}
+
+.ring-button:hover {
+  box-shadow: 0 0 24px rgba(201, 169, 97, 0.5), 0 0 48px rgba(201, 169, 97, 0.2);
+  transform: scale(1.05);
+}
+
+.ring-button-active {
+  border-color: #f0c040;
+  box-shadow: 0 0 20px rgba(240, 192, 64, 0.4), 0 0 40px rgba(240, 192, 64, 0.15);
+}
+
+/* Mode-aware border colors via data attributes */
+.ring-button[data-mode="geocentric"] {
+  border-color: #4a9bd9;
+  box-shadow: 0 0 16px rgba(74, 155, 217, 0.3), 0 0 32px rgba(74, 155, 217, 0.1);
+}
+
+.ring-button[data-mode="geocentric"]:hover {
+  box-shadow: 0 0 24px rgba(74, 155, 217, 0.5), 0 0 48px rgba(74, 155, 217, 0.2);
+}
+
+.ring-button[data-mode="geocentric"].ring-button-active {
+  border-color: #6ab8f0;
+  box-shadow: 0 0 20px rgba(106, 184, 240, 0.4), 0 0 40px rgba(106, 184, 240, 0.15);
+}
+
+.ring-button[data-mode="birthstone"] {
+  border-color: #a86ef5;
+  box-shadow: 0 0 16px rgba(168, 110, 245, 0.3), 0 0 32px rgba(168, 110, 245, 0.1);
+}
+
+.ring-button[data-mode="birthstone"]:hover {
+  box-shadow: 0 0 24px rgba(168, 110, 245, 0.5), 0 0 48px rgba(168, 110, 245, 0.2);
+}
+
+.ring-button[data-mode="birthstone"].ring-button-active {
+  border-color: #c08ff7;
+  box-shadow: 0 0 20px rgba(192, 143, 247, 0.4), 0 0 40px rgba(192, 143, 247, 0.15);
+}
+
+@media (max-width: 600px) {
+  .ring-button {
+    bottom: 68px;
+    right: 16px;
+    width: 36px;
+    height: 36px;
+  }
+}

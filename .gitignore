@@ -24,6 +24,12 @@ yarn-error.log*
 .vercel
 .env*.local
 
+# Claude Code local config
+.claude/
+
+# Vercel env snapshot
+.env.vercel
+
 # Capacitor native build artifacts
 ios/App/Pods
 ios/App/App/public

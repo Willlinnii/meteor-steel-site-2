@@ -121,7 +121,9 @@
       "heading": 270,
       "pitch": 20
     },
-    "pantheons": []
+    "pantheons": [
+      "canaanite"
+    ]
   },
   {
     "id": "newgrange",
@@ -421,7 +423,9 @@
     "region": "Iraq",
     "readUrl": "https://sacred-texts.com/jud/talmud.htm",
     "excerpt": "Rabbi Simlai expounded: Six hundred and thirteen commandments were communicated to Moses — three hundred and sixty-five negative commandments, corresponding to the number of days in the solar year, and two hundred and forty-eight positive commandments, corresponding to the parts of the human body.\n\nDavid came and reduced them to eleven principles, as it is written in Psalm 15: \"Lord, who shall abide in thy tabernacle? Who shall dwell in thy holy hill? He that walketh uprightly, and worketh righteousness, and speaketh the truth in his heart.\"\n\nIsaiah came and reduced them to six. Micah came and reduced them to three: \"Do justly, love mercy, and walk humbly with thy God.\" Isaiah again reduced them to two: \"Keep judgment and do righteousness.\" Amos came and reduced them to one: \"Seek Me and live.\"\n\n— Babylonian Talmud, Makkot 23b–24a",
-    "pantheons": []
+    "pantheons": [
+      "babylonian"
+    ]
   },
   {
     "id": "new-testament-jerusalem",
@@ -439,7 +443,9 @@
     "readUrl": "https://sacred-texts.com/bib/kjv/index.htm",
     "wikisourcePage": "Bible_(King_James)",
     "excerpt": "In the beginning was the Word, and the Word was with God, and the Word was God. The same was in the beginning with God. All things were made by him; and without him was not any thing made that was made. In him was life; and the life was the light of men. And the light shineth in darkness; and the darkness comprehended it not.\n\nThere was a man sent from God, whose name was John. The same came for a witness, to bear witness of the Light, that all men through him might believe. He was not that Light, but was sent to bear witness of that Light. That was the true Light, which lighteth every man that cometh into the world.\n\nHe was in the world, and the world was made by him, and the world knew him not. He came unto his own, and his own received him not. But as many as received him, to them gave he power to become the sons of God, even to them that believe on his name.\n\nAnd the Word was made flesh, and dwelt among us, and we beheld his glory, the glory as of the only begotten of the Father, full of grace and truth.\n\n— Gospel of John 1:1–14 (KJV)",
-    "pantheons": []
+    "pantheons": [
+      "canaanite"
+    ]
   },
   {
     "id": "quran-mecca",
@@ -454,7 +460,9 @@
     "readUrl": "https://sacred-texts.com/isl/quran/index.htm",
     "wikisourcePage": "The_Holy_Qur'an_(Maulana_Muhammad_Ali)",
     "excerpt": "In the name of God, the Most Gracious, the Most Merciful.\n\nPraise be to God, Lord of all the worlds, the Most Gracious, the Most Merciful, Master of the Day of Judgment. It is You we worship and You we ask for help. Guide us on the straight path — the path of those upon whom You have bestowed favor, not of those who have earned anger or of those who are astray.\n\n— Al-Fatiha (The Opening), Surah 1\n\nGod is the Light of the heavens and the earth. The parable of His light is as if there were a niche and within it a lamp: the lamp enclosed in glass: the glass as it were a brilliant star, lit from a blessed tree, an olive, neither of the east nor of the west, whose oil is well-nigh luminous, though fire scarce touched it: Light upon Light! God doth guide whom He will to His Light.\n\n— Surah 24:35, The Light Verse (An-Nur)",
-    "pantheons": []
+    "pantheons": [
+      "arabian"
+    ]
   },
   {
     "id": "book-of-mormon-manchester",
@@ -574,7 +582,9 @@
     "region": "Northwest Pakistan",
     "readUrl": "https://sacred-texts.com/bud/lotus/index.htm",
     "excerpt": "Thus have I heard. At one time the Buddha was staying in Rajagriha, on Mount Gridhrakuta, together with a great assembly of twelve thousand monks. They were all great Arhats whose outflows had been exhausted.\n\nAt that time the World-Honored One, surrounded by the four kinds of believers, having received offerings and being respectfully revered, for the sake of the Bodhisattvas preached the Great Vehicle Sutra called Immeasurable Meanings.\n\nWhen the Buddha had finished preaching this sutra, he sat in the lotus position and entered into the concentration of Immeasurable Meanings. Heaven rained mandarava flowers and great mandarava flowers, and scattered them over the Buddha and the great assembly.\n\nThe whole Buddha world quaked in six different ways. At that time all in the assembly — monks, nuns, laymen, laywomen, gods, dragons, spirits — all gazed at the Buddha with a single mind.\n\n— Lotus Sutra, Chapter 1: Introduction (trans. Burton Watson)",
-    "pantheons": []
+    "pantheons": [
+      "vedic"
+    ]
   },
   {
     "id": "tibetan-book-dead-samye",
@@ -920,7 +930,9 @@
       "heading": 90,
       "pitch": 10
     },
-    "pantheons": []
+    "pantheons": [
+      "canaanite"
+    ]
   },
   {
     "id": "church-holy-sepulchre",
@@ -936,7 +948,9 @@
       "heading": 180,
       "pitch": 10
     },
-    "pantheons": []
+    "pantheons": [
+      "canaanite"
+    ]
   },
   {
     "id": "dome-of-the-rock",
@@ -952,7 +966,10 @@
       "heading": 0,
       "pitch": 15
     },
-    "pantheons": []
+    "pantheons": [
+      "canaanite",
+      "arabian"
+    ]
   },
   {
     "id": "borobudur",
@@ -1003,7 +1020,9 @@
       "heading": 90,
       "pitch": 10
     },
-    "pantheons": []
+    "pantheons": [
+      "hindu"
+    ]
   },
   {
     "id": "boudhanath",
@@ -1018,7 +1037,9 @@
       "heading": 180,
       "pitch": 15
     },
-    "pantheons": []
+    "pantheons": [
+      "tibetan"
+    ]
   },
   {
     "id": "hampi",
@@ -1067,7 +1088,9 @@
       "heading": 90,
       "pitch": 5
     },
-    "pantheons": []
+    "pantheons": [
+      "hindu"
+    ]
   },
   {
     "id": "karnak",
@@ -1217,7 +1240,10 @@
       "heading": 270,
       "pitch": 5
     },
-    "pantheons": []
+    "pantheons": [
+      "samoan",
+      "tahitian"
+    ]
   },
   {
     "id": "sigiriya",
@@ -1232,7 +1258,9 @@
       "heading": 0,
       "pitch": 25
     },
-    "pantheons": []
+    "pantheons": [
+      "hindu"
+    ]
   },
   {
     "id": "persepolis",
@@ -1414,7 +1442,9 @@
       "heading": 0,
       "pitch": 15
     },
-    "pantheons": []
+    "pantheons": [
+      "canaanite"
+    ]
   },
   {
     "id": "mahabodhi",
@@ -1431,7 +1461,10 @@
       "heading": 0,
       "pitch": 15
     },
-    "pantheons": []
+    "pantheons": [
+      "hindu",
+      "vedic"
+    ]
   },
   {
     "id": "brihadeeswarar",
@@ -1770,7 +1803,9 @@
     "category": "sacred-site",
     "description": "The Sumerian paradise — a pure, clean, bright land where the sun rises. In the Epic of Gilgamesh, Dilmun is the garden of the gods where Utnapishtim dwells after surviving the Great Flood. The Enki and Ninhursag myth describes it as a place where there is no sickness, old age, or death, watered by Enki's sweet springs. Ancient Gulf civilisation flourished here as a trade hub linking Mesopotamia, the Indus Valley, and Arabia.",
     "region": "Qatar",
-    "pantheons": []
+    "pantheons": [
+      "sumerian"
+    ]
   },
   {
     "id": "jericho",
@@ -1785,7 +1820,9 @@
       "heading": 90,
       "pitch": 5
     },
-    "pantheons": []
+    "pantheons": [
+      "canaanite"
+    ]
   },
   {
     "id": "mehrgarh",
@@ -1807,7 +1844,9 @@
     "category": "sacred-site",
     "description": "Neolithic Chinese settlement that produced the world's oldest playable musical instruments — bone flutes carved from the wing bones of red-crowned cranes, tuned to a pentatonic scale still recognizable as music 9,000 years later. Jiahu also yielded the earliest known fermented beverage (a rice-honey-hawthorn wine) and symbols on tortoise shells that may be the earliest ancestors of Chinese writing.",
     "region": "Henan, China",
-    "pantheons": []
+    "pantheons": [
+      "chinese"
+    ]
   },
   {
     "id": "ain-ghazal",
@@ -1930,7 +1969,9 @@
     "category": "sacred-site",
     "description": "One of the world's first cities, rivaling Uruk in antiquity. The \"Eye Temple\" (c. 3500 BCE) contained thousands of small alabaster figurines with enormous staring eyes — mass-produced votive offerings that represent the earliest known example of standardized production. Tell Brak was a major urban center on the trade routes between Mesopotamia and Anatolia, thriving for over two millennia.",
     "region": "Syria",
-    "pantheons": []
+    "pantheons": [
+      "sumerian"
+    ]
   },
   {
     "id": "susa",
@@ -1958,7 +1999,9 @@
     "category": "sacred-site",
     "description": "Prehistoric mound site on the Iranian plateau, one of the key sites for understanding early metallurgy — the technological transition that gives the Copper Age its name. Sialk's earliest levels contain some of the oldest known evidence of copper smelting. Later proto-Elamite levels feature a stepped mudbrick platform that may be an ancestor of the Mesopotamian ziggurat.",
     "region": "Iran",
-    "pantheons": []
+    "pantheons": [
+      "elamite"
+    ]
   },
   {
     "id": "beer-sheva",
@@ -1973,7 +2016,9 @@
       "heading": 90,
       "pitch": 5
     },
-    "pantheons": []
+    "pantheons": [
+      "canaanite"
+    ]
   },
   {
     "id": "hierakonpolis",
@@ -2044,7 +2089,9 @@
     "category": "sacred-site",
     "description": "One of the first urban centers of the Indus Valley Civilization, which at its height encompassed five million people across an area larger than ancient Egypt and Mesopotamia combined. Harappa's grid-planned streets, standardized weights and measures, advanced drainage, and massive granaries reveal a sophisticated society. Most remarkably, no palaces, no temples, and no evidence of warfare have been found — a great civilization that may have governed itself without kings.",
     "region": "Punjab, Pakistan",
-    "pantheons": []
+    "pantheons": [
+      "vedic"
+    ]
   },
   {
     "id": "hattusa",
@@ -2334,7 +2381,9 @@
       "heading": 0,
       "pitch": 20
     },
-    "pantheons": []
+    "pantheons": [
+      "san"
+    ]
   },
   {
     "id": "denali",
@@ -2360,7 +2409,9 @@
       "heading": 90,
       "pitch": 0
     },
-    "pantheons": []
+    "pantheons": [
+      "guarani"
+    ]
   },
   {
     "id": "yellow-river",
@@ -2388,7 +2439,9 @@
       "heading": 90,
       "pitch": 0
     },
-    "pantheons": []
+    "pantheons": [
+      "canaanite"
+    ]
   },
   {
     "id": "danube",
@@ -2403,7 +2456,9 @@
       "heading": 0,
       "pitch": 10
     },
-    "pantheons": []
+    "pantheons": [
+      "slavic"
+    ]
   },
   {
     "id": "mississippi-river",
@@ -2414,7 +2469,9 @@
     "category": "sacred-site",
     "description": "The central artery of North America, 3,766 km from Lake Itasca in Minnesota to the Gulf of Mexico, draining 31 US states and two Canadian provinces. The Ojibwe name Misi-ziibi means 'Great River.' The river built the Mississippi Delta — 25,000 square km of new land from carried sediment. The mound-building cultures at Cahokia used the river as their highway. Mark Twain learned to read its currents as a steamboat pilot and later mapped the American character through its stories.",
     "region": "United States",
-    "pantheons": []
+    "pantheons": [
+      "algonquin"
+    ]
   },
   {
     "id": "lake-baikal",
@@ -2459,7 +2516,9 @@
       "heading": 90,
       "pitch": 5
     },
-    "pantheons": []
+    "pantheons": [
+      "canaanite"
+    ]
   },
   {
     "id": "crater-lake",
@@ -2573,7 +2632,9 @@
       "heading": 0,
       "pitch": 10
     },
-    "pantheons": []
+    "pantheons": [
+      "hittite"
+    ]
   },
   {
     "id": "tassili-najjer",
@@ -2584,7 +2645,9 @@
     "category": "sacred-site",
     "description": "A sandstone plateau in the central Sahara, 72,000 square km of eroded rock forests, natural arches, and deep canyons — sculpted by wind and water when the Sahara was green. Over 15,000 rock paintings and engravings, some 12,000 years old, show giraffes, hippos, cattle, and swimmers in a landscape now utterly dry. The art is a record of climate change observed in real time by the people who lived through it.",
     "region": "Algeria",
-    "pantheons": []
+    "pantheons": [
+      "berber"
+    ]
   },
   {
     "id": "mammoth-cave",
@@ -2811,7 +2874,9 @@
       "heading": 0,
       "pitch": 20
     },
-    "pantheons": []
+    "pantheons": [
+      "norse"
+    ]
   },
   {
     "id": "axum",
@@ -2827,7 +2892,9 @@
       "heading": 180,
       "pitch": 10
     },
-    "pantheons": []
+    "pantheons": [
+      "arabian"
+    ]
   },
   {
     "id": "benin-city",
@@ -2839,7 +2906,9 @@
     "category": "sacred-site",
     "description": "Center of the Edo Kingdom, surrounded by a network of earthen walls and moats that extended over 16,000 km — four times the length of the Great Wall of China, the largest earthwork in the world. The Oba's palace was the cosmic center of the Edo world, where the divine king mediated between the human realm and the spirit world. Benin's bronze plaques — over a thousand, cast by the lost-wax method — recorded court history, ritual, and cosmology on the palace walls. When the British sacked the city in 1897 and looted the bronzes, they were stunned by the sophistication. The bronzes are still being returned.",
     "region": "Nigeria",
-    "pantheons": []
+    "pantheons": [
+      "yoruba"
+    ]
   },
   {
     "id": "mount-hermon",

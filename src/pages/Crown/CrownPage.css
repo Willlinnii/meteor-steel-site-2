@@ -24,17 +24,19 @@
   backdrop-filter: blur(8px);
 }
 
-/* ── Date type selector ────────────────────────────────────────────── */
+/* ── Date type dropdown ────────────────────────────────────────────── */
 
-.crown-date-types {
-  display: flex;
-  gap: 0.2rem;
+.crown-date-picker {
+  position: relative;
 }
 
-.crown-date-type-btn {
+.crown-date-trigger {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
   background: transparent;
-  border: 1px solid rgba(201, 169, 97, 0.2);
-  color: rgba(201, 169, 97, 0.4);
+  border: 1px solid rgba(201, 169, 97, 0.3);
+  color: #f0c040;
   padding: 0.25rem 0.6rem;
   font-size: 0.7rem;
   border-radius: 4px;
@@ -42,26 +44,69 @@
   text-transform: uppercase;
   letter-spacing: 0.04em;
   font-family: inherit;
-  transition: border-color 0.2s, color 0.2s, background 0.2s;
+  transition: border-color 0.2s, color 0.2s;
 }
 
-.crown-date-type-btn:hover {
-  border-color: #c9a961;
+.crown-date-trigger:hover {
+  border-color: #f0c040;
+}
+
+.crown-date-chevron {
+  font-size: 0.65rem;
+  line-height: 1;
+}
+
+.crown-date-dropdown {
+  position: absolute;
+  bottom: calc(100% + 0.35rem);
+  left: 0;
+  min-width: 100%;
+  display: flex;
+  flex-direction: column;
+  background: rgba(10, 10, 20, 0.85);
+  border: 1px solid rgba(201, 169, 97, 0.3);
+  border-radius: 6px;
+  backdrop-filter: blur(10px);
+  overflow: hidden;
+  z-index: 20;
+}
+
+.crown-date-option {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: transparent;
+  border: none;
+  color: rgba(201, 169, 97, 0.6);
+  padding: 0.4rem 0.7rem;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-family: inherit;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s, color 0.15s;
+}
+
+.crown-date-option:hover {
+  background: rgba(201, 169, 97, 0.1);
   color: #c9a961;
 }
 
-.crown-date-type-btn.active {
-  border-color: #c9a961;
+.crown-date-option.active {
   color: #f0c040;
-  background: rgba(201, 169, 97, 0.12);
 }
 
-.crown-date-type-btn.has-date {
-  color: rgba(201, 169, 97, 0.7);
+.crown-date-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #c9a961;
+  flex-shrink: 0;
 }
 
-.crown-date-type-btn.has-date.active {
-  color: #f0c040;
+.crown-date-option.active .crown-date-dot {
+  background: #f0c040;
 }
 
 .crown-date-input {
@@ -104,6 +149,37 @@
   color: #f0c040;
 }
 
+/* ── Zodiac mode toggle ──────────────────────────────────────────── */
+
+.crown-zodiac-toggle {
+  font-size: 0.65rem;
+  padding: 0.25rem 0.6rem;
+}
+
+/* ── Layout toggle ────────────────────────────────────────────────── */
+
+.crown-layout-toggle {
+  background: transparent;
+  border: 1px solid rgba(201, 169, 97, 0.2);
+  border-radius: 4px;
+  width: 2rem;
+  height: 2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.crown-layout-toggle:hover {
+  border-color: #c9a961;
+}
+
+.crown-layout-toggle.navaratna {
+  border-color: #c9a961;
+  background: rgba(201, 169, 97, 0.12);
+}
+
 /* ── Mode toggle ──────────────────────────────────────────────────── */
 
 .crown-mode-divider {
@@ -141,6 +217,119 @@
   border-color: #c9a961;
   color: #f0c040;
   background: rgba(201, 169, 97, 0.12);
+}
+
+/* ── Disabled mode button ──────────────────────────────────────────── */
+
+.crown-mode-btn.disabled,
+.crown-mode-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* ── Store button ────────────────────────────────────────────────── */
+
+.crown-store-btn {
+  background: transparent;
+  border: 1px solid rgba(201, 169, 97, 0.2);
+  border-radius: 4px;
+  width: 2rem;
+  height: 2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.crown-store-btn:hover {
+  border-color: #c9a961;
+  background: rgba(201, 169, 97, 0.12);
+}
+
+/* ── 2D/3D view toggle ───────────────────────────────────────────── */
+
+.ring2d-view-toggle {
+  background: transparent;
+  border: 1px solid rgba(201, 169, 97, 0.2);
+  border-radius: 4px;
+  width: 2rem;
+  height: 2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.2s, background 0.2s;
+  color: #c9a961;
+  font-size: 0.65rem;
+  font-family: inherit;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+}
+
+.ring2d-view-toggle:hover {
+  border-color: #c9a961;
+  background: rgba(201, 169, 97, 0.12);
+}
+
+/* ── Ring size input ──────────────────────────────────────────────── */
+
+.crown-ring-size {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.crown-ring-size-label {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: rgba(201, 169, 97, 0.5);
+}
+
+.crown-ring-size-input {
+  width: 3rem;
+  background: rgba(201, 169, 97, 0.08);
+  border: 1px solid rgba(201, 169, 97, 0.3);
+  border-radius: 4px;
+  color: #f0e0b0;
+  padding: 0.3rem 0.4rem;
+  font-size: 0.8rem;
+  font-family: inherit;
+  text-align: center;
+  outline: none;
+  -moz-appearance: textfield;
+}
+
+.crown-ring-size-input::-webkit-inner-spin-button,
+.crown-ring-size-input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.crown-ring-size-input:focus {
+  border-color: rgba(240, 192, 64, 0.6);
+}
+
+/* ── Birthstone label overlay ─────────────────────────────────────── */
+
+.crown-birthstone-label {
+  position: absolute;
+  top: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  color: #f0c040;
+  font-size: 0.9rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0.35rem 1rem;
+  background: rgba(10, 10, 20, 0.6);
+  border: 1px solid rgba(201, 169, 97, 0.25);
+  border-radius: 6px;
+  backdrop-filter: blur(8px);
+  pointer-events: none;
 }
 
 /* ── Error state ───────────────────────────────────────────────────── */

@@ -25,23 +25,22 @@ const BODY_MAP = {
 
 const SIGN_SYMBOLS = ['♈','♉','♊','♋','♌','♍','♎','♏','♐','♑','♒','♓'];
 
-function getEclipticLongitude(planet) {
-  const vec = GeoVector(BODY_MAP[planet], new Date(), true);
+function getEclipticLongitude(planet, date = new Date()) {
+  const vec = GeoVector(BODY_MAP[planet], date, true);
   return Ecliptic(vec).elon;
 }
 
-function getHeliocentricLongitude(planet) {
+function getHeliocentricLongitude(planet, date = new Date()) {
   if (planet === 'Earth') {
     // Earth's heliocentric longitude = Sun's geocentric longitude + 180°
-    const vec = GeoVector(Body.Sun, new Date(), true);
+    const vec = GeoVector(Body.Sun, date, true);
     return (Ecliptic(vec).elon + 180) % 360;
   }
-  return EclipticLongitude(Body[planet], new Date());
+  return EclipticLongitude(Body[planet], date);
 }
 
-function getLahiriAyanamsa() {
-  const now = new Date();
-  const fracYear = now.getFullYear() + (now.getMonth() / 12) + (now.getDate() / 365.25);
+function getLahiriAyanamsa(date = new Date()) {
+  const fracYear = date.getFullYear() + (date.getMonth() / 12) + (date.getDate() / 365.25);
   return 23.853 + (fracYear - 2000) * 0.01397; // ~24.2° in 2026
 }
 
@@ -257,10 +256,11 @@ function ensureYTApi() {
   });
 }
 
-export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPlanet, hoveredPlanet, selectedSign, onSelectSign, selectedCardinal, onSelectCardinal, selectedEarth, onSelectEarth, showCalendar, onToggleCalendar, selectedMonth, onSelectMonth, showMedicineWheel, selectedWheelItem, onSelectWheelItem, chakraViewMode, onToggleBodyWheel, onClickOrderLabel, orderLabel, videoUrl, onCloseVideo, ybrActive, ybrCurrentStopIndex, ybrStopProgress, ybrJourneySequence, onToggleYBR, ybrAutoStart, clockMode, onToggleClock, compassHeading, compassSupported, compassDenied, onRequestCompass, onStopCompass, seasonalSign, seasonalMonth, seasonalStageIndex, showMonomyth, showMeteorSteel, monomythStages, selectedMonomythStage, onSelectMonomythStage, onToggleMonomyth, monomythModel, showCycles, onSelectCycleSegment, activeCulture, showFallenStarlight, showStoryOfStories, onToggleStarlight, starlightStages, selectedStarlightStage, onSelectStarlightStage, selectedConstellation, onSelectConstellation, zodiacMode, onSelectBeyondRing, beyondRings, activeBeyondRing, onToggle3D }) {
+export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPlanet, hoveredPlanet, selectedSign, onSelectSign, selectedCardinal, onSelectCardinal, selectedEarth, onSelectEarth, showCalendar, onToggleCalendar, selectedMonth, onSelectMonth, showMedicineWheel, selectedWheelItem, onSelectWheelItem, chakraViewMode, onToggleBodyWheel, onClickOrderLabel, orderLabel, videoUrl, onCloseVideo, ybrActive, ybrCurrentStopIndex, ybrStopProgress, ybrJourneySequence, onToggleYBR, ybrAutoStart, clockMode, onToggleClock, compassHeading, compassSupported, compassDenied, onRequestCompass, onStopCompass, seasonalSign, seasonalMonth, seasonalStageIndex, showMonomyth, showMeteorSteel, monomythStages, selectedMonomythStage, onSelectMonomythStage, onToggleMonomyth, monomythModel, showCycles, onSelectCycleSegment, activeCulture, showFallenStarlight, showStoryOfStories, onToggleStarlight, starlightStages, selectedStarlightStage, onSelectStarlightStage, selectedConstellation, onSelectConstellation, zodiacMode, onSelectBeyondRing, beyondRings, activeBeyondRing, showDodecahedron, dodecMode, onToggleDodecahedron, onToggle3D, targetDate }) {
   const wrapperRef = useRef(null);
   const [tooltip, setTooltip] = useState(null);
   const { hasPurchase, hasSubscription } = useProfile();
+  const effectiveDate = targetDate || new Date();
   const navigate = useNavigate();
   const compassActive = compassHeading != null;
   const [hoveredBeyondRing, setHoveredBeyondRing] = useState(null);
@@ -459,6 +459,11 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
 
   useEffect(() => {
     if (!showClock) return;
+    // Freeze clock at birth time when viewing birthday sky
+    if (targetDate) {
+      setClockTime({ h: targetDate.getHours(), m: targetDate.getMinutes(), s: 0 });
+      return;
+    }
     const tick = () => {
       const now = new Date();
       const tz = clockTzRef.current;
@@ -474,7 +479,7 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
     tick();
     const id = setInterval(tick, 1000);
     return () => clearInterval(id);
-  }, [showClock]);
+  }, [showClock, targetDate]);
 
   const handleTooltipEnter = useCallback((type, key, e) => {
     if (showMedicineWheel || chakraViewMode) return;
@@ -871,62 +876,63 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
     if (!livePositions) return null;
     const angles = {};
     for (const planet of Object.keys(BODY_MAP)) {
-      const lon = getEclipticLongitude(planet);
+      const lon = getEclipticLongitude(planet, effectiveDate);
       angles[planet] = { svgAngle: -lon, lon };
     }
     return angles;
-  }, [livePositions]);
+  }, [livePositions, targetDate]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const helioLiveAngles = useMemo(() => {
     if (!heliocentric) return null;
     const angles = {};
     HELIO_ORBITS.forEach(o => {
-      angles[o.planet] = -getHeliocentricLongitude(o.planet);
+      angles[o.planet] = -getHeliocentricLongitude(o.planet, effectiveDate);
     });
-    const moonGeoLon = getEclipticLongitude('Moon');
-    const earthHelioLon = getHeliocentricLongitude('Earth');
+    const moonGeoLon = getEclipticLongitude('Moon', effectiveDate);
+    const earthHelioLon = getHeliocentricLongitude('Earth', effectiveDate);
     angles['Moon-helio'] = -(moonGeoLon - earthHelioLon);
     return angles;
-  }, [heliocentric, clockTime]);
+  }, [heliocentric, clockTime, targetDate]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const moonPhaseAngle = useMemo(() => MoonPhase(new Date()), []);
+  const moonPhaseAngle = useMemo(() => MoonPhase(effectiveDate), [targetDate]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Live geocentric planet angles for 24h clock mode
   // Each planet orbits once per 24h (like the sun), offset by its real ecliptic longitude difference from the sun
   const geoClockAngles = useMemo(() => {
     if (clockMode !== '24h') return null;
-    const sunLon = getEclipticLongitude('Sun');
+    const sunLon = getEclipticLongitude('Sun', effectiveDate);
     const sunClockDeg = clockTime.h * 15 + clockTime.m * 0.25 + 90; // sun's clock angle (matches hour hand)
     const angles = {};
     for (const planet of Object.keys(BODY_MAP)) {
       if (planet === 'Sun') continue; // Sun rides the hour hand
-      const lon = getEclipticLongitude(planet);
+      const lon = getEclipticLongitude(planet, effectiveDate);
       angles[planet] = sunClockDeg + (lon - sunLon); // same daily rotation, real angular offset
     }
     return angles;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [clockMode, clockTime]); // recompute each second when clock ticks
+  }, [clockMode, clockTime, targetDate]); // recompute each second when clock ticks
 
   // Ecliptic longitudes for cycle rings (Solar Year ring + Lunar Month ring)
   const eclipticAngles = useMemo(() => {
     if (!showCycles) return null;
     const angles = {};
     for (const planet of Object.keys(BODY_MAP)) {
-      angles[planet] = -getEclipticLongitude(planet);
+      angles[planet] = -getEclipticLongitude(planet, effectiveDate);
     }
     return angles;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [showCycles, clockTime]);
+  }, [showCycles, clockTime, targetDate]);
 
   // Rotation for zodiac/month rings in 24h mode so Sun's sign aligns with hour hand
   const zodiacRotationDeg = useMemo(() => {
-    const siderealOffset = zodiacMode === 'sidereal' ? -getLahiriAyanamsa() : 0;
+    const siderealOffset = zodiacMode === 'sidereal' ? -getLahiriAyanamsa(effectiveDate) : 0;
     if (chakraViewMode || showMonomyth) return siderealOffset;
     if (clockMode !== '24h') return siderealOffset;
-    const sunLon = getEclipticLongitude('Sun');
+    const sunLon = getEclipticLongitude('Sun', effectiveDate);
     const hDeg24 = clockTime.h * 15 + clockTime.m * 0.25 + 90;
     return hDeg24 + sunLon + siderealOffset;
-  }, [clockMode, clockTime, chakraViewMode, showMonomyth, zodiacMode]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [clockMode, clockTime, chakraViewMode, showMonomyth, zodiacMode, targetDate]);
 
   const starPositionsNorth = useMemo(() =>
     starsNorth.map(([ra, dec, mag]) => ({ ...starToSvg(ra, dec), r: starRadius(mag), o: starOpacity(mag) })), []
@@ -2666,7 +2672,7 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
                     fontSize="8"
                     fontFamily="Crimson Pro, serif"
                   >
-                    {lonToSignLabel(liveAngles[o.planet].lon, zodiacMode === 'sidereal' ? getLahiriAyanamsa() : 0)}
+                    {lonToSignLabel(liveAngles[o.planet].lon, zodiacMode === 'sidereal' ? getLahiriAyanamsa(effectiveDate) : 0)}
                   </text>
                 </g>
               )}
@@ -3002,13 +3008,11 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
             </>
           )}
         </span>
+        {hasMonomyth && (
         <button
-          className={`monomyth-toggle${showMonomyth ? ' active' : ''}${showCycles ? ' cycles' : ''}${showMeteorSteel ? ' steel' : ''}${!hasMonomyth ? ' disabled' : ''}`}
-          onClick={() => {
-            if (!hasMonomyth) { setMonomythGateOpen(true); return; }
-            onToggleMonomyth && onToggleMonomyth();
-          }}
-          title={!hasMonomyth ? 'Unlock Monomyth & Meteor Steel' : showMeteorSteel ? 'Meteor steel — click for monomyth' : showMonomyth ? 'Monomyth — click for meteor steel' : 'Show monomyth journey ring'}
+          className={`monomyth-toggle${showMonomyth ? ' active' : ''}${showCycles ? ' cycles' : ''}${showMeteorSteel ? ' steel' : ''}`}
+          onClick={() => { onToggleMonomyth && onToggleMonomyth(); }}
+          title={showMeteorSteel ? 'Meteor steel — click for monomyth' : showMonomyth ? 'Monomyth — click for meteor steel' : 'Show monomyth journey ring'}
           style={showCycles && !showMeteorSteel ? { color: '#6ecf8a' } : undefined}
         >
           {showMeteorSteel ? (
@@ -3029,21 +3033,18 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
             </svg>
           )}
         </button>
+        )}
 
+        {(hasFallenStarlight || hasStoryOfStories) && (
         <button
-          className={`starlight-toggle${showFallenStarlight ? ' active' : ''}${showStoryOfStories ? ' stories' : ''}${!hasFallenStarlight && !hasStoryOfStories ? ' disabled' : ''}`}
+          className={`starlight-toggle${showFallenStarlight ? ' active' : ''}${showStoryOfStories ? ' stories' : ''}`}
           onClick={() => {
-            if (!showFallenStarlight && !showStoryOfStories) {
-              // Entering starlight mode — gate on fallen-starlight
-              if (!hasFallenStarlight) { setStarlightGateId('fallen-starlight'); return; }
-            } else if (showFallenStarlight) {
-              // In Fallen Starlight — switching to Story of Stories
-              if (!hasStoryOfStories) { setStarlightGateId('story-of-stories'); return; }
+            if (showFallenStarlight && !hasStoryOfStories) {
+              setStarlightGateId('story-of-stories'); return;
             }
-            // In Story of Stories — going back to Fallen Starlight (already purchased), or purchases satisfied
             onToggleStarlight && onToggleStarlight();
           }}
-          title={!hasFallenStarlight && !hasStoryOfStories ? 'Unlock Fallen Starlight' : showStoryOfStories ? 'Story of Stories \u2014 click for Fallen Starlight' : showFallenStarlight ? 'Fallen Starlight \u2014 click for Story of Stories' : 'Show Fallen Starlight'}
+          title={showStoryOfStories ? 'Story of Stories \u2014 click for Fallen Starlight' : showFallenStarlight ? 'Fallen Starlight \u2014 click for Story of Stories' : 'Show Fallen Starlight'}
         >
           {showStoryOfStories ? (
             /* Open book with golden circle on cover */
@@ -3075,6 +3076,20 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
               <path d="M12 6 L10.8 9.2 L7.5 9.2 L10.1 11.3 L9.1 14.5 L12 12.5 L14.9 14.5 L13.9 11.3 L16.5 9.2 L13.2 9.2 Z" fill="currentColor" stroke="none" />
             </svg>
           )}
+        </button>
+        )}
+
+        <button
+          className={`dodec-nav-toggle${showDodecahedron ? ` active dodec-${dodecMode || 'stars'}` : ''}`}
+          onClick={() => onToggleDodecahedron && onToggleDodecahedron()}
+          title={showDodecahedron ? `${dodecMode === 'stars' ? 'Lantern of Phanes' : dodecMode === 'roman' ? 'Roman Dodecahedron' : 'Die'} — click to cycle` : 'Dodecahedron'}
+        >
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+            {/* Pentagon (dodecahedron face) */}
+            <path d="M12 3 L21 9.5 L18 20 L6 20 L3 9.5 Z" fill="white" fillOpacity="0.15" />
+            {/* Inner edge hints */}
+            <path d="M12 3 L12 10 M21 9.5 L15 11.5 M18 20 L14 14 M6 20 L10 14 M3 9.5 L9 11.5" strokeWidth="0.7" opacity="0.4" />
+          </svg>
         </button>
 
         {hasSubscription('monomyth') && (

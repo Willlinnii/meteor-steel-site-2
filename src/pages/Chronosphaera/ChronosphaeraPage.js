@@ -9,14 +9,6 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import TarotCardContent from '../../components/chronosphaera/TarotCardContent';
 import PersonaChatPanel from '../../components/PersonaChatPanel';
 import coreData from '../../data/chronosphaera.json';
-import deitiesData from '../../data/chronosphaeraDeities.json';
-import archetypesData from '../../data/chronosphaeraArchetypes.json';
-import artistsData from '../../data/chronosphaeraArtists.json';
-import hebrewData from '../../data/chronosphaeraHebrew.json';
-import modernData from '../../data/chronosphaeraModern.json';
-import sharedData from '../../data/chronosphaeraShared.json';
-import storiesData from '../../data/chronosphaeraStories.json';
-import theologyData from '../../data/chronosphaeraTheology.json';
 import zodiacData from '../../data/chronosphaeraZodiac.json';
 import cardinalsData from '../../data/chronosphaeraCardinals.json';
 import planetaryCultures from '../../data/chronosphaeraPlanetaryCultures.json';
@@ -49,10 +41,12 @@ import resolveBodyPosition from '../../data/resolveBodyPosition';
 import { CHAKRA_ORDERINGS } from '../../data/chronosphaeraBodyPositions';
 import { useProfile } from '../../profile/ProfileContext';
 import usePerspective, { camelToTitle } from '../../components/chronosphaera/usePerspective';
+import usePlanetData, { findBySin, archetypesData, artistsData, modernData, storiesData, theologyData } from '../../hooks/usePlanetData';
 import { BEYOND_RINGS, BEYOND_TRADITIONS, FIXED_STARS_RING } from '../../data/chronosphaeraBeyondRings';
 import ColumnSequencePopup from '../../components/chronosphaera/ColumnSequencePopup';
 
 const InlineScene3D = lazy(() => import('../../components/chronosphaera/vr/InlineScene3D'));
+const DodecahedronPage = lazy(() => import('../Dodecahedron/DodecahedronPage'));
 
 const METEOR_STEEL_STAGES = [
   { id: 'golden-age', label: 'Golden Age' },
@@ -192,13 +186,7 @@ const CARDINAL_PLAYLISTS = { // eslint-disable-line no-unused-vars
   'autumnal-equinox': 'https://www.youtube.com/playlist?list=PLX31T_KS3jtqQZM-wycPZdEoc2BD2Q2iu',
 };
 
-function findBySin(arr, sin) {
-  return arr.find(item => item.sin === sin) || null;
-}
-
-function findByMetal(arr, metal) {
-  return arr.find(item => item.metal === metal) || null;
-}
+// findBySin / findByMetal imported from usePlanetData
 
 /* Map culture selector labels to JSON keys */
 const CULTURE_KEY_MAP = {
@@ -554,11 +542,12 @@ function StageArrow({ items, currentId, onSelect, getId = x => x, getLabel = x =
 export default function ChronosphaeraPage() {
   const location = useLocation();
   const navigate = useNavigate();
-  const { hasPurchase, hasSubscription } = useProfile();
+  const { hasPurchase, hasSubscription, natalChart } = useProfile();
   const compass = useCompass();
   const ambient = useAmbientLight();
   const season = useSeason();
   useHapticFeedback(compass.heading, compass.active);
+  const mergedData = usePlanetData();
   const [selectedPlanet, setSelectedPlanet] = useState('Sun');
   const [hoveredPlanet, setHoveredPlanet] = useState(null);
   const [activeTab, setActiveTab] = useState('overview');
@@ -571,6 +560,17 @@ export default function ChronosphaeraPage() {
   // Stop compass when leaving clock mode
   useEffect(() => { if (!clockMode && compass.active) compass.stopCompass(); }, [clockMode]); // eslint-disable-line react-hooks/exhaustive-deps
   const [zodiacMode, setZodiacMode] = useState('tropical');
+  const [birthdayMode, setBirthdayMode] = useState(false);
+  const [showBirthdayPicker, setShowBirthdayPicker] = useState(false);
+  const [localBirthday, setLocalBirthday] = useState(null);
+  const targetDate = useMemo(() => {
+    if (!birthdayMode) return null;
+    if (natalChart?.birthData) {
+      const bd = natalChart.birthData;
+      return new Date(bd.year, bd.month - 1, bd.day, bd.hour ?? 12, 0, 0);
+    }
+    return localBirthday;
+  }, [birthdayMode, natalChart, localBirthday]);
   const [showClock3D, setShowClock3D] = useState(true);
   const [showCalendar, setShowCalendar] = useState(() => location.pathname.endsWith('/calendar'));
   const [selectedMonth, setSelectedMonth] = useState(() => location.pathname.endsWith('/calendar') ? MONTHS[new Date().getMonth()] : null);
@@ -607,19 +607,32 @@ export default function ChronosphaeraPage() {
   const showMedicineWheel = mode === 'medicine-wheel';
   const showFallenStarlight = mode === 'fallen-starlight' || mode === 'story-of-stories';
   const showStoryOfStories = mode === 'story-of-stories';
+  const showDodecahedron = mode === 'dodecahedron';
+  const [dodecMode, setDodecMode] = useState('stars');
 
   const ybr = useYellowBrickRoad();
   const { forgeMode } = useStoryForge();
   const perspective = usePerspective(selectedPlanet);
+
+  // Deep-link support: ?tradition=plato&ring=source
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const tradition = params.get('tradition');
+    const ring = params.get('ring');
+    if (tradition) perspective.setActivePerspective(tradition);
+    if (ring) setSelectedBeyondRing(ring);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const chakraViewMode = mode === 'chakra' ? (perspective.bodyOrderKey || 'chaldean') : null;
 
   // Which beyond rings (worldSoul / nous / source) the current tradition supports
   const beyondRings = useMemo(() => {
-    if (showMonomyth || showFallenStarlight) return [];
+    if (showMonomyth || showFallenStarlight || showDodecahedron) return [];
     return BEYOND_RINGS
       .filter(ring => ring.traditions[perspective.activePerspective])
       .map(ring => ring.id);
-  }, [perspective.activePerspective, showMonomyth, showFallenStarlight]);
+  }, [perspective.activePerspective, showMonomyth, showFallenStarlight, showDodecahedron]);
 
   const [ybrAutoStart, setYbrAutoStart] = useState(false);
   const { trackElement, trackTime, isElementCompleted, courseworkMode } = useCoursework();
@@ -924,6 +937,11 @@ export default function ChronosphaeraPage() {
       }
     }
 
+    // Dodecahedron
+    if (sub === '/dodecahedron' && mode !== 'dodecahedron') {
+      setMode('dodecahedron');
+    }
+
     // Yellow Brick Road
     if (sub === '/yellow-brick-road' && !ybr.active) {
       setYbrAutoStart(true);
@@ -1038,6 +1056,23 @@ export default function ChronosphaeraPage() {
       setSelectedStarlightStage(null);
       setStarlightSectionId(null);
       navigate('/chronosphaera/fallen-starlight');
+    }
+  }, [mode, clearAllSelections, navigate]);
+
+  const handleToggleDodecahedron = useCallback(() => {
+    const DODEC_MODES = ['stars', 'roman', 'die'];
+    if (mode !== 'dodecahedron') {
+      // First click — enter dodecahedron at 'stars'
+      clearAllSelections();
+      setMode('dodecahedron');
+      setDodecMode('stars');
+      navigate('/chronosphaera/dodecahedron');
+    } else {
+      // Already in dodecahedron — cycle to next sub-mode
+      setDodecMode(prev => {
+        const idx = DODEC_MODES.indexOf(prev);
+        return DODEC_MODES[(idx + 1) % DODEC_MODES.length];
+      });
     }
   }, [mode, clearAllSelections, navigate]);
 
@@ -1193,24 +1228,6 @@ export default function ChronosphaeraPage() {
     return { planets, zodiac, cardinals, months, dayNight };
   }, []);
 
-  const mergedData = useMemo(() => {
-    const map = {};
-    coreData.forEach(item => {
-      map[item.planet] = {
-        core: item,
-        deities: findByMetal(deitiesData, item.metal),
-        archetype: findBySin(archetypesData, item.sin),
-        artists: findBySin(artistsData, item.sin),
-        hebrew: findByMetal(hebrewData, item.metal),
-        modern: findBySin(modernData, item.sin),
-        shared: sharedData,
-        stories: findBySin(storiesData, item.sin),
-        theology: findBySin(theologyData, item.sin),
-      };
-    });
-    return map;
-  }, []);
-
   let currentData = mergedData[selectedPlanet] || null;
 
   // In body mode, override position-pinned data (sin, virtue, body, gland)
@@ -1330,7 +1347,14 @@ export default function ChronosphaeraPage() {
   }
 
   return (
-    <div className={`chronosphaera-page chrono-${ambient.mode}${view3D ? ' chrono-3d-active' : ''}`}>
+    <div className={`chronosphaera-page chrono-${ambient.mode}${view3D ? ' chrono-3d-active' : ''}${showDodecahedron ? ' chrono-dodec-active' : ''}`}>
+      {showDodecahedron && (
+        <div className="chrono-dodec-layer">
+          <Suspense fallback={<div className="chrono-empty">Loading Dodecahedron...</div>}>
+            <DodecahedronPage embedded externalMode={dodecMode} />
+          </Suspense>
+        </div>
+      )}
       <div className="chrono-diagram-center">
         {view3D && hasSubscription('monomyth') && (
           <div className="chrono-view3d-controls">
@@ -1559,7 +1583,11 @@ export default function ChronosphaeraPage() {
                 ? handleSelectBeyondRing
                 : undefined
             }
+            showDodecahedron={showDodecahedron}
+            dodecMode={dodecMode}
+            onToggleDodecahedron={handleToggleDodecahedron}
             onToggle3D={handleToggle3D}
+            targetDate={targetDate}
           />
         )}
       </div>
@@ -2217,9 +2245,52 @@ export default function ChronosphaeraPage() {
       ) : selectedMonth ? (
         <>
           {clockMode && (
-            <p className="calendar-today-label calendar-today-above">
-              {new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
+            <p
+              className={`calendar-today-label calendar-today-above${birthdayMode ? ' birthday-active' : ''}`}
+              style={{ cursor: 'pointer' }}
+              title={birthdayMode ? 'Click to return to today' : (natalChart?.birthData ? 'Click to see your birthday sky' : 'Click to enter a birth date')}
+              onClick={() => {
+                if (natalChart?.birthData) {
+                  const entering = !birthdayMode;
+                  setBirthdayMode(entering);
+                  setShowBirthdayPicker(false);
+                  if (entering) {
+                    const bd = natalChart.birthData;
+                    setSelectedMonth(MONTHS[bd.month - 1]);
+                    trackElement('chronosphaera.birthday-toggle');
+                  } else {
+                    setSelectedMonth(MONTHS[new Date().getMonth()]);
+                  }
+                } else if (birthdayMode) {
+                  setBirthdayMode(false);
+                  setShowBirthdayPicker(false);
+                  setSelectedMonth(MONTHS[new Date().getMonth()]);
+                } else {
+                  setShowBirthdayPicker(prev => !prev);
+                }
+              }}
+            >
+              {birthdayMode && targetDate
+                ? `★ ${targetDate.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}`
+                : new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
             </p>
+          )}
+          {showBirthdayPicker && !natalChart?.birthData && (
+            <div className="birthday-date-picker">
+              <input
+                type="date"
+                onChange={(e) => {
+                  if (e.target.value) {
+                    const [y, m, d] = e.target.value.split('-').map(Number);
+                    setLocalBirthday(new Date(y, m - 1, d, 12, 0, 0));
+                    setBirthdayMode(true);
+                    setShowBirthdayPicker(false);
+                    setSelectedMonth(MONTHS[m - 1]);
+                    trackElement('chronosphaera.birthday-toggle');
+                  }
+                }}
+              />
+            </div>
           )}
           {clockMode && (
             <div className="zodiac-mode-switch">
@@ -2245,7 +2316,7 @@ export default function ChronosphaeraPage() {
               {WEEKDAYS.map((w, i) => (
                 <button
                   key={w.day}
-                  className={`calendar-weekday-btn${new Date().getDay() === i ? ' active' : ''}`}
+                  className={`calendar-weekday-btn${(targetDate || new Date()).getDay() === i ? ' active' : ''}`}
                   style={{ borderColor: w.color, color: w.color }}
                   onClick={() => {
                     setSelectedPlanet(w.planet);

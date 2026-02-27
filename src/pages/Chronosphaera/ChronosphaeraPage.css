@@ -240,7 +240,8 @@
 
 @media (max-width: 600px) {
   .view3d-toggle,
-  .back2d-toggle {
+  .back2d-toggle,
+  .dodec-nav-toggle {
     width: 34px;
     height: 34px;
     font-size: 0.95rem;
@@ -499,6 +500,32 @@
   text-align: center;
   margin: 0 0 0.3rem;
   font-size: 0.9rem;
+}
+
+.calendar-today-label.birthday-active {
+  color: rgba(201, 169, 97, 0.95);
+  text-shadow: 0 0 8px rgba(201, 169, 97, 0.4);
+}
+
+.birthday-date-picker {
+  text-align: center;
+  margin: 0 0 0.6rem;
+}
+
+.birthday-date-picker input[type="date"] {
+  background: rgba(10, 10, 24, 0.9);
+  border: 1px solid rgba(201, 169, 97, 0.4);
+  color: rgba(201, 169, 97, 0.9);
+  font-family: 'Cinzel', serif;
+  font-size: 0.85rem;
+  padding: 4px 10px;
+  border-radius: 4px;
+  outline: none;
+}
+
+.birthday-date-picker input[type="date"]:focus {
+  border-color: rgba(201, 169, 97, 0.7);
+  box-shadow: 0 0 6px rgba(201, 169, 97, 0.3);
 }
 
 .calendar-weekday-buttons {
@@ -1340,6 +1367,7 @@
   .vr-view-toggle,
   .mythic-earth-toggle,
   .monomyth-toggle,
+  .dodec-nav-toggle,
   .view3d-toggle,
   .back2d-toggle {
     width: 34px;
@@ -1436,6 +1464,69 @@
   opacity: 0.5;
   background: rgba(150, 150, 150, 0.05);
   box-shadow: none;
+}
+
+/* ===== DODECAHEDRON NAV TOGGLE ===== */
+
+.dodec-nav-toggle {
+  position: static;
+  background: none;
+  border: 1px solid rgba(180, 160, 120, 0.4);
+  color: rgba(180, 160, 120, 0.7);
+  font-size: 1.2rem;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  opacity: 0.7;
+}
+
+.dodec-nav-toggle:hover {
+  opacity: 1;
+  background: rgba(180, 160, 120, 0.1);
+  box-shadow: 0 0 10px rgba(180, 160, 120, 0.3);
+}
+
+.dodec-nav-toggle.active {
+  opacity: 1;
+  color: #b4a078;
+  border-color: rgba(180, 160, 120, 0.6);
+  background: rgba(180, 160, 120, 0.12);
+  box-shadow: 0 0 12px rgba(180, 160, 120, 0.4);
+}
+
+/* ===== DODECAHEDRON FULL-BLEED LAYER ===== */
+
+.chrono-dodec-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+}
+
+.chrono-dodec-active .chrono-diagram-center {
+  position: relative;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.chrono-dodec-active .orbital-svg {
+  display: none;
+}
+
+.chrono-dodec-active .compass-toggle {
+  display: none;
+}
+
+.chrono-dodec-active .orbital-btn-row {
+  pointer-events: auto;
+}
+
+.chrono-dodec-active .chrono-content-fade {
+  display: none;
 }
 
 /* ===== MYTHIC EARTH (embedded in diagram area) ===== */

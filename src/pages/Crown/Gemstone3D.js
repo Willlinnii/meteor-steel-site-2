@@ -13,6 +13,16 @@ const GEMSTONE_DATA = {
   Jupiter: { name: 'Yellow Sapphire', sanskrit: 'Pukhraj',  color: '#e8b820', emissive: '#a07810', cut: 'cushion',       faceted: true },
   Saturn:  { name: 'Blue Sapphire',   sanskrit: 'Neelam',   color: '#1838a0', emissive: '#0c1c60', cut: 'ovalBrilliant', faceted: true },
   Earth:   { name: 'Hessonite',       sanskrit: 'Gomed',    color: '#c07030', emissive: '#704018', cut: 'roundMixed',    faceted: true },
+
+  // ── Birthstones (months that don't overlap with Navaratna planets) ──
+  Garnet:    { name: 'Garnet',     color: '#8b1a1a', emissive: '#4a0d0d', cut: 'roundMixed',    faceted: true },   // Jan
+  Amethyst:  { name: 'Amethyst',   color: '#7b2d8e', emissive: '#3d1647', cut: 'ovalBrilliant', faceted: true },   // Feb
+  Aquamarine:{ name: 'Aquamarine', color: '#5bb8d4', emissive: '#2d5c6a', cut: 'emerald',       faceted: true },   // Mar
+  Moonstone: { name: 'Moonstone',  color: '#e8e0d0', emissive: '#a09880', cut: 'cabochon',      faceted: false },  // Jun
+  Sardonyx:  { name: 'Sardonyx',   color: '#a0522d', emissive: '#502916', cut: 'ovalCab',       faceted: false },  // Aug
+  Opal:      { name: 'Opal',       color: '#d4e8f0', emissive: '#6a7478', cut: 'cabochon',      faceted: false },  // Oct
+  Topaz:     { name: 'Topaz',      color: '#d4a017', emissive: '#6a500b', cut: 'cushion',       faceted: true },   // Nov
+  Turquoise: { name: 'Turquoise',  color: '#30c5b0', emissive: '#186258', cut: 'cabochon',      faceted: false },  // Dec
 };
 
 // ── Geometry helpers ──────────────────────────────────────────────────
@@ -365,4 +375,20 @@ export default function Gemstone3D({ planet, position, size, selected, onClick }
   );
 }
 
-export { GEMSTONE_DATA };
+// Maps birthstone name → GEMSTONE_DATA key (aliasing planetary overlaps)
+const BIRTHSTONE_KEYS = {
+  Garnet:     'Garnet',      // Jan
+  Amethyst:   'Amethyst',    // Feb
+  Aquamarine: 'Aquamarine',  // Mar
+  Diamond:    'Venus',       // Apr — same as Venus gem
+  Emerald:    'Mercury',     // May — same as Mercury gem
+  Moonstone:  'Moonstone',   // Jun
+  Ruby:       'Sun',         // Jul — same as Sun gem
+  Sardonyx:   'Sardonyx',    // Aug
+  Sapphire:   'Saturn',      // Sep — same as Saturn gem (Blue Sapphire)
+  Opal:       'Opal',        // Oct
+  Topaz:      'Topaz',       // Nov
+  Turquoise:  'Turquoise',   // Dec
+};
+
+export { GEMSTONE_DATA, BIRTHSTONE_KEYS };

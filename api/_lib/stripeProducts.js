@@ -47,6 +47,12 @@ const STRIPE_PRODUCTS = {
     amount: 2500,
     interval: 'month',
   },
+  'teaching': {
+    mode: 'subscription',
+    name: 'Teaching',
+    amount: 2500,
+    interval: 'month',
+  },
   // One-time purchases
   'fallen-starlight': {
     mode: 'payment',

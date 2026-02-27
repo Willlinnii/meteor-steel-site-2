@@ -1,0 +1,211 @@
+/* ========================================================
+   Microcosmos — 3D/2D Body Visualizer
+   ======================================================== */
+
+.microcosmos-page {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 8px 20px 60px;
+  position: relative;
+  min-height: 100vh;
+  background:
+    radial-gradient(1px 1px at 12% 18%, rgba(255,255,255,0.6) 50%, transparent 50%),
+    radial-gradient(1px 1px at 45% 8%, rgba(255,255,255,0.4) 50%, transparent 50%),
+    radial-gradient(1px 1px at 78% 25%, rgba(255,255,255,0.5) 50%, transparent 50%),
+    radial-gradient(1px 1px at 30% 55%, rgba(255,255,255,0.35) 50%, transparent 50%),
+    radial-gradient(1px 1px at 65% 72%, rgba(255,255,255,0.45) 50%, transparent 50%),
+    radial-gradient(1px 1px at 88% 45%, rgba(255,255,255,0.3) 50%, transparent 50%),
+    radial-gradient(1px 1px at 15% 82%, rgba(255,255,255,0.4) 50%, transparent 50%),
+    radial-gradient(1px 1px at 55% 90%, rgba(255,255,255,0.35) 50%, transparent 50%),
+    radial-gradient(ellipse at 50% 0%, rgba(30,30,60,0.4) 0%, transparent 70%),
+    radial-gradient(ellipse at 20% 50%, rgba(15,15,40,0.3) 0%, transparent 60%),
+    linear-gradient(to bottom, #06060f 0%, #0a0a18 40%, #0d0d1a 70%, #08080f 100%);
+  background-attachment: fixed;
+}
+
+/* ---------- Viewer ---------- */
+
+.microcosmos-viewer-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 684px;
+  height: 684px;
+  max-width: 90vw;
+  max-height: 90vw;
+  margin: 0 auto;
+}
+
+/* ---------- Button Stack (fixed bottom-right) ---------- */
+
+.microcosmos-btn-stack {
+  position: fixed;
+  bottom: 72px;
+  right: 24px;
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+}
+
+/* Hamburger always visible */
+.microcosmos-menu-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: none;
+  border: 1px solid rgba(201, 169, 97, 0.5);
+  color: rgba(201, 169, 97, 0.8);
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+  order: 99;
+}
+.microcosmos-menu-btn:hover {
+  border-color: rgba(201, 169, 97, 0.9);
+  color: rgba(201, 169, 97, 1);
+}
+
+/* Hidden by default */
+.microcosmos-btn-stack > button:not(.microcosmos-menu-btn) {
+  display: none;
+}
+
+/* Shown when expanded */
+.microcosmos-btn-stack[data-expanded] > button:not(.microcosmos-menu-btn) {
+  display: flex;
+  animation: micro-btn-fan 120ms ease-out both;
+}
+
+@keyframes micro-btn-fan {
+  from { opacity: 0; transform: translateY(8px) scale(0.85); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* System buttons */
+.microcosmos-sys-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.2);
+  background: transparent;
+  font-size: 1.15rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  opacity: 0.7;
+}
+.microcosmos-sys-btn:hover {
+  opacity: 1;
+  background: rgba(255,255,255,0.06);
+  box-shadow: 0 0 10px color-mix(in srgb, var(--sys-color) 40%, transparent);
+}
+.microcosmos-sys-btn.active {
+  opacity: 1;
+  border-color: var(--sys-color);
+  box-shadow: 0 0 14px color-mix(in srgb, var(--sys-color) 50%, transparent);
+  background: color-mix(in srgb, var(--sys-color) 12%, transparent);
+}
+
+/* 2D / 3D toggle */
+.microcosmos-dim-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid rgba(139, 195, 170, 0.3);
+  background: transparent;
+  color: rgba(139, 195, 170, 0.8);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  opacity: 0.7;
+}
+.microcosmos-dim-btn:hover {
+  opacity: 1;
+  background: rgba(139, 195, 170, 0.1);
+  box-shadow: 0 0 10px rgba(139, 195, 170, 0.3);
+}
+
+/* ---------- Content Panel ---------- */
+
+.microcosmos-content-container {
+  max-width: 720px;
+  margin: 24px auto 0;
+  text-align: center;
+  padding: 0 16px;
+}
+
+.microcosmos-heading {
+  font-family: 'Cinzel', serif;
+  font-size: 1.4rem;
+  color: rgba(201, 169, 97, 0.9);
+  margin: 0 0 8px;
+  letter-spacing: 0.05em;
+}
+
+.microcosmos-heading-icon {
+  margin-right: 8px;
+}
+
+.microcosmos-description {
+  font-size: 0.95rem;
+  color: rgba(200, 200, 220, 0.75);
+  line-height: 1.55;
+  margin: 0 0 6px;
+}
+
+.microcosmos-part-label {
+  font-size: 0.9rem;
+  color: rgba(200, 200, 220, 0.6);
+  margin: 6px 0 0;
+}
+
+.microcosmos-placeholder-text {
+  font-size: 0.95rem;
+  color: rgba(200, 200, 220, 0.5);
+  font-style: italic;
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 900px) {
+  .microcosmos-viewer-center {
+    width: 520px;
+    height: 520px;
+  }
+}
+
+@media (max-width: 600px) {
+  .microcosmos-page {
+    padding: 4px 8px 40px;
+  }
+  .microcosmos-viewer-center {
+    width: 100%;
+    height: 80vw;
+  }
+  .microcosmos-btn-stack {
+    bottom: 56px;
+    right: 16px;
+    gap: 4px;
+  }
+  .microcosmos-sys-btn,
+  .microcosmos-dim-btn,
+  .microcosmos-menu-btn {
+    width: 34px;
+    height: 34px;
+    font-size: 0.95rem;
+  }
+  .microcosmos-heading {
+    font-size: 1.15rem;
+  }
+}

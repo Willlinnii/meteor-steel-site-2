@@ -601,6 +601,7 @@ const SECTION_GROUPS = [
   { group: 'Business', children: [
     { id: 'glinter', label: 'Glinter LLC' },
     { id: 'plan', label: 'Plan' },
+    { id: 'product-plans', label: 'Product Plans' },
     { id: 'ip-registry', label: 'IP Registry' },
     { id: 'legal', label: 'Legal' },
   ]},
@@ -4946,6 +4947,159 @@ function useInitiativeStatuses() {
   return { getStatus, setStatus };
 }
 
+// ── Product Plans ──────────────────────────────────────────────────────
+function ProductPlansSection() {
+  const [expanded, setExpanded] = useState(null);
+  const toggle = (id) => setExpanded(prev => prev === id ? null : id);
+
+  const S = {
+    section: { padding: '32px 24px', maxWidth: 1100, margin: '0 auto' },
+    heading: { fontFamily: 'Cinzel, serif', color: 'rgba(218,165,32,0.9)', fontSize: '1.5rem', marginBottom: 4, letterSpacing: 2 },
+    subtitle: { color: '#888', fontSize: '0.9rem', marginBottom: 28, fontStyle: 'italic' },
+    card: { background: 'rgba(26,26,36,0.7)', border: '1px solid rgba(218,165,32,0.15)', borderRadius: 10, padding: '20px 22px', marginBottom: 16, cursor: 'pointer', transition: 'border-color 0.2s' },
+    cardTitle: { fontFamily: 'Cinzel, serif', color: '#ddd', fontSize: '1.05rem', margin: 0, display: 'flex', justifyContent: 'space-between', alignItems: 'center' },
+    badge: (bg, fg) => ({ display: 'inline-block', padding: '2px 10px', borderRadius: 4, background: bg, color: fg, fontSize: '0.7rem', letterSpacing: 0.5, marginLeft: 8 }),
+    body: { color: '#aaa', fontSize: '0.85rem', lineHeight: 1.7, marginTop: 14 },
+    h3: { fontFamily: 'Cinzel, serif', color: 'rgba(218,165,32,0.8)', fontSize: '0.9rem', margin: '18px 0 8px', letterSpacing: 1 },
+    table: { width: '100%', borderCollapse: 'collapse', margin: '10px 0 16px', fontSize: '0.8rem' },
+    th: { textAlign: 'left', padding: '6px 10px', borderBottom: '1px solid #3a3a4a', color: 'rgba(218,165,32,0.7)', fontSize: '0.72rem', letterSpacing: 1, textTransform: 'uppercase' },
+    td: { padding: '6px 10px', borderBottom: '1px solid rgba(255,255,255,0.04)', color: '#bbb' },
+    note: { background: 'rgba(0,0,0,0.2)', borderRadius: 6, padding: '12px 16px', marginTop: 12, color: '#999', fontSize: '0.8rem', lineHeight: 1.6 },
+  };
+
+  return (
+    <div style={S.section}>
+      <h2 style={S.heading}>Product Plans</h2>
+      <p style={S.subtitle}>Physical product lines — concept, catalog, production, and distribution</p>
+
+      {/* ── Production & Distribution ── */}
+      <div style={{ ...S.card, borderColor: expanded === 'distro' ? 'rgba(218,165,32,0.4)' : undefined }} onClick={() => toggle('distro')}>
+        <h3 style={S.cardTitle}>
+          Production & Distribution
+          <span style={S.badge('rgba(100,180,255,0.15)', '#6ab4ff')}>Operations</span>
+        </h3>
+        {expanded === 'distro' && (
+          <div style={S.body}>
+            <div style={S.h3}>Model</div>
+            <p>Made-to-order for adornments; small-batch inventory for dice. No warehouse — production triggered by purchase, shipped direct from fabricator/lapidary.</p>
+
+            <div style={S.h3}>Adornment Production</div>
+            <p>Gemstones sourced from certified Navaratna suppliers (Jaipur for Ruby, Emerald, Sapphires; Japanese Akoya or South Sea for Pearl; Mediterranean for Red Coral). Metal casting via lost-wax process — customer selects form, metal, date, and layout; the 3D configurator generates a unique stone placement map sent to the jeweler. Each piece is one-of-one because the astronomical positions are unique to the date.</p>
+
+            <div style={S.h3}>Dice Production</div>
+            <p><strong>Cosmic line</strong> (standard): Injection-molded resin with printed/engraved constellation faces. Low unit cost, batch production, ships from fulfillment partner.</p>
+            <p><strong>Ore line</strong> (mineral): Hand-cut from raw mineral stock by lapidary artisans. Obsidian (volcanic glass, Mexico/Iceland sources), Galena (lead ore), Malachite (copper carbonate, Congo/Arizona), Quartz (Brazil/Arkansas), Cinnabar (mercury sulfide, China/Spain), Magnetite (iron oxide). Each die is unique due to natural mineral variation — veining, inclusions, color shifts.</p>
+
+            <div style={S.h3}>Fulfillment</div>
+            <p>Adornments: 4-6 week lead time. Dice (cosmic): 3-5 business days. Dice (ore): 2-3 week lead time. All shipped insured with tracking. Adornments include a certificate of astronomical authenticity — the exact planetary positions encoded in the piece.</p>
+
+            <div style={S.h3}>Distribution Channels</div>
+            <p>Primary: mythouse.org/store (direct). Secondary: Etsy for discovery (dice especially). Future: wholesale to museum gift shops (planetariums, mythology/archaeology museums). Retreat/event sales at Myth Salon gatherings and Mentone retreats.</p>
+          </div>
+        )}
+      </div>
+
+      {/* ── Celestial Adornments ── */}
+      <div style={{ ...S.card, borderColor: expanded === 'adornments' ? 'rgba(218,165,32,0.4)' : undefined }} onClick={() => toggle('adornments')}>
+        <h3 style={S.cardTitle}>
+          Celestial Adornments
+          <span style={S.badge('rgba(218,165,32,0.15)', 'rgba(218,165,32,0.9)')}>Jewelry</span>
+        </h3>
+        {expanded === 'adornments' && (
+          <div style={S.body}>
+            <div style={S.h3}>Concept</div>
+            <p>Seven planetary gemstones from the Navaratna tradition set in alchemical metal, configured to a specific moment in the cosmos. Not decorative jewelry — a mythic instrument. Each piece is astronomically unique: stones placed at the real ecliptic positions of the seven classical planets at the chosen date, computed from orbital mechanics.</p>
+
+            <div style={S.h3}>Tradition</div>
+            <p>Inherits from the Vedic Navaratna system (Brihat Parashara Hora Shastra, Vishnu Purana, Surya Siddhanta) — planetary gemstones as conductors of cosmic frequency. Combined with the cross-cultural alchemical metal correspondence (Gold/Sun, Silver/Moon, Iron/Mars, Copper/Venus, Tin/Jupiter, Lead/Saturn). Mythouse adds computational astronomy — the innovation that makes each piece a portrait of the actual sky, not a conventional arrangement.</p>
+
+            <div style={S.h3}>Catalog</div>
+            <table style={S.table}>
+              <thead><tr><th style={S.th}>Form</th><th style={S.th}>Grams</th><th style={S.th}>Craft</th><th style={S.th}>Price Range</th></tr></thead>
+              <tbody>
+                <tr><td style={S.td}>Ring</td><td style={S.td}>10g</td><td style={S.td}>$200</td><td style={S.td}>$1,051 – $1,700</td></tr>
+                <tr><td style={S.td}>Bracelet</td><td style={S.td}>30g</td><td style={S.td}>$350</td><td style={S.td}>$1,208 – $3,150</td></tr>
+                <tr><td style={S.td}>Arm Band</td><td style={S.td}>60g</td><td style={S.td}>$450</td><td style={S.td}>$1,315 – $5,200</td></tr>
+                <tr><td style={S.td}>Belt</td><td style={S.td}>20g (leather)</td><td style={S.td}>$500 + $150</td><td style={S.td}>$1,502 – $2,950</td></tr>
+                <tr><td style={S.td}>Crown</td><td style={S.td}>80g</td><td style={S.td}>$750</td><td style={S.td}>$1,620 – $6,800</td></tr>
+              </tbody>
+            </table>
+            <p>All forms: $850 fixed gem set (7 Navaratna stones). Price = (grams × metal rate) + gems + craft. Metal drives the range: lead ($0.10/g) to meteor steel ($80/g).</p>
+
+            <div style={S.h3}>Seven Metals</div>
+            <table style={S.table}>
+              <thead><tr><th style={S.th}>Metal</th><th style={S.th}>Planet</th><th style={S.th}>$/gram</th></tr></thead>
+              <tbody>
+                <tr><td style={S.td}>Gold</td><td style={S.td}>Sun</td><td style={S.td}>$65.00</td></tr>
+                <tr><td style={S.td}>Silver</td><td style={S.td}>Moon</td><td style={S.td}>$1.00</td></tr>
+                <tr><td style={S.td}>Meteor Steel</td><td style={S.td}>Mars (celestial)</td><td style={S.td}>$80.00</td></tr>
+                <tr><td style={S.td}>Bronze</td><td style={S.td}>Venus + Jupiter</td><td style={S.td}>$0.50</td></tr>
+                <tr><td style={S.td}>Copper</td><td style={S.td}>Venus</td><td style={S.td}>$0.30</td></tr>
+                <tr><td style={S.td}>Tin</td><td style={S.td}>Jupiter</td><td style={S.td}>$0.25</td></tr>
+                <tr><td style={S.td}>Lead</td><td style={S.td}>Saturn</td><td style={S.td}>$0.10</td></tr>
+              </tbody>
+            </table>
+
+            <div style={S.h3}>Two Layouts</div>
+            <p><strong>Astronomical</strong> — stones at real ecliptic longitudes for the chosen date (heliocentric or geocentric). Every piece unique. Computed via astronomy-engine.</p>
+            <p><strong>Navaratna</strong> — traditional Vedic mandala cluster in Chaldean order (Saturn → Jupiter → Mars → Sun → Venus → Mercury → Moon). Sun at center. Same for everyone — the cosmic template.</p>
+
+            <div style={S.note}>
+              <strong>Key differentiator:</strong> No other jeweler computes real planetary positions from ephemeris data. Traditional Navaratna jewelers use the prescribed arrangement; Western birthstone jewelers use calendar month. Mythouse does both — and adds the astronomical layout that makes each piece a unique coordinate in time.
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* ── Platonic Dice ── */}
+      <div style={{ ...S.card, borderColor: expanded === 'dice' ? 'rgba(218,165,32,0.4)' : undefined }} onClick={() => toggle('dice')}>
+        <h3 style={S.cardTitle}>
+          Platonic Dice
+          <span style={S.badge('rgba(140,120,200,0.15)', '#a89cd8')}>Dice</span>
+        </h3>
+        {expanded === 'dice' && (
+          <div style={S.body}>
+            <div style={S.h3}>Concept</div>
+            <p>The five Platonic solids — the only perfectly regular convex polyhedra that exist — carved from planetary mineral ore. Each solid maps to a classical element (Plato, Timaeus) and each mineral maps to a planetary metal tradition. The dice are both functional gaming objects and mythic artifacts.</p>
+
+            <div style={S.h3}>Platonic Solid → Element → Mineral</div>
+            <table style={S.table}>
+              <thead><tr><th style={S.th}>Die</th><th style={S.th}>Solid</th><th style={S.th}>Faces</th><th style={S.th}>Element</th><th style={S.th}>Mineral</th><th style={S.th}>Planet</th><th style={S.th}>Ore</th><th style={S.th}>Cosmic</th></tr></thead>
+              <tbody>
+                <tr><td style={S.td}>D4</td><td style={S.td}>Tetrahedron</td><td style={S.td}>4</td><td style={S.td}>Fire</td><td style={S.td}>Quartz</td><td style={S.td}>—</td><td style={S.td}>$40</td><td style={S.td}>—</td></tr>
+                <tr><td style={S.td}>D6</td><td style={S.td}>Cube</td><td style={S.td}>6</td><td style={S.td}>Earth</td><td style={S.td}>Galena</td><td style={S.td}>Saturn</td><td style={S.td}>$35</td><td style={S.td}>—</td></tr>
+                <tr><td style={S.td}>D8</td><td style={S.td}>Octahedron</td><td style={S.td}>8</td><td style={S.td}>Air</td><td style={S.td}>Cinnabar</td><td style={S.td}>Mercury</td><td style={S.td}>$55</td><td style={S.td}>—</td></tr>
+                <tr><td style={S.td}>D12</td><td style={S.td}>Dodecahedron</td><td style={S.td}>12</td><td style={S.td}>Cosmos</td><td style={S.td}>Magnetite</td><td style={S.td}>Mars</td><td style={S.td}>$80</td><td style={S.td}>—</td></tr>
+                <tr><td style={S.td}>D20</td><td style={S.td}>Icosahedron</td><td style={S.td}>20</td><td style={S.td}>Water</td><td style={S.td}>Malachite</td><td style={S.td}>Venus</td><td style={S.td}>$65</td><td style={S.td}>—</td></tr>
+              </tbody>
+            </table>
+
+            <div style={S.h3}>Special Editions</div>
+            <table style={S.table}>
+              <thead><tr><th style={S.th}>Product</th><th style={S.th}>Material</th><th style={S.th}>Ore Price</th><th style={S.th}>Cosmic Price</th></tr></thead>
+              <tbody>
+                <tr><td style={S.td}>Obsidian D12</td><td style={S.td}>Volcanic glass</td><td style={S.td}>$195</td><td style={S.td}>$5</td></tr>
+                <tr><td style={S.td}>Platonic Set (all 5)</td><td style={S.td}>Mixed mineral</td><td style={S.td}>$275</td><td style={S.td}>$25</td></tr>
+              </tbody>
+            </table>
+
+            <div style={S.h3}>Design Details</div>
+            <p><strong>Ore dice:</strong> Hand-cut from raw mineral stock. Natural veining, inclusions, and color variation make each die unique. Faces polished flat and laser-engraved with constellation markings (D12) or elemental symbols (D4/D6/D8/D20). Weight and balance tested to fair-roll tolerance.</p>
+            <p><strong>Cosmic dice:</strong> Injection-molded resin, constellation/zodiac face engravings, metallic accent paint. Affordable entry point — same mythic design language, standard materials.</p>
+
+            <div style={S.h3}>The Dodecahedron</div>
+            <p>The D12 is the flagship. Twelve faces for twelve constellations of the zodiac — each face engraved with its constellation. The dodecahedron is Plato's shape for the cosmos itself (Timaeus 55c: "the god used it for the whole"). The obsidian edition is volcanic glass — formed in fire, cooled in air, carved by hand. The magnetite edition is naturally magnetic iron ore — Mars's mineral, the warrior's stone, and the only die that sticks to metal surfaces.</p>
+
+            <div style={S.note}>
+              <strong>Entry points:</strong> Cosmic D12 at $5 is the gateway product — low enough for impulse purchase, introduces the design language. Cosmic Platonic Set at $25 is the gift-tier entry. Ore editions are the collector tier. The obsidian D12 at $195 is the statement piece.
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 function StrategicPlanSection() {
   const [expandedPhase, setExpandedPhase] = useState('phase-0');
   const [viewMode, setViewMode] = useState('vision');
@@ -7761,6 +7915,7 @@ function AdminPage() {
       {activeSection === 'glinter' && <GlinterSection />}
       {activeSection === 'store' && <StoreSection />}
       {activeSection === 'plan' && <StrategicPlanSection />}
+      {activeSection === 'product-plans' && <ProductPlansSection />}
       {activeSection === 'system-health' && <SystemHealthSection />}
       {activeSection === 'campaigns' && <CampaignManagerSection />}
       {activeSection === 'secret-weapon' && <SecretWeaponCampaignSection />}

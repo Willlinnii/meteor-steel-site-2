@@ -91,9 +91,13 @@ const ConsultingDashboardPage = lazy(() => import('./pages/Consulting/Consulting
 const PractitionerDashboardPage = lazy(() => import('./pages/Consulting/PractitionerDashboardPage'));
 const ConsultingForgePage = lazy(() => import('./pages/Consulting/ConsultingForgePage'));
 const CrownPage = lazy(() => import('./pages/Crown/CrownPage'));
+const Ring2DPage = lazy(() => import('./pages/Ring2D/Ring2DPage'));
 const DodecahedronPage = lazy(() => import('./pages/Dodecahedron/DodecahedronPage'));
+const ArtBookPage = lazy(() => import('./pages/ArtBook/ArtBookPage'));
 const StorePage = lazy(() => import('./pages/Store/StorePage'));
 const TeacherPage = lazy(() => import('./pages/Teacher/TeacherPage'));
+const WillLinnPage = lazy(() => import('./pages/WillLinn/WillLinnPage'));
+const MicrocosmosPage = lazy(() => import('./pages/Microcosmos/MicrocosmosPage'));
 
 const STAGES = [
   { id: 'golden-age', label: 'Golden Age' },
@@ -2277,8 +2281,10 @@ function AppContent() {
         <Route path="/home" element={<MeteorSteelHome />} />
         <Route path="/chronosphaera/vr" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" />Loading 3D...</div>}><ChronosphaeraVRPage /></Suspense>} />
         <Route path="/chronosphaera/*" element={<ChronosphaeraPage />} />
-        <Route path="/crown" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" />Loading Crown...</div>}><CrownPage /></Suspense>} />
+        <Route path="/ring/2d" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" />Loading Ring...</div>}><Ring2DPage /></Suspense>} />
+        <Route path="/ring" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" />Loading Crown...</div>}><CrownPage /></Suspense>} />
         <Route path="/dodecahedron" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" />Loading Dodecahedron...</div>}><DodecahedronPage /></Suspense>} />
+        <Route path="/art-book" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" />Loading Art Book...</div>}><ArtBookPage /></Suspense>} />
         {/* Redirects from old /metals paths */}
         <Route path="/metals/vr" element={<Navigate to="/chronosphaera/vr" replace />} />
         <Route path="/metals/*" element={<Navigate to="/chronosphaera" replace />} />
@@ -2286,6 +2292,7 @@ function AppContent() {
         <Route path="/story-forge" element={<StoryForgeHome />} />
         <Route path="/yellow-brick-road" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><YellowBrickRoadPage /></Suspense>} />
         <Route path="/xr" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><XRPage /></Suspense>} />
+        <Route path="/microcosmos" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" />Loading Microcosmos...</div>}><MicrocosmosPage /></Suspense>} />
         <Route path="/sacred-sites-360" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><SacredSites360Page /></Suspense>} />
         <Route path="/monomyth" element={<MonomythPage />} />
         <Route path="/mythology-channel" element={<MythologyChannelPage />} />
@@ -2321,6 +2328,7 @@ function AppContent() {
         <Route path="/feed" element={<Navigate to="/fellowship" replace />} />
         {/* Redirect legacy /app routes to /fellowship */}
         <Route path="/app/*" element={<Navigate to="/fellowship" replace />} />
+        <Route path="/will-linn" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><WillLinnPage /></Suspense>} />
         <Route path="/dragon/*" element={<RequireAdmin><Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" />Loading Admin...</div>}><AdminPage /></Suspense></RequireAdmin>} />
       </Routes>
       {!isAtlas && <SiteFooter />}

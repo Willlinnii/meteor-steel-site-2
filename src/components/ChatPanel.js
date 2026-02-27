@@ -97,6 +97,8 @@ export default function ChatPanel() {
     if (path === '/library') return 'library';
     if (path.startsWith('/myths')) return 'mythology-channel';
     if (path === '/yellow-brick-road') return 'meteor-steel';
+    if (path === '/store') return 'store';
+    if (path === '/ring') return 'store';
     return null;
   }
 
