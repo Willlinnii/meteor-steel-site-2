@@ -48,3 +48,25 @@ Geography & reference:
   /v1/library — curated reading list of foundational texts
 
 All responses return { data, meta } JSON. GET /v1/ for full discovery.
+
+---
+
+## Architecture Governance
+
+Before making structural changes, always check these files:
+
+- `architecture/ontology_spec_v1.md` — canonical entities, counts, relationships, invariants
+- `architecture/ui_contract.json` — layout rules, required components, route inventory, CSS rules
+- `architecture/system_enforcement_map.md` — what's protected by tests vs what's not
+
+### Rules for AI
+
+1. **No silent schema changes.** If a change affects entity structure (adding/removing fields, changing counts, renaming IDs), propose it first. Reference the ontology spec.
+2. **No layout mutations without checking ui_contract.json.** Header, nav, footer positions are invariants. Route removal requires a redirect.
+3. **No new styles in App.css.** Use page-scoped CSS files with page-prefix naming.
+4. **All changes must pass tests.** Run `npm test` before considering work complete. 516+ tests protect data integrity, routes, features, courses, and journeys.
+5. **Canonical data lives in src/data/.** Do not duplicate data. Do not define inline datasets in components.
+6. **Naming: "Chronosphaera" not "metals" or "seven-metals."** This rename is complete and permanent.
+7. **Generative content (AI output) must never write back into canonical data automatically.** Atlas chat, persona dialogues, and natal interpretations are ephemeral unless the user promotes them.
+8. **Vercel function limit: 12.** Do not add new api/*.js files without consolidating an existing one first. Current count: exactly 12.
+9. **Paywall bypass is active.** `ProfileContext.js` has `hasSubscription`/`hasPurchase` returning `true`. This is temporary. Do not remove the TODO comment or the override pattern until explicitly told to restore enforcement.

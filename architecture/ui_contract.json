@@ -1,0 +1,152 @@
+{
+  "_version": "1.0",
+  "_updated": "2026-02-27",
+  "_description": "Layout invariants and UI structure rules. Tests enforce these. AI must check before modifying layout.",
+
+  "layout": {
+    "structure": "header → content → footer",
+    "headerPosition": "fixed-top",
+    "footerPosition": "bottom",
+    "contentArea": "scrollable, below header",
+    "headerComponent": "SiteHeader",
+    "navComponent": "SiteNav",
+    "footerComponent": "SiteFooter",
+    "definedIn": "src/App.js",
+    "rules": [
+      "Header must remain fixed at top of viewport",
+      "Footer must remain at bottom of page flow",
+      "Navigation must be accessible from every page",
+      "Content area must not overlap header",
+      "All pages render inside the shared layout shell"
+    ]
+  },
+
+  "requiredGlobalComponents": [
+    {
+      "name": "SiteHeader",
+      "location": "src/App.js",
+      "mustContain": ["logo", "navigation-toggle"],
+      "position": "fixed-top"
+    },
+    {
+      "name": "SiteNav",
+      "location": "src/App.js",
+      "type": "dropdown-menu",
+      "mustContain": ["route-links"]
+    },
+    {
+      "name": "SiteFooter",
+      "location": "src/App.js",
+      "mustContain": ["copyright", "social-links"]
+    },
+    {
+      "name": "ChatPanel",
+      "location": "src/components/ChatPanel.js",
+      "availability": "all-authenticated-pages",
+      "position": "overlay-right"
+    }
+  ],
+
+  "routes": {
+    "total": 44,
+    "rule": "No route may be removed without explicit approval and a redirect for the old path",
+    "coreRoutes": [
+      "/",
+      "/chronosphaera/*",
+      "/monomyth",
+      "/ring",
+      "/dodecahedron",
+      "/fallen-starlight",
+      "/story-of-stories",
+      "/mythology-channel",
+      "/games/*",
+      "/store",
+      "/profile",
+      "/atlas",
+      "/journey/:journeyId",
+      "/library",
+      "/mythic-earth",
+      "/yellow-brick-road",
+      "/teacher",
+      "/mentors",
+      "/guild",
+      "/consulting",
+      "/fellowship",
+      "/discover",
+      "/secret-weapon",
+      "/dragon/*"
+    ],
+    "redirects": [
+      { "from": "/metals/*", "to": "/chronosphaera" },
+      { "from": "/treasures", "to": "/myths/treasures" },
+      { "from": "/feed", "to": "/fellowship" },
+      { "from": "/app/*", "to": "/fellowship" }
+    ]
+  },
+
+  "designTokens": {
+    "source": "src/App.css :root",
+    "colors": {
+      "--bg-dark": "#0a0a0f",
+      "--bg-medium": "#1a1a24",
+      "--bg-light": "#2a2a38",
+      "--accent-steel": "#8b9dc3",
+      "--accent-fire": "#d4a574",
+      "--accent-gold": "#c9a961",
+      "--accent-ember": "#c4713a",
+      "--text-primary": "#e8e8f0",
+      "--text-secondary": "#a8a8b8",
+      "--border-subtle": "rgba(139, 157, 195, 0.2)"
+    },
+    "typography": {
+      "headings": "Cinzel, serif (weights: 400, 600, 700)",
+      "body": "Crimson Pro, serif (weights: 300, 400, 500)"
+    },
+    "rule": "All new components must use design tokens from :root, not hardcoded color values"
+  },
+
+  "cssStrategy": {
+    "current": "Plain CSS with global scope",
+    "globalFile": "src/App.css (7691 lines — to be modularized)",
+    "pageFiles": "src/pages/*/PageName.css",
+    "componentFiles": "src/components/*/Component.css",
+    "namingConvention": "page-prefix (e.g., .chronosphaera-*, .crown-*, .dodec-*)",
+    "rules": [
+      "Page styles must be prefixed with page name to avoid collisions",
+      "New styles should NOT be added to App.css — use page-level CSS files",
+      "Design tokens must be referenced via CSS variables, not hardcoded"
+    ]
+  },
+
+  "contextProviders": {
+    "nestingOrder": [
+      "AuthProvider",
+      "FamilyProvider",
+      "FriendsProvider",
+      "FriendRequestsProvider",
+      "FellowshipProvider",
+      "ScopeProvider",
+      "CourseworkProvider",
+      "WritingsProvider",
+      "ProfileProvider",
+      "MatchRequestsProvider",
+      "MultiplayerProvider",
+      "TraditionsProvider",
+      "CreationsProvider",
+      "StoryBookProvider",
+      "GenealogyProvider"
+    ],
+    "rule": "Provider order must not change without reviewing dependency chains. AuthProvider must always be outermost."
+  },
+
+  "pagePatterns": {
+    "lazyLoading": "All non-critical pages should use React.lazy() with Suspense",
+    "errorBoundary": "Every lazy-loaded page should be wrapped in an ErrorBoundary (NOT YET IMPLEMENTED)",
+    "loading": "Use celestial-loading spinner class for consistency",
+    "rules": [
+      "Pages must not redefine layout structure (header, nav, footer)",
+      "Pages must not modify global CSS without page-prefix scoping",
+      "Pages must import data from src/data/, not define inline datasets"
+    ]
+  }
+}

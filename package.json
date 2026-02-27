@@ -40,7 +40,8 @@
     "eject": "react-scripts eject",
     "cap:sync": "npm run build && npx cap sync",
     "cap:ios": "npm run build && npx cap sync ios && npx cap open ios",
-    "cap:android": "npm run build && npx cap sync android && npx cap open android"
+    "cap:android": "npm run build && npx cap sync android && npx cap open android",
+    "prepare": "husky"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -59,7 +60,17 @@
   },
   "proxy": "https://meteor-steel-site-2.vercel.app",
   "devDependencies": {
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.7",
     "mammoth": "^1.11.0",
     "react-app-rewired": "^2.2.1"
+  },
+  "lint-staged": {
+    "src/**/*.{js,jsx}": [
+      "npx react-app-rewired test --watchAll=false --bail --findRelatedTests"
+    ],
+    "src/data/**/*.json": [
+      "npx react-app-rewired test --watchAll=false --bail --testPathPattern=dataIntegrity"
+    ]
   }
 }
