@@ -7905,11 +7905,11 @@ const ARCH_OTHER_ENTITIES = {
 };
 
 const ARCH_TESTS = [
-  { suite: 'dataIntegrity.test.js', tests: 261, covers: 'Entity counts, field shapes, pantheon validation, sacred sites, figures' },
+  { suite: 'dataIntegrity.test.js', tests: 292, covers: 'Entity counts, field shapes, pantheons, octave/heptad/journey patterns' },
   { suite: 'routeExistence.test.js', tests: 41, covers: 'All lazy + static page imports resolve' },
-  { suite: 'featureExistence.test.js', tests: 171, covers: 'Page directories, shared components, context providers' },
+  { suite: 'featureExistence.test.js', tests: 181, covers: 'Page directories, shared components, contexts, layout structure' },
   { suite: 'apiHandlers.test.js', tests: 49, covers: 'Stripe products, tier config, content index, mentor routing' },
-  { suite: 'courseEngine.test.js', tests: 35, covers: 'Course definitions, requirement types, completion logic' },
+  { suite: 'courseEngine.test.js', tests: 29, covers: 'Course definitions, requirement types, completion logic' },
   { suite: 'journeyDefs.test.js', tests: 14, covers: 'Journey configs, stop counts, challenge modes' },
 ];
 

@@ -197,3 +197,68 @@ describe('Core contexts exist', () => {
     }
   );
 });
+
+// ---------------------------------------------------------------------------
+// 4. Layout structure integrity (App.js)
+// ---------------------------------------------------------------------------
+describe('Layout structure integrity', () => {
+  const appSource = fs.readFileSync(
+    path.resolve(__dirname, '..', 'App.js'),
+    'utf-8'
+  );
+
+  test('SiteHeader function is defined', () => {
+    expect(appSource).toMatch(/function SiteHeader\(\)/);
+  });
+
+  test('SiteNav function is defined', () => {
+    expect(appSource).toMatch(/function SiteNav\(\)/);
+  });
+
+  test('SiteFooter function is defined', () => {
+    expect(appSource).toMatch(/function SiteFooter\(\)/);
+  });
+
+  test('SiteHeader renders a <header> element with class "site-header"', () => {
+    expect(appSource).toMatch(/<header className="site-header">/);
+  });
+
+  test('SiteNav renders a <nav> element with class "site-nav"', () => {
+    expect(appSource).toMatch(/<nav className="site-nav">/);
+  });
+
+  test('SiteFooter renders a <footer> element with class "site-footer"', () => {
+    expect(appSource).toMatch(/<footer className="site-footer">/);
+  });
+
+  test('ErrorBoundary component is imported', () => {
+    expect(appSource).toMatch(/import ErrorBoundary from/);
+  });
+
+  test('ErrorBoundary wraps Routes', () => {
+    // ErrorBoundary must appear before <Routes> and close after </Routes>
+    const boundaryOpen = appSource.indexOf('<ErrorBoundary>');
+    const routesOpen = appSource.indexOf('<Routes>');
+    const routesClose = appSource.indexOf('</Routes>');
+    const boundaryClose = appSource.indexOf('</ErrorBoundary>');
+    expect(boundaryOpen).toBeGreaterThan(-1);
+    expect(routesOpen).toBeGreaterThan(boundaryOpen);
+    expect(routesClose).toBeGreaterThan(routesOpen);
+    expect(boundaryClose).toBeGreaterThan(routesClose);
+  });
+
+  test('Layout order: SiteHeader before SiteNav before ErrorBoundary before SiteFooter', () => {
+    const headerPos = appSource.indexOf('<SiteHeader />');
+    const navPos = appSource.indexOf('<SiteNav />');
+    const boundaryPos = appSource.indexOf('<ErrorBoundary>');
+    const footerPos = appSource.indexOf('<SiteFooter />');
+    expect(headerPos).toBeGreaterThan(-1);
+    expect(navPos).toBeGreaterThan(headerPos);
+    expect(boundaryPos).toBeGreaterThan(navPos);
+    expect(footerPos).toBeGreaterThan(boundaryPos);
+  });
+
+  test('ChatPanel is included in layout', () => {
+    expect(appSource).toMatch(/<ChatPanel \/>/);
+  });
+});

@@ -125,22 +125,55 @@
 | Challenge modes (3 tests) | Valid mode values (wheel/cosmic), cosmic=3 levels, wheel=1 level |
 | Intro/completion text (2 tests) | Every journey has intro array + completion string |
 
-### `src/tests/dataIntegrity.test.js` (261+ tests)
+### `src/tests/dataIntegrity.test.js` (292 tests)
 
 | Test Group | What It Protects |
 |---|---|
-| Canonical entity counts (12 tests) | 7 planets, 12 zodiac, 4 elements, 4 cardinals, 8 monomyth, 88 constellations, 26 YBR, 12 calendar, library, medicine wheels |
-| Planet data integrity (3 tests) | Required fields, planet name set, unique metals |
+| Canonical entity counts (10 tests) | 7 planets, 12 zodiac, 4 elements, 4 cardinals, 8 monomyth, 88 constellations, 26 YBR, 12 calendar, library, medicine wheels |
+| Planet data integrity (6 tests) | Required fields, planet name set, unique metals |
 | Zodiac data integrity (2 tests) | Sign/element fields, standard 12 names |
 | Monomyth data integrity (2 tests) | Stage IDs match expected set, each value is string |
 | Sacred sites (2 tests) | 200+ entries, name + coordinates per site |
-| Pantheon files (4 tests) | 78 files discovered, valid JSON, 3+ deities, name fields |
+| Pantheon files (234 tests) | 78 files discovered, valid JSON, 3+ deities, name fields (78 files × 3 checks) |
 | Figures (4 tests) | Array with 10+ figures, name/id fields, 8 stage keys per figure |
-| **Octave pattern integrity (14 tests)** | steelProcess 8 keys, synthesis 8 keys, stageOverviews 8+1 keys, psychles 8 keys, fallenStarlight titles/chapters 8 keys each, 6 cycles with 8 stages each, 20+ models with 8 stages each, required fields and non-empty strings |
-| **Heptad pattern integrity (7 tests)** | 7 unique metals, days, sins, virtues, chakras, organs; every planet has body.chakra + body.organ |
-| **Journey pattern integrity (5 tests)** | 6 journeys have 8 stops, planetary has 7, zodiac has 12, cosmic uses YBR (26), 9 total definitions |
+| Octave pattern integrity (14 tests) | steelProcess 8 keys, synthesis 8 keys, stageOverviews 8+1 keys, psychles 8 keys, fallenStarlight titles/chapters 8 keys each, 6 cycles with 8 stages each, 20+ models with 8 stages each, required fields and non-empty strings |
+| Heptad pattern integrity (7 tests) | 7 unique metals, days, sins, virtues, chakras, organs; every planet has body.chakra + body.organ |
+| Journey pattern integrity (5 tests) | 6 journeys have 8 stops, planetary has 7, zodiac has 12, cosmic uses YBR (26), 9 total definitions |
 
-**Status: ENFORCED in CI** — GitHub Actions runs all tests on push/PR to main.
+### `src/tests/apiHandlers.test.js` (49 tests)
+
+| Test Group | What It Protects |
+|---|---|
+| Stripe products integrity | Product definitions, pricing, bundle expansion |
+| Tier config integrity | API tier definitions, endpoint access |
+| Content index | Content routing and discovery |
+| Mentor action routing | Valid action dispatch, unknown action rejection |
+
+### `src/tests/routeExistence.test.js` (41 tests)
+
+| Test Group | What It Protects |
+|---|---|
+| Lazy-loaded page imports (41 tests) | Every lazy-loaded route component can be dynamically imported without error |
+
+### `src/tests/featureExistence.test.js` (181 tests)
+
+| Test Group | What It Protects |
+|---|---|
+| Core page modules exist (37 + 37 + 37 tests) | Every page directory exists on disk; every page module can be required and resolves |
+| Core shared components exist (15 tests) | ChatPanel, CircleNav, OrbitalDiagram, MetalDetailPanel, RingButton — file exists, can be required, exports default |
+| Core contexts exist (12 tests) | AuthContext, ProfileContext, CourseworkContext, WritingsContext — file exists, can be required, exports provider + hook |
+| Layout structure integrity (10 tests) | SiteHeader, SiteNav, SiteFooter defined with correct HTML elements and CSS classes; ErrorBoundary wraps Routes; layout order enforced (header → nav → boundary → footer); ChatPanel included |
+
+### Runtime schema validation (13 schemas)
+
+| Schema | File Validated | Enforcement |
+|---|---|---|
+| planets, zodiac, monomyth, elements, cardinals, figures | Core ontology entities | Dev-mode console warnings via `validateCanonicalData.js` |
+| steelProcess, synthesis, stageOverviews, psychles, fallenStarlight, cycles, models | Octave pattern files | Dev-mode console warnings via `validateCanonicalData.js` |
+
+**Total: 606 tests across 6 suites + 13 runtime schemas**
+
+**Status: ENFORCED in CI** — GitHub Actions runs all tests on push/PR to main. Pre-commit hooks (lint-staged) run related tests on staged files.
 
 ---
 
@@ -151,11 +184,12 @@
 | Tests pass | GitHub Actions CI (`.github/workflows/ci.yml`) | **ENFORCED** |
 | ESLint (react-app preset) | Runs during `npm run build` via react-scripts | **ENFORCED** (errors fail build) |
 | Build completes | Vercel deployment fails if build fails | **ENFORCED** |
-| Pre-commit hooks | None configured | **NOT ENFORCED** |
+| Pre-commit hooks (lint-staged) | Runs ESLint + related tests on staged files | **ENFORCED** |
+| Runtime schema validation | 13 schemas checked in dev mode via `validateCanonicalData.js` | **ENFORCED** (dev only) |
+| Route integrity | 41 lazy-loaded imports tested in `routeExistence.test.js` | **ENFORCED** |
+| Component/context existence | 171 tests in `featureExistence.test.js` | **ENFORCED** |
 | TypeScript type checking | No TypeScript in project | **NOT APPLICABLE** |
-| Schema validation | Not part of build | **NOT ENFORCED** |
-| UI structure validation | No snapshot/structural tests | **NOT ENFORCED** |
-| Route integrity | Not tested | **NOT ENFORCED** |
+| UI layout structure | 10 tests verify SiteHeader/SiteNav/SiteFooter/ErrorBoundary/order | **ENFORCED** |
 
 ---
 
@@ -165,16 +199,11 @@
 
 | Gap | Risk | Priority |
 |---|---|---|
-| **No route existence tests** | A page import can break silently. Route can be deleted without detection. | HIGH |
-| **No UI/layout tests** | Header, nav, footer can be moved/removed. No detection. | HIGH |
-| **No data file shape validation** | Malformed JSON in any of 151 data files = runtime crash. No guard. | HIGH |
-| **No API handler tests** | Mentor, chat, v1 handler logic untested. Regressions invisible. | MEDIUM |
-| **No component existence tests** | Core components can be deleted during refactors. No detection. | MEDIUM |
-| **No pre-commit hooks** | Broken code reaches remote before CI catches it. | MEDIUM |
-| **No error boundaries** | One component crash takes down the whole app. | MEDIUM |
-| **No runtime schema validation** | Bad data passes silently through to rendering. | MEDIUM |
+| **UI layout tests are source-level only** | Layout tests verify App.js source text; they don't render the DOM. A CSS change that hides header would not be caught. | LOW |
+| **Error boundary is single-layer** | `ErrorBoundary` wraps all routes in App.js, but per-page boundaries would isolate failures better | LOW |
+| **Enrichment data files unvalidated** | 13 core schemas validated; ~138 remaining data files (enrichment, content, pantheons) have no runtime shape checks | MEDIUM |
 | **Paywall bypass is active** | `hasSubscription()`/`hasPurchase()` return `true` for everyone. | LOW (intentional, but must be restored) |
-| **No CSS isolation** | Global class names can collide across pages. | LOW |
+| **No CSS isolation** | Global class names can collide across pages. 3 pages extracted, rest in App.css. | LOW |
 | **No layout component** | Layout defined inline in App.js. No single authority. | LOW (structural debt) |
 
 ---
