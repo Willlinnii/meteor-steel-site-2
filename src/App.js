@@ -21,6 +21,7 @@ import LoginPage from './auth/LoginPage';
 import './App.css';
 import { apiFetch } from './lib/chatApi';
 import ChatPanel from './components/ChatPanel';
+import ErrorBoundary from './components/ErrorBoundary';
 import CircleNav from './components/CircleNav';
 import DevelopmentPanel from './components/DevelopmentPanel';
 import useWheelJourney from './hooks/useWheelJourney';
@@ -2276,6 +2277,7 @@ function AppContent() {
       <SiteNav />
       <CourseCompletionPopup />
       <MentorContractPopup />
+      <ErrorBoundary>
       <Routes>
         <Route path="/" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><DiscoverStarlightPage /></Suspense>} />
         <Route path="/home" element={<MeteorSteelHome />} />
@@ -2331,6 +2333,7 @@ function AppContent() {
         <Route path="/will-linn" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><WillLinnPage /></Suspense>} />
         <Route path="/dragon/*" element={<RequireAdmin><Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" />Loading Admin...</div>}><AdminPage /></Suspense></RequireAdmin>} />
       </Routes>
+      </ErrorBoundary>
       {!isAtlas && <SiteFooter />}
       {!isAtlas && <ChatPanel />}
     </div>

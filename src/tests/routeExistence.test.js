@@ -64,6 +64,13 @@ const cesiumHandler = {
 jest.mock('cesium', () => new Proxy({}, cesiumHandler));
 jest.mock('cesium/Build/Cesium/Widgets/widgets.css', () => ({}));
 
+// ChronosphaeraPage has deeply nested ternary chains that Babel's Flow parser
+// cannot handle in Jest. Mock it so VR page and other importers can resolve.
+jest.mock('../pages/Chronosphaera/ChronosphaeraPage', () => ({
+  __esModule: true,
+  default: () => null,
+}));
+
 // DodecahedronScene runs canvas.getContext('2d') at module scope; jsdom
 // returns null for getContext. Mock the scene module to avoid the error.
 jest.mock('../pages/Dodecahedron/DodecahedronScene', () => {
