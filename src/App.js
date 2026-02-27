@@ -41,6 +41,11 @@ import monomyth from './data/monomyth.json';
 import synthesis from './data/synthesis.json';
 import ArchetypesPanel from './components/ArchetypesPanel';
 
+// Dev-mode runtime validation of canonical data (no-op in production)
+if (process.env.NODE_ENV === 'development') {
+  require('./utils/validateCanonicalData');
+}
+
 // YBR header context — pages register their toggle/active state so the header can show the button
 const YBRHeaderContext = createContext({ active: false, toggle: null });
 export const useYBRHeader = () => useContext(YBRHeaderContext);
