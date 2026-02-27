@@ -3,12 +3,14 @@ import { useSearchParams } from 'react-router-dom';
 import { useProfile } from '../../profile/ProfileContext';
 import GuildForum from './GuildForum';
 import GuildDirectory from './GuildDirectory';
+import MenteeFeed from './MenteeFeed';
 import { usePageTracking } from '../../coursework/CourseworkContext';
 import './GuildPage.css';
 
 const TABS = [
   { id: 'directory', label: 'Directory' },
   { id: 'forum', label: 'Forum' },
+  { id: 'mentees', label: 'My Mentees', mentorOnly: true },
 ];
 
 export default function GuildPage() {
@@ -16,7 +18,9 @@ export default function GuildPage() {
   const { effectiveMentorStatus } = useProfile();
   const { track } = usePageTracking('guild');
   const tabParam = searchParams.get('tab');
-  const [activeTab, setActiveTab] = useState(TABS.find(t => t.id === tabParam)?.id || 'directory');
+  const isMentor = effectiveMentorStatus === 'active';
+  const visibleTabs = TABS.filter(t => !t.mentorOnly || isMentor);
+  const [activeTab, setActiveTab] = useState(visibleTabs.find(t => t.id === tabParam)?.id || 'directory');
 
   const handleTabChange = (tabId) => {
     setActiveTab(tabId);
@@ -24,14 +28,12 @@ export default function GuildPage() {
     track(`tab.${tabId}`);
   };
 
-  const isMentor = effectiveMentorStatus === 'active';
-
   return (
     <div className="guild-page">
       <h1 className="profile-section-title">The Guild</h1>
 
       <div className="guild-tabs">
-        {TABS.map(tab => (
+        {visibleTabs.map(tab => (
           <button
             key={tab.id}
             className={`guild-tab${activeTab === tab.id ? ' active' : ''}`}
@@ -55,6 +57,10 @@ export default function GuildPage() {
 
       {activeTab === 'directory' && (
         <GuildDirectory />
+      )}
+
+      {activeTab === 'mentees' && isMentor && (
+        <MenteeFeed />
       )}
     </div>
   );

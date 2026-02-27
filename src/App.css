@@ -246,6 +246,22 @@ body {
   background: rgba(196, 113, 58, 0.12);
 }
 
+.site-nav-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--accent-ember);
+  color: #fff;
+  font-size: 0.55rem;
+  font-weight: 700;
+  min-width: 16px;
+  height: 16px;
+  border-radius: 8px;
+  padding: 0 4px;
+  margin-left: 6px;
+  line-height: 1;
+}
+
 @media (max-width: 600px) {
   .site-nav {
     top: 36px;

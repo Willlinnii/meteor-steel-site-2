@@ -11,6 +11,7 @@ import { useWritings } from '../../writings/WritingsContext';
 import './OuroborosJourneyPage.css';
 import { apiFetch } from '../../lib/chatApi';
 import ShareCompletionModal from '../../components/fellowship/ShareCompletionModal';
+import StageMoments from '../../components/fellowship/StageMoments';
 
 const { challenges } = challengeData;
 
@@ -607,6 +608,8 @@ export default function OuroborosJourneyPage() {
                 {isMultiLevel && <span className="ouro-lvl">Lvl {cosmicLevel}/{def.levelsPerStop}</span>}
                 {isFusedJourney && <span className="ouro-lvl">{fusedPhase === 0 ? 'Monomyth' : 'Meteor Steel'}</span>}
               </div>
+
+              <StageMoments journeyId={journeyId} stageId={stop?.id} />
 
               {stopDone ? (
                 <div className="ouro-passed">

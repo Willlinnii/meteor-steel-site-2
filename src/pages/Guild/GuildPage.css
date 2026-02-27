@@ -422,6 +422,14 @@
 }
 .guild-load-more:hover { border-color: var(--accent-steel); }
 
+/* Mentee Feed */
+.guild-mentee-feed {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 8px;
+}
+
 /* ========================= */
 /* Guild Directory           */
 /* ========================= */

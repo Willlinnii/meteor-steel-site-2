@@ -1,10 +1,13 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { Link } from 'react-router-dom';
 import { collection, addDoc, deleteDoc, doc, onSnapshot, orderBy, query, where, serverTimestamp, updateDoc, arrayUnion, arrayRemove, limit } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { db, storage } from '../../auth/firebase';
 import { useAuth } from '../../auth/AuthContext';
 import { useScope } from '../../contexts/ScopeContext';
+import { useFriendRequests } from '../../contexts/FriendRequestsContext';
 import FeedPost from '../../components/feed/FeedPost';
+import { getSeasonalPrompt } from '../../utils/seasonalPrompts';
 import './FeedPage.css';
 
 const MAX_IMAGES = 4;
@@ -24,9 +27,11 @@ function isValidUrl(str) {
 export default function FeedPage() {
   const { user } = useAuth();
   const { activeScope, allScopes } = useScope();
+  const { friends } = useFriendRequests();
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [feedMode, setFeedMode] = useState('personal');
+  const [seasonalDismissed, setSeasonalDismissed] = useState(false);
 
   // Composer state
   const [text, setText] = useState('');
@@ -55,6 +60,42 @@ export default function FeedPage() {
       q = query(colRef, where('createdBy', '==', user.uid), orderBy('createdAt', 'desc'), limit(50));
     } else if (feedMode === 'group' && activeScope) {
       q = query(colRef, where('scopeId', '==', activeScope.id), orderBy('createdAt', 'desc'), limit(50));
+    } else if (feedMode === 'friends') {
+      const friendUids = friends.map(f => f.uid).filter(Boolean);
+      if (friendUids.length === 0) {
+        setPosts([]);
+        setLoading(false);
+        return;
+      }
+      // Firestore `in` supports up to 30 values; chunk + merge if needed
+      const chunks = [];
+      for (let i = 0; i < friendUids.length; i += 30) {
+        chunks.push(friendUids.slice(i, i + 30));
+      }
+      setLoading(true);
+      const unsubs = [];
+      const chunkResults = new Array(chunks.length).fill(null).map(() => []);
+      const mergeAndSet = () => {
+        const all = chunkResults.flat();
+        all.sort((a, b) => {
+          const ta = a.createdAt?.toMillis?.() || (a.createdAt?.seconds ? a.createdAt.seconds * 1000 : 0);
+          const tb = b.createdAt?.toMillis?.() || (b.createdAt?.seconds ? b.createdAt.seconds * 1000 : 0);
+          return tb - ta;
+        });
+        setPosts(all);
+        setLoading(false);
+      };
+      chunks.forEach((chunk, idx) => {
+        const cq = query(colRef, where('createdBy', 'in', chunk), orderBy('createdAt', 'desc'), limit(50));
+        const u = onSnapshot(cq, (snap) => {
+          const items = [];
+          snap.forEach(d => items.push({ id: d.id, ...d.data() }));
+          chunkResults[idx] = items;
+          mergeAndSet();
+        }, () => { chunkResults[idx] = []; mergeAndSet(); });
+        unsubs.push(u);
+      });
+      return () => unsubs.forEach(u => u());
     } else {
       // community mode (or group with no activeScope — fallback to community)
       q = query(colRef, orderBy('createdAt', 'desc'), limit(50));
@@ -72,7 +113,7 @@ export default function FeedPage() {
     });
 
     return unsub;
-  }, [feedMode, user, activeScope]);
+  }, [feedMode, user, activeScope, friends]);
 
   // Handle image selection
   const handleImageSelect = useCallback((e) => {
@@ -190,15 +231,12 @@ export default function FeedPage() {
 
   const hasContent = text.trim() || imageFiles.length > 0 || link.trim();
 
-  const emptyMessages = {
-    personal: "You haven't posted anything yet.",
-    group: 'No posts in this group yet.',
-    community: 'No posts yet. Be the first to share something!',
-  };
+  const seasonalPrompt = feedMode === 'community' && !seasonalDismissed ? getSeasonalPrompt(new Date()) : null;
 
   const titleLabels = {
     personal: 'My Posts',
     group: activeScope?.name ? `${activeScope.name} Feed` : 'Group Feed',
+    friends: 'Friends Feed',
     community: 'Community Feed',
   };
 
@@ -220,6 +258,14 @@ export default function FeedPage() {
             onClick={() => setFeedMode('group')}
           >
             {activeScope?.name || 'Group'}
+          </button>
+        )}
+        {friends.length > 0 && (
+          <button
+            className={`feed-mode-btn${feedMode === 'friends' ? ' active' : ''}`}
+            onClick={() => setFeedMode('friends')}
+          >
+            Friends
           </button>
         )}
         <button
@@ -305,6 +351,15 @@ export default function FeedPage() {
         </div>
       </div>
 
+      {/* Seasonal Prompt */}
+      {seasonalPrompt && (
+        <div className="feed-seasonal-prompt">
+          <button className="feed-seasonal-dismiss" onClick={() => setSeasonalDismissed(true)}>&times;</button>
+          <div className="feed-seasonal-title">{seasonalPrompt.title}</div>
+          <div className="feed-seasonal-desc">{seasonalPrompt.description}</div>
+        </div>
+      )}
+
       {/* Feed */}
       {loading ? (
         <div className="feed-loading">
@@ -312,7 +367,20 @@ export default function FeedPage() {
         </div>
       ) : posts.length === 0 ? (
         <div className="feed-empty">
-          {emptyMessages[feedMode]}
+          {feedMode === 'personal' && (
+            <>
+              <p>You haven't posted anything yet.</p>
+              <p><Link to="/profile" className="fellowship-link">Find friends</Link> to share your journey.</p>
+            </>
+          )}
+          {feedMode === 'group' && <p>No posts in this group yet.</p>}
+          {feedMode === 'friends' && <p>Your friends haven't posted yet.</p>}
+          {feedMode === 'community' && (
+            <>
+              <p>No posts yet. Be the first to share something!</p>
+              <p><Link to="/profile" className="fellowship-link">Find friends</Link> to grow your community.</p>
+            </>
+          )}
         </div>
       ) : (
         <div className="feed-list">

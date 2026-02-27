@@ -677,6 +677,21 @@
   color: var(--text-secondary);
 }
 
+/* Community toggle */
+.fellowship-modal-community-toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  cursor: pointer;
+  margin-top: 12px;
+}
+
+.fellowship-modal-community-toggle input {
+  accent-color: var(--accent-gold);
+}
+
 /* Done */
 .fellowship-modal-done {
   text-align: center;
@@ -706,6 +721,67 @@
 
 .fellowship-share-btn:hover {
   background: rgba(200, 170, 110, 0.22);
+}
+
+/* ===== STAGE MOMENTS ===== */
+.stage-moments {
+  margin: 16px 0;
+}
+
+.stage-moments-toggle {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 0.82rem;
+  font-style: italic;
+  cursor: pointer;
+  padding: 0;
+}
+
+.stage-moments-toggle:hover {
+  color: var(--accent-gold);
+}
+
+.stage-moments-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.stage-moment-card {
+  background: rgba(26, 26, 36, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  border-radius: 8px;
+  padding: 10px 12px;
+}
+
+.stage-moment-author {
+  font-size: 0.8rem;
+  color: var(--text-primary);
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.stage-moment-time {
+  color: var(--text-secondary);
+  font-weight: 400;
+  margin-left: 8px;
+  font-size: 0.7rem;
+}
+
+.stage-moment-summary {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+.stage-moments-more {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  font-style: italic;
+  text-align: center;
+  padding: 4px 0;
 }
 
 /* ===== RESPONSIVE ===== */

@@ -7,8 +7,8 @@ import { ProfileProvider, useProfile } from './profile/ProfileContext';
 import { MultiplayerProvider } from './multiplayer/MultiplayerContext';
 import { FamilyProvider } from './contexts/FamilyContext';
 import { FriendsProvider } from './contexts/FriendsContext';
-import { FriendRequestsProvider } from './contexts/FriendRequestsContext';
-import { MatchRequestsProvider } from './contexts/MatchRequestsContext';
+import { FriendRequestsProvider, useFriendRequests } from './contexts/FriendRequestsContext';
+import { MatchRequestsProvider, useMatchRequests } from './contexts/MatchRequestsContext';
 import { FellowshipProvider } from './contexts/FellowshipContext';
 import { AtlasContextProvider, useAtlasContext } from './contexts/AtlasContext';
 import ShareCompletionModal from './components/fellowship/ShareCompletionModal';
@@ -25,6 +25,7 @@ import ChatPanel from './components/ChatPanel';
 import ErrorBoundary from './components/ErrorBoundary';
 import CircleNav from './components/CircleNav';
 import DevelopmentPanel from './components/DevelopmentPanel';
+import { useMatchConversations } from './storyMatching/useMatchConversations';
 import useWheelJourney from './hooks/useWheelJourney';
 import WheelJourneyPanel from './components/WheelJourneyPanel';
 import ChronosphaeraPage from './pages/Chronosphaera/ChronosphaeraPage';
@@ -1738,6 +1739,12 @@ function SiteNav() {
   const location = useLocation();
   const [open, setOpen] = useState(false);
 
+  // Notification badge for Fellowship
+  const { incomingRequests: friendIncoming } = useFriendRequests();
+  const { incomingRequests: matchIncoming } = useMatchRequests();
+  const { unreadCount: matchUnread } = useMatchConversations();
+  const notifTotal = (friendIncoming?.length || 0) + (matchIncoming?.length || 0) + (matchUnread || 0);
+
   // Include hidden nav items only when we're currently on that page
   const visibleItems = [
     ...NAV_ITEMS,
@@ -1780,6 +1787,9 @@ function SiteNav() {
               onClick={() => { setOpen(false); window.scrollTo(0, 0); }}
             >
               {item.label}
+              {item.path === '/fellowship' && notifTotal > 0 && (
+                <span className="site-nav-badge">{notifTotal}</span>
+              )}
             </Link>
           ))}
         </div>

@@ -13,6 +13,7 @@ import { checkAvailability, registerHandle } from '../../multiplayer/handleServi
 import { apiFetch } from '../../lib/chatApi';
 import { computeNumerology, NUMBER_MEANINGS, NUMBER_TYPES } from '../../profile/numerologyEngine';
 import FriendsSection from './FriendsSection';
+import MyStoryArc from './MyStoryArc';
 import StoryCardDeck from './StoryCardDeck';
 import { useStoryCardSync } from '../../storyCards/useStoryCardSync';
 import chronosphaeraZodiac from '../../data/chronosphaeraZodiac.json';
@@ -1339,6 +1340,9 @@ All responses return { data, meta } JSON. GET /v1/ for full discovery.`}</pre>
 
       {/* Friends Section */}
       <FriendsSection />
+
+      {/* My Story Arc */}
+      <MyStoryArc />
 
       {/* My Sacred Sites (Pilgrimages) */}
       <h2 className="profile-section-title">My Sacred Sites</h2>

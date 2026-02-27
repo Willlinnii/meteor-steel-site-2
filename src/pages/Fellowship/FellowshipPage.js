@@ -68,7 +68,9 @@ export default function FellowshipPage() {
                   <Link to="/profile" className="fellowship-link">Connect with friends</Link> to see their achievements here.
                 </p>
               ) : (
-                <p>Complete a journey, reading, or game and share it with your fellows!</p>
+                <p>
+                  <Link to="/yellow-brick-road" className="fellowship-link">Explore journeys</Link> to earn achievements and share with your fellows!
+                </p>
               )}
             </div>
           )}

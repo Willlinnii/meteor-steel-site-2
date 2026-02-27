@@ -1,4 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { db } from '../../auth/firebase';
+import { useAuth } from '../../auth/AuthContext';
 import { apiFetch } from '../../lib/chatApi';
 import { useFellowship } from '../../contexts/FellowshipContext';
 import FELLOWSHIP_TYPES from '../../data/fellowshipTypes';
@@ -20,11 +23,13 @@ export default function ShareCompletionModal({
   onClose,
   onPosted,
 }) {
+  const { user } = useAuth();
   const { postCompletionShare, uploadImages } = useFellowship();
   const [phase, setPhase] = useState('generating'); // generating | preview | editing | media | posting | done
   const [summary, setSummary] = useState('');
   const [fullStory, setFullStory] = useState('');
   const [error, setError] = useState(null);
+  const [shareToCommunity, setShareToCommunity] = useState(false);
 
   // Editing state
   const [editMessages, setEditMessages] = useState([]);
@@ -135,7 +140,7 @@ export default function ShareCompletionModal({
     setImagePreviews(prev => prev.filter((_, i) => i !== idx));
   }, []);
 
-  // Post to Fellowship
+  // Post to Fellowship (and optionally to Community)
   const handlePost = useCallback(async () => {
     setPhase('posting');
     setError(null);
@@ -144,7 +149,7 @@ export default function ShareCompletionModal({
       if (imageFiles.length > 0) {
         uploadedImages = await uploadImages(imageFiles);
       }
-      await postCompletionShare({
+      const fellowshipPostId = await postCompletionShare({
         summary,
         fullStory,
         completionType,
@@ -153,6 +158,25 @@ export default function ShareCompletionModal({
         images: uploadedImages,
         videoURL: videoURL || null,
       });
+
+      // Also share to community feed if opted in
+      if (shareToCommunity && db && user) {
+        await addDoc(collection(db, 'community-posts'), {
+          text: summary,
+          images: uploadedImages,
+          link: null,
+          createdBy: user.uid,
+          createdByName: user.displayName || user.email?.split('@')[0] || 'Anonymous',
+          createdByPhoto: user.photoURL || null,
+          createdAt: serverTimestamp(),
+          scopeId: null,
+          scopeType: null,
+          completionType: completionType || null,
+          completionLabel: completionLabel || typeDef.label || completionType,
+          fellowshipPostId: fellowshipPostId || null,
+        });
+      }
+
       setPhase('done');
       setTimeout(() => {
         onPosted?.();
@@ -162,7 +186,7 @@ export default function ShareCompletionModal({
       setError('Failed to post. Please try again.');
       setPhase('preview');
     }
-  }, [summary, fullStory, completionType, completionId, completionLabel, typeDef, imageFiles, videoURL, uploadImages, postCompletionShare, onPosted, onClose]);
+  }, [summary, fullStory, completionType, completionId, completionLabel, typeDef, imageFiles, videoURL, uploadImages, postCompletionShare, onPosted, onClose, shareToCommunity, user]);
 
   // Lock scroll while modal is open
   useEffect(() => {
@@ -220,6 +244,15 @@ export default function ShareCompletionModal({
                 ))}
               </div>
             )}
+
+            <label className="fellowship-modal-community-toggle">
+              <input
+                type="checkbox"
+                checked={shareToCommunity}
+                onChange={e => setShareToCommunity(e.target.checked)}
+              />
+              <span>Also share to Community feed</span>
+            </label>
 
             <div className="fellowship-modal-actions">
               <button className="fellowship-modal-btn fellowship-modal-btn-primary" onClick={handlePost}>

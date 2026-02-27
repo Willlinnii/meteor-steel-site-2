@@ -1,0 +1,191 @@
+/* ===== MY STORY ARC ===== */
+.story-arc-section {
+  margin: 20px 0;
+  border: 1px solid var(--border-subtle);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.story-arc-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  background: rgba(26, 26, 36, 0.5);
+  border: none;
+  padding: 14px 16px;
+  cursor: pointer;
+  color: var(--text-primary);
+}
+
+.story-arc-header:hover {
+  background: rgba(26, 26, 36, 0.7);
+}
+
+.story-arc-title {
+  font-family: 'Cinzel', serif;
+  font-size: 1rem;
+  color: var(--accent-gold);
+}
+
+.story-arc-arrow {
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+}
+
+.story-arc-content {
+  padding: 16px;
+  background: rgba(26, 26, 36, 0.3);
+}
+
+.story-arc-empty {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  text-align: center;
+  font-style: italic;
+  margin: 0 0 12px;
+}
+
+/* Arc track — horizontal on desktop, vertical on mobile */
+.story-arc-track {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  position: relative;
+  padding: 20px 0 8px;
+}
+
+.story-arc-line {
+  position: absolute;
+  top: 30px;
+  left: 20px;
+  right: 20px;
+  height: 2px;
+  background: var(--border-subtle);
+  z-index: 0;
+}
+
+.story-arc-node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  cursor: default;
+  position: relative;
+  z-index: 1;
+  padding: 0;
+  min-width: 0;
+  flex: 1;
+}
+
+.story-arc-node.completed {
+  cursor: pointer;
+}
+
+.story-arc-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid var(--border-subtle);
+  background: var(--bg-dark, #12121a);
+  transition: all 0.3s;
+}
+
+.story-arc-node.visited .story-arc-dot {
+  border-color: rgba(200, 170, 110, 0.5);
+  background: rgba(200, 170, 110, 0.2);
+}
+
+.story-arc-node.completed .story-arc-dot {
+  border-color: var(--accent-gold);
+  background: var(--accent-gold);
+  box-shadow: 0 0 6px rgba(200, 170, 110, 0.4);
+}
+
+.story-arc-node.selected .story-arc-dot {
+  box-shadow: 0 0 10px rgba(200, 170, 110, 0.6);
+  transform: scale(1.2);
+}
+
+.story-arc-label {
+  font-size: 0.65rem;
+  color: var(--text-secondary);
+  text-align: center;
+  white-space: nowrap;
+}
+
+.story-arc-node.visited .story-arc-label {
+  color: rgba(200, 170, 110, 0.7);
+}
+
+.story-arc-node.completed .story-arc-label {
+  color: var(--accent-gold);
+  font-weight: 500;
+}
+
+/* Detail panel */
+.story-arc-detail {
+  margin-top: 16px;
+  padding: 14px;
+  background: rgba(26, 26, 36, 0.6);
+  border: 1px solid rgba(200, 170, 110, 0.2);
+  border-radius: 8px;
+}
+
+.story-arc-detail-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.9rem;
+  color: var(--accent-gold);
+  margin-bottom: 8px;
+}
+
+.story-arc-detail-summary {
+  font-size: 0.88rem;
+  color: var(--text-primary);
+  line-height: 1.6;
+  margin-bottom: 8px;
+}
+
+.story-arc-detail-close {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  cursor: pointer;
+  padding: 0;
+}
+
+.story-arc-detail-close:hover {
+  color: var(--accent-gold);
+}
+
+/* Responsive — vertical on mobile */
+@media (max-width: 600px) {
+  .story-arc-track {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    padding: 8px 0;
+  }
+
+  .story-arc-line {
+    top: 0;
+    bottom: 0;
+    left: 6px;
+    right: auto;
+    width: 2px;
+    height: auto;
+  }
+
+  .story-arc-node {
+    flex-direction: row;
+    gap: 10px;
+    padding: 4px 0;
+  }
+
+  .story-arc-label {
+    font-size: 0.75rem;
+  }
+}

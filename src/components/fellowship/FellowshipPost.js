@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import FELLOWSHIP_TYPES from '../../data/fellowshipTypes';
+import UserProfileCard from '../shared/UserProfileCard';
+import { getWatermark } from '../../utils/cosmologicalWatermark';
 
 function timeAgo(timestamp) {
   if (!timestamp) return '';
@@ -23,12 +25,17 @@ function timeAgo(timestamp) {
 export default function FellowshipPost({ post, currentUid, onDelete, onCircle }) {
   const [expanded, setExpanded] = useState(false);
   const [confirming, setConfirming] = useState(false);
+  const [showProfile, setShowProfile] = useState(false);
 
   const isAuthor = post.authorUid === currentUid;
   const typeDef = FELLOWSHIP_TYPES[post.completionType] || null;
   const circledBy = post.circledBy || [];
   const isCircled = currentUid && circledBy.includes(currentUid);
   const circleCount = circledBy.length;
+
+  // Watermark
+  const postMs = post.createdAt?.toMillis?.() || (post.createdAt?.seconds ? post.createdAt.seconds * 1000 : 0);
+  const watermark = postMs ? getWatermark(new Date(postMs)) : null;
 
   return (
     <div className={`fellowship-post${isCircled ? ' circled' : ''}`}>
@@ -43,7 +50,12 @@ export default function FellowshipPost({ post, currentUid, onDelete, onCircle })
           )}
         </div>
         <div className="fellowship-post-meta">
-          <span className="fellowship-post-author">{post.authorHandle || post.authorName || 'Anonymous'}</span>
+          <button
+            className="fellowship-post-author fellowship-post-author-clickable"
+            onClick={() => setShowProfile(true)}
+          >
+            {post.authorHandle || post.authorName || 'Anonymous'}
+          </button>
           <span className="fellowship-post-time">{timeAgo(post.createdAt)}</span>
         </div>
         {isAuthor && (
@@ -65,6 +77,13 @@ export default function FellowshipPost({ post, currentUid, onDelete, onCircle })
           </div>
         )}
       </div>
+
+      {showProfile && (
+        <UserProfileCard
+          uid={post.authorUid}
+          onClose={() => setShowProfile(false)}
+        />
+      )}
 
       {typeDef && (
         <div className="fellowship-post-badge" style={{ color: typeDef.color, borderColor: typeDef.color }}>
@@ -106,6 +125,10 @@ export default function FellowshipPost({ post, currentUid, onDelete, onCircle })
             Watch video
           </a>
         </div>
+      )}
+
+      {watermark && (
+        <div className="feed-post-watermark">{watermark.dayLabel} · {watermark.monthLabel}</div>
       )}
 
       <div className="fellowship-post-footer">
