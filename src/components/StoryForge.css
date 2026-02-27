@@ -1,0 +1,799 @@
+/* StoryForge.css — extracted from App.css */
+
+/* ===== STORY FORGE ===== */
+
+.forge-template-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  max-width: 600px;
+  margin: 0 auto 40px;
+}
+
+.forge-template-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 24px 16px;
+  background: var(--bg-medium);
+  border: 1px solid var(--border-subtle);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.forge-template-btn:hover {
+  border-color: var(--accent-ember);
+  background: rgba(196, 113, 58, 0.08);
+}
+
+.forge-template-label {
+  font-family: 'Cinzel', serif;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent-ember);
+}
+
+.forge-template-desc {
+  font-family: 'Crimson Pro', serif;
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+}
+
+.forge-hub {
+  padding: 20px 0;
+}
+
+.forge-view-toggle {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+
+.forge-progress {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.forge-progress-title {
+  font-family: 'Cinzel', serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent-gold);
+  margin-bottom: 16px;
+}
+
+.forge-progress-stages {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+
+.forge-progress-dot {
+  font-family: 'Cinzel', serif;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  background: none;
+  border: 1px solid var(--border-subtle);
+  padding: 6px 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.forge-progress-dot:hover {
+  border-color: var(--accent-ember);
+  color: var(--accent-ember);
+}
+
+.forge-progress-dot.filled {
+  color: var(--accent-ember);
+  border-color: var(--accent-ember);
+  background: rgba(196, 113, 58, 0.12);
+  box-shadow: 0 0 8px rgba(196, 113, 58, 0.2);
+}
+
+.forge-progress-count {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+.forge-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+
+.forge-generate-btn,
+.forge-change-btn {
+  font-family: 'Cinzel', serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 12px 28px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: none;
+}
+
+.forge-generate-btn {
+  color: var(--accent-ember);
+  border: 1px solid var(--accent-ember);
+}
+
+.forge-generate-btn:hover:not(:disabled) {
+  background: rgba(196, 113, 58, 0.12);
+  box-shadow: 0 0 12px rgba(196, 113, 58, 0.3);
+}
+
+.forge-generate-btn:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.forge-change-btn {
+  color: var(--text-secondary);
+  border: 1px solid var(--border-subtle);
+}
+
+.forge-change-btn:hover {
+  color: var(--accent-steel);
+  border-color: var(--accent-steel);
+}
+
+.forge-prompt {
+  padding: 20px;
+  background: rgba(196, 113, 58, 0.06);
+  border-left: 3px solid var(--accent-ember);
+  margin-bottom: 20px;
+}
+
+.forge-prompt p {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: var(--accent-fire);
+  font-style: italic;
+}
+
+.forge-stage-nav {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 20px;
+  padding-bottom: 20px;
+}
+
+.forge-nav-btn {
+  font-family: 'Cinzel', serif;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--accent-steel);
+  background: none;
+  border: 1px solid var(--border-subtle);
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.forge-nav-btn:hover {
+  border-color: var(--accent-steel);
+  background: rgba(139, 157, 195, 0.08);
+}
+
+.forge-nav-overview {
+  color: var(--accent-gold);
+}
+
+.forge-nav-overview:hover {
+  border-color: var(--accent-gold);
+  background: rgba(201, 169, 97, 0.08);
+}
+
+.forge-story-overview {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.forge-chapter-preview {
+  padding: 16px;
+  background: var(--bg-medium);
+  border: 1px solid var(--border-subtle);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.forge-chapter-preview:hover {
+  border-color: var(--accent-ember);
+}
+
+.forge-chapter-preview h4 {
+  font-family: 'Cinzel', serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--accent-gold);
+  margin-bottom: 8px;
+}
+
+.forge-chapter-preview p {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+@media (max-width: 600px) {
+  .forge-template-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .forge-story-overview {
+    grid-template-columns: 1fr;
+  }
+
+  .forge-stage-nav {
+    flex-wrap: wrap;
+  }
+}
+
+/* ===== STORY FORGE LIBRARY ===== */
+
+.forge-library {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.forge-library-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  padding: 14px 18px;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.forge-library-card:hover {
+  border-color: var(--accent-gold);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.forge-library-card.expanded {
+  border-color: var(--accent-ember);
+}
+
+.forge-library-card-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.forge-library-source {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.forge-library-source.forge { background: rgba(196, 113, 58, 0.3); color: var(--accent-ember); }
+.forge-library-source.journey { background: rgba(168, 139, 90, 0.3); color: var(--accent-gold); }
+.forge-library-source.atlas { background: rgba(100, 140, 180, 0.3); color: #8ab4f8; }
+.forge-library-source.persona { background: rgba(130, 100, 170, 0.3); color: #b39ddb; }
+.forge-library-source.notes { background: rgba(100, 160, 100, 0.3); color: #a5d6a7; }
+
+.forge-library-card-title {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  margin: 0;
+  flex: 1;
+}
+
+.forge-library-date {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  flex-shrink: 0;
+}
+
+.forge-library-preview {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin: 8px 0 0;
+  line-height: 1.5;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.forge-library-card-body {
+  margin-top: 12px;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.forge-library-card-body p {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+
+.forge-library-msg {
+  font-size: 0.85rem;
+  line-height: 1.5;
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.forge-library-msg.user { color: var(--text-secondary); }
+.forge-library-msg.assistant { color: var(--text-primary); }
+
+/* ===== STORY INTERVIEW PANEL ===== */
+
+.story-interview-panel {
+  padding: 20px 0;
+}
+
+.story-interview-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.story-interview-header h3 {
+  font-family: 'Cinzel', serif;
+  font-size: 1rem;
+  color: var(--accent-gold);
+  margin: 0;
+}
+
+.story-interview-panel .chat-messages {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 12px;
+}
+
+.story-interview-panel .chat-input-area {
+  display: flex;
+  gap: 8px;
+  align-items: flex-end;
+}
+
+.story-interview-panel .chat-input {
+  flex: 1;
+}
+
+/* ===== CONVERSATIONAL FORGE DRAFT ===== */
+
+.forge-draft-overview {
+  text-align: center;
+  padding: 20px 0;
+}
+
+.forge-draft-chat {
+  max-height: 450px;
+  overflow-y: auto;
+  padding: 16px 0;
+  margin-bottom: 8px;
+}
+
+.forge-draft-chat .chat-msg {
+  margin-bottom: 14px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.forge-draft-chat .chat-msg.user {
+  background: rgba(196, 113, 58, 0.12);
+  margin-left: 32px;
+  border-bottom-right-radius: 2px;
+}
+
+.forge-draft-chat .chat-msg.assistant {
+  background: var(--bg-light);
+  margin-right: 32px;
+  border-bottom-left-radius: 2px;
+}
+
+.forge-draft-empty {
+  color: var(--text-secondary);
+  font-style: italic;
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.chat-input-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  padding: 8px 0;
+}
+
+.chat-input-row .chat-input {
+  flex: 1;
+  background: var(--bg-medium);
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  padding: 10px 14px;
+  color: var(--text-primary);
+  font-family: 'Crimson Pro', serif;
+  font-size: 0.95rem;
+  resize: none;
+  outline: none;
+  line-height: 1.4;
+}
+
+.chat-input-row .chat-input:focus {
+  border-color: var(--accent-ember);
+}
+
+.chat-input-row .chat-send {
+  background: none;
+  border: 1px solid var(--accent-ember);
+  color: var(--accent-ember);
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: 'Cinzel', serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.chat-input-row .chat-send:hover:not(:disabled) {
+  background: rgba(196, 113, 58, 0.15);
+}
+
+.chat-input-row .chat-send:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+/* Mythic resonance aside */
+.forge-mythic-aside {
+  margin-top: 10px;
+  padding: 10px 14px;
+  border-left: 3px solid var(--accent-gold);
+  background: rgba(201, 169, 97, 0.06);
+  border-radius: 0 6px 6px 0;
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+}
+
+.forge-mythic-aside strong {
+  color: var(--accent-gold);
+  font-family: 'Cinzel', serif;
+  font-size: 0.8rem;
+  letter-spacing: 0.03em;
+}
+
+.forge-mythic-suggestion {
+  margin-top: 4px;
+  font-style: italic;
+  color: var(--text-secondary);
+  opacity: 0.85;
+}
+
+/* Collapsible raw material */
+.forge-raw-material {
+  margin-bottom: 16px;
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.forge-raw-material summary {
+  cursor: pointer;
+  padding: 10px 14px;
+  font-family: 'Cinzel', serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: var(--text-secondary);
+  background: rgba(139, 157, 195, 0.05);
+}
+
+.forge-raw-material summary:hover {
+  color: var(--text-primary);
+}
+
+.forge-raw-group {
+  padding: 8px 14px;
+}
+
+.forge-raw-mode {
+  font-family: 'Cinzel', serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--accent-steel);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.forge-raw-group p {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  margin: 4px 0;
+}
+
+/* Current draft display card */
+.forge-current-draft {
+  margin-top: 20px;
+  padding: 20px;
+  background: rgba(201, 169, 97, 0.04);
+  border: 1px solid rgba(201, 169, 97, 0.15);
+  border-radius: 10px;
+}
+
+.forge-current-draft h4 {
+  font-family: 'Cinzel', serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--accent-gold);
+  letter-spacing: 0.06em;
+  margin-bottom: 12px;
+}
+
+.forge-current-draft p {
+  font-size: 0.95rem;
+  line-height: 1.7;
+  margin-bottom: 8px;
+}
+
+.forge-draft-timestamp {
+  display: block;
+  margin-top: 8px;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  opacity: 0.6;
+}
+
+/* Partial progress dot (has conversation but no draft) */
+.forge-progress-dot.partial {
+  border-color: var(--accent-gold);
+  color: var(--accent-gold);
+  opacity: 0.6;
+  background: rgba(201, 169, 97, 0.08);
+}
+
+/* ===== FORGE CONTROLS ROW ===== */
+
+.forge-controls {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin: -10px auto 20px;
+}
+
+.forge-ctrl-btn {
+  background: none;
+  border: 1px solid var(--accent-ember);
+  color: var(--accent-ember);
+  font-size: 1.3rem;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  opacity: 0.6;
+}
+
+.forge-ctrl-btn:hover {
+  opacity: 1;
+  box-shadow: 0 0 10px rgba(196, 113, 58, 0.4);
+}
+
+.forge-ctrl-btn.active.protag {
+  opacity: 1;
+  border-color: var(--accent-gold);
+  color: var(--accent-gold);
+}
+
+.forge-ctrl-btn.active.antag {
+  opacity: 1;
+  border-color: var(--accent-ember);
+  color: var(--accent-ember);
+  box-shadow: 0 0 10px rgba(196, 113, 58, 0.4);
+}
+
+/* ===== PROTAGONISM GENERATOR ===== */
+
+.protagonism-panel {
+  max-width: 700px;
+  margin: 0 auto 30px;
+  background: rgba(20, 20, 30, 0.85);
+  border: 1px solid rgba(196, 113, 58, 0.3);
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.protagonism-panel.antagonism {
+  border-color: rgba(196, 113, 58, 0.5);
+}
+
+.protagonism-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.protagonism-header h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  color: var(--accent-gold);
+  letter-spacing: 0.05em;
+}
+
+.protagonism-panel.antagonism .protagonism-header h3 {
+  color: var(--accent-ember);
+}
+
+.protagonism-header button {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 1.2rem;
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity 0.2s;
+}
+
+.protagonism-header button:hover {
+  opacity: 1;
+}
+
+.protagonism-intro {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin: 0 0 16px;
+  opacity: 0.8;
+}
+
+.protagonism-messages {
+  max-height: 400px;
+  overflow-y: auto;
+  margin-bottom: 16px;
+}
+
+.protagonism-msg {
+  margin-bottom: 16px;
+  padding: 12px 14px;
+  border-radius: 8px;
+}
+
+.protagonism-msg.user {
+  background: rgba(100, 100, 120, 0.2);
+  border-left: 3px solid var(--text-secondary);
+}
+
+.protagonism-msg.assistant {
+  background: rgba(201, 169, 97, 0.08);
+  border-left: 3px solid var(--accent-gold);
+}
+
+.protagonism-panel.antagonism .protagonism-msg.assistant {
+  background: rgba(196, 113, 58, 0.08);
+  border-left-color: var(--accent-ember);
+}
+
+.protagonism-panel.antagonism .protagonism-msg.assistant .protagonism-label {
+  color: var(--accent-ember);
+}
+
+.protagonism-label {
+  display: block;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 6px;
+  opacity: 0.6;
+}
+
+.protagonism-msg.user .protagonism-label { color: var(--text-secondary); }
+.protagonism-msg.assistant .protagonism-label { color: var(--accent-gold); }
+
+.protagonism-msg p {
+  margin: 0 0 8px;
+  font-size: 0.92rem;
+  line-height: 1.7;
+}
+
+.protagonism-msg p:last-child { margin-bottom: 0; }
+
+.protagonism-loading {
+  text-align: center;
+  color: var(--accent-gold);
+  font-size: 0.85rem;
+  opacity: 0.7;
+  padding: 12px;
+  font-style: italic;
+}
+
+.protagonism-input-row {
+  display: flex;
+  gap: 10px;
+  align-items: flex-end;
+}
+
+.protagonism-input-row textarea {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(196, 113, 58, 0.3);
+  border-radius: 8px;
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 0.9rem;
+  padding: 10px 12px;
+  resize: vertical;
+  min-height: 60px;
+  max-height: 150px;
+}
+
+.protagonism-input-row textarea::placeholder {
+  color: var(--text-secondary);
+  opacity: 0.5;
+}
+
+.protagonism-input-row textarea:focus {
+  outline: none;
+  border-color: var(--accent-ember);
+}
+
+.protagonism-input-row button {
+  background: none;
+  border: 1px solid var(--accent-ember);
+  color: var(--accent-ember);
+  font-size: 1.2rem;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.protagonism-input-row button:hover:not(:disabled) {
+  background: rgba(196, 113, 58, 0.15);
+}
+
+.protagonism-input-row button:disabled {
+  opacity: 0.3;
+  cursor: default;
+}

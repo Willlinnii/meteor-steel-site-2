@@ -19,6 +19,7 @@ import { StoryBookProvider } from './contexts/StoryBookContext';
 import { GenealogyProvider } from './contexts/GenealogyContext';
 import LoginPage from './auth/LoginPage';
 import './App.css';
+import './components/StoryForge.css';
 import { apiFetch } from './lib/chatApi';
 import ChatPanel from './components/ChatPanel';
 import ErrorBoundary from './components/ErrorBoundary';

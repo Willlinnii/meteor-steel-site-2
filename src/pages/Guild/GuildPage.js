@@ -4,6 +4,7 @@ import { useProfile } from '../../profile/ProfileContext';
 import GuildForum from './GuildForum';
 import GuildDirectory from './GuildDirectory';
 import { usePageTracking } from '../../coursework/CourseworkContext';
+import './GuildPage.css';
 
 const TABS = [
   { id: 'directory', label: 'Directory' },
