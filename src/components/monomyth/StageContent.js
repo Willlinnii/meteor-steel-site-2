@@ -21,9 +21,9 @@ const TABS = [
   { id: 'overview', label: 'Overview' },
   { id: 'cycles', label: 'Cycles' },
   { id: 'theorists', label: 'Theorists' },
-  { id: 'history', label: 'History' },
   { id: 'myths', label: 'Myths' },
   { id: 'films', label: 'Films' },
+  { id: 'history', label: 'History' },
 ];
 
 const THEORIST_GROUPS = [
