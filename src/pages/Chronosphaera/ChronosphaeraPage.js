@@ -612,6 +612,10 @@ export default function ChronosphaeraPage() {
   const [dodecMode, setDodecMode] = useState('stars');
   const showArtBook = mode === 'artbook';
   const [artBookMode, setArtBookMode] = useState('mountain');
+  const artBookContentRef = useRef(null);
+  const [artBookPanelCollapsed, setArtBookPanelCollapsed] = useState(false);
+  const [artBookStarlightStage, setArtBookStarlightStage] = useState(null);
+  const [artBookMonomythTab, setArtBookMonomythTab] = useState('overview');
 
   const ybr = useYellowBrickRoad();
   const { forgeMode } = useStoryForge();
@@ -1346,6 +1350,40 @@ export default function ChronosphaeraPage() {
     setPersonaChatHistory(prev => ({ ...prev, [personaChatOpen]: msgs }));
   }
 
+  // ── Art Book mountain → Chronosphaera content handlers ──────────────
+  const handleArtBookPlanetSelect = useCallback((planet) => {
+    trackElement(`chronosphaera.planet.${planet}`);
+    setSelectedPlanet(prev => prev === planet ? null : planet);
+    setSelectedSign(null); setSelectedCardinal(null); setSelectedEarth(null);
+    setSelectedMonth(null); setVideoUrl(null); setPersonaChatOpen(null);
+    setActiveTab('overview');
+    setArtBookMonomythTab('overview');
+    setArtBookPanelCollapsed(false);
+    setTimeout(() => artBookContentRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
+  }, [trackElement]);
+
+  const handleArtBookSignSelect = useCallback((sign) => {
+    if (sign) trackElement(`chronosphaera.zodiac.${sign}`);
+    setSelectedSign(prev => prev === sign ? null : sign);
+    setSelectedPlanet(null); setSelectedCardinal(null); setSelectedEarth(null);
+    setSelectedMonth(null); setVideoUrl(null); setPersonaChatOpen(null);
+    setArtBookMonomythTab('overview');
+    setArtBookPanelCollapsed(false);
+    setTimeout(() => artBookContentRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
+  }, [trackElement]);
+
+  const handleArtBookGemSelect = useCallback((sel) => {
+    trackElement(`chronosphaera.planet.${sel.planet}`);
+    setSelectedPlanet(sel.planet);
+    setSelectedSign(null); setSelectedCardinal(null); setSelectedEarth(null);
+    setSelectedMonth(null); setVideoUrl(null); setPersonaChatOpen(null);
+    setActiveTab('metal');
+    setActiveCulture('Vedic');
+    setArtBookMonomythTab('overview');
+    setArtBookPanelCollapsed(false);
+    setTimeout(() => artBookContentRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
+  }, [trackElement]);
+
   let wheelAlignmentData = null;
   if (selectedWheelItem?.startsWith('num:') || selectedWheelItem?.startsWith('dir:')) {
     const isNum = selectedWheelItem.startsWith('num:');
@@ -1369,8 +1407,181 @@ export default function ChronosphaeraPage() {
       {showArtBook && (
         <div className="chrono-artbook-layer">
           <Suspense fallback={<div className="chrono-empty">Loading Art Book...</div>}>
-            <ArtBookViewer embedded externalMode={artBookMode} />
+            <ArtBookViewer
+              embedded
+              externalMode={artBookMode}
+              onSelectPlanet={handleArtBookPlanetSelect}
+              onSelectSign={handleArtBookSignSelect}
+              onSelectGem={handleArtBookGemSelect}
+              onSelectStarlightStage={setArtBookStarlightStage}
+              externalSelectedPlanet={selectedPlanet}
+              externalSelectedSign={selectedSign}
+            />
           </Suspense>
+
+          {/* Planet content below mountain */}
+          {selectedPlanet && currentData && (
+            <div ref={artBookContentRef} className="chrono-artbook-content-below">
+              <div className="artbook-section-bar" onClick={() => setArtBookPanelCollapsed(c => !c)}>
+                <span className={`artbook-section-chevron${artBookPanelCollapsed ? '' : ' open'}`}>{'\u25B6'}</span>
+                <span className="artbook-section-title">Atlas</span>
+                <span className="artbook-section-sub">Chronosphaera</span>
+              </div>
+              {!artBookPanelCollapsed && (
+                <>
+                  {renderPlanetWeekdayNav()}
+                  <div className="container">
+                    <div id="content-container">
+                      <MetalDetailPanel
+                        data={currentData}
+                        activeTab={activeTab}
+                        onSelectTab={(tab) => { trackElement(`chronosphaera.tab.${tab}.${selectedPlanet}`); setActiveTab(tab); }}
+                        activeCulture={activeCulture}
+                        onSelectCulture={(c) => { trackElement(`chronosphaera.culture.${c}`); setActiveCulture(c); }}
+                        devEntries={devEntries}
+                        setDevEntries={setDevEntries}
+                        playlistUrl={PLANET_PLAYLISTS[selectedPlanet]}
+                        videoActive={!!videoUrl}
+                        onToggleVideo={() => {
+                          if (videoUrl) { setVideoUrl(null); }
+                          else { setVideoUrl(PLANET_PLAYLISTS[selectedPlanet]); }
+                        }}
+                        onTogglePersonaChat={() => togglePersonaChat('planet', selectedPlanet)}
+                        personaChatActive={personaChatOpen === `planet:${selectedPlanet}`}
+                        personaChatMessages={personaChatHistory[`planet:${selectedPlanet}`] || []}
+                        setPersonaChatMessages={setCurrentPersonaMessages}
+                        onClosePersonaChat={() => setPersonaChatOpen(null)}
+                        getTabClass={courseworkMode ? (tab) => isElementCompleted(`chronosphaera.tab.${tab}.${selectedPlanet}`) ? 'cw-completed' : 'cw-incomplete' : undefined}
+                        onToggleYBR={handleYBRToggle}
+                        ybrActive={ybr.active}
+                        chakraViewMode={null}
+                        activePerspective={perspective.activePerspective}
+                        perspectiveData={perspective.perspectiveData}
+                        perspectiveTabs={perspective.perspectiveTabs}
+                        activeTradition={perspective.activeTradition}
+                        perspectiveLabel={perspective.perspectiveLabel}
+                        orderLabel={perspective.orderLabel}
+                        onSelectPerspective={perspective.setActivePerspective}
+                        populatedPerspectives={perspective.populated}
+                        onColumnClick={handleColumnClick}
+                      />
+                      {activeTab === 'overview' && perspective.activePerspective === 'mythouse' && (
+                        <div className="planet-culture-wrapper">
+                          <CultureSelector activeCulture={activeCulture} onSelectCulture={setActiveCulture} />
+                          <PlanetCultureContent planet={currentData.core.planet} activeCulture={activeCulture} />
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </>
+              )}
+            </div>
+          )}
+
+          {/* Zodiac content below mountain */}
+          {selectedSign && !selectedPlanet && (
+            <div ref={artBookContentRef} className="chrono-artbook-content-below">
+              <div className="artbook-section-bar" onClick={() => setArtBookPanelCollapsed(c => !c)}>
+                <span className={`artbook-section-chevron${artBookPanelCollapsed ? '' : ' open'}`}>{'\u25B6'}</span>
+                <span className="artbook-section-title">Atlas</span>
+                <span className="artbook-section-sub">Chronosphaera</span>
+              </div>
+              {!artBookPanelCollapsed && (
+                <div className="container">
+                  <div id="content-container">
+                    <h2 className="chrono-heading">
+                      <span className="chrono-heading-title-row">
+                        {selectedSign}
+                        <StageArrow items={ZODIAC_SIGNS} currentId={selectedSign} onSelect={setSelectedSign} />
+                      </span>
+                      <span className="chrono-sub">{zodiacData.find(z => z.sign === selectedSign)?.archetype || 'Zodiac'}</span>
+                    </h2>
+                    <div className="metal-detail-panel">
+                      <div className="metal-tabs">
+                        <CultureTimelineBar activeCulture={activeCulture} onSelectCulture={setActiveCulture} />
+                        <CultureSelector activeCulture={activeCulture} onSelectCulture={setActiveCulture} />
+                        {ZODIAC_PLAYLISTS[selectedSign] && (
+                          <button
+                            className={`metal-tab playlist-tab${videoUrl ? ' active' : ''}`}
+                            title={`Watch ${selectedSign} playlist`}
+                            onClick={() => { if (videoUrl) { setVideoUrl(null); } else { setVideoUrl(ZODIAC_PLAYLISTS[selectedSign]); } }}
+                          >
+                            {videoUrl ? '\u25A0' : '\u25B6'}
+                          </button>
+                        )}
+                        <button
+                          className={`metal-tab persona-tab${personaChatOpen === `zodiac:${selectedSign}` ? ' active' : ''}`}
+                          onClick={() => togglePersonaChat('zodiac', selectedSign)}
+                        >
+                          {personaChatOpen === `zodiac:${selectedSign}` ? '\u25A0' : '\uD83C\uDF99'}
+                        </button>
+                      </div>
+                      <ZodiacContent sign={selectedSign} activeCulture={activeCulture} />
+                      {personaChatOpen === `zodiac:${selectedSign}` && (
+                        <PersonaChatPanel
+                          entityType="zodiac"
+                          entityName={selectedSign}
+                          entityLabel={selectedSign}
+                          messages={personaChatHistory[`zodiac:${selectedSign}`] || []}
+                          setMessages={setCurrentPersonaMessages}
+                          onClose={() => setPersonaChatOpen(null)}
+                        />
+                      )}
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Monomyth content tied to FS chapter — shown when a chapter is selected and no planet/sign overrides */}
+          {!selectedPlanet && !selectedSign && artBookStarlightStage && (
+            <div ref={artBookContentRef} className="chrono-artbook-content-below">
+              <div className="artbook-section-bar" onClick={() => setArtBookPanelCollapsed(c => !c)}>
+                <span className={`artbook-section-chevron${artBookPanelCollapsed ? '' : ' open'}`}>{'\u25B6'}</span>
+                <span className="artbook-section-title">Atlas</span>
+                <span className="artbook-section-sub">Monomyth</span>
+              </div>
+              {!artBookPanelCollapsed && (
+                <>
+                  <div className="artbook-weekday-nav" style={{ position: 'relative', zIndex: 1 }}>
+                    {MONOMYTH_STAGES.map(s => {
+                      const isSelected = artBookStarlightStage === s.id;
+                      return (
+                        <button
+                          key={s.id}
+                          className={`artbook-weekday-btn${isSelected ? ' active' : ''}`}
+                          style={{ '--btn-color': '#c9a961' }}
+                          onClick={() => {
+                            trackElement(`chronosphaera.monomyth.stage.${s.id}`);
+                            setArtBookStarlightStage(s.id);
+                            setArtBookMonomythTab('overview');
+                          }}
+                          title={s.label}
+                        >
+                          <span className="artbook-weekday-label">{s.label}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                  <div className="container">
+                    <div id="content-container">
+                    <StageContent
+                      stageId={artBookStarlightStage}
+                      activeTab={artBookMonomythTab}
+                      onSelectTab={(tab) => { trackElement(`chronosphaera.monomyth.tab.${tab}.${artBookStarlightStage}`); setArtBookMonomythTab(tab); }}
+                      onSelectModel={handleSelectMonomythModel}
+                      onSelectCycle={handleSelectMonomythCycle}
+                      selectedModelId={monomythModel?.id}
+                      devEntries={devEntries}
+                      setDevEntries={setDevEntries}
+                    />
+                    </div>
+                  </div>
+                </>
+              )}
+            </div>
+          )}
         </div>
       )}
       {showDodecahedron && (

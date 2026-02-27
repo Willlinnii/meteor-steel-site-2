@@ -196,6 +196,49 @@
   font-weight: 400;
 }
 
+/* ── Collapsible section bar ───────────────────────────────────────── */
+
+.artbook-section-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  cursor: pointer;
+  background: rgba(10, 10, 20, 0.85);
+  border-top: 1px solid rgba(201, 169, 97, 0.15);
+  border-bottom: 1px solid rgba(201, 169, 97, 0.08);
+  user-select: none;
+  transition: background 0.15s;
+}
+
+.artbook-section-bar:hover {
+  background: rgba(201, 169, 97, 0.08);
+}
+
+.artbook-section-chevron {
+  font-size: 10px;
+  color: rgba(201, 169, 97, 0.6);
+  transition: transform 0.2s;
+  display: inline-block;
+}
+
+.artbook-section-chevron.open {
+  transform: rotate(90deg);
+}
+
+.artbook-section-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: rgba(201, 169, 97, 0.9);
+  letter-spacing: 0.04em;
+}
+
+.artbook-section-sub {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.4);
+  font-weight: 400;
+}
+
 /* ── Content area ──────────────────────────────────────────────────── */
 
 .artbook-content {

@@ -300,22 +300,14 @@ const GOLD_SUN_CENTER_Y = 0; // orbit center at green disk midplane
 const ZODIAC_SCALE = 12 / ZODIAC_RADIUS; // ISLAND_ORBIT_RADIUS(12) / ZODIAC_RADIUS(15) = 0.8
 
 // ── Zodiac Ring — vertical, aligned with gold sun orbit ──────────────
-function ArtBookZodiacRing({ islandAngleRef }) {
-  const groupRef = useRef();
-
-  useFrame(() => {
-    if (!groupRef.current) return;
-    // Euler XYZ: X tips vertical (PI/2), Z rotates the plane to match island angle
-    // This aligns the zodiac equator with the gold sun's orbit circle
-    groupRef.current.rotation.set(Math.PI / 2, 0, islandAngleRef.current);
-  });
-
+function ArtBookZodiacRing({ onSelectSign, selectedSign }) {
   return (
     <group position={[0, GOLD_SUN_CENTER_Y, 0]}>
-      <group ref={groupRef} scale={[ZODIAC_SCALE, ZODIAC_SCALE, ZODIAC_SCALE]}>
+      {/* Tilt vertical — world rotation handled by Mountain parent group */}
+      <group rotation={[Math.PI / 2, 0, 0]} scale={[ZODIAC_SCALE, ZODIAC_SCALE, ZODIAC_SCALE]}>
         <ZodiacSphere
-          selectedSign={null}
-          onSelectSign={() => {}}
+          selectedSign={selectedSign || null}
+          onSelectSign={onSelectSign || (() => {})}
           zodiacMode="tropical"
           selectedStar={null}
           onSelectStar={() => {}}
@@ -369,9 +361,9 @@ function WeekdayPlanet({ planet, orbitRadius, size, planetAnglesRef, sunFactorRe
       setMoonPhase(prev => prev === deg ? prev : deg);
 
       // Counter-rotate so MoonPhase3D shadow faces the camera correctly
-      // Undo parent's Rx(PI/2) and Rz(theta) so Moon's local Y = world Y
+      // Undo parent's Ry(theta) * Rx(PI/2) so Moon's local Y = world Y
       if (moonWrapRef.current && islandAngleRef) {
-        moonWrapRef.current.rotation.set(-Math.PI / 2, 0, -islandAngleRef.current);
+        moonWrapRef.current.rotation.set(-Math.PI / 2, -islandAngleRef.current, 0);
       }
     }
   });
@@ -388,8 +380,8 @@ function WeekdayPlanet({ planet, orbitRadius, size, planetAnglesRef, sunFactorRe
       {/* Glow light on every planet */}
       <pointLight
         color={planet === 'Sun' ? '#fff4d0' : planetColor}
-        intensity={planet === 'Sun' ? 12 : 2}
-        distance={planet === 'Sun' ? 80 : 15}
+        intensity={planet === 'Sun' ? 35 : 2}
+        distance={planet === 'Sun' ? 200 : 15}
         decay={1.5}
       />
     </group>
@@ -410,8 +402,8 @@ function ArtBookPlanets({ islandAngleRef, draggingRef, sunFactorRef }) {
 
   useFrame((_, delta) => {
     if (!groupRef.current) return;
-    // Match zodiac ring rotation so planets orbit in the same vertical plane
-    groupRef.current.rotation.set(Math.PI / 2, 0, islandAngleRef.current);
+    // Tilt vertical — world rotation handled by Mountain parent group
+    groupRef.current.rotation.set(Math.PI / 2, 0, 0);
 
     if (!draggingRef?.current) {
       const dt = Math.min(delta, 0.1);
@@ -564,6 +556,129 @@ function Ocean({ sunFactorRef }) {
     <group position={[0, OCEAN_Y, 0]}>
       <mesh geometry={geo} material={mat} />
       <mesh geometry={depthGeo} material={depthMat} />
+    </group>
+  );
+}
+
+// ── Cloud Ring — animated mist at the ocean perimeter ─────────────────
+// Flat rings with procedural noise for organic, drifting cloud look.
+const FOG_INNER = OCEAN_RADIUS - 25;
+const FOG_OUTER = OCEAN_RADIUS + 12;
+
+const fogVert = `
+  uniform float uTime;
+  uniform float uSeed;
+  varying vec2 vPos;
+
+  float hash(vec2 p) {
+    return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453);
+  }
+  float noise(vec2 p) {
+    vec2 i = floor(p);
+    vec2 f = fract(p);
+    f = f * f * (3.0 - 2.0 * f);
+    float a = hash(i);
+    float b = hash(i + vec2(1.0, 0.0));
+    float c = hash(i + vec2(0.0, 1.0));
+    float d = hash(i + vec2(1.0, 1.0));
+    return mix(mix(a, b, f.x), mix(c, d, f.x), f.y);
+  }
+
+  void main() {
+    vPos = position.xz;
+    vec3 pos = position;
+    float angle = atan(pos.z, pos.x);
+    float n = noise(vec2(angle * 3.0 + uSeed, uTime * 0.3));
+    pos.y += n * 1.8;
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
+  }
+`;
+
+const fogFrag = `
+  uniform float uOpacity;
+  uniform float uTime;
+  uniform float uSeed;
+  varying vec2 vPos;
+
+  float hash(vec2 p) {
+    return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453);
+  }
+  float noise(vec2 p) {
+    vec2 i = floor(p);
+    vec2 f = fract(p);
+    f = f * f * (3.0 - 2.0 * f);
+    float a = hash(i);
+    float b = hash(i + vec2(1.0, 0.0));
+    float c = hash(i + vec2(0.0, 1.0));
+    float d = hash(i + vec2(1.0, 1.0));
+    return mix(mix(a, b, f.x), mix(c, d, f.x), f.y);
+  }
+  float fbm(vec2 p) {
+    float v = 0.0;
+    float a = 0.5;
+    for (int i = 0; i < 4; i++) {
+      v += a * noise(p);
+      p *= 2.0;
+      a *= 0.5;
+    }
+    return v;
+  }
+
+  void main() {
+    float dist = length(vPos);
+    float center = ${OCEAN_RADIUS.toFixed(1)};
+    float spread = 15.0;
+    float radial = exp(-0.5 * pow((dist - center) / spread, 2.0));
+    float angle = atan(vPos.y, vPos.x);
+    vec2 noiseCoord = vec2(angle * 4.0 + uSeed, dist * 0.08) + uTime * vec2(0.15, 0.05);
+    float cloud = fbm(noiseCoord);
+    cloud = smoothstep(0.25, 0.7, cloud);
+    float alpha = radial * cloud * uOpacity;
+    gl_FragColor = vec4(0.82, 0.85, 0.92, alpha);
+  }
+`;
+
+function FogRing() {
+  const geo = useMemo(() => {
+    const g = new THREE.RingGeometry(FOG_INNER, FOG_OUTER, 256, 4);
+    g.rotateX(-Math.PI / 2);
+    return g;
+  }, []);
+
+  const layers = [
+    { y: 0.0, opacity: 0.35, seed: 0.0 },
+    { y: 1.5, opacity: 0.28, seed: 10.0 },
+    { y: 3.0, opacity: 0.22, seed: 20.0 },
+    { y: 5.0, opacity: 0.16, seed: 30.0 },
+    { y: 7.5, opacity: 0.10, seed: 40.0 },
+    { y: 10.0, opacity: 0.05, seed: 50.0 },
+  ];
+
+  const mats = useMemo(() => layers.map(l => new THREE.ShaderMaterial({
+    uniforms: {
+      uOpacity: { value: l.opacity },
+      uTime: { value: 0 },
+      uSeed: { value: l.seed },
+    },
+    vertexShader: fogVert,
+    fragmentShader: fogFrag,
+    transparent: true,
+    depthWrite: false,
+    side: THREE.DoubleSide,
+    blending: THREE.AdditiveBlending,
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  })), []);
+
+  useFrame((state) => {
+    const t = state.clock.elapsedTime;
+    mats.forEach(m => { m.uniforms.uTime.value = t; });
+  });
+
+  return (
+    <group position={[0, OCEAN_Y, 0]}>
+      {layers.map((l, i) => (
+        <mesh key={i} geometry={geo} material={mats[i]} position={[0, l.y, 0]} />
+      ))}
     </group>
   );
 }
@@ -1097,20 +1212,15 @@ function SpiralBall({ draggingRef }) {
 }
 
 // ── Radial line on green disk — aligned with zodiac/orbital plane ─────
-function RadialLine({ islandAngleRef }) {
-  const groupRef = useRef();
+function RadialLine() {
   const lineY = LEVEL_HEIGHT / 2 + 0.02; // just above green disk surface
   const lineLength = LAND_RADIUS - BASE_RADIUS;
   const lineMid = (LAND_RADIUS + BASE_RADIUS) / 2;
+  const islandGeo = useMemo(() => new THREE.CylinderGeometry(1.2, 1.2, 0.15, 32), []);
 
-  useFrame(() => {
-    if (groupRef.current) {
-      groupRef.current.rotation.y = islandAngleRef.current;
-    }
-  });
-
+  // No self-rotation — parent Mountain group handles world rotation
   return (
-    <group ref={groupRef}>
+    <group>
       {/* Glow layer */}
       <mesh position={[lineMid, lineY, 0]} rotation={[-Math.PI / 2, 0, 0]}>
         <planeGeometry args={[lineLength, 0.2]} />
@@ -1129,6 +1239,13 @@ function RadialLine({ islandAngleRef }) {
         <planeGeometry args={[lineLength, 0.05]} />
         <meshBasicMaterial color="#c9a961" transparent opacity={0.7} side={THREE.DoubleSide} depthWrite={false} blending={THREE.AdditiveBlending} />
       </mesh>
+      {/* Static islands locked in alignment with lines */}
+      <mesh position={[ISLAND_ORBIT_RADIUS, ISLAND_Y, 0]} geometry={islandGeo}>
+        <meshStandardMaterial color="#c9a961" metalness={0.4} roughness={0.5} />
+      </mesh>
+      <mesh position={[-ISLAND_ORBIT_RADIUS, ISLAND_Y, 0]} geometry={islandGeo}>
+        <meshStandardMaterial color="#c9a961" metalness={0.4} roughness={0.5} />
+      </mesh>
     </group>
   );
 }
@@ -1141,7 +1258,7 @@ function useIslandOrbit(draggingRef) {
   const angleRef = useRef(Math.PI);
   useFrame((_, delta) => {
     if (draggingRef?.current) return;
-    angleRef.current -= Math.min(delta, 0.1) * 0.025;
+    angleRef.current += Math.min(delta, 0.1) * 0.04;
   });
   return angleRef;
 }
@@ -1174,9 +1291,10 @@ MOUNTAIN_LEVELS.forEach((level, i) => {
 });
 
 // ── Mountain group with hover bob ───────────────────────────────────
-function Mountain({ hoveredOre, onHoverOre, onSelect, selectedPlanet, draggingRef, islandAngleRef }) {
+function Mountain({ hoveredOre, onHoverOre, onSelect, selectedPlanet, draggingRef, islandAngleRef, onSelectSign, selectedSign }) {
   const groupRef = useRef();
   const ambientRef = useRef();
+  const hemiRef = useRef();
   const anglesRef = useArtBookOrbits(draggingRef);
   const sunFactorRef = useRef(0); // 0 = sun below water, 1 = sun at peak
 
@@ -1187,18 +1305,24 @@ function Mountain({ hoveredOre, onHoverOre, onSelect, selectedPlanet, draggingRe
   useFrame((state) => {
     if (groupRef.current) {
       groupRef.current.position.y = yOffset + Math.sin(state.clock.elapsedTime * 0.1) * 0.3;
+      // Rotate the entire world as one unit
+      groupRef.current.rotation.y = islandAngleRef.current;
     }
-    // Drive ambient light from sun position: dim at night, bright in day
+    // Drive ambient + hemisphere light from sun position: dim at night, full daylight at peak
     if (ambientRef.current) {
       const s = sunFactorRef.current;
-      ambientRef.current.intensity = 0.04 + s * 0.8;
+      ambientRef.current.intensity = 0.05 + s * 2.5;
+    }
+    if (hemiRef.current) {
+      hemiRef.current.intensity = sunFactorRef.current * 1.5;
     }
   });
 
   return (
     <group ref={groupRef} position={[0, yOffset, 0]}>
-      {/* Sun-driven ambient inside the mountain group */}
-      <ambientLight ref={ambientRef} intensity={0.04} />
+      {/* Sun-driven ambient + hemisphere light inside the mountain group */}
+      <ambientLight ref={ambientRef} intensity={0.05} />
+      <hemisphereLight ref={hemiRef} args={['#ffffee', '#445522', 0]} />
 
       {MOUNTAIN_LEVELS.map((level, i) => (
         <MountainLevel
@@ -1223,15 +1347,14 @@ function Mountain({ hoveredOre, onHoverOre, onSelect, selectedPlanet, draggingRe
         />
       ))}
       <PeakGem selected={selectedPlanet === 'Sun'} onSelect={onSelect} />
-      <ArtBookZodiacRing islandAngleRef={islandAngleRef} />
+      <ArtBookZodiacRing onSelectSign={onSelectSign} selectedSign={selectedSign} />
       <ArtBookPlanets islandAngleRef={islandAngleRef} draggingRef={draggingRef} sunFactorRef={sunFactorRef} />
       <PineForest />
       <MountainSpiral />
       <SpiralBall draggingRef={draggingRef} />
-      <RadialLine islandAngleRef={islandAngleRef} />
+      <RadialLine />
       <Ocean sunFactorRef={sunFactorRef} />
-      <OrbitingIsland angleRef={islandAngleRef} offset={0} />
-      <OrbitingIsland angleRef={islandAngleRef} offset={Math.PI} />
+      <FogRing />
     </group>
   );
 }
@@ -1560,7 +1683,7 @@ const videoDiscFrag = `
   }
 `;
 
-export default function ArtBookScene({ mode = 'mountain', hoveredOre, onHoverOre, onSelect, selectedPlanet, videoTexRef, draggingRef }) {
+export default function ArtBookScene({ mode = 'mountain', hoveredOre, onHoverOre, onSelect, selectedPlanet, videoTexRef, draggingRef, onSelectSign, selectedSign }) {
   const videoPlaneRef = useRef();
   const starGroupRef = useRef();
 
@@ -1571,8 +1694,8 @@ export default function ArtBookScene({ mode = 'mountain', hoveredOre, onHoverOre
   useFrame(() => {
     if (!starGroupRef.current) return;
     if (mode === 'mountain') {
-      // Match ArtBookZodiacRing rotation: tip vertical, rotate with islands
-      starGroupRef.current.rotation.set(Math.PI / 2, 0, islandAngleRef.current);
+      // Tilt vertical + Y rotation to match Mountain parent group
+      starGroupRef.current.rotation.set(Math.PI / 2, islandAngleRef.current, 0);
     } else {
       starGroupRef.current.rotation.set(0, 0, 0);
     }
@@ -1617,7 +1740,7 @@ export default function ArtBookScene({ mode = 'mountain', hoveredOre, onHoverOre
       </mesh>
 
       {mode === 'mountain'
-        ? <Mountain hoveredOre={hoveredOre} onHoverOre={onHoverOre} onSelect={onSelect} selectedPlanet={selectedPlanet} draggingRef={draggingRef} islandAngleRef={islandAngleRef} />
+        ? <Mountain hoveredOre={hoveredOre} onHoverOre={onHoverOre} onSelect={onSelect} selectedPlanet={selectedPlanet} draggingRef={draggingRef} islandAngleRef={islandAngleRef} onSelectSign={onSelectSign} selectedSign={selectedSign} />
         : <Book3D videoTexRef={videoTexRef} draggingRef={draggingRef} videoPlaneRef={videoPlaneRef} />}
     </>
   );
