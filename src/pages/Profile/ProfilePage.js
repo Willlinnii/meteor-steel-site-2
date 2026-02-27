@@ -20,6 +20,7 @@ import mythicCalendar from '../../data/mythicCalendar.json';
 import constellationContent from '../../data/constellationContent.json';
 import { EMBODIED_READING, TIMELESS_READING, PAIR_DYNAMIC, SAME_SIGN_READING } from '../../data/twoWheelReadings';
 import dayNight from '../../data/dayNight.json';
+import './ProfilePage.css';
 
 const SUBSCRIPTIONS = [
   {
