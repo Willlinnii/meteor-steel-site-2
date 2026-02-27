@@ -137,11 +137,6 @@ export default function MeteorSteelContent({ stageId, activeTab, onSelectTab, de
 
   return (
     <div className="metal-detail-panel">
-      {stageOverviews[stageId] && (
-        <div className="mono-overview-block">
-          <TextContent text={stageOverviews[stageId]} />
-        </div>
-      )}
       <div className="metal-tabs">
         {SECTION_TABS.map(t => (
           <button key={t.id}
@@ -181,6 +176,11 @@ export default function MeteorSteelContent({ stageId, activeTab, onSelectTab, de
         )}
       </div>
       <div className="metal-content-scroll">
+        {stageOverviews[stageId] && (
+          <div className="mono-overview-block">
+            <TextContent text={stageOverviews[stageId]} />
+          </div>
+        )}
         <div className="tab-content">
           {activeTab === 'introduction' && <IntroductionContent stageId={stageId} />}
           {activeTab === 'technology' && <TextContent text={steelProcess[stageId]} />}
