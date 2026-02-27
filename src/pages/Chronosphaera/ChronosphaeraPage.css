@@ -241,7 +241,8 @@
 @media (max-width: 600px) {
   .view3d-toggle,
   .back2d-toggle,
-  .dodec-nav-toggle {
+  .dodec-nav-toggle,
+  .artbook-nav-toggle {
     width: 34px;
     height: 34px;
     font-size: 0.95rem;
@@ -1368,6 +1369,7 @@
   .mythic-earth-toggle,
   .monomyth-toggle,
   .dodec-nav-toggle,
+  .artbook-nav-toggle,
   .view3d-toggle,
   .back2d-toggle {
     width: 34px;
@@ -1497,6 +1499,69 @@
   border-color: rgba(180, 160, 120, 0.6);
   background: rgba(180, 160, 120, 0.12);
   box-shadow: 0 0 12px rgba(180, 160, 120, 0.4);
+}
+
+/* ===== ART BOOK NAV TOGGLE ===== */
+
+.artbook-nav-toggle {
+  position: static;
+  background: none;
+  border: 1px solid rgba(196, 113, 58, 0.4);
+  color: rgba(196, 113, 58, 0.7);
+  font-size: 1.2rem;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  opacity: 0.7;
+}
+
+.artbook-nav-toggle:hover {
+  opacity: 1;
+  background: rgba(196, 113, 58, 0.1);
+  box-shadow: 0 0 10px rgba(196, 113, 58, 0.3);
+}
+
+.artbook-nav-toggle.active {
+  opacity: 1;
+  color: #c4713a;
+  border-color: rgba(196, 113, 58, 0.6);
+  background: rgba(196, 113, 58, 0.12);
+  box-shadow: 0 0 12px rgba(196, 113, 58, 0.4);
+}
+
+/* ===== ART BOOK FULL-BLEED LAYER ===== */
+
+.chrono-artbook-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+}
+
+.chrono-artbook-active .chrono-diagram-center {
+  position: relative;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.chrono-artbook-active .orbital-svg {
+  display: none;
+}
+
+.chrono-artbook-active .compass-toggle {
+  display: none;
+}
+
+.chrono-artbook-active .orbital-btn-row {
+  pointer-events: auto;
+}
+
+.chrono-artbook-active .chrono-content-fade {
+  display: none;
 }
 
 /* ===== DODECAHEDRON FULL-BLEED LAYER ===== */

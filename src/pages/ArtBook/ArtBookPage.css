@@ -65,64 +65,7 @@
   box-shadow: 0 0 10px rgba(201, 169, 97, 0.45);
 }
 
-/* ── Starlight toggle — pinned above mode toggle ─────────────────── */
-
-.artbook-starlight-btn {
-  position: fixed;
-  bottom: 120px;
-  right: 24px;
-  z-index: 1000;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  border: 1px solid rgba(196, 113, 58, 0.4);
-  background: rgba(5, 5, 16, 0.6);
-  backdrop-filter: blur(6px);
-  color: rgba(196, 113, 58, 0.7);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-  opacity: 0.7;
-  transition: all 0.3s ease;
-}
-
-.artbook-starlight-btn:hover {
-  opacity: 1;
-  background: rgba(196, 113, 58, 0.1);
-  box-shadow: 0 0 10px rgba(196, 113, 58, 0.3);
-}
-
-.artbook-starlight-btn.active {
-  opacity: 1;
-  color: #c4713a;
-  border-color: rgba(196, 113, 58, 0.6);
-  background: rgba(196, 113, 58, 0.12);
-  box-shadow: 0 0 12px rgba(196, 113, 58, 0.4);
-}
-
-.artbook-starlight-btn.stories {
-  color: #8b9dc3;
-  border-color: rgba(139, 157, 195, 0.6);
-  background: rgba(139, 157, 195, 0.12);
-  box-shadow: 0 0 12px rgba(139, 157, 195, 0.4);
-}
-
-.artbook-starlight-btn.disabled {
-  opacity: 0.35;
-  color: rgba(150, 150, 150, 0.6);
-  border-color: rgba(150, 150, 150, 0.3);
-  cursor: default;
-}
-
-.artbook-starlight-btn.disabled:hover {
-  opacity: 0.5;
-  background: rgba(150, 150, 150, 0.05);
-  box-shadow: none;
-}
-
-/* ── Extended world toggle — pinned above starlight toggle ────────── */
+/* ── Extended world toggle ─────────────────────────────────────────── */
 
 .artbook-world-btn {
   position: fixed;
@@ -273,13 +216,6 @@
     height: 36px;
   }
 
-  .artbook-starlight-btn {
-    bottom: 112px;
-    right: 16px;
-    width: 36px;
-    height: 36px;
-  }
-
   .artbook-mode-btn {
     bottom: 68px;
     right: 16px;
@@ -306,42 +242,4 @@
     height: 32px;
     font-size: 12px;
   }
-}
-
-/* ── Lullaby audio + poem styles ──────────────────────────────────── */
-
-.modern-section.sos-poem {
-  text-align: center;
-  border-left: none;
-  background: none;
-  font-style: italic;
-}
-
-.modern-section.sos-poem p {
-  margin-bottom: 0.5em;
-}
-
-.sos-audio-control {
-  margin-bottom: 20px;
-}
-
-.sos-play-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 48px;
-  height: 48px;
-  margin: 0 auto;
-  border-radius: 50%;
-  border: 1px solid #c9a961;
-  background: rgba(201, 169, 97, 0.08);
-  color: #c9a961;
-  font-size: 1.2rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.sos-play-btn:hover {
-  background: rgba(201, 169, 97, 0.18);
-  box-shadow: 0 0 14px rgba(201, 169, 97, 0.25);
 }

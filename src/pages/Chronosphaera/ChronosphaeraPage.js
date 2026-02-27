@@ -47,6 +47,7 @@ import ColumnSequencePopup from '../../components/chronosphaera/ColumnSequencePo
 
 const InlineScene3D = lazy(() => import('../../components/chronosphaera/vr/InlineScene3D'));
 const DodecahedronPage = lazy(() => import('../Dodecahedron/DodecahedronPage'));
+const ArtBookViewer = lazy(() => import('../../components/ArtBookViewer'));
 
 const METEOR_STEEL_STAGES = [
   { id: 'golden-age', label: 'Golden Age' },
@@ -609,6 +610,8 @@ export default function ChronosphaeraPage() {
   const showStoryOfStories = mode === 'story-of-stories';
   const showDodecahedron = mode === 'dodecahedron';
   const [dodecMode, setDodecMode] = useState('stars');
+  const showArtBook = mode === 'artbook';
+  const [artBookMode, setArtBookMode] = useState('mountain');
 
   const ybr = useYellowBrickRoad();
   const { forgeMode } = useStoryForge();
@@ -628,11 +631,11 @@ export default function ChronosphaeraPage() {
 
   // Which beyond rings (worldSoul / nous / source) the current tradition supports
   const beyondRings = useMemo(() => {
-    if (showMonomyth || showFallenStarlight || showDodecahedron) return [];
+    if (showMonomyth || showFallenStarlight || showDodecahedron || showArtBook) return [];
     return BEYOND_RINGS
       .filter(ring => ring.traditions[perspective.activePerspective])
       .map(ring => ring.id);
-  }, [perspective.activePerspective, showMonomyth, showFallenStarlight, showDodecahedron]);
+  }, [perspective.activePerspective, showMonomyth, showFallenStarlight, showDodecahedron, showArtBook]);
 
   const [ybrAutoStart, setYbrAutoStart] = useState(false);
   const { trackElement, trackTime, isElementCompleted, courseworkMode } = useCoursework();
@@ -1076,6 +1079,21 @@ export default function ChronosphaeraPage() {
     }
   }, [mode, clearAllSelections, navigate]);
 
+  const handleToggleArtBook = useCallback(() => {
+    const ARTBOOK_MODES = ['mountain', 'book'];
+    if (mode !== 'artbook') {
+      clearAllSelections();
+      setMode('artbook');
+      setArtBookMode('mountain');
+      navigate('/chronosphaera/artbook');
+    } else {
+      setArtBookMode(prev => {
+        const idx = ARTBOOK_MODES.indexOf(prev);
+        return ARTBOOK_MODES[(idx + 1) % ARTBOOK_MODES.length];
+      });
+    }
+  }, [mode, clearAllSelections, navigate]);
+
   const handleToggle3D = useCallback((value) => {
     if (value === 'vr') {
       const isMobile = /Mobi|Android|iPad|iPhone|iPod/i.test(navigator.userAgent);
@@ -1347,7 +1365,14 @@ export default function ChronosphaeraPage() {
   }
 
   return (
-    <div className={`chronosphaera-page chrono-${ambient.mode}${view3D ? ' chrono-3d-active' : ''}${showDodecahedron ? ' chrono-dodec-active' : ''}`}>
+    <div className={`chronosphaera-page chrono-${ambient.mode}${view3D ? ' chrono-3d-active' : ''}${showDodecahedron ? ' chrono-dodec-active' : ''}${showArtBook ? ' chrono-artbook-active' : ''}`}>
+      {showArtBook && (
+        <div className="chrono-artbook-layer">
+          <Suspense fallback={<div className="chrono-empty">Loading Art Book...</div>}>
+            <ArtBookViewer embedded externalMode={artBookMode} />
+          </Suspense>
+        </div>
+      )}
       {showDodecahedron && (
         <div className="chrono-dodec-layer">
           <Suspense fallback={<div className="chrono-empty">Loading Dodecahedron...</div>}>
@@ -1586,6 +1611,9 @@ export default function ChronosphaeraPage() {
             showDodecahedron={showDodecahedron}
             dodecMode={dodecMode}
             onToggleDodecahedron={handleToggleDodecahedron}
+            showArtBook={showArtBook}
+            artBookMode={artBookMode}
+            onToggleArtBook={handleToggleArtBook}
             onToggle3D={handleToggle3D}
             targetDate={targetDate}
           />
@@ -1941,8 +1969,44 @@ export default function ChronosphaeraPage() {
                   <div className="metal-detail-panel">
                     <div className="metal-content-scroll">
                       <div className="tab-content">
-                        <p>Select a stage on the meteor steel ring above to explore its content.</p>
-                        <p>The eight stages trace the journey of meteoric iron from its celestial origins through forging, quenching, and integration into the mythic imagination of cultures worldwide.</p>
+                        <div className="metal-tabs">
+                          <span className="ov-label" style={{ padding: '8px 0', marginRight: 8 }}>Proposal</span>
+                          {storyOfStoriesData.proposalSections.filter(s => s.group === 'proposal').map(section => (
+                            <button
+                              key={section.id}
+                              className={`metal-tab${starlightSectionId === section.id ? ' active' : ''}`}
+                              onClick={() => setStarlightSectionId(starlightSectionId === section.id ? null : section.id)}
+                            >
+                              {section.label}
+                            </button>
+                          ))}
+                        </div>
+                        <div className="metal-tabs">
+                          <span className="ov-label" style={{ padding: '8px 0', marginRight: 8 }}>Writing</span>
+                          {storyOfStoriesData.proposalSections.filter(s => s.group === 'writing').map(section => (
+                            <button
+                              key={section.id}
+                              className={`metal-tab${starlightSectionId === section.id ? ' active' : ''}`}
+                              onClick={() => setStarlightSectionId(starlightSectionId === section.id ? null : section.id)}
+                            >
+                              {section.label}
+                            </button>
+                          ))}
+                        </div>
+                        {starlightSectionId && (() => {
+                          const section = storyOfStoriesData.proposalSections.find(s => s.id === starlightSectionId);
+                          if (!section) return null;
+                          return (
+                            <div className="modern-section">
+                              {section.content.split('\n\n').map((p, i) => (
+                                <p key={i}>{p}</p>
+                              ))}
+                            </div>
+                          );
+                        })()}
+                        {!starlightSectionId && (
+                          <p>Select a stage on the ring above to explore chapter content, or choose a proposal section.</p>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -2113,32 +2177,48 @@ export default function ChronosphaeraPage() {
               <div className="container">
                 <div id="content-container">
                   <div className="metal-detail-panel">
-                    <div className="monomyth-world-selector">
-                      {['normal', 'other', 'threshold'].map(w => (
-                        <button
-                          key={w}
-                          className={`metal-tab${monomythWorld === w ? ' active' : ''}`}
-                          onClick={() => setMonomythWorld(monomythWorld === w ? null : w)}
-                        >
-                          {w === 'normal' ? 'Normal World' : w === 'other' ? 'Other World' : 'Threshold'}
-                        </button>
-                      ))}
+                    <div className="metal-content-scroll">
+                      <div className="tab-content">
+                        <div className="metal-tabs">
+                          <span className="ov-label" style={{ padding: '8px 0', marginRight: 8 }}>Proposal</span>
+                          {storyOfStoriesData.proposalSections.filter(s => s.group === 'proposal').map(section => (
+                            <button
+                              key={section.id}
+                              className={`metal-tab${starlightSectionId === section.id ? ' active' : ''}`}
+                              onClick={() => setStarlightSectionId(starlightSectionId === section.id ? null : section.id)}
+                            >
+                              {section.label}
+                            </button>
+                          ))}
+                        </div>
+                        <div className="metal-tabs">
+                          <span className="ov-label" style={{ padding: '8px 0', marginRight: 8 }}>Writing</span>
+                          {storyOfStoriesData.proposalSections.filter(s => s.group === 'writing').map(section => (
+                            <button
+                              key={section.id}
+                              className={`metal-tab${starlightSectionId === section.id ? ' active' : ''}`}
+                              onClick={() => setStarlightSectionId(starlightSectionId === section.id ? null : section.id)}
+                            >
+                              {section.label}
+                            </button>
+                          ))}
+                        </div>
+                        {starlightSectionId && (() => {
+                          const section = storyOfStoriesData.proposalSections.find(s => s.id === starlightSectionId);
+                          if (!section) return null;
+                          return (
+                            <div className="modern-section">
+                              {section.content.split('\n\n').map((p, i) => (
+                                <p key={i}>{p}</p>
+                              ))}
+                            </div>
+                          );
+                        })()}
+                        {!starlightSectionId && (
+                          <p>Select a stage on the ring above to explore chapter content, or choose a proposal section.</p>
+                        )}
+                      </div>
                     </div>
-                    {monomythWorld ? (
-                      <div className="metal-content-scroll">
-                        <div className="tab-content">
-                          <h4 className="mono-card-name">{worldData[monomythWorld === 'normal' ? 'normalWorld' : monomythWorld === 'other' ? 'otherWorld' : 'threshold']?.title}</h4>
-                          <p>{worldData[monomythWorld === 'normal' ? 'normalWorld' : monomythWorld === 'other' ? 'otherWorld' : 'threshold']?.description}</p>
-                        </div>
-                      </div>
-                    ) : (
-                      <div className="metal-content-scroll">
-                        <div className="tab-content">
-                          <p>Select a stage on the monomyth ring above to explore its content, or choose a world zone below.</p>
-                          <p>The eight stages of the monomyth trace the hero's departure from the known world, descent into trial, and return transformed. Click any stage label on the outer golden ring to begin.</p>
-                        </div>
-                      </div>
-                    )}
                   </div>
                 </div>
               </div>

@@ -10,8 +10,32 @@ import ufo from '../../data/ufo.json';
 import monomythProse from '../../data/monomyth.json';
 import synthesis from '../../data/synthesis.json';
 import stageOverviews from '../../data/stageOverviews.json';
+import storyOfStoriesData from '../../data/storyOfStoriesData';
+
+const STAGE_TO_SOS = {
+  'golden-age': 'golden-surface',
+  'falling-star': 'calling-star',
+  'impact-crater': 'crater-crossing',
+  'forge': 'trials-forge',
+  'quenching': 'quenching',
+  'integration': 'return-reflection',
+  'drawing': 'drawing-dawn',
+  'new-age': 'new-age',
+};
+
+const SOS_CHAPTER_NAMES = {
+  'golden-surface': 'Chapter 1: Golden Age \u2014 The Setup',
+  'calling-star': 'Chapter 2: Calling Star \u2014 From Stasis to Rupture',
+  'crater-crossing': 'Chapter 3: Crater Crossing \u2014 Threshold',
+  'trials-forge': 'Chapter 4: Tests of the Forge \u2014 The Road of Initiation',
+  'quenching': 'Chapter 5: Quench \u2014 The Nadir',
+  'return-reflection': 'Chapter 6: Integrate & Reflect \u2014 The Return',
+  'drawing-dawn': 'Chapter 7: Drawing Dawn \u2014 The Return Threshold',
+  'new-age': 'Chapter 8: Age of Integration \u2014 Renewal',
+};
 
 const SECTION_TABS = [
+  { id: 'introduction', label: 'Introduction' },
   { id: 'technology', label: 'Meteor Steel' },
   { id: 'figures', label: 'Mythic Figures' },
   { id: 'saviors', label: 'Iron Age Saviors' },
@@ -27,6 +51,23 @@ function TextContent({ text }) {
     <div className="overview-text">
       {text.split('\n\n').map((p, i) => <p key={i}>{p}</p>)}
     </div>
+  );
+}
+
+function IntroductionContent({ stageId }) {
+  const sosId = STAGE_TO_SOS[stageId];
+  if (!sosId) return <div className="chrono-empty">No introduction available.</div>;
+  const chapterName = SOS_CHAPTER_NAMES[sosId];
+  const summary = storyOfStoriesData.stageSummaries?.[sosId];
+  return (
+    <>
+      {chapterName && <h4>{chapterName}</h4>}
+      {summary ? (
+        summary.split('\n\n').map((p, i) => <p key={i}>{p}</p>)
+      ) : (
+        <div className="chrono-empty">Content coming soon.</div>
+      )}
+    </>
   );
 }
 
@@ -141,6 +182,7 @@ export default function MeteorSteelContent({ stageId, activeTab, onSelectTab, de
       </div>
       <div className="metal-content-scroll">
         <div className="tab-content">
+          {activeTab === 'introduction' && <IntroductionContent stageId={stageId} />}
           {activeTab === 'technology' && <TextContent text={steelProcess[stageId]} />}
           {activeTab === 'figures' && <FigureCards figuresList={figures} stage={stageId} onFigureClick={handleFigureClick} />}
           {activeTab === 'saviors' && <FigureCards figuresList={saviors} stage={stageId} onFigureClick={handleFigureClick} />}

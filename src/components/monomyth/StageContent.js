@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import TextBlock from '../chronosphaera/TextBlock';
 import DevelopmentPanel from '../DevelopmentPanel';
 import StageTest from '../StageTest';
@@ -16,8 +16,41 @@ import mythsData from '../../data/monomythMyths.json';
 import psychlesData from '../../data/monomythPsychles.json';
 import depthData from '../../data/monomythDepth.json';
 import filmsData from '../../data/monomythFilms.json';
+import storyOfStoriesData from '../../data/storyOfStoriesData';
+import worldData from '../../data/normalOtherWorld.json';
 
-const TABS = [
+const STAGE_TO_SOS = {
+  'golden-age': 'golden-surface',
+  'falling-star': 'calling-star',
+  'impact-crater': 'crater-crossing',
+  'forge': 'trials-forge',
+  'quenching': 'quenching',
+  'integration': 'return-reflection',
+  'drawing': 'drawing-dawn',
+  'new-age': 'new-age',
+};
+
+const SOS_CHAPTER_NAMES = {
+  'golden-surface': 'Chapter 1: Golden Age \u2014 The Setup',
+  'calling-star': 'Chapter 2: Calling Star \u2014 From Stasis to Rupture',
+  'crater-crossing': 'Chapter 3: Crater Crossing \u2014 Threshold',
+  'trials-forge': 'Chapter 4: Tests of the Forge \u2014 The Road of Initiation',
+  'quenching': 'Chapter 5: Quench \u2014 The Nadir',
+  'return-reflection': 'Chapter 6: Integrate & Reflect \u2014 The Return',
+  'drawing-dawn': 'Chapter 7: Drawing Dawn \u2014 The Return Threshold',
+  'new-age': 'Chapter 8: Age of Integration \u2014 Renewal',
+};
+
+const WORLD_TABS_BY_STAGE = {
+  'golden-age': [{ id: 'normal-world', label: 'Normal World', worldKey: 'normalWorld' }],
+  'impact-crater': [
+    { id: 'threshold', label: 'Threshold', worldKey: 'threshold' },
+    { id: 'other-world', label: 'Other World', worldKey: 'otherWorld' },
+  ],
+};
+
+const BASE_TABS = [
+  { id: 'introduction', label: 'Introduction' },
   { id: 'overview', label: 'Overview' },
   { id: 'cycles', label: 'Cycles' },
   { id: 'theorists', label: 'Theorists' },
@@ -41,6 +74,41 @@ const PSYCHLE_KEY_TO_CYCLE = {
 };
 
 const CS_STAGES = MONOMYTH_STAGES.map(s => ({ id: s.id, label: s.label }));
+
+function IntroductionTab({ stageId }) {
+  const sosId = STAGE_TO_SOS[stageId];
+  if (!sosId) return <p className="chrono-empty">No introduction available.</p>;
+  const chapterName = SOS_CHAPTER_NAMES[sosId];
+  const summary = storyOfStoriesData.stageSummaries?.[sosId];
+  return (
+    <div className="tab-content">
+      {chapterName && <h4>{chapterName}</h4>}
+      {summary ? (
+        summary.split('\n\n').map((p, i) => <p key={i}>{p}</p>)
+      ) : (
+        <p className="chrono-empty">Content coming soon.</p>
+      )}
+    </div>
+  );
+}
+
+function WorldTab({ worldKey }) {
+  const data = worldData[worldKey];
+  if (!data) return <p className="chrono-empty">No content available.</p>;
+  return (
+    <div className="tab-content">
+      <h4 className="mono-card-name">{data.title}</h4>
+      {data.subtitle && <h5 className="mono-card-concept">{data.subtitle}</h5>}
+      <p>{data.description}</p>
+      {data.overview && Object.entries(data.overview).map(([key, text]) => (
+        <div key={key} className="mono-card">
+          <h5 className="mono-card-concept">{key}</h5>
+          <p>{text}</p>
+        </div>
+      ))}
+    </div>
+  );
+}
 
 function OverviewTab({ stageId }) {
   const overview = stageOverviews[stageId];
@@ -315,10 +383,17 @@ export default function StageContent({
     if (data) setCrossStageData(data);
   };
 
+  const effectiveTabs = useMemo(() => {
+    const worldTabs = WORLD_TABS_BY_STAGE[stageId] || [];
+    if (worldTabs.length === 0) return BASE_TABS;
+    // Insert world tabs after the last base tab (history)
+    return [...BASE_TABS, ...worldTabs];
+  }, [stageId]);
+
   return (
     <div className="metal-detail-panel">
       <div className="metal-tabs">
-        {TABS.map(t => {
+        {effectiveTabs.map(t => {
           const cwClass = getTabClass ? (' ' + getTabClass(t.id)) : '';
           return (
             <button
@@ -396,12 +471,17 @@ export default function StageContent({
       )}
 
       <div className="metal-content-scroll">
+        {activeTab === 'introduction' && <IntroductionTab stageId={stageId} />}
         {activeTab === 'overview' && <OverviewTab stageId={stageId} />}
         {activeTab === 'cycles' && <CyclesTab stageId={stageId} onSelectCycle={onSelectCycle} selectedModelId={selectedModelId} onItemClick={handleItemClick} />}
         {activeTab === 'theorists' && <TheoristsTab stageId={stageId} activeGroup={activeGroup} onSelectModel={onSelectModel} selectedModelId={selectedModelId} onItemClick={handleItemClick} />}
         {activeTab === 'history' && <HistoryTab stageId={stageId} />}
         {activeTab === 'myths' && <MythsTab stageId={stageId} onItemClick={handleItemClick} />}
         {activeTab === 'films' && <FilmsTab stageId={stageId} onItemClick={handleItemClick} />}
+        {(activeTab === 'normal-world' || activeTab === 'threshold' || activeTab === 'other-world') && (() => {
+          const worldTab = effectiveTabs.find(t => t.id === activeTab);
+          return worldTab?.worldKey ? <WorldTab worldKey={worldTab.worldKey} /> : null;
+        })()}
         {activeTab === 'development' && <DevelopmentPanel stageLabel={stageLabel || stageId} stageKey={`monomyth-${stageId}`} entries={devEntries || {}} setEntries={setDevEntries || (() => {})} />}
         {activeTab === 'test' && courseworkMode && (
           <StageTest
