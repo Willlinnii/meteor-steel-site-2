@@ -3035,7 +3035,8 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
         </button>
         )}
 
-        {(hasFallenStarlight || hasStoryOfStories) && (
+        {/* Starlight/SOS toggle button hidden — content now accessible via monomyth/meteor-steel landing pages and direct routes */}
+        {false && (hasFallenStarlight || hasStoryOfStories) && (
         <button
           className={`starlight-toggle${showFallenStarlight ? ' active' : ''}${showStoryOfStories ? ' stories' : ''}`}
           onClick={() => {
