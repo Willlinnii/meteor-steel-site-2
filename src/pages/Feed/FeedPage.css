@@ -13,6 +13,37 @@
   text-align: center;
 }
 
+/* ===== MODE TOGGLE ===== */
+.feed-mode-toggle {
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+  margin: 0 0 20px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.feed-mode-btn {
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: var(--text-secondary);
+  font-family: 'Cinzel', serif;
+  font-size: 0.9rem;
+  padding: 8px 20px;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+  margin-bottom: -1px;
+}
+
+.feed-mode-btn:hover {
+  color: var(--text-primary);
+}
+
+.feed-mode-btn.active {
+  color: var(--accent-gold);
+  border-bottom-color: var(--accent-gold);
+}
+
 /* ===== COMPOSER ===== */
 .feed-composer {
   background: rgba(26, 26, 36, 0.6);
@@ -110,6 +141,29 @@
   margin-top: 10px;
   padding-top: 10px;
   border-top: 1px solid var(--border-subtle);
+}
+
+.feed-composer-actions-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.feed-composer-group-toggle {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.feed-composer-group-toggle input {
+  accent-color: var(--accent-gold);
+}
+
+.feed-composer-group-toggle span {
+  white-space: nowrap;
 }
 
 .feed-composer-image-btn {
