@@ -48,7 +48,7 @@
   ],
 
   "routes": {
-    "total": 44,
+    "total": 45,
     "rule": "No route may be removed without explicit approval and a redirect for the old path",
     "coreRoutes": [
       "/",
@@ -74,7 +74,8 @@
       "/fellowship",
       "/discover",
       "/secret-weapon",
-      "/dragon/*"
+      "/dragon/*",
+      "/recursive-chart"
     ],
     "redirects": [
       { "from": "/metals/*", "to": "/chronosphaera" },
@@ -137,6 +138,18 @@
       "GenealogyProvider"
     ],
     "rule": "Provider order must not change without reviewing dependency chains. AuthProvider must always be outermost."
+  },
+
+  "globeInteraction": {
+    "scope": "MythicEarthPage, MythsPage (earth view)",
+    "rules": [
+      "Pin click must NEVER scroll the browser viewport — the screen layout stays fixed while the globe rotates and content updates in place",
+      "No scrollIntoView, window.scrollTo, or equivalent on pin selection — the globe camera.flyTo centers the pin, content panels update, viewport stays put",
+      "All pins must have a hover effect: scale up, show name label tag, and switch cursor to pointer",
+      "Hover styling must be visually distinct from (and smaller than) the clicked/highlighted state so users can distinguish preview from selection",
+      "Clicked pins must stay highlighted until another pin is selected or the selection is cleared",
+      "Libraries are libraries — not 'ancient libraries'. They are pinned to their era via the timeline, not segregated by age"
+    ]
   },
 
   "pagePatterns": {

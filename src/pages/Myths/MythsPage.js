@@ -2760,12 +2760,8 @@ function MythsPage() {
 
   useEffect(() => { trackElement('myths.page.visited'); }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Auto-scroll to content area when a site is selected
-  useEffect(() => {
-    if (selectedMythicSite && earthContentRef.current) {
-      earthContentRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-  }, [selectedMythicSite]);
+  // Content updates in place when a site is selected — no viewport scrolling
+  // so the user's view of the globe and controls stays fixed.
 
   // Sync activeView when URL changes (back/forward navigation)
   useEffect(() => {

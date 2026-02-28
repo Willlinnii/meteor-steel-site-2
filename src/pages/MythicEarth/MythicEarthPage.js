@@ -467,6 +467,7 @@ function MythicEarthGlobe({ activeFilters, timelineRange, traditionFilter, onSel
   const readyFired = useRef(false);
   const geoApplied = useRef(false);
   const userInteractingRef = useRef(false);
+  const [hoveredSiteId, setHoveredSiteId] = useState(null);
 
   const highlightSet = useMemo(
     () => new Set(highlightedSiteIds || []),
@@ -584,6 +585,18 @@ function MythicEarthGlobe({ activeFilters, timelineRange, traditionFilter, onSel
     handler.setInputAction(startInteracting, ScreenSpaceEventType.PINCH_START);
     handler.setInputAction(stopInteracting, ScreenSpaceEventType.PINCH_END);
 
+    // Hover detection: pick entity under cursor
+    handler.setInputAction((movement) => {
+      const picked = viewer.scene.pick(movement.endPosition);
+      if (picked?.id?.name) {
+        setHoveredSiteId(picked.id.name);
+        viewer.canvas.style.cursor = 'pointer';
+      } else {
+        setHoveredSiteId(null);
+        viewer.canvas.style.cursor = '';
+      }
+    }, ScreenSpaceEventType.MOUSE_MOVE);
+
     // Store cleanup refs
     viewer._rotationCleanup = () => {
       viewer.scene.preRender.removeEventListener(rotationListener);
@@ -692,6 +705,8 @@ function MythicEarthGlobe({ activeFilters, timelineRange, traditionFilter, onSel
     >
       {activeTab === 'sites' && filteredSites.map(site => {
         const highlighted = highlightSet.has(site.id);
+        const hovered = hoveredSiteId === site.name;
+        const active = highlighted || hovered;
         const isUser = site.isUserSite;
         return (
           <Entity
@@ -703,31 +718,33 @@ function MythicEarthGlobe({ activeFilters, timelineRange, traditionFilter, onSel
           >
             <BillboardGraphics
               image={site.isBook ? BOOK_PIN_SVG : isUser ? (USER_PIN_SVGS[site.category] || USER_PIN_SVGS['sacred-site']) : PIN_SVGS[site.category]}
-              width={highlighted ? 38 : 28}
-              height={highlighted ? 54 : 40}
+              width={highlighted ? 38 : hovered ? 34 : 28}
+              height={highlighted ? 54 : hovered ? 48 : 40}
               verticalOrigin={VerticalOrigin.BOTTOM}
-              scaleByDistance={highlighted ? new NearFarScalar(1e4, 1.5, 8e6, 0.7) : new NearFarScalar(1e4, 1.2, 8e6, 0.4)}
+              scaleByDistance={active ? new NearFarScalar(1e4, 1.5, 8e6, 0.7) : new NearFarScalar(1e4, 1.2, 8e6, 0.4)}
               pixelOffset={new Cartesian2(0, 0)}
             />
             <LabelGraphics
               text={site.name}
-              font={highlighted ? '14px Cinzel, serif' : '12px Cinzel, serif'}
-              fillColor={highlighted ? Color.WHITE : (isUser ? USER_LABEL_COLOR : (CATEGORY_COLORS[site.category] || Color.WHITE))}
+              font={active ? '14px Cinzel, serif' : '12px Cinzel, serif'}
+              fillColor={active ? Color.WHITE : (isUser ? USER_LABEL_COLOR : (CATEGORY_COLORS[site.category] || Color.WHITE))}
               outlineColor={Color.BLACK}
-              outlineWidth={highlighted ? 3 : 2}
+              outlineWidth={active ? 3 : 2}
               style={LabelStyle.FILL_AND_OUTLINE}
               verticalOrigin={VerticalOrigin.TOP}
               horizontalOrigin={HorizontalOrigin.CENTER}
               pixelOffset={new Cartesian2(0, 6)}
-              scaleByDistance={highlighted ? new NearFarScalar(1e4, 1.2, 8e6, 0.3) : new NearFarScalar(1e4, 1, 5e6, 0)}
+              scaleByDistance={active ? new NearFarScalar(1e4, 1.2, 8e6, 0.3) : new NearFarScalar(1e4, 1, 5e6, 0)}
               showBackground={true}
-              backgroundColor={highlighted ? new Color(0.78, 0.66, 0.38, 0.85) : new Color(0.04, 0.04, 0.06, 0.75)}
+              backgroundColor={highlighted ? new Color(0.78, 0.66, 0.38, 0.85) : hovered ? new Color(0.5, 0.45, 0.3, 0.85) : new Color(0.04, 0.04, 0.06, 0.75)}
               backgroundPadding={new Cartesian2(6, 3)}
             />
           </Entity>
         );
       })}
-      {activeTab === 'movements' && movements.map(m => (
+      {activeTab === 'movements' && movements.map(m => {
+        const mHovered = hoveredSiteId === m.name;
+        return (
         <Entity
           key={m.id}
           position={Cartesian3.fromDegrees(m.lng, m.lat)}
@@ -736,15 +753,15 @@ function MythicEarthGlobe({ activeFilters, timelineRange, traditionFilter, onSel
         >
           <BillboardGraphics
             image={MOVEMENT_PIN_SVGS[m.id]}
-            width={32}
-            height={46}
+            width={mHovered ? 38 : 32}
+            height={mHovered ? 54 : 46}
             verticalOrigin={VerticalOrigin.BOTTOM}
-            scaleByDistance={new NearFarScalar(1e4, 1.4, 8e6, 0.6)}
+            scaleByDistance={mHovered ? new NearFarScalar(1e4, 1.6, 8e6, 0.7) : new NearFarScalar(1e4, 1.4, 8e6, 0.6)}
             pixelOffset={new Cartesian2(0, 0)}
           />
           <LabelGraphics
             text={m.name}
-            font="14px Cinzel, serif"
+            font={mHovered ? '15px Cinzel, serif' : '14px Cinzel, serif'}
             fillColor={Color.fromCssColorString('#d4a853')}
             outlineColor={Color.BLACK}
             outlineWidth={3}
@@ -752,13 +769,14 @@ function MythicEarthGlobe({ activeFilters, timelineRange, traditionFilter, onSel
             verticalOrigin={VerticalOrigin.TOP}
             horizontalOrigin={HorizontalOrigin.CENTER}
             pixelOffset={new Cartesian2(0, 8)}
-            scaleByDistance={new NearFarScalar(1e4, 1.2, 1e7, 0.4)}
+            scaleByDistance={mHovered ? new NearFarScalar(1e4, 1.4, 1e7, 0.5) : new NearFarScalar(1e4, 1.2, 1e7, 0.4)}
             showBackground={true}
-            backgroundColor={new Color(0.04, 0.04, 0.06, 0.8)}
+            backgroundColor={mHovered ? new Color(0.5, 0.45, 0.3, 0.85) : new Color(0.04, 0.04, 0.06, 0.8)}
             backgroundPadding={new Cartesian2(8, 4)}
           />
         </Entity>
-      ))}
+        );
+      })}
     </Viewer>
   );
 }
@@ -1325,11 +1343,8 @@ function MythicEarthPage({ embedded, onSiteSelect: onSiteSelectExternal, externa
     }
   }, [externalFlyTo, embedded]);
 
-  useEffect(() => {
-    if ((selectedSite || selectedMovement) && detailRef.current) {
-      detailRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-  }, [selectedSite, selectedMovement]);
+  // Content updates in place when a site is selected — no viewport scrolling
+  // so the user's view of the globe and controls stays fixed.
 
   const [xrSlot, setXrSlot] = useState(null);
   useEffect(() => {
