@@ -8,6 +8,7 @@ import ProfileChat from '../../profile/ProfileChat';
 import MentorApplicationChat from '../../profile/MentorApplicationChat';
 import ConsultingSetupChat from '../../profile/ConsultingSetupChat';
 import { MENTOR_STATUS, MENTOR_TYPES, getMentorDisplay, getMentorCourseChecklist, DEFAULT_MENTOR_CAPACITY, MAX_MENTOR_BIO_LENGTH, MAX_MENTOR_CAPACITY } from '../../profile/mentorEngine';
+import { PARTNER_STATUS, MAX_ENTITY_NAME_LENGTH, MAX_DESCRIPTION_LENGTH, MAX_MYTHIC_RELATION_LENGTH } from '../../profile/partnerEngine';
 import { validatePhoto, uploadProfilePhoto } from '../../profile/photoUpload';
 import { checkAvailability, registerHandle } from '../../multiplayer/handleService';
 import { apiFetch } from '../../lib/chatApi';
@@ -186,7 +187,7 @@ const PURCHASES = [
 export default function ProfilePage() {
   const { user, signOut } = useAuth();
   const { getCourseStates, completedCourses, certificateData, allCourses } = useCoursework();
-  const { earnedRanks, highestRank, activeCredentials, hasProfile, loaded: profileLoaded, handle, natalChart, updateNatalChart, numerologyName, updateNumerologyName, luckyNumber, updateLuckyNumber, subscriptions, purchases, hasStripeAccount, initiateCheckout, openBillingPortal, refreshProfile, mentorData, qualifiedMentorTypes, mentorEligible, mentorCoursesComplete, effectiveMentorStatus, pairingCategories, updateMentorBio, updateMentorCapacity, publishToDirectory, unpublishFromDirectory, respondToPairing, endPairing, photoURL, consultingData, consultingCategories, updateProfilePhoto, respondToConsulting, apiKeys, saveApiKey, removeApiKey, hasAnthropicKey, hasOpenaiKey, mythouseApiKey, hasMythouseKey, generateMythouseKey, regenerateMythouseKey, social, updateSocial, pilgrimages, pilgrimagesLoaded, removePilgrimage, personalStory, savePersonalStory, curatorApproved, ringSize, updateRingSize } = useProfile();
+  const { earnedRanks, highestRank, activeCredentials, hasProfile, loaded: profileLoaded, handle, natalChart, updateNatalChart, numerologyName, updateNumerologyName, luckyNumber, updateLuckyNumber, subscriptions, purchases, hasStripeAccount, initiateCheckout, openBillingPortal, refreshProfile, mentorData, qualifiedMentorTypes, mentorEligible, mentorCoursesComplete, effectiveMentorStatus, pairingCategories, updateMentorBio, updateMentorCapacity, publishToDirectory, unpublishFromDirectory, respondToPairing, endPairing, photoURL, consultingData, consultingCategories, updateProfilePhoto, respondToConsulting, apiKeys, saveApiKey, removeApiKey, hasAnthropicKey, hasOpenaiKey, mythouseApiKey, hasMythouseKey, generateMythouseKey, regenerateMythouseKey, social, updateSocial, pilgrimages, pilgrimagesLoaded, removePilgrimage, personalStory, savePersonalStory, curatorApproved, ringSize, updateRingSize, partnerData, partnerStatus, partnerDisplay, partnerMembershipCategories, submitPartnerApplication, updatePartnerProfile, publishPartnerDirectory, unpublishPartnerDirectory, inviteRepresentative, requestJoinPartner, respondToPartnerMembership, endPartnerMembership } = useProfile();
 const { cards: storyCards, loaded: storyCardsLoaded, vaultCardIds, toggleVaultCard } = useStoryCardSync();
   const { myVaultPosts, myProfilePosts, deletePost: deleteFellowshipPost } = useFellowship();
   const navigate = useNavigate();
@@ -863,6 +864,23 @@ const { cards: storyCards, loaded: storyCardsLoaded, vaultCardIds, toggleVaultCa
           onConsultingAccept={handleConsultingAccept}
           onConsultingDecline={handleConsultingDecline}
           consultingRespondingId={consultingRespondingId}
+        />
+      )}
+
+      {/* Partner Section */}
+      {profileLoaded && (
+        <PartnerSection
+          partnerStatus={partnerStatus}
+          partnerData={partnerData}
+          partnerDisplay={partnerDisplay}
+          partnerMembershipCategories={partnerMembershipCategories}
+          submitPartnerApplication={submitPartnerApplication}
+          updatePartnerProfile={updatePartnerProfile}
+          publishPartnerDirectory={publishPartnerDirectory}
+          unpublishPartnerDirectory={unpublishPartnerDirectory}
+          inviteRepresentative={inviteRepresentative}
+          respondToPartnerMembership={respondToPartnerMembership}
+          endPartnerMembership={endPartnerMembership}
         />
       )}
 
@@ -4114,5 +4132,242 @@ function NatalChartInput({ existingChart, onSave }) {
         </div>
       )}
     </div>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════
+// PARTNER SECTION
+// ═══════════════════════════════════════════════════════════════
+
+// Shared form for both apply and edit — the only difference is the submit handler and button label
+function PartnerEntityForm({ initial, onSubmit, onCancel, submitLabel, submitting }) {
+  const [entityName, setEntityName] = useState(initial?.entityName || '');
+  const [description, setDescription] = useState(initial?.description || '');
+  const [websiteUrl, setWebsiteUrl] = useState(initial?.websiteUrl || '');
+  const [mythicRelation, setMythicRelation] = useState(initial?.mythicRelation || '');
+
+  return (
+    <div className="profile-credential-card" style={{ flexDirection: 'column', alignItems: 'stretch', gap: 12 }}>
+      <input type="text" placeholder="Entity name *" value={entityName} onChange={e => setEntityName(e.target.value)} maxLength={MAX_ENTITY_NAME_LENGTH} className="profile-handle-input" />
+      <textarea placeholder="Description — what does this entity do?" value={description} onChange={e => setDescription(e.target.value)} maxLength={MAX_DESCRIPTION_LENGTH} rows={3} className="profile-handle-input" style={{ resize: 'vertical', fontFamily: 'inherit' }} />
+      <input type="url" placeholder="Website URL (optional)" value={websiteUrl} onChange={e => setWebsiteUrl(e.target.value)} className="profile-handle-input" />
+      <textarea placeholder="Mythic relation — how does this connect to myth, story, or the hero's journey? (optional)" value={mythicRelation} onChange={e => setMythicRelation(e.target.value)} maxLength={MAX_MYTHIC_RELATION_LENGTH} rows={3} className="profile-handle-input" style={{ resize: 'vertical', fontFamily: 'inherit' }} />
+      <div style={{ display: 'flex', gap: 8 }}>
+        <button className="profile-update-btn" onClick={() => onSubmit({ entityName, description, websiteUrl, mythicRelation })} disabled={submitting}>
+          {submitting ? 'Saving...' : submitLabel}
+        </button>
+        <button className="profile-update-btn" onClick={onCancel} style={{ opacity: 0.7 }}>Cancel</button>
+      </div>
+    </div>
+  );
+}
+
+// Renders a titled list of membership cards with optional actions
+function MembershipListSection({ title, items, nameKey, actionButtons, loadingId }) {
+  if (!items || items.length === 0) return null;
+  return (
+    <div style={{ marginTop: 16 }}>
+      <div className="profile-credential-details" style={{ marginBottom: 8, fontWeight: 600 }}>{title}</div>
+      {items.map(m => {
+        const label = nameKey === 'rep' ? `@${m.representativeHandle || 'unknown'}` : m.partnerEntityName;
+        return (
+          <div key={m.id} className="profile-credential-card" style={{ marginBottom: 8, flexDirection: actionButtons ? 'column' : 'row', alignItems: actionButtons ? 'stretch' : 'center' }}>
+            {nameKey === 'partner' && <span className="profile-credential-icon">{'\u{1F91D}'}</span>}
+            <div className="profile-credential-info">
+              <div className="profile-credential-name">{nameKey === 'partner' && actionButtons === 'leave' ? `Representing ${label}` : label}</div>
+              {m.message && actionButtons && <div className="profile-credential-details" style={{ marginTop: 4 }}>{m.message}</div>}
+              {!actionButtons && <div className="profile-credential-details">Awaiting response</div>}
+            </div>
+            {actionButtons === 'accept-decline' && (
+              <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
+                <button className="profile-update-btn" onClick={() => m.onAccept()} disabled={loadingId === m.id}>Accept</button>
+                <button className="profile-update-btn" onClick={() => m.onDecline()} disabled={loadingId === m.id} style={{ opacity: 0.7 }}>Decline</button>
+              </div>
+            )}
+            {actionButtons === 'remove' && (
+              <button className="profile-update-btn" onClick={() => m.onEnd()} disabled={loadingId === m.id} style={{ opacity: 0.7 }}>Remove</button>
+            )}
+            {actionButtons === 'leave' && (
+              <button className="profile-update-btn" onClick={() => m.onEnd()} disabled={loadingId === m.id} style={{ opacity: 0.7 }}>Leave</button>
+            )}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+function PartnerSection({ partnerStatus, partnerData, partnerDisplay, partnerMembershipCategories, submitPartnerApplication, updatePartnerProfile, publishPartnerDirectory, unpublishPartnerDirectory, inviteRepresentative, respondToPartnerMembership, endPartnerMembership }) {
+  const [showForm, setShowForm] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState(null);
+  const [editing, setEditing] = useState(false);
+  const [inviteHandle, setInviteHandle] = useState('');
+  const [inviteMessage, setInviteMessage] = useState('');
+  const [inviting, setInviting] = useState(false);
+  const [membershipActionId, setMembershipActionId] = useState(null);
+
+  const handleApply = async (fields) => {
+    if (!fields.entityName.trim()) { setError('Entity name is required.'); return; }
+    setSubmitting(true);
+    setError(null);
+    try {
+      await submitPartnerApplication({ entityName: fields.entityName.trim(), description: fields.description.trim(), websiteUrl: fields.websiteUrl.trim(), mythicRelation: fields.mythicRelation.trim() });
+      setShowForm(false);
+    } catch (err) {
+      setError(err.message || 'Failed to submit application');
+    }
+    setSubmitting(false);
+  };
+
+  const handleUpdate = async (fields) => {
+    setSubmitting(true);
+    setError(null);
+    try {
+      await updatePartnerProfile({ entityName: fields.entityName.trim() || undefined, description: fields.description.trim(), websiteUrl: fields.websiteUrl.trim(), mythicRelation: fields.mythicRelation.trim() });
+      setEditing(false);
+    } catch (err) {
+      setError(err.message || 'Failed to update');
+    }
+    setSubmitting(false);
+  };
+
+  const handleInvite = async () => {
+    const raw = inviteHandle.trim().replace(/^@/, '');
+    if (!raw) return;
+    setInviting(true);
+    setError(null);
+    try {
+      await inviteRepresentative(raw, inviteMessage.trim() || null);
+      setInviteHandle('');
+      setInviteMessage('');
+    } catch (err) {
+      setError(err.message || 'Failed to invite');
+    }
+    setInviting(false);
+  };
+
+  const withMembershipAction = async (membershipId, fn) => {
+    setMembershipActionId(membershipId);
+    try { await fn(); } catch (err) { setError(err.message || 'Action failed'); }
+    setMembershipActionId(null);
+  };
+
+  const { pendingInvites, pendingRequests, activeReps, myPartnerships, pendingMyInvites, pendingMyRequests } = partnerMembershipCategories;
+
+  // Attach callbacks to membership items for the list helper
+  const withActions = (items, { accept, decline, end } = {}) =>
+    items.map(m => ({
+      ...m,
+      ...(accept && { onAccept: () => withMembershipAction(m.id, () => respondToPartnerMembership(m.id, true)) }),
+      ...(decline && { onDecline: () => withMembershipAction(m.id, () => respondToPartnerMembership(m.id, false)) }),
+      ...(end && { onEnd: () => withMembershipAction(m.id, () => endPartnerMembership(m.id)) }),
+    }));
+
+  return (
+    <>
+      <h2 className="profile-section-title">Partner</h2>
+
+      {error && <div className="profile-empty" style={{ color: '#d95b5b', marginBottom: 12 }}>{error}</div>}
+
+      {/* NONE: Apply button */}
+      {partnerStatus === PARTNER_STATUS.NONE && !showForm && (
+        <div>
+          <div className="profile-empty">Represent an organization, brand, or practice on Mythouse.</div>
+          <button className="profile-update-btn" onClick={() => { setShowForm(true); setError(null); }}>
+            Apply to Become a Partner
+          </button>
+        </div>
+      )}
+
+      {/* Application form (new or re-apply) */}
+      {(partnerStatus === PARTNER_STATUS.NONE || partnerStatus === PARTNER_STATUS.REJECTED) && showForm && (
+        <PartnerEntityForm onSubmit={handleApply} onCancel={() => setShowForm(false)} submitLabel="Submit Application" submitting={submitting} />
+      )}
+
+      {/* PENDING_ADMIN: Status card */}
+      {partnerStatus === PARTNER_STATUS.PENDING_ADMIN && (
+        <div className="profile-credential-card">
+          <span className="profile-credential-icon">{'\u{1F4E8}'}</span>
+          <div className="profile-credential-info">
+            <div className="profile-credential-name">{partnerDisplay?.entityName}</div>
+            <div className="profile-credential-details">Your application is under review.</div>
+          </div>
+        </div>
+      )}
+
+      {/* REJECTED: Status card with re-apply */}
+      {partnerStatus === PARTNER_STATUS.REJECTED && !showForm && (
+        <div>
+          <div className="profile-credential-card">
+            <span className="profile-credential-icon">{'\u{274C}'}</span>
+            <div className="profile-credential-info">
+              <div className="profile-credential-name">{partnerData?.entityName || 'Partner Application'}</div>
+              <div className="profile-credential-details">
+                Not approved{partnerData?.rejectionReason ? `: ${partnerData.rejectionReason}` : '.'}
+              </div>
+            </div>
+          </div>
+          <button className="profile-update-btn" onClick={() => { setShowForm(true); setError(null); }}>Re-Apply</button>
+        </div>
+      )}
+
+      {/* APPROVED: Management panel */}
+      {partnerStatus === PARTNER_STATUS.APPROVED && (
+        <div>
+          <div className="profile-credential-card">
+            <span className="profile-credential-icon">{'\u{1F91D}'}</span>
+            <div className="profile-credential-info">
+              <div className="profile-credential-name">{partnerDisplay?.entityName}</div>
+              <div className="profile-credential-details">{partnerDisplay?.statusLabel}</div>
+            </div>
+          </div>
+
+          {editing ? (
+            <div style={{ marginTop: 12 }}>
+              <PartnerEntityForm initial={partnerData} onSubmit={handleUpdate} onCancel={() => setEditing(false)} submitLabel="Save" submitting={submitting} />
+            </div>
+          ) : (
+            <div style={{ marginTop: 8 }}>
+              {partnerData?.description && <div className="profile-credential-details" style={{ marginBottom: 8 }}>{partnerData.description}</div>}
+              {partnerData?.websiteUrl && <div className="profile-credential-details" style={{ marginBottom: 8 }}><a href={partnerData.websiteUrl} target="_blank" rel="noopener noreferrer">{partnerData.websiteUrl}</a></div>}
+              {partnerData?.mythicRelation && <div className="profile-credential-details" style={{ marginBottom: 8, fontStyle: 'italic' }}>{partnerData.mythicRelation}</div>}
+              <button className="profile-update-btn" onClick={() => { setEditing(true); setError(null); }}>Edit Entity Info</button>
+            </div>
+          )}
+
+          {/* Directory toggle */}
+          <div style={{ marginTop: 12, display: 'flex', gap: 8, alignItems: 'center' }}>
+            {partnerData?.directoryListed ? (
+              <>
+                <span className="profile-credential-details" style={{ color: '#5bd97a' }}>Listed in Partner Directory</span>
+                <button className="profile-update-btn" onClick={unpublishPartnerDirectory}>Unpublish</button>
+              </>
+            ) : (
+              <button className="profile-update-btn" onClick={publishPartnerDirectory}>Publish to Directory</button>
+            )}
+          </div>
+
+          {/* Invite representative */}
+          <div style={{ marginTop: 16 }}>
+            <div className="profile-credential-details" style={{ marginBottom: 8, fontWeight: 600 }}>Invite a Representative</div>
+            <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
+              <input type="text" placeholder="@handle" value={inviteHandle} onChange={e => setInviteHandle(e.target.value)} className="profile-handle-input" style={{ flex: 1, minWidth: 150 }} />
+              <button className="profile-update-btn" onClick={handleInvite} disabled={inviting || !inviteHandle.trim()}>{inviting ? 'Inviting...' : 'Invite'}</button>
+            </div>
+            <textarea placeholder="Optional message..." value={inviteMessage} onChange={e => setInviteMessage(e.target.value)} maxLength={500} rows={2} className="profile-handle-input" style={{ resize: 'vertical', fontFamily: 'inherit', marginTop: 8, width: '100%' }} />
+          </div>
+
+          <MembershipListSection title="Pending Invites Sent" items={pendingInvites} nameKey="rep" />
+          <MembershipListSection title="Pending Join Requests" items={withActions(pendingRequests, { accept: true, decline: true })} nameKey="rep" actionButtons="accept-decline" loadingId={membershipActionId} />
+          <MembershipListSection title={`Active Representatives (${activeReps.length})`} items={withActions(activeReps, { end: true })} nameKey="rep" actionButtons="remove" loadingId={membershipActionId} />
+        </div>
+      )}
+
+      {/* My Partnerships — shown for all users regardless of partner status */}
+      <MembershipListSection title="Partner Invitations" items={withActions(pendingMyInvites, { accept: true, decline: true })} nameKey="partner" actionButtons="accept-decline" loadingId={membershipActionId} />
+      <MembershipListSection title="Pending Join Requests" items={pendingMyRequests} nameKey="partner" />
+      <MembershipListSection title="My Partnerships" items={withActions(myPartnerships, { end: true })} nameKey="partner" actionButtons="leave" loadingId={membershipActionId} />
+    </>
   );
 }

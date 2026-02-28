@@ -7,6 +7,7 @@ import { getEarnedRanks, getHighestRank, getActiveCredentials } from './profileE
 import { getQualifiedMentorTypes, isEligibleForMentor, getEffectiveMentorStatus, isMentorCourseComplete } from './mentorEngine';
 import { categorizePairings } from './mentorPairingEngine';
 import { categorizeConsultingRequests } from './consultingEngine';
+import { getPartnerStatus, getPartnerDisplay, categorizePartnerMemberships } from './partnerEngine';
 
 const ProfileContext = createContext(null);
 
@@ -205,6 +206,11 @@ export function ProfileProvider({ children }) {
   // Curator approval derived from profile
   const curatorApproved = profileData?.curatorApproved === true;
 
+  // Partner derived values
+  const partnerData = profileData?.partner || null;
+  const partnerStatus = useMemo(() => getPartnerStatus(partnerData), [partnerData]);
+  const partnerDisplay = useMemo(() => getPartnerDisplay(partnerData), [partnerData]);
+
   // --- Consulting request subscriptions ---
   const [consultingRequests, setConsultingRequests] = useState([]);
 
@@ -314,6 +320,61 @@ export function ProfileProvider({ children }) {
   const consultingCategories = useMemo(
     () => categorizeConsultingRequests(consultingRequests, user?.uid),
     [consultingRequests, user?.uid]
+  );
+
+  // --- Partner membership subscriptions ---
+  const [partnerMemberships, setPartnerMemberships] = useState([]);
+
+  useEffect(() => {
+    if (!user || !firebaseConfigured || !db) {
+      setPartnerMemberships([]);
+      return;
+    }
+
+    const memRef = collection(db, 'partner-memberships');
+
+    // Listener 1: memberships where user is the partner owner
+    const qOwner = query(
+      memRef,
+      where('partnerUid', '==', user.uid),
+      where('status', 'in', ['pending', 'accepted']),
+    );
+
+    // Listener 2: memberships where user is a representative
+    const qRep = query(
+      memRef,
+      where('representativeUid', '==', user.uid),
+      where('status', 'in', ['pending', 'accepted']),
+    );
+
+    let ownerResults = [];
+    let repResults = [];
+
+    const merge = () => {
+      const map = new Map();
+      [...ownerResults, ...repResults].forEach(m => map.set(m.id, m));
+      setPartnerMemberships(Array.from(map.values()));
+    };
+
+    const unsub1 = onSnapshot(qOwner, (snap) => {
+      ownerResults = [];
+      snap.forEach(d => ownerResults.push({ id: d.id, ...d.data() }));
+      merge();
+    }, (err) => console.error('Partner memberships (owner) listener error:', err));
+
+    const unsub2 = onSnapshot(qRep, (snap) => {
+      repResults = [];
+      snap.forEach(d => repResults.push({ id: d.id, ...d.data() }));
+      merge();
+    }, (err) => console.error('Partner memberships (rep) listener error:', err));
+
+    return () => { unsub1(); unsub2(); };
+  }, [user]);
+
+  // Categorize partner memberships into role-based groups
+  const partnerMembershipCategories = useMemo(
+    () => categorizePartnerMemberships(partnerMemberships, user?.uid),
+    [partnerMemberships, user?.uid]
   );
 
   // --- Mentor pairing API methods ---
@@ -1007,6 +1068,180 @@ export function ProfileProvider({ children }) {
     }
   }, [user]);
 
+  // --- Partner action functions ---
+
+  const submitPartnerApplication = useCallback(async ({ entityName, description, websiteUrl, mythicRelation }) => {
+    if (!user) return;
+    const partnerUpdate = {
+      status: 'pending-admin',
+      entityName,
+      description: description || '',
+      websiteUrl: websiteUrl || '',
+      mythicRelation: mythicRelation || '',
+      appliedAt: Date.now(),
+    };
+    setProfileData(prev => ({ ...prev, partner: partnerUpdate }));
+    try {
+      const token = await user.getIdToken();
+      const resp = await fetch('/api/mentor', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ action: 'partner-apply', entityName, description, websiteUrl, mythicRelation }),
+      });
+      if (!resp.ok) {
+        const err = await resp.json();
+        throw new Error(err.error || 'Failed to apply');
+      }
+    } catch (err) {
+      console.error('Failed to submit partner application:', err);
+      setProfileData(prev => ({ ...prev, partner: null }));
+      throw err;
+    }
+  }, [user]);
+
+  const updatePartnerProfile = useCallback(async (updates) => {
+    if (!user) return;
+    const prev = profileDataRef.current?.partner || {};
+    setProfileData(p => ({ ...p, partner: { ...prev, ...updates } }));
+    try {
+      const token = await user.getIdToken();
+      const resp = await fetch('/api/mentor', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ action: 'partner-update', ...updates }),
+      });
+      if (!resp.ok) {
+        const err = await resp.json();
+        throw new Error(err.error || 'Failed to update partner');
+      }
+    } catch (err) {
+      console.error('Failed to update partner profile:', err);
+      setProfileData(p => ({ ...p, partner: prev }));
+      throw err;
+    }
+  }, [user]);
+
+  const publishPartnerDirectory = useCallback(async () => {
+    if (!user) return;
+    setProfileData(prev => ({ ...prev, partner: { ...(prev?.partner || {}), directoryListed: true } }));
+    try {
+      const token = await user.getIdToken();
+      const resp = await fetch('/api/mentor', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ action: 'partner-publish' }),
+      });
+      if (!resp.ok) {
+        const err = await resp.json();
+        throw new Error(err.error || 'Failed to publish');
+      }
+    } catch (err) {
+      console.error('Failed to publish partner directory:', err);
+      setProfileData(prev => ({ ...prev, partner: { ...(prev?.partner || {}), directoryListed: false } }));
+      throw err;
+    }
+  }, [user]);
+
+  const unpublishPartnerDirectory = useCallback(async () => {
+    if (!user) return;
+    setProfileData(prev => ({ ...prev, partner: { ...(prev?.partner || {}), directoryListed: false } }));
+    try {
+      const token = await user.getIdToken();
+      const resp = await fetch('/api/mentor', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ action: 'partner-unpublish' }),
+      });
+      if (!resp.ok) {
+        const err = await resp.json();
+        throw new Error(err.error || 'Failed to unpublish');
+      }
+    } catch (err) {
+      console.error('Failed to unpublish partner directory:', err);
+      setProfileData(prev => ({ ...prev, partner: { ...(prev?.partner || {}), directoryListed: true } }));
+      throw err;
+    }
+  }, [user]);
+
+  const inviteRepresentative = useCallback(async (handleOrUid, message) => {
+    if (!user) return;
+    try {
+      const token = await user.getIdToken();
+      const clean = handleOrUid.replace(/^@/, '');
+      const resp = await fetch('/api/mentor', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ action: 'partner-invite', targetHandle: clean, message: message || null }),
+      });
+      if (!resp.ok) {
+        const err = await resp.json();
+        throw new Error(err.error || 'Failed to invite representative');
+      }
+      return await resp.json();
+    } catch (err) {
+      console.error('Failed to invite representative:', err);
+      throw err;
+    }
+  }, [user]);
+
+  const requestJoinPartner = useCallback(async (partnerUid, message) => {
+    if (!user) return;
+    try {
+      const token = await user.getIdToken();
+      const resp = await fetch('/api/mentor', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ action: 'partner-request-join', partnerUid, message: message || null }),
+      });
+      if (!resp.ok) {
+        const err = await resp.json();
+        throw new Error(err.error || 'Failed to request join');
+      }
+      return await resp.json();
+    } catch (err) {
+      console.error('Failed to request join partner:', err);
+      throw err;
+    }
+  }, [user]);
+
+  const respondToPartnerMembership = useCallback(async (membershipId, accept) => {
+    if (!user) return;
+    try {
+      const token = await user.getIdToken();
+      const resp = await fetch('/api/mentor', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ action: accept ? 'partner-membership-accept' : 'partner-membership-decline', membershipId }),
+      });
+      if (!resp.ok) {
+        const err = await resp.json();
+        throw new Error(err.error || 'Failed to respond to membership');
+      }
+    } catch (err) {
+      console.error('Failed to respond to partner membership:', err);
+      throw err;
+    }
+  }, [user]);
+
+  const endPartnerMembership = useCallback(async (membershipId) => {
+    if (!user) return;
+    try {
+      const token = await user.getIdToken();
+      const resp = await fetch('/api/mentor', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ action: 'partner-membership-end', membershipId }),
+      });
+      if (!resp.ok) {
+        const err = await resp.json();
+        throw new Error(err.error || 'Failed to end membership');
+      }
+    } catch (err) {
+      console.error('Failed to end partner membership:', err);
+      throw err;
+    }
+  }, [user]);
+
   // Mythouse API key (from secrets doc)
   const mythouseApiKey = apiKeys.mythouseApiKey || null;
   const hasMythouseKey = !!mythouseApiKey;
@@ -1315,6 +1550,19 @@ export function ProfileProvider({ children }) {
     updateRingZodiacMode,
     jewelryConfig,
     updateJewelryConfig,
+    partnerData,
+    partnerStatus,
+    partnerDisplay,
+    partnerMemberships,
+    partnerMembershipCategories,
+    submitPartnerApplication,
+    updatePartnerProfile,
+    publishPartnerDirectory,
+    unpublishPartnerDirectory,
+    inviteRepresentative,
+    requestJoinPartner,
+    respondToPartnerMembership,
+    endPartnerMembership,
   }), [
     profileData, earnedRanks, highestRank, activeCredentials, hasProfile, loaded, handle,
     natalChart, numerologyName, subscriptions, hasSubscription, purchases, hasPurchase,
@@ -1332,6 +1580,9 @@ export function ProfileProvider({ children }) {
     social, updateSocial, pilgrimages, pilgrimagesLoaded, addPilgrimage, removePilgrimage,
     userSites, userSitesLoaded, addUserSite, removeUserSite, savedSiteIds, saveSite, unsaveSite,
     personalStory, savePersonalStory, curatorApproved, updateCuratorStatus,
+    partnerData, partnerStatus, partnerDisplay, partnerMemberships, partnerMembershipCategories,
+    submitPartnerApplication, updatePartnerProfile, publishPartnerDirectory, unpublishPartnerDirectory,
+    inviteRepresentative, requestJoinPartner, respondToPartnerMembership, endPartnerMembership,
   ]);
 
   return (

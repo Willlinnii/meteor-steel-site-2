@@ -617,6 +617,7 @@ const SECTION_GROUPS = [
     { id: 'subscribers', label: 'Subscribers' },
     { id: 'contacts', label: 'Contacts' },
     { id: 'mentors', label: 'Mentors' },
+    { id: 'partners', label: 'Partners' },
     { id: 'consulting', label: 'Consulting' },
   ]},
   { group: 'Site', children: [
@@ -1426,6 +1427,182 @@ function MentorManagerSection() {
                         className="admin-coursework-load-btn"
                         style={{ background: '#3a1a1a', borderColor: '#d95b5b', color: '#d95b5b' }}
                         onClick={(e) => { e.stopPropagation(); handleAction(app.id, 'reject'); }}
+                        disabled={actionLoading === app.id}
+                      >
+                        Reject
+                      </button>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+// --- Partner Manager Section ---
+function PartnerManagerSection() {
+  const { user } = useAuth();
+  const [applications, setApplications] = useState([]);
+  const [loadingApps, setLoadingApps] = useState(false);
+  const [expandedApp, setExpandedApp] = useState(null);
+  const [rejectReason, setRejectReason] = useState('');
+  const [actionLoading, setActionLoading] = useState(null);
+
+  const loadApplications = useCallback(async () => {
+    if (!firebaseConfigured || !db) return;
+    setLoadingApps(true);
+    try {
+      const q = query(collection(db, 'partner-applications'), orderBy('createdAt', 'desc'));
+      const snap = await getDocs(q);
+      const apps = [];
+      snap.forEach(doc => apps.push({ id: doc.id, ...doc.data() }));
+      setApplications(apps);
+    } catch (err) {
+      console.error('Failed to load partner applications:', err);
+    }
+    setLoadingApps(false);
+  }, []);
+
+  const handleAction = async (appId, action) => {
+    setActionLoading(appId);
+    try {
+      const token = await user.getIdToken();
+      const body = { applicationId: appId, action };
+      if (action === 'partner-reject' && rejectReason.trim()) {
+        body.rejectionReason = rejectReason.trim();
+      }
+      const res = await fetch('/api/mentor', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify(body),
+      });
+      const data = await res.json();
+      if (data.success) {
+        await loadApplications();
+        setRejectReason('');
+      }
+    } catch (err) {
+      console.error('Partner admin action failed:', err);
+    }
+    setActionLoading(null);
+  };
+
+  const sorted = useMemo(() => {
+    return [...applications].sort((a, b) => {
+      if (a.status === 'pending-admin' && b.status !== 'pending-admin') return -1;
+      if (b.status === 'pending-admin' && a.status !== 'pending-admin') return 1;
+      return (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0);
+    });
+  }, [applications]);
+
+  const STATUS_COLORS = {
+    'pending-admin': '#d9a55b',
+    'approved': '#5bd97a',
+    'rejected': '#d95b5b',
+  };
+
+  return (
+    <div className="admin-coursework">
+      <h2 className="admin-coursework-title">PARTNER APPLICATIONS</h2>
+
+      <button
+        className="admin-coursework-load-btn"
+        onClick={loadApplications}
+        disabled={loadingApps}
+      >
+        {loadingApps ? 'Loading...' : 'Load Applications'}
+      </button>
+
+      {sorted.length > 0 && (
+        <div className="admin-coursework-stats">
+          <div className="admin-coursework-stat-row">
+            <span>Total applications:</span>
+            <strong>{sorted.length}</strong>
+          </div>
+          <div className="admin-coursework-stat-row">
+            <span>Pending:</span>
+            <strong>{sorted.filter(a => a.status === 'pending-admin').length}</strong>
+          </div>
+        </div>
+      )}
+
+      <div className="admin-coursework-users">
+        {sorted.map(app => {
+          const expanded = expandedApp === app.id;
+          return (
+            <div key={app.id} className="admin-coursework-user-row" style={{ flexDirection: 'column', alignItems: 'stretch', cursor: 'pointer' }} onClick={() => setExpandedApp(expanded ? null : app.id)}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <span className="admin-coursework-user-email">{app.entityName || app.displayName || app.email || app.uid}</span>
+                <span className="admin-badge" style={{ borderColor: STATUS_COLORS[app.status], color: STATUS_COLORS[app.status] }}>
+                  {app.status}
+                </span>
+                {app.handle && <span className="admin-badge">@{app.handle}</span>}
+              </div>
+
+              {expanded && (
+                <div style={{ marginTop: '12px', paddingLeft: '8px' }}>
+                  <div className="admin-coursework-req-desc" style={{ marginBottom: '8px' }}>
+                    <strong>Entity:</strong> {app.entityName}
+                  </div>
+                  {app.displayName && (
+                    <div className="admin-coursework-req-desc" style={{ marginBottom: '8px' }}>
+                      <strong>Owner:</strong> {app.displayName}{app.handle ? ` (@${app.handle})` : ''}
+                    </div>
+                  )}
+                  {app.description && (
+                    <div className="admin-coursework-req-desc" style={{ marginBottom: '8px' }}>
+                      <strong>Description:</strong> {app.description}
+                    </div>
+                  )}
+                  {app.websiteUrl && (
+                    <div style={{ marginBottom: '8px' }}>
+                      <strong>Website:</strong>{' '}
+                      <a href={app.websiteUrl} target="_blank" rel="noopener noreferrer" className="admin-badge" style={{ borderColor: '#5b8dd9', color: '#5b8dd9' }}>
+                        {app.websiteUrl}
+                      </a>
+                    </div>
+                  )}
+                  {app.mythicRelation && (
+                    <div className="admin-coursework-req-desc" style={{ marginBottom: '8px' }}>
+                      <strong>Mythic Relation:</strong> {app.mythicRelation}
+                    </div>
+                  )}
+                  {app.rejectionReason && (
+                    <div className="admin-coursework-req-desc" style={{ marginBottom: '8px' }}>
+                      <strong>Rejection Reason:</strong> {app.rejectionReason}
+                    </div>
+                  )}
+
+                  {app.status === 'pending-admin' && (
+                    <div style={{ display: 'flex', gap: '8px', marginTop: '12px', alignItems: 'center', flexWrap: 'wrap' }}>
+                      <button
+                        className="admin-coursework-load-btn"
+                        style={{ background: '#1a3a1a', borderColor: '#5bd97a', color: '#5bd97a' }}
+                        onClick={(e) => { e.stopPropagation(); handleAction(app.id, 'partner-approve'); }}
+                        disabled={actionLoading === app.id}
+                      >
+                        Approve
+                      </button>
+                      <input
+                        type="text"
+                        placeholder="Rejection reason..."
+                        value={rejectReason}
+                        onChange={e => setRejectReason(e.target.value)}
+                        onClick={e => e.stopPropagation()}
+                        className="admin-coursework-select"
+                        style={{ flex: 1, minWidth: '200px' }}
+                      />
+                      <button
+                        className="admin-coursework-load-btn"
+                        style={{ background: '#3a1a1a', borderColor: '#d95b5b', color: '#d95b5b' }}
+                        onClick={(e) => { e.stopPropagation(); handleAction(app.id, 'partner-reject'); }}
                         disabled={actionLoading === app.id}
                       >
                         Reject
@@ -8304,6 +8481,7 @@ function AdminPage() {
       {activeSection === 'architecture' && <ArchitectureSection />}
       {activeSection === 'subscribers' && <SubscribersSection />}
       {activeSection === 'mentors' && <MentorManagerSection />}
+      {activeSection === 'partners' && <PartnerManagerSection />}
       {activeSection === 'consulting' && <ConsultingManagerSection />}
       {activeSection === 'contacts' && (
         <Suspense fallback={<div className="contacts-loading">Loading Contacts...</div>}>

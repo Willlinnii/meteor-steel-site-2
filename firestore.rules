@@ -96,6 +96,27 @@ service cloud.firestore {
       allow write: if false;
     }
 
+    // Partner applications — admin read-only, server-written
+    match /partner-applications/{appId} {
+      allow read: if request.auth != null && request.auth.token.email == 'willlinnii@gmail.com';
+      allow write: if false;
+    }
+
+    // Partner directory — readable by all auth users, server-written only
+    match /partner-directory/{partnerId} {
+      allow read: if request.auth != null;
+      allow write: if false;
+    }
+
+    // Partner memberships — readable by partner owner, representative, or admin; server-written only
+    match /partner-memberships/{membershipId} {
+      allow read: if request.auth != null
+        && (request.auth.uid == resource.data.partnerUid
+            || request.auth.uid == resource.data.representativeUid
+            || request.auth.token.email == 'willlinnii@gmail.com');
+      allow write: if false;
+    }
+
     // Mentor pairings — readable by mentor, student, or admin; server-written only
     match /mentor-pairings/{pairingId} {
       allow read: if request.auth != null

@@ -75,7 +75,10 @@ const CONSULTING_ACTIONS = ['consulting-request', 'consulting-accept', 'consulti
 const GUILD_ACTIONS = ['create-post', 'create-reply', 'vote', 'delete-post', 'delete-reply', 'pin-post', 'cleanup-match'];
 const ENGAGEMENT_ACTIONS = ['create-engagement', 'get-engagement', 'list-engagements', 'update-engagement-status', 'save-session', 'get-sessions', 'assign-practitioner', 'list-practitioner-engagements', 'list-practitioners'];
 const TEACHER_ACTIONS = ['get-catalog', 'parse-syllabus'];
-const ALL_ACTIONS = [...ADMIN_ACTIONS, ...DIRECTORY_ACTIONS, ...PAIRING_ACTIONS, ...CONSULTING_ACTIONS, ...GUILD_ACTIONS, ...ENGAGEMENT_ACTIONS, ...TEACHER_ACTIONS];
+const PARTNER_ACTIONS = ['partner-apply', 'partner-update', 'partner-publish', 'partner-unpublish'];
+const PARTNER_ADMIN_ACTIONS = ['partner-approve', 'partner-reject'];
+const PARTNER_MEMBERSHIP_ACTIONS = ['partner-invite', 'partner-request-join', 'partner-membership-accept', 'partner-membership-decline', 'partner-membership-end'];
+const ALL_ACTIONS = [...ADMIN_ACTIONS, ...DIRECTORY_ACTIONS, ...PAIRING_ACTIONS, ...CONSULTING_ACTIONS, ...GUILD_ACTIONS, ...ENGAGEMENT_ACTIONS, ...TEACHER_ACTIONS, ...PARTNER_ACTIONS, ...PARTNER_ADMIN_ACTIONS, ...PARTNER_MEMBERSHIP_ACTIONS];
 
 module.exports = async (req, res) => {
   if (req.method !== 'POST') {
@@ -92,8 +95,8 @@ module.exports = async (req, res) => {
     return res.status(400).json({ error: `Invalid action. Must be one of: ${ALL_ACTIONS.join(', ')}` });
   }
 
-  // --- Admin actions ---
-  if (ADMIN_ACTIONS.includes(action)) {
+  // --- Admin actions (mentor + partner) ---
+  if (ADMIN_ACTIONS.includes(action) || PARTNER_ADMIN_ACTIONS.includes(action)) {
     // Screen action: user's own token (not admin)
     if (action === 'screen') {
       return handleScreen(req, res);
@@ -115,6 +118,9 @@ module.exports = async (req, res) => {
       return res.status(401).json({ error: 'Invalid token.' });
     }
 
+    if (PARTNER_ADMIN_ACTIONS.includes(action)) {
+      return handlePartnerAdmin(req, res);
+    }
     return handleAdminAction(req, res);
   }
 
@@ -139,6 +145,10 @@ module.exports = async (req, res) => {
     return handlePairing(req, res, uid);
   } else if (TEACHER_ACTIONS.includes(action)) {
     return handleTeacher(req, res, uid);
+  } else if (PARTNER_ACTIONS.includes(action)) {
+    return handlePartner(req, res, uid);
+  } else if (PARTNER_MEMBERSHIP_ACTIONS.includes(action)) {
+    return handlePartnerMembership(req, res, uid);
   } else {
     return handleConsulting(req, res, uid);
   }
@@ -889,6 +899,484 @@ Return ONLY the JSON array, no other text. If no entities found, return [].`,
     return res.status(400).json({ error: 'Unhandled action.' });
   } catch (err) {
     console.error('Teacher API error:', err?.message);
+    return res.status(500).json({ error: `Something went wrong: ${err?.message || 'Unknown error'}` });
+  }
+}
+
+// ============================================================
+// PARTNER ADMIN: partner-approve, partner-reject
+// ============================================================
+
+async function handlePartnerAdmin(req, res) {
+  const { action, applicationId, rejectionReason } = req.body || {};
+
+  if (!applicationId) {
+    return res.status(400).json({ error: 'applicationId is required.' });
+  }
+
+  const db = admin.firestore();
+  const now = admin.firestore.FieldValue.serverTimestamp();
+
+  try {
+    const appRef = db.doc(`partner-applications/${applicationId}`);
+    const appSnap = await appRef.get();
+    if (!appSnap.exists) {
+      return res.status(404).json({ error: 'Application not found.' });
+    }
+
+    const appData = appSnap.data();
+    const uid = appData.uid;
+
+    if (action === 'partner-approve') {
+      await appRef.update({
+        status: 'approved',
+        resolvedAt: now,
+        resolvedBy: ADMIN_EMAIL,
+      });
+
+      const profileRef = db.doc(`users/${uid}/meta/profile`);
+      await profileRef.update({
+        'partner.status': 'approved',
+        'partner.approvedAt': Date.now(),
+        'partner.adminReviewedBy': ADMIN_EMAIL,
+        updatedAt: now,
+      });
+
+      // Auto-create directory entry (inactive)
+      const profileSnap = await profileRef.get();
+      const profile = profileSnap.exists ? profileSnap.data() : {};
+
+      const dirRef = db.doc(`partner-directory/${uid}`);
+      await dirRef.set({
+        uid,
+        handle: profile.handle || null,
+        displayName: profile.displayName || null,
+        entityName: appData.entityName || profile.partner?.entityName || '',
+        description: appData.description || profile.partner?.description || '',
+        websiteUrl: appData.websiteUrl || profile.partner?.websiteUrl || '',
+        mythicRelation: appData.mythicRelation || profile.partner?.mythicRelation || '',
+        logoUrl: null,
+        photoURL: profile.photoURL || null,
+        active: false,
+        representativeCount: 0,
+        createdAt: now,
+        updatedAt: now,
+      });
+
+      return res.status(200).json({ success: true, status: 'approved' });
+    } else {
+      // partner-reject
+      const reason = rejectionReason || 'Application did not meet requirements.';
+
+      await appRef.update({
+        status: 'rejected',
+        resolvedAt: now,
+        resolvedBy: ADMIN_EMAIL,
+        rejectionReason: reason,
+      });
+
+      const profileRef = db.doc(`users/${uid}/meta/profile`);
+      await profileRef.update({
+        'partner.status': 'rejected',
+        'partner.rejectedAt': Date.now(),
+        'partner.rejectionReason': reason,
+        'partner.adminReviewedBy': ADMIN_EMAIL,
+        updatedAt: now,
+      });
+
+      return res.status(200).json({ success: true, status: 'rejected' });
+    }
+  } catch (err) {
+    console.error('Partner admin error:', err?.message);
+    return res.status(500).json({ error: `Something went wrong: ${err?.message || 'Unknown error'}` });
+  }
+}
+
+// ============================================================
+// PARTNER: partner-apply, partner-update, partner-publish, partner-unpublish
+// ============================================================
+
+const MAX_ENTITY_NAME = 200;
+const MAX_PARTNER_DESC = 2000;
+const MAX_MYTHIC_REL = 1000;
+
+async function handlePartner(req, res, uid) {
+  const { action, entityName, description, websiteUrl, mythicRelation } = req.body || {};
+  const db = admin.firestore();
+  const now = admin.firestore.FieldValue.serverTimestamp();
+  const profileRef = db.doc(`users/${uid}/meta/profile`);
+
+  try {
+    if (action === 'partner-apply') {
+      if (!entityName || typeof entityName !== 'string' || !entityName.trim()) {
+        return res.status(400).json({ error: 'Entity name is required.' });
+      }
+      if (entityName.length > MAX_ENTITY_NAME) {
+        return res.status(400).json({ error: `Entity name must be ${MAX_ENTITY_NAME} characters or fewer.` });
+      }
+      if (description && description.length > MAX_PARTNER_DESC) {
+        return res.status(400).json({ error: `Description must be ${MAX_PARTNER_DESC} characters or fewer.` });
+      }
+      if (mythicRelation && mythicRelation.length > MAX_MYTHIC_REL) {
+        return res.status(400).json({ error: `Mythic relation must be ${MAX_MYTHIC_REL} characters or fewer.` });
+      }
+
+      const profileSnap = await profileRef.get();
+      const profile = profileSnap.exists ? profileSnap.data() : {};
+
+      const partnerUpdate = {
+        status: 'pending-admin',
+        entityName: entityName.trim(),
+        description: (description || '').trim(),
+        websiteUrl: (websiteUrl || '').trim(),
+        mythicRelation: (mythicRelation || '').trim(),
+        appliedAt: Date.now(),
+      };
+
+      await profileRef.update({
+        partner: partnerUpdate,
+        updatedAt: now,
+      });
+
+      // Resolve email/displayName
+      let email = profile.email || '';
+      let displayName = profile.displayName || '';
+      if (!email) {
+        try {
+          const siteUserSnap = await db.doc(`site-users/${uid}`).get();
+          const siteUser = siteUserSnap.data() || {};
+          email = siteUser.email || '';
+          displayName = displayName || siteUser.displayName || '';
+        } catch { /* ignore */ }
+      }
+
+      await db.collection('partner-applications').add({
+        uid,
+        email,
+        displayName,
+        handle: profile.handle || '',
+        entityName: partnerUpdate.entityName,
+        description: partnerUpdate.description,
+        websiteUrl: partnerUpdate.websiteUrl,
+        mythicRelation: partnerUpdate.mythicRelation,
+        status: 'pending-admin',
+        createdAt: now,
+        resolvedAt: null,
+        resolvedBy: null,
+        rejectionReason: null,
+      });
+
+      return res.status(200).json({ success: true, status: 'pending-admin' });
+    }
+
+    if (action === 'partner-update') {
+      const profileSnap = await profileRef.get();
+      if (!profileSnap.exists) return res.status(404).json({ error: 'Profile not found.' });
+      const profile = profileSnap.data();
+      if (profile.partner?.status !== 'approved') {
+        return res.status(403).json({ error: 'Partner must be approved to update.' });
+      }
+
+      const updates = {};
+      if (entityName !== undefined) {
+        if (typeof entityName !== 'string' || !entityName.trim()) return res.status(400).json({ error: 'Entity name cannot be empty.' });
+        if (entityName.length > MAX_ENTITY_NAME) return res.status(400).json({ error: `Entity name must be ${MAX_ENTITY_NAME} characters or fewer.` });
+        updates.entityName = entityName.trim();
+      }
+      if (description !== undefined) {
+        if (description.length > MAX_PARTNER_DESC) return res.status(400).json({ error: `Description must be ${MAX_PARTNER_DESC} characters or fewer.` });
+        updates.description = (description || '').trim();
+      }
+      if (websiteUrl !== undefined) {
+        updates.websiteUrl = (websiteUrl || '').trim();
+      }
+      if (mythicRelation !== undefined) {
+        if (mythicRelation.length > MAX_MYTHIC_REL) return res.status(400).json({ error: `Mythic relation must be ${MAX_MYTHIC_REL} characters or fewer.` });
+        updates.mythicRelation = (mythicRelation || '').trim();
+      }
+
+      if (Object.keys(updates).length === 0) {
+        return res.status(400).json({ error: 'No fields to update.' });
+      }
+
+      const batch = db.batch();
+      const partnerFieldUpdates = {};
+      for (const [key, val] of Object.entries(updates)) {
+        partnerFieldUpdates[`partner.${key}`] = val;
+      }
+      partnerFieldUpdates.updatedAt = now;
+      batch.update(profileRef, partnerFieldUpdates);
+
+      const dirRef = db.doc(`partner-directory/${uid}`);
+      const dirSnap = await dirRef.get();
+      if (dirSnap.exists) {
+        batch.update(dirRef, { ...updates, updatedAt: now });
+      }
+
+      await batch.commit();
+      return res.status(200).json({ success: true, updates });
+    }
+
+    if (action === 'partner-publish') {
+      const profileSnap = await profileRef.get();
+      if (!profileSnap.exists) return res.status(404).json({ error: 'Profile not found.' });
+      const profile = profileSnap.data();
+      if (profile.partner?.status !== 'approved') {
+        return res.status(403).json({ error: 'Partner must be approved to publish.' });
+      }
+
+      const partner = profile.partner || {};
+
+      const dirRef = db.doc(`partner-directory/${uid}`);
+      const dirSnap = await dirRef.get();
+
+      const dirData = {
+        uid,
+        handle: profile.handle || null,
+        displayName: profile.displayName || null,
+        entityName: partner.entityName || '',
+        description: partner.description || '',
+        websiteUrl: partner.websiteUrl || '',
+        mythicRelation: partner.mythicRelation || '',
+        logoUrl: partner.logoUrl || null,
+        photoURL: profile.photoURL || null,
+        active: true,
+        updatedAt: now,
+      };
+
+      if (dirSnap.exists) {
+        await dirRef.update({ ...dirData, createdAt: dirSnap.data().createdAt, representativeCount: dirSnap.data().representativeCount || 0 });
+      } else {
+        await dirRef.set({ ...dirData, representativeCount: 0, createdAt: now });
+      }
+
+      await profileRef.update({ 'partner.directoryListed': true, updatedAt: now });
+      return res.status(200).json({ success: true, status: 'published' });
+    }
+
+    if (action === 'partner-unpublish') {
+      const dirRef = db.doc(`partner-directory/${uid}`);
+      const dirSnap = await dirRef.get();
+      if (dirSnap.exists) {
+        await dirRef.update({ active: false, updatedAt: now });
+      }
+      await profileRef.update({ 'partner.directoryListed': false, updatedAt: now });
+      return res.status(200).json({ success: true, status: 'unpublished' });
+    }
+  } catch (err) {
+    console.error('Partner error:', err?.message);
+    return res.status(500).json({ error: `Something went wrong: ${err?.message || 'Unknown error'}` });
+  }
+}
+
+// ============================================================
+// PARTNER MEMBERSHIP: invite, request-join, accept, decline, end
+// ============================================================
+
+async function handlePartnerMembership(req, res, uid) {
+  const { action, targetHandle, targetUid, partnerUid, membershipId, message } = req.body || {};
+  const db = admin.firestore();
+  const now = admin.firestore.FieldValue.serverTimestamp();
+
+  try {
+    if (action === 'partner-invite') {
+      // Partner owner invites a representative by handle or uid
+      if (!targetHandle && !targetUid) {
+        return res.status(400).json({ error: 'targetHandle or targetUid is required.' });
+      }
+
+      // Verify caller is an approved partner
+      const profileRef = db.doc(`users/${uid}/meta/profile`);
+      const profileSnap = await profileRef.get();
+      if (!profileSnap.exists || profileSnap.data().partner?.status !== 'approved') {
+        return res.status(403).json({ error: 'You must be an approved partner to invite representatives.' });
+      }
+
+      // Resolve target uid
+      let resolvedUid = targetUid;
+      let resolvedHandle = targetHandle;
+      if (targetHandle && !targetUid) {
+        const handleSnap = await db.doc(`handles/${targetHandle.toLowerCase()}`).get();
+        if (!handleSnap.exists) {
+          return res.status(404).json({ error: 'Handle not found.' });
+        }
+        resolvedUid = handleSnap.data().uid;
+      }
+      if (!resolvedHandle && resolvedUid) {
+        const targetProfileSnap = await db.doc(`users/${resolvedUid}/meta/profile`).get();
+        resolvedHandle = targetProfileSnap.exists ? targetProfileSnap.data().handle || null : null;
+      }
+
+      if (resolvedUid === uid) {
+        return res.status(400).json({ error: 'Cannot invite yourself.' });
+      }
+
+      // Check for existing pending/accepted membership
+      const existingSnap = await db.collection('partner-memberships')
+        .where('partnerUid', '==', uid)
+        .where('representativeUid', '==', resolvedUid)
+        .where('status', 'in', ['pending', 'accepted'])
+        .get();
+      if (!existingSnap.empty) {
+        return res.status(409).json({ error: 'A pending or active membership already exists with this user.' });
+      }
+
+      const profile = profileSnap.data();
+      const membershipData = {
+        partnerUid: uid,
+        partnerEntityName: profile.partner?.entityName || '',
+        partnerHandle: profile.handle || null,
+        representativeUid: resolvedUid,
+        representativeHandle: resolvedHandle,
+        status: 'pending',
+        direction: 'invited',
+        message: (typeof message === 'string' && message.trim()) ? message.trim().slice(0, 500) : null,
+        createdAt: now,
+        respondedAt: null,
+        endedAt: null,
+      };
+
+      const newRef = await db.collection('partner-memberships').add(membershipData);
+      return res.status(200).json({ success: true, membershipId: newRef.id });
+    }
+
+    if (action === 'partner-request-join') {
+      // User requests to join a partner entity
+      if (!partnerUid) {
+        return res.status(400).json({ error: 'partnerUid is required.' });
+      }
+      if (partnerUid === uid) {
+        return res.status(400).json({ error: 'Cannot request to join your own entity.' });
+      }
+
+      // Verify target is an approved, listed partner
+      const dirRef = db.doc(`partner-directory/${partnerUid}`);
+      const dirSnap = await dirRef.get();
+      if (!dirSnap.exists || !dirSnap.data().active) {
+        return res.status(404).json({ error: 'Partner not found in directory.' });
+      }
+
+      // Check for existing
+      const existingSnap = await db.collection('partner-memberships')
+        .where('partnerUid', '==', partnerUid)
+        .where('representativeUid', '==', uid)
+        .where('status', 'in', ['pending', 'accepted'])
+        .get();
+      if (!existingSnap.empty) {
+        return res.status(409).json({ error: 'You already have a pending or active membership with this partner.' });
+      }
+
+      const requesterProfileSnap = await db.doc(`users/${uid}/meta/profile`).get();
+      const requesterHandle = requesterProfileSnap.exists ? requesterProfileSnap.data().handle || null : null;
+
+      const dirData = dirSnap.data();
+      const membershipData = {
+        partnerUid,
+        partnerEntityName: dirData.entityName || '',
+        partnerHandle: dirData.handle || null,
+        representativeUid: uid,
+        representativeHandle: requesterHandle,
+        status: 'pending',
+        direction: 'requested',
+        message: (typeof message === 'string' && message.trim()) ? message.trim().slice(0, 500) : null,
+        createdAt: now,
+        respondedAt: null,
+        endedAt: null,
+      };
+
+      const newRef = await db.collection('partner-memberships').add(membershipData);
+      return res.status(200).json({ success: true, membershipId: newRef.id });
+    }
+
+    if (action === 'partner-membership-accept') {
+      if (!membershipId) return res.status(400).json({ error: 'membershipId is required.' });
+
+      const result = await db.runTransaction(async (tx) => {
+        const memRef = db.doc(`partner-memberships/${membershipId}`);
+        const memSnap = await tx.get(memRef);
+        if (!memSnap.exists) throw new Error('MEMBERSHIP_NOT_FOUND');
+
+        const mem = memSnap.data();
+        if (mem.status !== 'pending') throw new Error('NOT_PENDING');
+
+        // Direction-aware: invited → rep accepts, requested → partner accepts
+        if (mem.direction === 'invited' && mem.representativeUid !== uid) throw new Error('FORBIDDEN');
+        if (mem.direction === 'requested' && mem.partnerUid !== uid) throw new Error('FORBIDDEN');
+
+        tx.update(memRef, { status: 'accepted', respondedAt: now });
+
+        // Increment representative count
+        const dirRef = db.doc(`partner-directory/${mem.partnerUid}`);
+        const dirSnap = await tx.get(dirRef);
+        if (dirSnap.exists) {
+          const currentCount = dirSnap.data().representativeCount || 0;
+          tx.update(dirRef, { representativeCount: currentCount + 1, updatedAt: now });
+        }
+
+        return { status: 'accepted' };
+      });
+
+      return res.status(200).json({ success: true, ...result });
+    }
+
+    if (action === 'partner-membership-decline') {
+      if (!membershipId) return res.status(400).json({ error: 'membershipId is required.' });
+
+      const memRef = db.doc(`partner-memberships/${membershipId}`);
+      const memSnap = await memRef.get();
+      if (!memSnap.exists) return res.status(404).json({ error: 'Membership not found.' });
+
+      const mem = memSnap.data();
+      if (mem.status !== 'pending') return res.status(400).json({ error: 'Membership is not pending.' });
+
+      // Direction-aware: invited → rep declines, requested → partner declines
+      if (mem.direction === 'invited' && mem.representativeUid !== uid) return res.status(403).json({ error: 'Forbidden.' });
+      if (mem.direction === 'requested' && mem.partnerUid !== uid) return res.status(403).json({ error: 'Forbidden.' });
+
+      await memRef.update({ status: 'declined', respondedAt: now });
+      return res.status(200).json({ success: true, status: 'declined' });
+    }
+
+    if (action === 'partner-membership-end') {
+      if (!membershipId) return res.status(400).json({ error: 'membershipId is required.' });
+
+      const result = await db.runTransaction(async (tx) => {
+        const memRef = db.doc(`partner-memberships/${membershipId}`);
+        const memSnap = await tx.get(memRef);
+        if (!memSnap.exists) throw new Error('MEMBERSHIP_NOT_FOUND');
+
+        const mem = memSnap.data();
+        if (mem.partnerUid !== uid && mem.representativeUid !== uid) throw new Error('END_FORBIDDEN');
+        if (mem.status !== 'accepted') throw new Error('NOT_ACCEPTED');
+
+        tx.update(memRef, { status: 'ended', endedAt: now });
+
+        // Decrement representative count
+        const dirRef = db.doc(`partner-directory/${mem.partnerUid}`);
+        const dirSnap = await tx.get(dirRef);
+        if (dirSnap.exists) {
+          const newCount = Math.max(0, (dirSnap.data().representativeCount || 1) - 1);
+          tx.update(dirRef, { representativeCount: newCount, updatedAt: now });
+        }
+
+        return { status: 'ended' };
+      });
+
+      return res.status(200).json({ success: true, ...result });
+    }
+  } catch (err) {
+    const errorMap = {
+      MEMBERSHIP_NOT_FOUND: [404, 'Membership not found.'],
+      FORBIDDEN: [403, 'You cannot perform this action.'],
+      NOT_PENDING: [400, 'Membership is not pending.'],
+      END_FORBIDDEN: [403, 'Only the partner owner or representative can end this membership.'],
+      NOT_ACCEPTED: [400, 'Only accepted memberships can be ended.'],
+    };
+
+    const mapped = errorMap[err.message];
+    if (mapped) return res.status(mapped[0]).json({ error: mapped[1] });
+
+    console.error('Partner membership error:', err?.message);
     return res.status(500).json({ error: `Something went wrong: ${err?.message || 'Unknown error'}` });
   }
 }
