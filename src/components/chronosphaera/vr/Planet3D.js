@@ -140,29 +140,33 @@ export default function Planet3D({ planet, position, size, selected, onClick, mo
         <meshBasicMaterial transparent opacity={0} depthWrite={false} />
       </mesh>
 
-      {/* Main sphere */}
-      <mesh
-        ref={meshRef}
-      >
-        <sphereGeometry args={[size, 32, 32]} />
-        {isSun ? (
-          <meshBasicMaterial color={color} />
-        ) : (
-          <meshStandardMaterial
-            color={color}
-            emissive={color}
-            emissiveIntensity={selected ? 0.5 : hovered ? 0.35 : 0.2}
-            roughness={0.6}
-            metalness={0.2}
-          />
-        )}
-      </mesh>
+      {/* Main sphere — Moon uses crescent shader, others use standard material */}
+      {isMoon ? (
+        <MoonPhase3D
+          radius={size}
+          phase={moonPhase}
+          color={color}
+          emissiveIntensity={selected ? 0.5 : hovered ? 0.35 : 0.2}
+        />
+      ) : (
+        <mesh ref={meshRef}>
+          <sphereGeometry args={[size, 32, 32]} />
+          {isSun ? (
+            <meshBasicMaterial color={color} />
+          ) : (
+            <meshStandardMaterial
+              color={color}
+              emissive={color}
+              emissiveIntensity={selected ? 0.5 : hovered ? 0.35 : 0.2}
+              roughness={0.6}
+              metalness={0.2}
+            />
+          )}
+        </mesh>
+      )}
 
       {/* Planet surface details */}
       {!isSun && !isMoon && !isSaturn && <PlanetSurface planet={planet} radius={size} />}
-
-      {/* Moon phase shadow */}
-      {isMoon && <MoonPhase3D radius={size} phase={moonPhase} />}
 
       {/* Saturn rings */}
       {isSaturn && <SaturnRings3D radius={size} />}

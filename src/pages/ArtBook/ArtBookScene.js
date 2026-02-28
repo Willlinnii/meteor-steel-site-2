@@ -355,9 +355,11 @@ function WeekdayPlanet({ planet, orbitRadius, size, planetAnglesRef, sunFactorRe
       sunFactorRef.current = Math.max(0, -Math.sin(angle));
     }
 
-    // Moon phase: full (180°) at top, new (0°) at bottom
+    // Moon phase: full (180°) at top (+Y), new (0°) at bottom (-Y)
+    // Orbit tilt Rx(PI/2) maps local-Z to world-Y with sign flip,
+    // so offset by -PI/2 to align full with the visual top of the arc.
     if (planet === 'Moon') {
-      const raw = (((angle + Math.PI / 2) % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI);
+      const raw = (((angle - Math.PI / 2) % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI);
       const deg = Math.round((raw / (2 * Math.PI)) * 360) % 360;
       setMoonPhase(prev => prev === deg ? prev : deg);
 
