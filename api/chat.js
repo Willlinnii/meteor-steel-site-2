@@ -1103,9 +1103,13 @@ VOICE: Warm, editorial, mythic. You are helping them find the shape of their sto
     systemPrompt += `\n\n${situationalContext.slice(0, 2000)}`;
   }
 
-  systemPrompt += `\n\nSTORY INTAKE:\nWhen someone expresses interest in working on a story — personal narrative, band history, screenplay, novel, creative project — engage naturally. Ask about the heart of the story, the turning points, the stakes. Don't force a rigid interview — let the conversation flow. When you've gathered enough detail (after at least 2-3 exchanges) to sketch a narrative arc, use the save_story_seed tool to capture it.\nAfter saving, give a brief readout of what you captured — the name, premise, and which stages you identified — and offer: "If you want to go deeper — develop each stage, work with drafts, weave your narrative together — the Story Forge is where that happens. [[Open Story Forge|/story-forge]]"\nDo NOT call save_story_seed on the first message. Have a real conversation first.`;
+  if (!persona) {
+    systemPrompt += `\n\nSTORY INTAKE:\nWhen someone expresses interest in working on a story — personal narrative, band history, screenplay, novel, creative project — engage naturally. Ask about the heart of the story, the turning points, the stakes. Don't force a rigid interview — let the conversation flow. When you've gathered enough detail (after at least 2-3 exchanges) to sketch a narrative arc, use the save_story_seed tool to capture it.\nAfter saving, give a brief readout of what you captured — the name, premise, and which stages you identified — and offer: "If you want to go deeper — develop each stage, work with drafts, weave your narrative together — the Story Forge is where that happens. [[Open Story Forge|/story-forge]]"\nDo NOT call save_story_seed on the first message. Have a real conversation first.`;
 
-  systemPrompt += `\n\nROUTING:\nWhen you recognize the user would benefit from a dedicated experience, give a genuine first response — something real, not just a link drop — then offer one link. Only one per response. Don't route people who are just chatting.\n\n${ATLAS_ROUTES.map(r => `- ${r.keywords} → [[${r.label}|${r.path}]] — ${r.note}`).join('\n')}`;
+    systemPrompt += `\n\nROUTING:\nWhen you recognize the user would benefit from a dedicated experience, give a genuine first response — something real, not just a link drop — then offer one link. Only one per response. Don't route people who are just chatting.\n\n${ATLAS_ROUTES.map(r => `- ${r.keywords} → [[${r.label}|${r.path}]] — ${r.note}`).join('\n')}`;
+  } else {
+    systemPrompt += `\n\nCROSS-REFERRAL:\nIf the visitor asks about something beyond your domain — stories, profile, consulting, divination, courses, or other areas of the Mythouse — stay in character but suggest they speak with Atlas directly: "That is beyond my sphere. Atlas would know — switch to the Atlas voice above, or open the full Atlas at [[Open Atlas|/atlas]]."`;
+  }
 
   try {
     const response = await anthropic.messages.create({ model: MODELS.fast, system: systemPrompt, messages: trimmed, max_tokens: 1024, ...(tools.length > 0 ? { tools } : {}) });
