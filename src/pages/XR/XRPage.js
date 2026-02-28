@@ -44,7 +44,7 @@ const EXPERIENCES = [
     label: 'Sacred Sites 360',
     description: 'Browse the world\'s sacred sites in immersive 360 Street View panoramas. Pick a site and look around from ground level.',
     path: '/sacred-sites-360',
-    features: '360 Panorama \u00B7 Street View',
+    features: '360 Panorama · Street View',
     icon: (
       <svg viewBox="0 0 40 40" width="36" height="36" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
         <circle cx="20" cy="20" r="16" opacity="0.25" />
@@ -57,6 +57,79 @@ const EXPERIENCES = [
         <path d="M20 14 L20 10" />
         <path d="M25 17 L28 14" />
         <path d="M25 23 L28 26" />
+      </svg>
+    ),
+  },
+  {
+    id: 'crown-3d',
+    label: 'Crown & Ring 3D',
+    description: 'Design a ring, bracelet, or crown with planetary metals and birthstones in an interactive 3D scene. Heliocentric, geocentric, and navaratna layouts.',
+    path: '/ring',
+    features: '3D · Orbit Controls · Fullscreen',
+    icon: (
+      <svg viewBox="0 0 40 40" width="36" height="36" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+        <ellipse cx="20" cy="24" rx="14" ry="6" opacity="0.4" />
+        <path d="M6 24 L10 12 L16 18 L20 8 L24 18 L30 12 L34 24" opacity="0.6" />
+        <circle cx="20" cy="8" r="2" fill="currentColor" opacity="0.5" />
+        <circle cx="10" cy="12" r="1.5" fill="currentColor" opacity="0.4" />
+        <circle cx="30" cy="12" r="1.5" fill="currentColor" opacity="0.4" />
+      </svg>
+    ),
+  },
+  {
+    id: 'dodecahedron-3d',
+    label: 'Dodecahedron',
+    description: 'Rotate a 3D Roman dodecahedron. Three modes: constellation map (Lantern of Phanes), Roman coin density calculator, and d12 die roller.',
+    path: '/dodecahedron',
+    features: '3D · Orbit Controls · Physics',
+    icon: (
+      <svg viewBox="0 0 40 40" width="36" height="36" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+        <polygon points="20,3 35,13 31,30 9,30 5,13" opacity="0.4" />
+        <polygon points="20,10 28,16 26,26 14,26 12,16" opacity="0.6" />
+        <line x1="20" y1="3" x2="20" y2="10" opacity="0.3" />
+        <line x1="35" y1="13" x2="28" y2="16" opacity="0.3" />
+        <line x1="31" y1="30" x2="26" y2="26" opacity="0.3" />
+        <line x1="9" y1="30" x2="14" y2="26" opacity="0.3" />
+        <line x1="5" y1="13" x2="12" y2="16" opacity="0.3" />
+      </svg>
+    ),
+  },
+  {
+    id: 'art-book-3d',
+    label: 'Fallen Starlight 3D',
+    description: 'Explore a 3D mountain with seven levels of gemstones and ores mapped to the Fallen Starlight narrative. Book and mountain camera modes.',
+    path: '/art-book',
+    features: '3D · Dual Camera · Audio',
+    icon: (
+      <svg viewBox="0 0 40 40" width="36" height="36" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M20 4 L34 34 L6 34 Z" opacity="0.3" />
+        <line x1="10" y1="28" x2="30" y2="28" opacity="0.4" />
+        <line x1="13" y1="22" x2="27" y2="22" opacity="0.4" />
+        <line x1="15" y1="16" x2="25" y2="16" opacity="0.4" />
+        <circle cx="20" cy="10" r="2" fill="currentColor" opacity="0.5" />
+        <circle cx="14" cy="25" r="1.5" fill="currentColor" opacity="0.3" />
+        <circle cx="26" cy="25" r="1.5" fill="currentColor" opacity="0.3" />
+        <circle cx="17" cy="19" r="1.5" fill="currentColor" opacity="0.3" />
+      </svg>
+    ),
+  },
+  {
+    id: 'microcosmos-3d',
+    label: 'Microcosmos',
+    description: 'An interactive 3D anatomical body explorer. Toggle body systems, select organs, and view planetary correspondences across traditions.',
+    path: '/microcosmos',
+    features: '3D · Orbit Controls · 2D Toggle',
+    icon: (
+      <svg viewBox="0 0 40 40" width="36" height="36" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="20" cy="9" r="5" opacity="0.4" />
+        <line x1="20" y1="14" x2="20" y2="28" opacity="0.5" />
+        <line x1="20" y1="18" x2="12" y2="24" opacity="0.4" />
+        <line x1="20" y1="18" x2="28" y2="24" opacity="0.4" />
+        <line x1="20" y1="28" x2="14" y2="36" opacity="0.4" />
+        <line x1="20" y1="28" x2="26" y2="36" opacity="0.4" />
+        <circle cx="20" cy="20" r="2" fill="currentColor" opacity="0.4" />
+        <circle cx="18" cy="24" r="1.5" fill="currentColor" opacity="0.3" />
+        <circle cx="22" cy="24" r="1.5" fill="currentColor" opacity="0.3" />
       </svg>
     ),
   },

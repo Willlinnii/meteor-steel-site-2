@@ -75,6 +75,20 @@ const YELLOW_BRICK_ROADS = [
     ouroborosPath: '/journey/cosmic',
   },
   {
+    id: 'planetary-journey',
+    label: 'Planetary Journey',
+    description: 'Ascend through the seven classical spheres — Moon to Saturn. 7 encounters. 3 levels each.',
+    externalPath: '/chronosphaera/yellow-brick-road',
+    ouroborosPath: '/journey/planetary',
+  },
+  {
+    id: 'zodiac-journey',
+    label: 'Zodiac Journey',
+    description: 'Walk the wheel of the twelve zodiac signs from Aries to Pisces. 12 encounters. 3 levels each.',
+    externalPath: '/chronosphaera/yellow-brick-road',
+    ouroborosPath: '/journey/zodiac',
+  },
+  {
     id: 'monomyth-journey',
     label: 'Monomyth Journey',
     description: 'Walk the eight stages of the Hero\'s Journey with Atlas as your guide.',
@@ -117,6 +131,34 @@ const XR_EXPERIENCES = [
     description: 'Browse the world\'s sacred sites in immersive 360 Street View panoramas. Pick a site and look around from ground level.',
     path: '/sacred-sites-360',
     features: '360 Panorama · Street View',
+  },
+  {
+    id: 'crown-3d',
+    label: 'Crown & Ring 3D',
+    description: 'Design a ring, bracelet, or crown with planetary metals and birthstones in an interactive 3D scene. Heliocentric, geocentric, and navaratna layouts.',
+    path: '/ring',
+    features: '3D · Orbit Controls · Fullscreen',
+  },
+  {
+    id: 'dodecahedron-3d',
+    label: 'Dodecahedron',
+    description: 'Rotate a 3D Roman dodecahedron. Three modes: constellation map (Lantern of Phanes), Roman coin density calculator, and d12 die roller.',
+    path: '/dodecahedron',
+    features: '3D · Orbit Controls · Physics',
+  },
+  {
+    id: 'art-book-3d',
+    label: 'Fallen Starlight 3D',
+    description: 'Explore a 3D mountain with seven levels of gemstones and ores mapped to the Fallen Starlight narrative. Book and mountain camera modes.',
+    path: '/art-book',
+    features: '3D · Dual Camera · Audio',
+  },
+  {
+    id: 'microcosmos-3d',
+    label: 'Microcosmos',
+    description: 'An interactive 3D anatomical body explorer. Toggle body systems, select organs, and view planetary correspondences across traditions.',
+    path: '/microcosmos',
+    features: '3D · Orbit Controls · 2D Toggle',
   },
 ];
 
