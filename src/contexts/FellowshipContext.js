@@ -18,8 +18,8 @@ export function useFellowship() {
 
 export function FellowshipProvider({ children }) {
   const { user } = useAuth();
-  const { friends } = useFriendRequests();
-  const [feedItems, setFeedItems] = useState([]);
+  const { friends, familyUids } = useFriendRequests();
+  const [rawItems, setRawItems] = useState([]);
   const [loading, setLoading] = useState(true);
 
   // Build list of UIDs to query: self + friends
@@ -33,7 +33,7 @@ export function FellowshipProvider({ children }) {
   // Real-time listener for fellowship posts from self + friends
   useEffect(() => {
     if (!user || !firebaseConfigured || !db || feedUids.length === 0) {
-      setFeedItems([]);
+      setRawItems([]);
       setLoading(false);
       return;
     }
@@ -54,7 +54,7 @@ export function FellowshipProvider({ children }) {
         const tb = b.createdAt?.toMillis?.() || 0;
         return tb - ta;
       });
-      setFeedItems(all);
+      setRawItems(all);
       setLoading(false);
     };
 
@@ -80,15 +80,39 @@ export function FellowshipProvider({ children }) {
     return () => unsubscribers.forEach(u => u());
   }, [user, feedUids]);
 
+  // Derived views from rawItems
+  const feedItems = useMemo(() =>
+    rawItems.filter(item => {
+      const vis = item.visibility || 'friends';
+      if (vis === 'vault' || vis === 'profile') return false;
+      if (vis === 'family') {
+        if (item.authorUid === user?.uid) return true;
+        return familyUids.has(item.authorUid);
+      }
+      return true; // friends + public pass through
+    }),
+    [rawItems, user, familyUids]
+  );
+
+  const myVaultPosts = useMemo(() =>
+    user ? rawItems.filter(i => i.authorUid === user.uid && i.visibility === 'vault') : [],
+    [user, rawItems]
+  );
+
+  const myProfilePosts = useMemo(() =>
+    user ? rawItems.filter(i => i.authorUid === user.uid && i.visibility === 'profile') : [],
+    [user, rawItems]
+  );
+
   // Check if user already posted for a given completion
   const hasPostedCompletion = useCallback((completionType, completionId) => {
     if (!user) return false;
-    return feedItems.some(
+    return rawItems.some(
       item => item.authorUid === user.uid
         && item.completionType === completionType
         && item.completionId === completionId
     );
-  }, [user, feedItems]);
+  }, [user, rawItems]);
 
   // Upload images to Firebase Storage
   const uploadImages = useCallback(async (files) => {
@@ -108,7 +132,7 @@ export function FellowshipProvider({ children }) {
   }, [user]);
 
   // Post a completion share
-  const postCompletionShare = useCallback(async ({ summary, fullStory, completionType, completionId, completionLabel, images, videoURL }) => {
+  const postCompletionShare = useCallback(async ({ summary, fullStory, completionType, completionId, completionLabel, images, videoURL, visibility = 'friends', privateMatching = false }) => {
     if (!user || !db) return null;
     const postData = {
       authorUid: user.uid,
@@ -126,6 +150,8 @@ export function FellowshipProvider({ children }) {
       activityType: null,
       activityTargetHandle: null,
       activityMessage: null,
+      visibility,
+      privateMatching: visibility === 'vault' ? privateMatching : false,
       createdAt: serverTimestamp(),
     };
     const docRef = await addDoc(collection(db, 'fellowship-posts'), postData);
@@ -151,6 +177,7 @@ export function FellowshipProvider({ children }) {
       activityType,
       activityTargetHandle: activityTargetHandle || null,
       activityMessage: activityMessage || null,
+      visibility: 'friends',
       createdAt: serverTimestamp(),
     };
     const docRef = await addDoc(collection(db, 'fellowship-posts'), postData);
@@ -166,6 +193,8 @@ export function FellowshipProvider({ children }) {
   return (
     <FellowshipContext.Provider value={{
       feedItems,
+      myVaultPosts,
+      myProfilePosts,
       loading,
       postCompletionShare,
       postActivity,

@@ -22,6 +22,14 @@ function timeAgo(timestamp) {
   return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
 }
 
+const VISIBILITY_ICONS = {
+  vault: '\u{1F512}',
+  profile: '\u{1F4CB}',
+  friends: '\u{1F465}',
+  family: '\u{1F3E0}',
+  public: '\u{1F310}',
+};
+
 export default function FellowshipPost({ post, currentUid, onDelete, onCircle }) {
   const [expanded, setExpanded] = useState(false);
   const [confirming, setConfirming] = useState(false);
@@ -32,6 +40,7 @@ export default function FellowshipPost({ post, currentUid, onDelete, onCircle })
   const circledBy = post.circledBy || [];
   const isCircled = currentUid && circledBy.includes(currentUid);
   const circleCount = circledBy.length;
+  const visIcon = isAuthor ? VISIBILITY_ICONS[post.visibility || 'friends'] : null;
 
   // Watermark
   const postMs = post.createdAt?.toMillis?.() || (post.createdAt?.seconds ? post.createdAt.seconds * 1000 : 0);
@@ -56,7 +65,10 @@ export default function FellowshipPost({ post, currentUid, onDelete, onCircle })
           >
             {post.authorHandle || post.authorName || 'Anonymous'}
           </button>
-          <span className="fellowship-post-time">{timeAgo(post.createdAt)}</span>
+          <span className="fellowship-post-time">
+            {timeAgo(post.createdAt)}
+            {visIcon && <span className="fellowship-post-vis-badge" title={post.visibility || 'friends'}>{visIcon}</span>}
+          </span>
         </div>
         {isAuthor && (
           <div className="fellowship-post-actions">

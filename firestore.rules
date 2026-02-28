@@ -31,9 +31,18 @@ service cloud.firestore {
         allow read, write: if request.auth != null && request.auth.uid == userId;
       }
 
+      // Vault visibility for story cards is enforced client-side and
+      // server-side via Admin SDK. Firestore query rules can't mix
+      // per-doc visibility checks with `in`/collection queries.
       match /story-cards/{cardId} {
         allow read: if request.auth != null;
         allow write: if request.auth != null && request.auth.uid == userId;
+      }
+
+      match /story-reveals/{otherUid} {
+        allow write: if request.auth != null && request.auth.uid == userId;
+        allow read: if request.auth != null
+          && (request.auth.uid == userId || request.auth.uid == otherUid);
       }
     }
 
@@ -244,6 +253,9 @@ service cloud.firestore {
     }
 
     // ===== Fellowship posts (social feed) =====
+    // Vault/family/profile visibility is enforced client-side.
+    // Firestore `in` queries break if per-doc rules reject any result,
+    // so we keep read open and filter in the client.
     match /fellowship-posts/{postId} {
       allow read: if request.auth != null;
       allow create: if request.auth != null && request.auth.uid == request.resource.data.authorUid;
@@ -275,7 +287,8 @@ service cloud.firestore {
       allow create: if request.auth != null
         && request.auth.uid == request.resource.data.senderUid;
       allow update: if request.auth != null
-        && request.auth.uid == resource.data.recipientUid;
+        && (request.auth.uid == resource.data.senderUid
+            || request.auth.uid == resource.data.recipientUid);
       allow delete: if request.auth != null
         && (request.auth.uid == resource.data.senderUid
             || request.auth.uid == resource.data.recipientUid);

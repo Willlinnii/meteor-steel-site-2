@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { collection, onSnapshot, writeBatch, doc, serverTimestamp } from 'firebase/firestore';
+import { collection, onSnapshot, writeBatch, doc, serverTimestamp, getDoc, setDoc } from 'firebase/firestore';
 import { db, firebaseConfigured } from '../auth/firebase';
 import { useAuth } from '../auth/AuthContext';
 import { useWritings } from '../writings/WritingsContext';
@@ -22,11 +22,24 @@ export function useStoryCardSync() {
   const [cards, setCards] = useState([]);
   const [loaded, setLoaded] = useState(false);
   const [syncing, setSyncing] = useState(false);
+  const [vaultCardIds, setVaultCardIds] = useState(new Set());
 
   // Current Firestore docs (Map<sourceId, docData>)
   const firestoreCards = useRef(new Map());
   const firestoreLoaded = useRef(false);
   const debounceTimer = useRef(null);
+
+  // Load vaultCardIds from user meta
+  useEffect(() => {
+    if (!user || !firebaseConfigured || !db) return;
+    const metaRef = doc(db, 'users', user.uid, 'meta', 'profile');
+    getDoc(metaRef).then(snap => {
+      if (snap.exists()) {
+        const ids = snap.data().vaultCardIds;
+        if (Array.isArray(ids)) setVaultCardIds(new Set(ids));
+      }
+    }).catch(() => {});
+  }, [user]);
 
   // Listen to Firestore story-cards subcollection
   useEffect(() => {
@@ -91,6 +104,7 @@ export function useStoryCardSync() {
         icon: config.icon || '',
         color: config.color || '#888',
         sourceId,
+        visibility: vaultCardIds.has(sourceId) ? 'vault' : 'public',
       };
 
       if (!existing) {
@@ -124,7 +138,7 @@ export function useStoryCardSync() {
       }
       setSyncing(false);
     }
-  }, [user, natalChart, numerologyName, luckyNumber, journeySyntheses, personalStories, forgeData, isElementCompleted, certificateData, allCourses]);
+  }, [user, natalChart, numerologyName, luckyNumber, journeySyntheses, personalStories, forgeData, isElementCompleted, certificateData, allCourses, vaultCardIds]);
 
   // Debounced sync when dependencies change
   useEffect(() => {
@@ -142,7 +156,25 @@ export function useStoryCardSync() {
     };
   }, [writingsLoaded, profileLoaded, cwLoaded, syncCards]);
 
-  return { cards, loaded, syncing };
+  // Toggle a card's vault status.
+  // Only updates vaultCardIds state + persists the set to user meta.
+  // The actual card visibility write happens in syncCards (single writer).
+  const toggleVaultCard = useCallback(async (sourceId) => {
+    if (!user || !firebaseConfigured || !db) return;
+    const newSet = new Set(vaultCardIds);
+    if (newSet.has(sourceId)) {
+      newSet.delete(sourceId);
+    } else {
+      newSet.add(sourceId);
+    }
+    setVaultCardIds(newSet);
+
+    // Persist to user meta
+    const metaRef = doc(db, 'users', user.uid, 'meta', 'profile');
+    await setDoc(metaRef, { vaultCardIds: [...newSet] }, { merge: true });
+  }, [user, vaultCardIds]);
+
+  return { cards, loaded, syncing, vaultCardIds, toggleVaultCard };
 }
 
 // Compare relevant fields to detect changes
@@ -151,6 +183,7 @@ function hasChanged(existing, desired) {
     existing.title !== desired.title ||
     existing.subtitle !== desired.subtitle ||
     existing.summary !== desired.summary ||
-    existing.category !== desired.category
+    existing.category !== desired.category ||
+    existing.visibility !== desired.visibility
   );
 }

@@ -27,7 +27,7 @@ function isValidUrl(str) {
 export default function FeedPage() {
   const { user } = useAuth();
   const { activeScope, allScopes } = useScope();
-  const { friends } = useFriendRequests();
+  const { friends, familyUids } = useFriendRequests();
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [feedMode, setFeedMode] = useState('personal');
@@ -76,7 +76,13 @@ export default function FeedPage() {
       const unsubs = [];
       const chunkResults = new Array(chunks.length).fill(null).map(() => []);
       const mergeAndSet = () => {
-        const all = chunkResults.flat();
+        const all = chunkResults.flat().filter(item => {
+          const vis = item.visibility || 'friends';
+          if (item.createdBy === user.uid) return true;
+          if (vis === 'vault' || vis === 'profile') return false;
+          if (vis === 'family') return familyUids.has(item.createdBy);
+          return true;
+        });
         all.sort((a, b) => {
           const ta = a.createdAt?.toMillis?.() || (a.createdAt?.seconds ? a.createdAt.seconds * 1000 : 0);
           const tb = b.createdAt?.toMillis?.() || (b.createdAt?.seconds ? b.createdAt.seconds * 1000 : 0);

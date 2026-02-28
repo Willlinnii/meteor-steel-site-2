@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useEffect, useCallback } from 'react';
+import { useAuth } from '../../auth/AuthContext';
 import { useStoryMatching } from '../../storyMatching/useStoryMatching';
 import { useMatchRequests } from '../../contexts/MatchRequestsContext';
+import { useStoryReveals } from '../../storyMatching/useStoryReveals';
 import MatchRequestCard from './MatchRequestCard';
 import '../Profile/StoryMatchingSection.css';
 
@@ -26,6 +28,7 @@ const EMPTY_TEXT = {
 };
 
 export default function DiscoverTab() {
+  const { user } = useAuth();
   const {
     matchingEnabled,
     toggleMatching,
@@ -34,6 +37,7 @@ export default function DiscoverTab() {
     matchExcludeFriends,
     setExcludeFriends,
     matches,
+    comparisons,
     loading,
     sendMatchRequest,
     matchConnectedUids,
@@ -48,9 +52,23 @@ export default function DiscoverTab() {
     mutualMatches,
   } = useMatchRequests();
 
+  const { watchUser, revealTo, isRevealedTo, isRevealedToMe } = useStoryReveals();
+
+  // Auto-watch all match UIDs so reveals are live
+  useEffect(() => {
+    for (const m of matches) {
+      watchUser(m.uid);
+    }
+  }, [matches, watchUser]);
+
+  const handleReveal = useCallback((targetUid, cardSourceId) => {
+    revealTo(targetUid, cardSourceId);
+  }, [revealTo]);
+
   // UIDs that already have a match relationship
   const mutualUids = new Set(mutualMatches.map(m => m.uid));
   const outgoingUids = new Set(outgoingRequests.map(r => r.recipientUid));
+  const myUid = user?.uid;
 
   return (
     <div>
@@ -135,18 +153,46 @@ export default function DiscoverTab() {
                   else if (matchConnectedUids.has(m.uid)) variant = 'mutual';
 
                   const outReq = outgoingRequests.find(r => r.recipientUid === m.uid);
+                  const comp = comparisons[m.uid];
+                  const hints = comp?.vaultHints || [];
 
                   return (
-                    <MatchRequestCard
-                      key={m.uid}
-                      uid={m.uid}
-                      handle={m.handle}
-                      photoURL={m.photoURL}
-                      score={m.score}
-                      variant={variant}
-                      onSendRequest={() => sendMatchRequest(m.uid, m.handle, m.photoURL, m.score)}
-                      onCancel={outReq ? () => cancelMatchRequest(outReq.id) : undefined}
-                    />
+                    <div key={m.uid}>
+                      <MatchRequestCard
+                        uid={m.uid}
+                        handle={m.handle}
+                        photoURL={m.photoURL}
+                        score={m.score}
+                        variant={variant}
+                        onSendRequest={() => sendMatchRequest(m.uid, m.handle, m.photoURL, m.score)}
+                        onCancel={outReq ? () => cancelMatchRequest(outReq.id) : undefined}
+                      />
+                      {hints.length > 0 && (
+                        <div className="discover-vault-hints">
+                          {hints.map((hint, i) => {
+                            const isMine = hint.ownerUid === myUid;
+                            return (
+                              <div key={i} className="discover-vault-hint">
+                                <span className="discover-vault-hint-icon">{'\u{1F512}'}</span>
+                                <span className="discover-vault-hint-text">{hint.hintText}</span>
+                                {isMine && hint.cardSourceId && (
+                                  <button
+                                    className="discover-vault-reveal-btn"
+                                    onClick={() => handleReveal(m.uid, hint.cardSourceId)}
+                                    disabled={isRevealedTo(m.uid, hint.cardSourceId)}
+                                  >
+                                    {isRevealedTo(m.uid, hint.cardSourceId) ? 'Revealed' : 'Reveal'}
+                                  </button>
+                                )}
+                                {!isMine && hint.cardSourceId && isRevealedToMe(hint.ownerUid, hint.cardSourceId) && (
+                                  <span className="discover-vault-revealed-badge">Revealed to you</span>
+                                )}
+                              </div>
+                            );
+                          })}
+                        </div>
+                      )}
+                    </div>
                   );
                 })}
               </div>

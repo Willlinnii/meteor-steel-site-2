@@ -4,7 +4,7 @@ import StoryMatchingSection from './StoryMatchingSection';
 import { CATEGORY_CONFIG, CATEGORY_ORDER } from '../../storyCards/storyCardDefs';
 import './StoryCardDeck.css';
 
-export default function StoryCardDeck({ cards, loaded }) {
+export default function StoryCardDeck({ cards, loaded, vaultCardIds, onToggleVault }) {
   const [expanded, setExpanded] = useState(false);
   const [showMatching, setShowMatching] = useState(false);
 
@@ -105,7 +105,18 @@ export default function StoryCardDeck({ cards, loaded }) {
                   </h3>
                   <div className="story-deck-grid">
                     {catCards.map(card => (
-                      <StoryCard key={card.sourceId} card={card} />
+                      <div key={card.sourceId} className="story-deck-card-wrapper">
+                        <StoryCard card={card} />
+                        {onToggleVault && (
+                          <button
+                            className={`story-deck-vault-btn${vaultCardIds?.has(card.sourceId) ? ' active' : ''}`}
+                            onClick={() => onToggleVault(card.sourceId)}
+                            title={vaultCardIds?.has(card.sourceId) ? 'Remove from vault' : 'Add to vault'}
+                          >
+                            {vaultCardIds?.has(card.sourceId) ? '\u{1F512}' : '\u{1F513}'}
+                          </button>
+                        )}
+                      </div>
                     ))}
                   </div>
                 </div>

@@ -10,6 +10,14 @@ const MAX_IMAGES = 4;
 const MAX_IMAGE_SIZE = 5 * 1024 * 1024;
 const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
 
+const VISIBILITY_OPTIONS = [
+  { key: 'vault', icon: '\u{1F512}', label: 'Secret Vault', desc: 'Only you can see. Available for private matching.' },
+  { key: 'profile', icon: '\u{1F4CB}', label: 'Save to Profile', desc: 'Visible on your profile only.' },
+  { key: 'friends', icon: '\u{1F465}', label: 'Share with Friends', desc: 'Your friends see it in their feed.' },
+  { key: 'family', icon: '\u{1F3E0}', label: 'Share with Family', desc: 'Only family connections see it.' },
+  { key: 'public', icon: '\u{1F310}', label: 'Share Publicly', desc: 'Everyone in the community can see it.' },
+];
+
 /**
  * ShareCompletionModal — state machine for sharing completions with fellows.
  *
@@ -29,7 +37,8 @@ export default function ShareCompletionModal({
   const [summary, setSummary] = useState('');
   const [fullStory, setFullStory] = useState('');
   const [error, setError] = useState(null);
-  const [shareToCommunity, setShareToCommunity] = useState(false);
+  const [visibility, setVisibility] = useState('friends');
+  const [privateMatching, setPrivateMatching] = useState(false);
 
   // Editing state
   const [editMessages, setEditMessages] = useState([]);
@@ -157,10 +166,12 @@ export default function ShareCompletionModal({
         completionLabel: completionLabel || typeDef.label || completionType,
         images: uploadedImages,
         videoURL: videoURL || null,
+        visibility,
+        privateMatching,
       });
 
-      // Also share to community feed if opted in
-      if (shareToCommunity && db && user) {
+      // Also share to community feed if public
+      if (visibility === 'public' && db && user) {
         await addDoc(collection(db, 'community-posts'), {
           text: summary,
           images: uploadedImages,
@@ -186,7 +197,7 @@ export default function ShareCompletionModal({
       setError('Failed to post. Please try again.');
       setPhase('preview');
     }
-  }, [summary, fullStory, completionType, completionId, completionLabel, typeDef, imageFiles, videoURL, uploadImages, postCompletionShare, onPosted, onClose, shareToCommunity, user]);
+  }, [summary, fullStory, completionType, completionId, completionLabel, typeDef, imageFiles, videoURL, uploadImages, postCompletionShare, onPosted, onClose, visibility, privateMatching, user]);
 
   // Lock scroll while modal is open
   useEffect(() => {
@@ -245,14 +256,34 @@ export default function ShareCompletionModal({
               </div>
             )}
 
-            <label className="fellowship-modal-community-toggle">
-              <input
-                type="checkbox"
-                checked={shareToCommunity}
-                onChange={e => setShareToCommunity(e.target.checked)}
-              />
-              <span>Also share to Community feed</span>
-            </label>
+            <div className="fellowship-modal-visibility">
+              {VISIBILITY_OPTIONS.map(opt => (
+                <label key={opt.key} className={`fellowship-modal-vis-option${visibility === opt.key ? ' active' : ''}`}>
+                  <input
+                    type="radio"
+                    name="visibility"
+                    value={opt.key}
+                    checked={visibility === opt.key}
+                    onChange={() => setVisibility(opt.key)}
+                  />
+                  <span className="fellowship-modal-vis-icon">{opt.icon}</span>
+                  <span className="fellowship-modal-vis-text">
+                    <span className="fellowship-modal-vis-label">{opt.label}</span>
+                    <span className="fellowship-modal-vis-desc">{opt.desc}</span>
+                  </span>
+                </label>
+              ))}
+              {visibility === 'vault' && (
+                <label className="fellowship-modal-private-matching">
+                  <input
+                    type="checkbox"
+                    checked={privateMatching}
+                    onChange={e => setPrivateMatching(e.target.checked)}
+                  />
+                  <span>Enable private matching</span>
+                </label>
+              )}
+            </div>
 
             <div className="fellowship-modal-actions">
               <button className="fellowship-modal-btn fellowship-modal-btn-primary" onClick={handlePost}>

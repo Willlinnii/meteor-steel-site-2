@@ -57,13 +57,20 @@ export function FriendRequestsProvider({ children }) {
   const friends = useMemo(() => {
     const list = [];
     sentDocs.filter(d => d.status === 'accepted').forEach(d => {
-      list.push({ uid: d.recipientUid, handle: d.recipientHandle, requestId: d.id });
+      list.push({ uid: d.recipientUid, handle: d.recipientHandle, requestId: d.id, relationship: d.relationship || 'friend' });
     });
     receivedDocs.filter(d => d.status === 'accepted').forEach(d => {
-      list.push({ uid: d.senderUid, handle: d.senderHandle, requestId: d.id });
+      list.push({ uid: d.senderUid, handle: d.senderHandle, requestId: d.id, relationship: d.relationship || 'friend' });
     });
     return list;
   }, [sentDocs, receivedDocs]);
+
+  // Family members (friends marked as family)
+  const familyMembers = useMemo(() => friends.filter(f => f.relationship === 'family'), [friends]);
+
+  // Quick-lookup Sets
+  const friendUids = useMemo(() => new Set(friends.map(f => f.uid)), [friends]);
+  const familyUids = useMemo(() => new Set(familyMembers.map(f => f.uid)), [familyMembers]);
 
   const incomingRequests = useMemo(() =>
     receivedDocs.filter(d => d.status === 'pending'),
@@ -103,6 +110,7 @@ export function FriendRequestsProvider({ children }) {
       recipientUid,
       recipientHandle: recipientHandle || '',
       status: 'pending',
+      relationship: 'friend',
       createdAt: serverTimestamp(),
       respondedAt: null,
     });
@@ -156,9 +164,17 @@ export function FriendRequestsProvider({ children }) {
     await deleteDoc(doc(db, 'friend-requests', requestId));
   }, []);
 
+  const setRelationship = useCallback(async (requestId, rel) => {
+    if (!db) return;
+    await updateDoc(doc(db, 'friend-requests', requestId), { relationship: rel });
+  }, []);
+
   return (
     <FriendRequestsContext.Provider value={{
       friends,
+      familyMembers,
+      friendUids,
+      familyUids,
       incomingRequests,
       outgoingRequests,
       connectedUids,
@@ -166,6 +182,7 @@ export function FriendRequestsProvider({ children }) {
       acceptRequest,
       declineRequest,
       removeFriend,
+      setRelationship,
       loading,
     }}>
       {children}

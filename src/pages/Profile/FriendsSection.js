@@ -8,7 +8,7 @@ export default function FriendsSection() {
   const { handle } = useProfile();
   const {
     friends, incomingRequests, outgoingRequests, connectedUids,
-    sendRequest, acceptRequest, declineRequest, removeFriend,
+    sendRequest, acceptRequest, declineRequest, removeFriend, setRelationship,
   } = useFriendRequests();
 
   const [searchQuery, setSearchQuery] = useState('');
@@ -175,29 +175,38 @@ export default function FriendsSection() {
           friends.map(f => (
             <div key={f.requestId} className="friends-list-row">
               <span className="friends-handle">@{f.handle}</span>
-              {confirmRemove === f.requestId ? (
-                <div className="friends-invite-actions">
-                  <button
-                    className="friends-action-btn friends-decline-btn"
-                    onClick={() => handleRemoveFriend(f.requestId)}
-                  >
-                    Confirm
-                  </button>
-                  <button
-                    className="friends-action-btn"
-                    onClick={() => setConfirmRemove(null)}
-                  >
-                    Cancel
-                  </button>
-                </div>
-              ) : (
+              <div className="friends-list-actions">
                 <button
-                  className="friends-action-btn friends-remove-btn"
-                  onClick={() => setConfirmRemove(f.requestId)}
+                  className={`friends-rel-btn${f.relationship === 'family' ? ' friends-rel-family' : ''}`}
+                  onClick={() => setRelationship(f.requestId, f.relationship === 'family' ? 'friend' : 'family')}
+                  title={f.relationship === 'family' ? 'Change to Friend' : 'Mark as Family'}
                 >
-                  Remove
+                  {f.relationship === 'family' ? 'Family' : 'Friend'}
                 </button>
-              )}
+                {confirmRemove === f.requestId ? (
+                  <div className="friends-invite-actions">
+                    <button
+                      className="friends-action-btn friends-decline-btn"
+                      onClick={() => handleRemoveFriend(f.requestId)}
+                    >
+                      Confirm
+                    </button>
+                    <button
+                      className="friends-action-btn"
+                      onClick={() => setConfirmRemove(null)}
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                ) : (
+                  <button
+                    className="friends-action-btn friends-remove-btn"
+                    onClick={() => setConfirmRemove(f.requestId)}
+                  >
+                    Remove
+                  </button>
+                )}
+              </div>
             </div>
           ))
         )}

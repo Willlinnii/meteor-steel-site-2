@@ -15,6 +15,8 @@ import { computeNumerology, NUMBER_MEANINGS, NUMBER_TYPES } from '../../profile/
 import FriendsSection from './FriendsSection';
 import MyStoryArc from './MyStoryArc';
 import StoryCardDeck from './StoryCardDeck';
+import { useFellowship } from '../../contexts/FellowshipContext';
+import FellowshipPost from '../../components/fellowship/FellowshipPost';
 import { useStoryCardSync } from '../../storyCards/useStoryCardSync';
 import chronosphaeraZodiac from '../../data/chronosphaeraZodiac.json';
 import mythicCalendar from '../../data/mythicCalendar.json';
@@ -185,9 +187,12 @@ export default function ProfilePage() {
   const { user, signOut } = useAuth();
   const { getCourseStates, completedCourses, certificateData, allCourses } = useCoursework();
   const { earnedRanks, highestRank, activeCredentials, hasProfile, loaded: profileLoaded, handle, natalChart, updateNatalChart, numerologyName, updateNumerologyName, luckyNumber, updateLuckyNumber, subscriptions, purchases, hasStripeAccount, initiateCheckout, openBillingPortal, refreshProfile, mentorData, qualifiedMentorTypes, mentorEligible, mentorCoursesComplete, effectiveMentorStatus, pairingCategories, updateMentorBio, updateMentorCapacity, publishToDirectory, unpublishFromDirectory, respondToPairing, endPairing, photoURL, consultingData, consultingCategories, updateProfilePhoto, respondToConsulting, apiKeys, saveApiKey, removeApiKey, hasAnthropicKey, hasOpenaiKey, mythouseApiKey, hasMythouseKey, generateMythouseKey, regenerateMythouseKey, social, updateSocial, pilgrimages, pilgrimagesLoaded, removePilgrimage, personalStory, savePersonalStory, curatorApproved, ringSize, updateRingSize } = useProfile();
-const { cards: storyCards, loaded: storyCardsLoaded } = useStoryCardSync();
+const { cards: storyCards, loaded: storyCardsLoaded, vaultCardIds, toggleVaultCard } = useStoryCardSync();
+  const { myVaultPosts, myProfilePosts, deletePost: deleteFellowshipPost } = useFellowship();
   const navigate = useNavigate();
   const location = useLocation();
+  const [showVault, setShowVault] = useState(false);
+  const [showProfilePosts, setShowProfilePosts] = useState(false);
   const [showChat, setShowChat] = useState(false);
   const [showMentorChat, setShowMentorChat] = useState(false);
   const [showConsultingChat, setShowConsultingChat] = useState(false);
@@ -741,7 +746,7 @@ const { cards: storyCards, loaded: storyCardsLoaded } = useStoryCardSync();
       />
 
       {/* My Story Cards (with Story Matching pop-down) */}
-      <StoryCardDeck cards={storyCards} loaded={storyCardsLoaded} />
+      <StoryCardDeck cards={storyCards} loaded={storyCardsLoaded} vaultCardIds={vaultCardIds} onToggleVault={toggleVaultCard} />
 
       {/* Social Media Links (click-to-expand) */}
       <h2
@@ -1340,6 +1345,52 @@ All responses return { data, meta } JSON. GET /v1/ for full discovery.`}</pre>
 
       {/* Friends Section */}
       <FriendsSection />
+
+      {/* Secret Vault */}
+      {myVaultPosts.length > 0 && (
+        <>
+          <h2
+            className="profile-section-title profile-section-toggle"
+            onClick={() => setShowVault(v => !v)}
+            role="button"
+            tabIndex={0}
+            onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') setShowVault(v => !v); }}
+          >
+            Secret Vault ({myVaultPosts.length})
+            <span className={`profile-section-chevron${showVault ? ' open' : ''}`}>&#9662;</span>
+          </h2>
+          {showVault && (
+            <div className="profile-vault-posts">
+              {myVaultPosts.map(post => (
+                <FellowshipPost key={post.id} post={post} currentUid={user?.uid} onDelete={deleteFellowshipPost} />
+              ))}
+            </div>
+          )}
+        </>
+      )}
+
+      {/* Profile Posts */}
+      {myProfilePosts.length > 0 && (
+        <>
+          <h2
+            className="profile-section-title profile-section-toggle"
+            onClick={() => setShowProfilePosts(v => !v)}
+            role="button"
+            tabIndex={0}
+            onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') setShowProfilePosts(v => !v); }}
+          >
+            Profile Posts ({myProfilePosts.length})
+            <span className={`profile-section-chevron${showProfilePosts ? ' open' : ''}`}>&#9662;</span>
+          </h2>
+          {showProfilePosts && (
+            <div className="profile-profile-posts">
+              {myProfilePosts.map(post => (
+                <FellowshipPost key={post.id} post={post} currentUid={user?.uid} onDelete={deleteFellowshipPost} />
+              ))}
+            </div>
+          )}
+        </>
+      )}
 
       {/* My Story Arc */}
       <MyStoryArc />

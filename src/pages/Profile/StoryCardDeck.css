@@ -136,6 +136,35 @@
   gap: 10px;
 }
 
+/* ===== VAULT TOGGLE PER CARD ===== */
+.story-deck-card-wrapper {
+  position: relative;
+}
+
+.story-deck-vault-btn {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  background: rgba(20, 20, 28, 0.85);
+  border: 1px solid var(--border-subtle, #2a2a3a);
+  border-radius: 4px;
+  font-size: 0.75rem;
+  padding: 2px 4px;
+  cursor: pointer;
+  opacity: 0.5;
+  transition: opacity 0.15s;
+  z-index: 2;
+}
+
+.story-deck-vault-btn:hover {
+  opacity: 1;
+}
+
+.story-deck-vault-btn.active {
+  opacity: 1;
+  border-color: var(--accent-gold, #d4a55a);
+}
+
 /* ===== INDIVIDUAL STORY CARD ===== */
 .story-card {
   background: rgba(26, 26, 36, 0.7);

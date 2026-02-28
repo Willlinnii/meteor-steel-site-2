@@ -100,6 +100,62 @@
   padding: 40px 20px;
 }
 
+/* Vault hints */
+.discover-vault-hints {
+  margin: -4px 0 12px 20px;
+  padding: 8px 12px;
+  border-left: 2px solid var(--accent-gold, #d4a55a);
+  background: rgba(212, 165, 90, 0.04);
+  border-radius: 0 6px 6px 0;
+}
+
+.discover-vault-hint {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0;
+  font-size: 0.82rem;
+}
+
+.discover-vault-hint-icon {
+  font-size: 0.85rem;
+  flex-shrink: 0;
+}
+
+.discover-vault-hint-text {
+  color: var(--text-secondary, #8a8a9a);
+  flex: 1;
+}
+
+.discover-vault-reveal-btn {
+  padding: 2px 10px;
+  border-radius: 4px;
+  border: 1px solid var(--accent-gold, #d4a55a);
+  background: transparent;
+  color: var(--accent-gold, #d4a55a);
+  font-family: 'Cinzel', serif;
+  font-size: 0.65rem;
+  cursor: pointer;
+  transition: all 0.15s;
+  flex-shrink: 0;
+}
+
+.discover-vault-reveal-btn:hover:not(:disabled) {
+  background: rgba(212, 165, 90, 0.15);
+}
+
+.discover-vault-reveal-btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.discover-vault-revealed-badge {
+  font-size: 0.65rem;
+  color: #5bd97a;
+  font-style: italic;
+  flex-shrink: 0;
+}
+
 .discover-match-list {
   display: flex;
   flex-direction: column;

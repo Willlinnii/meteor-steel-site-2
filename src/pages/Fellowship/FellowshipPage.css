@@ -162,9 +162,16 @@
 }
 
 .fellowship-post-time {
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 4px;
   font-size: 0.75rem;
   color: var(--text-secondary);
+}
+
+.fellowship-post-vis-badge {
+  font-size: 0.7rem;
+  opacity: 0.7;
 }
 
 .fellowship-post-actions {
@@ -677,18 +684,73 @@
   color: var(--text-secondary);
 }
 
-/* Community toggle */
-.fellowship-modal-community-toggle {
+/* Visibility picker */
+.fellowship-modal-visibility {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.fellowship-modal-vis-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all 0.15s;
+}
+
+.fellowship-modal-vis-option:hover {
+  background: rgba(212, 165, 90, 0.06);
+}
+
+.fellowship-modal-vis-option.active {
+  border-color: var(--accent-gold, #d4a55a);
+  background: rgba(212, 165, 90, 0.08);
+}
+
+.fellowship-modal-vis-option input[type="radio"] {
+  display: none;
+}
+
+.fellowship-modal-vis-icon {
+  font-size: 1.1rem;
+  flex-shrink: 0;
+  width: 22px;
+  text-align: center;
+}
+
+.fellowship-modal-vis-text {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.fellowship-modal-vis-label {
+  font-size: 0.82rem;
+  color: var(--text-primary, #d4d4d4);
+  font-weight: 600;
+}
+
+.fellowship-modal-vis-desc {
+  font-size: 0.7rem;
+  color: var(--text-secondary, #6a6a7a);
+}
+
+.fellowship-modal-private-matching {
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: 0.82rem;
+  font-size: 0.8rem;
   color: var(--text-secondary);
   cursor: pointer;
-  margin-top: 12px;
+  margin: 4px 0 0 30px;
 }
 
-.fellowship-modal-community-toggle input {
+.fellowship-modal-private-matching input {
   accent-color: var(--accent-gold);
 }
 

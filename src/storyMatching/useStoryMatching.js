@@ -6,7 +6,6 @@ import { useProfile } from '../profile/ProfileContext';
 import { useCoursework } from '../coursework/CourseworkContext';
 import { useWritings } from '../writings/WritingsContext';
 import { useFriendRequests } from '../contexts/FriendRequestsContext';
-import { useFamily } from '../contexts/FamilyContext';
 import { useStoryCardSync } from '../storyCards/useStoryCardSync';
 import { useMatchRequests } from '../contexts/MatchRequestsContext';
 import { buildMatchProfile, computeQuickMatch } from './matchEngine';
@@ -23,8 +22,7 @@ export function useStoryMatching() {
   const { profileData, handle, natalChart, photoURL } = useProfile();
   const { certificateData, isElementCompleted } = useCoursework();
   const { journeySyntheses } = useWritings();
-  const { friends } = useFriendRequests();
-  const { families } = useFamily();
+  const { friends, familyUids: familyUidSet } = useFriendRequests();
   const { cards: storyCards } = useStoryCardSync();
   const { sendMatchRequest: sendRequest, connectedUids: matchConnectedUids, outgoingRequests, incomingRequests } = useMatchRequests();
 
@@ -41,17 +39,8 @@ export function useStoryMatching() {
   const syncTimer = useRef(null);
   const lastProfileJson = useRef(null);
 
-  // Collect family member UIDs (excluding self)
-  const familyUids = useMemo(() => {
-    if (!user || !families?.length) return [];
-    const uids = new Set();
-    for (const fam of families) {
-      for (const uid of (fam.memberUids || [])) {
-        if (uid !== user.uid) uids.add(uid);
-      }
-    }
-    return [...uids];
-  }, [user, families]);
+  // Family UIDs from friend-requests (connections marked as family)
+  const familyUids = useMemo(() => [...familyUidSet], [familyUidSet]);
 
   // Friend UIDs for filtering
   const friendUids = useMemo(() => {
