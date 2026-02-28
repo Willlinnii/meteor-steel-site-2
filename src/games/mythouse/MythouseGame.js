@@ -153,9 +153,11 @@ function tangentRot(deg) {
 // === GAME LOGIC ===
 
 function initPieces() {
+  // Players start on opposite halves of ring 1 (28 spaces)
+  // P0: positions 0–6, P1: positions 14–20
   return [
-    PIECE_TYPES.map((_, i) => ({ ring: 1, pos: i * 2, finished: false })),
-    PIECE_TYPES.map((_, i) => ({ ring: 1, pos: i * 2 + 1, finished: false })),
+    PIECE_TYPES.map((_, i) => ({ ring: 1, pos: i, finished: false })),
+    PIECE_TYPES.map((_, i) => ({ ring: 1, pos: 14 + i, finished: false })),
   ];
 }
 
@@ -448,6 +450,11 @@ export default function MythouseGame({
     const oppPieces = currentPieces[1 - player];
     const moves = [];
 
+    const isOccupied = (ring, pos, excludeIdx) => {
+      return myPieces.some((p, j) => j !== excludeIdx && !p.finished && p.ring === ring && p.pos === pos)
+        || oppPieces.some(p => !p.finished && p.ring === ring && p.pos === pos);
+    };
+
     for (let i = 0; i < myPieces.length; i++) {
       const piece = myPieces[i];
       if (piece.finished) continue;
@@ -466,13 +473,16 @@ export default function MythouseGame({
         newPos = newPos - SPACES_PER_RING;
       }
 
-      const ownBlocked = myPieces.some((p, j) =>
-        j !== i && !p.finished && p.ring === newRing && p.pos === newPos
-      );
+      // Check for ladder/chute at destination to get final landing position
+      let finalRing = newRing;
+      let finalPos = newPos;
+      const ladder = getLadderAt(newRing, newPos);
+      const chute = getChuteAt(newRing, newPos);
+      if (ladder) { finalRing = ladder.toRing; finalPos = ladder.toPos; }
+      else if (chute) { finalRing = chute.toRing; finalPos = chute.toPos; }
 
-      const oppOnDest = oppPieces.some(p =>
-        !p.finished && p.ring === newRing && p.pos === newPos
-      );
+      // No two pieces can share a space — check final destination
+      if (isOccupied(finalRing, finalPos, i)) continue;
 
       moves.push({
         pieceIdx: i,
@@ -480,7 +490,7 @@ export default function MythouseGame({
         fromPos: piece.pos,
         toRing: newRing,
         toPos: newPos,
-        type: ownBlocked ? 'push' : oppOnDest ? 'displace' : 'move',
+        type: 'move',
       });
     }
 
@@ -569,24 +579,6 @@ export default function MythouseGame({
     } else {
       let destRing = move.toRing;
       let destPos = move.toPos;
-
-      if (move.type === 'push') {
-        const pushIdx = next[currentPlayer].findIndex((p, j) =>
-          j !== move.pieceIdx && !p.finished && p.ring === destRing && p.pos === destPos
-        );
-        if (pushIdx !== -1) {
-          next[currentPlayer][pushIdx].pos = Math.max(0, next[currentPlayer][pushIdx].pos - 3);
-        }
-      }
-
-      if (move.type === 'displace') {
-        const oppIdx = next[1 - currentPlayer].findIndex(p =>
-          !p.finished && p.ring === destRing && p.pos === destPos
-        );
-        if (oppIdx !== -1) {
-          next[1 - currentPlayer][oppIdx].pos = 0;
-        }
-      }
 
       next[currentPlayer][move.pieceIdx].ring = destRing;
       next[currentPlayer][move.pieceIdx].pos = destPos;
@@ -886,14 +878,12 @@ export default function MythouseGame({
           const move = chooseBestMove(legalMoves, (m) => {
             let score = 0;
             if (m.type === 'summit') score += 100;
-            if (m.type === 'displace') score += 10;
             if (m.toRing > m.fromRing) score += 15;
             score += m.toPos * 0.5;
             const ladder = getLadderAt(m.toRing, m.toPos);
             if (ladder) score += 20;
             const chute = getChuteAt(m.toRing, m.toPos);
             if (chute) score -= 15;
-            if (m.type === 'push') score -= 5;
             return evaluateWithNoise(score);
           });
           if (move) applyMove(move);
@@ -1008,7 +998,7 @@ export default function MythouseGame({
       gamePhase={gamePhase}
       winner={winner}
       turnCount={turnCount}
-      onRoll={(!isOnline || isMyTurn) ? handleRoll : null}
+      onRoll={(!isOnline || isMyTurn) && gamePhase === 'rolling' && winner === null ? handleRoll : null}
       onRestart={isOnline ? null : resetGame}
       onExit={onExit}
       onForfeit={isOnline ? onForfeit : undefined}
@@ -1257,14 +1247,14 @@ export default function MythouseGame({
                 style={{ cursor: isClickable ? 'pointer' : 'default' }}
               >
                 <circle
-                  cx={x + offset} cy={y} r={6}
+                  cx={x + offset} cy={y} r={isClickable ? 9 : 6}
                   fill={PLAYER_COLORS[player]}
                   stroke={isClickable ? 'var(--accent-ember)' : 'var(--bg-dark)'}
-                  strokeWidth={isClickable ? 1.5 : 0.8}
+                  strokeWidth={isClickable ? 2 : 0.8}
                 />
                 <text
-                  x={x + offset} y={y + 1}
-                  textAnchor="middle" fontSize="6"
+                  x={x + offset} y={y + (isClickable ? 2 : 1)}
+                  textAnchor="middle" fontSize={isClickable ? '8' : '6'}
                   fill="var(--bg-dark)" pointerEvents="none"
                 >
                   {PIECE_TYPES[i].symbol}

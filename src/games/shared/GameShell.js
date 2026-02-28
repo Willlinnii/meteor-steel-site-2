@@ -151,6 +151,9 @@ export default function GameShell({
         {onRoll && diceDisplay && (
           <div className="game-shell-roll-hint">tap to roll</div>
         )}
+        {!onRoll && diceDisplay && (extraInfo || message) && (
+          <div className="game-shell-roll-hint" style={{ color: 'var(--accent-gold)' }}>{extraInfo || message}</div>
+        )}
       </div>
 
       {moveLog && moveLog.length > 0 && (
