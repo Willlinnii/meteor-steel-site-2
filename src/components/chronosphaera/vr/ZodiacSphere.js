@@ -130,10 +130,10 @@ function WheelSegment({ index, selected, hovered, highlightAll, onClick, onHover
     );
   }, [thetaStart]);
 
-  // Invisible hit-area (closed with caps) — much easier to hover/click from any angle
+  // Invisible hit-area (wall only, no caps — caps would cover the interior and block planet clicks)
   const hitGeo = useMemo(() => {
     return new THREE.CylinderGeometry(
-      ZODIAC_RADIUS, ZODIAC_RADIUS, WALL_HEIGHT, 16, 1, false, thetaStart, Math.PI / 6
+      ZODIAC_RADIUS, ZODIAC_RADIUS, WALL_HEIGHT, 16, 1, true, thetaStart, Math.PI / 6
     );
   }, [thetaStart]);
 

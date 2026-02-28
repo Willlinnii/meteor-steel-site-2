@@ -1,7 +1,26 @@
-import React, { Suspense, useState, Component } from 'react';
-import { Canvas } from '@react-three/fiber';
+import React, { Suspense, useState, Component, useEffect } from 'react';
+import { Canvas, useThree } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import CrownScene from './CrownScene';
+
+const CAMERA_DEFAULT = [0, 0, 42];
+const CAMERA_MOBILE  = [0, 0, 56];
+const MOBILE_BREAKPOINT = 600;
+
+function isMobile() {
+  return typeof window !== 'undefined' && window.innerWidth <= MOBILE_BREAKPOINT;
+}
+
+function CameraSetup() {
+  const { camera } = useThree();
+  useEffect(() => {
+    const pos = isMobile() ? CAMERA_MOBILE : CAMERA_DEFAULT;
+    camera.position.set(...pos);
+    camera.lookAt(0, 0, 0);
+    camera.updateProjectionMatrix();
+  }, [camera]);
+  return null;
+}
 
 class SceneErrorBoundary extends Component {
   state = { hasError: false };
@@ -21,7 +40,8 @@ export default function RingSceneEmbed({ birthDate, selectedPlanet, onSelectPlan
   const [autoRotate, setAutoRotate] = useState(true);
   return (
     <SceneErrorBoundary>
-      <Canvas camera={{ position: [0, 0, 42], fov: 60, near: 0.1, far: 200 }} gl={{ antialias: true }} dpr={[1, 2]}>
+      <Canvas camera={{ position: isMobile() ? CAMERA_MOBILE : CAMERA_DEFAULT, fov: 60, near: 0.1, far: 200 }} gl={{ antialias: true }} dpr={[1, 2]}>
+        <CameraSetup />
         <Suspense fallback={null}>
           <CrownScene
             birthDate={birthDate}

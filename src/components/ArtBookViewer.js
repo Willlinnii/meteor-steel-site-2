@@ -78,16 +78,25 @@ const CameraIcon = () => (
   </svg>
 );
 
-// Camera positions per mode
-const CAMERA_BOOK = [0, 4, 12];
-const CAMERA_MOUNTAIN = [-4, 5, 16];
+// Camera positions per mode — mobile pulls back for a wider view
+const MOBILE_BREAKPOINT = 600;
+const CAMERA_BOOK         = [0, 4, 12];
+const CAMERA_BOOK_MOBILE  = [0, 5, 17];
+const CAMERA_MOUNTAIN         = [-4, 5, 16];
+const CAMERA_MOUNTAIN_MOBILE  = [-6, 8, 26];
+
+function getCameraPos(mode) {
+  const mobile = window.innerWidth <= MOBILE_BREAKPOINT;
+  if (mode === 'mountain') return mobile ? CAMERA_MOUNTAIN_MOBILE : CAMERA_MOUNTAIN;
+  return mobile ? CAMERA_BOOK_MOBILE : CAMERA_BOOK;
+}
 
 // Reset camera when mode changes
 function CameraReset({ mode, controlsRef }) {
   const { camera } = useThree();
 
   useEffect(() => {
-    const pos = mode === 'mountain' ? CAMERA_MOUNTAIN : CAMERA_BOOK;
+    const pos = getCameraPos(mode);
     camera.position.set(...pos);
     camera.lookAt(0, 0, 0);
     camera.updateProjectionMatrix();
@@ -264,7 +273,7 @@ export default function ArtBookViewer({ embedded = false, externalMode, onSelect
       <div className="artbook-canvas-wrapper" onPointerDown={handleCanvasPointerDown} onPointerMove={handleCanvasPointerMove} onPointerUp={handleCanvasPointerUp}>
         <SceneErrorBoundary>
           <Canvas
-            camera={{ position: isMountain ? CAMERA_MOUNTAIN : CAMERA_BOOK, fov: 55, near: 1, far: 100 }}
+            camera={{ position: getCameraPos(mode), fov: 55, near: 1, far: 100 }}
             gl={{ antialias: true }}
             dpr={[1, 2]}
           >

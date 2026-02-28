@@ -189,6 +189,7 @@
   aspect-ratio: auto;
   border-radius: 0;
   z-index: 0;
+  pointer-events: auto;
 }
 
 /* Make the page itself transparent so the 3D shows through */
@@ -202,6 +203,13 @@
   z-index: 1;
   min-height: calc(100vh - 130px);
   max-height: none;
+  pointer-events: none;
+}
+
+@media (max-width: 768px) {
+  .chrono-3d-active .chrono-diagram-center {
+    min-height: calc(100vh - 220px);
+  }
 }
 
 /* All page content floats above the fixed canvas */

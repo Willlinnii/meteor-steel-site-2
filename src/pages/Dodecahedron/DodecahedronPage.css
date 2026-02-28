@@ -22,6 +22,12 @@
   height: 100vh;
 }
 
+@media (max-width: 768px) {
+  .dodecahedron-page.dodecahedron-embedded .dodec-viewport {
+    height: calc(100vh - 90px);
+  }
+}
+
 .dodec-viewport {
   position: relative;
   width: 100%;
