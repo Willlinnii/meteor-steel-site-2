@@ -67,7 +67,7 @@ export default function AtlasPage() {
   const navigate = useNavigate();
   const { voiceEnabled, recording, speaking, toggleVoice, startListening, stopListening, speak } = useVoice(setInput);
   const { trackElement, trackTime, buildCourseSummary } = useCoursework();
-  const { getConversation, saveConversation, loaded: writingsLoaded } = useWritings();
+  const { getConversation, saveConversation, addStory, addStoryEntry, loaded: writingsLoaded } = useWritings();
   const { buildAtlasContext } = useAtlasContext();
 
   // Load per-voice chat histories from persisted writings
@@ -185,7 +185,18 @@ export default function AtlasPage() {
       const data = await res.json();
       const reply = res.ok ? data.reply : (data.error || 'Something went wrong.');
       setMessages(vid, [...updated, { role: 'assistant', content: reply }]);
-      if (res.ok) speak(reply);
+      if (res.ok) {
+        speak(reply);
+        if (data.storySeed) {
+          const { storyId, name, stageEntries } = data.storySeed;
+          addStory(storyId, name || 'Untitled Story', 'atlas-conversation');
+          if (stageEntries) {
+            Object.entries(stageEntries).forEach(([stageId, text]) => {
+              if (text) addStoryEntry(storyId, stageId, { text, source: 'atlas-conversation' });
+            });
+          }
+        }
+      }
     } catch {
       setMessages(vid, [...updated, { role: 'assistant', content: 'Network error. Please try again.' }]);
     } finally {

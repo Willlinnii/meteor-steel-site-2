@@ -41,7 +41,7 @@ export default function ChatPanel() {
   const location = useLocation();
   const { voiceEnabled, recording, speaking, toggleVoice, startListening, stopListening, speak } = useVoice(setInput);
   const { trackElement, buildCourseSummary } = useCoursework();
-  const { getConversation, saveConversation, loaded: writingsLoaded } = useWritings();
+  const { getConversation, saveConversation, addStory, addStoryEntry, loaded: writingsLoaded } = useWritings();
   const { profileData, loaded: profileLoaded, completeOnboarding } = useProfile();
   const { area: areaOverride, meta: areaMeta } = useAreaOverride();
   const { buildAtlasContext } = useAtlasContext();
@@ -166,6 +166,15 @@ export default function ChatPanel() {
       } else {
         setMessages([...updated, { role: 'assistant', content: data.reply }]);
         speak(data.reply);
+        if (data.storySeed) {
+          const { storyId, name, stageEntries } = data.storySeed;
+          addStory(storyId, name || 'Untitled Story', 'atlas-conversation');
+          if (stageEntries) {
+            Object.entries(stageEntries).forEach(([stageId, text]) => {
+              if (text) addStoryEntry(storyId, stageId, { text, source: 'atlas-conversation' });
+            });
+          }
+        }
       }
     } catch {
       setMessages([...updated, { role: 'assistant', content: 'Network error. Please try again.' }]);

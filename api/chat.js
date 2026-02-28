@@ -111,6 +111,18 @@ const SAVE_STORY_SEED = {
   }
 };
 
+// --- Atlas routing table — detect intent, give a real response, offer the link ---
+
+const ATLAS_ROUTES = [
+  { keywords: 'birthday, birth time, astrology, chart', label: 'Open Divination', path: '/divination', note: 'interactive chart with houses, aspects, cultural traditions. Use compute_natal_chart tool first if they share birth data' },
+  { keywords: 'profile, credentials, background, expertise', label: 'Set Up Profile', path: '/profile', note: 'guided credential assessment, natal chart, professional identity' },
+  { keywords: 'guidance, coaching, life transition, feeling stuck or lost', label: 'Start a Consultation', path: '/consulting/intake', note: 'structured mythic consultation mapping situation to archetypal patterns' },
+  { keywords: 'teaching, mentoring, contributing expertise, guild, practitioner', label: 'Explore the Guild', path: '/guild', note: 'where practitioners gather to teach and consult' },
+  { keywords: 'deeper study, find a mentor, guided learning', label: 'Find a Mentor', path: '/guild-directory', note: 'browse the mentor directory for guided study' },
+  { keywords: 'tarot, reading, card pull, divination, oracle', label: 'Open Divination', path: '/divination', note: 'full readings with card imagery and cultural traditions' },
+  { keywords: 'bio, CV, resume, transmute into narrative', label: 'Open Profile', path: '/profile', note: 'transmute raw biographical text into mythic narrative' },
+];
+
 // --- Yellow Brick Road challenge prompt builders ---
 
 function buildYBRChallengePrompt(persona, challengeData, level) {
@@ -1091,11 +1103,9 @@ VOICE: Warm, editorial, mythic. You are helping them find the shape of their sto
     systemPrompt += `\n\n${situationalContext.slice(0, 2000)}`;
   }
 
-  systemPrompt += `\n\nMENTOR PROGRAM:\nThe Mythouse has a mentor program. If a student expresses interest in deeper study,\nguidance, or mentorship in mythology, storytelling, healing, media, or adventure,\nyou may suggest they visit the Mentor Directory: [[Find a Mentor|/mentors]].\nIf they are an active mentor, remind them they can access the Guild at [[Enter the Guild|/guild]]\nfor discussions with fellow mentors and to set up consulting.\nOnly suggest this when genuinely relevant — do not push mentorship or the Guild unsolicited.`;
-
   systemPrompt += `\n\nSTORY INTAKE:\nWhen someone expresses interest in working on a story — personal narrative, band history, screenplay, novel, creative project — engage naturally. Ask about the heart of the story, the turning points, the stakes. Don't force a rigid interview — let the conversation flow. When you've gathered enough detail (after at least 2-3 exchanges) to sketch a narrative arc, use the save_story_seed tool to capture it.\nAfter saving, give a brief readout of what you captured — the name, premise, and which stages you identified — and offer: "If you want to go deeper — develop each stage, work with drafts, weave your narrative together — the Story Forge is where that happens. [[Open Story Forge|/story-forge]]"\nDo NOT call save_story_seed on the first message. Have a real conversation first.`;
 
-  systemPrompt += `\n\nROUTING — DETECT & OFFER:\nWhen you recognize one of these intents, give a brief, useful first response — then offer the dedicated experience. Don't just drop a link; say something real first.\n\n- ASTROLOGY / NATAL CHART: If someone mentions their birthday, birth time, astrology, or "my chart" — you already have the compute_natal_chart tool, so use it. After giving the reading, offer: "For a full interactive chart with houses, aspects, and cultural traditions — [[Open Divination|/divination]]"\n\n- PROFILE / CREDENTIALS: If someone shares their professional background, expertise, or asks about setting up their profile — acknowledge what they shared, reflect it back briefly, then offer: "If you want to build out your full profile — credentials, natal chart, professional identity — there's a guided setup for that. [[Set Up Profile|/profile]]"\n\n- CONSULTING / GUIDANCE: If someone expresses a need for deeper personal guidance, coaching, or working through a life transition with mythic framing — respond with genuine empathy and an initial observation, then offer: "If you want to go deeper with a structured mythic consultation — mapping your situation to archetypal patterns and working through it over time — [[Start a Consultation|/consulting/intake]]"\n\n- GUILD / MENTORSHIP APPLICATION: If someone expresses interest in teaching, mentoring, or contributing their expertise to the community — honor that impulse, then offer: "The Guild is where practitioners gather. If you'd like to apply — [[Explore the Guild|/guild]]"\n\n- DIVINATION / TAROT: If someone asks for a reading, card pull, or divination — engage the question briefly (what's on your mind?), then offer: "For a full reading with card imagery and cultural traditions — [[Open Divination|/divination]]"\n\n- STORY TRANSMUTATION: If someone shares or pastes a raw bio, CV, or resume and wants it transformed into narrative — acknowledge the material, then offer: "Your profile page has a tool that can transmute that into mythic narrative. [[Open Profile|/profile]]"\n\nRules: Only suggest ONE route per response. Never stack multiple offers. Let the conversation breathe — if they're clearly just chatting, don't route them anywhere.`;
+  systemPrompt += `\n\nROUTING:\nWhen you recognize the user would benefit from a dedicated experience, give a genuine first response — something real, not just a link drop — then offer one link. Only one per response. Don't route people who are just chatting.\n\n${ATLAS_ROUTES.map(r => `- ${r.keywords} → [[${r.label}|${r.path}]] — ${r.note}`).join('\n')}`;
 
   try {
     const response = await anthropic.messages.create({ model: MODELS.fast, system: systemPrompt, messages: trimmed, max_tokens: 1024, ...(tools.length > 0 ? { tools } : {}) });
