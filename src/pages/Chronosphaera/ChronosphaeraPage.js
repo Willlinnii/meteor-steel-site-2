@@ -1146,6 +1146,9 @@ export default function ChronosphaeraPage() {
     // Dodecahedron
     if (sub === '/dodecahedron' && mode !== 'dodecahedron') {
       setMode('dodecahedron');
+      setTimeout(() => {
+        document.querySelector('.dodec-content-heading')?.scrollIntoView({ behavior: 'smooth', block: 'end' });
+      }, 100);
     }
 
     // Yellow Brick Road
@@ -1308,6 +1311,9 @@ export default function ChronosphaeraPage() {
       setShowCalendar(false);
       setDodecMode('stars');
       navigate('/chronosphaera/dodecahedron');
+      setTimeout(() => {
+        document.querySelector('.dodec-content-heading')?.scrollIntoView({ behavior: 'smooth', block: 'end' });
+      }, 100);
     } else {
       // dodecahedron → clock
       clearAllSelections();

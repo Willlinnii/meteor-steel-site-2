@@ -8,6 +8,7 @@ import { ORBITAL_MODES } from '../../components/chronosphaera/vr/constants3D';
 import '../../components/chronosphaera/vr/CelestialScene.css';
 import './ChronosphaeraPage.css';
 import { usePageTracking } from '../../coursework/CourseworkContext';
+import useCompass from '../../hooks/useCompass';
 
 // Reuse all existing data + content components from 2D page
 import MetalDetailPanel from '../../components/chronosphaera/MetalDetailPanel';
@@ -211,6 +212,8 @@ export default function ChronosphaeraVRPage() {
   const { track } = usePageTracking('chronosphaera-vr');
   const navigate = useNavigate();
   const location = useLocation();
+
+  const compass = useCompass();
 
   const [clockMode, setClockMode] = useState('24h');        // '24h' | '12h'
   const [zodiacMode, setZodiacMode] = useState('sidereal');  // 'sidereal' | 'tropical'
@@ -626,6 +629,7 @@ export default function ChronosphaeraVRPage() {
         )}
 
         <CelestialScene
+          compassHeading={compass.active ? compass.heading : null}
           mode={mode}
           selectedPlanet={selectedPlanet}
           onSelectPlanet={handleSelectPlanet}
@@ -714,6 +718,22 @@ export default function ChronosphaeraVRPage() {
           <button className="celestial-btn" onClick={toggleFullscreen} title={isFullscreen ? 'Exit fullscreen' : 'Fullscreen immersive view'}>
             {isFullscreen ? 'Exit FS' : 'Fullscreen'}
           </button>
+          {!cameraAR && (
+            <button
+              className={`compass-toggle-inline${compass.active ? ' active' : ''}${compass.denied ? ' denied' : ''}`}
+              onClick={compass.supported
+                ? (compass.active ? compass.stopCompass : compass.requestCompass)
+                : () => alert('Compass alignment is a mobile feature — open this page on your phone to use it.')}
+              title={!compass.supported ? 'Mobile feature — compass alignment' : compass.denied ? 'Compass permission denied' : compass.active ? 'Disable compass' : 'Align to compass'}
+            >
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.5">
+                <circle cx="12" cy="12" r="9" />
+                <polygon points="12,3 14,12 12,10.5 10,12" fill="currentColor" stroke="none" />
+                <polygon points="12,21 14,12 12,13.5 10,12" />
+                <circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none" />
+              </svg>
+            </button>
+          )}
           {!cameraAR ? (
             <button className="celestial-btn celestial-xr-enter" onClick={startCameraAR} title="Phone AR — use camera as window into the scene">
               Phone AR

@@ -1,13 +1,16 @@
 import React, { Suspense } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
+import * as THREE from 'three';
 import ModeAwareScene from './ModeAwareScene';
 
 function SceneFallback() {
   return null;
 }
 
-export default function InlineScene3D(props) {
+export default function InlineScene3D({ compassHeading, ...sceneProps }) {
+  const yRot = compassHeading != null ? -THREE.MathUtils.degToRad(compassHeading) : 0;
+
   return (
     <div className="chrono-3d-container">
       <Canvas
@@ -17,7 +20,9 @@ export default function InlineScene3D(props) {
         style={{ background: '#0a0a14' }}
       >
         <Suspense fallback={<SceneFallback />}>
-          <ModeAwareScene {...props} />
+          <group rotation={[0, yRot, 0]}>
+            <ModeAwareScene {...sceneProps} />
+          </group>
           <OrbitControls
             enableDamping
             dampingFactor={0.05}

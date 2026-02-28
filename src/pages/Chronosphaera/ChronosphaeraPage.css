@@ -425,14 +425,20 @@
   }
 }
 
-/* View mode button group (2D / 3D / VR) — positioned left of heading, beside compass */
 .view-mode-group {
+  display: inline-flex;
+  gap: 4px;
+  align-items: center;
+}
+.chrono-heading-title-row > .view-mode-group {
   position: absolute;
-  right: calc(100% + 48px);
+  right: calc(100% + 10px);
   top: 50%;
   transform: translateY(-50%);
-  display: flex;
-  gap: 4px;
+}
+.view-mode-group .compass-toggle-inline {
+  position: static;
+  transform: none;
 }
 .view3d-toggle-inline {
   display: flex;
@@ -473,11 +479,6 @@
   margin-top: 4px;
   margin-bottom: 8px;
 }
-.view3d-below-arc .view-mode-group {
-  position: static;
-  transform: none;
-}
-
 /* ===== ORBITAL MODE TOGGLE (cycle: orbiting → live → aligned) ===== */
 
 .orbital-mode-toggle {

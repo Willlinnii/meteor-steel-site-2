@@ -2,6 +2,7 @@ import React, { Suspense, useRef, useEffect, Component } from 'react';
 import { Canvas, useThree } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import { XR, useXR, XROrigin, useXRControllerLocomotion } from '@react-three/xr';
+import * as THREE from 'three';
 import OrbitalScene from './OrbitalScene';
 import GyroscopeCamera from './GyroscopeCamera';
 import './CelestialScene.css';
@@ -66,6 +67,14 @@ function ConditionalOrbitControls({ cameraAR }) {
   );
 }
 
+// Compass rotation wrapper: rotates scene by device heading, disabled in AR and XR
+function CompassGroup({ compassHeading, cameraAR, children }) {
+  const isPresenting = useXR((state) => state.session != null);
+  const yRot = (!cameraAR && !isPresenting && compassHeading != null)
+    ? -THREE.MathUtils.degToRad(compassHeading) : 0;
+  return <group rotation={[0, yRot, 0]}>{children}</group>;
+}
+
 // VR locomotion wrapper: thumbstick movement in VR, passthrough otherwise
 function VRScene({ children }) {
   const originRef = useRef(null);
@@ -90,6 +99,7 @@ function VRScene({ children }) {
 }
 
 export default function CelestialScene({
+  compassHeading,
   mode,
   selectedPlanet,
   onSelectPlanet,
@@ -139,6 +149,7 @@ export default function CelestialScene({
         <XR store={xrStore}>
           <Suspense fallback={<SceneFallback />}>
             <VRScene>
+              <CompassGroup compassHeading={compassHeading} cameraAR={cameraAR}>
               <OrbitalScene
                 mode={mode}
                 selectedPlanet={selectedPlanet}
@@ -166,6 +177,7 @@ export default function CelestialScene({
                 showClock={showClock}
                 activeCulture={activeCulture}
               />
+              </CompassGroup>
             </VRScene>
             <ConditionalOrbitControls cameraAR={cameraAR} />
             {cameraAR && (

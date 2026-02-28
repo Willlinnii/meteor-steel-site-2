@@ -255,7 +255,7 @@ export default function DodecahedronPage({ embedded, externalMode, onModeChange 
       <div className="dodec-viewport">
       <SceneErrorBoundary>
         <Canvas
-          camera={{ position: [0, 2.5, 11], fov: 55, near: 0.1, far: 300 }}
+          camera={{ position: [0, 1.5, 7], fov: 55, near: 0.1, far: 300 }}
           gl={{ antialias: true }}
           dpr={[1, 2]}
           onPointerMissed={rolling ? undefined : () => setSelectedFace(null)}
