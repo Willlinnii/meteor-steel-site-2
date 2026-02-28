@@ -734,6 +734,7 @@ export default function ChronosphaeraPage() {
   // Single mode enum replaces 8 separate boolean/enum state variables
   const [mode, setMode] = useState(() => {
     if (location.pathname.endsWith('/medicine-wheel') && hasPurchase('medicine-wheel')) return 'medicine-wheel';
+    if (location.pathname.endsWith('/artbook')) return 'artbook';
     return 'default';
   });
   // Derived flags — same names for minimal render-logic changes
@@ -1137,6 +1138,11 @@ export default function ChronosphaeraPage() {
       }
     }
 
+    // Artbook
+    if (sub === '/artbook' && mode !== 'artbook') {
+      setMode('artbook');
+    }
+
     // Dodecahedron
     if (sub === '/dodecahedron' && mode !== 'dodecahedron') {
       setMode('dodecahedron');
@@ -1326,20 +1332,7 @@ export default function ChronosphaeraPage() {
     updateJewelryConfig(ringForm, { date: '' });
   }, [ringActiveDateType, ringForm, updateJewelryConfig]);
 
-  const handleToggle3D = useCallback((value) => {
-    if (value === 'vr') {
-      const isMobile = /Mobi|Android|iPad|iPhone|iPod/i.test(navigator.userAgent);
-      if (!isMobile) {
-        alert('VR/AR mode is available on mobile devices — open this page on your phone or tablet.');
-        return;
-      }
-      navigate('/chronosphaera/vr', { state: { autoAR: true } });
-    } else if (value === '3d') {
-      setView3D(true);
-    } else {
-      setView3D(false);
-    }
-  }, [navigate]);
+  const handleToggle3D = useCallback(() => setView3D(v => !v), []);
 
   const handleSelectMonomythModel = useCallback((theoristKey) => {
     const modelId = THEORIST_TO_MODEL[theoristKey];
@@ -1386,6 +1379,11 @@ export default function ChronosphaeraPage() {
     const area = (mode === 'monomyth' || mode === 'meteor-steel') ? 'meteor-steel'
       : mode === 'fallen-starlight' ? 'fallen-starlight'
       : mode === 'story-of-stories' ? 'story-of-stories'
+      : mode === 'chakra' ? 'chrono-body'
+      : mode === 'medicine-wheel' ? 'chrono-wheel'
+      : mode === 'ring' ? 'store'
+      : mode === 'dodecahedron' ? 'chrono-dodecahedron'
+      : mode === 'artbook' ? 'chrono-artbook'
       : 'celestial-clocks';
 
     // Determine focus
@@ -1402,6 +1400,12 @@ export default function ChronosphaeraPage() {
       focus = { type: 'stage', id: selectedMonomythStage, label: selectedMonomythStage, tab: showMeteorSteel ? meteorSteelTab : monomythTab };
     } else if (selectedConstellation) {
       focus = { type: 'constellation', id: selectedConstellation, label: selectedConstellation };
+    } else if (mode === 'medicine-wheel' && selectedWheelItem) {
+      focus = { type: 'wheel', id: selectedWheelItem, label: selectedWheelItem };
+    } else if (mode === 'dodecahedron') {
+      focus = { type: 'view', id: dodecMode, label: `dodecahedron (${dodecMode})` };
+    } else if (mode === 'artbook') {
+      focus = { type: 'view', id: artBookMode, label: `art book (${artBookMode})` };
     }
 
     // Page status: which planets have been visited
@@ -1415,6 +1419,7 @@ export default function ChronosphaeraPage() {
     return () => setPageContext(null);
   }, [mode, selectedPlanet, activeTab, selectedSign, selectedCardinal, selectedMonth,
       selectedMonomythStage, monomythTab, meteorSteelTab, showMeteorSteel, selectedConstellation,
+      selectedWheelItem, dodecMode, artBookMode,
       isElementCompleted, setPageContext]);
 
   const tooltipData = useMemo(() => {
@@ -1560,28 +1565,44 @@ export default function ChronosphaeraPage() {
     );
   }
 
+  const handleVR = useCallback(() => {
+    const isMobile = /Mobi|Android|iPad|iPhone|iPod/i.test(navigator.userAgent);
+    if (!isMobile) {
+      alert('VR/AR mode is available on mobile devices — open this page on your phone or tablet.');
+      return;
+    }
+    navigate('/chronosphaera/vr', { state: { autoAR: true } });
+  }, [navigate]);
+
   const viewModeButtons = hasSubscription('monomyth') && (
     <span className="view-mode-group">
       <button
-        className={`view3d-toggle-inline${!view3D ? ' active' : ''}`}
-        onClick={() => view3D && handleToggle3D(false)}
-        title="2D view"
-      >
-        2D
-      </button>
-      <button
         className={`view3d-toggle-inline${view3D ? ' active' : ''}`}
-        onClick={() => !view3D && handleToggle3D('3d')}
-        title="3D view"
+        onClick={handleToggle3D}
+        title={view3D ? 'Switch to 2D' : 'Switch to 3D'}
       >
-        3D
+        {view3D ? '2D' : '3D'}
       </button>
       <button
         className="view3d-toggle-inline"
-        onClick={() => handleToggle3D('vr')}
+        onClick={handleVR}
         title="VR experience"
       >
         VR
+      </button>
+      <button
+        className={`compass-toggle-inline${compass.active ? ' active' : ''}${compass.denied ? ' denied' : ''}`}
+        onClick={compass.supported
+          ? (compass.active ? compass.stopCompass : compass.requestCompass)
+          : () => alert('Compass alignment is a mobile feature — open this page on your phone to use it.')}
+        title={!compass.supported ? 'Mobile feature — compass alignment' : compass.denied ? 'Compass permission denied' : compass.active ? 'Disable compass' : 'Align to compass'}
+      >
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.5">
+          <circle cx="12" cy="12" r="9" />
+          <polygon points="12,3 14,12 12,10.5 10,12" fill="currentColor" stroke="none" />
+          <polygon points="12,21 14,12 12,13.5 10,12" />
+          <circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none" />
+        </svg>
       </button>
     </span>
   );
@@ -1879,6 +1900,7 @@ export default function ChronosphaeraPage() {
         {view3D ? (
           <Suspense fallback={<div className="chrono-3d-container chrono-3d-loading">Loading 3D...</div>}>
             <InlineScene3D
+              compassHeading={compass.active ? compass.heading : null}
               clockMode={clockMode}
               zodiacMode={zodiacMode}
               showClock={showClock3D}
@@ -2836,23 +2858,9 @@ export default function ChronosphaeraPage() {
           )}
           <h2 className="chrono-heading">
             <span className="chrono-heading-title-row">
-              <button
-                className={`compass-toggle-inline${compass.active ? ' active' : ''}${compass.denied ? ' denied' : ''}`}
-                onClick={compass.supported
-                  ? (compass.active ? compass.stopCompass : compass.requestCompass)
-                  : () => alert('Compass alignment is a mobile feature — open this page on your phone to use it.')}
-                title={!compass.supported ? 'Mobile feature — compass alignment' : compass.denied ? 'Compass permission denied' : compass.active ? 'Disable compass' : 'Align to compass'}
-              >
-                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.5">
-                  <circle cx="12" cy="12" r="9" />
-                  <polygon points="12,3 14,12 12,10.5 10,12" fill="currentColor" stroke="none" />
-                  <polygon points="12,21 14,12 12,13.5 10,12" />
-                  <circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none" />
-                </svg>
-              </button>
+              {view3DBtn}
               {selectedMonth}
               <StageArrow items={MONTHS} currentId={selectedMonth} onSelect={setSelectedMonth} />
-              {view3DBtn}
             </span>
           </h2>
           <div className="calendar-weekday-bar">

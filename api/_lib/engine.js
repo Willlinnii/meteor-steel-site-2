@@ -820,15 +820,61 @@ Mentone retreats: Day $500, Weekend $1,500, Week-long residency $5,000.
 - Don't pressure anyone. If they're browsing, help them understand what things are. If they're deciding, help them compare.`;
 }
 
+// ── Distilled summaries (one-paragraph cross-references for sub-areas) ──
+
+function distilledPlanets() {
+  return '**Planets (distilled):** 7 classical planets — Saturn/Lead/Saturday, Jupiter/Tin/Thursday, Mars/Iron/Tuesday, Sun/Gold/Sunday, Venus/Copper/Friday, Mercury/Quicksilver/Wednesday, Moon/Silver/Monday — each mapped to a chakra, sin, virtue, and deities across 10+ cultures.';
+}
+
+function distilledZodiac() {
+  return '**Zodiac (distilled):** 12 signs in 4 elements (Fire/Earth/Air/Water) × 3 modalities (Cardinal/Fixed/Mutable). Each sign has a ruling planet, house, archetype, and cross-cultural traditions (Greek, Vedic, Chinese, Egyptian, Celtic).';
+}
+
+function distilledCalendar() {
+  return '**Calendar (distilled):** 12 months, each with a birthstone, flower, holidays, and mythic mood. Woven into the zodiac wheel — each month spans the cusp between two signs.';
+}
+
+function distilledWheels() {
+  return '**Medicine Wheels (distilled):** 7 indigenous knowledge wheels — Self, Four Directions, Four Elements, Sacred Elements, Earth Count, Body Spheres, Mathematics — each mapping 4 directions to teachings about wholeness, balance, and the body.';
+}
+
+function distilledBody() {
+  return '**Body & Chakra (distilled):** 7 planets mapped to 7 chakras from root (Saturn/Lead) to crown (Sun/Gold). Multiple ordering systems: Chaldean (orbital speed), Vedic (traditional), Kabbalistic, and frequency-based. Each chakra links a planet to a body center, sin, virtue, and organ.';
+}
+
+function distilledConstellations() {
+  return '**Constellations (distilled):** 88 IAU constellations with mythology from Greek, Arabic, Chinese, Indian, and indigenous traditions. Cultural star names reveal how different civilizations read the same sky.';
+}
+
+function distilledMonomyth() {
+  return '**Monomyth (distilled):** 8-stage hero\'s journey — Golden Age, Falling Star, Impact Crater, Forge, Quenching, Integration, Drawing, New Age. 15+ theorists (Campbell, Jung, Vogler, Snyder, Murdock). Films, myths, cycles, and depth psychology per stage.';
+}
+
+function distilledFallenStarlight() {
+  return '**Fallen Starlight (distilled):** 8-chapter story — Jaq enters the Mythouse carrying Story Atlas, walks the monomyth stages, confronts purification ideology, chooses integration. The origin story that gave Atlas life.';
+}
+
+function distilledStoryOfStories() {
+  return '**Story of Stories (distilled):** Will Linn\'s book proposal — "Story of Stories: Meteor Steel and the Monomyth." A meta-narrative exploring how the monomyth operates across cultures and how steel-forging mirrors transformation.';
+}
+
+function distilledStore() {
+  return '**Celestial Adornments (distilled):** Navaratna jewelry — 9 planetary gemstones set in 7 alchemical metals, configured to a specific date. Two layouts: Astronomical (real ecliptic positions) and Navaratna (traditional Vedic). Five forms: Ring, Bracelet, Arm Band, Belt, Crown.';
+}
+
 // ── Area knowledge loaders ──
 
-const VALID_AREAS = ['celestial-clocks', 'meteor-steel', 'fallen-starlight', 'story-forge', 'mythology-channel', 'games', 'story-of-stories', 'mythic-earth', 'library', 'store'];
+const VALID_AREAS = ['celestial-clocks', 'meteor-steel', 'fallen-starlight', 'story-forge', 'mythology-channel', 'games', 'story-of-stories', 'mythic-earth', 'library', 'store', 'chrono-body', 'chrono-wheel', 'chrono-dodecahedron', 'chrono-artbook'];
 
 function detectAreaFromMessage(messages) {
   const last = [...messages].reverse().find(m => m.role === 'user');
   if (!last) return null;
   const t = String(last.content).toLowerCase();
-  if (/zodiac|planet|metal|chakra|astrology|natal|horoscope|seven metals|hebrew|kabbal|sephir|medicine wheel|\\b(sun|moon|mercury|venus|mars|jupiter|saturn)\\b|\\b(aries|taurus|gemini|cancer|leo|virgo|libra|scorpio|sagittarius|capricorn|aquarius|pisces)\\b|equinox|solstice/.test(t)) return 'celestial-clocks';
+  if (/chakra|body map|body view|body.*order|chaldean.*body|kundalini/.test(t)) return 'chrono-body';
+  if (/medicine wheel|four directions|sacred hoop|wheel.*teaching/.test(t)) return 'chrono-wheel';
+  if (/dodecahedron|platonic solid|12 faces|twelve faces/.test(t)) return 'chrono-dodecahedron';
+  if (/artbook|art book|mountain.*metal|chaldean.*order|chaldean.*mountain/.test(t)) return 'chrono-artbook';
+  if (/zodiac|planet|metal|astrology|natal|horoscope|seven metals|hebrew|kabbal|sephir|\\b(sun|moon|mercury|venus|mars|jupiter|saturn)\\b|\\b(aries|taurus|gemini|cancer|leo|virgo|libra|scorpio|sagittarius|capricorn|aquarius|pisces)\\b|equinox|solstice/.test(t)) return 'celestial-clocks';
   if (/monomyth|hero.?s? journey|golden age|falling star|meteor steel|forge|quench|campbell|vogler|snyder/.test(t)) return 'meteor-steel';
   if (/fallen starlight|\\bjaq\\b|revelation/.test(t)) return 'fallen-starlight';
   if (/story forge|narrative|screenplay|story structure|writing craft/.test(t)) return 'story-forge';
@@ -981,6 +1027,67 @@ function getAreaKnowledge(area, context) {
     case 'store':
       return compactStoreKnowledge();
 
+    case 'chrono-body':
+      return [
+        '## Body & Chakra View — Context\nThe user is exploring the Body/Chakra view of the Chronosphaera. This maps the 7 classical planets to 7 chakras, with multiple ordering systems (Chaldean, Vedic, Kabbalistic, frequency-based). Questions will center on chakra-planet correspondences, body energy centers, ordering logic, and the relationship between metals, organs, and spiritual centers. Provide deep, specific answers about body correspondences.\n',
+        compactMetals(),
+        compactShared(),
+        compactDeities(),
+        compactArchetypes(),
+        compactTheology(),
+        compactPlanetaryCultures(),
+        '\n## Cross-References (distilled)',
+        distilledZodiac(),
+        distilledCalendar(),
+        distilledWheels(),
+        distilledMonomyth(),
+        distilledConstellations(),
+      ].filter(Boolean).join('\n\n');
+
+    case 'chrono-wheel':
+      return [
+        '## Medicine Wheel View — Context\nThe user is exploring the Medicine Wheel view of the Chronosphaera. This presents 7 indigenous knowledge wheels mapping the four directions to teachings about Self, Elements, Sacred Elements, Earth Count, Body Spheres, and Mathematics. Questions will center on directional wisdom, indigenous frameworks, and how the wheels relate to each other. Honor the traditions with specificity and respect.\n',
+        compactWheels(),
+        compactMedicineWheelContent(),
+        compactCardinals(),
+        compactElements(),
+        '\n## Cross-References (distilled)',
+        distilledPlanets(),
+        distilledBody(),
+        distilledZodiac(),
+        distilledMonomyth(),
+        distilledCalendar(),
+      ].filter(Boolean).join('\n\n');
+
+    case 'chrono-dodecahedron':
+      return [
+        '## Dodecahedron View — Context\nThe user is exploring the Dodecahedron view of the Chronosphaera. The dodecahedron is the fifth Platonic solid — 12 pentagonal faces, the form Plato associated with the cosmos itself ("God used it to arrange the constellations on the whole heaven"). This view maps the 12 zodiac signs and 88 constellations onto the celestial sphere. Questions will center on constellations, zodiac geometry, Platonic cosmology, and stellar mythology.\n',
+        compactConstellations(),
+        compactZodiac(),
+        compactElements(),
+        '\n## Cross-References (distilled)',
+        distilledPlanets(),
+        distilledMonomyth(),
+        distilledCalendar(),
+        distilledWheels(),
+      ].filter(Boolean).join('\n\n');
+
+    case 'chrono-artbook':
+      return [
+        '## Art Book View — Context\nThe user is exploring the Art Book view of the Chronosphaera. This presents the Chaldean order as a mountain ascent — from Saturn/Lead at the base to Moon/Silver at the peak — with gems, ores, cultural imagery, and mythic correspondences rendered as a visual compendium. Questions will center on the Chaldean ordering logic, metal-gem-ore triads, cultural art traditions, and the mountain metaphor.\n',
+        compactMetals(),
+        compactZodiac(),
+        compactHebrew(),
+        compactDeities(),
+        compactPlanetaryCultures(),
+        '\n## Cross-References (distilled)',
+        distilledMonomyth(),
+        distilledCalendar(),
+        distilledWheels(),
+        distilledConstellations(),
+        distilledFallenStarlight(),
+      ].filter(Boolean).join('\n\n');
+
     default:
       return '';
   }
@@ -991,8 +1098,20 @@ function getAreaKnowledge(area, context) {
 function loadCoreSummary() {
   return `AREA SUMMARIES — You have broad awareness of all areas. When the user is on a specific page, you also have deep knowledge for that area.
 
-## Celestial Clocks (the user reaches this on /metals)
+## Celestial Clocks (the user reaches this on /chronosphaera)
 7 metals (Lead/Saturn → Silver/Moon) mapped to planets, days, sins, virtues, chakras, deities across 10+ cultures (Egyptian, Greek, Roman, Norse, Vedic, Babylonian, Islamic, Medieval). 12 zodiac signs with cultural variants. 4 cardinal points (equinoxes/solstices). 4 elements. Hebrew creation days & Kabbalistic sephiroth. Theology of 7 deadly sins traced through Desert Fathers, Cassian, Gregory, Aquinas. Sins in art (Bosch, Dali, Bruegel), literature (Dante, Chaucer, Spenser), and modern life. Extended deity profiles with domains, animals, symbols, holidays. Planetary spirits across 7 cultures. Day/night mythology. Mythic calendar (12 months with stones, flowers, holidays). Medicine wheels with extended teachings on Self, four directions, four elements, sacred elements, earth count, body spheres, and mathematics.
+
+## Body & Chakra View (the user reaches this on /chronosphaera/body)
+7 planets mapped to 7 chakras with multiple ordering systems (Chaldean, Vedic, Kabbalistic, frequency-based). Deep body-planet correspondences, organs, energy centers, sin-virtue axes per chakra.
+
+## Medicine Wheel View (the user reaches this on /chronosphaera/medicine-wheel)
+7 indigenous knowledge wheels — Self, Four Directions, Four Elements, Sacred Elements, Earth Count, Body Spheres, Mathematics. Four-directional wisdom, extended teachings, and cross-cultural wheel traditions.
+
+## Dodecahedron View (the user reaches this on /chronosphaera/dodecahedron)
+The fifth Platonic solid — 12 pentagonal faces mapping zodiac signs and 88 constellations onto the celestial sphere. Plato's cosmological form, stellar mythology, and cultural star names.
+
+## Art Book View (the user reaches this on /chronosphaera/artbook)
+The Chaldean order rendered as a mountain ascent — Saturn/Lead at base to Moon/Silver at peak. Gems, ores, cultural imagery, and mythic correspondences as a visual compendium.
 
 ## Meteor Steel Monomyth (the user reaches this on / or /monomyth)
 8-stage hero's journey (Golden Age → New Age) with mythic figures (Sosruquo, Achilles, Osiris, Inanna, Buddha, Persephone), saviors (Jesus, Buddha, Christ), modern heroes (Superman, Wolverine, Iron Man). Steel forging as transformation metaphor. Films by stage (Wizard of Oz, Star Wars, Matrix). 15+ theorists (Campbell, Jung, Nietzsche, Vogler, Snyder, Harmon, McKee, Field, Murdock, Frobenius, Eliade, Plato, Hegel, Freud, Steiner) mapped to every stage. Concrete myth examples across 8+ traditions. Natural cycles (solar day, lunar month, solar year, life/death, procreation, waking/dreaming) per stage. Depth psychology with geometry, philosophy, and symbols per stage. 6+ narrative structure models. Normal World / Other World duality with wasteland concept, theorist perspectives, film examples.
@@ -1132,9 +1251,14 @@ Meteor Steel (/):
 - [[Label|/?stage=STAGE_ID]]
   Same stage IDs as monomyth
 
-Celestial Clocks (/metals):
-- [[Label|/metals]]
-- [[Walk the Yellow Brick Road|/metals/yellow-brick-road]]
+Chronosphaera (/chronosphaera):
+- [[Label|/chronosphaera]]
+- [[Body & Chakra View|/chronosphaera/body]]
+- [[Medicine Wheel|/chronosphaera/medicine-wheel]]
+- [[Dodecahedron|/chronosphaera/dodecahedron]]
+- [[Art Book|/chronosphaera/artbook]]
+- [[Celestial Ring|/chronosphaera/ring]]
+- [[Walk the Yellow Brick Road|/chronosphaera/yellow-brick-road]]
 
 Yellow Brick Roads:
 - [[Monomyth Journey|/monomyth?journey=true]]

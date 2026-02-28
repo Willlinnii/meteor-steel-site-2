@@ -24,6 +24,10 @@ const AREA_LABELS = {
   'games': 'Games',
   'mythic-earth': 'Mythic Earth',
   'library': 'Library',
+  'chrono-body': 'Chronosphaera (Body & Chakra)',
+  'chrono-wheel': 'Chronosphaera (Medicine Wheel)',
+  'chrono-dodecahedron': 'Chronosphaera (Dodecahedron)',
+  'chrono-artbook': 'Chronosphaera (Art Book)',
 };
 
 const PATH_LABELS = {
@@ -258,6 +262,12 @@ export function AtlasContextProvider({ children }) {
         lines.push(`- Draw on ${ctx.focus.label || ctx.focus.id}'s correspondences if relevant to their question.`);
       } else if (ctx?.focus?.type === 'stage') {
         lines.push(`- Draw on the ${ctx.focus.label || ctx.focus.id} stage's themes if relevant.`);
+      } else if (ctx?.focus?.type === 'wheel') {
+        lines.push(`- Draw on the ${ctx.focus.label || ctx.focus.id} wheel's teachings and directional wisdom.`);
+      } else if (ctx?.focus?.type === 'constellation') {
+        lines.push(`- Draw on ${ctx.focus.label || ctx.focus.id}'s mythology and cultural star names.`);
+      } else if (ctx?.focus?.type === 'view') {
+        lines.push(`- The user is exploring the ${ctx.focus.label || ctx.focus.id} view. Ground responses in this context.`);
       }
       lines.push("- Don't narrate their journey back to them.");
       lines.push('- Use awareness of their current view to make responses more relevant.');
