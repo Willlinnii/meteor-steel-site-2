@@ -167,6 +167,10 @@ const MODE_CONFIG = {
     heading: 'Etruscan Dodecahedron',
     tabs: [
       { id: 'overview', label: 'Overview' },
+      { id: 'ancient', label: 'The Ancient Die' },
+      { id: 'gap', label: 'The Long Gap' },
+      { id: 'return', label: 'The Modern Return' },
+      { id: 'sources', label: 'Sources' },
     ],
   },
 };
@@ -255,6 +259,76 @@ const CITATIONS = [
     text: 'A solid lead-and-silver dodecahedron with Latin zodiac sign names on each face, found at the Cathedral of Saint-Pierre in Geneva (1982). A separate artifact from the hollow bronze Gallo-Roman dodecahedra.',
     source: 'Archaeological Museum of Geneva; Language Log analysis',
     url: 'https://languagelog.ldc.upenn.edu/nll/?p=64177',
+  },
+  {
+    id: 201,
+    short: 'De\' Stefani, "On an almost regular dodecahedron of stone" (1885)',
+    text: 'A dodecahedron of soapstone with pentagonal faces carved with figures, discovered in the ancient stone dwellings of Monte Loffa in the Lessini Mountains. De\' Stefani consulted Ariodante Fabretti; both concluded it was a die used for gaming.',
+    source: 'Stefano De\' Stefani, Atti del Reale Istituto Veneto di Scienze, Lettere ed Arti (1885)',
+    url: null,
+  },
+  {
+    id: 203,
+    short: 'Artioli et al., "Gambling with Etruscan Dice" (2011)',
+    text: 'Systematic combinatorial analysis of 93 Etruscan dice from southern Etruria, 8th–3rd c. BCE. Only 2 of 15 possible numerical combinations were in use. Older dice placed numbers differing by one on opposite faces; later dice adopted the Roman pattern where opposite faces sum to seven.',
+    source: 'G. Artioli et al., Archaeometry 53 (2011), pp. 1031–1043',
+    url: 'https://doi.org/10.1111/j.1475-4754.2011.00596.x',
+  },
+  {
+    id: 205,
+    short: 'Homeromanteion oracle papyri (2nd–3rd c. CE)',
+    text: 'A Greek oracle handbook in which a querent throws polyhedral lots to obtain a number, then consults the text for prophecies. Part of the broader Roman practice of Sortes — divination by lot.',
+    source: 'W. Brashear, "The Greek Magical Papyri: an Introduction and Survey" (1995); Heintz, "Oracle Questions" (ANRW II.18.5)',
+    url: null,
+  },
+  {
+    id: 206,
+    short: 'Le Dodechedron de Fortune (1556)',
+    text: 'A game using a 12-sided die connected to the twelve signs of the zodiac to predict the future. Readers pick a house and a question, correlate to a 12-by-12 grid, and roll a d12 to find their fortune. Includes instructions for making the die.',
+    source: 'Pseudo-Jean de Meun, Le Dodechedron de Fortune, ed. François Gruget (Paris: Gilles Robinot, 1556)',
+    url: 'https://archive.org/details/ledodechedronde00meungoog',
+  },
+  {
+    id: 207,
+    short: 'Ptolemaic rhombic d12, Louvre',
+    text: 'A rhombic dodecahedron from Ptolemaic Egypt with Greek letters alpha through iota-beta (1–12) inscribed on its faces. Among the oldest known twelve-sided dice.',
+    source: 'Musée du Louvre, Département des Antiquités égyptiennes',
+    url: null,
+  },
+  {
+    id: 208,
+    short: 'Ptolemaic d20 icosahedra, Met Museum',
+    text: 'Three icosahedral dice with Greek numerals on twenty faces, acquired in Egypt in the 1920s. Dating uncertain — possibly Ptolemaic or Roman period.',
+    source: 'The Metropolitan Museum of Art, acc. nos. 10.130.1158–1160',
+    url: 'https://www.metmuseum.org/art/collection/search/551072',
+  },
+  {
+    id: 209,
+    short: 'Minas-Nerpel, Dakhleh Oasis demotic die (2007)',
+    text: 'A stone die from the 1st century CE inscribed with Demotic (Egyptian script) names of deities on each face. Found at Dakhleh Oasis in Egypt\'s Western Desert.',
+    source: 'M. Minas-Nerpel, Journal of Egyptian Archaeology 93 (2007)',
+    url: null,
+  },
+  {
+    id: 210,
+    short: 'Peterson, Playing at the World — Sieve/Zazz (2012)',
+    text: 'The first known d20 numbered 1–20 appeared in Zazz Polyspheres, invented by Fredda Sieve. The set also included a d12, d8, d6, and d4 — arguably the first modern polyhedral dice set.',
+    source: 'Jon Peterson, Playing at the World (Unreason Press, 2012)',
+    url: null,
+  },
+  {
+    id: 211,
+    short: 'Analog Game Studies, "The Birth of the Modern d20" (2024)',
+    text: 'The JSA Icosahedron Random Numbers Generating Dice, developed 1950–1951 and available summer 1952, were created for demonstrating principles of statistical quality control.',
+    source: 'Analog Game Studies (2024)',
+    url: 'https://analoggamestudies.org/2024/02/an-elegant-little-instrument/',
+  },
+  {
+    id: 212,
+    short: 'Peterson, "How Gaming Got Its Dice" (2012)',
+    text: 'Gygax and Don Kaye formed TSR, found a classroom supplier of five dice, and thought to throw out the three they would not need. Instead, they developed their game to include and use all five.',
+    source: 'Jon Peterson, Playing at the World (Unreason Press, 2012)',
+    url: null,
   },
 ];
 
@@ -802,8 +876,190 @@ function DieOverviewTab() {
   return (
     <div className="dodec-content-tab-inner">
       <p className="dodec-content-lead">
-        Content coming soon.
+        The twelve-sided die is 2,500 years old. Its faces have carried numbers,
+        zodiac signs, deities, and fortunes. It has been a gaming piece, an oracle
+        tool, a fortune-telling device, and a random number generator. Of all the
+        polyhedral dice, it is the one most consistently linked to the cosmos —
+        and the one most consistently overlooked.
       </p>
+      <EntryBlock
+        title="The Oldest Specimen"
+        body={[
+          <span key="p1">A soapstone dodecahedron found at Monte Loffa in the Lessini Mountains of northern Italy — within the territory of the Reti and Euganei peoples, historically linked to Etruscan culture — bears markings on its twelve pentagonal faces: a mixture of dots and Etruscan numerals adapted from Greek. It dates to before 500 BCE.<Cite n={201} /></span>,
+          <span key="p2">Stefano De' Stefani documented it in 1885. He and the epigrapher Ariodante Fabretti concluded it was a die used for gaming. In 2012, Amelia Carolina Sparavigna argued the object suggests knowledge of the dodecahedral form among Italic peoples centuries before Plato wrote the <em>Timaeus</em>.<Cite n={101} /></span>,
+        ]}
+      />
+      <EntryBlock
+        title="The Cosmic Die"
+        body={[
+          <span key="p1">Twelve pentagonal faces. One for each sign of the zodiac. One for each month. One for each face of the shape Plato assigned to the cosmos.<Cite n={3} /> The number twelve is not arbitrary — it is the number where geometry, astronomy, and calendrics converge on a single solid.</span>,
+          'Every culture that used a twelve-sided die connected it to this convergence. The Ptolemaic Egyptians inscribed theirs with numbers 1 through 12. The Romans inscribed zodiac signs. A 16th-century French fortune book mapped its faces to the twelve astrological houses. The correspondence between die, cosmos, and calendar runs unbroken from antiquity to the present.',
+        ]}
+      />
+      <EntryBlock
+        title="A Story in Four Acts"
+        body="The tabs that follow trace the d12 across 2,500 years in three movements: the ancient die (Etruscan through Roman), the long gap (its near-total disappearance for a thousand years), and its modern return (from postwar Japan to the gaming table). It is a story of persistence and rediscovery — the perpetual underdog among dice."
+      />
+    </div>
+  );
+}
+
+function DieAncientTab() {
+  return (
+    <div className="dodec-content-tab-inner">
+      <p className="dodec-content-lead">
+        The dodecahedral die appears in the archaeological record before 500 BCE
+        and persists through the Roman period. It never becomes common — the
+        six-sided cube dominates ancient gaming — but it recurs across cultures
+        and centuries, always carrying associations with cosmology and divination.
+      </p>
+      <EntryBlock
+        title="Monte Loffa (pre-500 BCE)"
+        body={[
+          <span key="p1">The earliest known dodecahedral die is a soapstone object from Monte Loffa in northern Italy's Lessini Mountains. Its faces carry a mixture of dot-patterns and Etruscan numerals — a notation system adapted from Greek. De' Stefani documented it in 1885 as a gaming die.<Cite n={201} /></span>,
+          <span key="p2">The Monte Loffa specimen is solid, not hollow. Its markings have never been fully deciphered. But its existence predates Plato by at least a century, suggesting that the dodecahedral form circulated among Italic peoples well before Greek philosophers claimed it for cosmology.<Cite n={101} /></span>,
+        ]}
+      />
+      <EntryBlock
+        title="The Etruscan Dice Tradition"
+        body={[
+          <span key="p1">Most Etruscan dice are cubic. The famous Tuscanian Dice — ivory cubes from Tuscania, now in the Bibliothèque nationale de France — carry Etruscan number-words instead of dots: <em>thu, zal, ci, huth, mach, sa</em>. Their decipherment was a puzzle for over a century.</span>,
+          <span key="p2">In 2011, Artioli and colleagues analyzed 93 Etruscan dice systematically and found that only two of the fifteen possible face-numbering patterns were ever used. Older dice (before ~500 BCE) placed numbers differing by one on opposite faces. Later dice adopted the pattern where opposite faces sum to seven — the same convention used on modern dice.<Cite n={203} /></span>,
+          'The Monte Loffa dodecahedron belongs to this older Etruscan tradition. It is not an anomaly — it is the twelve-faced extension of a well-documented gaming culture.',
+        ]}
+      />
+      <EntryBlock
+        title="Ptolemaic Egypt (3rd–1st c. BCE)"
+        body={[
+          <span key="p1">From Ptolemaic Egypt come some of the oldest known polyhedral dice beyond the cube. A rhombic dodecahedron in the Louvre carries Greek letters alpha through iota-beta (1–12) on its twelve faces.<Cite n={207} /> Icosahedral dice (d20s) with Greek numerals survive in the Metropolitan Museum.<Cite n={208} /></span>,
+          <span key="p2">At Dakhleh Oasis in Egypt's Western Desert, a stone die from the 1st century CE carries Demotic script — not numbers but the names of deities inscribed on each face.<Cite n={209} /> This is not a gaming die. It is an oracle instrument: roll the die, receive a god.</span>,
+          'The Ptolemaic evidence establishes that non-cubic dice were not rare curiosities but working tools for both chance and divination in the Hellenistic world.',
+        ]}
+      />
+      <EntryBlock
+        title="The Geneva Zodiac Dodecahedron (2nd–4th c. CE)"
+        body={[
+          <span key="p1">A solid dodecahedron of lead and silver, found at the Cathedral of Saint-Pierre in Geneva in 1982, carries Latin names of the twelve zodiac signs on its twelve pentagonal faces.<Cite n={102} /> It is a separate class of artifact from the hollow bronze Gallo-Roman dodecahedra explored in the Roman mode.</span>,
+          'Its function is debated — astrological divination tool, teaching device, or votive object — but the inscription makes the cosmic mapping explicit. Twelve faces, twelve signs. The same correspondence Plutarch described, cast in metal.',
+        ]}
+      />
+      <EntryBlock
+        title="Oracle Systems"
+        body={[
+          <span key="p1">Polyhedral dice appear repeatedly in Roman-era divination. The <em>Homeromanteion</em>, a 2nd–3rd century Greek oracle handbook, instructs the querent to throw lots to obtain a number, then consult the text for a prophecy.<Cite n={205} /> The practice belonged to a broader Roman tradition called <em>Sortes</em> — divination by lot.</span>,
+          'Dice inscribed with Greek or Roman characters — on polyhedra including dodecahedra and icosahedra — were common instruments in this system. The die was not just a randomizer. It was the interface between the human question and the divine answer.',
+        ]}
+      />
+    </div>
+  );
+}
+
+function DieGapTab() {
+  return (
+    <div className="dodec-content-tab-inner">
+      <p className="dodec-content-lead">
+        After the Roman period, the dodecahedral die effectively vanishes from
+        Europe for a thousand years. Cubic dice persist everywhere. Non-cubic
+        polyhedra do not. The d12 survives in exactly one thread — a French
+        fortune-telling book — and even that thread is tangled.
+      </p>
+      <EntryBlock
+        title="The Medieval Silence"
+        body={[
+          'Alfonso X of Castile\'s Libro de los Juegos (1283) — the most comprehensive medieval gaming manual — documents dice variants including seven-sided and eight-sided forms for chess variants. It does not mention twelve-sided dice.',
+          'No medieval European archaeological site has produced a dodecahedral die. The knowledge of how to make them was not lost — the dodecahedron remained a subject of mathematical study — but no one appears to have thought to roll one.',
+        ]}
+      />
+      <EntryBlock
+        title={<span>Le Dodechedron de Fortune <span style={{ fontWeight: 'normal' }}>(1556)</span></span>}
+        body={[
+          <span key="p1">The sole surviving thread. A French fortune-telling book attributed to Jean de Meun — author of the <em>Roman de la Rose</em> — though the attribution is almost certainly pseudonymous. Manuscripts date to the early 14th century. The first printed edition appeared in 1556, edited by François Gruget and published in Paris by Gilles Robinot.<Cite n={206} /></span>,
+          'The mechanics: choose one of twelve astrological houses. Select a question. Consult a 12-by-12 grid. Roll a twelve-sided die. Count to your answer. Twelve houses, twelve questions per house, twelve answers per question — the entire system built on the zodiacal twelve.',
+          'The book includes instructions for constructing the die itself. This is telling. If dodecahedral dice were readily available, you would not need to explain how to make one. The instructions confirm that by the 16th century, the d12 was exotic enough to require a manual.',
+          'An English translation appeared in 1613: The Dodechedron of Fortune; or, The Exercise of a Quick Wit. The Harvard copy survives in the Houghton Library.',
+        ]}
+      />
+      <EntryBlock
+        title="The Renaissance Paradox"
+        body={[
+          'Renaissance mathematicians studied the dodecahedron intensively. Luca Pacioli illustrated all five Platonic solids for his De Divina Proportione (1509), with drawings by Leonardo da Vinci. Gerolamo Cardano\'s Liber de Ludo Aleae (c. 1564) — the first systematic treatise on probability — analyzed dice games in mathematical detail.',
+          'Yet neither Pacioli nor Cardano appears to have considered the dodecahedron as a practical die. The shape was a mathematical object, not a gaming instrument. The disconnect is striking: the people best equipped to understand polyhedral dice as probability tools did not make the connection.',
+        ]}
+      />
+      <EntryBlock
+        title="Parallel Traditions"
+        body={[
+          'Outside Europe, non-cubic randomizers persisted. Korean Yut Nori uses four flat sticks that produce five outcomes — a non-cubic probability space. Chinese traditions include long dice (six-faced elongated prisms) and fortune sticks (bamboo lots drawn from a container). Islamic geomancy (ilm al-raml) used binary systems — marks in sand or thrown objects — to generate randomized patterns mapped to astrological figures.',
+          'None of these traditions produced a twelve-sided die. But they demonstrate that the attachment to the cube was a European phenomenon, not a universal one. Other cultures continued inventing non-cubic ways to generate chance. Europe, after Rome, simply stopped.',
+        ]}
+      />
+    </div>
+  );
+}
+
+function DieReturnTab() {
+  return (
+    <div className="dodec-content-tab-inner">
+      <p className="dodec-content-lead">
+        The polyhedral die returns in the 20th century — not through gaming,
+        but through statistics. From postwar Japanese quality control to a
+        widow's parlor game to a Wisconsin insurance salesman's fantasy
+        rulebook, the d12 re-enters the world through a series of accidents
+        that no one planned and no one predicted.
+      </p>
+      <EntryBlock
+        title="Japan: The Statistical Die (1952)"
+        body={[
+          <span key="p1">In 1950, the Japanese Standards Association formed a Quality Control Management Committee to modernize postwar manufacturing. They needed randomization tools for demonstrating statistical sampling. Their solution: an icosahedral die (d20) with digits 0–9 inscribed twice, available by summer 1952.<Cite n={211} /></span>,
+          'The JSA die was not a toy. It was an industrial instrument — the first modern polyhedral die manufactured at scale. It remained in production for over forty years before quietly disappearing from the market around 1995.',
+        ]}
+      />
+      <EntryBlock
+        title="Zazz: The First Modern Set (1963)"
+        body={[
+          <span key="p1">Fredda Sieve, described in gaming histories as a well-to-do widow and entrepreneur, invented Zazz — a parlor game whose box included something that had not existed since antiquity: a matched set of polyhedral dice. A d20, d12, d8, d6, and d4, sold together.<Cite n={210} /></span>,
+          'The Zazz d20 was the first known twenty-sided die numbered 1 through 20 (rather than 0–9 twice, like the JSA die). The d12 was back — not as a cosmic or oracular instrument, but as one die among five in a parlor game that almost no one remembers.',
+        ]}
+      />
+      <EntryBlock
+        title="The Classroom (1972)"
+        body={[
+          <span key="p1">Creative Publications, a math education supplier, began producing polyhedral dice sets for classrooms: a white d20, blue d12, green d8, pink d6, and yellow d4. Manufactured in Hong Kong with sharp-engraved numerals. They were probability teaching aids — tools for showing students that not all random events involve six outcomes.<Cite n={212} /></span>,
+          'These were the dice that Gary Gygax found.',
+        ]}
+      />
+      <EntryBlock
+        title="Dungeons & Dragons (1974)"
+        body={[
+          <span key="p1">Gygax and Don Kaye formed Tactical Studies Rules (TSR) and discovered the Creative Publications classroom dice. They initially planned to use only the d6 and d20. Then, rather than discard the remaining three, they redesigned their game to use all five.<Cite n={212} /></span>,
+          'The first printing of D&D (1974) — three rulebooks titled Men & Magic, Monsters & Treasure, and The Underworld & Wilderness Adventures — shipped with a set of polyhedral dice. The d12 was included almost as an afterthought. It has remained an afterthought ever since.',
+        ]}
+      />
+      <EntryBlock
+        title="The Perpetual Underdog"
+        body={[
+          'Of the standard polyhedral dice, the d12 is the least used in Dungeons & Dragons. The d20 determines success or failure on virtually every action. The d6 and d8 handle most damage. The d4 and d10 fill specific niches. The d12 is assigned to a handful of weapons and to the barbarian class\'s hit die — and almost nothing else.',
+          'The pattern is consistent across editions. The development team for D&D 3rd Edition reportedly finished a complete draft and realized they had never called for a d12 roll. They went back and added it to barbarians and certain large weapons.',
+          'A player might roll every week for a year without touching the d12. It sits in the dice bag, twelve beautiful pentagonal faces, waiting — the cosmic solid reduced to a rounding error in a game system that included it by accident.',
+        ]}
+      />
+      <EntryBlock
+        title="The Artisan Revival"
+        body={[
+          'The late 20th century brought precision manufacturing to polyhedral dice. Lou Zocchi founded GameScience in 1974, arguing that traditional tumbled dice — with their rounded edges — were measurably unfair, and producing sharp-edged polyhedra for serious gamers. Chessex Manufacturing began in 1987, eventually becoming the largest dice producer in the hobby.',
+          'Today the d12 is manufactured in hundreds of colors, materials, and finishes — metal, gemstone, resin, wood. It has more variety as a physical object than at any point in its 2,500-year history. It is also, still, the die you are least likely to roll.',
+        ]}
+      />
+    </div>
+  );
+}
+
+const DIE_CITE_IDS = [101, 102, 201, 203, 205, 206, 207, 208, 209, 210, 211, 212];
+
+function DieSourcesTab() {
+  return (
+    <div className="dodec-content-tab-inner">
+      <CitationsBlock ids={DIE_CITE_IDS} />
     </div>
   );
 }
@@ -826,6 +1082,10 @@ const TAB_COMPONENTS = {
   },
   die: {
     overview: DieOverviewTab,
+    ancient: DieAncientTab,
+    gap: DieGapTab,
+    return: DieReturnTab,
+    sources: DieSourcesTab,
   },
 };
 
