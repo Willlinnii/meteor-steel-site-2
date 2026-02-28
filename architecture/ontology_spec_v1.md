@@ -1,12 +1,16 @@
-# Ontology Specification v1.1
+# Ontology Specification v1.2
 
 > The canonical entity inventory for Mythouse — The Story Atlas.
 >
 > This document defines what exists, where it lives, and how entities relate.
 > Changes to entity structure require a version bump and migration plan.
 >
-> Version: 1.1
-> Date: 2026-02-27
+> Version: 1.2
+> Date: 2026-02-28
+>
+> **v1.2 changelog:** Added Wheel Traditions to the Quaternary (4) pattern family.
+> 9 Indigenous directional systems as a companion dataset to Storm's Medicine Wheels.
+> New invariant (#11): 9 traditions, 12 association keys, 4 quadrant colors per tradition.
 >
 > **v1.1 changelog:** Restructured Entity Inventory into Pattern Families to surface
 > the fractal architecture — the same numbers (8, 7, 4, 12, 26) recur across
@@ -78,7 +82,8 @@ All indexed by 7 classical planets: Sun, Moon, Mercury, Venus, Mars, Jupiter, Sa
 |---|---|---|
 | **Elements** | `src/data/chronosphaeraElements.json` | Fire, Earth, Air, Water |
 | **Cardinal Directions** | `src/data/chronosphaeraCardinals.json` | vernal-equinox, summer-solstice, autumnal-equinox, winter-solstice |
-| **Medicine Wheels** | `src/data/medicineWheels.json` + `medicineWheelContent.json` | Multiple 4-directional traditions |
+| **Medicine Wheels** | `src/data/medicineWheels.json` + `medicineWheelContent.json` | Storm's 7 concentric wheels (4/8/10-position) |
+| **Wheel Traditions** | `src/data/wheelTraditions.json` | 9 Indigenous directional systems (4–6 directions each) |
 | **Zodiac Triplicities** | Derived: 3 signs per element | Fire: Aries/Leo/Sagittarius, etc. |
 
 ### The Dodecad (12) — Zodiacal Cycle
@@ -128,7 +133,7 @@ These files enrich the core 7 planets. They do NOT duplicate — they extend.
 
 | Entity | Canonical Source | Count | Structure |
 |---|---|---|---|
-| **Pantheon** | `src/data/*Pantheon.json` (78 files) | 78 traditions | Array of deities per culture |
+| **Pantheon** | `src/data/*Pantheon.json` (79 files) | 79 traditions | Array of deities per culture |
 
 Each pantheon file is independently authored but follows a consistent structure:
 - Array of deity objects
@@ -161,8 +166,8 @@ Each pantheon file is independently authored but follows a consistent structure:
 | **Credential Category** | `src/profile/profileEngine.js` | 8 | Scholar, storyteller, healer, etc. |
 | **Stripe Product** | `api/_lib/stripeProducts.js` | 20+ | Subscriptions + one-time purchases |
 | **API Tier** | `api/_lib/tierConfig.js` | 3 | free, call, ambient |
-| **Mentor Type** | `src/profile/mentorEngine.js` | 5 | scholar, storyteller, healer, mediaVoice, adventurer |
-| **Consulting Type** | `api/mentor.js` | 5 | character, narrative, coaching, media, adventure |
+| **Guild Type** | `src/profile/guildEngine.js` | 5 | scholar, storyteller, healer, mediaVoice, adventurer |
+| **Consulting Type** | `api/guild-member.js` | 5 | character, narrative, coaching, media, adventure |
 | **Discover Feature** | `src/data/discoverFeatureDefs.js` | ~15 | Marketing/feature pages |
 
 ### User-Generated (Overlay Layer)
@@ -220,6 +225,12 @@ Zodiac (12)
   ├── Cardinal (4) — equinox/solstice markers
   └── Calendar Month — loose association
 
+Wheel Traditions (9)
+  ├── Directions (4–6 per tradition) — each with 12 association keys
+  ├── Quadrant Colors (4 per tradition) — N/E/S/W rgba values
+  ├── Medicine Wheels — companion dataset (Storm's system is primary)
+  └── Cardinal Directions — shared directional framework
+
 Journeys (9)
   ├── Stages — from journeyDefs or yellowBrickRoad
   ├── Challenge Mode — wheel (1 level) or cosmic (3 levels)
@@ -253,6 +264,8 @@ Courses (11)
 9. **Pantheons are per-culture, never merged into a single table.** Cross-cultural connections go through planet-deity mappings.
 
 10. **Naming convention: "Chronosphaera" not "metals" or "seven-metals."** Tracked in MEMORY.md, should be enforced in CI grep.
+
+11. **9 wheel traditions.** IDs: lakota, cherokee, ojibwe, navajo, zuni, mikmaq, hopi, cree, apache. Each has exactly 4 quadrantColors (N/E/S/W) and 12 association keys per direction (animal, plant, element, season, lifeStage, timeOfDay, virtue, celestialBody, humanAspect, sacredMountain, gemstone, clan). Tested. Cardinal angles follow convention: N=-90, E=0, S=90, W=180.
 
 ---
 

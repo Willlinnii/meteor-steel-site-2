@@ -14,9 +14,9 @@ The baseline schema is defined in `architecture/ontology_spec_v1.md` (version 1.
 - **Narrative spine**: 8 monomyth stages, 30+ theorists, 20+ models, 100+ figures, 6 cycles, 50+ films, 30+ myths, synthesis, steel process
 - **Cosmological structure**: 7 planets, 12 zodiac signs, 4 elements, 4 cardinal directions, 88 constellations, 12 calendar months, medicine wheels, day/night polarity
 - **Enrichment files**: 11 planet-extension files (deities, archetypes, artists, etc.)
-- **Pantheons**: 78 per-culture tradition files
+- **Pantheons**: 79 per-culture tradition files
 - **Content**: Fallen Starlight, Story of Stories, Mythology Channel, sacred sites, libraries, temples, treasures
-- **Product structure**: 9 journey definitions, 26 YBR stops, 11 courses, 7 ranks, 8 credential categories, 20+ Stripe products, 3 API tiers, 5 mentor types
+- **Product structure**: 9 journey definitions, 26 YBR stops, 11 courses, 7 ranks, 8 credential categories, 20+ Stripe products, 3 API tiers, 5 guild types
 - **User data (Firestore)**: Progress tracking via dot-path element IDs, writings, story cards, certificates, teacher courses, guild/feed/fellowship posts
 
 This is the schema everything is built against. All tests in `dataIntegrity.test.js`, `courseEngine.test.js`, and `journeyDefs.test.js` validate v1.0 invariants.

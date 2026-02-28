@@ -18,7 +18,7 @@ const CLIENT_TYPE_OPTIONS = [
 
 export default function ConsultingIntakePage() {
   const { user } = useAuth();
-  const { profile } = useProfile();
+  const { profileData } = useProfile();
   const navigate = useNavigate();
   const { getConversation, saveConversation, loaded: writingsLoaded } = useWritings();
 
@@ -59,8 +59,8 @@ export default function ConsultingIntakePage() {
   }, [messages, loading]);
 
   // Get existing credentials and natal chart from profile
-  const existingCredentials = profile?.credentials || null;
-  const existingNatalChart = profile?.natalChart || null;
+  const existingCredentials = profileData?.credentials || null;
+  const existingNatalChart = profileData?.natalChart || null;
 
   const createEngagement = useCallback(async (assessment) => {
     if (!user) return;

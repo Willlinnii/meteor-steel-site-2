@@ -17,7 +17,7 @@ const STATUS_COLORS = {
 
 export default function PractitionerDashboardPage() {
   const { user } = useAuth();
-  const { profile } = useProfile();
+  const { profileData } = useProfile();
   const navigate = useNavigate();
 
   const [engagements, setEngagements] = useState([]);
@@ -25,7 +25,7 @@ export default function PractitionerDashboardPage() {
   const [expandedId, setExpandedId] = useState(null);
   const [sessions, setSessions] = useState({});
 
-  const consultantLevel = profile?.credentials?.consultant?.level || 0;
+  const consultantLevel = profileData?.credentials?.consultant?.level || 0;
 
   const loadEngagements = useCallback(async () => {
     if (!user) return;

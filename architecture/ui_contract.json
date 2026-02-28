@@ -48,7 +48,7 @@
   ],
 
   "routes": {
-    "total": 45,
+    "total": 46,
     "rule": "No route may be removed without explicit approval and a redirect for the old path",
     "coreRoutes": [
       "/",
@@ -68,20 +68,21 @@
       "/mythic-earth",
       "/yellow-brick-road",
       "/teacher",
-      "/mentors",
+      "/guild-directory",
       "/guild",
       "/consulting",
       "/fellowship",
       "/discover",
       "/secret-weapon",
       "/dragon/*",
-      "/recursive-chart"
+      "/divination/*"
     ],
     "redirects": [
       { "from": "/metals/*", "to": "/chronosphaera" },
       { "from": "/treasures", "to": "/myths/treasures" },
       { "from": "/feed", "to": "/fellowship" },
-      { "from": "/app/*", "to": "/fellowship" }
+      { "from": "/app/*", "to": "/fellowship" },
+      { "from": "/recursive-chart", "to": "/divination/mythouse-astrology" }
     ]
   },
 
