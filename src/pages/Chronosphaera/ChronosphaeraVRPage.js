@@ -308,6 +308,7 @@ export default function ChronosphaeraVRPage() {
     });
   };
   const toggleFullscreen = () => {
+    track('fullscreen.toggle');
     if (document.fullscreenElement) {
       document.exitFullscreen();
     } else {
@@ -369,6 +370,7 @@ export default function ChronosphaeraVRPage() {
   }, []);
 
   const stopCameraAR = useCallback(() => {
+    track('ar.stopped');
     if (streamRef.current) {
       streamRef.current.getTracks().forEach(t => t.stop());
       streamRef.current = null;
@@ -377,7 +379,7 @@ export default function ChronosphaeraVRPage() {
     setArPassthrough(false);
     setArPanelLocked(false);
     panelLockedExtRef.current = false;
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Auto-start camera AR when arriving from 3D button
   const autoARTriggered = useRef(false);
@@ -551,7 +553,7 @@ export default function ChronosphaeraVRPage() {
         <MetalDetailPanel
           data={null}
           activeTab={activeTab}
-          onSelectTab={setActiveTab}
+          onSelectTab={(tab) => { track('tab.' + tab); setActiveTab(tab); }}
           activeCulture={activeCulture}
           onSelectCulture={setActiveCulture}
           activePerspective={perspective.activePerspective}
@@ -574,7 +576,7 @@ export default function ChronosphaeraVRPage() {
       <MetalDetailPanel
         data={currentData}
         activeTab={activeTab}
-        onSelectTab={setActiveTab}
+        onSelectTab={(tab) => { track('tab.' + tab); setActiveTab(tab); }}
         activeCulture={activeCulture}
         onSelectCulture={setActiveCulture}
       />
@@ -709,7 +711,7 @@ export default function ChronosphaeraVRPage() {
           <button className="celestial-icon-btn" onClick={toggleClockMode} title={clockMode === '24h' ? 'Geocentric (Earth-centered) — click for Heliocentric' : 'Heliocentric (Sun-centered) — click for Geocentric'}>
             {clockMode === '24h' ? '\u{1F30D}' : '\u2600\uFE0F'}
           </button>
-          <button className="celestial-icon-btn" onClick={() => setShowClock3D(v => !v)} title={showClock3D ? 'Hide clock hands' : 'Show clock hands'} style={{ opacity: showClock3D ? 0.85 : 0.4 }}>
+          <button className="celestial-icon-btn" onClick={() => { track('clock-hands.toggle'); setShowClock3D(v => !v); }} title={showClock3D ? 'Hide clock hands' : 'Show clock hands'} style={{ opacity: showClock3D ? 0.85 : 0.4 }}>
             {'\u{1F551}'}
           </button>
           <button className="celestial-btn" onClick={toggleZodiacMode} title={`Switch to ${zodiacMode === 'sidereal' ? 'tropical' : 'sidereal'}`}>
@@ -722,7 +724,7 @@ export default function ChronosphaeraVRPage() {
             <button
               className={`compass-toggle-inline${compass.active ? ' active' : ''}${compass.denied ? ' denied' : ''}`}
               onClick={compass.supported
-                ? (compass.active ? compass.stopCompass : compass.requestCompass)
+                ? () => { track('compass.toggle'); (compass.active ? compass.stopCompass : compass.requestCompass)(); }
                 : () => alert('Compass alignment is a mobile feature — open this page on your phone to use it.')}
               title={!compass.supported ? 'Mobile feature — compass alignment' : compass.denied ? 'Compass permission denied' : compass.active ? 'Disable compass' : 'Align to compass'}
             >
@@ -742,7 +744,7 @@ export default function ChronosphaeraVRPage() {
             <>
               <button
                 className={`celestial-btn celestial-xr-enter${arPassthrough ? ' active' : ''}`}
-                onClick={() => setArPassthrough(p => !p)}
+                onClick={() => { track('ar.passthrough-toggle'); setArPassthrough(p => !p); }}
                 title={arPassthrough ? 'Show starfield background' : 'Passthrough — camera only with artifacts'}
               >
                 {arPassthrough ? 'Stars Off' : 'Passthrough'}
@@ -763,12 +765,12 @@ export default function ChronosphaeraVRPage() {
             </button>
           )}
           {!cameraAR && panelOpen && hasSelection && (
-            <button className="celestial-btn" onClick={() => setPanelOpen(false)}>
+            <button className="celestial-btn" onClick={() => { track('panel.hide'); setPanelOpen(false); }}>
               Hide Panel
             </button>
           )}
           {!cameraAR && !panelOpen && hasSelection && (
-            <button className="celestial-btn" onClick={() => setPanelOpen(true)}>
+            <button className="celestial-btn" onClick={() => { track('panel.show'); setPanelOpen(true); }}>
               Show Panel
             </button>
           )}
