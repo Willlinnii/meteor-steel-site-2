@@ -340,50 +340,6 @@
   to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
-/* ===== COMPASS TOGGLE (fixed bottom-left, mirrors btn-row on right) ===== */
-
-.compass-toggle {
-  display: none;
-  position: fixed;
-  bottom: 72px;
-  left: 24px;
-  z-index: 999;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: none;
-  border: 1px solid rgba(139, 195, 170, 0.4);
-  color: rgba(139, 195, 170, 0.7);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s ease;
-  opacity: 0.7;
-}
-.compass-toggle:hover {
-  opacity: 1;
-  background: rgba(139, 195, 170, 0.1);
-  box-shadow: 0 0 10px rgba(139, 195, 170, 0.3);
-}
-.compass-toggle.active {
-  border-color: rgba(139, 195, 170, 0.9);
-  color: rgba(139, 195, 170, 1);
-  opacity: 1;
-  box-shadow: 0 0 12px rgba(139, 195, 170, 0.4);
-  background: rgba(139, 195, 170, 0.08);
-}
-.compass-toggle.denied {
-  border-color: rgba(200, 100, 80, 0.6);
-  color: rgba(200, 100, 80, 0.8);
-  opacity: 1;
-}
-.compass-toggle:active {
-  opacity: 1;
-  background: rgba(139, 195, 170, 0.25);
-  transform: scale(0.92);
-}
-
 /* Inline compass button — next to month heading */
 .compass-toggle-inline {
   display: flex;
@@ -1453,13 +1409,6 @@
   .mobile-mode-toggle {
     width: 36px;
     height: 36px;
-  }
-
-  .compass-toggle {
-    bottom: 56px;
-    left: 16px;
-    width: 34px;
-    height: 34px;
   }
 
   .persona-tab {

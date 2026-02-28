@@ -12,6 +12,7 @@ import zodiacCultureData from '../../data/chronosphaeraZodiac.json';
 import constellationCultures from '../../data/constellationCultures.json';
 import { CHAKRA_ORDERINGS, CHAKRA_MODE_LABELS } from '../../data/chronosphaeraBodyPositions';
 import { BEYOND_RINGS } from '../../data/chronosphaeraBeyondRings';
+import { INNER_RING_SETS, getInnerRingModel } from '../../data/monomythConstants';
 
 const BODY_MAP = {
   Moon: Body.Moon,
@@ -222,6 +223,12 @@ const CYCLE_RINGS = [
   { key: 'solarYear', label: 'Solar Year', cycleName: 'Solar Year', innerR: 255, outerR: 295, textR: 275, fontSize: 10 },
 ];
 
+const THREE_RINGS = [
+  { innerR: 90, outerR: 155, textR: 122, fontSize: 8.5 },
+  { innerR: 165, outerR: 230, textR: 197, fontSize: 9.5 },
+  { innerR: 240, outerR: 295, textR: 267, fontSize: 10.5 },
+];
+
 const PLANET_COLORS = {
   Moon: '#c8d8e8', Mercury: '#b8b8c8', Venus: '#e8b060',
   Sun: '#f0c040', Mars: '#d06040', Jupiter: '#a0b8c0', Saturn: '#908070',
@@ -256,7 +263,33 @@ function ensureYTApi() {
   });
 }
 
-export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPlanet, hoveredPlanet, selectedSign, onSelectSign, selectedCardinal, onSelectCardinal, selectedEarth, onSelectEarth, showCalendar, onToggleCalendar, selectedMonth, onSelectMonth, showMedicineWheel, selectedWheelItem, onSelectWheelItem, chakraViewMode, onToggleBodyWheel, onClickOrderLabel, orderLabel, videoUrl, onCloseVideo, ybrActive, ybrCurrentStopIndex, ybrStopProgress, ybrJourneySequence, onToggleYBR, ybrAutoStart, clockMode, layoutMode, onEnterClock, compassHeading, compassSupported, compassDenied, onRequestCompass, onStopCompass, seasonalSign, seasonalMonth, seasonalStageIndex, showMonomyth, showMeteorSteel, monomythStages, selectedMonomythStage, onSelectMonomythStage, onToggleMonomyth, monomythModel, showCycles, onSelectCycleSegment, activeCulture, showFallenStarlight, showStoryOfStories, onToggleStarlight, starlightStages, selectedStarlightStage, onSelectStarlightStage, selectedConstellation, onSelectConstellation, zodiacMode, onSelectBeyondRing, beyondRings, activeBeyondRing, showDodecahedron, dodecMode, showArtBook, artBookMode, onToggleArtBook, showRing, targetDate }) {
+function hexWithAlpha(hex, alpha) {
+  const r = parseInt(hex.slice(1, 3), 16);
+  const g = parseInt(hex.slice(3, 5), 16);
+  const b = parseInt(hex.slice(5, 7), 16);
+  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+}
+
+function getRingSegmentLabel(tab, itemId, stageIndex) {
+  if (tab === 'theorists') {
+    const model = getInnerRingModel(tab, itemId);
+    return model?.stages?.[stageIndex] || '';
+  }
+  if (tab === 'myths') {
+    const model = getInnerRingModel(tab, itemId);
+    const stageTitle = model?.stages?.[stageIndex];
+    if (!stageTitle) return '';
+    const parts = stageTitle.split(' \u2014 ');
+    return parts.length > 1 ? parts[1] : stageTitle;
+  }
+  if (tab === 'films') {
+    const model = getInnerRingModel(tab, itemId);
+    return model?.stages?.[stageIndex] || '';
+  }
+  return '';
+}
+
+export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPlanet, hoveredPlanet, selectedSign, onSelectSign, selectedCardinal, onSelectCardinal, selectedEarth, onSelectEarth, showCalendar, onToggleCalendar, selectedMonth, onSelectMonth, showMedicineWheel, selectedWheelItem, onSelectWheelItem, chakraViewMode, onToggleBodyWheel, onClickOrderLabel, orderLabel, videoUrl, onCloseVideo, ybrActive, ybrCurrentStopIndex, ybrStopProgress, ybrJourneySequence, onToggleYBR, ybrAutoStart, clockMode, layoutMode, onEnterClock, compassHeading, compassSupported, compassDenied, onRequestCompass, onStopCompass, seasonalSign, seasonalMonth, seasonalStageIndex, showMonomyth, showMeteorSteel, monomythStages, selectedMonomythStage, onSelectMonomythStage, onToggleMonomyth, monomythModel, showCycles, onSelectCycleSegment, monomythTab, theoristGroup, onSelectRingSegment, ringSelections, activeCulture, showFallenStarlight, showStoryOfStories, onToggleStarlight, starlightStages, selectedStarlightStage, onSelectStarlightStage, selectedConstellation, onSelectConstellation, zodiacMode, onSelectBeyondRing, beyondRings, activeBeyondRing, showDodecahedron, dodecMode, showArtBook, artBookMode, onToggleArtBook, showRing, targetDate }) {
   const wrapperRef = useRef(null);
   const [tooltip, setTooltip] = useState(null);
   const { hasPurchase, hasSubscription } = useProfile();
@@ -264,6 +297,22 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
   const navigate = useNavigate();
   const compassActive = compassHeading != null;
   const [hoveredBeyondRing, setHoveredBeyondRing] = useState(null);
+
+  const activeRingItems = useMemo(() => {
+    if (!showCycles) return null;
+    const category = monomythTab === 'theorists'
+      ? theoristGroup
+      : (['myths', 'films'].includes(monomythTab) ? monomythTab : 'cycles');
+    const selectedIds = ringSelections?.[category] || [];
+
+    if (category === 'cycles') {
+      const filtered = CYCLE_RINGS.filter(r => selectedIds.includes(r.key));
+      return filtered.length > 0 ? filtered : null;
+    }
+    const source = INNER_RING_SETS[category] || [];
+    const filtered = source.filter(item => selectedIds.includes(item.id));
+    return filtered.length > 0 ? filtered : null;
+  }, [showCycles, monomythTab, theoristGroup, ringSelections]);
 
   // Pre-generate star positions for the star sphere ring (narrow band outside zodiac)
   const starBeltDots = useMemo(() => {
@@ -1937,22 +1986,44 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
           const SLICE_DEG = 45;
           const stageCenter = (i) => -90 - i * SLICE_DEG;
           const dividerAngle = (i) => -90 + SLICE_DEG / 2 - i * SLICE_DEG;
+          const isCyclesMode = !activeRingItems || activeRingItems.every(item => item.key && item.cycleName);
+          const activeItems = activeRingItems || CYCLE_RINGS.slice(0, 3);
+          const rings = activeItems.map((item, idx) => {
+            const geo = THREE_RINGS[3 - activeItems.length + idx];
+            const { innerR: _a, outerR: _b, textR: _c, fontSize: _d, ...rest } = item;
+            return { ...geo, ...rest };
+          });
 
           return (
             <g className="cycle-rings">
-              {CYCLE_RINGS.map((ring, ri) => {
-                // Color palette: inner 3 mystical/purple, outer 3 astronomical/blue
-                const ringColor = ri < 3
-                  ? 'rgba(180, 160, 200, ALPHA)'
-                  : 'rgba(100, 180, 220, ALPHA)';
-                const circleStroke = ringColor.replace('ALPHA', '0.18');
-                const dividerStroke = ringColor.replace('ALPHA', '0.22');
-                const textFill = ringColor.replace('ALPHA', '0.6');
-                const textFillActive = ringColor.replace('ALPHA', '0.95');
-                const titleFill = ringColor.replace('ALPHA', '0.15');
+              {rings.map((ring, ri) => {
+                // Color palette: cycles use purple/blue; other tabs use item color
+                let circleStroke, dividerStroke, textFill, textFillActive, titleFill, highlightFill;
+                if (isCyclesMode) {
+                  const colors = [
+                    'rgba(180, 160, 200, ALPHA)',
+                    'rgba(140, 170, 210, ALPHA)',
+                    'rgba(100, 180, 220, ALPHA)',
+                  ];
+                  const ringColor = colors[ri] || colors[2];
+                  circleStroke = ringColor.replace('ALPHA', '0.18');
+                  dividerStroke = ringColor.replace('ALPHA', '0.22');
+                  textFill = ringColor.replace('ALPHA', '0.6');
+                  textFillActive = ringColor.replace('ALPHA', '0.95');
+                  titleFill = ringColor.replace('ALPHA', '0.15');
+                  highlightFill = ringColor.replace('ALPHA', '0.08');
+                } else {
+                  const c = ring.color || '#aaa';
+                  circleStroke = hexWithAlpha(c, 0.25);
+                  dividerStroke = hexWithAlpha(c, 0.3);
+                  textFill = hexWithAlpha(c, 0.7);
+                  textFillActive = hexWithAlpha(c, 1);
+                  titleFill = hexWithAlpha(c, 0.2);
+                  highlightFill = hexWithAlpha(c, 0.1);
+                }
 
                 return (
-                  <g key={ring.key}>
+                  <g key={ring.key || ring.id || ri}>
                     {/* Ring circles */}
                     <circle cx={CX} cy={CY} r={ring.innerR} fill="none" stroke={circleStroke} strokeWidth="0.6" />
                     <circle cx={CX} cy={CY} r={ring.outerR} fill="none" stroke={circleStroke} strokeWidth="0.6" />
@@ -1979,7 +2050,7 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
                       const angle = dividerAngle(i);
                       const rad = (angle * Math.PI) / 180;
                       return (
-                        <line key={`cdiv-${ring.key}-${i}`}
+                        <line key={`cdiv-${ring.key || ring.id}-${i}`}
                           x1={CX + ring.innerR * Math.cos(rad)} y1={CY + ring.innerR * Math.sin(rad)}
                           x2={CX + ring.outerR * Math.cos(rad)} y2={CY + ring.outerR * Math.sin(rad)}
                           stroke={dividerStroke} strokeWidth="0.4" />
@@ -1988,7 +2059,9 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
 
                     {/* Phase labels on arc paths */}
                     {monomythStages.map((stage, i) => {
-                      const phase = psychlesData[stage.id]?.cycles[ring.key]?.phase;
+                      const phase = isCyclesMode
+                        ? psychlesData[stage.id]?.cycles[ring.key]?.phase
+                        : getRingSegmentLabel(monomythTab, ring.id, i);
                       if (!phase) return null;
                       const center = stageCenter(i);
                       const cwEdge = center + SLICE_DEG / 2;
@@ -1996,7 +2069,7 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
                       const effectiveAngle = ((center % 360) + 360) % 360;
                       const isUpper = effectiveAngle > 180 || effectiveAngle === 0;
                       const inset = 1.5;
-                      const pathId = `cpath-${ring.key}-${stage.id}`;
+                      const pathId = `cpath-${ring.key || ring.id}-${stage.id}`;
                       const pathD = isUpper
                         ? arcPath(CX, CY, ring.textR, ccwEdge + inset, cwEdge - inset, 1)
                         : arcPath(CX, CY, ring.textR, cwEdge - inset, ccwEdge + inset, 0);
@@ -2008,8 +2081,11 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
                       const hy = CY + ring.textR * Math.sin(cRad);
 
                       return (
-                        <g key={`clabel-${ring.key}-${stage.id}`}
-                          onClick={() => onSelectCycleSegment && onSelectCycleSegment(stage.id, ring.cycleName)}
+                        <g key={`clabel-${ring.key || ring.id}-${stage.id}`}
+                          onClick={() => isCyclesMode
+                            ? onSelectCycleSegment && onSelectCycleSegment(stage.id, ring.cycleName)
+                            : onSelectRingSegment && onSelectRingSegment(stage.id, monomythTab, ring.id)
+                          }
                           style={{ cursor: 'pointer' }}>
                           {/* Segment highlight when stage selected */}
                           {isSelected && (() => {
@@ -2018,7 +2094,7 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
                             return (
                               <path
                                 d={`M ${CX + ring.innerR * Math.cos(cwRad)},${CY + ring.innerR * Math.sin(cwRad)} A ${ring.innerR},${ring.innerR} 0 0,0 ${CX + ring.innerR * Math.cos(ccwRad)},${CY + ring.innerR * Math.sin(ccwRad)} L ${CX + ring.outerR * Math.cos(ccwRad)},${CY + ring.outerR * Math.sin(ccwRad)} A ${ring.outerR},${ring.outerR} 0 0,1 ${CX + ring.outerR * Math.cos(cwRad)},${CY + ring.outerR * Math.sin(cwRad)} Z`}
-                                fill={ri < 3 ? 'rgba(180, 160, 200, 0.08)' : 'rgba(100, 180, 220, 0.08)'}
+                                fill={highlightFill}
                               />
                             );
                           })()}
@@ -2038,92 +2114,6 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
                 );
               })}
 
-              {/* Planet dots on Solar Day ring (hour angles) */}
-              {geoClockAngles && (() => {
-                const dayRing = CYCLE_RINGS[3]; // solarDay
-                const sunDeg = clockTime.h * 15 + clockTime.m * 0.25 + 90;
-                const allDayPlanets = [
-                  { planet: 'Sun', angle: sunDeg },
-                  ...Object.entries(geoClockAngles).map(([planet, angle]) => ({ planet, angle })),
-                ];
-                return allDayPlanets.map(({ planet, angle }) => {
-                  const rad = (angle * Math.PI) / 180;
-                  const px = CX + dayRing.textR * Math.cos(rad);
-                  const py = CY + dayRing.textR * Math.sin(rad);
-                  const isSel = selectedPlanet === planet;
-                  const r = planet === 'Sun' ? 5 : 4;
-                  return (
-                    <g key={`day-${planet}`} style={{ cursor: 'pointer' }}
-                      onClick={() => onSelectPlanet && onSelectPlanet(planet)}>
-                      <circle cx={px} cy={py} r="10" fill="transparent" />
-                      {isSel && (
-                        <circle cx={px} cy={py} r={r + 4} fill="none"
-                          stroke={PLANET_COLORS[planet]} strokeWidth="0.8" opacity="0.6">
-                          <animate attributeName="r" values={`${r + 2};${r + 6};${r + 2}`} dur="2s" repeatCount="indefinite" />
-                          <animate attributeName="opacity" values="0.6;0.2;0.6" dur="2s" repeatCount="indefinite" />
-                        </circle>
-                      )}
-                      <circle cx={px} cy={py} r={r}
-                        fill={PLANET_COLORS[planet]} fillOpacity={isSel ? 1 : 0.85}
-                        stroke={isSel ? '#fff' : PLANET_COLORS[planet]} strokeWidth={isSel ? 1 : 0.5} />
-                      <title>{planet}</title>
-                    </g>
-                  );
-                });
-              })()}
-
-              {/* Planet dots on Solar Year ring (ecliptic longitudes) */}
-              {eclipticAngles && Object.entries(eclipticAngles).map(([planet, angle]) => {
-                const yearRing = CYCLE_RINGS[5]; // solarYear
-                const rad = (angle * Math.PI) / 180;
-                const px = CX + yearRing.textR * Math.cos(rad);
-                const py = CY + yearRing.textR * Math.sin(rad);
-                const isSel = selectedPlanet === planet;
-                return (
-                  <g key={`year-${planet}`} style={{ cursor: 'pointer' }}
-                    onClick={() => onSelectPlanet && onSelectPlanet(planet)}>
-                    <circle cx={px} cy={py} r="10" fill="transparent" />
-                    {isSel && (
-                      <circle cx={px} cy={py} r="8" fill="none"
-                        stroke={PLANET_COLORS[planet]} strokeWidth="0.8" opacity="0.6">
-                        <animate attributeName="r" values="6;10;6" dur="2s" repeatCount="indefinite" />
-                        <animate attributeName="opacity" values="0.6;0.2;0.6" dur="2s" repeatCount="indefinite" />
-                      </circle>
-                    )}
-                    <circle cx={px} cy={py} r="4"
-                      fill={PLANET_COLORS[planet]} fillOpacity={isSel ? 1 : 0.8}
-                      stroke={isSel ? '#fff' : PLANET_COLORS[planet]} strokeWidth={isSel ? 1 : 0.3} />
-                    <title>{planet}</title>
-                  </g>
-                );
-              })}
-
-              {/* Moon on Lunar Month ring (ecliptic position) */}
-              {eclipticAngles && (() => {
-                const monthRing = CYCLE_RINGS[4]; // lunarMonth
-                const moonAngle = eclipticAngles['Moon'];
-                const rad = (moonAngle * Math.PI) / 180;
-                const px = CX + monthRing.textR * Math.cos(rad);
-                const py = CY + monthRing.textR * Math.sin(rad);
-                const isSel = selectedPlanet === 'Moon';
-                return (
-                  <g style={{ cursor: 'pointer' }}
-                    onClick={() => onSelectPlanet && onSelectPlanet('Moon')}>
-                    <circle cx={px} cy={py} r="10" fill="transparent" />
-                    {isSel && (
-                      <circle cx={px} cy={py} r="9" fill="none"
-                        stroke={PLANET_COLORS.Moon} strokeWidth="0.8" opacity="0.6">
-                        <animate attributeName="r" values="7;11;7" dur="2s" repeatCount="indefinite" />
-                        <animate attributeName="opacity" values="0.6;0.2;0.6" dur="2s" repeatCount="indefinite" />
-                      </circle>
-                    )}
-                    <circle cx={px} cy={py} r="5"
-                      fill={PLANET_COLORS.Moon} fillOpacity={isSel ? 1 : 0.85}
-                      stroke={isSel ? '#fff' : PLANET_COLORS.Moon} strokeWidth={isSel ? 1 : 0.5} />
-                    <title>Moon</title>
-                  </g>
-                );
-              })()}
             </g>
           );
         })()}
@@ -2680,6 +2670,31 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
           </>
         )}
 
+        {/* Planets on zodiac ring in monomyth/meteor-steel mode */}
+        {showCycles && eclipticAngles && ORBITS.map(o => {
+          const angle = eclipticAngles[o.planet];
+          if (angle == null) return null;
+          const rad = (angle * Math.PI) / 180;
+          const px = CX + ZODIAC_TEXT_R * Math.cos(rad);
+          const py = CY + ZODIAC_TEXT_R * Math.sin(rad);
+          return (
+            <PlanetNode
+              key={`zodiac-${o.planet}`}
+              planet={o.planet}
+              metal={o.metal}
+              cx={px}
+              cy={py}
+              selected={selectedPlanet === o.planet}
+              hovered={hoveredPlanet === o.planet}
+              onClick={() => onSelectPlanet(o.planet)}
+              onMouseEnter={(e) => handleTooltipEnter('planet', o.planet, e)}
+              onMouseLeave={handleTooltipLeave}
+              moonPhase={o.planet === 'Moon' ? moonPhaseAngle : undefined}
+              smooth={false}
+            />
+          );
+        })}
+
         {/* Star layers — outside chakra/normal ternary so they render in both modes (hidden in cycles mode) */}
         {starMapMode === 'south' && !showCycles && (
           <g className="star-layer star-layer-south" opacity={hoveredConstellation ? 0.15 : 1}>
@@ -2932,20 +2947,6 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
         );
       })()}
       </div>
-      {compassSupported && showClock && (
-        <button
-          className={`compass-toggle${compassActive ? ' active' : ''}${compassDenied ? ' denied' : ''}`}
-          onClick={compassActive ? onStopCompass : onRequestCompass}
-          title={compassDenied ? 'Compass permission denied — tap to retry' : compassActive ? 'Disable compass' : 'Align to compass'}
-        >
-          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.5">
-            <circle cx="12" cy="12" r="9" />
-            <polygon points="12,3 14,12 12,10.5 10,12" fill="currentColor" stroke="none" />
-            <polygon points="12,21 14,12 12,13.5 10,12" />
-            <circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none" />
-          </svg>
-        </button>
-      )}
       <div className="orbital-btn-row" data-expanded={mobileMenuOpen || undefined}>
         <button
           className="mobile-mode-toggle"
