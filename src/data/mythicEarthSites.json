@@ -167,7 +167,8 @@
     "era": "c. 100 BCE – 550 CE",
     "lat": 19.6925,
     "lng": -98.8438,
-    "category": "sacred-site",
+    "category": "temple",
+    "isTemple": true,
     "description": "City of the Gods in central Mexico. The Pyramid of the Sun and Moon aligned with cosmic forces, where the fifth sun was born through divine sacrifice.",
     "region": "Mexico",
     "streetView": {
@@ -995,7 +996,8 @@
     "era": "c. 850 CE",
     "lat": -7.752,
     "lng": 110.4914,
-    "category": "sacred-site",
+    "category": "temple",
+    "isTemple": true,
     "description": "Largest Hindu temple complex in Indonesia, dedicated to the Trimurti — Brahma, Vishnu, and Shiva. Its towering spires and relief carvings of the Ramayana rival anything in India itself.",
     "region": "Indonesia",
     "streetView": {
@@ -1116,7 +1118,8 @@
     "era": "c. 1264–1244 BCE",
     "lat": 22.3369,
     "lng": 31.6256,
-    "category": "sacred-site",
+    "category": "temple",
+    "isTemple": true,
     "description": "Twin rock temples carved by Ramesses II, guarded by four colossal seated pharaohs. Twice a year, sunlight penetrates 200 feet to illuminate the gods in the innermost sanctuary.",
     "region": "Egypt",
     "streetView": {
@@ -1182,7 +1185,8 @@
     "era": "c. 600–1200 CE",
     "lat": 20.6843,
     "lng": -88.5678,
-    "category": "sacred-site",
+    "category": "temple",
+    "isTemple": true,
     "description": "Great Maya city dominated by the pyramid of Kukulkan, where a feathered serpent of shadow descends the staircase at each equinox. Its observatory, ball court, and cenote of sacrifice made it a cosmic center.",
     "region": "Mexico",
     "streetView": {
@@ -1285,14 +1289,15 @@
     "era": "c. 9500–8000 BCE",
     "lat": 37.2231,
     "lng": 38.9225,
-    "category": "sacred-site",
+    "category": "temple",
+    "isTemple": true,
     "description": "The oldest known temple complex in the world, built around 9500 BCE — 7,000 years before Stonehenge. Hunter-gatherers carved massive T-shaped pillars with animal reliefs, suggesting that worship preceded civilization.",
     "region": "Turkey",
     "streetView": {
       "heading": 90,
       "pitch": 10
     },
-    "pantheons": []
+    "pantheons": ["hittite"]
   },
   {
     "id": "ephesus",
@@ -1395,7 +1400,7 @@
       "heading": 90,
       "pitch": 5
     },
-    "pantheons": []
+    "pantheons": ["zulu"]
   },
   {
     "id": "serpent-mound",
@@ -4100,5 +4105,133 @@
     "pantheons": [
       "global"
     ]
+  },
+  {
+    "id": "myth-salon-library",
+    "name": "Myth Salon Library",
+    "era": "2020 – present",
+    "lat": 34.5667,
+    "lng": -85.5811,
+    "category": "library",
+    "isLibrary": true,
+    "description": "A living archive at the Mentone Mythouse Retreat. Home to the Eranos Yearbooks, Bollingen Series, and curated collections spanning depth psychology, sacred texts, and the monomyth.",
+    "region": "United States",
+    "streetView": {
+      "heading": 0,
+      "pitch": 10
+    },
+    "pantheons": []
+  },
+  {
+    "id": "templo-mayor",
+    "name": "Templo Mayor",
+    "era": "1325–1521 CE",
+    "lat": 19.4352,
+    "lng": -99.1318,
+    "category": "temple",
+    "isTemple": true,
+    "description": "Twin-pyramid heart of the Aztec empire in Tenochtitlan, where Huitzilopochtli's war shrine and Tlaloc's rain shrine rose side by side. Rediscovered in 1978 beneath downtown Mexico City.",
+    "region": "Mexico",
+    "streetView": {
+      "heading": 0,
+      "pitch": 15
+    },
+    "pantheons": ["aztec"]
+  },
+  {
+    "id": "ziggurat-of-ur",
+    "name": "Ziggurat of Ur",
+    "era": "c. 2112 BCE",
+    "lat": 30.9627,
+    "lng": 46.1031,
+    "category": "temple",
+    "isTemple": true,
+    "description": "Massive mud-brick stepped pyramid raised by King Ur-Nammu for the moon god Nanna. Partially restored, it remains the best-preserved ziggurat in Mesopotamia.",
+    "region": "Iraq",
+    "streetView": {
+      "heading": 180,
+      "pitch": 15
+    },
+    "pantheons": ["sumerian"]
+  },
+  {
+    "id": "temple-at-uppsala",
+    "name": "Temple at Uppsala",
+    "era": "4th–11th century CE",
+    "lat": 59.8982,
+    "lng": 17.6310,
+    "category": "temple",
+    "isTemple": true,
+    "description": "Last great heathen temple of Scandinavia at Gamla Uppsala, where Norse gods received sacrifice and kings were crowned. Described by Adam of Bremen in 1070 before its destruction.",
+    "region": "Sweden",
+    "streetView": {
+      "heading": 90,
+      "pitch": 10
+    },
+    "pantheons": ["norse"]
+  },
+  {
+    "id": "jebel-barkal",
+    "name": "Jebel Barkal",
+    "era": "c. 1450 BCE – 3rd century CE",
+    "lat": 18.5340,
+    "lng": 31.8270,
+    "category": "temple",
+    "isTemple": true,
+    "description": "Holy mountain and temple complex at the Nile's great bend in Nubia, where Kushite kings built a southern Karnak. The flat-topped pinnacle was seen as Amun's dwelling and a divine uraeus.",
+    "region": "Sudan",
+    "streetView": {
+      "heading": 0,
+      "pitch": 20
+    },
+    "pantheons": ["egyptian"]
+  },
+  {
+    "id": "taputapuatea",
+    "name": "Taputapuātea",
+    "era": "c. 1000 CE",
+    "lat": -16.8310,
+    "lng": -151.3575,
+    "category": "temple",
+    "isTemple": true,
+    "description": "Sacred marae on Ra'iātea, the spiritual center of Polynesia. From here navigators carried the worship of 'Oro across the Pacific. UNESCO World Heritage Site since 2017.",
+    "region": "French Polynesia",
+    "streetView": {
+      "heading": 180,
+      "pitch": 5
+    },
+    "pantheons": ["tahitian"]
+  },
+  {
+    "id": "puuhonua-o-honaunau",
+    "name": "Puʻuhonua o Hōnaunau",
+    "era": "c. 1400s–1819 CE",
+    "lat": 19.4228,
+    "lng": -155.9117,
+    "category": "temple",
+    "isTemple": true,
+    "description": "Royal refuge and temple complex on the Kona coast of Hawai'i. Defeated warriors and kapu-breakers who reached its walls received absolution. The Hale o Keawe housed royal bones and fierce ki'i akua god images.",
+    "region": "Hawai'i",
+    "streetView": {
+      "heading": 270,
+      "pitch": 10
+    },
+    "pantheons": ["hawaiian"]
+  },
+  {
+    "id": "jongmyo",
+    "name": "Jongmyo Shrine",
+    "era": "1394 CE",
+    "lat": 37.5743,
+    "lng": 126.9941,
+    "category": "temple",
+    "isTemple": true,
+    "description": "Royal ancestral shrine of the Joseon dynasty in Seoul, housing spirit tablets of kings and queens in the world's longest wooden hall. The Jongmyo Jerye rites performed here are a UNESCO Masterpiece of Intangible Heritage.",
+    "region": "South Korea",
+    "streetView": {
+      "heading": 0,
+      "pitch": 5
+    },
+    "pantheons": ["korean"]
   }
 ]

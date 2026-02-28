@@ -288,5 +288,145 @@
       { "id": "kubera", "title": "Kubera", "role": "God of Wealth", "domain": "nature", "description": "Lord of riches and king of the yakshas who guards the north. His niche at Brihadeeswarar symbolizes the material prosperity that Rajaraja Chola's empire achieved at its zenith." },
       { "id": "rajaraja-chola", "title": "Rajaraja Chola I", "role": "Royal Builder", "domain": "divine-figure", "description": "The great Chola emperor who commissioned Brihadeeswarar as the supreme expression of his dynasty's power and devotion. His inscriptions on the temple walls record donations of gold, land, and dancers — creating an eternal covenant between king and god." }
     ]
+  },
+  {
+    "id": "templo-mayor",
+    "name": "Templo Mayor",
+    "location": "Mexico City, Mexico",
+    "era": "1325–1521 CE",
+    "tagline": "Twin-pyramid heart of the Aztec empire, where Huitzilopochtli's war shrine and Tlaloc's rain shrine rose side by side at the center of the world.",
+    "deities": [
+      { "id": "huitzilopochtli", "title": "Huitzilopochtli", "role": "God of War and the Sun", "domain": "warrior", "description": "Patron god of the Mexica whose shrine crowned the south side of the Templo Mayor. Born fully armed on Coatepec, he defeated his four hundred brothers and sister Coyolxauhqui. Daily human sacrifice fed the sun and ensured the continuation of the Fifth World." },
+      { "id": "tlaloc", "title": "Tlaloc", "role": "God of Rain", "domain": "nature", "description": "Ancient rain deity whose shrine crowned the north side of the Templo Mayor. His goggle-eyed face appears on painted vessels and stone carvings throughout the precinct. Children were sacrificed at mountain shrines so their tears would summon the rains." },
+      { "id": "coyolxauhqui", "title": "Coyolxauhqui", "role": "Moon Goddess", "domain": "cosmic", "description": "Dismembered sister of Huitzilopochtli whose massive carved stone disk was found at the pyramid's base in 1978, triggering the modern excavation. Her broken body at the foot of the temple re-enacts her mythic defeat on Coatepec." },
+      { "id": "ehecatl-quetzalcoatl", "title": "Ehecatl-Quetzalcoatl", "role": "Wind God / Feathered Serpent", "domain": "cosmic", "description": "Quetzalcoatl in his aspect as wind god, honored in a circular temple within the sacred precinct. His conical temple allowed wind to pass freely, and shell-shaped ornaments marked his presence as the breath that precedes rain." },
+      { "id": "tezcatlipoca", "title": "Tezcatlipoca", "role": "Smoking Mirror", "domain": "cosmic", "description": "Lord of the night sky, sorcery, and destiny whose obsidian mirror revealed all things. Rival and complement to Quetzalcoatl, his presence at the precinct embodied the cosmic struggle between order and chaos at the heart of Aztec theology." },
+      { "id": "tonatiuh", "title": "Tonatiuh", "role": "Sun God of the Fifth Age", "domain": "cosmic", "description": "The current sun whose face appears at the center of the famous Sun Stone found near the Templo Mayor. His survival depended on the blood sacrifices performed at the pyramid's summit, making the temple a cosmic engine." },
+      { "id": "xiuhtecuhtli", "title": "Xiuhtecuhtli", "role": "God of Fire and Time", "domain": "cosmic", "description": "Old Fire God who dwelt at the center of the universe and presided over the New Fire Ceremony held every 52 years. Excavations uncovered his fire serpent sculptures and braziers within the Templo Mayor offerings." },
+      { "id": "mictlantecuhtli", "title": "Mictlantecuhtli", "role": "Lord of the Dead", "domain": "underworld", "description": "Skeletal lord of Mictlan, the underworld's deepest level. His shrine within the precinct housed offerings of sacrificial knives and skull masks. The dead traveled four years through nine levels to reach his realm." },
+      { "id": "xipe-totec", "title": "Xipe Totec", "role": "The Flayed Lord", "domain": "nature", "description": "God of spring, renewal, and goldsmiths who wore the skin of a sacrificial victim to symbolize the earth putting on new vegetation. His temple Yopico stood within the sacred precinct, and gladiatorial sacrifice was performed in his honor." },
+      { "id": "chicomecoatl", "title": "Chicomecoatl", "role": "Goddess of Maize", "domain": "nature", "description": "Seven Serpent, goddess of sustenance and ripe maize. Her stone images were found throughout the precinct holding double ears of corn. In September harvest festivals, a young woman embodying the goddess was sacrificed to ensure the next year's crop." },
+      { "id": "chalchiuhtlicue", "title": "Chalchiuhtlicue", "role": "Goddess of Water", "domain": "nature", "description": "She of the Jade Skirt, consort of Tlaloc and goddess of rivers, lakes, and streams. Her carved images were found near Tlaloc's shrine, linking terrestrial waters with the rain god's celestial domain." }
+    ]
+  },
+  {
+    "id": "ziggurat-of-ur",
+    "name": "Ziggurat of Ur",
+    "location": "Tell el-Muqayyar, Iraq",
+    "era": "c. 2112 BCE",
+    "tagline": "Mud-brick mountain sacred to Nanna the moon god, raised by Ur-Nammu at the height of Sumer's final renaissance.",
+    "deities": [
+      { "id": "nanna", "title": "Nanna", "role": "Moon God", "domain": "cosmic", "description": "Patron deity of Ur whose crescent crown defined the city's identity for two millennia. The ziggurat was his earthly mountain, where priests ascended three monumental staircases to tend his high shrine beneath the moon." },
+      { "id": "ningal", "title": "Ningal", "role": "Great Lady", "domain": "love", "description": "Consort of Nanna and mother of Utu and Inanna. Her temple Egipar stood adjacent to the ziggurat, and her 'Lament for Ur' is among the oldest literary expressions of grief for a destroyed city." },
+      { "id": "utu", "title": "Utu", "role": "Sun God and Judge", "domain": "cosmic", "description": "Son of Nanna who crossed the sky daily dispensing justice. As the god who sees all, he was invoked in legal oaths and boundary disputes. His light balanced his father's lunar sovereignty at Ur." },
+      { "id": "inanna", "title": "Inanna", "role": "Queen of Heaven", "domain": "love", "description": "Daughter of Nanna and the most complex deity in Sumerian religion — goddess of love, war, and political power. Her descent to the underworld and return is the oldest recorded journey of death and rebirth." },
+      { "id": "ningirsu", "title": "Ningirsu", "role": "God of War and Agriculture", "domain": "warrior", "description": "Storm warrior and lord of the plow whose cult at nearby Lagash rivaled Ur. His presence in Ur's religious calendar reflects the network of temple economies that linked Sumerian city-states." },
+      { "id": "enki", "title": "Enki", "role": "God of Wisdom and Fresh Water", "domain": "wisdom", "description": "Trickster sage of the abzu, the freshwater ocean beneath the earth. From his temple at nearby Eridu, the oldest city, Enki ordered civilization by distributing the divine decrees to each city — including Ur." },
+      { "id": "enlil", "title": "Enlil", "role": "King of the Gods", "domain": "cosmic", "description": "Lord of wind and supreme authority of the Sumerian pantheon, based at Nippur. The kings of Ur's Third Dynasty claimed Enlil's blessing for their empire, making his approval essential to the ziggurat's legitimacy." },
+      { "id": "ninhursag", "title": "Ninhursag", "role": "Mother Goddess", "domain": "creator", "description": "Lady of the Mountain, the great mother who shaped humanity from clay. One of the four supreme deities of Sumer, she appears in Ur's offering lists and cylinder seal impressions as guarantor of fertility and birth." }
+    ]
+  },
+  {
+    "id": "temple-at-uppsala",
+    "name": "Temple at Uppsala",
+    "location": "Gamla Uppsala, Sweden",
+    "era": "4th–11th century CE",
+    "tagline": "Last great heathen temple of Scandinavia, where Thor, Odin, and Freyr received sacrifice beneath a golden roof until Christianity prevailed.",
+    "deities": [
+      { "id": "thor", "title": "Thor", "role": "God of Thunder", "domain": "warrior", "description": "Placed in the central and highest seat at Uppsala according to Adam of Bremen. The red-bearded defender of Midgard wielded Mjolnir against giants and chaos, and his idol received the most offerings from farmers seeking rain and good harvests." },
+      { "id": "odin", "title": "Odin", "role": "Allfather", "domain": "wisdom", "description": "One-eyed god of war, wisdom, and death who sacrificed himself on Yggdrasil to gain the runes. At Uppsala he sat beside Thor, receiving warriors' dedications and the hanged sacrifices of the great nine-year blót." },
+      { "id": "freyr", "title": "Freyr", "role": "God of Fertility and Kingship", "domain": "nature", "description": "Vanir lord of peace and plenty whose phallic idol at Uppsala presided over marriages and harvests. Adam of Bremen placed him third in the triad. The Swedish royal Yngling dynasty claimed descent from him." },
+      { "id": "freyja", "title": "Freyja", "role": "Goddess of Love and Seiðr", "domain": "love", "description": "Freyr's twin sister, lady of love, war, and shamanic magic. Though Adam of Bremen's account centers on the male triad, archaeological finds at Gamla Uppsala include gold-foil figures of embracing couples linked to Freyja's cult of sacred union." },
+      { "id": "njord", "title": "Njörð", "role": "God of the Sea and Wind", "domain": "nature", "description": "Father of Freyr and Freyja, Vanir god of harbors, fishing, and wealth from the sea. Place-name evidence across Sweden ties Njörð worship to coastal and lakeside cult sites feeding into Uppsala's network." },
+      { "id": "the-disir", "title": "The Dísir", "role": "Ancestral Spirit-Women", "domain": "guardian", "description": "Collective female spirits — ancestors, fate-shapers, and protectors — honored at the Dísablót held annually at Uppsala. This winter sacrifice to the dísir may have been the oldest stratum of cult at the site, predating the named gods." }
+    ]
+  },
+  {
+    "id": "jebel-barkal",
+    "name": "Jebel Barkal",
+    "location": "Karima, Sudan",
+    "era": "c. 1450 BCE – 3rd century CE",
+    "tagline": "Holy mountain of Amun at the Nile's great bend, where Nubian kings built a southern Karnak and forged their own divine mandate.",
+    "deities": [
+      { "id": "amun-of-napata", "title": "Amun of Napata", "role": "King of the Gods (Nubian)", "domain": "creator", "description": "Southern form of Amun who dwelt inside the flat-topped mountain itself. The Kushite kings believed this Amun chose them to rule, and his oracle at Jebel Barkal legitimized their conquest of Egypt as the 25th Dynasty." },
+      { "id": "amun-northern", "title": "Amun", "role": "Hidden One (Egyptian form)", "domain": "creator", "description": "The Theban Amun introduced when Thutmose III first consecrated Jebel Barkal as the 'Pure Mountain.' Egyptian and Nubian forms coexisted in adjacent temples, reflecting centuries of cultural exchange along the Nile." },
+      { "id": "mut-barkal", "title": "Mut", "role": "Mother Goddess", "domain": "guardian", "description": "Consort of Amun whose temple at Jebel Barkal mirrors her precinct at Karnak. A pinnacle on the mountain's cliff face was interpreted as a rearing uraeus — the cobra crown of divine queenship linked to Mut and the royal women." },
+      { "id": "hathor-barkal", "title": "Hathor", "role": "Goddess of Joy and the Distant Eye", "domain": "love", "description": "Cow-eared goddess of love, music, and motherhood with her own temple cut into the cliff at Jebel Barkal. In the myth of the Distant Goddess, Hathor's return from Nubia to Egypt was celebrated at this very site." },
+      { "id": "bes-barkal", "title": "Bes", "role": "Protector of Households", "domain": "guardian", "description": "Dwarf deity of protection, dance, and childbirth whose images appear throughout the Jebel Barkal temples. Originally a Nubian import into Egyptian religion, his strong presence here reflects his deep roots in the upper Nile." },
+      { "id": "tefnut-barkal", "title": "Tefnut", "role": "Goddess of Moisture and the Eye of Ra", "domain": "nature", "description": "Lion-headed goddess identified with the Eye of Ra in the Distant Goddess myth. At Jebel Barkal she was associated with the pinnacle and the return of the goddess from the south — a myth literally embodied by the site's geography." },
+      { "id": "apedemak", "title": "Apedemak", "role": "Lion-Headed War God", "domain": "warrior", "description": "Indigenous Nubian war god with no Egyptian equivalent, depicted as a lion or lion-headed man. His temple at Jebel Barkal sits alongside Egyptian deities, demonstrating that Kush was not merely an Egyptian copy but a distinct civilization." },
+      { "id": "osiris-dedwen", "title": "Osiris-Dedwen", "role": "Lord of Nubia", "domain": "underworld", "description": "Syncretized form merging Egyptian Osiris with Dedwen, a Nubian god of incense and wealth. This fusion deity received offerings at Jebel Barkal's mortuary temples, bridging Egyptian afterlife theology with local Nubian tradition." },
+      { "id": "isis-barkal", "title": "Isis", "role": "Great of Magic", "domain": "cosmic", "description": "Wife of Osiris and mother of Horus whose cult flourished in Nubia long after it waned in Egypt. The Meroitic queens (Kandakes) identified with Isis as divine mothers, and her worship persisted at Jebel Barkal into the 3rd century CE." },
+      { "id": "re-horakhty", "title": "Re-Horakhty", "role": "Sun God of the Horizon", "domain": "cosmic", "description": "Falcon-headed solar deity combining Ra and Horus. His temple at Jebel Barkal faces the sunrise across the Nile, and the mountain itself was seen as the primeval mound from which the sun first rose at the beginning of time." }
+    ]
+  },
+  {
+    "id": "taputapuatea",
+    "name": "Taputapuātea",
+    "location": "Ra'iātea, French Polynesia",
+    "era": "c. 1000 CE",
+    "tagline": "Sacred marae at the spiritual center of Polynesia, from which navigators carried 'Oro's worship across the Pacific.",
+    "deities": [
+      { "id": "oro", "title": "'Oro", "role": "God of War and Fertility", "domain": "warrior", "description": "Supreme deity of the Arioi society whose great marae at Taputapuātea was the most sacred in eastern Polynesia. Born from Ta'aroa's breath on Ra'iātea, 'Oro demanded human sacrifice in wartime and presided over peace and fertility through his Arioi devotees." },
+      { "id": "taaroa", "title": "Ta'aroa", "role": "Creator God", "domain": "creator", "description": "Self-created supreme being who broke from his cosmic egg-shell to form the world. In Tahitian cosmogony, Ta'aroa existed alone in the void, then used his own body as raw material for sky, earth, and sea. Taputapuātea is where his creation took visible form." },
+      { "id": "hina-tu-a-uta", "title": "Hina-tu-a-uta", "role": "Goddess of the Inland", "domain": "nature", "description": "Earth-aspect of the great goddess Hina who presided over cultivated land and fertility. Paired with Hina of the sea, she represents the inland half of Polynesian life — taro gardens, forests, and the volcanic soil that sustains island communities." },
+      { "id": "tane", "title": "Tane", "role": "God of Forests and Light", "domain": "nature", "description": "God who separated sky-father Atea from earth-mother Papa to let light into the world. Lord of forests, birds, and beautiful things, Tane shaped the first woman from sand at Hawaiki. Canoe builders invoked him before felling sacred trees." },
+      { "id": "tu", "title": "Tu", "role": "God of War", "domain": "warrior", "description": "War god invoked before battle whose fierce rituals prepared warriors for combat. At Taputapuātea, Tu's cult intersected with 'Oro's, and captive warriors were offered on the marae as demonstrations of mana and divine favor." },
+      { "id": "roo", "title": "Ro'o", "role": "God of Peace and Agriculture", "domain": "nature", "description": "Peaceful deity of harvests and the cultivation arts. Ro'o balanced the martial energies of 'Oro and Tu, representing the seasons of planting and abundance that sustained island life between wars." }
+    ]
+  },
+  {
+    "id": "puuhonua-o-honaunau",
+    "name": "Puʻuhonua o Hōnaunau",
+    "location": "Big Island, Hawai'i",
+    "era": "c. 1400s–1819 CE",
+    "tagline": "Royal refuge on the Kona coast where defeated warriors and kapu-breakers found absolution under the watch of fierce ki'i akua.",
+    "deities": [
+      { "id": "lono", "title": "Lono", "role": "God of Fertility and Peace", "domain": "nature", "description": "God of agriculture, rainfall, and the Makahiki festival whose season of peace and games lasted four months each year. The Hale o Keawe at Puʻuhonua stored royal bones and sacred mana, and Lono's rituals renewed the land's fertility during his season." },
+      { "id": "ku", "title": "Kū", "role": "God of War", "domain": "warrior", "description": "War god whose feathered image Kūka'ilimoku accompanied Hawaiian kings into battle. At Puʻuhonua o Hōnaunau, Kū's fierce ki'i akua (carved god images) stood guard around the Hale o Keawe, their grimacing faces warning intruders away from the sacred precinct." },
+      { "id": "kane", "title": "Kāne", "role": "God of Creation and Fresh Water", "domain": "creator", "description": "Supreme creator who shaped the first man and brought fresh water from the heavens. Kāne was too sacred for carved images, but his presence permeated the puʻuhonua as the source of life-giving power that made absolution possible." },
+      { "id": "kanaloa", "title": "Kanaloa", "role": "God of the Sea and Healing", "domain": "nature", "description": "God of the deep ocean and companion of Kāne, with whom he traveled the islands striking fresh-water springs from rock. At this coastal site, Kanaloa's oceanic domain surrounded the puʻuhonua on three sides, and ocean currents bore the canoes of those seeking sanctuary." },
+      { "id": "deified-alii", "title": "Deified Ali'i", "role": "Ancestral Royal Spirits", "domain": "guardian", "description": "The bones of high chiefs stored in the Hale o Keawe transformed them into protective ancestral gods whose mana guarded the puʻuhonua. Twenty-three ali'i were interred here, their accumulated spiritual power making the site inviolable — even enemies could not pursue the defeated past its walls." },
+      { "id": "kii-akua", "title": "Ki'i Akua", "role": "Carved God Images", "domain": "guardian", "description": "Wooden temple images with jutting jaws, pearl-shell eyes, and bristling crests of human hair. These ki'i akua channeled divine power to protect the royal compound and its sacred contents. The surviving examples are among the most powerful works of Polynesian art." }
+    ]
+  },
+  {
+    "id": "jongmyo",
+    "name": "Jongmyo Shrine",
+    "location": "Seoul, South Korea",
+    "era": "1394 CE",
+    "tagline": "Royal ancestral shrine of the Joseon dynasty, where Confucian rites and Korean spirit-world traditions merge in the world's longest wooden hall.",
+    "deities": [
+      { "id": "sangje", "title": "Sangje", "role": "Supreme Heavenly Lord", "domain": "cosmic", "description": "The highest deity in Korean cosmology, equated with Heaven itself. The Joseon king performed rites as the Son of Heaven, and the Jongmyo rituals positioned the royal ancestors as intermediaries between Sangje's cosmic order and the earthly kingdom." },
+      { "id": "cheonsin", "title": "Cheonsin", "role": "Spirits of Heaven", "domain": "cosmic", "description": "Collective celestial spirits honored in the broader Korean spirit-world alongside Confucian rites. Stars, winds, and seasonal forces were understood as expressions of heavenly will, and Jongmyo's rites acknowledged these cosmic powers as the framework within which royal ancestors operated." },
+      { "id": "jisin", "title": "Jisin", "role": "Spirits of Earth", "domain": "nature", "description": "Earth spirits governing the land's fertility and the well-being of the kingdom's territory. At Jongmyo, offerings to the jisin ensured that the soil, mountains, and rivers of Joseon would sustain the people under the ancestors' watchful care." },
+      { "id": "taejo", "title": "Taejo", "role": "Founding Ancestor", "domain": "divine-figure", "description": "Yi Seong-gye, founder of the Joseon dynasty in 1392, whose spirit tablet holds the first position in Jongmyo's Jeongjeon hall. As the dynasty's originating ancestor, his rites were the most solemn, performed with the full court in attendance." },
+      { "id": "sejong", "title": "Sejong", "role": "Sage King", "domain": "wisdom", "description": "The Great King who invented Hangul, the Korean alphabet, and whose spirit tablet in Jongmyo embodies the Confucian ideal of the wise ruler. His reign is remembered as Joseon's golden age of science, music, and learning." },
+      { "id": "jeongjeon-ancestors", "title": "Jeongjeon Ancestors", "role": "Main Hall Spirit Tablets", "domain": "guardian", "description": "Nineteen spirit tablets of Joseon's most honored kings and queens enshrined in the 101-meter Jeongjeon hall, the longest wooden structure in the world. Five times yearly, the Jongmyo Jerye rites fill the hall with ancient court music as offerings are presented to each ancestor in succession." },
+      { "id": "yeongnyeongjeon-ancestors", "title": "Yeongnyeongjeon Ancestors", "role": "Eternal Peace Hall Tablets", "domain": "guardian", "description": "Spirit tablets of kings and queens moved to the secondary Yeongnyeongjeon hall, maintaining their honored status while making room in the Jeongjeon. These ancestors continue to receive rites and offerings, ensuring no royal spirit is neglected." },
+      { "id": "confucius-sages", "title": "Confucius and the Sages", "role": "Moral Exemplars", "domain": "wisdom", "description": "Though Confucius and his disciples are primarily honored at Seonggyungwan, their ethical framework pervades every aspect of Jongmyo's rites. The shrine's hierarchical layout, musical protocols, and seasonal ceremonies all follow Confucian ritual prescriptions transmitted from China and adapted to Korean practice." }
+    ]
+  },
+  {
+    "id": "prambanan",
+    "name": "Prambanan",
+    "location": "Yogyakarta, Indonesia",
+    "era": "c. 850 CE",
+    "tagline": "Largest Hindu temple in Southeast Asia, where the Trimurti rises in soaring stone spires above the Javanese plain.",
+    "deities": [
+      { "id": "shiva-prambanan", "title": "Shiva", "role": "The Destroyer", "domain": "cosmic", "description": "Supreme deity of Prambanan enshrined in the tallest central tower at 47 meters. The four-armed Shiva Mahadeva statue in the main chamber faces east, flanked by chambers for his aspects: Agastya the sage, Durga the warrior goddess, and Ganesha the remover of obstacles." },
+      { "id": "brahma-prambanan", "title": "Brahma", "role": "The Creator", "domain": "creator", "description": "God of creation whose dedicated temple stands south of Shiva's tower. Its inner walls are carved with episodes from the Ramayana epic, continuing the narrative cycle that wraps around the entire complex." },
+      { "id": "vishnu-prambanan", "title": "Vishnu", "role": "The Preserver", "domain": "guardian", "description": "God of preservation enshrined in the temple north of Shiva's tower. His Ramayana reliefs and his avatars — especially Krishna — demonstrate the full integration of Hindu theology into 9th-century Javanese court culture." },
+      { "id": "durga-prambanan", "title": "Durga", "role": "Warrior Goddess", "domain": "warrior", "description": "Fierce goddess in the northern chamber of the Shiva temple, depicted slaying the buffalo demon Mahishasura. Javanese tradition identifies this statue as Loro Jonggrang — the Slender Maiden of local legend who was cursed to become the temple's thousandth statue." },
+      { "id": "ganesha-prambanan", "title": "Ganesha", "role": "Remover of Obstacles", "domain": "wisdom", "description": "Elephant-headed son of Shiva seated in the western chamber of the main temple. As lord of beginnings and wisdom, Ganesha received the first prayers of devotees entering the complex." },
+      { "id": "agastya-prambanan", "title": "Agastya", "role": "Divine Sage", "domain": "wisdom", "description": "Great Vedic sage enshrined in the southern chamber of the Shiva temple. Agastya is credited with bringing Hinduism to Southeast Asia, making his prominent placement at Prambanan a statement of Javanese spiritual lineage." },
+      { "id": "nandi-prambanan", "title": "Nandi", "role": "Sacred Bull Mount", "domain": "guardian", "description": "Shiva's devoted bull mount whose statue sits in the smaller temple directly facing Shiva's tower. This facing arrangement — vahana gazing eternally at its lord — is replicated in the Brahma-Hamsa and Vishnu-Garuda pairs." },
+      { "id": "surya-prambanan", "title": "Surya", "role": "Sun God", "domain": "cosmic", "description": "Solar deity whose image appears on the exterior walls of the main temples alongside other directional guardians. The complex's east-facing orientation honors the rising sun as the source of divine illumination." },
+      { "id": "chandra-prambanan", "title": "Chandra", "role": "Moon God", "domain": "cosmic", "description": "Lunar deity depicted among the celestial guardians on the temple's carved walls. His presence completes the cosmic framework of sun, moon, and planets that governs the temple's astronomical symbolism." },
+      { "id": "garuda-prambanan", "title": "Garuda", "role": "Divine Eagle", "domain": "guardian", "description": "Vishnu's eagle mount enshrined in the small temple facing Vishnu's tower. The Garuda at Prambanan later became a national symbol of Indonesia, appearing on the state coat of arms." },
+      { "id": "hamsa-prambanan", "title": "Hamsa", "role": "Sacred Swan", "domain": "guardian", "description": "Brahma's swan mount in the small temple facing Brahma's tower, completing the three vahana temples that mirror the Trimurti above. The hamsa symbolizes discernment — the ability to separate milk from water, truth from illusion." },
+      { "id": "lokapala-prambanan", "title": "Lokapala", "role": "Directional Guardians", "domain": "guardian", "description": "Eight guardian deities of the cardinal and intermediate directions carved into niches on the temple exteriors. Indra (east), Agni (southeast), Yama (south), and their peers protect the sacred precinct from all directions." },
+      { "id": "ramayana-heroes", "title": "Ramayana Heroes", "role": "Epic Figures in Relief", "domain": "divine-figure", "description": "Rama, Sita, Lakshmana, and Hanuman appear across 42 carved panels on the inner balustrade, telling the complete Ramayana narrative. These reliefs are considered the finest example of Hindu epic art in Southeast Asia." }
+    ]
   }
 ]
