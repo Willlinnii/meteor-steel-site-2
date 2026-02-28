@@ -90,6 +90,27 @@ const HIGHLIGHT_SITES_TOOL = {
   },
 };
 
+// --- Story seed tool definition ---
+
+const SAVE_STORY_SEED = {
+  name: 'save_story_seed',
+  description: 'Save a story seed when the user has shared enough about a story they want to develop. Call after 2-3+ exchanges, not on the first message.',
+  input_schema: {
+    type: 'object',
+    properties: {
+      name: { type: 'string', description: 'Short evocative name for the story' },
+      type: { type: 'string', description: 'Story type: personal, band, screenplay, novel, myth, other' },
+      premise: { type: 'string', description: '1-2 sentence summary of the story' },
+      stageEntries: {
+        type: 'object',
+        description: 'Map of monomyth stage IDs to content from what the user shared. IDs: golden-age, falling-star, impact-crater, forge, quenching, integration, drawing, new-age. Only include stages with clear content.',
+        additionalProperties: { type: 'string' }
+      }
+    },
+    required: ['name', 'premise']
+  }
+};
+
 // --- Yellow Brick Road challenge prompt builders ---
 
 function buildYBRChallengePrompt(persona, challengeData, level) {
@@ -638,7 +659,7 @@ module.exports = async function handler(req, res) {
   const trimmed = []; for (const msg of raw) { if (trimmed.length > 0 && trimmed[trimmed.length - 1].role === msg.role) { trimmed[trimmed.length - 1].content += '\n' + msg.content; } else { trimmed.push({ ...msg }); } } if (trimmed.length > 0 && trimmed[0].role !== 'user') trimmed.shift();
 
   const anthropic = getAnthropicClient(userKeys.anthropicKey);
-  const tools = [NATAL_CHART_TOOL];
+  const tools = [NATAL_CHART_TOOL, SAVE_STORY_SEED];
   if (validArea === 'mythic-earth') tools.push(HIGHLIGHT_SITES_TOOL);
 
   // --- Yellow Brick Road modes ---
@@ -727,30 +748,30 @@ module.exports = async function handler(req, res) {
     } catch (err) { console.error('Profile Onboarding API error:', err?.message, err?.status); return res.status(500).json({ error: `Something went wrong: ${err?.message || 'Unknown error'}` }); }
   }
 
-  // --- Mentor Application mode ---
-  if (mode === 'mentor-application') {
-    const mentorTypes = qualifiedMentorTypes || []; const typeList = mentorTypes.map(t => `${t.title} (${t.credentialCategory}, Level ${t.credentialLevel})`).join(', ');
-    const SAVE_MENTOR_APPLICATION_TOOL = { name: 'save_mentor_application', description: 'Save the mentor application after gathering all information.', input_schema: { type: 'object', properties: { type: { type: 'string', enum: ['scholar', 'storyteller', 'healer', 'mediaVoice', 'adventurer'] }, summary: { type: 'string', description: 'The applicant\'s personal statement' } }, required: ['type', 'summary'] } };
-    const mentorSystemPrompt = `You are Atlas, the mythic companion of the Mythouse. You are guiding a member through their application to become a mentor.\n\nTHE APPLICANT QUALIFIES FOR THESE MENTOR ROLES:\n${typeList || 'None'}\n\nMENTOR TYPES AND THEIR MEANING:\n- Mentor Mythologist (scholar): Guide students through mythic scholarship, depth psychology, and academic inquiry.\n- Mentor Storyteller (storyteller): Help emerging writers and oral storytellers develop their craft through mythic structure.\n- Mentor Healer (healer): Support practitioners in integrating mythic wisdom into therapeutic and coaching work.\n- Mentor Media Voice (mediaVoice): Guide content creators in bringing mythic narratives to podcasts, video, and media.\n- Mentor Adventurer (adventurer): Lead experiential mythology — mythic travel, fieldwork, and embodied exploration.\n\nCONVERSATION FLOW (4-6 exchanges):\n1. Welcome them and confirm which mentor type they'd like to apply for.\n2. Explain the commitment: 2-4 hours per month.\n3. Ask for a brief personal statement.\n4. Note they can upload a supporting document.\n5. Once you have type and statement, call save_mentor_application.\n\n${uploadedDocument ? `UPLOADED DOCUMENT: "${uploadedDocument.name}". Acknowledge this.` : ''}\n\nVOICE: Warm, encouraging, but honest about the responsibility.\n\nIMPORTANT: Call save_mentor_application as soon as you have the type and a substantive statement. Do NOT ask for the same information twice.`;
+  // --- Guild Application mode ---
+  if (mode === 'guild-application' || mode === 'mentor-application') {
+    const mentorTypes = qualifiedGuildTypes || qualifiedMentorTypes || []; const typeList = mentorTypes.map(t => `${t.title} (${t.credentialCategory}, Level ${t.credentialLevel})`).join(', ');
+    const SAVE_GUILD_APPLICATION_TOOL = { name: 'save_guild_application', description: 'Save the guild application after gathering all information.', input_schema: { type: 'object', properties: { type: { type: 'string', enum: ['scholar', 'storyteller', 'healer', 'mediaVoice', 'adventurer'] }, summary: { type: 'string', description: 'The applicant\'s personal statement' } }, required: ['type', 'summary'] } };
+    const guildSystemPrompt = `You are Atlas, the mythic companion of the Mythouse. You are guiding a member through their application to become a guild member.\n\nTHE APPLICANT QUALIFIES FOR THESE GUILD ROLES:\n${typeList || 'None'}\n\nGUILD TYPES AND THEIR MEANING:\n- Mythologist (scholar): Guide students through mythic scholarship, depth psychology, and academic inquiry.\n- Storyteller (storyteller): Help emerging writers and oral storytellers develop their craft through mythic structure.\n- Healer (healer): Support practitioners in integrating mythic wisdom into therapeutic and coaching work.\n- Media Voice (mediaVoice): Guide content creators in bringing mythic narratives to podcasts, video, and media.\n- Adventurer (adventurer): Lead experiential mythology — mythic travel, fieldwork, and embodied exploration.\n\nCONVERSATION FLOW (4-6 exchanges):\n1. Welcome them and confirm which guild type they'd like to apply for.\n2. Explain the commitment: 2-4 hours per month.\n3. Ask for a brief personal statement.\n4. Note they can upload a supporting document.\n5. Once you have type and statement, call save_guild_application.\n\n${uploadedDocument ? `UPLOADED DOCUMENT: "${uploadedDocument.name}". Acknowledge this.` : ''}\n\nVOICE: Warm, encouraging, but honest about the responsibility of guiding others in the guild.\n\nIMPORTANT: Call save_guild_application as soon as you have the type and a substantive statement. Do NOT ask for the same information twice.`;
     try {
-      let currentMessages = [...trimmed], reply = '', mentorApplication = null;
+      let currentMessages = [...trimmed], reply = '', guildApplication = null;
       for (let turn = 0; turn < 5; turn++) {
-        const response = await anthropic.messages.create({ model: MODELS.fast, system: mentorSystemPrompt, messages: currentMessages, max_tokens: 1024, tools: [SAVE_MENTOR_APPLICATION_TOOL] });
+        const response = await anthropic.messages.create({ model: MODELS.fast, system: guildSystemPrompt, messages: currentMessages, max_tokens: 1024, tools: [SAVE_GUILD_APPLICATION_TOOL] });
         const toolBlocks = response.content.filter(c => c.type === 'tool_use'); const textBlock = response.content.find(c => c.type === 'text');
         if (toolBlocks.length === 0) { reply = textBlock?.text || 'No response generated.'; break; }
-        const toolResults = []; for (const tb of toolBlocks) { if (tb.name === 'save_mentor_application' && tb.input) { mentorApplication = { type: tb.input.type, summary: tb.input.summary }; toolResults.push({ type: 'tool_result', tool_use_id: tb.id, content: JSON.stringify({ success: true, type: tb.input.type }) }); } }
+        const toolResults = []; for (const tb of toolBlocks) { if (tb.name === 'save_guild_application' && tb.input) { guildApplication = { type: tb.input.type, summary: tb.input.summary }; toolResults.push({ type: 'tool_result', tool_use_id: tb.id, content: JSON.stringify({ success: true, type: tb.input.type }) }); } }
         if (textBlock?.text) reply = textBlock.text;
         currentMessages = [...currentMessages, { role: 'assistant', content: response.content }, { role: 'user', content: toolResults }];
       }
-      const result = { reply }; if (mentorApplication) result.mentorApplication = mentorApplication;
+      const result = { reply }; if (guildApplication) result.guildApplication = guildApplication;
       return res.status(200).json(result);
-    } catch (err) { console.error('Mentor Application API error:', err?.message, err?.status); return res.status(500).json({ error: `Something went wrong: ${err?.message || 'Unknown error'}` }); }
+    } catch (err) { console.error('Guild Application API error:', err?.message, err?.status); return res.status(500).json({ error: `Something went wrong: ${err?.message || 'Unknown error'}` }); }
   }
 
   // --- Consulting Setup mode ---
   if (mode === 'consulting-setup') {
     const SAVE_CONSULTING_PROFILE_TOOL = { name: 'save_consulting_profile', description: 'Save the consulting profile after gathering project information.', input_schema: { type: 'object', properties: { projects: { type: 'array', items: { type: 'object', properties: { title: { type: 'string' }, description: { type: 'string' }, clientType: { type: 'string' }, outcome: { type: 'string' } }, required: ['title', 'description'] } }, specialties: { type: 'array', items: { type: 'string' } }, consultingTypes: { type: 'array', items: { type: 'string', enum: ['character', 'narrative', 'coaching', 'media', 'adventure'] } } }, required: ['projects', 'specialties', 'consultingTypes'] } };
-    const consultingSystemPrompt = `You are Atlas, the mythic companion of the Mythouse. You are helping an active mentor set up their consulting profile.\n\nCONVERSATION FLOW (4-6 exchanges):\n1. Welcome them and explain that consulting profiles showcase their professional experience.\n2. Ask about their consulting experience — at least 3 projects.\n3. Ask about specialties and consulting types.\n4. Once you have at least 3 projects, call save_consulting_profile.\n\nVOICE: Professional but warm.\n\nIMPORTANT: You need at least 3 projects before calling the tool.`;
+    const consultingSystemPrompt = `You are Atlas, the mythic companion of the Mythouse. You are helping an active guild member set up their consulting profile.\n\nCONVERSATION FLOW (4-6 exchanges):\n1. Welcome them and explain that consulting profiles showcase their professional experience.\n2. Ask about their consulting experience — at least 3 projects.\n3. Ask about specialties and consulting types.\n4. Once you have at least 3 projects, call save_consulting_profile.\n\nVOICE: Professional but warm.\n\nIMPORTANT: You need at least 3 projects before calling the tool.`;
     try {
       let currentMessages = [...trimmed], reply = '', consultingProfile = null;
       for (let turn = 0; turn < 5; turn++) {
@@ -1072,6 +1093,10 @@ VOICE: Warm, editorial, mythic. You are helping them find the shape of their sto
 
   systemPrompt += `\n\nMENTOR PROGRAM:\nThe Mythouse has a mentor program. If a student expresses interest in deeper study,\nguidance, or mentorship in mythology, storytelling, healing, media, or adventure,\nyou may suggest they visit the Mentor Directory: [[Find a Mentor|/mentors]].\nIf they are an active mentor, remind them they can access the Guild at [[Enter the Guild|/guild]]\nfor discussions with fellow mentors and to set up consulting.\nOnly suggest this when genuinely relevant — do not push mentorship or the Guild unsolicited.`;
 
+  systemPrompt += `\n\nSTORY INTAKE:\nWhen someone expresses interest in working on a story — personal narrative, band history, screenplay, novel, creative project — engage naturally. Ask about the heart of the story, the turning points, the stakes. Don't force a rigid interview — let the conversation flow. When you've gathered enough detail (after at least 2-3 exchanges) to sketch a narrative arc, use the save_story_seed tool to capture it.\nAfter saving, give a brief readout of what you captured — the name, premise, and which stages you identified — and offer: "If you want to go deeper — develop each stage, work with drafts, weave your narrative together — the Story Forge is where that happens. [[Open Story Forge|/story-forge]]"\nDo NOT call save_story_seed on the first message. Have a real conversation first.`;
+
+  systemPrompt += `\n\nROUTING — DETECT & OFFER:\nWhen you recognize one of these intents, give a brief, useful first response — then offer the dedicated experience. Don't just drop a link; say something real first.\n\n- ASTROLOGY / NATAL CHART: If someone mentions their birthday, birth time, astrology, or "my chart" — you already have the compute_natal_chart tool, so use it. After giving the reading, offer: "For a full interactive chart with houses, aspects, and cultural traditions — [[Open Divination|/divination]]"\n\n- PROFILE / CREDENTIALS: If someone shares their professional background, expertise, or asks about setting up their profile — acknowledge what they shared, reflect it back briefly, then offer: "If you want to build out your full profile — credentials, natal chart, professional identity — there's a guided setup for that. [[Set Up Profile|/profile]]"\n\n- CONSULTING / GUIDANCE: If someone expresses a need for deeper personal guidance, coaching, or working through a life transition with mythic framing — respond with genuine empathy and an initial observation, then offer: "If you want to go deeper with a structured mythic consultation — mapping your situation to archetypal patterns and working through it over time — [[Start a Consultation|/consulting/intake]]"\n\n- GUILD / MENTORSHIP APPLICATION: If someone expresses interest in teaching, mentoring, or contributing their expertise to the community — honor that impulse, then offer: "The Guild is where practitioners gather. If you'd like to apply — [[Explore the Guild|/guild]]"\n\n- DIVINATION / TAROT: If someone asks for a reading, card pull, or divination — engage the question briefly (what's on your mind?), then offer: "For a full reading with card imagery and cultural traditions — [[Open Divination|/divination]]"\n\n- STORY TRANSMUTATION: If someone shares or pastes a raw bio, CV, or resume and wants it transformed into narrative — acknowledge the material, then offer: "Your profile page has a tool that can transmute that into mythic narrative. [[Open Profile|/profile]]"\n\nRules: Only suggest ONE route per response. Never stack multiple offers. Let the conversation breathe — if they're clearly just chatting, don't route them anywhere.`;
+
   try {
     const response = await anthropic.messages.create({ model: MODELS.fast, system: systemPrompt, messages: trimmed, max_tokens: 1024, ...(tools.length > 0 ? { tools } : {}) });
     let reply; const toolBlock = response.content.find(c => c.type === 'tool_use');
@@ -1079,6 +1104,12 @@ VOICE: Warm, editorial, mythic. You are helping them find the shape of their sto
       const chart = computeNatalChart(toolBlock.input);
       const followUp = await anthropic.messages.create({ model: MODELS.fast, system: systemPrompt, messages: [...trimmed, { role: 'assistant', content: response.content }, { role: 'user', content: [{ type: 'tool_result', tool_use_id: toolBlock.id, content: JSON.stringify(chart) }] }], max_tokens: 4096 });
       reply = followUp.content?.find(c => c.type === 'text')?.text || 'Chart computed but no reading generated.';
+    } else if (response.stop_reason === 'tool_use' && toolBlock?.name === 'save_story_seed') {
+      const seed = toolBlock.input;
+      const storyId = `story-${Date.now()}`;
+      const followUp = await anthropic.messages.create({ model: MODELS.fast, system: systemPrompt, messages: [...trimmed, { role: 'assistant', content: response.content }, { role: 'user', content: [{ type: 'tool_result', tool_use_id: toolBlock.id, content: JSON.stringify({ success: true, storyId, message: 'Story seed saved. Give the user a brief readout of what you captured and offer the Story Forge link.' }) }] }], max_tokens: 1024 });
+      reply = followUp.content?.find(c => c.type === 'text')?.text || 'Story seed saved.';
+      return res.status(200).json({ reply, storySeed: { ...seed, storyId } });
     } else if (response.stop_reason === 'tool_use' && toolBlock?.name === 'highlight_sites') {
       const validSiteIds = new Set(mythicEarthSites.map(s => s.id));
       const requestedIds = toolBlock.input.site_ids || [];

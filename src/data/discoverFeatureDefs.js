@@ -409,7 +409,7 @@ const DISCOVER_FEATURE_DEFS = {
     ctaLink: '/guild',
     highlights: [
       { icon: 'guild', label: 'The Guild', desc: 'A gathering place for seekers and shared mythological conversation' },
-      { icon: 'mentor', label: 'Mentor Directory', desc: 'Guides who have walked the territory — available for mentorship' },
+      { icon: 'guild-member', label: 'Guild Directory', desc: 'Guides who have walked the territory — available for guidance' },
       { icon: 'shared', label: 'Shared Learning', desc: 'Group coursework, fellowship completions, collaborative tracking' },
     ],
     whitePaperTitle: 'The Fire Burns Brighter Together',
@@ -418,8 +418,8 @@ const DISCOVER_FEATURE_DEFS = {
         type: 'narrative',
         heading: 'The Fire Burns Brighter Together',
         paragraphs: [
-          'The great mythological traditions were never solitary pursuits. They were communal — told around fires, debated in academies, transmitted from mentor to student across generations.',
-          'The Fellowship is Mythouse\'s community layer. It connects seekers with one another and with mentors who have walked the territory before. It creates space for shared learning, collaborative exploration, and the kind of conversation that only happens when people gather around something that matters.',
+          'The great mythological traditions were never solitary pursuits. They were communal — told around fires, debated in academies, transmitted from guide to student across generations.',
+          'The Fellowship is Mythouse\'s community layer. It connects seekers with one another and with guild members who have walked the territory before. It creates space for shared learning, collaborative exploration, and the kind of conversation that only happens when people gather around something that matters.',
           'This is not a social network. There are no likes, no followers, no algorithmic feeds. There is only the work — and the people who care about it.',
         ],
         emphasis: 'The fire burns brighter when others gather around it.',
@@ -430,7 +430,7 @@ const DISCOVER_FEATURE_DEFS = {
         heading: 'Community Instruments',
         items: [
           { title: 'The Guild', description: 'A gathering place for seekers — shared discoveries, collaborative projects, and the kind of mythological conversation that the internet usually destroys.', accent: 'var(--accent-fire)' },
-          { title: 'Mentor Directory', description: 'Find guides who have walked the territory. Mythologists, depth psychologists, storytellers, and scholars available for one-on-one mentorship.', accent: 'var(--accent-gold)' },
+          { title: 'Guild Directory', description: 'Find guides who have walked the territory. Mythologists, depth psychologists, storytellers, and scholars available for one-on-one guidance.', accent: 'var(--accent-gold)' },
           { title: 'Shared Learning', description: 'Fellowship completions, group coursework, and collaborative journey tracking. See what your companions have discovered — and what they are still seeking.', accent: 'var(--accent-steel)' },
         ],
       },

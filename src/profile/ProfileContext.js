@@ -4,8 +4,8 @@ import { db, firebaseConfigured } from '../auth/firebase';
 import { useAuth } from '../auth/AuthContext';
 import { useCoursework } from '../coursework/CourseworkContext';
 import { getEarnedRanks, getHighestRank, getActiveCredentials } from './profileEngine';
-import { getQualifiedMentorTypes, isEligibleForMentor, getEffectiveMentorStatus, isMentorCourseComplete } from './mentorEngine';
-import { categorizePairings } from './mentorPairingEngine';
+import { getQualifiedGuildTypes, isEligibleForGuild, getEffectiveGuildStatus, isGuildCourseComplete } from './guildEngine';
+import { categorizePairings } from './guildPairingEngine';
 import { categorizeConsultingRequests } from './consultingEngine';
 import { getPartnerStatus, getPartnerDisplay, categorizePartnerMemberships } from './partnerEngine';
 
@@ -178,21 +178,21 @@ export function ProfileProvider({ children }) {
   const earnedRanks = useMemo(() => getEarnedRanks(completedCourses), [completedCourses]);
   const highestRank = useMemo(() => getHighestRank(completedCourses), [completedCourses]);
 
-  // Mentor derived values (computed before credentials so guildMember can be injected)
-  const mentorData = profileData?.mentor || null;
-  const qualifiedMentorTypes = useMemo(() => getQualifiedMentorTypes(profileData?.credentials), [profileData?.credentials]);
-  const mentorEligible = useMemo(() => isEligibleForMentor(profileData?.credentials), [profileData?.credentials]);
-  const mentorCoursesComplete = useMemo(() => isMentorCourseComplete(completedCourses), [completedCourses]);
-  const effectiveMentorStatus = useMemo(() => getEffectiveMentorStatus(mentorData, completedCourses), [mentorData, completedCourses]);
+  // Guild derived values (computed before credentials so guildMember can be injected)
+  const guildData = profileData?.guild || profileData?.mentor || null;
+  const qualifiedGuildTypes = useMemo(() => getQualifiedGuildTypes(profileData?.credentials), [profileData?.credentials]);
+  const guildEligible = useMemo(() => isEligibleForGuild(profileData?.credentials), [profileData?.credentials]);
+  const guildCoursesComplete = useMemo(() => isGuildCourseComplete(completedCourses), [completedCourses]);
+  const effectiveGuildStatus = useMemo(() => getEffectiveGuildStatus(guildData, completedCourses), [guildData, completedCourses]);
 
-  // Compute active credentials from profileData, injecting guildMember if active mentor
+  // Compute active credentials from profileData, injecting guildMember if active guild member
   const credentialsWithGuild = useMemo(() => {
     const base = profileData?.credentials || {};
-    if (effectiveMentorStatus === 'active') {
+    if (effectiveGuildStatus === 'active') {
       return { ...base, guildMember: { level: 1 } };
     }
     return base;
-  }, [profileData?.credentials, effectiveMentorStatus]);
+  }, [profileData?.credentials, effectiveGuildStatus]);
   const activeCredentials = useMemo(() => getActiveCredentials(credentialsWithGuild), [credentialsWithGuild]);
 
   const hasProfile = !!(profileData && profileData.credentials && Object.keys(profileData.credentials).length > 0);
@@ -260,21 +260,21 @@ export function ProfileProvider({ children }) {
     return () => { unsub1(); unsub2(); };
   }, [user]);
 
-  // --- Mentor pairing subscriptions ---
-  const [mentorPairings, setMentorPairings] = useState([]);
+  // --- Guild pairing subscriptions ---
+  const [guildPairings, setGuildPairings] = useState([]);
 
   useEffect(() => {
     if (!user || !firebaseConfigured || !db) {
-      setMentorPairings([]);
+      setGuildPairings([]);
       return;
     }
 
-    const pairingsRef = collection(db, 'mentor-pairings');
+    const pairingsRef = collection(db, 'guild-pairings');
 
-    // Listener 1: pairings where user is the mentor
-    const qMentor = query(
+    // Listener 1: pairings where user is the guild member
+    const qGuildMember = query(
       pairingsRef,
-      where('mentorUid', '==', user.uid),
+      where('guildMemberUid', '==', user.uid),
       where('status', 'in', ['pending', 'accepted']),
     );
 
@@ -285,21 +285,20 @@ export function ProfileProvider({ children }) {
       where('status', 'in', ['pending', 'accepted']),
     );
 
-    let mentorResults = [];
+    let guildMemberResults = [];
     let studentResults = [];
 
     const merge = () => {
-      // Deduplicate by id (in case user is both mentor and student in same pairing — shouldn't happen but safe)
       const map = new Map();
-      [...mentorResults, ...studentResults].forEach(p => map.set(p.id, p));
-      setMentorPairings(Array.from(map.values()));
+      [...guildMemberResults, ...studentResults].forEach(p => map.set(p.id, p));
+      setGuildPairings(Array.from(map.values()));
     };
 
-    const unsub1 = onSnapshot(qMentor, (snap) => {
-      mentorResults = [];
-      snap.forEach(d => mentorResults.push({ id: d.id, ...d.data() }));
+    const unsub1 = onSnapshot(qGuildMember, (snap) => {
+      guildMemberResults = [];
+      snap.forEach(d => guildMemberResults.push({ id: d.id, ...d.data() }));
       merge();
-    }, (err) => console.error('Mentor pairings listener error:', err));
+    }, (err) => console.error('Guild pairings listener error:', err));
 
     const unsub2 = onSnapshot(qStudent, (snap) => {
       studentResults = [];
@@ -312,8 +311,8 @@ export function ProfileProvider({ children }) {
 
   // Categorize pairings into role-based groups
   const pairingCategories = useMemo(
-    () => categorizePairings(mentorPairings, user?.uid),
-    [mentorPairings, user?.uid]
+    () => categorizePairings(guildPairings, user?.uid),
+    [guildPairings, user?.uid]
   );
 
   // Categorize consulting requests into role-based groups
@@ -377,18 +376,18 @@ export function ProfileProvider({ children }) {
     [partnerMemberships, user?.uid]
   );
 
-  // --- Mentor pairing API methods ---
+  // --- Guild pairing API methods ---
 
-  const updateMentorBio = useCallback(async (bio) => {
+  const updateGuildBio = useCallback(async (bio) => {
     if (!user) return;
-    const prevBio = profileDataRef.current?.mentor?.bio || '';
+    const prevBio = profileDataRef.current?.guild?.bio || profileDataRef.current?.mentor?.bio || '';
     setProfileData(prev => ({
       ...prev,
-      mentor: { ...(prev?.mentor || {}), bio },
+      guild: { ...(prev?.guild || prev?.mentor || {}), bio },
     }));
     try {
       const token = await user.getIdToken();
-      const resp = await fetch('/api/mentor', {
+      const resp = await fetch('/api/guild-member', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify({ action: 'update-bio', bio }),
@@ -398,25 +397,25 @@ export function ProfileProvider({ children }) {
         throw new Error(err.error || 'Failed to update bio');
       }
     } catch (err) {
-      console.error('Failed to update mentor bio:', err);
+      console.error('Failed to update guild bio:', err);
       setProfileData(prev => ({
         ...prev,
-        mentor: { ...(prev?.mentor || {}), bio: prevBio },
+        guild: { ...(prev?.guild || prev?.mentor || {}), bio: prevBio },
       }));
       throw err;
     }
   }, [user]);
 
-  const updateMentorCapacity = useCallback(async (capacity) => {
+  const updateGuildCapacity = useCallback(async (capacity) => {
     if (!user) return;
-    const prevCap = profileDataRef.current?.mentor?.capacity;
+    const prevCap = profileDataRef.current?.guild?.capacity || profileDataRef.current?.mentor?.capacity;
     setProfileData(prev => ({
       ...prev,
-      mentor: { ...(prev?.mentor || {}), capacity },
+      guild: { ...(prev?.guild || prev?.mentor || {}), capacity },
     }));
     try {
       const token = await user.getIdToken();
-      const resp = await fetch('/api/mentor', {
+      const resp = await fetch('/api/guild-member', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify({ action: 'update-capacity', capacity }),
@@ -426,10 +425,10 @@ export function ProfileProvider({ children }) {
         throw new Error(err.error || 'Failed to update capacity');
       }
     } catch (err) {
-      console.error('Failed to update mentor capacity:', err);
+      console.error('Failed to update guild capacity:', err);
       setProfileData(prev => ({
         ...prev,
-        mentor: { ...(prev?.mentor || {}), capacity: prevCap },
+        guild: { ...(prev?.guild || prev?.mentor || {}), capacity: prevCap },
       }));
       throw err;
     }
@@ -439,11 +438,11 @@ export function ProfileProvider({ children }) {
     if (!user) return;
     setProfileData(prev => ({
       ...prev,
-      mentor: { ...(prev?.mentor || {}), directoryListed: true },
+      guild: { ...(prev?.guild || prev?.mentor || {}), directoryListed: true },
     }));
     try {
       const token = await user.getIdToken();
-      const resp = await fetch('/api/mentor', {
+      const resp = await fetch('/api/guild-member', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify({ action: 'publish' }),
@@ -456,7 +455,7 @@ export function ProfileProvider({ children }) {
       console.error('Failed to publish to directory:', err);
       setProfileData(prev => ({
         ...prev,
-        mentor: { ...(prev?.mentor || {}), directoryListed: false },
+        guild: { ...(prev?.guild || prev?.mentor || {}), directoryListed: false },
       }));
       throw err;
     }
@@ -466,11 +465,11 @@ export function ProfileProvider({ children }) {
     if (!user) return;
     setProfileData(prev => ({
       ...prev,
-      mentor: { ...(prev?.mentor || {}), directoryListed: false },
+      guild: { ...(prev?.guild || prev?.mentor || {}), directoryListed: false },
     }));
     try {
       const token = await user.getIdToken();
-      const resp = await fetch('/api/mentor', {
+      const resp = await fetch('/api/guild-member', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify({ action: 'unpublish' }),
@@ -483,28 +482,28 @@ export function ProfileProvider({ children }) {
       console.error('Failed to unpublish from directory:', err);
       setProfileData(prev => ({
         ...prev,
-        mentor: { ...(prev?.mentor || {}), directoryListed: true },
+        guild: { ...(prev?.guild || prev?.mentor || {}), directoryListed: true },
       }));
       throw err;
     }
   }, [user]);
 
-  const requestMentor = useCallback(async (mentorUid, message) => {
+  const requestGuildMember = useCallback(async (guildMemberUid, message) => {
     if (!user) return;
     try {
       const token = await user.getIdToken();
-      const resp = await fetch('/api/mentor', {
+      const resp = await fetch('/api/guild-member', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-        body: JSON.stringify({ action: 'pairing-request', mentorUid, message: message || null }),
+        body: JSON.stringify({ action: 'pairing-request', guildMemberUid, message: message || null }),
       });
       if (!resp.ok) {
         const err = await resp.json();
-        throw new Error(err.error || 'Failed to request mentor');
+        throw new Error(err.error || 'Failed to request guild member');
       }
       return await resp.json();
     } catch (err) {
-      console.error('Failed to request mentor:', err);
+      console.error('Failed to request guild member:', err);
       throw err;
     }
   }, [user]);
@@ -513,7 +512,7 @@ export function ProfileProvider({ children }) {
     if (!user) return;
     try {
       const token = await user.getIdToken();
-      const resp = await fetch('/api/mentor', {
+      const resp = await fetch('/api/guild-member', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify({
@@ -536,7 +535,7 @@ export function ProfileProvider({ children }) {
     if (!user) return;
     try {
       const token = await user.getIdToken();
-      const resp = await fetch('/api/mentor', {
+      const resp = await fetch('/api/guild-member', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify({ action: 'pairing-end', pairingId }),
@@ -603,12 +602,12 @@ export function ProfileProvider({ children }) {
     }
   }, [user]);
 
-  // Request consulting from a mentor
+  // Request consulting from a guild member
   const requestConsulting = useCallback(async (consultantUid, consultingType, message) => {
     if (!user) return;
     try {
       const token = await user.getIdToken();
-      const resp = await fetch('/api/mentor', {
+      const resp = await fetch('/api/guild-member', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify({ action: 'consulting-request', consultantUid, consultingType: consultingType || null, message: message || null }),
@@ -629,7 +628,7 @@ export function ProfileProvider({ children }) {
     if (!user) return;
     try {
       const token = await user.getIdToken();
-      const resp = await fetch('/api/mentor', {
+      const resp = await fetch('/api/guild-member', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify({ action: accept ? 'consulting-accept' : 'consulting-decline', requestId }),
@@ -1004,11 +1003,11 @@ export function ProfileProvider({ children }) {
     }
   }, [user]);
 
-  // Submit mentor application
-  const submitMentorApplication = useCallback(async ({ type, summary, documentUrl, documentName }) => {
+  // Submit guild application
+  const submitGuildApplication = useCallback(async ({ type, summary, documentUrl, documentName }) => {
     if (!user || !firebaseConfigured || !db) return;
 
-    const mentorUpdate = {
+    const guildUpdate = {
       type,
       status: 'applied',
       appliedAt: Date.now(),
@@ -1018,53 +1017,53 @@ export function ProfileProvider({ children }) {
     };
 
     // Clean replace — don't carry over old rejection data
-    setProfileData(prev => ({ ...prev, mentor: mentorUpdate }));
+    setProfileData(prev => ({ ...prev, guild: guildUpdate }));
 
     try {
       const ref = doc(db, 'users', user.uid, 'meta', 'profile');
-      await setDoc(ref, { mentor: mentorUpdate, updatedAt: serverTimestamp() }, { merge: true });
+      await setDoc(ref, { guild: guildUpdate, updatedAt: serverTimestamp() }, { merge: true });
     } catch (err) {
-      console.error('Failed to submit mentor application:', err);
+      console.error('Failed to submit guild application:', err);
     }
   }, [user]);
 
-  // Accept mentor contract (legal agreement gate before activation)
-  const acceptMentorContract = useCallback(async () => {
+  // Accept guild contract (legal agreement gate before activation)
+  const acceptGuildContract = useCallback(async () => {
     if (!user || !firebaseConfigured || !db) return;
 
-    const contractUpdate = { mentorContractAccepted: true, mentorContractAcceptedAt: Date.now() };
+    const contractUpdate = { guildContractAccepted: true, guildContractAcceptedAt: Date.now() };
 
     setProfileData(prev => ({
       ...prev,
-      mentor: { ...(prev?.mentor || {}), ...contractUpdate },
+      guild: { ...(prev?.guild || prev?.mentor || {}), ...contractUpdate },
     }));
 
     try {
-      const currentMentor = profileDataRef.current?.mentor || {};
-      const merged = { ...currentMentor, ...contractUpdate };
+      const currentGuild = profileDataRef.current?.guild || profileDataRef.current?.mentor || {};
+      const merged = { ...currentGuild, ...contractUpdate };
       const ref = doc(db, 'users', user.uid, 'meta', 'profile');
-      await setDoc(ref, { mentor: merged, updatedAt: serverTimestamp() }, { merge: true });
+      await setDoc(ref, { guild: merged, updatedAt: serverTimestamp() }, { merge: true });
     } catch (err) {
-      console.error('Failed to accept mentor contract:', err);
+      console.error('Failed to accept guild contract:', err);
     }
   }, [user]);
 
-  // Update mentor status (partial update to mentor field)
-  const updateMentorStatus = useCallback(async (statusUpdate) => {
+  // Update guild status (partial update to guild field)
+  const updateGuildStatus = useCallback(async (statusUpdate) => {
     if (!user || !firebaseConfigured || !db) return;
 
     setProfileData(prev => ({
       ...prev,
-      mentor: { ...(prev?.mentor || {}), ...statusUpdate },
+      guild: { ...(prev?.guild || prev?.mentor || {}), ...statusUpdate },
     }));
 
     try {
-      const currentMentor = profileDataRef.current?.mentor || {};
-      const merged = { ...currentMentor, ...statusUpdate };
+      const currentGuild = profileDataRef.current?.guild || profileDataRef.current?.mentor || {};
+      const merged = { ...currentGuild, ...statusUpdate };
       const ref = doc(db, 'users', user.uid, 'meta', 'profile');
-      await setDoc(ref, { mentor: merged, updatedAt: serverTimestamp() }, { merge: true });
+      await setDoc(ref, { guild: merged, updatedAt: serverTimestamp() }, { merge: true });
     } catch (err) {
-      console.error('Failed to update mentor status:', err);
+      console.error('Failed to update guild status:', err);
     }
   }, [user]);
 
@@ -1083,7 +1082,7 @@ export function ProfileProvider({ children }) {
     setProfileData(prev => ({ ...prev, partner: partnerUpdate }));
     try {
       const token = await user.getIdToken();
-      const resp = await fetch('/api/mentor', {
+      const resp = await fetch('/api/guild-member', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify({ action: 'partner-apply', entityName, description, websiteUrl, mythicRelation }),
@@ -1105,7 +1104,7 @@ export function ProfileProvider({ children }) {
     setProfileData(p => ({ ...p, partner: { ...prev, ...updates } }));
     try {
       const token = await user.getIdToken();
-      const resp = await fetch('/api/mentor', {
+      const resp = await fetch('/api/guild-member', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify({ action: 'partner-update', ...updates }),
@@ -1126,7 +1125,7 @@ export function ProfileProvider({ children }) {
     setProfileData(prev => ({ ...prev, partner: { ...(prev?.partner || {}), directoryListed: true } }));
     try {
       const token = await user.getIdToken();
-      const resp = await fetch('/api/mentor', {
+      const resp = await fetch('/api/guild-member', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify({ action: 'partner-publish' }),
@@ -1147,7 +1146,7 @@ export function ProfileProvider({ children }) {
     setProfileData(prev => ({ ...prev, partner: { ...(prev?.partner || {}), directoryListed: false } }));
     try {
       const token = await user.getIdToken();
-      const resp = await fetch('/api/mentor', {
+      const resp = await fetch('/api/guild-member', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify({ action: 'partner-unpublish' }),
@@ -1168,7 +1167,7 @@ export function ProfileProvider({ children }) {
     try {
       const token = await user.getIdToken();
       const clean = handleOrUid.replace(/^@/, '');
-      const resp = await fetch('/api/mentor', {
+      const resp = await fetch('/api/guild-member', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify({ action: 'partner-invite', targetHandle: clean, message: message || null }),
@@ -1188,7 +1187,7 @@ export function ProfileProvider({ children }) {
     if (!user) return;
     try {
       const token = await user.getIdToken();
-      const resp = await fetch('/api/mentor', {
+      const resp = await fetch('/api/guild-member', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify({ action: 'partner-request-join', partnerUid, message: message || null }),
@@ -1208,7 +1207,7 @@ export function ProfileProvider({ children }) {
     if (!user) return;
     try {
       const token = await user.getIdToken();
-      const resp = await fetch('/api/mentor', {
+      const resp = await fetch('/api/guild-member', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify({ action: accept ? 'partner-membership-accept' : 'partner-membership-decline', membershipId }),
@@ -1227,7 +1226,7 @@ export function ProfileProvider({ children }) {
     if (!user) return;
     try {
       const token = await user.getIdToken();
-      const resp = await fetch('/api/mentor', {
+      const resp = await fetch('/api/guild-member', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify({ action: 'partner-membership-end', membershipId }),
@@ -1484,21 +1483,21 @@ export function ProfileProvider({ children }) {
     updateLuckyNumber,
     completeOnboarding,
     refreshProfile,
-    mentorData,
-    qualifiedMentorTypes,
-    mentorEligible,
-    mentorCoursesComplete,
-    effectiveMentorStatus,
-    submitMentorApplication,
-    acceptMentorContract,
-    updateMentorStatus,
-    mentorPairings,
+    guildData,
+    qualifiedGuildTypes,
+    guildEligible,
+    guildCoursesComplete,
+    effectiveGuildStatus,
+    submitGuildApplication,
+    acceptGuildContract,
+    updateGuildStatus,
+    guildPairings,
     pairingCategories,
-    updateMentorBio,
-    updateMentorCapacity,
+    updateGuildBio,
+    updateGuildCapacity,
     publishToDirectory,
     unpublishFromDirectory,
-    requestMentor,
+    requestGuildMember,
     respondToPairing,
     endPairing,
     photoURL,
@@ -1569,10 +1568,10 @@ export function ProfileProvider({ children }) {
     hasStripeAccount, initiateCheckout, openBillingPortal, updateCredentials,
     updateNatalChart, updateNumerologyName, luckyNumber, updateLuckyNumber,
     ringSize, updateRingSize, ringForm, updateRingForm, ringMetal, updateRingMetal, ringLayout, updateRingLayout, ringMode, updateRingMode, ringZodiacMode, updateRingZodiacMode, jewelryConfig, updateJewelryConfig,
-    completeOnboarding, refreshProfile, mentorData, qualifiedMentorTypes, mentorEligible,
-    mentorCoursesComplete, effectiveMentorStatus, submitMentorApplication, acceptMentorContract,
-    updateMentorStatus, mentorPairings, pairingCategories, updateMentorBio, updateMentorCapacity,
-    publishToDirectory, unpublishFromDirectory, requestMentor, respondToPairing, endPairing,
+    completeOnboarding, refreshProfile, guildData, qualifiedGuildTypes, guildEligible,
+    guildCoursesComplete, effectiveGuildStatus, submitGuildApplication, acceptGuildContract,
+    updateGuildStatus, guildPairings, pairingCategories, updateGuildBio, updateGuildCapacity,
+    publishToDirectory, unpublishFromDirectory, requestGuildMember, respondToPairing, endPairing,
     photoURL, consultingData, consultingRequests, consultingCategories, updateProfilePhoto,
     submitConsultingProfile, requestConsulting, respondToConsulting,
     apiKeys, apiKeysLoaded, saveApiKey, removeApiKey, hasAnthropicKey, hasOpenaiKey,

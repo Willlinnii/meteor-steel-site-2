@@ -120,7 +120,7 @@ export default function TeacherPage() {
     let cancelled = false;
     (async () => {
       try {
-        const res = await apiFetch('/api/mentor', {
+        const res = await apiFetch('/api/guild-member', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ action: 'get-catalog' }),
@@ -181,7 +181,7 @@ export default function TeacherPage() {
     setUnmatchedItems([]);
 
     try {
-      const res = await apiFetch('/api/mentor', {
+      const res = await apiFetch('/api/guild-member', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ action: 'parse-syllabus', syllabusText }),

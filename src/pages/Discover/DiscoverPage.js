@@ -90,8 +90,8 @@ const CHAMBERS = [
     accent: '#c4713a',
   },
   {
-    title: 'Guild & Mentors',
-    quote: 'Mythology is not meant to be studied alone. The Guild connects seekers. Mentors guide the descent.',
+    title: 'The Guild',
+    quote: 'Mythology is not meant to be studied alone. The Guild connects seekers. Guild members guide the descent.',
     path: '/guild',
     accent: '#d4a574',
   },

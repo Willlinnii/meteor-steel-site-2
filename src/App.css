@@ -2285,7 +2285,7 @@ body {
 
 /* ===== MENTOR CONTRACT POPUP ===== */
 
-.mentor-contract-overlay {
+.guild-member-contract-overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -2300,7 +2300,7 @@ body {
   animation: cw-fade-in 0.3s ease;
 }
 
-.mentor-contract-panel {
+.guild-member-contract-panel {
   position: relative;
   background: var(--bg-medium);
   border: 2px solid var(--accent-gold);
@@ -2315,7 +2315,7 @@ body {
   animation: cw-panel-in 0.4s ease;
 }
 
-.mentor-contract-close {
+.guild-member-contract-close {
   position: absolute;
   top: 12px;
   right: 16px;
@@ -2329,11 +2329,11 @@ body {
   transition: color 0.2s ease;
 }
 
-.mentor-contract-close:hover {
+.guild-member-contract-close:hover {
   color: var(--text-primary);
 }
 
-.mentor-contract-heading {
+.guild-member-contract-heading {
   font-family: 'Cinzel', serif;
   color: var(--accent-gold);
   font-size: 1.3rem;
@@ -2341,14 +2341,14 @@ body {
   letter-spacing: 0.05em;
 }
 
-.mentor-contract-subtitle {
+.guild-member-contract-subtitle {
   color: var(--text-secondary);
   font-size: 0.88rem;
   margin-bottom: 16px;
   line-height: 1.5;
 }
 
-.mentor-contract-body {
+.guild-member-contract-body {
   flex: 1;
   overflow-y: auto;
   padding: 16px 20px;
@@ -2358,7 +2358,7 @@ body {
   border: 1px solid var(--border-subtle);
 }
 
-.mentor-contract-body h3.mentor-contract-doc-title {
+.guild-member-contract-body h3.guild-member-contract-doc-title {
   font-family: 'Cinzel', serif;
   color: var(--accent-gold);
   font-size: 1.05rem;
@@ -2366,7 +2366,7 @@ body {
   letter-spacing: 0.04em;
 }
 
-.mentor-contract-body h4.mentor-contract-doc-section {
+.guild-member-contract-body h4.guild-member-contract-doc-section {
   font-family: 'Cinzel', serif;
   color: var(--accent-fire);
   font-size: 0.95rem;
@@ -2374,14 +2374,14 @@ body {
   margin-bottom: 6px;
 }
 
-.mentor-contract-body .mentor-contract-doc-subsection {
+.guild-member-contract-body .guild-member-contract-doc-subsection {
   color: var(--text-primary);
   font-size: 0.88rem;
   margin-bottom: 4px;
   padding-left: 12px;
 }
 
-.mentor-contract-body .mentor-contract-doc-bullet {
+.guild-member-contract-body .guild-member-contract-doc-bullet {
   color: var(--text-primary);
   font-size: 0.85rem;
   margin-left: 24px;
@@ -2389,27 +2389,27 @@ body {
   list-style: disc;
 }
 
-.mentor-contract-body .mentor-contract-doc-date {
+.guild-member-contract-body .guild-member-contract-doc-date {
   color: var(--text-secondary);
   font-size: 0.82rem;
   font-style: italic;
   margin-bottom: 8px;
 }
 
-.mentor-contract-body .mentor-contract-doc-para {
+.guild-member-contract-body .guild-member-contract-doc-para {
   color: var(--text-primary);
   font-size: 0.88rem;
   line-height: 1.6;
   margin-bottom: 6px;
 }
 
-.mentor-contract-actions {
+.guild-member-contract-actions {
   display: flex;
   justify-content: center;
   padding-top: 4px;
 }
 
-.mentor-contract-accept-btn {
+.guild-member-contract-accept-btn {
   font-family: 'Cinzel', serif;
   font-size: 0.9rem;
   padding: 10px 36px;
@@ -2422,18 +2422,18 @@ body {
   transition: all 0.2s ease;
 }
 
-.mentor-contract-accept-btn:hover {
+.guild-member-contract-accept-btn:hover {
   background: rgba(201, 169, 97, 0.25);
   box-shadow: 0 0 12px rgba(201, 169, 97, 0.2);
 }
 
 @media (max-width: 600px) {
-  .mentor-contract-panel {
+  .guild-member-contract-panel {
     padding: 24px 18px 18px;
     width: 96%;
     max-height: 90vh;
   }
-  .mentor-contract-body {
+  .guild-member-contract-body {
     padding: 12px 14px;
   }
 }
@@ -2800,22 +2800,22 @@ body {
   }
 }
 
-/* ===== Mentor Directory & Pairing Styles ===== */
+/* ===== Guild Directory & Pairing Styles ===== */
 
-.mentor-directory-page {
+.guild-member-directory-page {
   max-width: 900px;
   margin: 0 auto;
   padding: 84px 20px 60px;
 }
 
-.mentor-directory-filters {
+.guild-member-directory-filters {
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
   margin-bottom: 24px;
 }
 
-.mentor-filter-tab {
+.guild-member-filter-tab {
   background: var(--bg-medium);
   border: 1px solid var(--border-subtle);
   color: var(--text-secondary);
@@ -2827,16 +2827,16 @@ body {
   transition: all 0.2s;
 }
 
-.mentor-filter-tab:hover { border-color: var(--accent-steel); color: var(--text-primary); }
-.mentor-filter-tab.active { background: var(--accent-steel); color: var(--bg-dark); border-color: var(--accent-steel); }
+.guild-member-filter-tab:hover { border-color: var(--accent-steel); color: var(--text-primary); }
+.guild-member-filter-tab.active { background: var(--accent-steel); color: var(--bg-dark); border-color: var(--accent-steel); }
 
-.mentor-directory-grid {
+.guild-member-directory-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: 16px;
 }
 
-.mentor-card {
+.guild-member-card {
   background: var(--bg-medium);
   border: 1px solid var(--border-subtle);
   border-radius: 12px;
@@ -2844,36 +2844,36 @@ body {
   transition: border-color 0.2s;
 }
 
-.mentor-card:hover { border-color: var(--accent-steel); }
+.guild-member-card:hover { border-color: var(--accent-steel); }
 
-.mentor-card-header {
+.guild-member-card-header {
   display: flex;
   align-items: flex-start;
   gap: 12px;
   margin-bottom: 12px;
 }
 
-.mentor-card-icon { font-size: 1.8em; }
-.mentor-card-title { font-family: 'Cinzel', serif; font-size: 1em; color: var(--text-primary); }
-.mentor-card-handle { color: var(--accent-steel); font-size: 0.9em; }
-.mentor-card-credential { margin-left: auto; font-size: 0.85em; color: var(--accent-gold); white-space: nowrap; }
+.guild-member-card-icon { font-size: 1.8em; }
+.guild-member-card-title { font-family: 'Cinzel', serif; font-size: 1em; color: var(--text-primary); }
+.guild-member-card-handle { color: var(--accent-steel); font-size: 0.9em; }
+.guild-member-card-credential { margin-left: auto; font-size: 0.85em; color: var(--accent-gold); white-space: nowrap; }
 
-.mentor-card-bio {
+.guild-member-card-bio {
   color: var(--text-secondary);
   font-size: 0.95em;
   line-height: 1.5;
   margin-bottom: 12px;
 }
 
-.mentor-card-slots {
+.guild-member-card-slots {
   font-size: 0.85em;
   color: var(--text-secondary);
   margin-bottom: 12px;
 }
 
-.mentor-card-actions { margin-top: 8px; }
+.guild-member-card-actions { margin-top: 8px; }
 
-.mentor-card-request-btn {
+.guild-member-card-request-btn {
   background: var(--accent-steel);
   color: var(--bg-dark);
   border: none;
@@ -2885,10 +2885,10 @@ body {
   transition: opacity 0.2s;
 }
 
-.mentor-card-request-btn:hover:not(:disabled) { opacity: 0.85; }
-.mentor-card-request-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.guild-member-card-request-btn:hover:not(:disabled) { opacity: 0.85; }
+.guild-member-card-request-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
-.mentor-card-cancel-btn {
+.guild-member-card-cancel-btn {
   background: none;
   border: 1px solid var(--border-subtle);
   color: var(--text-secondary);
@@ -2899,15 +2899,15 @@ body {
   font-size: 0.95em;
 }
 
-.mentor-card-paired-label {
+.guild-member-card-paired-label {
   color: var(--accent-gold);
   font-size: 0.9em;
   font-style: italic;
 }
 
-.mentor-card-request-form { margin-top: 8px; }
+.guild-member-card-request-form { margin-top: 8px; }
 
-.mentor-request-textarea {
+.guild-member-request-textarea {
   width: 100%;
   background: var(--bg-dark);
   border: 1px solid var(--border-subtle);
@@ -2920,11 +2920,11 @@ body {
   margin-bottom: 8px;
 }
 
-.mentor-request-form-actions { display: flex; gap: 8px; }
-.mentor-request-error { color: #e57373; font-size: 0.85em; margin-top: 6px; }
+.guild-member-request-form-actions { display: flex; gap: 8px; }
+.guild-member-request-error { color: #e57373; font-size: 0.85em; margin-top: 6px; }
 
 /* Bio editor (profile page) */
-.mentor-bio-editor {
+.guild-member-bio-editor {
   margin-top: 16px;
   padding: 16px;
   background: var(--bg-medium);
@@ -2932,7 +2932,7 @@ body {
   border-radius: 12px;
 }
 
-.mentor-bio-label, .mentor-capacity-label {
+.guild-member-bio-label, .guild-member-capacity-label {
   display: block;
   font-family: 'Cinzel', serif;
   font-size: 0.9em;
@@ -2940,7 +2940,7 @@ body {
   margin-bottom: 8px;
 }
 
-.mentor-bio-textarea {
+.guild-member-bio-textarea {
   width: 100%;
   background: var(--bg-dark);
   border: 1px solid var(--border-subtle);
@@ -2952,16 +2952,16 @@ body {
   resize: vertical;
 }
 
-.mentor-bio-footer {
+.guild-member-bio-footer {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-top: 8px;
 }
 
-.mentor-bio-charcount { font-size: 0.8em; color: var(--text-secondary); }
+.guild-member-bio-charcount { font-size: 0.8em; color: var(--text-secondary); }
 
-.mentor-bio-save-btn, .mentor-capacity-save-btn {
+.guild-member-bio-save-btn, .guild-member-capacity-save-btn {
   background: var(--accent-steel);
   color: var(--bg-dark);
   border: none;
@@ -2972,10 +2972,10 @@ body {
   font-size: 0.9em;
 }
 
-.mentor-bio-save-btn:disabled, .mentor-capacity-save-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.guild-member-bio-save-btn:disabled, .guild-member-capacity-save-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
 /* Capacity control */
-.mentor-capacity-control {
+.guild-member-capacity-control {
   margin-top: 16px;
   padding: 16px;
   background: var(--bg-medium);
@@ -2983,9 +2983,9 @@ body {
   border-radius: 12px;
 }
 
-.mentor-capacity-row { display: flex; align-items: center; gap: 12px; }
+.guild-member-capacity-row { display: flex; align-items: center; gap: 12px; }
 
-.mentor-capacity-input {
+.guild-member-capacity-input {
   width: 80px;
   background: var(--bg-dark);
   border: 1px solid var(--border-subtle);
@@ -2998,7 +2998,7 @@ body {
 }
 
 /* Directory toggle */
-.mentor-directory-toggle {
+.guild-member-directory-toggle {
   display: flex;
   align-items: center;
   gap: 12px;
@@ -3009,12 +3009,12 @@ body {
   border-radius: 12px;
 }
 
-.mentor-directory-toggle-label { font-size: 0.95em; color: var(--text-primary); }
+.guild-member-directory-toggle-label { font-size: 0.95em; color: var(--text-primary); }
 
 /* Request / Student cards (profile page) */
-.mentor-pending-section, .mentor-students-section { margin-top: 20px; }
+.guild-member-pending-section, .guild-member-students-section { margin-top: 20px; }
 
-.mentor-request-card {
+.guild-member-request-card {
   background: var(--bg-medium);
   border: 1px solid var(--border-subtle);
   border-radius: 10px;
@@ -3022,13 +3022,13 @@ body {
   margin-bottom: 10px;
 }
 
-.mentor-request-card-header { margin-bottom: 6px; }
-.mentor-request-card-handle { color: var(--accent-steel); font-size: 0.95em; }
-.mentor-request-card-message { color: var(--text-secondary); font-size: 0.9em; margin-bottom: 10px; font-style: italic; }
+.guild-member-request-card-header { margin-bottom: 6px; }
+.guild-member-request-card-handle { color: var(--accent-steel); font-size: 0.95em; }
+.guild-member-request-card-message { color: var(--text-secondary); font-size: 0.9em; margin-bottom: 10px; font-style: italic; }
 
-.mentor-request-card-actions { display: flex; gap: 8px; }
+.guild-member-request-card-actions { display: flex; gap: 8px; }
 
-.mentor-accept-btn {
+.guild-member-accept-btn {
   background: rgba(76, 175, 80, 0.2);
   border: 1px solid rgba(76, 175, 80, 0.4);
   color: #81c784;
@@ -3038,7 +3038,7 @@ body {
   font-family: 'Crimson Pro', serif;
 }
 
-.mentor-decline-btn {
+.guild-member-decline-btn {
   background: rgba(229, 115, 115, 0.1);
   border: 1px solid rgba(229, 115, 115, 0.3);
   color: #e57373;
@@ -3048,7 +3048,7 @@ body {
   font-family: 'Crimson Pro', serif;
 }
 
-.mentor-student-card {
+.guild-member-student-card {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -3059,9 +3059,9 @@ body {
   margin-bottom: 8px;
 }
 
-.mentor-student-card-handle { color: var(--accent-steel); font-size: 0.95em; }
+.guild-member-student-card-handle { color: var(--accent-steel); font-size: 0.95em; }
 
-.mentor-end-btn {
+.guild-member-end-btn {
   background: none;
   border: 1px solid rgba(229, 115, 115, 0.3);
   color: #e57373;
@@ -3072,12 +3072,12 @@ body {
   font-size: 0.85em;
 }
 
-.mentor-end-btn:disabled, .mentor-accept-btn:disabled, .mentor-decline-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.guild-member-end-btn:disabled, .guild-member-accept-btn:disabled, .guild-member-decline-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
-/* My Mentors section */
-.my-mentors-section { margin-top: 20px; }
+/* My Guild Members section */
+.my-guild-members-section { margin-top: 20px; }
 
-.my-mentors-card {
+.my-guild-members-card {
   display: flex;
   align-items: center;
   gap: 12px;
@@ -3088,10 +3088,10 @@ body {
   margin-bottom: 8px;
 }
 
-.my-mentors-card.pending { opacity: 0.7; }
-.my-mentors-card-handle { color: var(--accent-steel); font-size: 0.95em; }
-.my-mentors-card-type { color: var(--text-secondary); font-size: 0.85em; margin-left: auto; }
-.my-mentors-card-status { color: var(--accent-gold); font-size: 0.85em; margin-left: auto; font-style: italic; }
+.my-guild-members-card.pending { opacity: 0.7; }
+.my-guild-members-card-handle { color: var(--accent-steel); font-size: 0.95em; }
+.my-guild-members-card-type { color: var(--text-secondary); font-size: 0.85em; margin-left: auto; }
+.my-guild-members-card-status { color: var(--accent-gold); font-size: 0.85em; margin-left: auto; font-style: italic; }
 
 /* ===== SELECTOR RING (inner circle items) ===== */
 

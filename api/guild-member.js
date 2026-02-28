@@ -1,5 +1,5 @@
 const admin = require('firebase-admin');
-const { getMentorTypeInfo } = require('./_lib/mentorTypes');
+const { getGuildTypeInfo } = require('./_lib/guildTypes');
 const { getAnthropicClient, getUserKeys } = require('./_lib/llm');
 const { ensureFirebaseAdmin, getUidFromRequest } = require('./_lib/auth');
 const { getContentCatalog, searchContent } = require('./_lib/contentIndex');
@@ -22,7 +22,7 @@ const VALID_CONSULTING_TYPES = new Set(['character', 'narrative', 'coaching', 'm
 const MAX_TITLE_LENGTH = 200;
 const MAX_BODY_LENGTH = 10000;
 const MAX_IMAGES = 4;
-const REQUIRED_MENTOR_COURSES = ['monomyth-explorer', 'celestial-clocks-explorer', 'atlas-conversationalist'];
+const REQUIRED_GUILD_COURSES = ['monomyth-explorer', 'celestial-clocks-explorer', 'atlas-conversationalist'];
 
 // ── Consulting engagement stage templates ──
 const STAGE_TEMPLATES = {
@@ -95,7 +95,7 @@ module.exports = async (req, res) => {
     return res.status(400).json({ error: `Invalid action. Must be one of: ${ALL_ACTIONS.join(', ')}` });
   }
 
-  // --- Admin actions (mentor + partner) ---
+  // --- Admin actions (guild + partner) ---
   if (ADMIN_ACTIONS.includes(action) || PARTNER_ADMIN_ACTIONS.includes(action)) {
     // Screen action: user's own token (not admin)
     if (action === 'screen') {
@@ -169,7 +169,7 @@ async function handleAdminAction(req, res) {
   const now = admin.firestore.FieldValue.serverTimestamp();
 
   try {
-    const appRef = db.doc(`mentor-applications/${applicationId}`);
+    const appRef = db.doc(`guild-applications/${applicationId}`);
     const appSnap = await appRef.get();
     if (!appSnap.exists) {
       return res.status(404).json({ error: 'Application not found.' });
@@ -187,31 +187,31 @@ async function handleAdminAction(req, res) {
 
       const profileRef = db.doc(`users/${uid}/meta/profile`);
       await profileRef.update({
-        'mentor.status': 'approved',
-        'mentor.approvedAt': Date.now(),
-        'mentor.adminReviewedBy': ADMIN_EMAIL,
+        'guild.status': 'approved',
+        'guild.approvedAt': Date.now(),
+        'guild.adminReviewedBy': ADMIN_EMAIL,
         updatedAt: now,
       });
 
       // Auto-create directory entry (inactive)
       const profileSnap = await profileRef.get();
       const profile = profileSnap.exists ? profileSnap.data() : {};
-      const mentorType = profile.mentor?.type || appData.type;
-      const typeInfo = getMentorTypeInfo(mentorType);
+      const mentorType = profile.guild?.type || profile.mentor?.type || appData.type;
+      const typeInfo = getGuildTypeInfo(mentorType);
 
       const creds = profile.credentials || {};
       const cred = creds[mentorType] || {};
       const credLevel = cred.level || 2;
       const credLevelNames = { 1: 'Initiate', 2: 'Adept', 3: 'Master', 4: 'Grand Master', 5: 'Archon' };
 
-      const dirRef = db.doc(`mentor-directory/${uid}`);
+      const dirRef = db.doc(`guild-directory/${uid}`);
       await dirRef.set({
         uid,
         handle: profile.handle || null,
         displayName: profile.displayName || null,
-        mentorType,
-        mentorTitle: typeInfo.title,
-        mentorIcon: typeInfo.icon,
+        guildType: mentorType,
+        guildTitle: typeInfo.title,
+        guildIcon: typeInfo.icon,
         credentialLevel: credLevel,
         credentialName: credLevelNames[credLevel] || `Level ${credLevel}`,
         bio: '',
@@ -237,23 +237,23 @@ async function handleAdminAction(req, res) {
 
       const profileRef = db.doc(`users/${uid}/meta/profile`);
       await profileRef.update({
-        'mentor.status': 'rejected',
-        'mentor.rejectedAt': Date.now(),
-        'mentor.rejectionReason': reason,
-        'mentor.adminReviewedBy': ADMIN_EMAIL,
+        'guild.status': 'rejected',
+        'guild.rejectedAt': Date.now(),
+        'guild.rejectionReason': reason,
+        'guild.adminReviewedBy': ADMIN_EMAIL,
         updatedAt: now,
       });
 
       return res.status(200).json({ success: true, status: 'rejected' });
     }
   } catch (err) {
-    console.error('Mentor admin error:', err?.message);
+    console.error('Guild admin error:', err?.message);
     return res.status(500).json({ error: `Something went wrong: ${err?.message || 'Unknown error'}` });
   }
 }
 
 // ============================================================
-// SCREEN: AI screening of mentor application (user's own token)
+// SCREEN: AI screening of guild application (user's own token)
 // ============================================================
 
 async function handleScreen(req, res) {
@@ -277,7 +277,7 @@ async function handleScreen(req, res) {
     if (!profileSnap.exists) {
       return res.status(403).json({ error: 'Invalid user.' });
     }
-    const profileMentor = profileSnap.data()?.mentor;
+    const profileMentor = profileSnap.data()?.guild || profileSnap.data()?.mentor;
     if (!profileMentor || profileMentor.status !== 'applied') {
       return res.status(400).json({ error: 'No pending application found for this user.' });
     }
@@ -295,19 +295,19 @@ async function handleScreen(req, res) {
         .join('\n')
     : 'No credentials on file.';
 
-  const screeningPrompt = `You are reviewing a mentor application for the Mythouse community. Evaluate whether this applicant should proceed to admin review.
+  const screeningPrompt = `You are reviewing a guild application for the Mythouse community. Evaluate whether this applicant should proceed to admin review.
 
 APPLICANT CREDENTIALS:
 ${credentialSummary}
 
-MENTOR TYPE APPLIED FOR: ${application.type}
+GUILD TYPE APPLIED FOR: ${application.type}
 APPLICATION STATEMENT: ${application.summary}
 ${application.documentName ? `SUPPORTING DOCUMENT: ${application.documentName} (uploaded)` : 'No supporting document uploaded.'}
 
 EVALUATION CRITERIA:
-1. Does their credential level (Level 2+) match the mentor role they're applying for?
+1. Does their credential level (Level 2+) match the guild role they're applying for?
 2. Is their personal statement thoughtful, substantive, and relevant?
-3. Do they demonstrate genuine interest in mentoring others?
+3. Do they demonstrate genuine interest in guiding others?
 4. Are there any red flags (incoherent statement, mismatched credentials, concerning language)?
 
 Respond with a JSON object only — no other text:
@@ -335,9 +335,9 @@ Respond with a JSON object only — no other text:
 
     if (screening.passed) {
       await profileRef.update({
-        'mentor.status': 'pending-admin',
-        'mentor.atlasScreeningAt': Date.now(),
-        'mentor.atlasScreeningResult': { passed: true, notes: screening.notes },
+        'guild.status': 'pending-admin',
+        'guild.atlasScreeningAt': Date.now(),
+        'guild.atlasScreeningResult': { passed: true, notes: screening.notes },
         updatedAt: now,
       });
 
@@ -355,12 +355,12 @@ Respond with a JSON object only — no other text:
         } catch { /* ignore */ }
       }
 
-      await db.collection('mentor-applications').add({
+      await db.collection('guild-applications').add({
         uid,
         email,
         displayName,
         handle: profileData.handle || '',
-        mentorType: application.type,
+        guildType: application.type,
         credentialLevel: credentials?.[application.type]?.level || 0,
         credentialDetails: credentials?.[application.type]?.details || '',
         applicationSummary: application.summary,
@@ -379,18 +379,18 @@ Respond with a JSON object only — no other text:
       });
     } else {
       await profileRef.update({
-        'mentor.status': 'rejected',
-        'mentor.atlasScreeningAt': Date.now(),
-        'mentor.atlasScreeningResult': { passed: false, notes: screening.notes },
-        'mentor.rejectedAt': Date.now(),
-        'mentor.rejectionReason': screening.notes,
+        'guild.status': 'rejected',
+        'guild.atlasScreeningAt': Date.now(),
+        'guild.atlasScreeningResult': { passed: false, notes: screening.notes },
+        'guild.rejectedAt': Date.now(),
+        'guild.rejectionReason': screening.notes,
         updatedAt: now,
       });
     }
 
     return res.status(200).json({ screening });
   } catch (err) {
-    console.error('Mentor review error:', err?.message);
+    console.error('Guild review error:', err?.message);
     return res.status(500).json({ error: `Something went wrong: ${err?.message || 'Unknown error'}` });
   }
 }
@@ -411,9 +411,9 @@ async function handleDirectory(req, res, uid) {
       return res.status(404).json({ error: 'Profile not found.' });
     }
     const profile = profileSnap.data();
-    const mentorStatus = profile.mentor?.status;
+    const mentorStatus = profile.guild?.status || profile.mentor?.status;
     if (mentorStatus !== 'approved') {
-      return res.status(403).json({ error: 'Mentor status must be approved.' });
+      return res.status(403).json({ error: 'Guild status must be approved.' });
     }
 
     if (action === 'update-bio') {
@@ -425,9 +425,9 @@ async function handleDirectory(req, res, uid) {
       }
 
       const batch = db.batch();
-      batch.update(profileRef, { 'mentor.bio': bio, updatedAt: now });
+      batch.update(profileRef, { 'guild.bio': bio, updatedAt: now });
 
-      const dirRef = db.doc(`mentor-directory/${uid}`);
+      const dirRef = db.doc(`guild-directory/${uid}`);
       const dirSnap = await dirRef.get();
       if (dirSnap.exists) {
         batch.update(dirRef, { bio, updatedAt: now });
@@ -444,9 +444,9 @@ async function handleDirectory(req, res, uid) {
       }
 
       const batch = db.batch();
-      batch.update(profileRef, { 'mentor.capacity': cap, updatedAt: now });
+      batch.update(profileRef, { 'guild.capacity': cap, updatedAt: now });
 
-      const dirRef = db.doc(`mentor-directory/${uid}`);
+      const dirRef = db.doc(`guild-directory/${uid}`);
       const dirSnap = await dirRef.get();
       if (dirSnap.exists) {
         const activeStudents = dirSnap.data().activeStudents || 0;
@@ -462,8 +462,8 @@ async function handleDirectory(req, res, uid) {
     }
 
     if (action === 'publish') {
-      const mentorType = profile.mentor?.type;
-      const typeInfo = getMentorTypeInfo(mentorType);
+      const mentorType = profile.guild?.type || profile.mentor?.type;
+      const typeInfo = getGuildTypeInfo(mentorType);
 
       const creds = profile.credentials || {};
       const cred = creds[mentorType] || {};
@@ -472,9 +472,9 @@ async function handleDirectory(req, res, uid) {
         1: 'Initiate', 2: 'Adept', 3: 'Master', 4: 'Grand Master', 5: 'Archon',
       };
 
-      const cap = profile.mentor?.capacity || DEFAULT_CAPACITY;
+      const cap = profile.guild?.capacity || profile.mentor?.capacity || DEFAULT_CAPACITY;
 
-      const pairingsSnap = await db.collection('mentor-pairings')
+      const pairingsSnap = await db.collection('guild-pairings')
         .where('mentorUid', '==', uid)
         .where('status', '==', 'accepted')
         .get();
@@ -485,17 +485,17 @@ async function handleDirectory(req, res, uid) {
       const consultingProjectCount = (consulting.projects || []).length;
       const consultingAvailable = consultingProjectCount >= 3;
 
-      const dirRef = db.doc(`mentor-directory/${uid}`);
+      const dirRef = db.doc(`guild-directory/${uid}`);
       const dirData = {
         uid,
         handle: profile.handle || null,
         displayName: profile.displayName || null,
-        mentorType,
-        mentorTitle: typeInfo.title,
-        mentorIcon: typeInfo.icon,
+        guildType: mentorType,
+        guildTitle: typeInfo.title,
+        guildIcon: typeInfo.icon,
         credentialLevel: credLevel,
         credentialName: credLevelNames[credLevel] || `Level ${credLevel}`,
-        bio: profile.mentor?.bio || '',
+        bio: profile.guild?.bio || profile.mentor?.bio || '',
         capacity: cap,
         activeStudents,
         availableSlots: Math.max(0, cap - activeStudents),
@@ -514,23 +514,23 @@ async function handleDirectory(req, res, uid) {
         await dirRef.set({ ...dirData, createdAt: now });
       }
 
-      await profileRef.update({ 'mentor.directoryListed': true, updatedAt: now });
+      await profileRef.update({ 'guild.directoryListed': true, updatedAt: now });
       return res.status(200).json({ success: true, status: 'published' });
     }
 
     if (action === 'unpublish') {
-      const dirRef = db.doc(`mentor-directory/${uid}`);
+      const dirRef = db.doc(`guild-directory/${uid}`);
       const dirSnap = await dirRef.get();
       if (dirSnap.exists) {
         await dirRef.update({ active: false, updatedAt: now });
       }
 
-      await profileRef.update({ 'mentor.directoryListed': false, updatedAt: now });
+      await profileRef.update({ 'guild.directoryListed': false, updatedAt: now });
       return res.status(200).json({ success: true, status: 'unpublished' });
     }
 
     if (action === 'update-consulting-availability') {
-      const dirRef = db.doc(`mentor-directory/${uid}`);
+      const dirRef = db.doc(`guild-directory/${uid}`);
       const dirSnap = await dirRef.get();
       if (!dirSnap.exists) {
         return res.status(404).json({ error: 'Directory entry not found. Publish first.' });
@@ -540,7 +540,7 @@ async function handleDirectory(req, res, uid) {
       return res.status(200).json({ success: true, consultingAvailable: !current });
     }
   } catch (err) {
-    console.error('Mentor directory error:', err?.message);
+    console.error('Guild directory error:', err?.message);
     return res.status(500).json({ error: `Something went wrong: ${err?.message || 'Unknown error'}` });
   }
 }
@@ -563,16 +563,16 @@ async function handlePairing(req, res, uid) {
         return res.status(400).json({ error: 'Cannot request yourself as mentor.' });
       }
 
-      const dirRef = db.doc(`mentor-directory/${mentorUid}`);
+      const dirRef = db.doc(`guild-directory/${mentorUid}`);
       const dirSnap = await dirRef.get();
       if (!dirSnap.exists || !dirSnap.data().active) {
-        return res.status(404).json({ error: 'Mentor not found in directory.' });
+        return res.status(404).json({ error: 'Guild member not found in directory.' });
       }
       if ((dirSnap.data().availableSlots || 0) <= 0) {
-        return res.status(400).json({ error: 'Mentor has no available slots.' });
+        return res.status(400).json({ error: 'Guild member has no available slots.' });
       }
 
-      const existingSnap = await db.collection('mentor-pairings')
+      const existingSnap = await db.collection('guild-pairings')
         .where('mentorUid', '==', mentorUid)
         .where('studentUid', '==', uid)
         .where('status', 'in', ['pending', 'accepted'])
@@ -598,7 +598,7 @@ async function handlePairing(req, res, uid) {
         declineReason: null,
       };
 
-      const newRef = await db.collection('mentor-pairings').add(pairingData);
+      const newRef = await db.collection('guild-pairings').add(pairingData);
       return res.status(200).json({ success: true, pairingId: newRef.id });
     }
 
@@ -608,7 +608,7 @@ async function handlePairing(req, res, uid) {
       }
 
       const result = await db.runTransaction(async (tx) => {
-        const pairingRef = db.doc(`mentor-pairings/${pairingId}`);
+        const pairingRef = db.doc(`guild-pairings/${pairingId}`);
         const pairingSnap = await tx.get(pairingRef);
         if (!pairingSnap.exists) throw new Error('PAIRING_NOT_FOUND');
 
@@ -616,7 +616,7 @@ async function handlePairing(req, res, uid) {
         if (pairing.mentorUid !== uid) throw new Error('FORBIDDEN');
         if (pairing.status !== 'pending') throw new Error('NOT_PENDING');
 
-        const dirRef = db.doc(`mentor-directory/${uid}`);
+        const dirRef = db.doc(`guild-directory/${uid}`);
         const dirSnap = await tx.get(dirRef);
         if (!dirSnap.exists) throw new Error('DIRECTORY_NOT_FOUND');
 
@@ -643,12 +643,12 @@ async function handlePairing(req, res, uid) {
         return res.status(400).json({ error: 'pairingId is required.' });
       }
 
-      const pairingRef = db.doc(`mentor-pairings/${pairingId}`);
+      const pairingRef = db.doc(`guild-pairings/${pairingId}`);
       const pairingSnap = await pairingRef.get();
       if (!pairingSnap.exists) return res.status(404).json({ error: 'Pairing not found.' });
 
       const pairing = pairingSnap.data();
-      if (pairing.mentorUid !== uid) return res.status(403).json({ error: 'Only the mentor can decline.' });
+      if (pairing.mentorUid !== uid) return res.status(403).json({ error: 'Only the guild member can decline.' });
       if (pairing.status !== 'pending') return res.status(400).json({ error: 'Pairing is not pending.' });
 
       await pairingRef.update({
@@ -666,7 +666,7 @@ async function handlePairing(req, res, uid) {
       }
 
       const result = await db.runTransaction(async (tx) => {
-        const pairingRef = db.doc(`mentor-pairings/${pairingId}`);
+        const pairingRef = db.doc(`guild-pairings/${pairingId}`);
         const pairingSnap = await tx.get(pairingRef);
         if (!pairingSnap.exists) throw new Error('PAIRING_NOT_FOUND');
 
@@ -676,7 +676,7 @@ async function handlePairing(req, res, uid) {
 
         tx.update(pairingRef, { status: 'ended', endedAt: now });
 
-        const dirRef = db.doc(`mentor-directory/${pairing.mentorUid}`);
+        const dirRef = db.doc(`guild-directory/${pairing.mentorUid}`);
         const dirSnap = await tx.get(dirRef);
         if (dirSnap.exists) {
           const dirData = dirSnap.data();
@@ -696,18 +696,18 @@ async function handlePairing(req, res, uid) {
   } catch (err) {
     const errorMap = {
       PAIRING_NOT_FOUND: [404, 'Pairing not found.'],
-      FORBIDDEN: [403, 'Only the mentor can accept.'],
+      FORBIDDEN: [403, 'Only the guild member can accept.'],
       NOT_PENDING: [400, 'Pairing is not pending.'],
-      DIRECTORY_NOT_FOUND: [404, 'Mentor directory entry not found.'],
-      AT_CAPACITY: [400, 'Mentor is at capacity.'],
-      END_FORBIDDEN: [403, 'Only the mentor or student can end this pairing.'],
+      DIRECTORY_NOT_FOUND: [404, 'Guild directory entry not found.'],
+      AT_CAPACITY: [400, 'Guild member is at capacity.'],
+      END_FORBIDDEN: [403, 'Only the guild member or student can end this pairing.'],
       NOT_ACCEPTED: [400, 'Only accepted pairings can be ended.'],
     };
 
     const mapped = errorMap[err.message];
     if (mapped) return res.status(mapped[0]).json({ error: mapped[1] });
 
-    console.error('Mentor pairing error:', err?.message);
+    console.error('Guild pairing error:', err?.message);
     return res.status(500).json({ error: `Something went wrong: ${err?.message || 'Unknown error'}` });
   }
 }
@@ -730,7 +730,7 @@ async function handleConsulting(req, res, uid) {
         return res.status(400).json({ error: 'Cannot request consulting from yourself.' });
       }
 
-      const dirRef = db.doc(`mentor-directory/${consultantUid}`);
+      const dirRef = db.doc(`guild-directory/${consultantUid}`);
       const dirSnap = await dirRef.get();
       if (!dirSnap.exists || !dirSnap.data().active) {
         return res.status(404).json({ error: 'Consultant not found in directory.' });
@@ -745,7 +745,7 @@ async function handleConsulting(req, res, uid) {
         .where('status', '==', 'pending')
         .get();
       if (!existingSnap.empty) {
-        return res.status(409).json({ error: 'You already have a pending consulting request with this mentor.' });
+        return res.status(409).json({ error: 'You already have a pending consulting request with this guild member.' });
       }
 
       const requesterProfileSnap = await db.doc(`users/${uid}/meta/profile`).get();

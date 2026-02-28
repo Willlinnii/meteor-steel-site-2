@@ -1,51 +1,51 @@
 import React, { useState, useCallback } from 'react';
 import { useProfile } from '../../profile/ProfileContext';
 import { useAuth } from '../../auth/AuthContext';
-import { canRequestMentor } from '../../profile/mentorPairingEngine';
-import { useMentorDirectory, FILTER_TABS } from '../Guild/useMentorDirectory';
+import { canRequestGuildMember } from '../../profile/guildPairingEngine';
+import { useGuildDirectory, FILTER_TABS } from '../Guild/useGuildDirectory';
 import { usePageTracking } from '../../coursework/CourseworkContext';
 
 export default function MentorDirectoryPage() {
   const { user } = useAuth();
-  const { mentorPairings, requestMentor } = useProfile();
-  const { mentors: filteredMentors, loading, activeFilter, setActiveFilter, hasMore, loadMore } = useMentorDirectory();
-  const { track } = usePageTracking('mentor-directory');
-  const [requestingMentor, setRequestingMentor] = useState(null); // uid of mentor being requested
+  const { guildPairings, requestGuildMember } = useProfile();
+  const { members: filteredMembers, loading, activeFilter, setActiveFilter, hasMore, loadMore } = useGuildDirectory();
+  const { track } = usePageTracking('guild-directory');
+  const [requestingMember, setRequestingMember] = useState(null);
   const [requestMessage, setRequestMessage] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState(null);
 
-  const handleRequest = useCallback(async (mentorUid) => {
+  const handleRequest = useCallback(async (guildMemberUid) => {
     if (submitting) return;
     setSubmitting(true);
     setError(null);
     try {
-      await requestMentor(mentorUid, requestMessage.trim() || null);
+      await requestGuildMember(guildMemberUid, requestMessage.trim() || null);
       track('request');
-      setRequestingMentor(null);
+      setRequestingMember(null);
       setRequestMessage('');
     } catch (err) {
       setError(err.message || 'Failed to send request');
     }
     setSubmitting(false);
-  }, [requestMentor, requestMessage, submitting]);
+  }, [requestGuildMember, requestMessage, submitting]);
 
   if (loading) {
     return (
-      <div className="mentor-directory-page">
-        <div className="profile-empty">Loading mentors...</div>
+      <div className="guild-member-directory-page">
+        <div className="profile-empty">Loading guild members...</div>
       </div>
     );
   }
 
   return (
-    <div className="mentor-directory-page">
+    <div className="guild-member-directory-page">
       {/* Filter tabs */}
-      <div className="mentor-directory-filters">
+      <div className="guild-member-directory-filters">
         {FILTER_TABS.map(tab => (
           <button
             key={tab.id}
-            className={`mentor-filter-tab${activeFilter === tab.id ? ' active' : ''}`}
+            className={`guild-member-filter-tab${activeFilter === tab.id ? ' active' : ''}`}
             onClick={() => { setActiveFilter(tab.id); track(`filter.${tab.id}`); }}
           >
             {tab.label}
@@ -53,86 +53,86 @@ export default function MentorDirectoryPage() {
         ))}
       </div>
 
-      {/* Mentor grid */}
-      {filteredMentors.length === 0 ? (
+      {/* Guild member grid */}
+      {filteredMembers.length === 0 ? (
         <div className="profile-empty">
           {activeFilter === 'all'
-            ? 'No mentors are currently available.'
-            : `No ${FILTER_TABS.find(t => t.id === activeFilter)?.label || ''} mentors are currently available.`}
+            ? 'No guild members are currently available.'
+            : `No ${FILTER_TABS.find(t => t.id === activeFilter)?.label || ''} guild members are currently available.`}
         </div>
       ) : (
-        <div className="mentor-directory-grid">
-          {filteredMentors.map(mentor => {
-            const canRequest = user && mentor.uid !== user.uid && canRequestMentor(mentorPairings, mentor.uid) && (mentor.availableSlots || 0) > 0;
-            const existingPairing = mentorPairings.find(p => p.mentorUid === mentor.uid && (p.status === 'pending' || p.status === 'accepted'));
-            const isSelf = user && mentor.uid === user.uid;
+        <div className="guild-member-directory-grid">
+          {filteredMembers.map(member => {
+            const canRequest = user && member.uid !== user.uid && canRequestGuildMember(guildPairings, member.uid) && (member.availableSlots || 0) > 0;
+            const existingPairing = guildPairings.find(p => (p.guildMemberUid || p.mentorUid) === member.uid && (p.status === 'pending' || p.status === 'accepted'));
+            const isSelf = user && member.uid === user.uid;
 
             return (
-              <div key={mentor.id} className="mentor-card">
-                <div className="mentor-card-header">
-                  <span className="mentor-card-icon">{mentor.mentorIcon}</span>
+              <div key={member.id} className="guild-member-card">
+                <div className="guild-member-card-header">
+                  <span className="guild-member-card-icon">{member.guildIcon || member.mentorIcon}</span>
                   <div>
-                    <div className="mentor-card-title">{mentor.mentorTitle}</div>
-                    {mentor.handle && <div className="mentor-card-handle">@{mentor.handle}</div>}
+                    <div className="guild-member-card-title">{member.guildTitle || member.mentorTitle}</div>
+                    {member.handle && <div className="guild-member-card-handle">@{member.handle}</div>}
                   </div>
-                  <span className="mentor-card-credential">
-                    L{mentor.credentialLevel} {mentor.credentialName}
+                  <span className="guild-member-card-credential">
+                    L{member.credentialLevel} {member.credentialName}
                   </span>
                 </div>
 
-                {mentor.bio && (
-                  <div className="mentor-card-bio">{mentor.bio}</div>
+                {member.bio && (
+                  <div className="guild-member-card-bio">{member.bio}</div>
                 )}
 
-                <div className="mentor-card-slots">
-                  {(mentor.availableSlots || 0) > 0
-                    ? `${mentor.availableSlots} slot${mentor.availableSlots === 1 ? '' : 's'} available`
+                <div className="guild-member-card-slots">
+                  {(member.availableSlots || 0) > 0
+                    ? `${member.availableSlots} slot${member.availableSlots === 1 ? '' : 's'} available`
                     : 'No slots available'}
                 </div>
 
                 {/* Request button or status */}
                 {!isSelf && (
-                  <div className="mentor-card-actions">
-                    {requestingMentor === mentor.uid ? (
-                      <div className="mentor-card-request-form">
+                  <div className="guild-member-card-actions">
+                    {requestingMember === member.uid ? (
+                      <div className="guild-member-card-request-form">
                         <textarea
-                          className="mentor-request-textarea"
-                          placeholder="Optional: introduce yourself or share why you'd like this mentor..."
+                          className="guild-member-request-textarea"
+                          placeholder="Optional: introduce yourself or share why you'd like this guild member..."
                           value={requestMessage}
                           onChange={e => setRequestMessage(e.target.value)}
                           maxLength={500}
                           rows={3}
                         />
-                        <div className="mentor-request-form-actions">
+                        <div className="guild-member-request-form-actions">
                           <button
-                            className="mentor-card-request-btn"
+                            className="guild-member-card-request-btn"
                             disabled={submitting}
-                            onClick={() => handleRequest(mentor.uid)}
+                            onClick={() => handleRequest(member.uid)}
                           >
                             {submitting ? 'Sending...' : 'Send Request'}
                           </button>
                           <button
-                            className="mentor-card-cancel-btn"
-                            onClick={() => { setRequestingMentor(null); setRequestMessage(''); setError(null); }}
+                            className="guild-member-card-cancel-btn"
+                            onClick={() => { setRequestingMember(null); setRequestMessage(''); setError(null); }}
                           >
                             Cancel
                           </button>
                         </div>
-                        {error && <div className="mentor-request-error">{error}</div>}
+                        {error && <div className="guild-member-request-error">{error}</div>}
                       </div>
                     ) : existingPairing ? (
-                      <span className="mentor-card-paired-label">
-                        {existingPairing.status === 'accepted' ? 'Active Mentorship' : 'Request Pending'}
+                      <span className="guild-member-card-paired-label">
+                        {existingPairing.status === 'accepted' ? 'Active Membership' : 'Request Pending'}
                       </span>
                     ) : canRequest ? (
                       <button
-                        className="mentor-card-request-btn"
-                        onClick={() => { setRequestingMentor(mentor.uid); setError(null); }}
+                        className="guild-member-card-request-btn"
+                        onClick={() => { setRequestingMember(member.uid); setError(null); }}
                       >
-                        Request Mentor
+                        Request Guild Member
                       </button>
-                    ) : (mentor.availableSlots || 0) <= 0 ? (
-                      <button className="mentor-card-request-btn" disabled>Full</button>
+                    ) : (member.availableSlots || 0) <= 0 ? (
+                      <button className="guild-member-card-request-btn" disabled>Full</button>
                     ) : null}
                   </div>
                 )}

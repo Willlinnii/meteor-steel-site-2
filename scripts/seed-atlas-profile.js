@@ -99,15 +99,15 @@ async function main() {
     numerologyName: 'Atlas',
     luckyNumber: 7,
 
-    // Mentor — fully active, published
-    mentor: {
+    // Guild — fully active, published
+    guild: {
       type: 'scholar',
       status: 'approved',
       bio: 'I am Atlas, the mythological guide of Mythouse. I hold the celestial sphere and illuminate the paths between ancient wisdom and modern understanding. Ask me anything about mythology, the monomyth, sacred sites, or the journey of transformation.',
       capacity: 20,
       directoryListed: true,
-      mentorContractAccepted: true,
-      mentorContractAcceptedAt: NOW,
+      guildContractAccepted: true,
+      guildContractAcceptedAt: NOW,
       appliedAt: NOW - 86400000,
       approvedAt: NOW,
       adminReviewedBy: 'willlinnii@gmail.com',
@@ -306,19 +306,19 @@ async function main() {
   }, { merge: true });
   console.log('  5 pilgrimages written.');
 
-  // ── Step 7: Write mentor directory entry ──
-  console.log('Writing mentor directory entry...');
-  const dirRef = db.doc(`mentor-directory/${uid}`);
+  // ── Step 7: Write guild directory entry ──
+  console.log('Writing guild directory entry...');
+  const dirRef = db.doc(`guild-directory/${uid}`);
   await dirRef.set({
     uid,
     handle: 'atlas',
     displayName: 'Atlas',
-    mentorType: 'scholar',
-    mentorTitle: 'Mentor Mythologist',
-    mentorIcon: null,
+    guildType: 'scholar',
+    guildTitle: 'Mythologist',
+    guildIcon: null,
     credentialLevel: 3,
     credentialName: 'Full Professor',
-    bio: profileData.mentor.bio,
+    bio: profileData.guild.bio,
     capacity: 20,
     activeStudents: 0,
     availableSlots: 20,

@@ -6,8 +6,8 @@ import FellowshipPost from '../../components/fellowship/FellowshipPost';
 import { doc, updateDoc, arrayUnion, arrayRemove } from 'firebase/firestore';
 
 /**
- * MenteeFeed — shows fellowship posts from mentor's active mentees.
- * Queries mentor-pairings for accepted mentees, then queries fellowship-posts.
+ * MenteeFeed — shows fellowship posts from guild member's active mentees.
+ * Queries guild-pairings for accepted mentees, then queries fellowship-posts.
  */
 export default function MenteeFeed() {
   const { user } = useAuth();
@@ -23,8 +23,8 @@ export default function MenteeFeed() {
     }
 
     const q = query(
-      collection(db, 'mentor-pairings'),
-      where('mentorUid', '==', user.uid),
+      collection(db, 'guild-pairings'),
+      where('guildMemberUid', '==', user.uid),
       where('status', '==', 'ACCEPTED'),
     );
 

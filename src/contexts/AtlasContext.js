@@ -53,7 +53,7 @@ const PATH_LABELS = {
   '/myths': 'Myths',
   '/xr': 'XR / VR',
   '/fellowship': 'Fellowship',
-  '/mentors': 'Mentors',
+  '/guild': 'Guild Directory',
   '/guild': 'Guild',
   '/discover': 'Discover',
   '/curated': 'Curated Products',

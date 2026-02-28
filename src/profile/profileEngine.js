@@ -118,7 +118,7 @@ export const CREDENTIAL_CATEGORIES = {
     label: 'Guild Member',
     icon: '\uD83C\uDFDB\uFE0F',
     levels: [
-      { level: 1, name: 'Guild Member', description: 'Active mentor in the Mythouse Guild' },
+      { level: 1, name: 'Guild Member', description: 'Active member of the Mythouse Guild' },
     ],
   },
   consultant: {

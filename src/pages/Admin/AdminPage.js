@@ -63,8 +63,8 @@ function useAdminDataLoader() {
       // Coursework aggregation
       let courseCompletions = 0;
 
-      // Mentor aggregation
-      let activeMentors = 0;
+      // Guild member aggregation
+      let activeGuildMembers = 0;
 
       for (const userDoc of usersSnap.docs) {
         totalUsers++;
@@ -90,10 +90,10 @@ function useAdminDataLoader() {
           progressSnap.forEach(d => { progressData[d.id] = d.data(); });
         } catch { /* no progress */ }
 
-        // Mentor status
-        const mentor = profileData.mentor;
-        if (mentor && (mentor.status === 'approved' || mentor.status === 'active') && mentor.directoryListed) {
-          activeMentors++;
+        // Guild member status
+        const guild = profileData.guild || profileData.mentor;
+        if (guild && (guild.status === 'approved' || guild.status === 'active') && guild.directoryListed) {
+          activeGuildMembers++;
         }
 
         const subs = profileData.subscriptions || {};
@@ -171,7 +171,7 @@ function useAdminDataLoader() {
           activeIds: [...activeIds], bundledIds: [...bundledIds],
           userMrr, userOneTime, hasPaid,
           stripeCustomerId: profileData.stripeCustomerId || null,
-          mentor: profileData.mentor || null,
+          guild: profileData.guild || profileData.mentor || null,
           handle: profileData.handle || null,
           courseStates, progressData,
         });
@@ -190,7 +190,7 @@ function useAdminDataLoader() {
         users: users.sort((a, b) => b.userMrr + b.userOneTime - (a.userMrr + a.userOneTime)),
         totalUsers, payingUsers, mrr, oneTime, itemCounts,
         campaignAttr,
-        courseCompletions, activeMentors,
+        courseCompletions, activeGuildMembers,
         campaignPosted, campaignTotal,
       });
     } catch (err) {
@@ -219,7 +219,7 @@ function AdminStatsBar() {
     { label: 'Paying', value: data.payingUsers },
     { label: 'Users', value: data.totalUsers },
     { label: 'Courses Done', value: data.courseCompletions },
-    { label: 'Mentors', value: data.activeMentors },
+    { label: 'Guild Members', value: data.activeGuildMembers },
     { label: 'Campaign', value: `${data.campaignPosted}/${data.campaignTotal}` },
     { label: 'Revenue', value: fmt(data.oneTime), color: data.oneTime > 0 ? '#6ec87a' : null },
   ];
@@ -335,14 +335,14 @@ function UserDrawer() {
           );
         }) : <div style={S.dim}>No course activity</div>}
 
-        {/* Mentor Status */}
-        {u.mentor && (
+        {/* Guild Member Status */}
+        {u.guild && (
           <>
-            <div style={S.heading}>Mentor</div>
+            <div style={S.heading}>Guild Member</div>
             <div style={S.val}>
-              Type: {u.mentor.type || '—'} &nbsp;|&nbsp; Status: <span style={{ color: u.mentor.status === 'approved' || u.mentor.status === 'active' ? '#6ec87a' : '#c9a961' }}>{u.mentor.status}</span>
+              Type: {u.guild.type || '—'} &nbsp;|&nbsp; Status: <span style={{ color: u.guild.status === 'approved' || u.guild.status === 'active' ? '#6ec87a' : '#c9a961' }}>{u.guild.status}</span>
             </div>
-            {u.mentor.directoryListed && <div style={S.dim}>Listed in directory</div>}
+            {u.guild.directoryListed && <div style={S.dim}>Listed in directory</div>}
           </>
         )}
 
@@ -616,7 +616,7 @@ const SECTION_GROUPS = [
     { id: 'secret-weapon', label: 'Secret Weapon' },
     { id: 'subscribers', label: 'Subscribers' },
     { id: 'contacts', label: 'Contacts' },
-    { id: 'mentors', label: 'Mentors' },
+    { id: 'mentors', label: 'Guild Members' },
     { id: 'partners', label: 'Partners' },
     { id: 'consulting', label: 'Consulting' },
   ]},
@@ -1272,8 +1272,8 @@ function CourseworkManagerSection() {
   );
 }
 
-// --- Mentor Manager Section ---
-function MentorManagerSection() {
+// --- Guild Member Manager Section ---
+function GuildManagerSection() {
   const { user } = useAuth();
   const [applications, setApplications] = useState([]);
   const [loadingApps, setLoadingApps] = useState(false);
@@ -1285,13 +1285,13 @@ function MentorManagerSection() {
     if (!firebaseConfigured || !db) return;
     setLoadingApps(true);
     try {
-      const q = query(collection(db, 'mentor-applications'), orderBy('createdAt', 'desc'));
+      const q = query(collection(db, 'guild-applications'), orderBy('createdAt', 'desc'));
       const snap = await getDocs(q);
       const apps = [];
       snap.forEach(doc => apps.push({ id: doc.id, ...doc.data() }));
       setApplications(apps);
     } catch (err) {
-      console.error('Failed to load mentor applications:', err);
+      console.error('Failed to load guild applications:', err);
     }
     setLoadingApps(false);
   }, []);
@@ -1304,7 +1304,7 @@ function MentorManagerSection() {
       if (action === 'reject' && rejectReason.trim()) {
         body.rejectionReason = rejectReason.trim();
       }
-      const res = await fetch('/api/mentor', {
+      const res = await fetch('/api/guild-member', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -1319,7 +1319,7 @@ function MentorManagerSection() {
         setRejectReason('');
       }
     } catch (err) {
-      console.error('Mentor admin action failed:', err);
+      console.error('Guild admin action failed:', err);
     }
     setActionLoading(null);
   };
@@ -1341,7 +1341,7 @@ function MentorManagerSection() {
 
   return (
     <div className="admin-coursework">
-      <h2 className="admin-coursework-title">MENTOR APPLICATIONS</h2>
+      <h2 className="admin-coursework-title">GUILD APPLICATIONS</h2>
 
       <button
         className="admin-coursework-load-btn"
@@ -1374,7 +1374,7 @@ function MentorManagerSection() {
                 <span className="admin-badge" style={{ borderColor: STATUS_COLORS[app.status], color: STATUS_COLORS[app.status] }}>
                   {app.status}
                 </span>
-                <span className="admin-badge">{app.mentorType}</span>
+                <span className="admin-badge">{app.guildType || app.mentorType}</span>
                 <span className="admin-coursework-req-count">L{app.credentialLevel}</span>
               </div>
 
@@ -1475,7 +1475,7 @@ function PartnerManagerSection() {
       if (action === 'partner-reject' && rejectReason.trim()) {
         body.rejectionReason = rejectReason.trim();
       }
-      const res = await fetch('/api/mentor', {
+      const res = await fetch('/api/guild-member', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -1823,7 +1823,7 @@ const SERVICES = [
     name: 'Anthropic Claude',
     url: 'https://console.anthropic.com',
     category: 'AI / LLM',
-    usedFor: 'Atlas chat, mentor review',
+    usedFor: 'Atlas chat, guild review',
     paid: 'Paid',
     status: 'Active',
     envVars: ['ANTHROPIC_API_KEY'],
@@ -2569,7 +2569,7 @@ const IP_REGISTRY = [
 
   // Algorithms
   { id: 'course-engine', category: 'algorithms', name: 'Course Engine', description: 'Original algorithm — requirement checking, progress tracking, certificate logic', type: 'trade-secret', source: ['src/coursework/courseEngine.js'], status: 'unregistered', protection: 'medium', year: 2024 },
-  { id: 'mentor-engine', category: 'algorithms', name: 'Mentor Engine', description: 'Original algorithm — multi-stage mentor application screening with AI assessment', type: 'trade-secret', source: ['api/mentor-apply.js', 'src/pages/Mentors/'], status: 'unregistered', protection: 'medium', year: 2025 },
+  { id: 'guild-engine', category: 'algorithms', name: 'Guild Engine', description: 'Original algorithm — multi-stage guild application screening with AI assessment', type: 'trade-secret', source: ['api/guild-member.js', 'src/profile/guildEngine.js'], status: 'unregistered', protection: 'medium', year: 2025 },
   { id: 'profile-engine', category: 'algorithms', name: 'Profile Engine', description: 'Original algorithm — user rank progression, subscription gating, achievement tracking', type: 'trade-secret', source: ['src/pages/Profile/ProfilePage.js'], status: 'unregistered', protection: 'medium', year: 2024 },
   { id: 'numerology-engine', category: 'algorithms', name: 'Numerology Engine', description: 'Original algorithm — Pythagorean and Chaldean numerology calculations', type: 'trade-secret', source: ['src/pages/Chronosphaera/'], status: 'unregistered', protection: 'low', year: 2024 },
   { id: 'natal-chart', category: 'algorithms', name: 'Natal Chart Calculator', description: 'Original algorithm — astronomical position calculations for birth chart generation', type: 'trade-secret', source: ['src/pages/Chronosphaera/'], status: 'unregistered', protection: 'low', year: 2024 },
@@ -3826,17 +3826,17 @@ const LEGAL_CONTRACTS = [
     scope: 'All Users',
     trigger: 'Account creation / first login',
     description: 'Data collection, usage, storage, and sharing practices. Required by GDPR, CCPA, and Firebase/Google terms.',
-    covers: ['Personal data: email, display name, birth date/time, profile photo', 'Behavioral data: coursework progress, page visits, element tracking, game completions', 'AI interaction data: Atlas conversations, Story Forge drafts, mentor application chats', 'Natal chart & numerology data', 'BYOK API keys (encrypted storage)', 'Third-party services: Firebase/Google, Anthropic, OpenAI, Vercel, YouTube embeds, Google Maps/Street View', 'Cookies & localStorage (session persistence, last-path recall)'],
+    covers: ['Personal data: email, display name, birth date/time, profile photo', 'Behavioral data: coursework progress, page visits, element tracking, game completions', 'AI interaction data: Atlas conversations, Story Forge drafts, guild application chats', 'Natal chart & numerology data', 'BYOK API keys (encrypted storage)', 'Third-party services: Firebase/Google, Anthropic, OpenAI, Vercel, YouTube embeds, Google Maps/Street View', 'Cookies & localStorage (session persistence, last-path recall)'],
     status: 'draft',
   },
   {
-    id: 'mentor-agreement',
-    title: 'Mentor Agreement',
+    id: 'guild-member-agreement',
+    title: 'Guild Member Agreement',
     category: 'contract',
-    scope: 'Mentors',
-    trigger: 'After mentor application approval (before activation)',
-    description: 'Agreement between Mythouse and approved mentors. Covers mentor responsibilities, student relationship guidelines, capacity commitments, code of conduct, content ownership, termination, and liability.',
-    covers: ['Mentor qualifications & ongoing requirements (Level 2+ credential)', 'Student pairing acceptance & capacity limits (default 5)', 'Bio & directory listing consent', 'Communication standards & boundaries', 'Consulting rate setting & session conduct', 'Content ownership of mentor-created materials', 'Termination & unpublishing process', 'Guild participation guidelines'],
+    scope: 'Guild Members',
+    trigger: 'After guild application approval (before activation)',
+    description: 'Agreement between Mythouse and approved guild members. Covers guild member responsibilities, student relationship guidelines, capacity commitments, code of conduct, content ownership, termination, and liability.',
+    covers: ['Guild member qualifications & ongoing requirements (Level 2+ credential)', 'Student pairing acceptance & capacity limits (default 5)', 'Bio & directory listing consent', 'Communication standards & boundaries', 'Consulting rate setting & session conduct', 'Content ownership of guild member-created materials', 'Termination & unpublishing process', 'Guild participation guidelines'],
     status: 'draft',
   },
   {
@@ -3863,10 +3863,10 @@ const LEGAL_CONTRACTS = [
     id: 'consulting-agreement',
     title: 'Consulting Services Agreement',
     category: 'contract',
-    scope: 'Consulting Mentors & Clients',
+    scope: 'Consulting Guild Members & Clients',
     trigger: 'When a consulting session is booked',
-    description: 'Three-party agreement governing paid consulting sessions between mentors, clients, and Mythouse as platform.',
-    covers: ['Session scheduling & cancellation', 'Payment terms & platform fee', 'Mentor as independent contractor (not employee)', 'Confidentiality of session content', 'Liability & professional disclaimers', 'Dispute resolution between mentor and client'],
+    description: 'Three-party agreement governing paid consulting sessions between guild members, clients, and Mythouse as platform.',
+    covers: ['Session scheduling & cancellation', 'Payment terms & platform fee', 'Guild member as independent contractor (not employee)', 'Confidentiality of session content', 'Liability & professional disclaimers', 'Dispute resolution between guild member and client'],
     status: 'draft',
   },
   {
@@ -3888,7 +3888,7 @@ const LEGAL_POLICIES = [
     category: 'policy',
     scope: 'All Users',
     description: 'Disclaimer that Atlas and AI features provide educational/entertainment content, not professional advice. Covers mythology, psychology, astrology, and spiritual content.',
-    covers: ['Atlas chat is not therapy, medical, legal, or financial advice', 'Natal chart readings are educational/entertainment', 'Numerology & tarot readings are cultural exploration, not prediction', 'AI-generated story content may contain inaccuracies', 'Mentor interactions are not licensed professional services (unless explicitly stated)'],
+    covers: ['Atlas chat is not therapy, medical, legal, or financial advice', 'Natal chart readings are educational/entertainment', 'Numerology & tarot readings are cultural exploration, not prediction', 'AI-generated story content may contain inaccuracies', 'Guild member interactions are not licensed professional services (unless explicitly stated)'],
     status: 'draft',
   },
   {
@@ -3914,8 +3914,8 @@ const LEGAL_POLICIES = [
     title: 'Community Guidelines',
     category: 'policy',
     scope: 'All Users',
-    description: 'Behavioral expectations for multiplayer interactions, mentor-student relationships, and Guild participation.',
-    covers: ['Multiplayer game conduct (real-time board games)', 'Mentor-student communication standards', 'Guild discussion guidelines', 'Prohibited content & behavior', 'Reporting & enforcement process'],
+    description: 'Behavioral expectations for multiplayer interactions, guild member-student relationships, and Guild participation.',
+    covers: ['Multiplayer game conduct (real-time board games)', 'Guild member-student communication standards', 'Guild discussion guidelines', 'Prohibited content & behavior', 'Reporting & enforcement process'],
     status: 'draft',
   },
   {
@@ -4137,8 +4137,8 @@ const PLAN_PHASES = [
     color: '#3498db',
     icon: '\u26ED',
     initiatives: [
-      { id: 'guild-activate', name: 'Guild Forum System', status: 'complete', description: 'Full forum with posts, threaded replies, voting, images, admin pinning. Mentor-gated access (active mentor + 3 courses). API-backed.', priority: 'high' },
-      { id: 'mentor-marketplace', name: 'Mentor Marketplace', status: 'in-progress', description: '5 mentor types (Scholar, Storyteller, Healer, Media Voice, Adventurer). AI screening, admin approval, directory, pairing, consulting requests. Needs booking/scheduling and session payments.', priority: 'high' },
+      { id: 'guild-activate', name: 'Guild Forum System', status: 'complete', description: 'Full forum with posts, threaded replies, voting, images, admin pinning. Guild-gated access (active guild member + 3 courses). API-backed.', priority: 'high' },
+      { id: 'guild-marketplace', name: 'Guild Marketplace', status: 'in-progress', description: '5 guild types (Mythologist, Storyteller, Healer, Media Voice, Adventurer). AI screening, admin approval, directory, pairing, consulting requests. Needs booking/scheduling and session payments.', priority: 'high' },
       { id: 'ugc', name: 'User-Generated Content', status: 'in-progress', description: 'Story Forge writings persist in WritingsContext. Fellowship posts with images. Story matching conversations. Guild forum posts. Needs public sharing gallery.', priority: 'medium' },
       { id: 'matching', name: 'Story Matching System', status: 'complete', description: 'Full mutual matching: match profiles, compatibility scoring, request workflow (send/accept/decline), private messaging between matches, AI-generated opening messages.', priority: 'high' },
       { id: 'family-groups', name: 'Family & Friend Groups', status: 'complete', description: 'Family groups with invite codes, roles, shared traditions/creations/storybook/feed/genealogy. Friend groups with same shared spaces. Full context providers.', priority: 'medium' },
@@ -4163,7 +4163,7 @@ const PLAN_PHASES = [
       { id: 'pwa', name: 'Progressive Web App / Mobile', status: 'not-started', description: 'Offline support, push notifications, app store presence. Mobile FAB and responsive work already in progress.', priority: 'high' },
       { id: 'publisher', name: 'Publisher Partnerships', status: 'not-started', description: 'Book deals, documentary tie-ins, educational content licensing. IP registry with 35+ items, deposit manifests, NDA generation ready.', priority: 'medium' },
       { id: 'tv-integration', name: 'Lost Treasures TV Tie-In', status: 'complete', description: 'Myths page live with Templars and Czar Gold series. Triple-ring CircleNav, 3-ring knowledge hierarchy, episode browser with synthesis, Mythouse card/arcana lookup.', priority: 'medium' },
-      { id: 'notifications', name: 'Push & In-App Notifications', status: 'not-started', description: 'No notification system exists. Needed for match requests, friend requests, mentor responses, course milestones.', priority: 'high' },
+      { id: 'notifications', name: 'Push & In-App Notifications', status: 'not-started', description: 'No notification system exists. Needed for match requests, friend requests, guild member responses, course milestones.', priority: 'high' },
       { id: 'search', name: 'Full-Text Search', status: 'not-started', description: 'No search system exists. 62 data files with 2.8MB of content need indexing. Handle prefix search is the only search today.', priority: 'medium' },
     ],
   },
@@ -4201,7 +4201,7 @@ const REVENUE_STREAMS = [
     icon: '\uD83E\uDD1D',
     phase: '3',
     items: [
-      { name: 'Mentorship Sessions', id: 'mentorship', description: '5 mentor types, AI screening, pairing system live. Needs booking + payment.', status: 'partial', priceNote: 'TBD' },
+      { name: 'Guild Membership Sessions', id: 'membership', description: '5 guild types, AI screening, pairing system live. Needs booking + payment.', status: 'partial', priceNote: 'TBD' },
       { name: 'Consulting', id: 'consulting', description: 'Consulting request system built, needs payment flow', status: 'partial', priceNote: 'TBD' },
       { name: 'Live Events', id: 'events', description: 'Virtual guided journeys, mythology salons, group sessions', status: 'not-started', priceNote: 'TBD' },
       { name: 'Curated Products', id: 'curated', description: 'Admin-curated product collection at /curated', status: 'built', priceNote: 'Commission TBD' },
@@ -4242,7 +4242,7 @@ const FEATURE_MATRIX = [
   { name: 'Coursework System (10 courses)', route: 'system', status: 'live', category: 'premium' },
   // --- Community & Social ---
   { name: 'Profile (ranks, certs, natal, numerology, BYOK)', route: '/profile', status: 'live', category: 'community' },
-  { name: 'Mentor Directory (5 types, AI screening)', route: '/mentors', status: 'live', category: 'community' },
+  { name: 'Guild Directory (5 types, AI screening)', route: '/guild-directory', status: 'live', category: 'community' },
   { name: 'Guild Forum (posts, replies, voting)', route: '/guild', status: 'live', category: 'community' },
   { name: 'Fellowship (friends-only social feed)', route: '/fellowship', status: 'live', category: 'community' },
   { name: 'Story Matching (profiles + messaging)', route: '/matching', status: 'live', category: 'community' },
@@ -4536,7 +4536,7 @@ const PRODUCT_ROADMAP = [
     id: 'atlas',
     name: 'Atlas AI',
     category: 'ai',
-    description: 'Multi-persona AI mentor — 25+ voices, voice I/O, situational awareness, user memory, BYOK support',
+    description: 'Multi-persona AI guide — 25+ voices, voice I/O, situational awareness, user memory, BYOK support',
     route: '/atlas',
     released: [
       { label: 'Atlas primary guide (Claude-powered)', version: '1.0' },
@@ -4560,7 +4560,7 @@ const PRODUCT_ROADMAP = [
       { label: 'Per-voice message tracking for coursework' },
     ],
     future: [
-      { label: 'Personal mentor voice creation' },
+      { label: 'Personal guide voice creation' },
       { label: 'Group conversation mode' },
       { label: 'Atlas "office hours" scheduled sessions' },
     ],
@@ -4689,7 +4689,7 @@ const PRODUCT_ROADMAP = [
     future: [
       { label: 'Course prereq chains' },
       { label: 'Cohort-based group courses' },
-      { label: 'Mentor-led courses' },
+      { label: 'Guild member-led courses' },
     ],
     maturity: 'gold',
     subscriptionGate: 'coursework',
@@ -4698,7 +4698,7 @@ const PRODUCT_ROADMAP = [
     id: 'profile',
     name: 'Profile & Identity',
     category: 'community',
-    description: 'User identity — ranks, natal chart, numerology, handle, friends, story cards, mentor status, BYOK keys',
+    description: 'User identity — ranks, natal chart, numerology, handle, friends, story cards, guild status, BYOK keys',
     route: '/profile',
     released: [
       { label: 'Rank display & progression', version: '1.0' },
@@ -4724,27 +4724,27 @@ const PRODUCT_ROADMAP = [
     maturity: 'gold',
   },
   {
-    id: 'mentors',
-    name: 'Mentorship & Consulting',
+    id: 'guild-members',
+    name: 'Guild & Consulting',
     category: 'community',
-    description: '5 mentor types (Scholar, Storyteller, Healer, Media Voice, Adventurer) with AI screening, pairing, consulting',
-    route: '/mentors',
+    description: '5 guild types (Mythologist, Storyteller, Healer, Media Voice, Adventurer) with AI screening, pairing, consulting',
+    route: '/guild-directory',
     released: [
-      { label: '5 mentor types with status system', version: '1.0' },
+      { label: '5 guild types with status system', version: '1.0' },
       { label: 'AI-powered application screening', version: '1.1' },
       { label: 'Admin approval workflow', version: '1.0' },
       { label: 'Public directory with filtering', version: '1.0' },
       { label: 'Student pairing system', version: '1.0' },
       { label: 'Consulting request system', version: '1.0' },
       { label: 'Capacity management', version: '1.0' },
-      { label: 'Mentor Agreement popup', version: '1.1' },
+      { label: 'Guild Member Agreement popup', version: '1.1' },
     ],
     next: [
       { label: 'Booking & scheduling system' },
       { label: 'Session payment processing (needs Stripe)' },
     ],
     future: [
-      { label: 'Mentor-created courses' },
+      { label: 'Guild member-created courses' },
       { label: 'Video session integration' },
     ],
     maturity: 'silver',
@@ -4753,7 +4753,7 @@ const PRODUCT_ROADMAP = [
     id: 'guild',
     name: 'Guild Forum',
     category: 'community',
-    description: 'Community forum with posts, threaded replies, voting, images — mentor-gated access',
+    description: 'Community forum with posts, threaded replies, voting, images — guild-gated access',
     route: '/guild',
     released: [
       { label: 'Forum posts with up to 4 images', version: '1.1' },
@@ -4761,7 +4761,7 @@ const PRODUCT_ROADMAP = [
       { label: 'Upvote/downvote system with toggle', version: '1.1' },
       { label: 'Author reputation scoring', version: '1.1' },
       { label: 'Admin post pinning', version: '1.1' },
-      { label: 'Mentor-gated access (active mentor + 3 courses)', version: '1.1' },
+      { label: 'Guild-gated access (active guild member + 3 courses)', version: '1.1' },
       { label: 'Handle system & multiplayer context', version: '1.0' },
       { label: 'Full API backend (guild.js)', version: '1.1' },
     ],
@@ -4968,7 +4968,7 @@ const PRODUCT_ROADMAP = [
     id: 'admin-dragon',
     name: 'Dragon Admin Console',
     category: 'platform',
-    description: '13-tab admin dashboard: Glinter LLC, Plan, IP Registry, Legal, Services, Dev Tools, System Health, Campaigns, Subscribers, Contacts, Mentors, Coursework, Curated Products, 360 Media',
+    description: '13-tab admin dashboard: Glinter LLC, Plan, IP Registry, Legal, Services, Dev Tools, System Health, Campaigns, Subscribers, Contacts, Guild Members, Coursework, Curated Products, 360 Media',
     route: '/dragon',
     released: [
       { label: '13 admin tabs across 4 groups (Business, Web, Friends, Site)', version: '1.0' },
@@ -5056,7 +5056,7 @@ const KEY_METRICS = [
   { name: 'Subscription Churn', target: '<5%/mo', source: 'Stripe webhook events (needs historical tracking)', phase: '0' },
   { name: 'Revenue Per User (ARPU)', target: 'Track', source: 'Stripe + Firestore profiles', phase: '0' },
   // --- Community ---
-  { name: 'Mentor Active Pairings', target: 'Track', source: 'mentor-pairings collection (built)', phase: '3' },
+  { name: 'Guild Active Pairings', target: 'Track', source: 'guild-pairings collection (built)', phase: '3' },
   { name: 'Guild Forum Posts', target: 'Track', source: 'guild-posts collection (built)', phase: '3' },
   { name: 'Story Matches Made', target: 'Track', source: 'match-requests (accepted)', phase: '3' },
   { name: 'Family/Friend Groups', target: 'Track', source: 'families + friendGroups collections', phase: '3' },
@@ -5609,7 +5609,7 @@ function StrategicPlanSection() {
                 ? `${((liveData.payingUsers / liveData.totalUsers) * 100).toFixed(1)}%` : '—';
               case 'Revenue Per User (ARPU)': return liveData.payingUsers > 0
                 ? `$${((liveData.mrr + liveData.oneTime) / liveData.payingUsers / 100).toFixed(2)}` : '—';
-              case 'Mentor Active Pairings': return liveData.activeMentors.toString();
+              case 'Guild Active Pairings': return liveData.activeGuildMembers.toString();
               case 'Subscription Churn': return '—'; // needs historical data
               default: return null;
             }
@@ -5878,7 +5878,7 @@ function StrategicPlanSection() {
             { label: 'Planet Modes', value: '12+', detail: 'Chronosphaera view modes' },
             { label: 'Subscriptions', value: '4', detail: 'Defined & togglable' },
             { label: 'Purchases', value: '4', detail: 'Defined & togglable' },
-            { label: 'Mentor Types', value: 'Multi', detail: 'With pairing system' },
+            { label: 'Guild Types', value: 'Multi', detail: 'With pairing system' },
             { label: 'IP Items', value: 'Tracked', detail: 'Filing registry ready' },
           ].map(item => (
             <div key={item.label} style={{
@@ -7638,7 +7638,7 @@ function GlinterSection() {
       </GlinterCollapsible>
       <GlinterCollapsible title="Release Campaign (5 Phases)">
         <ol style={{ color: '#b8b8c8', fontSize: '0.84rem', lineHeight: 1.8, margin: 0, paddingLeft: 20 }}>
-          <li><strong>Co-Creation</strong> &mdash; 22 co-creators (mythologists, storytellers, artists, mentors, musicians) privately invited to annotate and expand the text; insights become mythic footnotes</li>
+          <li><strong>Co-Creation</strong> &mdash; 22 co-creators (mythologists, storytellers, artists, guild members, musicians) privately invited to annotate and expand the text; insights become mythic footnotes</li>
           <li><strong>Private Sharing</strong> &mdash; Updated edition distributed as mythic invitation to friends, collaborators, industry professionals; Atlas emerges as living companion</li>
           <li><strong>Experiential Mythic Release Event</strong> &mdash; One-night transformational experience, sunset to sunrise: feast, story oration, night-long dance &amp; medicine journeys, second oration at dawn</li>
           <li><strong>Organic Industry Engagement</strong> &mdash; Agents and producers swept in as participants, not pitched to</li>
@@ -8074,7 +8074,7 @@ const ARCH_PATTERN_FAMILIES = {
 
 const ARCH_OTHER_ENTITIES = {
   'Constellations': { count: 88, source: 'constellations.json' },
-  'Pantheons': { count: 78, source: '*Pantheon.json (78 files)' },
+  'Pantheons': { count: 79, source: '*Pantheon.json (79 files)' },
   'Journeys': { count: 9, source: 'journeyDefs.js' },
   'Courses': { count: 11, source: 'courseEngine.js' },
   'Ranks': { count: 7, source: 'profileEngine.js' },
@@ -8085,7 +8085,7 @@ const ARCH_TESTS = [
   { suite: 'dataIntegrity.test.js', tests: 292, covers: 'Entity counts, field shapes, pantheons, octave/heptad/journey patterns' },
   { suite: 'routeExistence.test.js', tests: 41, covers: 'All lazy + static page imports resolve' },
   { suite: 'featureExistence.test.js', tests: 181, covers: 'Page directories, shared components, contexts, layout structure' },
-  { suite: 'apiHandlers.test.js', tests: 49, covers: 'Stripe products, tier config, content index, mentor routing' },
+  { suite: 'apiHandlers.test.js', tests: 49, covers: 'Stripe products, tier config, content index, guild routing' },
   { suite: 'courseEngine.test.js', tests: 29, covers: 'Course definitions, requirement types, completion logic' },
   { suite: 'journeyDefs.test.js', tests: 14, covers: 'Journey configs, stop counts, challenge modes' },
 ];
@@ -8099,7 +8099,7 @@ const ARCH_CSS_STATUS = {
     { file: 'StoryForge.css', lines: 799, page: 'Story Forge' },
   ],
   remaining: [
-    { section: 'MentorDirectory', lines: '~447', priority: 'Next' },
+    { section: 'GuildDirectory', lines: '~447', priority: 'Next' },
     { section: 'FallenStarlight', lines: '~224', priority: 'Next' },
     { section: 'Home/CircleNav', lines: '~769', priority: 'Deferred (generic selectors need renaming)' },
     { section: 'Store Modal', lines: '~219', priority: 'Low' },
@@ -8480,7 +8480,7 @@ function AdminPage() {
       {activeSection === '360-media' && <Media360Section />}
       {activeSection === 'architecture' && <ArchitectureSection />}
       {activeSection === 'subscribers' && <SubscribersSection />}
-      {activeSection === 'mentors' && <MentorManagerSection />}
+      {activeSection === 'mentors' && <GuildManagerSection />}
       {activeSection === 'partners' && <PartnerManagerSection />}
       {activeSection === 'consulting' && <ConsultingManagerSection />}
       {activeSection === 'contacts' && (

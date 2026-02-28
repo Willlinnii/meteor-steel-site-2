@@ -1,5 +1,5 @@
 // Partner engine: statuses, constants, and pure computation functions.
-// Mirrors mentorEngine.js pattern — no Firebase imports.
+// Mirrors guildEngine.js pattern — no Firebase imports.
 
 // --- PARTNER STATUS ---
 export const PARTNER_STATUS = {

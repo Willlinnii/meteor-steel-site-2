@@ -329,8 +329,8 @@ function PostCard({ post, expanded, onToggle, userVotes, onVote, onDelete, curre
       </div>
       <div className="guild-post-content" onClick={onToggle}>
         <div className="guild-post-meta">
-          <span className="guild-post-author-icon">{post.authorMentorIcon}</span>
-          <span className="guild-post-author-handle">{post.authorHandle ? `@${post.authorHandle}` : 'Mentor'}</span>
+          <span className="guild-post-author-icon">{post.authorGuildIcon || post.authorMentorIcon}</span>
+          <span className="guild-post-author-handle">{post.authorHandle ? `@${post.authorHandle}` : 'Guild Member'}</span>
           {post.pinned && <span className="guild-post-pin-badge">Pinned</span>}
           <TimeAgo timestamp={post.createdAt} />
         </div>
@@ -528,8 +528,8 @@ function ReplyThread({ reply, childMap, depth, postId, userVotes, onVote, onRepl
   return (
     <div className={`guild-reply${effectiveDepth > 0 ? ' guild-reply-nested' : ''}`} style={{ marginLeft: effectiveDepth * 20 }}>
       <div className="guild-reply-header">
-        <span className="guild-reply-author-icon">{reply.authorMentorIcon}</span>
-        <span className="guild-reply-author-handle">{reply.authorHandle ? `@${reply.authorHandle}` : 'Mentor'}</span>
+        <span className="guild-reply-author-icon">{reply.authorGuildIcon || reply.authorMentorIcon}</span>
+        <span className="guild-reply-author-handle">{reply.authorHandle ? `@${reply.authorHandle}` : 'Guild Member'}</span>
         <TimeAgo timestamp={reply.createdAt} />
       </div>
       <div className="guild-reply-body" dangerouslySetInnerHTML={{ __html: renderMarkdown(reply.body) }} />

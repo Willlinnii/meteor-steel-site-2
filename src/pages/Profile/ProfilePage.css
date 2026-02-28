@@ -88,12 +88,12 @@
   border-color: var(--accent-steel);
 }
 
-.profile-badge.mentor {
+.profile-badge.guild-member {
   background: rgba(107, 197, 160, 0.08);
   border-color: rgba(107, 197, 160, 0.25);
 }
 
-.profile-badge.mentor:hover {
+.profile-badge.guild-member:hover {
   background: rgba(107, 197, 160, 0.18);
   border-color: #6bc5a0;
 }
@@ -172,6 +172,22 @@
 
 .profile-section-chevron.open {
   transform: rotate(180deg);
+}
+
+.profile-bio-toggle {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  cursor: pointer;
+  padding: 4px 0;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.profile-bio-toggle:hover {
+  color: var(--accent-gold);
 }
 
 .profile-handle {
@@ -1666,21 +1682,21 @@
 }
 
 
-/* ===== PROFILE: MENTORSHIP ===== */
-.mentor-eligible {
+/* ===== PROFILE: GUILD MEMBERSHIP ===== */
+.guild-member-eligible {
   margin-bottom: 16px;
 }
-.mentor-eligible p {
+.guild-member-eligible p {
   color: rgba(201, 169, 97, 0.7);
   margin-bottom: 10px;
   font-size: 0.88rem;
 }
-.mentor-type-list {
+.guild-member-type-list {
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
-.mentor-type-card {
+.guild-member-type-card {
   display: flex;
   align-items: center;
   gap: 12px;
@@ -1689,16 +1705,16 @@
   border-radius: 10px;
   padding: 12px 14px;
 }
-.mentor-badge-icon {
+.guild-member-badge-icon {
   font-size: 1.5rem;
   flex-shrink: 0;
 }
-.mentor-badge-title {
+.guild-member-badge-title {
   color: #c9a961;
   font-weight: 600;
   font-size: 0.95rem;
 }
-.mentor-status-card {
+.guild-member-status-card {
   display: flex;
   align-items: flex-start;
   gap: 12px;
@@ -1708,37 +1724,37 @@
   padding: 14px 16px;
   margin-bottom: 12px;
 }
-.mentor-status-card.pending {
+.guild-member-status-card.pending {
   border-color: rgba(217, 165, 91, 0.4);
 }
-.mentor-status-card.approved {
+.guild-member-status-card.approved {
   border-color: rgba(91, 217, 122, 0.4);
 }
-.mentor-status-card.active {
+.guild-member-status-card.active {
   border-color: rgba(91, 217, 122, 0.6);
   background: rgba(91, 217, 122, 0.08);
 }
-.mentor-status-card.rejected {
+.guild-member-status-card.rejected {
   border-color: rgba(217, 91, 91, 0.4);
 }
-.mentor-course-checklist {
+.guild-member-course-checklist {
   list-style: none;
   padding: 0;
   margin: 8px 0 0;
 }
-.mentor-course-checklist li {
+.guild-member-course-checklist li {
   color: rgba(201, 169, 97, 0.6);
   font-size: 0.85rem;
   padding: 3px 0;
 }
-.mentor-course-checklist li.done {
+.guild-member-course-checklist li.done {
   color: rgba(91, 217, 122, 0.8);
 }
-.mentor-upload-area {
+.guild-member-upload-area {
   margin: 10px 0;
   text-align: center;
 }
-.mentor-upload-btn {
+.guild-member-upload-btn {
   background: rgba(201, 169, 97, 0.1);
   border: 1px dashed rgba(201, 169, 97, 0.3);
   border-radius: 8px;
@@ -1748,14 +1764,14 @@
   font-size: 0.85rem;
   transition: border-color 0.2s;
 }
-.mentor-upload-btn:hover {
+.guild-member-upload-btn:hover {
   border-color: rgba(201, 169, 97, 0.5);
 }
-.mentor-upload-success {
+.guild-member-upload-success {
   color: rgba(91, 217, 122, 0.8);
   font-size: 0.85rem;
 }
-.mentor-upload-error {
+.guild-member-upload-error {
   color: rgba(217, 91, 91, 0.8);
   font-size: 0.85rem;
   margin-top: 4px;

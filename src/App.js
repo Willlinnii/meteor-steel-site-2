@@ -82,7 +82,7 @@ const MythicEarthPage = lazy(() => import('./pages/MythicEarth/MythicEarthPage')
 const YellowBrickRoadPage = lazy(() => import('./pages/YellowBrickRoad/YellowBrickRoadPage'));
 const XRPage = lazy(() => import('./pages/XR/XRPage'));
 const FallenStarlightPage = lazy(() => import('./pages/FallenStarlight/FallenStarlightPage'));
-const MentorDirectoryPage = lazy(() => import('./pages/MentorDirectory/MentorDirectoryPage'));
+const GuildDirectoryPage = lazy(() => import('./pages/MentorDirectory/MentorDirectoryPage'));
 const PartnerDirectoryPage = lazy(() => import('./pages/PartnerDirectory/PartnerDirectoryPage'));
 const GuildPage = lazy(() => import('./pages/Guild/GuildPage'));
 const SacredSites360Page = lazy(() => import('./pages/SacredSites360/SacredSites360Page'));
@@ -108,6 +108,7 @@ const TeacherPage = lazy(() => import('./pages/Teacher/TeacherPage'));
 const WillLinnPage = lazy(() => import('./pages/WillLinn/WillLinnPage'));
 const MicrocosmosPage = lazy(() => import('./pages/Microcosmos/MicrocosmosPage'));
 const RecursiveChartPage = lazy(() => import('./pages/RecursiveChart/RecursiveChartPage'));
+const DivinationPage = lazy(() => import('./pages/Divination/DivinationPage'));
 
 const STAGES = [
   { id: 'golden-age', label: 'Golden Age' },
@@ -1750,12 +1751,13 @@ const NAV_ITEMS = [
   { path: '/atlas', label: 'Atlas' },
   { path: '/story-forge', label: 'Story Forge' },
   { path: '/games', label: 'Game Room' },
+  { path: '/divination', label: 'Divination' },
   { path: '/library', label: 'Library' },
   { path: '/', label: 'Creation Story' },
 ];
 
 const HIDDEN_NAV_ITEMS = [
-  { path: '/mentors', label: 'Guild Directory' },
+  { path: '/guild-directory', label: 'Guild Directory' },
   { path: '/guild', label: 'Guild' },
 ];
 
@@ -1776,7 +1778,7 @@ function SiteNav() {
   ];
 
   // Label-only overrides: show in the toggle text but not in the dropdown
-  const LABEL_OVERRIDES = { '/profile': 'Profile', '/xr': 'VR / XR', '/mentors': 'Guild Directory', '/guild': 'Guild', '/dragon': 'Dragon', '/fallen-starlight': 'Fallen Starlight', '/story-of-stories': 'Story of Stories', '/monomyth': 'Monomyth', '/story-forge': 'Story Forge', '/yellow-brick-road': 'Yellow Brick Road', '/library': 'Library', '/home': 'Home', '/sacred-sites-360': 'Sacred Sites 360', '/mythic-earth': 'Mythic Earth', '/secret-weapon': 'Secret Weapon', '/secret-weapon-api': 'Secret Weapon API', '/fellowship': 'Fellowship', '/curated': 'Curated Collection' };
+  const LABEL_OVERRIDES = { '/profile': 'Profile', '/xr': 'VR / XR', '/guild-directory': 'Guild Directory', '/guild': 'Guild', '/dragon': 'Dragon', '/fallen-starlight': 'Fallen Starlight', '/story-of-stories': 'Story of Stories', '/monomyth': 'Monomyth', '/story-forge': 'Story Forge', '/yellow-brick-road': 'Yellow Brick Road', '/library': 'Library', '/home': 'Home', '/sacred-sites-360': 'Sacred Sites 360', '/mythic-earth': 'Mythic Earth', '/secret-weapon': 'Secret Weapon', '/secret-weapon-api': 'Secret Weapon API', '/fellowship': 'Fellowship', '/curated': 'Curated Collection' };
   const pathMatch = (navPath) => navPath === '/' ? location.pathname === '/' : location.pathname === navPath || location.pathname.startsWith(navPath + '/');
   const overrideLabel = LABEL_OVERRIDES[location.pathname]
     || (location.pathname.startsWith('/journey/') && 'Journey')
@@ -2172,20 +2174,20 @@ function renderLegalDocumentInline(text) {
   return text.trim().split('\n').map((line, i) => {
     const trimmed = line.trimEnd();
     if (!trimmed) return <br key={i} />;
-    if (/^MYTHOUSE\s/.test(trimmed)) return <h3 key={i} className="mentor-contract-doc-title">{trimmed}</h3>;
-    if (/^\d+\.\s+[A-Z]/.test(trimmed)) return <h4 key={i} className="mentor-contract-doc-section">{trimmed}</h4>;
-    if (/^\d+\.\d+\s/.test(trimmed)) return <p key={i} className="mentor-contract-doc-subsection">{trimmed}</p>;
-    if (/^- /.test(trimmed)) return <li key={i} className="mentor-contract-doc-bullet">{trimmed.slice(2)}</li>;
-    if (/^Last Updated/.test(trimmed)) return <p key={i} className="mentor-contract-doc-date">{trimmed}</p>;
-    return <p key={i} className="mentor-contract-doc-para">{trimmed}</p>;
+    if (/^MYTHOUSE\s/.test(trimmed)) return <h3 key={i} className="guild-member-contract-doc-title">{trimmed}</h3>;
+    if (/^\d+\.\s+[A-Z]/.test(trimmed)) return <h4 key={i} className="guild-member-contract-doc-section">{trimmed}</h4>;
+    if (/^\d+\.\d+\s/.test(trimmed)) return <p key={i} className="guild-member-contract-doc-subsection">{trimmed}</p>;
+    if (/^- /.test(trimmed)) return <li key={i} className="guild-member-contract-doc-bullet">{trimmed.slice(2)}</li>;
+    if (/^Last Updated/.test(trimmed)) return <p key={i} className="guild-member-contract-doc-date">{trimmed}</p>;
+    return <p key={i} className="guild-member-contract-doc-para">{trimmed}</p>;
   });
 }
 
-function MentorContractPopup() {
-  const { mentorData, loaded: profileLoaded, acceptMentorContract } = useProfile();
+function GuildContractPopup() {
+  const { guildData, loaded: profileLoaded, acceptGuildContract } = useProfile();
   const [dismissed, setDismissed] = useState(false);
 
-  const show = profileLoaded && mentorData?.status === 'approved' && !mentorData?.mentorContractAccepted && !dismissed;
+  const show = profileLoaded && guildData?.status === 'approved' && !guildData?.guildContractAccepted && !dismissed;
 
   useEffect(() => {
     if (show) {
@@ -2204,16 +2206,16 @@ function MentorContractPopup() {
   if (!show) return null;
 
   return (
-    <div className="mentor-contract-overlay" onClick={() => setDismissed(true)}>
-      <div className="mentor-contract-panel" onClick={e => e.stopPropagation()}>
-        <button className="mentor-contract-close" onClick={() => setDismissed(true)} aria-label="Close">&times;</button>
-        <h2 className="mentor-contract-heading">Mentor Agreement</h2>
-        <p className="mentor-contract-subtitle">Please review and accept the agreement below to proceed with your mentor activation.</p>
-        <div className="mentor-contract-body">
-          {renderLegalDocumentInline(LEGAL_DOCUMENTS['mentor-agreement'])}
+    <div className="guild-member-contract-overlay" onClick={() => setDismissed(true)}>
+      <div className="guild-member-contract-panel" onClick={e => e.stopPropagation()}>
+        <button className="guild-member-contract-close" onClick={() => setDismissed(true)} aria-label="Close">&times;</button>
+        <h2 className="guild-member-contract-heading">Guild Member Agreement</h2>
+        <p className="guild-member-contract-subtitle">Please review and accept the agreement below to proceed with your guild activation.</p>
+        <div className="guild-member-contract-body">
+          {renderLegalDocumentInline(LEGAL_DOCUMENTS['guild-member-agreement'])}
         </div>
-        <div className="mentor-contract-actions">
-          <button className="mentor-contract-accept-btn" onClick={acceptMentorContract}>I Accept</button>
+        <div className="guild-member-contract-actions">
+          <button className="guild-member-contract-accept-btn" onClick={acceptGuildContract}>I Accept</button>
         </div>
       </div>
     </div>
@@ -2314,7 +2316,7 @@ function AppContent() {
       <SiteHeader />
       <SiteNav />
       <CourseCompletionPopup />
-      <MentorContractPopup />
+      <GuildContractPopup />
       <ErrorBoundary>
       <Routes>
         <Route path="/" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><DiscoverStarlightPage /></Suspense>} />
@@ -2341,7 +2343,8 @@ function AppContent() {
         <Route path="/mythosophia" element={<MythosophiaPage />} />
         <Route path="/store" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><StorePageWithProfile /></Suspense>} />
         <Route path="/profile" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><ProfilePage /></Suspense>} />
-        <Route path="/recursive-chart" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" />Loading Chart...</div>}><RecursiveChartPage /></Suspense>} />
+        <Route path="/divination/*" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><DivinationPage /></Suspense>} />
+        <Route path="/recursive-chart" element={<Navigate to="/divination/mythouse-astrology" replace />} />
         <Route path="/atlas" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><AtlasPage /></Suspense>} />
         <Route path="/journey/:journeyId" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" />Loading Journey...</div>}><OuroborosJourneyPage /></Suspense>} />
         <Route path="/library" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><MythSalonLibraryPage /></Suspense>} />
@@ -2355,7 +2358,8 @@ function AppContent() {
         <Route path="/consulting/engagement/:engagementId" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><ConsultingDashboardPage /></Suspense>} />
         <Route path="/consulting/practitioner" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><PractitionerDashboardPage /></Suspense>} />
         <Route path="/consulting/forge/:engagementId" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><ConsultingForgePage /></Suspense>} />
-        <Route path="/mentors" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><MentorDirectoryPage /></Suspense>} />
+        <Route path="/mentors" element={<Navigate to="/guild-directory" replace />} />
+        <Route path="/guild-directory" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><GuildDirectoryPage /></Suspense>} />
         <Route path="/partners" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><PartnerDirectoryPage /></Suspense>} />
         <Route path="/guild" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><GuildPage /></Suspense>} />
         <Route path="/teacher" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><TeacherPage /></Suspense>} />

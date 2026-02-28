@@ -84,13 +84,23 @@ service cloud.firestore {
       allow write: if false;
     }
 
-    // Mentor applications — admin read-only, server-written
-    match /mentor-applications/{appId} {
+    // Guild applications — admin read-only, server-written
+    match /guild-applications/{appId} {
       allow read: if request.auth != null && request.auth.token.email == 'willlinnii@gmail.com';
       allow write: if false;
     }
 
-    // Mentor directory — readable by all auth users, server-written only
+    // Guild directory — readable by all auth users, server-written only
+    match /guild-directory/{memberId} {
+      allow read: if request.auth != null;
+      allow write: if false;
+    }
+
+    // Legacy mentor collections (kept during migration)
+    match /mentor-applications/{appId} {
+      allow read: if request.auth != null && request.auth.token.email == 'willlinnii@gmail.com';
+      allow write: if false;
+    }
     match /mentor-directory/{mentorId} {
       allow read: if request.auth != null;
       allow write: if false;
@@ -117,7 +127,17 @@ service cloud.firestore {
       allow write: if false;
     }
 
-    // Mentor pairings — readable by mentor, student, or admin; server-written only
+    // Guild pairings — readable by guild member, student, or admin; server-written only
+    match /guild-pairings/{pairingId} {
+      allow read: if request.auth != null
+        && (request.auth.uid == resource.data.guildMemberUid
+            || request.auth.uid == resource.data.mentorUid
+            || request.auth.uid == resource.data.studentUid
+            || request.auth.token.email == 'willlinnii@gmail.com');
+      allow write: if false;
+    }
+
+    // Legacy mentor pairings (kept during migration)
     match /mentor-pairings/{pairingId} {
       allow read: if request.auth != null
         && (request.auth.uid == resource.data.mentorUid

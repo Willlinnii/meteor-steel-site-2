@@ -1,7 +1,7 @@
-// Mentor pairing engine: constants and pure functions for mentor-student pairing.
-// Mirrors mentorEngine.js pattern — no side effects, no Firebase imports.
+// Guild pairing engine: constants and pure functions for guild member-student pairing.
+// Mirrors guildEngine.js pattern — no side effects, no Firebase imports.
 
-import { DEFAULT_MENTOR_CAPACITY, MAX_MENTOR_BIO_LENGTH, MAX_MENTOR_CAPACITY } from './mentorEngine';
+import { DEFAULT_GUILD_CAPACITY, MAX_GUILD_BIO_LENGTH, MAX_GUILD_CAPACITY } from './guildEngine';
 
 // --- PAIRING STATUS ---
 
@@ -12,18 +12,18 @@ export const PAIRING_STATUS = {
   ENDED: 'ended',
 };
 
-// --- CONSTANTS (re-exported from mentorEngine for backwards compat) ---
-export { DEFAULT_MENTOR_CAPACITY, MAX_MENTOR_BIO_LENGTH, MAX_MENTOR_CAPACITY };
+// --- CONSTANTS (re-exported from guildEngine for backwards compat) ---
+export { DEFAULT_GUILD_CAPACITY, MAX_GUILD_BIO_LENGTH, MAX_GUILD_CAPACITY };
 
 // --- FUNCTIONS ---
 
 /**
- * Returns true if the user can request this mentor (no duplicate pending/active request).
+ * Returns true if the user can request this guild member (no duplicate pending/active request).
  */
-export function canRequestMentor(existingPairings, mentorUid) {
+export function canRequestGuildMember(existingPairings, guildMemberUid) {
   if (!existingPairings || existingPairings.length === 0) return true;
   return !existingPairings.some(
-    p => p.mentorUid === mentorUid &&
+    p => p.guildMemberUid === guildMemberUid &&
       (p.status === PAIRING_STATUS.PENDING || p.status === PAIRING_STATUS.ACCEPTED)
   );
 }
@@ -32,7 +32,7 @@ export function canRequestMentor(existingPairings, mentorUid) {
  * Returns remaining capacity (available slots).
  */
 export function getAvailableSlots(capacity, activeCount) {
-  return Math.max(0, (capacity || DEFAULT_MENTOR_CAPACITY) - (activeCount || 0));
+  return Math.max(0, (capacity || DEFAULT_GUILD_CAPACITY) - (activeCount || 0));
 }
 
 /**
@@ -47,32 +47,32 @@ export function getPairingDisplay(pairing, isStudent) {
   };
 
   return {
-    otherHandle: isStudent ? pairing.mentorHandle : pairing.studentHandle,
-    otherUid: isStudent ? pairing.mentorUid : pairing.studentUid,
+    otherHandle: isStudent ? pairing.guildMemberHandle : pairing.studentHandle,
+    otherUid: isStudent ? pairing.guildMemberUid : pairing.studentUid,
     status: pairing.status,
     statusLabel: statusLabels[pairing.status] || pairing.status,
-    mentorType: pairing.mentorType,
+    guildType: pairing.guildType,
     requestMessage: pairing.requestMessage || null,
     declineReason: pairing.declineReason || null,
   };
 }
 
 /**
- * Categorizes pairings into groups based on whether the user is mentor or student side.
- * Returns { pendingRequests, activeStudents, myMentors, pendingApplications }
+ * Categorizes pairings into groups based on whether the user is guild member or student side.
+ * Returns { pendingRequests, activeStudents, myGuildMembers, pendingApplications }
  */
 export function categorizePairings(pairings, uid) {
   const result = {
-    pendingRequests: [],    // incoming pending requests where user is mentor
-    activeStudents: [],     // accepted pairings where user is mentor
-    myMentors: [],          // accepted pairings where user is student
+    pendingRequests: [],    // incoming pending requests where user is guild member
+    activeStudents: [],     // accepted pairings where user is guild member
+    myGuildMembers: [],     // accepted pairings where user is student
     pendingApplications: [], // pending requests where user is student
   };
 
   if (!pairings || !uid) return result;
 
   for (const p of pairings) {
-    if (p.mentorUid === uid) {
+    if ((p.guildMemberUid || p.mentorUid) === uid) {
       if (p.status === PAIRING_STATUS.PENDING) {
         result.pendingRequests.push(p);
       } else if (p.status === PAIRING_STATUS.ACCEPTED) {
@@ -83,7 +83,7 @@ export function categorizePairings(pairings, uid) {
       if (p.status === PAIRING_STATUS.PENDING) {
         result.pendingApplications.push(p);
       } else if (p.status === PAIRING_STATUS.ACCEPTED) {
-        result.myMentors.push(p);
+        result.myGuildMembers.push(p);
       }
     }
   }

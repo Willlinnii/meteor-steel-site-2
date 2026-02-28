@@ -5,7 +5,7 @@
  * with mock request/response objects. No HTTP requests are made —
  * this validates function logic: routing, validation, and data integrity.
  *
- * Derived from: api/mentor.js, api/_lib/stripeProducts.js,
+ * Derived from: api/guild-member.js, api/_lib/stripeProducts.js,
  *               api/_lib/tierConfig.js, api/_lib/contentIndex.js
  */
 
@@ -58,7 +58,7 @@ const {
   searchContent,
 } = require('../../api/_lib/contentIndex');
 
-const mentorHandler = require('../../api/mentor');
+const guildMemberHandler = require('../../api/guild-member');
 
 // ── Helpers ──
 
@@ -327,18 +327,18 @@ describe('Content index', () => {
 });
 
 // ============================================================
-// 4. Mentor action routing
+// 4. Guild member action routing
 // ============================================================
 
-describe('Mentor action routing', () => {
+describe('Guild member action routing', () => {
   test('module exports a function', () => {
-    expect(typeof mentorHandler).toBe('function');
+    expect(typeof guildMemberHandler).toBe('function');
   });
 
   test('GET request returns 405', async () => {
     const req = mockReq({ method: 'GET' });
     const res = mockRes();
-    await mentorHandler(req, res);
+    await guildMemberHandler(req, res);
     expect(res.status).toHaveBeenCalledWith(405);
     expect(res.json).toHaveBeenCalledWith({ error: 'Method not allowed' });
   });
@@ -346,21 +346,21 @@ describe('Mentor action routing', () => {
   test('PUT request returns 405', async () => {
     const req = mockReq({ method: 'PUT' });
     const res = mockRes();
-    await mentorHandler(req, res);
+    await guildMemberHandler(req, res);
     expect(res.status).toHaveBeenCalledWith(405);
   });
 
   test('DELETE request returns 405', async () => {
     const req = mockReq({ method: 'DELETE' });
     const res = mockRes();
-    await mentorHandler(req, res);
+    await guildMemberHandler(req, res);
     expect(res.status).toHaveBeenCalledWith(405);
   });
 
   test('missing action returns 400', async () => {
     const req = mockReq({ body: {} });
     const res = mockRes();
-    await mentorHandler(req, res);
+    await guildMemberHandler(req, res);
     expect(res.status).toHaveBeenCalledWith(400);
     expect(res.json).toHaveBeenCalledWith(
       expect.objectContaining({ error: expect.stringContaining('Invalid action') })
@@ -370,7 +370,7 @@ describe('Mentor action routing', () => {
   test('invalid action returns 400', async () => {
     const req = mockReq({ body: { action: 'hack-the-planet' } });
     const res = mockRes();
-    await mentorHandler(req, res);
+    await guildMemberHandler(req, res);
     expect(res.status).toHaveBeenCalledWith(400);
     expect(res.json).toHaveBeenCalledWith(
       expect.objectContaining({ error: expect.stringContaining('Invalid action') })
@@ -380,14 +380,14 @@ describe('Mentor action routing', () => {
   test('null body returns 400', async () => {
     const req = mockReq({ body: null });
     const res = mockRes();
-    await mentorHandler(req, res);
+    await guildMemberHandler(req, res);
     expect(res.status).toHaveBeenCalledWith(400);
   });
 
   test('admin action (approve) without auth returns 401', async () => {
     const req = mockReq({ body: { action: 'approve' } });
     const res = mockRes();
-    await mentorHandler(req, res);
+    await guildMemberHandler(req, res);
     expect(res.status).toHaveBeenCalledWith(401);
     expect(res.json).toHaveBeenCalledWith({ error: 'Unauthorized.' });
   });
@@ -395,7 +395,7 @@ describe('Mentor action routing', () => {
   test('admin action (reject) without auth returns 401', async () => {
     const req = mockReq({ body: { action: 'reject' } });
     const res = mockRes();
-    await mentorHandler(req, res);
+    await guildMemberHandler(req, res);
     expect(res.status).toHaveBeenCalledWith(401);
     expect(res.json).toHaveBeenCalledWith({ error: 'Unauthorized.' });
   });
@@ -403,7 +403,7 @@ describe('Mentor action routing', () => {
   test('directory action without auth returns 401', async () => {
     const req = mockReq({ body: { action: 'update-bio' } });
     const res = mockRes();
-    await mentorHandler(req, res);
+    await guildMemberHandler(req, res);
     expect(res.status).toHaveBeenCalledWith(401);
     expect(res.json).toHaveBeenCalledWith({ error: 'Unauthorized.' });
   });
@@ -411,7 +411,7 @@ describe('Mentor action routing', () => {
   test('pairing action without auth returns 401', async () => {
     const req = mockReq({ body: { action: 'pairing-request' } });
     const res = mockRes();
-    await mentorHandler(req, res);
+    await guildMemberHandler(req, res);
     expect(res.status).toHaveBeenCalledWith(401);
     expect(res.json).toHaveBeenCalledWith({ error: 'Unauthorized.' });
   });
@@ -419,7 +419,7 @@ describe('Mentor action routing', () => {
   test('consulting action without auth returns 401', async () => {
     const req = mockReq({ body: { action: 'consulting-request' } });
     const res = mockRes();
-    await mentorHandler(req, res);
+    await guildMemberHandler(req, res);
     expect(res.status).toHaveBeenCalledWith(401);
     expect(res.json).toHaveBeenCalledWith({ error: 'Unauthorized.' });
   });
@@ -430,7 +430,7 @@ describe('Mentor action routing', () => {
       headers: { authorization: 'Basic abc123' },
     });
     const res = mockRes();
-    await mentorHandler(req, res);
+    await guildMemberHandler(req, res);
     expect(res.status).toHaveBeenCalledWith(401);
   });
 
@@ -440,7 +440,7 @@ describe('Mentor action routing', () => {
       headers: { authorization: 'Bearer fake-token-123' },
     });
     const res = mockRes();
-    await mentorHandler(req, res);
+    await guildMemberHandler(req, res);
     // The mock verifyIdToken rejects, so we get 401 "Invalid token."
     expect(res.status).toHaveBeenCalledWith(401);
     expect(res.json).toHaveBeenCalledWith({ error: 'Invalid token.' });
@@ -449,27 +449,27 @@ describe('Mentor action routing', () => {
   test('teacher action (get-catalog) without auth returns 401', async () => {
     const req = mockReq({ body: { action: 'get-catalog' } });
     const res = mockRes();
-    await mentorHandler(req, res);
+    await guildMemberHandler(req, res);
     expect(res.status).toHaveBeenCalledWith(401);
   });
 
   test('guild action without auth returns 401', async () => {
     const req = mockReq({ body: { action: 'create-post' } });
     const res = mockRes();
-    await mentorHandler(req, res);
+    await guildMemberHandler(req, res);
     expect(res.status).toHaveBeenCalledWith(401);
   });
 
   test('engagement action without auth returns 401', async () => {
     const req = mockReq({ body: { action: 'create-engagement' } });
     const res = mockRes();
-    await mentorHandler(req, res);
+    await guildMemberHandler(req, res);
     expect(res.status).toHaveBeenCalledWith(401);
   });
 
   test('all valid action names are recognized by the handler', () => {
     // Verify the handler recognizes all documented action categories.
-    // These are derived from the mentor.js source.
+    // These are derived from the guild-member.js source.
     const ADMIN_ACTIONS = ['approve', 'reject', 'screen'];
     const DIRECTORY_ACTIONS = ['update-bio', 'update-capacity', 'publish', 'unpublish', 'update-consulting-availability'];
     const PAIRING_ACTIONS = ['pairing-request', 'pairing-accept', 'pairing-decline', 'pairing-end'];

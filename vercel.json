@@ -8,6 +8,7 @@
   },
   "rewrites": [
     { "source": "/api/v1/:path*", "destination": "/api/v1" },
+    { "source": "/api/mentor", "destination": "/api/guild-member" },
     { "source": "/api/(.*)", "destination": "/api/$1" },
     { "source": "/(.*)", "destination": "/index.html" }
   ]

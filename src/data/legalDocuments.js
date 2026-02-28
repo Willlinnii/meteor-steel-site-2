@@ -43,9 +43,9 @@ You agree not to:
 - Use the Platform for any unlawful purpose
 - Attempt to gain unauthorized access to any part of the Platform or its systems
 - Interfere with the proper functioning of the Platform
-- Harass, abuse, or harm other users, including mentors, students, and Guild members
+- Harass, abuse, or harm other users, including guild members, students, and partners
 - Upload malicious code or attempt to compromise Platform security
-- Misrepresent your identity or qualifications, particularly in the mentor program
+- Misrepresent your identity or qualifications, particularly in the guild program
 - Use AI features (Atlas, Story Forge) to generate harmful, abusive, or illegal content
 - Scrape, crawl, or systematically download Platform content
 - Resell or redistribute Platform content without authorization
@@ -139,14 +139,14 @@ This Privacy Policy describes how Mythouse / Meteor Steel ("we," "us," "our") co
 1.4 AI Interaction Data
 - Atlas chat conversation history
 - Story Forge drafts and assembled narratives
-- Mentor application chat transcripts
+- Guild application chat transcripts
 - Journey synthesis and story interview interactions
 - Tarot reading requests and interpretations
 
 1.5 User-Generated Content
 - Personal stories and reflections (Writings)
 - Story Forge creative writing
-- Mentor bios and application materials
+- Guild member bios and application materials
 - Consulting profiles
 
 1.6 Financial and Subscription Data
@@ -168,7 +168,7 @@ We use collected information to:
 - Compute natal charts and numerological profiles
 - Power AI features (Atlas chat, Story Forge, journey synthesis)
 - Track coursework progress and award credentials
-- Facilitate the mentor program (applications, pairings, directory listings)
+- Facilitate the guild program (applications, pairings, directory listings)
 - Enable multiplayer game functionality
 - Improve the Platform based on usage patterns
 - Communicate about your account or Platform changes
@@ -206,7 +206,7 @@ The Platform integrates with the following third-party services, each with their
 
 We do not sell your personal data. We may share data:
 - With third-party service providers as described above, solely to provide Platform functionality
-- With mentor-student pairings: limited profile information is shared between paired mentors and students
+- With guild member-student pairings: limited profile information is shared between paired guild members and students
 - If required by law, regulation, or legal process
 - To protect the rights, safety, or property of Mythouse, our users, or the public
 
@@ -252,51 +252,51 @@ We may update this Privacy Policy from time to time. Material changes will be co
 For privacy inquiries or data requests, contact: [CONTACT EMAIL]
 `,
 
-  'mentor-agreement': `
-MYTHOUSE — MENTOR AGREEMENT
+  'guild-member-agreement': `
+MYTHOUSE — GUILD MEMBER AGREEMENT
 
 Last Updated: [DATE]
 
-This Mentor Agreement ("Agreement") is between Mythouse / Meteor Steel ("the Platform," "we," "us") and you ("Mentor"), an approved mentor on the Mythouse platform.
+This Guild Member Agreement ("Agreement") is between Mythouse / Meteor Steel ("the Platform," "we," "us") and you ("Guild Member"), an approved guild member on the Mythouse platform.
 
-By activating your mentor status, you agree to the following terms.
+By activating your guild member status, you agree to the following terms.
 
 1. QUALIFICATION AND ELIGIBILITY
 
 1.1 You have earned at least one Level 2 credential in a recognized Mythouse credential category (Scholar, Storyteller, Healer, Media Voice, or Adventurer).
 
-1.2 You have completed the required mentor coursework.
+1.2 You have completed the required guild coursework.
 
-1.3 Your mentor application has been reviewed and approved by the Platform administrator.
+1.3 Your guild application has been reviewed and approved by the Platform administrator.
 
-1.4 You understand that mentor status is a privilege, not a right, and may be revoked for cause.
+1.4 You understand that guild member status is a privilege, not a right, and may be revoked for cause.
 
-2. MENTOR ROLES AND RESPONSIBILITIES
+2. GUILD MEMBER ROLES AND RESPONSIBILITIES
 
-2.1 You may serve as a mentor in the categories for which you hold qualifying credentials:
-- Mentor Mythologist (Scholar track)
-- Mentor Storyteller (Storyteller track)
-- Mentor Healer (Healer track)
-- Mentor Media Voice (Media Voice track)
-- Mentor Adventurer (Adventurer track)
+2.1 You may serve as a guild member in the categories for which you hold qualifying credentials:
+- Mythologist (Scholar track)
+- Storyteller (Storyteller track)
+- Healer (Healer track)
+- Media Voice (Media Voice track)
+- Adventurer (Adventurer track)
 
 2.2 You agree to:
 - Respond to student pairing requests in a timely manner (accept or decline)
 - Maintain your stated capacity for active students (default: 5)
 - Provide guidance within your areas of qualification
-- Respect the boundaries of the mentor-student relationship
+- Respect the boundaries of the guild member-student relationship
 - Keep your bio and directory listing accurate and up to date
 
 2.3 You agree NOT to:
 - Represent yourself as a licensed professional (therapist, doctor, lawyer, financial advisor) unless you hold such licensure separately and disclose it clearly
 - Provide medical, psychological, legal, or financial advice
-- Engage in romantic or sexual relationships with students you mentor on the Platform
+- Engage in romantic or sexual relationships with students you guide on the Platform
 - Share student personal information with third parties
-- Use the mentor relationship for personal financial gain outside the Platform's consulting framework
+- Use the guild member relationship for personal financial gain outside the Platform's consulting framework
 
 3. STUDENT RELATIONSHIPS
 
-3.1 Mentor-student pairings are facilitated through the Platform. Either party may end a pairing at any time.
+3.1 Guild member-student pairings are facilitated through the Platform. Either party may end a pairing at any time.
 
 3.2 You acknowledge that students may range in age (13+) and experience. You will adapt your guidance appropriately.
 
@@ -312,29 +312,29 @@ By activating your mentor status, you agree to the following terms.
 
 5. DIRECTORY LISTING
 
-5.1 By publishing to the Mentor Directory, you consent to making your mentor bio, credential categories, and capacity visible to all Platform users.
+5.1 By publishing to the Guild Directory, you consent to making your guild member bio, credential categories, and capacity visible to all Platform users.
 
 5.2 You may unpublish from the Directory at any time, which removes your listing but does not end active pairings.
 
 6. GUILD PARTICIPATION
 
-6.1 As an active mentor, you have access to the Guild — a community space for mentors to discuss practices, share insights, and collaborate.
+6.1 As an active guild member, you have access to the Guild — a community space for guild members to discuss practices, share insights, and collaborate.
 
 6.2 Guild interactions are subject to the Community Guidelines.
 
 7. CONTENT AND INTELLECTUAL PROPERTY
 
-7.1 Content you create as a mentor (guidance, resources, written materials) remains your intellectual property.
+7.1 Content you create as a guild member (guidance, resources, written materials) remains your intellectual property.
 
-7.2 You grant the Platform a non-exclusive license to display your mentor bio and directory information as part of the service.
+7.2 You grant the Platform a non-exclusive license to display your guild member bio and directory information as part of the service.
 
 7.3 You will not reproduce or redistribute proprietary Platform content (synthesis essays, system prompts, course materials, game data) outside the Platform.
 
 8. TERMINATION
 
-8.1 You may resign your mentor status at any time by unpublishing and ending all active pairings.
+8.1 You may resign your guild member status at any time by unpublishing and ending all active pairings.
 
-8.2 We may revoke your mentor status for:
+8.2 We may revoke your guild member status for:
 - Violation of this Agreement or the Terms of Service
 - Sustained complaints from students
 - Misrepresentation of qualifications
@@ -345,15 +345,15 @@ By activating your mentor status, you agree to the following terms.
 
 9. LIABILITY AND INDEMNIFICATION
 
-9.1 You acknowledge that mentoring involves interpersonal guidance in subjective fields (mythology, storytelling, spiritual exploration) and that outcomes are not guaranteed.
+9.1 You acknowledge that guild membership involves interpersonal guidance in subjective fields (mythology, storytelling, spiritual exploration) and that outcomes are not guaranteed.
 
-9.2 THE PLATFORM IS NOT LIABLE FOR ANY ACTIONS, ADVICE, OR CONDUCT OF MENTORS. MENTORS ACT AS INDEPENDENT INDIVIDUALS.
+9.2 THE PLATFORM IS NOT LIABLE FOR ANY ACTIONS, ADVICE, OR CONDUCT OF GUILD MEMBERS. GUILD MEMBERS ACT AS INDEPENDENT INDIVIDUALS.
 
-9.3 You agree to indemnify the Platform against claims arising from your mentoring activities.
+9.3 You agree to indemnify the Platform against claims arising from your guild member activities.
 
 10. ACKNOWLEDGMENT
 
-By activating your mentor status, you confirm that you have read, understood, and agree to this Mentor Agreement.
+By activating your guild member status, you confirm that you have read, understood, and agree to this Guild Member Agreement.
 `,
 
   'subscription-agreement': `
@@ -531,27 +531,27 @@ MYTHOUSE — CONSULTING SERVICES AGREEMENT
 
 Last Updated: [DATE]
 
-This Agreement governs paid consulting sessions facilitated through the Mythouse platform, involving Mentors, Clients, and the Platform.
+This Agreement governs paid consulting sessions facilitated through the Mythouse platform, involving Guild Members, Clients, and the Platform.
 
 1. PARTIES
 
 - "Platform" refers to Mythouse / Meteor Steel
-- "Mentor" refers to an approved Mythouse mentor offering consulting services
+- "Guild Member" refers to an approved Mythouse guild member offering consulting services
 - "Client" refers to a Platform user booking a consulting session
 
 2. NATURE OF SERVICES
 
-2.1 Consulting sessions are conversations between a Mentor and Client on topics within the Mentor's qualified credential categories (mythology, storytelling, healing arts, media/communication, adventure/exploration).
+2.1 Consulting sessions are conversations between a Guild Member and Client on topics within the Guild Member's qualified credential categories (mythology, storytelling, healing arts, media/communication, adventure/exploration).
 
 2.2 Consulting sessions are NOT:
 - Licensed therapy, counseling, or psychological treatment
 - Medical, legal, or financial advice
 - Guaranteed to produce specific outcomes
-- An employment or agency relationship between Mentor and Client
+- An employment or agency relationship between Guild Member and Client
 
 3. INDEPENDENT CONTRACTOR STATUS
 
-3.1 Mentors are independent contractors, not employees, agents, or representatives of Mythouse / Meteor Steel.
+3.1 Guild Members are independent contractors, not employees, agents, or representatives of Mythouse / Meteor Steel.
 
 3.2 The Platform facilitates discovery, scheduling, and payment processing. The Platform does not control the content, methods, or outcomes of consulting sessions.
 
@@ -561,27 +561,27 @@ This Agreement governs paid consulting sessions facilitated through the Mythouse
 
 4.2 Both parties should honor scheduled session times. Cancellations should be made with reasonable advance notice (at least 24 hours).
 
-4.3 If a Mentor fails to appear for a scheduled session without notice, the Client is entitled to a full refund.
+4.3 If a Guild Member fails to appear for a scheduled session without notice, the Client is entitled to a full refund.
 
-4.4 If a Client fails to appear without notice, the Mentor may charge the full session fee.
+4.4 If a Client fails to appear without notice, the Guild Member may charge the full session fee.
 
 5. FEES AND PAYMENT
 
-5.1 Mentors set their own consulting rates, which are displayed on their consulting profile.
+5.1 Guild Members set their own consulting rates, which are displayed on their consulting profile.
 
 5.2 The Platform may charge a service fee on each transaction.
 
-5.3 Payment is processed through the Platform. Mentors receive their portion according to the Platform's payout schedule.
+5.3 Payment is processed through the Platform. Guild Members receive their portion according to the Platform's payout schedule.
 
 5.4 Specific fee structures, platform percentages, and payout terms will be communicated separately and may be updated with notice.
 
 6. CONFIDENTIALITY
 
-6.1 Both Mentors and Clients agree to treat session content as confidential.
+6.1 Both Guild Members and Clients agree to treat session content as confidential.
 
 6.2 Neither party may record sessions without the other's explicit consent.
 
-6.3 Mentors may not share Client personal information with third parties.
+6.3 Guild Members may not share Client personal information with third parties.
 
 6.4 Exceptions to confidentiality include situations involving:
 - Imminent risk of harm to self or others
@@ -590,13 +590,13 @@ This Agreement governs paid consulting sessions facilitated through the Mythouse
 
 7. DISPUTES
 
-7.1 Disputes between Mentors and Clients should first be addressed directly between the parties.
+7.1 Disputes between Guild Members and Clients should first be addressed directly between the parties.
 
 7.2 If direct resolution fails, either party may contact the Platform for mediation.
 
 7.3 The Platform may, at its discretion:
 - Issue refunds to Clients
-- Suspend or revoke Mentor consulting privileges
+- Suspend or revoke Guild Member consulting privileges
 - Remove either party's access to the consulting system
 
 7.4 The Platform's decision in disputes is final.
@@ -605,7 +605,7 @@ This Agreement governs paid consulting sessions facilitated through the Mythouse
 
 8.1 THE PLATFORM IS NOT LIABLE FOR THE QUALITY, ACCURACY, OR OUTCOMES OF CONSULTING SESSIONS.
 
-8.2 Mentors are solely responsible for the content and quality of their consulting services.
+8.2 Guild Members are solely responsible for the content and quality of their consulting services.
 
 8.3 Clients participate in consulting sessions at their own discretion and risk.
 
@@ -613,9 +613,9 @@ This Agreement governs paid consulting sessions facilitated through the Mythouse
 
 9. TERMINATION
 
-9.1 Either the Mentor or Client may decline future sessions at any time.
+9.1 Either the Guild Member or Client may decline future sessions at any time.
 
-9.2 The Platform may suspend consulting features for either party for violation of this Agreement, the Terms of Service, or the Mentor Agreement.
+9.2 The Platform may suspend consulting features for either party for violation of this Agreement, the Terms of Service, or the Guild Member Agreement.
 `,
 
   'story-forge-content': `
@@ -631,7 +631,7 @@ This Agreement governs the ownership and licensing of content you create on the 
 - Personal stories and reflections saved in the Writings system
 - Story Forge drafts, assembled narratives, and creative writing
 - Atlas chat conversation messages you compose
-- Mentor application materials and bios
+- Guild application materials and bios
 - Profile information and descriptions
 - Any other original material you create on the Platform
 
@@ -653,7 +653,7 @@ This Agreement governs the ownership and licensing of content you create on the 
 - Publish Your Content publicly without your consent
 - Sell Your Content to third parties
 - Use Your Content to train AI models (note: third-party AI providers may have their own data usage policies)
-- Share Your Content with other users without your explicit action (e.g., publishing to the Mentor Directory)
+- Share Your Content with other users without your explicit action (e.g., publishing to the Guild Directory)
 
 4. AI-GENERATED CONTENT
 
@@ -721,7 +721,7 @@ The following features are powered by AI:
 - Story Interview: AI-guided reflective storytelling (powered by Anthropic Claude)
 - Tarot Reading: AI-interpreted tarot card readings within a mythological framework (powered by Anthropic Claude)
 - Profile Onboarding: AI-guided initial profile setup (powered by Anthropic Claude)
-- Mentor Application: AI-facilitated mentor application process (powered by Anthropic Claude)
+- Guild Application: AI-facilitated guild application process (powered by Anthropic Claude)
 
 2. NOT PROFESSIONAL ADVICE
 
@@ -930,19 +930,19 @@ The Mythouse is a space for mythic exploration, creative growth, and meaningful 
 
 2.3 If playing against another user in real-time, be respectful in any communications.
 
-3. MENTOR-STUDENT INTERACTIONS
+3. GUILD MEMBER-STUDENT INTERACTIONS
 
-3.1 Mentors should provide guidance that is supportive, within scope, and appropriate to the student's level and age.
+3.1 Guild Members should provide guidance that is supportive, within scope, and appropriate to the student's level and age.
 
-3.2 Students should communicate respectfully with their mentors and honor scheduled commitments.
+3.2 Students should communicate respectfully with their Guild Members and honor scheduled commitments.
 
-3.3 Both parties should maintain professional boundaries. The mentor-student relationship exists within the context of mythological, creative, and cultural exploration.
+3.3 Both parties should maintain professional boundaries. The Guild Member-student relationship exists within the context of mythological, creative, and cultural exploration.
 
 3.4 If either party feels uncomfortable, they may end the pairing at any time without explanation.
 
 4. GUILD CONDUCT
 
-4.1 The Guild is a space for mentors to discuss practices, share insights, and support each other's growth.
+4.1 The Guild is a space for guild members to discuss practices, share insights, and support each other's growth.
 
 4.2 Guild discussions should remain constructive, collegial, and focused on the shared mission of mythic education.
 
@@ -964,7 +964,7 @@ The following are prohibited across all Platform interactions:
 
 5.5 Spam, commercial solicitation, or advertising unrelated to Platform activities.
 
-5.6 Impersonation of other users, mentors, or Platform administrators.
+5.6 Impersonation of other users, guild members, or Platform administrators.
 
 5.7 Deliberately providing harmful advice, especially regarding mental health, physical health, or safety.
 
@@ -985,7 +985,7 @@ The following are prohibited across all Platform interactions:
 8.1 Violations may result in:
 - A warning from the Platform administrator
 - Temporary suspension of specific features (chat, multiplayer, consulting)
-- Removal from the Mentor Directory or Guild
+- Removal from the Guild Directory or Guild
 - Permanent account termination
 
 8.2 Enforcement decisions are made by the Platform administrator and are final.
@@ -1020,7 +1020,7 @@ While your account is active, the following data is retained:
 - Atlas conversation history
 - Story Forge drafts and assembled narratives
 - Personal stories and writings
-- Mentor application materials
+- Guild application materials
 
 1.4 BYOK API Keys (retained until you remove them)
 - Stored in separate owner-only Firestore document
@@ -1043,8 +1043,8 @@ While your account is active, the following data is retained:
 - Delete your coursework progress and activity data
 - Delete your AI conversation history and writings
 - Delete your BYOK API keys
-- Remove your Mentor Directory listing (if applicable)
-- End all active mentor-student pairings (if applicable)
+- Remove your Guild Directory listing (if applicable)
+- End all active guild member-student pairings (if applicable)
 - Remove your Guild access (if applicable)
 
 3.3 The following may be retained after account deletion:
@@ -1104,7 +1104,7 @@ Provider: Anthropic
 Terms: https://www.anthropic.com/terms
 Privacy: https://www.anthropic.com/privacy
 
-Powers Atlas chat, journey synthesis, story interviews, mentor applications, profile onboarding, tarot readings, and Yellow Brick Road challenges. Anthropic's API does not use customer inputs/outputs for model training by default.
+Powers Atlas chat, journey synthesis, story interviews, guild applications, profile onboarding, tarot readings, and Yellow Brick Road challenges. Anthropic's API does not use customer inputs/outputs for model training by default.
 
 3. OPENAI
 

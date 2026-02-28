@@ -5,7 +5,7 @@ const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
 const ALLOWED_TYPES = ['application/pdf', 'image/jpeg', 'image/png', 'image/webp'];
 
 /**
- * Validates file for mentor document upload.
+ * Validates file for guild document upload.
  * Returns { valid: true } or { valid: false, error: string }.
  */
 export function validateFile(file) {
@@ -20,10 +20,10 @@ export function validateFile(file) {
 }
 
 /**
- * Uploads a mentor document to Firebase Cloud Storage.
+ * Uploads a guild document to Firebase Cloud Storage.
  * Returns { url, name } on success.
  */
-export async function uploadMentorDocument(uid, file) {
+export async function uploadGuildDocument(uid, file) {
   if (!storage) throw new Error('Firebase Storage not configured.');
 
   const validation = validateFile(file);
@@ -31,7 +31,7 @@ export async function uploadMentorDocument(uid, file) {
 
   const ext = file.name.split('.').pop() || 'pdf';
   const timestamp = Date.now();
-  const path = `mentor-docs/${uid}/credential-${timestamp}.${ext}`;
+  const path = `guild-docs/${uid}/credential-${timestamp}.${ext}`;
   const storageRef = ref(storage, path);
 
   await uploadBytes(storageRef, file, { contentType: file.type });

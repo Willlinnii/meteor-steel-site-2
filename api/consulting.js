@@ -340,14 +340,14 @@ module.exports = async (req, res) => {
 
     // --- List available practitioners ---
     if (action === 'list-practitioners') {
-      // Query mentor directory for consulting-available mentors
-      const mentorSnap = await db.collection('mentor-directory')
+      // Query guild directory for consulting-available guild members
+      const dirSnap = await db.collection('guild-directory')
         .where('consultingAvailable', '==', true)
         .get();
 
       const practitioners = [];
-      for (const doc of mentorSnap.docs) {
-        const mentorData = doc.data();
+      for (const doc of dirSnap.docs) {
+        const memberData = doc.data();
         // Verify consultant credential level
         const profileSnap = await db.doc(`users/${doc.id}/meta/profile`).get();
         const profile = profileSnap.exists ? profileSnap.data() : {};
@@ -355,10 +355,10 @@ module.exports = async (req, res) => {
         if (consultantLevel >= 2) {
           practitioners.push({
             uid: doc.id,
-            displayName: mentorData.displayName || '',
-            handle: mentorData.handle || '',
-            bio: mentorData.bio || '',
-            specialties: mentorData.specialties || [],
+            displayName: memberData.displayName || '',
+            handle: memberData.handle || '',
+            bio: memberData.bio || '',
+            specialties: memberData.specialties || [],
             consultantLevel,
           });
         }

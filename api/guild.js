@@ -1,5 +1,5 @@
 const admin = require('firebase-admin');
-const { getMentorTypeInfo } = require('./_lib/mentorTypes');
+const { getGuildTypeInfo } = require('./_lib/guildTypes');
 
 let initialized = false;
 
@@ -28,8 +28,8 @@ const MAX_TITLE_LENGTH = 200;
 const MAX_BODY_LENGTH = 10000;
 const MAX_IMAGES = 4;
 
-// Required courses before a mentor is considered "active" (mirrors mentorEngine.js)
-const REQUIRED_MENTOR_COURSES = [
+// Required courses before a guild member is considered "active" (mirrors guildEngine.js)
+const REQUIRED_GUILD_COURSES = [
   'monomyth-explorer',
   'celestial-clocks-explorer',
   'atlas-conversationalist',
@@ -101,17 +101,17 @@ module.exports = async (req, res) => {
     }
   }
 
-  // Helper: verify user is an active mentor (approved + required courses complete)
-  async function verifyMentor() {
+  // Helper: verify user is an active guild member (approved + required courses complete)
+  async function verifyGuildMember() {
     const profileSnap = await db.doc(`users/${uid}/meta/profile`).get();
     if (!profileSnap.exists) return null;
     const profile = profileSnap.data();
-    if (profile.mentor?.status !== 'approved') return null;
+    if ((profile.guild?.status || profile.mentor?.status) !== 'approved') return null;
 
-    // Check required mentor courses from certificates
+    // Check required guild courses from certificates
     const certSnap = await db.doc(`users/${uid}/meta/certificates`).get();
     const completed = certSnap.exists ? certSnap.data()?.completed || {} : {};
-    const coursesComplete = REQUIRED_MENTOR_COURSES.every(id => !!completed[id]);
+    const coursesComplete = REQUIRED_GUILD_COURSES.every(id => !!completed[id]);
     if (!coursesComplete) return null;
 
     return profile;
@@ -120,9 +120,9 @@ module.exports = async (req, res) => {
   try {
     // --- CREATE POST ---
     if (action === 'create-post') {
-      const profile = await verifyMentor();
+      const profile = await verifyGuildMember();
       if (!profile) {
-        return res.status(403).json({ error: 'Only active mentors can post.' });
+        return res.status(403).json({ error: 'Only active guild members can post.' });
       }
 
       const { title, body, imageUrls } = req.body;
@@ -140,13 +140,13 @@ module.exports = async (req, res) => {
       }
       const images = Array.isArray(imageUrls) ? imageUrls.slice(0, MAX_IMAGES) : [];
 
-      const typeInfo = getMentorTypeInfo(profile.mentor?.type);
+      const typeInfo = getGuildTypeInfo(profile.guild?.type || profile.mentor?.type);
 
       const postData = {
         authorUid: uid,
         authorHandle: profile.handle || null,
-        authorMentorType: profile.mentor?.type || null,
-        authorMentorIcon: typeInfo.icon,
+        authorGuildType: profile.guild?.type || profile.mentor?.type || null,
+        authorGuildIcon: typeInfo.icon,
         title: title.trim(),
         body: body.trim(),
         imageUrls: images,
@@ -164,9 +164,9 @@ module.exports = async (req, res) => {
 
     // --- CREATE REPLY ---
     if (action === 'create-reply') {
-      const profile = await verifyMentor();
+      const profile = await verifyGuildMember();
       if (!profile) {
-        return res.status(403).json({ error: 'Only active mentors can reply.' });
+        return res.status(403).json({ error: 'Only active guild members can reply.' });
       }
 
       const { postId, body, parentReplyId } = req.body;
@@ -186,13 +186,13 @@ module.exports = async (req, res) => {
         return res.status(404).json({ error: 'Post not found.' });
       }
 
-      const typeInfo = getMentorTypeInfo(profile.mentor?.type);
+      const typeInfo = getGuildTypeInfo(profile.guild?.type || profile.mentor?.type);
 
       const replyData = {
         authorUid: uid,
         authorHandle: profile.handle || null,
-        authorMentorType: profile.mentor?.type || null,
-        authorMentorIcon: typeInfo.icon,
+        authorGuildType: profile.guild?.type || profile.mentor?.type || null,
+        authorGuildIcon: typeInfo.icon,
         body: body.trim(),
         parentReplyId: parentReplyId || null,
         score: 0,
@@ -214,9 +214,9 @@ module.exports = async (req, res) => {
 
     // --- VOTE ---
     if (action === 'vote') {
-      const profile = await verifyMentor();
+      const profile = await verifyGuildMember();
       if (!profile) {
-        return res.status(403).json({ error: 'Only active mentors can vote.' });
+        return res.status(403).json({ error: 'Only active guild members can vote.' });
       }
 
       const { targetId, targetType, postId, value } = req.body;

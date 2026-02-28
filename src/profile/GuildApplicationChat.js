@@ -3,12 +3,12 @@ import { useProfile } from './ProfileContext';
 import { useWritings } from '../writings/WritingsContext';
 import { useAuth } from '../auth/AuthContext';
 import useVoice, { SpeechRecognition } from '../hooks/useVoice';
-import { validateFile, uploadMentorDocument } from './mentorUpload';
+import { validateFile, uploadGuildDocument } from './guildUpload';
 import DodecahedronButton from '../components/DodecahedronButton';
 import { apiFetch } from '../lib/chatApi';
 
-export default function MentorApplicationChat({ onComplete, qualifiedMentorTypes }) {
-  const { profileData, submitMentorApplication, refreshProfile } = useProfile();
+export default function GuildApplicationChat({ onComplete, qualifiedGuildTypes }) {
+  const { profileData, submitGuildApplication, refreshProfile } = useProfile();
   const { user } = useAuth();
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
@@ -22,10 +22,10 @@ export default function MentorApplicationChat({ onComplete, qualifiedMentorTypes
   const { voiceEnabled, recording, speaking, toggleVoice, startListening, stopListening, speak } = useVoice(setInput);
   const { getConversation, saveConversation, loaded: writingsLoaded } = useWritings();
 
-  // Load previous mentor conversation
+  // Load previous guild application conversation
   useEffect(() => {
     if (writingsLoaded) {
-      const prev = getConversation('mentor-application', null);
+      const prev = getConversation('guild-application', null) || getConversation('mentor-application', null);
       if (prev.length > 0) setMessages(prev);
     }
   }, [writingsLoaded]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -36,7 +36,7 @@ export default function MentorApplicationChat({ onComplete, qualifiedMentorTypes
     if (!writingsLoaded || messages.length === 0) return;
     if (prevMsgsRef.current === messages) return;
     prevMsgsRef.current = messages;
-    saveConversation('mentor-application', null, messages.map(m => ({ role: m.role, content: m.content })));
+    saveConversation('guild-application', null, messages.map(m => ({ role: m.role, content: m.content })));
   }, [messages, writingsLoaded, saveConversation]);
 
   useEffect(() => {
@@ -60,7 +60,7 @@ export default function MentorApplicationChat({ onComplete, qualifiedMentorTypes
     setUploadError(null);
     setUploading(true);
     try {
-      const result = await uploadMentorDocument(user.uid, file);
+      const result = await uploadGuildDocument(user.uid, file);
       setUploadedDoc(result);
     } catch (err) {
       setUploadError(err.message || 'Upload failed.');
@@ -85,8 +85,8 @@ export default function MentorApplicationChat({ onComplete, qualifiedMentorTypes
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           messages: apiMessages,
-          mode: 'mentor-application',
-          qualifiedMentorTypes,
+          mode: 'guild-application',
+          qualifiedGuildTypes,
           uploadedDocument: uploadedDoc,
         }),
       });
@@ -97,35 +97,35 @@ export default function MentorApplicationChat({ onComplete, qualifiedMentorTypes
       speak(reply);
 
       // If application was submitted via tool call
-      if (data.mentorApplication) {
-        await submitMentorApplication({
-          type: data.mentorApplication.type,
-          summary: data.mentorApplication.summary,
+      if (data.guildApplication) {
+        await submitGuildApplication({
+          type: data.guildApplication.type,
+          summary: data.guildApplication.summary,
           documentUrl: uploadedDoc?.url || null,
           documentName: uploadedDoc?.name || null,
         });
 
         // Trigger automated Atlas screening
         try {
-          await apiFetch('/api/mentor', {
+          await apiFetch('/api/guild-member', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
               action: 'screen',
               uid: user.uid,
               application: {
-                type: data.mentorApplication.type,
-                summary: data.mentorApplication.summary,
+                type: data.guildApplication.type,
+                summary: data.guildApplication.summary,
                 documentUrl: uploadedDoc?.url || null,
                 documentName: uploadedDoc?.name || null,
               },
               credentials: profileData?.credentials || {},
             }),
           });
-          // Refresh profile to get updated mentor status
+          // Refresh profile to get updated guild status
           await refreshProfile();
         } catch (err) {
-          console.error('Mentor review trigger failed:', err);
+          console.error('Guild review trigger failed:', err);
         }
       }
     } catch {
@@ -135,7 +135,7 @@ export default function MentorApplicationChat({ onComplete, qualifiedMentorTypes
   };
 
   const startChat = async () => {
-    const seedMessage = 'I would like to apply to become a mentor.';
+    const seedMessage = 'I would like to apply to become a guild member.';
     setLoading(true);
 
     try {
@@ -144,13 +144,13 @@ export default function MentorApplicationChat({ onComplete, qualifiedMentorTypes
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           messages: [{ role: 'user', content: seedMessage }],
-          mode: 'mentor-application',
-          qualifiedMentorTypes,
+          mode: 'guild-application',
+          qualifiedGuildTypes,
         }),
       });
       const data = await res.json();
 
-      const reply = data.reply || 'Welcome! Let\u2019s discuss your mentor application.';
+      const reply = data.reply || 'Welcome! Let\u2019s discuss your guild application.';
       setMessages([
         { role: 'user', content: seedMessage, hidden: true },
         { role: 'assistant', content: reply },
@@ -183,7 +183,7 @@ export default function MentorApplicationChat({ onComplete, qualifiedMentorTypes
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <div className="profile-chat mentor-application-chat">
+    <div className="profile-chat guild-member-application-chat">
       <div className="profile-chat-controls">
         <button
           className={`chat-voice-toggle${voiceEnabled ? ' active' : ''}`}
@@ -208,7 +208,7 @@ export default function MentorApplicationChat({ onComplete, qualifiedMentorTypes
       </div>
 
       {/* File upload area */}
-      <div className="mentor-upload-area">
+      <div className="guild-member-upload-area">
         <input
           ref={fileInputRef}
           type="file"
@@ -217,19 +217,19 @@ export default function MentorApplicationChat({ onComplete, qualifiedMentorTypes
           style={{ display: 'none' }}
         />
         {uploadedDoc ? (
-          <div className="mentor-upload-success">
+          <div className="guild-member-upload-success">
             Uploaded: {uploadedDoc.name}
           </div>
         ) : (
           <button
-            className="mentor-upload-btn"
+            className="guild-member-upload-btn"
             onClick={() => fileInputRef.current?.click()}
             disabled={uploading}
           >
             {uploading ? 'Uploading...' : 'Upload Supporting Document (Optional)'}
           </button>
         )}
-        {uploadError && <div className="mentor-upload-error">{uploadError}</div>}
+        {uploadError && <div className="guild-member-upload-error">{uploadError}</div>}
       </div>
 
       <div className="profile-chat-input-area">

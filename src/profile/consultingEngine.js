@@ -1,5 +1,5 @@
 // Consulting engine: constants and pure functions for consulting system.
-// Mirrors mentorPairingEngine.js pattern — no side effects, no Firebase imports.
+// Mirrors guildPairingEngine.js pattern — no side effects, no Firebase imports.
 
 // --- CONSULTING TYPES ---
 
@@ -23,11 +23,11 @@ export const CONSULTING_STATUS = {
 // --- FUNCTIONS ---
 
 /**
- * Returns true if the mentor is eligible for consulting.
- * Accepts effectiveMentorStatus (computed from mentorData + course completion).
+ * Returns true if the guild member is eligible for consulting.
+ * Accepts effectiveGuildStatus (computed from guildData + course completion).
  */
-export function isConsultingEligible(effectiveMentorStatus) {
-  return effectiveMentorStatus === 'active';
+export function isConsultingEligible(effectiveGuildStatus) {
+  return effectiveGuildStatus === 'active';
 }
 
 /**

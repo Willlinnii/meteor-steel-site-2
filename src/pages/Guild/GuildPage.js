@@ -10,16 +10,16 @@ import './GuildPage.css';
 const TABS = [
   { id: 'directory', label: 'Directory' },
   { id: 'forum', label: 'Forum' },
-  { id: 'mentees', label: 'My Mentees', mentorOnly: true },
+  { id: 'mentees', label: 'My Mentees', guildOnly: true },
 ];
 
 export default function GuildPage() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const { effectiveMentorStatus } = useProfile();
+  const { effectiveGuildStatus } = useProfile();
   const { track } = usePageTracking('guild');
   const tabParam = searchParams.get('tab');
-  const isMentor = effectiveMentorStatus === 'active';
-  const visibleTabs = TABS.filter(t => !t.mentorOnly || isMentor);
+  const isGuildMember = effectiveGuildStatus === 'active';
+  const visibleTabs = TABS.filter(t => !t.guildOnly || isGuildMember);
   const [activeTab, setActiveTab] = useState(visibleTabs.find(t => t.id === tabParam)?.id || 'directory');
 
   const handleTabChange = (tabId) => {
@@ -45,12 +45,12 @@ export default function GuildPage() {
       </div>
 
       {activeTab === 'forum' && (
-        isMentor ? (
+        isGuildMember ? (
           <GuildForum />
         ) : (
           <div className="guild-members-only">
-            <p>The Guild Forum is available to active mentors only.</p>
-            <p>Complete your mentor application and coursework to gain access.</p>
+            <p>The Guild Forum is available to active guild members only.</p>
+            <p>Complete your guild application and coursework to gain access.</p>
           </div>
         )
       )}
@@ -59,7 +59,7 @@ export default function GuildPage() {
         <GuildDirectory />
       )}
 
-      {activeTab === 'mentees' && isMentor && (
+      {activeTab === 'mentees' && isGuildMember && (
         <MenteeFeed />
       )}
     </div>

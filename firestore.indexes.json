@@ -10,6 +10,48 @@
       ]
     },
     {
+      "collectionGroup": "guild-pairings",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "guildMemberUid", "order": "ASCENDING" },
+        { "fieldPath": "status", "order": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "guild-pairings",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "studentUid", "order": "ASCENDING" },
+        { "fieldPath": "status", "order": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "guild-pairings",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "guildMemberUid", "order": "ASCENDING" },
+        { "fieldPath": "studentUid", "order": "ASCENDING" },
+        { "fieldPath": "status", "order": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "guild-directory",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "active", "order": "ASCENDING" },
+        { "fieldPath": "guildType", "order": "ASCENDING" },
+        { "fieldPath": "availableSlots", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "guild-directory",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "active", "order": "ASCENDING" },
+        { "fieldPath": "availableSlots", "order": "DESCENDING" }
+      ]
+    },
+    {
       "collectionGroup": "mentor-pairings",
       "queryScope": "COLLECTION",
       "fields": [
