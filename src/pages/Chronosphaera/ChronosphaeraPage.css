@@ -1410,7 +1410,7 @@
   }
 
   .orbital-svg {
-    max-width: 400px;
+    max-width: 75vw;
     margin-top: 12px;
   }
 
@@ -1478,6 +1478,19 @@
 
   .vr-view-toggle {
     font-size: 0.7rem;
+  }
+
+  /* Ring toolbar: force 3-row layout on mobile */
+  .chrono-ring-toolbar-inner > span.chrono-ring-divider:nth-of-type(1),
+  .chrono-ring-toolbar-inner > span.chrono-ring-divider:nth-of-type(2) {
+    flex-basis: 100%;
+    height: 0;
+    border: none;
+    margin: 0;
+  }
+
+  .chrono-ring-toolbar-inner > span.chrono-ring-divider:nth-of-type(3) {
+    display: none;
   }
 
 }
@@ -1764,6 +1777,7 @@
 .chrono-ring-active .orbital-btn-row { pointer-events: auto; }
 .chrono-ring-active .chrono-content-fade { display: none; }
 .chrono-ring-active .chrono-toggle-strip { display: none; }
+.chrono-ring-active { padding-bottom: 200px; }
 
 /* Ring layer sits above the 3D scene in combined 3D + ring mode */
 .chrono-3d-active.chrono-ring-active .chrono-ring-layer { z-index: 3; background: var(--bg, #0a0a14); }
