@@ -289,7 +289,7 @@ function getRingSegmentLabel(tab, itemId, stageIndex) {
   return '';
 }
 
-export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPlanet, hoveredPlanet, selectedSign, onSelectSign, selectedCardinal, onSelectCardinal, selectedEarth, onSelectEarth, showCalendar, onToggleCalendar, selectedMonth, onSelectMonth, showMedicineWheel, selectedWheelItem, onSelectWheelItem, chakraViewMode, onToggleBodyWheel, onClickOrderLabel, orderLabel, videoUrl, onCloseVideo, ybrActive, ybrCurrentStopIndex, ybrStopProgress, ybrJourneySequence, onToggleYBR, ybrAutoStart, clockMode, layoutMode, onEnterClock, compassHeading, compassSupported, compassDenied, onRequestCompass, onStopCompass, seasonalSign, seasonalMonth, seasonalStageIndex, showMonomyth, showMeteorSteel, monomythStages, selectedMonomythStage, onSelectMonomythStage, onToggleMonomyth, monomythModel, showCycles, onSelectCycleSegment, monomythTab, theoristGroup, onSelectRingSegment, ringSelections, activeCulture, showFallenStarlight, showStoryOfStories, onToggleStarlight, starlightStages, selectedStarlightStage, onSelectStarlightStage, selectedConstellation, onSelectConstellation, zodiacMode, onSelectBeyondRing, beyondRings, activeBeyondRing, showDodecahedron, dodecMode, showArtBook, artBookMode, onToggleArtBook, showRing, targetDate }) {
+export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPlanet, hoveredPlanet, selectedSign, onSelectSign, selectedCardinal, onSelectCardinal, selectedEarth, onSelectEarth, showCalendar, onToggleCalendar, selectedMonth, onSelectMonth, showMedicineWheel, selectedWheelItem, onSelectWheelItem, chakraViewMode, onToggleBodyWheel, onClickOrderLabel, orderLabel, videoUrl, onCloseVideo, ybrActive, ybrCurrentStopIndex, ybrStopProgress, ybrJourneySequence, onToggleYBR, ybrAutoStart, clockMode, layoutMode, onEnterClock, compassHeading, compassSupported, compassDenied, onRequestCompass, onStopCompass, seasonalSign, seasonalMonth, seasonalStageIndex, showMonomyth, showMeteorSteel, monomythStages, selectedMonomythStage, onSelectMonomythStage, onToggleMonomyth, monomythModel, showCycles, onSelectCycleSegment, monomythTab, theoristGroup, onSelectRingSegment, ringSelections, activeCulture, showFallenStarlight, showStoryOfStories, onToggleStarlight, starlightStages, selectedStarlightStage, onSelectStarlightStage, selectedConstellation, onSelectConstellation, zodiacMode, onSelectBeyondRing, beyondRings, activeBeyondRing, showDodecahedron, dodecMode, showArtBook, artBookMode, onToggleArtBook, showRing, targetDate, wheelDataOverride, isTraditionView }) {
   const wrapperRef = useRef(null);
   const [tooltip, setTooltip] = useState(null);
   const { hasPurchase, hasSubscription } = useProfile();
@@ -297,6 +297,7 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
   const navigate = useNavigate();
   const compassActive = compassHeading != null;
   const [hoveredBeyondRing, setHoveredBeyondRing] = useState(null);
+  const effectiveWheelData = wheelDataOverride || wheelData;
 
   const activeRingItems = useMemo(() => {
     if (!showCycles) return null;
@@ -860,8 +861,23 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
     const svgY = ((e.clientY - rect.top) / rect.height) * 700;
     const dist = Math.sqrt((svgX - CX) ** 2 + (svgY - CY) ** 2);
     let idx = null;
-    for (let i = 0; i < WHEEL_RINGS.length; i++) {
-      if (dist >= WHEEL_RINGS[i].innerR && dist < WHEEL_RINGS[i].outerR) { idx = i; break; }
+    if (isTraditionView) {
+      const count = effectiveWheelData.wheels.length;
+      const innerBound = 20, outerBound = 280;
+      const gap = (outerBound - innerBound) / count;
+      // -1 means center area (inside innermost ring)
+      if (dist < innerBound) { idx = -1; }
+      else {
+        for (let i = 0; i < count; i++) {
+          const rInner = innerBound + i * gap;
+          const rOuter = innerBound + (i + 1) * gap;
+          if (dist >= rInner && dist < rOuter) { idx = i; break; }
+        }
+      }
+    } else {
+      for (let i = 0; i < WHEEL_RINGS.length; i++) {
+        if (dist >= WHEEL_RINGS[i].innerR && dist < WHEEL_RINGS[i].outerR) { idx = i; break; }
+      }
     }
     if (idx !== hoveredRingRef.current) {
       hoveredRingRef.current = idx;
@@ -1075,7 +1091,7 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
           <g className="medicine-wheel" onMouseMove={handleWheelMove} onMouseLeave={() => { hoveredRingRef.current = null; setHoveredRing(null); }}>
             {/* Quadrant background sectors */}
             {MW_QUADRANTS.map(q => (
-              <path key={q.dir} d={quadrantArc(CX, CY, MW_OUTER_R, q.startDeg, q.endDeg)} fill={wheelData.quadrantColors[q.dir]} />
+              <path key={q.dir} d={quadrantArc(CX, CY, MW_OUTER_R, q.startDeg, q.endDeg)} fill={effectiveWheelData.quadrantColors[q.dir]} />
             ))}
 
             {/* Cross-hair lines (N-S and E-W axes) */}
@@ -1095,7 +1111,18 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
             })}
 
             {/* Concentric ring circles */}
-            {WHEEL_RINGS.map(ring => ring.outerR > 0 && (
+            {isTraditionView ? (() => {
+              const count = effectiveWheelData.wheels.length;
+              const innerBound = 20, outerBound = 280;
+              const gap = (outerBound - innerBound) / count;
+              return effectiveWheelData.wheels.map((_, i) => (
+                <circle key={i} cx={CX} cy={CY} r={innerBound + (i + 1) * gap}
+                  fill="none"
+                  stroke={hoveredRing === i ? "rgba(218, 165, 32, 0.45)" : "rgba(180, 140, 80, 0.25)"}
+                  strokeWidth={hoveredRing === i ? "1.5" : "0.8"}
+                  style={{ transition: 'stroke 0.3s, stroke-width 0.3s' }} />
+              ));
+            })() : WHEEL_RINGS.map(ring => ring.outerR > 0 && (
               <circle key={ring.idx} cx={CX} cy={CY} r={ring.outerR} fill="none"
                 stroke={hoveredRing === ring.idx ? "rgba(218, 165, 32, 0.45)" : "rgba(180, 140, 80, 0.25)"}
                 strokeWidth={hoveredRing === ring.idx ? "1.5" : "0.8"}
@@ -1103,8 +1130,27 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
             ))}
             <circle cx={CX} cy={CY} r={MW_OUTER_R} fill="none" stroke="rgba(180, 140, 80, 0.35)" strokeWidth="1.2" />
 
-            {/* Ring title labels (faint, along top of each ring) */}
-            {wheelData.wheels.map((wheel, wi) => {
+            {/* Ring title labels */}
+            {isTraditionView ? (() => {
+              const count = effectiveWheelData.wheels.length;
+              const innerBound = 20, outerBound = 280;
+              const gap = (outerBound - innerBound) / count;
+              const titleFontSize = Math.max(5, 8 - count * 0.3);
+              return effectiveWheelData.wheels.map((wheel, wi) => {
+                const titleR = innerBound + (wi + 1) * gap - 5;
+                return (
+                  <text key={`title-${wheel.id}`}
+                    x={CX + titleR * Math.cos(-1.2)} y={CY + titleR * Math.sin(-1.2)}
+                    textAnchor="middle" dominantBaseline="central"
+                    fill="rgba(180, 140, 80, 0.25)" fontSize={titleFontSize} fontFamily="Cinzel, serif"
+                    fontWeight="400" letterSpacing="0.5"
+                    transform={`rotate(${-1.2 * 180 / Math.PI}, ${CX + titleR * Math.cos(-1.2)}, ${CY + titleR * Math.sin(-1.2)})`}
+                  >
+                    {wheel.title}
+                  </text>
+                );
+              });
+            })() : effectiveWheelData.wheels.map((wheel, wi) => {
               const ring = WHEEL_RINGS[wi];
               const titleR = ring.outerR - 6;
               return (
@@ -1121,9 +1167,18 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
             })}
 
             {/* Position labels and hit targets */}
-            {wheelData.wheels.map((wheel, wi) => {
-              const ring = WHEEL_RINGS[wi];
-              const fontSize = [10, 11, 12, 13, 11, 11, 11][wi] || 10;
+            {effectiveWheelData.wheels.map((wheel, wi) => {
+              let ring, fontSize;
+              if (isTraditionView) {
+                const count = effectiveWheelData.wheels.length;
+                const innerBound = 20, outerBound = 280;
+                const gap = (outerBound - innerBound) / count;
+                ring = { idx: wi, innerR: innerBound + wi * gap, outerR: innerBound + (wi + 1) * gap, textR: innerBound + (wi + 0.5) * gap };
+                fontSize = Math.max(6, 13 - count * 0.6);
+              } else {
+                ring = WHEEL_RINGS[wi];
+                fontSize = [10, 11, 12, 13, 11, 11, 11][wi] || 10;
+              }
               return (
                 <g key={wheel.id}>
                   {wheel.positions.filter(p => !p.isCenter).map(pos => {
@@ -1154,6 +1209,14 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
                     const tx = CX + effectiveR * Math.cos(rad);
                     const ty = CY + effectiveR * Math.sin(rad);
 
+                    // Background rect dimensions
+                    const bgPadX = fontSize * 0.5;
+                    const bgPadY = fontSize * 0.3;
+                    const approxCharW = fontSize * 0.55;
+                    const longestLine = lines.reduce((a, b) => a.length > b.length ? a : b, '');
+                    const bgW = longestLine.length * approxCharW + bgPadX * 2;
+                    const bgH = lines.length * lineSpacing + bgPadY * 2;
+
                     return (
                       <g key={itemKey}
                         className={`mw-position${isActive ? ' active' : ''}`}
@@ -1166,6 +1229,15 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
                             <animate attributeName="r" values="11;15;11" dur="2s" repeatCount="indefinite" />
                             <animate attributeName="opacity" values="0.6;0.2;0.6" dur="2s" repeatCount="indefinite" />
                           </circle>
+                        )}
+                        {isTraditionView && (
+                          <rect
+                            x={tx - bgW / 2} y={ty - bgH / 2}
+                            width={bgW} height={bgH}
+                            rx={2} ry={2}
+                            fill="rgba(18, 16, 14, 0.88)"
+                            transform={rot ? `rotate(${rot}, ${tx}, ${ty})` : undefined}
+                          />
                         )}
                         <text x={tx} y={ty}
                           textAnchor="middle" dominantBaseline="central"
@@ -1189,7 +1261,8 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
               );
             })}
 
-            {/* Outer number ring */}
+            {/* Outer number ring — hidden in tradition view */}
+            {!isTraditionView && (<>
             <circle cx={CX} cy={CY} r={NUM_RING_R} fill="none" stroke="rgba(180, 140, 80, 0.2)" strokeWidth="0.6" strokeDasharray="3 2" />
             {NUM_ANGLES.map(({ num, angle }) => {
               const rad = (angle * Math.PI) / 180;
@@ -1223,9 +1296,22 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
                 </g>
               );
             })}
+            </>)}
 
-            {/* Dynamic center content — changes on ring hover */}
-            {(() => {
+            {/* Dynamic center content */}
+            {isTraditionView ? (() => {
+              const centerLabel = effectiveWheelData.wheels[0]?.center || '';
+              const showCenter = hoveredRing === -1;
+              return (
+                <g style={{ opacity: showCenter ? 1 : 0, transition: 'opacity 0.3s' }}>
+                  <circle cx={CX} cy={CY} r={20} fill="rgba(18, 16, 14, 0.92)" />
+                  <text x={CX} y={CY} textAnchor="middle" dominantBaseline="central"
+                    fill="rgba(220, 190, 120, 0.9)" fontSize="11" fontFamily="Cinzel, serif" fontWeight="700">
+                    {centerLabel}
+                  </text>
+                </g>
+              );
+            })() : (() => {
               let items;
               if (hoveredRing == null) {
                 items = [{ text: 'Self', size: 15, bold: true }];
@@ -1282,7 +1368,8 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
               );
             })()}
 
-            {/* Storm attribution — bottom right, clickable */}
+            {/* Storm attribution — bottom right, clickable — hidden in tradition view */}
+            {!isTraditionView && (
             <g onClick={() => { triggerStormFlash(); onSelectWheelItem && onSelectWheelItem(selectedWheelItem === 'meta:author' ? null : 'meta:author'); }} style={{ cursor: 'pointer' }}>
               <text x={CX + MW_OUTER_R + 10} y={CY + MW_OUTER_R + 22} textAnchor="end"
                 fill={selectedWheelItem === 'meta:author' ? '#f0c040' : 'rgba(220, 190, 120, 0.45)'} fontSize="11" fontFamily="Crimson Pro, serif" fontWeight="400" fontStyle="italic"
@@ -1290,6 +1377,7 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
                 Hyemeyohsts Storm
               </text>
             </g>
+            )}
 
             {/* Clickable compass direction labels */}
             {[
@@ -1299,12 +1387,29 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
               { dir: 'W', x: CX - MW_OUTER_R - 18, y: CY + 1, anchor: 'end', baseDom: 'central', baseFill: 'rgba(150, 150, 150, 0.8)' },
             ].map(c => {
               const dirKey = `dir:${c.dir}`;
-              const isDirActive = selectedWheelItem === dirKey || (selectedWheelItem?.startsWith('num:') && NUM_TO_DIR[parseInt(selectedWheelItem.split(':')[1])] === c.dir);
+              const isDirActive = isTraditionView
+                ? selectedWheelItem?.split(':')[1] === c.dir
+                : (selectedWheelItem === dirKey || (selectedWheelItem?.startsWith('num:') && NUM_TO_DIR[parseInt(selectedWheelItem.split(':')[1])] === c.dir));
+              // In tradition view, derive compass label color from quadrant colors (boost opacity)
+              const compassFill = isTraditionView
+                ? effectiveWheelData.quadrantColors[c.dir]?.replace(/[\d.]+\)$/, '0.8)')
+                : c.baseFill;
               return (
-                <g key={c.dir} onClick={() => onSelectWheelItem && onSelectWheelItem(selectedWheelItem === dirKey ? null : dirKey)} style={{ cursor: 'pointer' }}>
+                <g key={c.dir} onClick={() => {
+                  if (isTraditionView) {
+                    // In tradition view, clicking compass labels selects the first category for that direction
+                    const tWheel = effectiveWheelData.wheels[0];
+                    if (tWheel) {
+                      const itemKey = `${tWheel.id}:${c.dir}`;
+                      onSelectWheelItem && onSelectWheelItem(selectedWheelItem?.split(':')[1] === c.dir ? null : itemKey);
+                    }
+                  } else {
+                    onSelectWheelItem && onSelectWheelItem(selectedWheelItem === dirKey ? null : dirKey);
+                  }
+                }} style={{ cursor: 'pointer' }}>
                   <circle cx={c.x} cy={c.y} r="14" fill="transparent" />
                   <text x={c.x} y={c.y} textAnchor={c.anchor} dominantBaseline={c.baseDom}
-                    fill={isDirActive ? '#f0c040' : c.baseFill}
+                    fill={isDirActive ? '#f0c040' : compassFill}
                     fontSize="16" fontFamily="Cinzel, serif" fontWeight="700" letterSpacing="2"
                     style={{ transition: 'fill 0.3s' }}>
                     {c.dir}

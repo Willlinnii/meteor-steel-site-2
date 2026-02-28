@@ -1438,3 +1438,32 @@
     flex-direction: column;
   }
 }
+
+/* ── Hover tooltip ── */
+.mythic-earth-hover-tooltip {
+  position: fixed;
+  z-index: 10000;
+  pointer-events: none;
+  background: rgba(12, 10, 8, 0.92);
+  border: 1px solid rgba(201, 169, 97, 0.35);
+  border-radius: 6px;
+  padding: 6px 10px;
+  max-width: 240px;
+  backdrop-filter: blur(6px);
+}
+
+.mythic-earth-hover-name {
+  color: #e8d9b0;
+  font-family: 'Cinzel', serif;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.mythic-earth-hover-cat {
+  color: rgba(201, 169, 97, 0.7);
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 11.5px;
+  margin-top: 2px;
+  line-height: 1.2;
+}

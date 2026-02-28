@@ -468,6 +468,7 @@ function MythicEarthGlobe({ activeFilters, timelineRange, traditionFilter, onSel
   const geoApplied = useRef(false);
   const userInteractingRef = useRef(false);
   const [hoveredSiteId, setHoveredSiteId] = useState(null);
+  const [hoverPos, setHoverPos] = useState(null);
 
   const highlightSet = useMemo(
     () => new Set(highlightedSiteIds || []),
@@ -590,9 +591,15 @@ function MythicEarthGlobe({ activeFilters, timelineRange, traditionFilter, onSel
       const picked = viewer.scene.pick(movement.endPosition);
       if (picked?.id?.name) {
         setHoveredSiteId(picked.id.name);
+        const canvasRect = viewer.canvas.getBoundingClientRect();
+        setHoverPos({
+          x: canvasRect.left + movement.endPosition.x,
+          y: canvasRect.top + movement.endPosition.y,
+        });
         viewer.canvas.style.cursor = 'pointer';
       } else {
         setHoveredSiteId(null);
+        setHoverPos(null);
         viewer.canvas.style.cursor = '';
       }
     }, ScreenSpaceEventType.MOUSE_MOVE);
@@ -685,6 +692,7 @@ function MythicEarthGlobe({ activeFilters, timelineRange, traditionFilter, onSel
   }, [cameraAR]);
 
   return (
+    <>
     <Viewer
       ref={viewerRef}
       className="mythic-earth-cesium"
@@ -778,6 +786,22 @@ function MythicEarthGlobe({ activeFilters, timelineRange, traditionFilter, onSel
         );
       })}
     </Viewer>
+    {hoveredSiteId && hoverPos && (() => {
+      const allItems = activeTab === 'movements' ? movements : filteredSites;
+      const item = allItems.find(s => s.name === hoveredSiteId);
+      if (!item) return null;
+      const catLabel = activeTab === 'movements'
+        ? 'Movement'
+        : (CATEGORY_MAP[item.category]?.singular || item.category || 'Site');
+      return createPortal(
+        <div className="mythic-earth-hover-tooltip" style={{ left: hoverPos.x + 14, top: hoverPos.y - 10 }}>
+          <div className="mythic-earth-hover-name">{item.name}</div>
+          <div className="mythic-earth-hover-cat">{catLabel}{item.region ? ` · ${item.region}` : ''}</div>
+        </div>,
+        document.body
+      );
+    })()}
+    </>
   );
 }
 
