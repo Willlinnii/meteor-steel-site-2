@@ -395,7 +395,8 @@ function ArtBookPlanets({ islandAngleRef, draggingRef, sunFactorRef }) {
   if (planetAnglesRef.current === null) {
     const init = {};
     WEEKDAY_ORBITS.forEach((o, i) => {
-      init[o.planet] = (i / WEEKDAY_ORBITS.length) * Math.PI * 2;
+      // Sun starts at -PI/2 (top of arc, near the ruby); others spaced from there
+      init[o.planet] = -Math.PI / 2 + (i / WEEKDAY_ORBITS.length) * Math.PI * 2;
     });
     planetAnglesRef.current = init;
   }
@@ -408,7 +409,7 @@ function ArtBookPlanets({ islandAngleRef, draggingRef, sunFactorRef }) {
     if (!draggingRef?.current) {
       const dt = Math.min(delta, 0.1);
       WEEKDAY_ORBITS.forEach(o => {
-        planetAnglesRef.current[o.planet] -= o.speed * dt;
+        planetAnglesRef.current[o.planet] += o.speed * dt;
       });
     }
   });
@@ -1240,12 +1241,18 @@ function RadialLine() {
         <meshBasicMaterial color="#c9a961" transparent opacity={0.7} side={THREE.DoubleSide} depthWrite={false} blending={THREE.AdditiveBlending} />
       </mesh>
       {/* Static islands locked in alignment with lines */}
-      <mesh position={[ISLAND_ORBIT_RADIUS, ISLAND_Y, 0]} geometry={islandGeo}>
-        <meshStandardMaterial color="#c9a961" metalness={0.4} roughness={0.5} />
-      </mesh>
-      <mesh position={[-ISLAND_ORBIT_RADIUS, ISLAND_Y, 0]} geometry={islandGeo}>
-        <meshStandardMaterial color="#c9a961" metalness={0.4} roughness={0.5} />
-      </mesh>
+      <group position={[ISLAND_ORBIT_RADIUS, ISLAND_Y, 0]}>
+        <mesh geometry={islandGeo}>
+          <meshStandardMaterial color="#c9a961" metalness={0.4} roughness={0.5} />
+        </mesh>
+        <GoldenAppleTree />
+      </group>
+      <group position={[-ISLAND_ORBIT_RADIUS, ISLAND_Y, 0]}>
+        <mesh geometry={islandGeo}>
+          <meshStandardMaterial color="#c9a961" metalness={0.4} roughness={0.5} />
+        </mesh>
+        <GoldenAppleTree />
+      </group>
     </group>
   );
 }
@@ -1255,7 +1262,7 @@ const ISLAND_Y = 0; // same plane as green disk center
 const ISLAND_ORBIT_RADIUS = 12; // fixed — does not change with zoom
 
 function useIslandOrbit(draggingRef) {
-  const angleRef = useRef(Math.PI);
+  const angleRef = useRef(Math.PI * 0.5);
   useFrame((_, delta) => {
     if (draggingRef?.current) return;
     angleRef.current += Math.min(delta, 0.1) * 0.04;
@@ -1263,22 +1270,56 @@ function useIslandOrbit(draggingRef) {
   return angleRef;
 }
 
+// ── Golden Apple Tree for satellite islands ──────────────────────────
+const applePositions = [
+  [0.25, 0.15, 0.2], [-0.2, 0.25, -0.15], [0.1, -0.05, -0.25],
+  [-0.15, 0.3, 0.1], [0.3, 0.05, -0.1],
+];
+
+function GoldenAppleTree() {
+  const trunkGeo = useMemo(() => new THREE.CylinderGeometry(0.04, 0.06, 0.6, 6), []);
+  const canopyGeo = useMemo(() => new THREE.SphereGeometry(0.4, 12, 10), []);
+  const appleGeo = useMemo(() => new THREE.SphereGeometry(0.06, 8, 6), []);
+
+  return (
+    <group position={[0, 0.075, 0]}>
+      {/* Trunk */}
+      <mesh geometry={trunkGeo} position={[0, 0.3, 0]}>
+        <meshStandardMaterial color="#5a3a1a" roughness={0.9} metalness={0.0} />
+      </mesh>
+      {/* Canopy */}
+      <mesh geometry={canopyGeo} position={[0, 0.75, 0]}>
+        <meshStandardMaterial color="#2a5a20" roughness={0.8} metalness={0.05} />
+      </mesh>
+      {/* Golden apples */}
+      {applePositions.map((pos, i) => (
+        <mesh key={i} geometry={appleGeo} position={[pos[0], 0.75 + pos[1], pos[2]]}>
+          <meshStandardMaterial color="#c9a961" metalness={0.6} roughness={0.25} emissive="#c9a961" emissiveIntensity={0.15} />
+        </mesh>
+      ))}
+    </group>
+  );
+}
+
 function OrbitingIsland({ angleRef, offset = 0 }) {
-  const meshRef = useRef();
+  const groupRef = useRef();
   const geo = useMemo(() => new THREE.CylinderGeometry(1.2, 1.2, 0.15, 32), []);
 
   useFrame(() => {
-    if (!meshRef.current) return;
+    if (!groupRef.current) return;
     const a = angleRef.current + offset;
-    meshRef.current.position.x = Math.cos(a) * ISLAND_ORBIT_RADIUS;
-    meshRef.current.position.z = Math.sin(a) * ISLAND_ORBIT_RADIUS;
-    meshRef.current.position.y = ISLAND_Y;
+    groupRef.current.position.x = Math.cos(a) * ISLAND_ORBIT_RADIUS;
+    groupRef.current.position.z = Math.sin(a) * ISLAND_ORBIT_RADIUS;
+    groupRef.current.position.y = ISLAND_Y;
   });
 
   return (
-    <mesh ref={meshRef} geometry={geo}>
-      <meshStandardMaterial color="#c9a961" metalness={0.4} roughness={0.5} />
-    </mesh>
+    <group ref={groupRef}>
+      <mesh geometry={geo}>
+        <meshStandardMaterial color="#c9a961" metalness={0.4} roughness={0.5} />
+      </mesh>
+      <GoldenAppleTree />
+    </group>
   );
 }
 

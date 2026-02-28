@@ -40,6 +40,7 @@ import { useAtlasContext } from '../../contexts/AtlasContext';
 import resolveBodyPosition from '../../data/resolveBodyPosition';
 import { CHAKRA_ORDERINGS } from '../../data/chronosphaeraBodyPositions';
 import { useProfile } from '../../profile/ProfileContext';
+import { BIRTHSTONE_KEYS } from '../Crown/Gemstone3D';
 import usePerspective, { camelToTitle } from '../../components/chronosphaera/usePerspective';
 import usePlanetData, { findBySin, archetypesData, artistsData, modernData, storiesData, theologyData } from '../../hooks/usePlanetData';
 import { BEYOND_RINGS, BEYOND_TRADITIONS, FIXED_STARS_RING } from '../../data/chronosphaeraBeyondRings';
@@ -48,6 +49,8 @@ import ColumnSequencePopup from '../../components/chronosphaera/ColumnSequencePo
 const InlineScene3D = lazy(() => import('../../components/chronosphaera/vr/InlineScene3D'));
 const DodecahedronPage = lazy(() => import('../Dodecahedron/DodecahedronPage'));
 const ArtBookViewer = lazy(() => import('../../components/ArtBookViewer'));
+const RingSceneEmbed = lazy(() => import('../Crown/RingSceneEmbed'));
+const RingDiagram2D = lazy(() => import('../Ring2D/RingDiagram2D'));
 
 const METEOR_STEEL_STAGES = [
   { id: 'golden-age', label: 'Golden Age' },
@@ -95,6 +98,28 @@ const SOS_CHAPTER_NAMES = {
 
 const MONTHS = ['January','February','March','April','May','June',
   'July','August','September','October','November','December'];
+
+const RING_DATE_TYPES = [
+  { key: 'birthday', label: 'Birthday' }, { key: 'engagement', label: 'Engagement' },
+  { key: 'wedding', label: 'Wedding' }, { key: 'anniversary', label: 'Anniversary' },
+  { key: 'secret', label: 'Secret' }, { key: 'other', label: 'Other' },
+];
+const RING_FORM_TYPES = [
+  { key: 'ring', label: 'Ring' }, { key: 'bracelet', label: 'Bracelet' },
+  { key: 'belt', label: 'Belt' }, { key: 'armband', label: 'Arm Band' },
+  { key: 'crown', label: 'Crown' },
+];
+const RING_METAL_TYPES = [
+  { key: 'gold', label: 'Gold' }, { key: 'silver', label: 'Silver' },
+  { key: 'meteorSteel', label: 'Meteor Steel' }, { key: 'bronze', label: 'Bronze' },
+  { key: 'copper', label: 'Copper' }, { key: 'tin', label: 'Tin' }, { key: 'lead', label: 'Lead' },
+];
+
+function parseRingDate(val) {
+  if (!val) return null;
+  const [y, m, d] = val.split('-').map(Number);
+  return new Date(y, m - 1, d);
+}
 
 const PLANET_NAV_COLORS = {
   Sun: '#e8e8e8', Moon: '#9b59b6', Mars: '#4a90d9',
@@ -540,10 +565,118 @@ function StageArrow({ items, currentId, onSelect, getId = x => x, getLabel = x =
   );
 }
 
+function RingToolbar({ ringForm, updateRingForm, ringMetal, updateRingMetal, ringLayout, updateRingLayout, ringMode, updateRingMode, ringZodiacMode, updateRingZodiacMode, ringActiveInput, ringActiveDate, ringActiveDateType, setRingActiveDateType, ringDates, ringDateDropOpen, setRingDateDropOpen, ringFormDropOpen, setRingFormDropOpen, ringMetalDropOpen, setRingMetalDropOpen, ringDatePickerRef, ringFormPickerRef, ringMetalPickerRef, ringBirthstone, ringFormConfig, ringViewMode, setRingViewMode, handleRingDateChange, handleRingClear, updateJewelryConfig, navigate }) {
+  return (
+    <div className="chrono-ring-toolbar">
+      <div className="chrono-ring-toolbar-inner">
+        <div className="chrono-ring-picker" ref={ringFormPickerRef}>
+          <button className="chrono-ring-trigger" onClick={() => setRingFormDropOpen(prev => !prev)}>
+            {RING_FORM_TYPES.find(f => f.key === ringForm)?.label || 'Ring'}<span className="chrono-ring-chevron">&#x25BE;</span>
+          </button>
+          {ringFormDropOpen && (
+            <div className="chrono-ring-dropdown">
+              {RING_FORM_TYPES.map(f => (
+                <button key={f.key} className={`chrono-ring-option${ringForm === f.key ? ' active' : ''}`}
+                  onClick={() => { updateRingForm(f.key); setRingFormDropOpen(false); }}>{f.label}</button>
+              ))}
+            </div>
+          )}
+        </div>
+        <div className="chrono-ring-picker" ref={ringMetalPickerRef}>
+          <button className="chrono-ring-trigger" onClick={() => setRingMetalDropOpen(prev => !prev)}>
+            {RING_METAL_TYPES.find(m => m.key === ringMetal)?.label || 'Gold'}<span className="chrono-ring-chevron">&#x25BE;</span>
+          </button>
+          {ringMetalDropOpen && (
+            <div className="chrono-ring-dropdown">
+              {RING_METAL_TYPES.map(m => (
+                <button key={m.key} className={`chrono-ring-option${ringMetal === m.key ? ' active' : ''}`}
+                  onClick={() => { updateRingMetal(m.key); setRingMetalDropOpen(false); }}>{m.label}</button>
+              ))}
+            </div>
+          )}
+        </div>
+        <button className={`chrono-ring-layout-btn${ringLayout === 'navaratna' ? ' navaratna' : ''}`}
+          onClick={() => updateRingLayout(ringLayout === 'astronomical' ? 'navaratna' : 'astronomical')}
+          title={ringLayout === 'astronomical' ? 'Astronomical layout' : 'Navaratna layout'}>
+          {ringLayout === 'astronomical'
+            ? <svg viewBox="0 0 24 24" width="18" height="18" fill="none"><circle cx="12" cy="12" r="8" stroke="#c9a961" strokeWidth="1" opacity="0.4" /><circle cx="12" cy="4" r="1.5" fill="#c9a961" /><circle cx="19" cy="9" r="1.5" fill="#c9a961" /><circle cx="18" cy="17" r="1.5" fill="#c9a961" /><circle cx="6" cy="17" r="1.5" fill="#c9a961" /><circle cx="5" cy="9" r="1.5" fill="#c9a961" /></svg>
+            : <svg viewBox="0 0 24 24" width="18" height="18" fill="none"><circle cx="12" cy="12" r="8" stroke="#f0c040" strokeWidth="1" opacity="0.4" /><circle cx="12" cy="4" r="2" fill="#f0c040" /><circle cx="9" cy="6.5" r="1.3" fill="#f0c040" /><circle cx="15" cy="6.5" r="1.3" fill="#f0c040" /><circle cx="7.5" cy="9" r="1.3" fill="#f0c040" /><circle cx="16.5" cy="9" r="1.3" fill="#f0c040" /></svg>}
+        </button>
+        <span className="chrono-ring-divider" />
+        <div className="chrono-ring-picker" ref={ringDatePickerRef}>
+          <button className="chrono-ring-trigger" onClick={() => setRingDateDropOpen(prev => !prev)}>
+            {RING_DATE_TYPES.find(dt => dt.key === ringActiveDateType)?.label || 'Birthday'}<span className="chrono-ring-chevron">&#x25BE;</span>
+          </button>
+          {ringDateDropOpen && (
+            <div className="chrono-ring-dropdown">
+              {RING_DATE_TYPES.map(dt => (
+                <button key={dt.key}
+                  className={`chrono-ring-option${ringActiveDateType === dt.key ? ' active' : ''}${ringDates[dt.key] ? ' has-date' : ''}`}
+                  onClick={() => { setRingActiveDateType(dt.key); setRingDateDropOpen(false); if (ringDates[dt.key]) updateJewelryConfig(ringForm, { dateType: dt.key, date: ringDates[dt.key] }); }}>
+                  {dt.label}{ringDates[dt.key] && <span className="chrono-ring-dot" />}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+        <input type="date" className="chrono-ring-date-input" value={ringActiveInput} onChange={handleRingDateChange} />
+        {ringActiveDate && <button className="chrono-ring-clear" onClick={handleRingClear}>Clear</button>}
+        <button className="chrono-ring-clear chrono-ring-zodiac-toggle"
+          onClick={() => updateRingZodiacMode(ringZodiacMode === 'tropical' ? 'sidereal' : 'tropical')}
+          title={ringZodiacMode === 'tropical' ? 'Switch to Sidereal' : 'Switch to Tropical'}>
+          {ringZodiacMode === 'tropical' ? 'Tropical' : 'Sidereal'}
+        </button>
+        <span className="chrono-ring-divider" />
+        <div className="chrono-ring-mode-toggle">
+          <button className={`chrono-ring-mode-btn${ringMode === 'heliocentric' ? ' active' : ''}`} onClick={() => updateRingMode('heliocentric')} title="Heliocentric">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none"><circle cx="12" cy="12" r="4.5" fill={ringMode === 'heliocentric' ? '#f0c040' : '#c9a961'} opacity={ringMode === 'heliocentric' ? 1 : 0.5} />
+            {[0,45,90,135,180,225,270,315].map(a => <line key={a} x1={12+Math.cos(a*Math.PI/180)*6.5} y1={12+Math.sin(a*Math.PI/180)*6.5} x2={12+Math.cos(a*Math.PI/180)*9} y2={12+Math.sin(a*Math.PI/180)*9} stroke={ringMode === 'heliocentric' ? '#f0c040' : '#c9a961'} strokeWidth="1.5" strokeLinecap="round" opacity={ringMode === 'heliocentric' ? 1 : 0.5} />)}</svg>
+          </button>
+          <button className={`chrono-ring-mode-btn${ringMode === 'geocentric' ? ' active' : ''}`} onClick={() => updateRingMode('geocentric')} title="Geocentric">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none"><circle cx="12" cy="12" r="7" stroke={ringMode === 'geocentric' ? '#4a9bd9' : '#c9a961'} strokeWidth="1.5" fill={ringMode === 'geocentric' ? '#1a4a6a' : 'none'} opacity={ringMode === 'geocentric' ? 1 : 0.5} />
+            <ellipse cx="12" cy="12" rx="3" ry="7" stroke={ringMode === 'geocentric' ? '#4a9bd9' : '#c9a961'} strokeWidth="1" opacity={ringMode === 'geocentric' ? 1 : 0.5} />
+            <line x1="5" y1="12" x2="19" y2="12" stroke={ringMode === 'geocentric' ? '#4a9bd9' : '#c9a961'} strokeWidth="1" opacity={ringMode === 'geocentric' ? 1 : 0.5} /></svg>
+          </button>
+          <button className={`chrono-ring-mode-btn${ringMode === 'birthstone' ? ' active' : ''}${!ringBirthstone ? ' disabled' : ''}`}
+            onClick={() => ringBirthstone && updateRingMode('birthstone')} disabled={!ringBirthstone}
+            title={ringBirthstone ? `Birthstone — ${ringBirthstone.name}` : 'Enter a birthday first'}>
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none"><path d="M12 3 L17 9 L12 21 L7 9 Z" fill={ringMode === 'birthstone' ? '#f0c040' : 'none'} opacity={ringMode === 'birthstone' ? 0.25 : 0} />
+            <path d="M12 3 L17 9 L12 21 L7 9 Z" stroke={ringMode === 'birthstone' ? '#f0c040' : '#c9a961'} strokeWidth="1.5" strokeLinejoin="round" opacity={ringMode === 'birthstone' ? 1 : 0.5} />
+            <line x1="7" y1="9" x2="17" y2="9" stroke={ringMode === 'birthstone' ? '#f0c040' : '#c9a961'} strokeWidth="1" opacity={ringMode === 'birthstone' ? 1 : 0.5} /></svg>
+          </button>
+        </div>
+        <span className="chrono-ring-divider" />
+        <div className="chrono-ring-size">
+          <label className="chrono-ring-size-label">Size</label>
+          <input type="number" className="chrono-ring-size-input" min="1" max="16" step="0.5" placeholder="—"
+            value={ringFormConfig.size ?? ''} onChange={(e) => { const v = e.target.value; updateJewelryConfig(ringForm, { size: v === '' ? null : parseFloat(v) }); }} />
+        </div>
+        <button className="chrono-ring-store-btn" title="View in store" onClick={() => {
+          const params = new URLSearchParams({ highlight: 'jewelry', form: ringForm || 'ring' });
+          if (ringMetal) params.set('metal', ringMetal); if (ringLayout) params.set('layout', ringLayout);
+          if (ringFormConfig.size != null) params.set('size', ringFormConfig.size);
+          if (ringDates[ringActiveDateType]) { params.set('date', ringDates[ringActiveDateType]); params.set('dateType', ringActiveDateType); }
+          navigate(`/store?${params.toString()}`);
+        }}>
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none"><path d="M6 2L3 7v13a1 1 0 001 1h16a1 1 0 001-1V7l-3-5H6z" stroke="#c9a961" strokeWidth="1.5" strokeLinejoin="round" /><line x1="3" y1="7" x2="21" y2="7" stroke="#c9a961" strokeWidth="1.5" /><path d="M16 11a4 4 0 01-8 0" stroke="#c9a961" strokeWidth="1.5" strokeLinecap="round" /></svg>
+        </button>
+        <button className="chrono-ring-view-toggle" title={ringViewMode === '3d' ? 'Switch to 2D' : 'Switch to 3D'}
+          onClick={() => setRingViewMode(prev => prev === '3d' ? '2d' : '3d')}>
+          {ringViewMode === '3d' ? '2D' : '3D'}
+        </button>
+      </div>
+    </div>
+  );
+}
+
 export default function ChronosphaeraPage() {
   const location = useLocation();
   const navigate = useNavigate();
-  const { hasPurchase, hasSubscription, natalChart } = useProfile();
+  const { hasPurchase, hasSubscription, natalChart,
+    ringForm, updateRingForm, ringMetal, updateRingMetal,
+    ringLayout, updateRingLayout, ringMode, updateRingMode,
+    ringZodiacMode, updateRingZodiacMode, jewelryConfig, updateJewelryConfig
+  } = useProfile();
   const compass = useCompass();
   const ambient = useAmbientLight();
   const season = useSeason();
@@ -557,7 +690,8 @@ export default function ChronosphaeraPage() {
   const [selectedCardinal, setSelectedCardinal] = useState(null);
   const [selectedEarth, setSelectedEarth] = useState(null);
   const [devEntries, setDevEntries] = useState({});
-  const [clockMode, setClockMode] = useState('24h');
+  const [clockMode, setClockMode] = useState('12h');
+  const [layoutMode, setLayoutMode] = useState('geo');
   // Stop compass when leaving clock mode
   useEffect(() => { if (!clockMode && compass.active) compass.stopCompass(); }, [clockMode]); // eslint-disable-line react-hooks/exhaustive-deps
   const [zodiacMode, setZodiacMode] = useState('tropical');
@@ -611,11 +745,25 @@ export default function ChronosphaeraPage() {
   const showDodecahedron = mode === 'dodecahedron';
   const [dodecMode, setDodecMode] = useState('stars');
   const showArtBook = mode === 'artbook';
-  const [artBookMode, setArtBookMode] = useState('mountain');
+  const showRing = mode === 'ring';
+  const [artBookMode, setArtBookMode] = useState('book');
   const artBookContentRef = useRef(null);
   const [artBookPanelCollapsed, setArtBookPanelCollapsed] = useState(false);
   const [artBookStarlightStage, setArtBookStarlightStage] = useState(null);
   const [artBookMonomythTab, setArtBookMonomythTab] = useState('overview');
+
+  // Ring embed state
+  const [ringViewMode, setRingViewMode] = useState('3d');
+  const [ringDates, setRingDates] = useState({ birthday: '', engagement: '', wedding: '', anniversary: '', secret: '', other: '' });
+  const [ringActiveDateType, setRingActiveDateType] = useState('birthday');
+  const [ringDateDropOpen, setRingDateDropOpen] = useState(false);
+  const [ringFormDropOpen, setRingFormDropOpen] = useState(false);
+  const [ringMetalDropOpen, setRingMetalDropOpen] = useState(false);
+  const [ringSelectedPlanet, setRingSelectedPlanet] = useState(null);
+  const [ringSelectedCardinal, setRingSelectedCardinal] = useState(null);
+  const ringDatePickerRef = useRef(null);
+  const ringFormPickerRef = useRef(null);
+  const ringMetalPickerRef = useRef(null);
 
   const ybr = useYellowBrickRoad();
   const { forgeMode } = useStoryForge();
@@ -667,6 +815,45 @@ export default function ChronosphaeraPage() {
     });
   }, [devEntries, writingsLoaded, saveNotes]);
 
+  // Ring: seed birthday from natal chart
+  useEffect(() => {
+    if (natalChart?.birthData) {
+      const { year, month, day } = natalChart.birthData;
+      const val = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+      setRingDates(prev => prev.birthday ? prev : { ...prev, birthday: val });
+    }
+  }, [natalChart]);
+
+  // Ring: close dropdowns on outside click
+  useEffect(() => {
+    if (!ringDateDropOpen && !ringFormDropOpen && !ringMetalDropOpen) return;
+    const handleClick = (e) => {
+      if (ringDateDropOpen && ringDatePickerRef.current && !ringDatePickerRef.current.contains(e.target)) setRingDateDropOpen(false);
+      if (ringFormDropOpen && ringFormPickerRef.current && !ringFormPickerRef.current.contains(e.target)) setRingFormDropOpen(false);
+      if (ringMetalDropOpen && ringMetalPickerRef.current && !ringMetalPickerRef.current.contains(e.target)) setRingMetalDropOpen(false);
+    };
+    document.addEventListener('mousedown', handleClick);
+    return () => document.removeEventListener('mousedown', handleClick);
+  }, [ringDateDropOpen, ringFormDropOpen, ringMetalDropOpen]);
+
+  // Ring: derive birthstone from active date
+  const ringFormConfig = jewelryConfig?.[ringForm] || { size: null, date: '', dateType: 'birthday' };
+  const ringActiveInput = ringDates[ringActiveDateType];
+  const ringActiveDate = parseRingDate(ringActiveInput);
+  const ringBirthstone = useMemo(() => {
+    const bd = parseRingDate(ringDates.birthday) || ringActiveDate;
+    if (!bd) return null;
+    const entry = calendarData[bd.getMonth()];
+    if (!entry?.stone?.name) return null;
+    const key = BIRTHSTONE_KEYS[entry.stone.name];
+    return key ? { name: entry.stone.name, key } : null;
+  }, [ringDates, ringActiveDate]);
+
+  // Ring: fallback if birthstone cleared while in birthstone mode
+  useEffect(() => {
+    if (ringMode === 'birthstone' && !ringBirthstone) updateRingMode('geocentric');
+  }, [ringBirthstone, ringMode, updateRingMode]);
+
   // Page visit tracking
   useEffect(() => { trackElement('chronosphaera.page.visited'); }, [trackElement]);
 
@@ -684,6 +871,8 @@ export default function ChronosphaeraPage() {
         const next = perspective.clockMode;
         return prev === next ? prev : next;
       });
+      setLayoutMode(perspective.centerModel === 'heliocentric' ? 'helio' : 'geo');
+      setZodiacMode(perspective.zodiacFrame || 'tropical');
       setShowCalendar(prev => prev === true ? prev : true);
     }
   }, [perspective.activePerspective]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -758,7 +947,7 @@ export default function ChronosphaeraPage() {
   const renderKrishnamurtiContent = () => (
     <>
       <h2 className="chrono-heading">
-        <span className="chrono-heading-title-row">Krishnamurti</span>
+        <span className="chrono-heading-title-row">Krishnamurti{view3DBtn}</span>
         <span className="chrono-sub">The Dissolution of the Order of the Star &middot; 1929</span>
       </h2>
       <div className="container">
@@ -817,6 +1006,7 @@ export default function ChronosphaeraPage() {
             <h2 className="chrono-heading">
               <span className="chrono-heading-title-row">
                 Sphere of Fixed Stars
+                {view3DBtn}
               </span>
               <span className="chrono-sub">The Eighth Sphere</span>
             </h2>
@@ -851,6 +1041,7 @@ export default function ChronosphaeraPage() {
         <h2 className="chrono-heading">
           <span className="chrono-heading-title-row">
             {beyondData?.label || ringDef.label}
+            {view3DBtn}
           </span>
           <span className="chrono-sub">{ringDef.subtitle} · {perspective.perspectiveLabel}</span>
         </h2>
@@ -984,6 +1175,7 @@ export default function ChronosphaeraPage() {
       clearAllSelections();
       setMode('monomyth');
       setClockMode('24h');
+      setLayoutMode('geo');
       setShowCalendar(true);
       navigate('/chronosphaera/monomyth');
     } else if (mode === 'monomyth') {
@@ -1045,12 +1237,14 @@ export default function ChronosphaeraPage() {
       clearAllSelections();
       setMode('fallen-starlight');
       setClockMode('24h');
+      setLayoutMode('geo');
       setShowCalendar(true);
       navigate('/chronosphaera/fallen-starlight');
     } else if (mode === 'fallen-starlight') {
       // Switch to Story of Stories
       setMode('story-of-stories');
       setClockMode('12h');
+      setLayoutMode('helio');
       setShowCalendar(true);
       setSelectedStarlightStage(null);
       setStarlightSectionId(null);
@@ -1059,6 +1253,7 @@ export default function ChronosphaeraPage() {
       // Back to Fallen Starlight
       setMode('fallen-starlight');
       setClockMode('24h');
+      setLayoutMode('geo');
       setShowCalendar(true);
       setSelectedStarlightStage(null);
       setStarlightSectionId(null);
@@ -1088,7 +1283,7 @@ export default function ChronosphaeraPage() {
     if (mode !== 'artbook') {
       clearAllSelections();
       setMode('artbook');
-      setArtBookMode('mountain');
+      setArtBookMode('book');
       navigate('/chronosphaera/artbook');
     } else {
       setArtBookMode(prev => {
@@ -1097,6 +1292,39 @@ export default function ChronosphaeraPage() {
       });
     }
   }, [mode, clearAllSelections, navigate]);
+
+  const handleToggleClockRing = useCallback(() => {
+    if (!clockMode) {
+      // From body/chakra → enter clock
+      clearAllSelections();
+      setMode('default');
+      setClockMode('12h');
+      setLayoutMode('geo');
+      setShowCalendar(true);
+      setSelectedMonth(MONTHS[new Date().getMonth()]);
+      setActiveMonthTab('stone');
+      navigate('/chronosphaera/calendar');
+    } else if (mode !== 'ring') {
+      // From clock → enter ring
+      setMode('ring');
+      navigate('/chronosphaera/ring');
+    } else {
+      // From ring → back to clock
+      setMode('default');
+      navigate('/chronosphaera/calendar');
+    }
+  }, [clockMode, mode, clearAllSelections, navigate]);
+
+  const handleRingDateChange = useCallback((e) => {
+    const val = e.target.value;
+    setRingDates(prev => ({ ...prev, [ringActiveDateType]: val }));
+    updateJewelryConfig(ringForm, { date: val, dateType: ringActiveDateType });
+  }, [ringActiveDateType, ringForm, updateJewelryConfig]);
+
+  const handleRingClear = useCallback(() => {
+    setRingDates(prev => ({ ...prev, [ringActiveDateType]: '' }));
+    updateJewelryConfig(ringForm, { date: '' });
+  }, [ringActiveDateType, ringForm, updateJewelryConfig]);
 
   const handleToggle3D = useCallback((value) => {
     if (value === 'vr') {
@@ -1332,6 +1560,51 @@ export default function ChronosphaeraPage() {
     );
   }
 
+  const view3DBtn = !view3D && hasSubscription('monomyth') && (
+    <button
+      className="view3d-toggle-inline"
+      onClick={() => handleToggle3D('3d')}
+      title="Switch to 3D view"
+    >
+      3D
+    </button>
+  );
+
+  const view3DBtnRow = !view3D && hasSubscription('monomyth') && (
+    <div className="view3d-below-arc">
+      <button
+        className="view3d-toggle-inline"
+        onClick={() => handleToggle3D('3d')}
+        title="Switch to 3D view"
+      >
+        3D
+      </button>
+    </div>
+  );
+
+  const toggleStripJSX = clockMode && (
+    <div className="chrono-toggle-strip">
+      <div className="chrono-toggle-pair">
+        <button className={`chrono-toggle-btn${zodiacMode === 'tropical' ? ' active' : ''}`}
+          onClick={() => setZodiacMode('tropical')}>Tropical</button>
+        <button className={`chrono-toggle-btn${zodiacMode === 'sidereal' ? ' active' : ''}`}
+          onClick={() => setZodiacMode('sidereal')}>Sidereal</button>
+      </div>
+      <div className="chrono-toggle-pair">
+        <button className={`chrono-toggle-btn${clockMode === '12h' ? ' active' : ''}`}
+          onClick={() => setClockMode('12h')}>12hr</button>
+        <button className={`chrono-toggle-btn${clockMode === '24h' ? ' active' : ''}`}
+          onClick={() => setClockMode('24h')}>24hr</button>
+      </div>
+      <div className="chrono-toggle-pair">
+        <button className={`chrono-toggle-btn${layoutMode === 'helio' ? ' active' : ''}`}
+          onClick={() => setLayoutMode('helio')}>Helio</button>
+        <button className={`chrono-toggle-btn${layoutMode === 'geo' ? ' active' : ''}`}
+          onClick={() => setLayoutMode('geo')}>Geo</button>
+      </div>
+    </div>
+  );
+
   function togglePersonaChat(type, name) {
     const key = `${type}:${name}`;
     if (personaChatOpen === key) {
@@ -1403,7 +1676,7 @@ export default function ChronosphaeraPage() {
   }
 
   return (
-    <div className={`chronosphaera-page chrono-${ambient.mode}${view3D ? ' chrono-3d-active' : ''}${showDodecahedron ? ' chrono-dodec-active' : ''}${showArtBook ? ' chrono-artbook-active' : ''}`}>
+    <div className={`chronosphaera-page chrono-${ambient.mode}${view3D ? ' chrono-3d-active' : ''}${showDodecahedron ? ' chrono-dodec-active' : ''}${showArtBook ? ' chrono-artbook-active' : ''}${showRing ? ' chrono-ring-active' : ''}`}>
       {showArtBook && (
         <div className="chrono-artbook-layer">
           <Suspense fallback={<div className="chrono-empty">Loading Art Book...</div>}>
@@ -1493,6 +1766,7 @@ export default function ChronosphaeraPage() {
                       <span className="chrono-heading-title-row">
                         {selectedSign}
                         <StageArrow items={ZODIAC_SIGNS} currentId={selectedSign} onSelect={setSelectedSign} />
+                        {view3DBtn}
                       </span>
                       <span className="chrono-sub">{zodiacData.find(z => z.sign === selectedSign)?.archetype || 'Zodiac'}</span>
                     </h2>
@@ -1584,6 +1858,7 @@ export default function ChronosphaeraPage() {
           )}
         </div>
       )}
+      {showRing && (<div className="chrono-ring-layer"><Suspense fallback={<div className="chrono-empty">Loading Ring...</div>}>{ringViewMode === '3d' ? (<RingSceneEmbed birthDate={ringActiveDate} selectedPlanet={ringSelectedPlanet} onSelectPlanet={(p) => setRingSelectedPlanet(ringSelectedPlanet === p ? null : p)} selectedCardinal={ringSelectedCardinal} onSelectCardinal={setRingSelectedCardinal} mode={ringMode} zodiacMode={ringZodiacMode} birthstoneKey={ringBirthstone?.key || null} metal={ringMetal} form={ringForm} layout={ringLayout} />) : (<RingDiagram2D birthDate={ringActiveDate} mode={ringMode} zodiacMode={ringZodiacMode} selectedPlanet={ringSelectedPlanet} onSelectPlanet={(p) => setRingSelectedPlanet(ringSelectedPlanet === p ? null : p)} hoveredPlanet={null} onHoverPlanet={() => {}} selectedSign={null} onSelectSign={() => {}} selectedCardinal={ringSelectedCardinal} onSelectCardinal={setRingSelectedCardinal} />)}</Suspense><RingToolbar ringForm={ringForm} updateRingForm={updateRingForm} ringMetal={ringMetal} updateRingMetal={updateRingMetal} ringLayout={ringLayout} updateRingLayout={updateRingLayout} ringMode={ringMode} updateRingMode={updateRingMode} ringZodiacMode={ringZodiacMode} updateRingZodiacMode={updateRingZodiacMode} ringActiveInput={ringActiveInput} ringActiveDate={ringActiveDate} ringActiveDateType={ringActiveDateType} setRingActiveDateType={setRingActiveDateType} ringDates={ringDates} ringDateDropOpen={ringDateDropOpen} setRingDateDropOpen={setRingDateDropOpen} ringFormDropOpen={ringFormDropOpen} setRingFormDropOpen={setRingFormDropOpen} ringMetalDropOpen={ringMetalDropOpen} setRingMetalDropOpen={setRingMetalDropOpen} ringDatePickerRef={ringDatePickerRef} ringFormPickerRef={ringFormPickerRef} ringMetalPickerRef={ringMetalPickerRef} ringBirthstone={ringBirthstone} ringFormConfig={ringFormConfig} ringViewMode={ringViewMode} setRingViewMode={setRingViewMode} handleRingDateChange={handleRingDateChange} handleRingClear={handleRingClear} updateJewelryConfig={updateJewelryConfig} navigate={navigate} /></div>)}
       {showDodecahedron && (
         <div className="chrono-dodec-layer">
           <Suspense fallback={<div className="chrono-empty">Loading Dodecahedron...</div>}>
@@ -1723,17 +1998,9 @@ export default function ChronosphaeraPage() {
             selectedMonth={selectedMonth}
             onSelectMonth={(m) => { if (m) trackElement(`chronosphaera.calendar.month.${m}`); setSelectedMonth(m); setActiveMonthTab('stone'); if (m) { setSelectedSign(null); setSelectedCardinal(null); setSelectedEarth(null); } }}
             clockMode={clockMode}
-            onToggleClock={() => {
-              const next = clockMode === '12h' ? '24h' : '12h';
-              clearAllSelections();
-              setMode('default');
-              setClockMode(next);
-              setZodiacMode(next === '24h' ? 'sidereal' : 'tropical');
-              setShowCalendar(true);
-              setSelectedMonth(MONTHS[new Date().getMonth()]);
-              setActiveMonthTab('stone');
-              navigate(next === '24h' ? '/chronosphaera/calendar-24' : '/chronosphaera/calendar');
-            }}
+            layoutMode={layoutMode}
+            onEnterClock={handleToggleClockRing}
+            showRing={showRing}
             compassHeading={compass.active ? compass.heading : null}
             compassSupported={compass.supported}
             compassDenied={compass.denied}
@@ -1825,7 +2092,6 @@ export default function ChronosphaeraPage() {
             showArtBook={showArtBook}
             artBookMode={artBookMode}
             onToggleArtBook={handleToggleArtBook}
-            onToggle3D={handleToggle3D}
             targetDate={targetDate}
           />
         )}
@@ -1855,6 +2121,7 @@ export default function ChronosphaeraPage() {
                 <span className="chrono-heading-title-row">
                   {STORY_OF_STORIES_STAGES.find(s => s.id === selectedStarlightStage)?.label || selectedStarlightStage}
                   <StageArrow items={STORY_OF_STORIES_STAGES} currentId={selectedStarlightStage} onSelect={(id) => { setSelectedStarlightStage(id); setStarlightSectionId(null); }} getId={s => s.id} getLabel={s => s.label} />
+                  {view3DBtn}
                 </span>
                 <span className="chrono-sub">Story of Stories</span>
               </h2>
@@ -1885,6 +2152,7 @@ export default function ChronosphaeraPage() {
                 <span className="chrono-heading-title-row">
                   Story of Stories
                   <span className="chrono-heading-next" onClick={() => { setSelectedStarlightStage(STORY_OF_STORIES_STAGES[0].id); setStarlightSectionId(null); }} title={STORY_OF_STORIES_STAGES[0].label}>→</span>
+                  {view3DBtn}
                 </span>
                 <span className="chrono-sub">{storyOfStoriesData.subtitle}</span>
               </h2>
@@ -1946,6 +2214,7 @@ export default function ChronosphaeraPage() {
                 <span className="chrono-heading-title-row">
                   {FALLEN_STARLIGHT_STAGES.find(s => s.id === selectedStarlightStage)?.label || selectedStarlightStage}
                   <StageArrow items={FALLEN_STARLIGHT_STAGES} currentId={selectedStarlightStage} onSelect={(id) => { setSelectedStarlightStage(id); setStarlightSectionId(null); }} getId={s => s.id} getLabel={s => s.label} />
+                  {view3DBtn}
                 </span>
                 <span className="chrono-sub">Fallen Starlight</span>
               </h2>
@@ -1994,6 +2263,7 @@ export default function ChronosphaeraPage() {
                 <span className="chrono-heading-title-row">
                   Fallen Starlight
                   <span className="chrono-heading-next" onClick={() => { setSelectedStarlightStage(FALLEN_STARLIGHT_STAGES[0].id); setStarlightSectionId(null); }} title={FALLEN_STARLIGHT_STAGES[0].label}>→</span>
+                  {view3DBtn}
                 </span>
                 <span className="chrono-sub">The Revelation</span>
               </h2>
@@ -2026,6 +2296,7 @@ export default function ChronosphaeraPage() {
                 <span className="chrono-heading-title-row">
                   {selectedSign}
                   <StageArrow items={ZODIAC_SIGNS} currentId={selectedSign} onSelect={setSelectedSign} />
+                  {view3DBtn}
                 </span>
                 <span className="chrono-sub">{zodiacData.find(z => z.sign === selectedSign)?.archetype || 'Zodiac'}</span>
               </h2>
@@ -2072,6 +2343,7 @@ export default function ChronosphaeraPage() {
                 <span className="chrono-heading-title-row">
                   {cardinalsData[selectedCardinal]?.label || selectedCardinal}
                   <StageArrow items={CARDINALS} currentId={selectedCardinal} onSelect={setSelectedCardinal} getLabel={c => cardinalsData[c]?.label || c} />
+                  {view3DBtn}
                 </span>
                 <span className="chrono-sub">{MW_DIR_NAMES[CARDINAL_TO_MW_DIR[selectedCardinal]]} · Alignments Across All Wheels</span>
               </h2>
@@ -2090,6 +2362,7 @@ export default function ChronosphaeraPage() {
           ) : selectedPlanet && currentData ? (
             <>
               {renderPlanetWeekdayNav()}
+              {view3DBtnRow}
               {showOrderInfo && chakraViewMode && ORDER_DESCRIPTIONS[chakraViewMode] && (
                 <div className="order-info-panel">
                   <h4>{ORDER_DESCRIPTIONS[chakraViewMode].title}</h4>
@@ -2101,6 +2374,7 @@ export default function ChronosphaeraPage() {
                   ))}
                 </div>
               )}
+              {toggleStripJSX}
               <div className="container">
                 <div id="content-container">
                   <MetalDetailPanel
@@ -2151,6 +2425,7 @@ export default function ChronosphaeraPage() {
                 <span className="chrono-heading-title-row">
                   {METEOR_STEEL_STAGES.find(s => s.id === selectedMonomythStage)?.label || selectedMonomythStage}
                   <StageArrow items={METEOR_STEEL_STAGES} currentId={selectedMonomythStage} onSelect={setSelectedMonomythStage} getId={s => s.id} getLabel={s => s.label} />
+                  {view3DBtn}
                 </span>
                 <span className="chrono-sub">Meteor Steel</span>
               </h2>
@@ -2172,6 +2447,7 @@ export default function ChronosphaeraPage() {
                 <span className="chrono-heading-title-row">
                   Meteor Steel
                   <span className="chrono-heading-next" onClick={() => setSelectedMonomythStage(METEOR_STEEL_STAGES[0].id)} title={METEOR_STEEL_STAGES[0].label}>→</span>
+                  {view3DBtn}
                 </span>
                 <span className="chrono-sub">The Journey of Iron from Sky to Sword</span>
               </h2>
@@ -2233,6 +2509,7 @@ export default function ChronosphaeraPage() {
                 <span className="chrono-heading-title-row">
                   {selectedSign}
                   <StageArrow items={ZODIAC_SIGNS} currentId={selectedSign} onSelect={setSelectedSign} />
+                  {view3DBtn}
                 </span>
                 <span className="chrono-sub">{zodiacData.find(z => z.sign === selectedSign)?.archetype || 'Zodiac'}</span>
               </h2>
@@ -2279,6 +2556,7 @@ export default function ChronosphaeraPage() {
                 <span className="chrono-heading-title-row">
                   {cardinalsData[selectedCardinal]?.label || selectedCardinal}
                   <StageArrow items={CARDINALS} currentId={selectedCardinal} onSelect={setSelectedCardinal} getLabel={c => cardinalsData[c]?.label || c} />
+                  {view3DBtn}
                 </span>
                 <span className="chrono-sub">{MW_DIR_NAMES[CARDINAL_TO_MW_DIR[selectedCardinal]]} · Alignments Across All Wheels</span>
               </h2>
@@ -2297,6 +2575,7 @@ export default function ChronosphaeraPage() {
           ) : selectedPlanet && currentData ? (
             <>
               {renderPlanetWeekdayNav()}
+              {view3DBtnRow}
               {showOrderInfo && chakraViewMode && ORDER_DESCRIPTIONS[chakraViewMode] && (
                 <div className="order-info-panel">
                   <h4>{ORDER_DESCRIPTIONS[chakraViewMode].title}</h4>
@@ -2308,6 +2587,7 @@ export default function ChronosphaeraPage() {
                   ))}
                 </div>
               )}
+              {toggleStripJSX}
               <div className="container">
                 <div id="content-container">
                   <MetalDetailPanel
@@ -2358,6 +2638,7 @@ export default function ChronosphaeraPage() {
                 <span className="chrono-heading-title-row">
                   {MONOMYTH_STAGES.find(s => s.id === selectedMonomythStage)?.label || selectedMonomythStage}
                   <StageArrow items={MONOMYTH_STAGES} currentId={selectedMonomythStage} onSelect={setSelectedMonomythStage} getId={s => s.id} getLabel={s => s.label} />
+                  {view3DBtn}
                 </span>
                 <span className="chrono-sub">Hero's Journey</span>
               </h2>
@@ -2382,6 +2663,7 @@ export default function ChronosphaeraPage() {
                 <span className="chrono-heading-title-row">
                   Hero's Journey
                   <span className="chrono-heading-next" onClick={() => setSelectedMonomythStage(MONOMYTH_STAGES[0].id)} title={MONOMYTH_STAGES[0].label}>→</span>
+                  {view3DBtn}
                 </span>
                 <span className="chrono-sub">& the Monomyth</span>
               </h2>
@@ -2583,23 +2865,25 @@ export default function ChronosphaeraPage() {
               />
             </div>
           )}
-          {clockMode && (
-            <div className="zodiac-mode-switch">
-              <span className={zodiacMode === 'tropical' ? 'active' : ''}>Tropical</span>
-              <button
-                className={`zodiac-toggle-track ${zodiacMode}`}
-                onClick={() => setZodiacMode(z => z === 'tropical' ? 'sidereal' : 'tropical')}
-                title={zodiacMode === 'sidereal' ? 'Sidereal — aligned to actual constellations' : 'Tropical — aligned to equinoxes'}
-              >
-                <span className="zodiac-toggle-knob" />
-              </button>
-              <span className={zodiacMode === 'sidereal' ? 'active' : ''}>Sidereal</span>
-            </div>
-          )}
           <h2 className="chrono-heading">
             <span className="chrono-heading-title-row">
+              <button
+                className={`compass-toggle-inline${compass.active ? ' active' : ''}${compass.denied ? ' denied' : ''}`}
+                onClick={compass.supported
+                  ? (compass.active ? compass.stopCompass : compass.requestCompass)
+                  : () => alert('Compass alignment is a mobile feature — open this page on your phone to use it.')}
+                title={!compass.supported ? 'Mobile feature — compass alignment' : compass.denied ? 'Compass permission denied' : compass.active ? 'Disable compass' : 'Align to compass'}
+              >
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.5">
+                  <circle cx="12" cy="12" r="9" />
+                  <polygon points="12,3 14,12 12,10.5 10,12" fill="currentColor" stroke="none" />
+                  <polygon points="12,21 14,12 12,13.5 10,12" />
+                  <circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none" />
+                </svg>
+              </button>
               {selectedMonth}
               <StageArrow items={MONTHS} currentId={selectedMonth} onSelect={setSelectedMonth} />
+              {view3DBtn}
             </span>
           </h2>
           <div className="calendar-weekday-bar">
@@ -2623,6 +2907,7 @@ export default function ChronosphaeraPage() {
               ))}
             </div>
           </div>
+          {toggleStripJSX}
           <div className="container">
             <div id="content-container">
               <div className="metal-detail-panel">
@@ -2637,9 +2922,11 @@ export default function ChronosphaeraPage() {
             <span className="chrono-heading-title-row">
               Earth · Day
               <StageArrow items={['day','night']} currentId={selectedEarth} onSelect={setSelectedEarth} />
+              {view3DBtn}
             </span>
             <span className="chrono-sub">Daylight</span>
           </h2>
+          {toggleStripJSX}
           <div className="container">
             <div id="content-container">
               <div className="metal-detail-panel">
@@ -2655,9 +2942,11 @@ export default function ChronosphaeraPage() {
             <span className="chrono-heading-title-row">
               Earth · Night
               <StageArrow items={['day','night']} currentId={selectedEarth} onSelect={setSelectedEarth} />
+              {view3DBtn}
             </span>
             <span className="chrono-sub">Night Shadow</span>
           </h2>
+          {toggleStripJSX}
           <div className="container">
             <div id="content-container">
               <div className="metal-detail-panel">
@@ -2673,9 +2962,11 @@ export default function ChronosphaeraPage() {
             <span className="chrono-heading-title-row">
               {cardinalsData[selectedCardinal]?.label || selectedCardinal}
               <StageArrow items={CARDINALS} currentId={selectedCardinal} onSelect={setSelectedCardinal} getLabel={c => cardinalsData[c]?.label || c} />
+              {view3DBtn}
             </span>
             <span className="chrono-sub">{MW_DIR_NAMES[CARDINAL_TO_MW_DIR[selectedCardinal]]} · Alignments Across All Wheels</span>
           </h2>
+          {toggleStripJSX}
           <div className="container">
             <div id="content-container">
               <div className="metal-detail-panel">
@@ -2690,9 +2981,11 @@ export default function ChronosphaeraPage() {
             <span className="chrono-heading-title-row">
               {selectedSign}
               <StageArrow items={ZODIAC_SIGNS} currentId={selectedSign} onSelect={setSelectedSign} />
+              {view3DBtn}
             </span>
             <span className="chrono-sub">{zodiacData.find(z => z.sign === selectedSign)?.archetype || 'Zodiac'}</span>
           </h2>
+          {toggleStripJSX}
           <div className="container">
             <div id="content-container">
               <div className="metal-detail-panel">
@@ -2744,9 +3037,11 @@ export default function ChronosphaeraPage() {
             <span className="chrono-heading-title-row">
               {cultureConst || defaultName}
               <StageArrow items={CONSTELLATION_IDS} currentId={selectedConstellation} onSelect={setSelectedConstellation} getLabel={c => constellationContent[c]?.name || c} />
+              {view3DBtn}
             </span>
             <span className="chrono-sub">{cultureConst && cultureConst !== defaultName ? defaultName : 'Constellation'}</span>
           </h2>
+          {toggleStripJSX}
           <div className="container">
             <div id="content-container">
               <div className="metal-detail-panel">
@@ -2779,6 +3074,7 @@ export default function ChronosphaeraPage() {
               {renderPlanetWeekdayNav()}
             </>
           )}
+          {view3DBtnRow}
           {showOrderInfo && chakraViewMode && ORDER_DESCRIPTIONS[chakraViewMode] && (
             <div className="order-info-panel">
               <h4>{ORDER_DESCRIPTIONS[chakraViewMode].title}</h4>
@@ -2790,6 +3086,7 @@ export default function ChronosphaeraPage() {
               ))}
             </div>
           )}
+          {toggleStripJSX}
           <div className="container">
             <div id="content-container">
               {currentData ? (

@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useRef, useEffect, useMemo, Suspense, Component } from 'react';
 import * as THREE from 'three';
-import { Canvas } from '@react-three/fiber';
+import { Canvas, useThree } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import { useNavigate } from 'react-router-dom';
 import ArtBookScene from '../pages/ArtBook/ArtBookScene';
@@ -78,6 +78,28 @@ const CameraIcon = () => (
   </svg>
 );
 
+// Camera positions per mode
+const CAMERA_BOOK = [0, 4, 12];
+const CAMERA_MOUNTAIN = [-4, 5, 16];
+
+// Reset camera when mode changes
+function CameraReset({ mode, controlsRef }) {
+  const { camera } = useThree();
+
+  useEffect(() => {
+    const pos = mode === 'mountain' ? CAMERA_MOUNTAIN : CAMERA_BOOK;
+    camera.position.set(...pos);
+    camera.lookAt(0, 0, 0);
+    camera.updateProjectionMatrix();
+    if (controlsRef.current) {
+      controlsRef.current.target.set(0, 0, 0);
+      controlsRef.current.update();
+    }
+  }, [mode, camera, controlsRef]);
+
+  return null;
+}
+
 const WEEKDAYS = [
   { label: 'Sun', day: 'Sunday', planet: 'Sun', color: '#e8e8e8' },
   { label: 'Mon', day: 'Monday', planet: 'Moon', color: '#9b59b6' },
@@ -99,6 +121,8 @@ export default function ArtBookViewer({ embedded = false, externalMode, onSelect
   const [activeCulture, setActiveCulture] = useState('Atlas');
   const [cameraOn, setCameraOn] = useState(false);
   const draggingRef = useRef(false);
+  const pointerDownPos = useRef(null);
+  const controlsRef = useRef(null);
   const videoRef = useRef(null);
   const streamRef = useRef(null);
   const videoTexRef = useRef(null);
@@ -185,8 +209,9 @@ export default function ArtBookViewer({ embedded = false, externalMode, onSelect
   const mergedData = usePlanetData();
   const perspective = usePerspective(selectedPlanet);
 
-  // Ore click: select planet, clear FS stage
+  // Ore click: select planet, clear FS stage (ignore if dragging)
   const handleSelect = useCallback((sel) => {
+    if (draggingRef.current) return;
     if (embedded && onSelectPlanet) {
       if (sel.type === 'gem') { onSelectGem?.(sel); return; }
       onSelectPlanet(sel.planet);
@@ -210,6 +235,20 @@ export default function ArtBookViewer({ embedded = false, externalMode, onSelect
     setFsCollapsed(false);
   }, []);
 
+  const handleCanvasPointerDown = useCallback((e) => {
+    pointerDownPos.current = { x: e.clientX, y: e.clientY };
+    draggingRef.current = false;
+  }, []);
+
+  const handleCanvasPointerMove = useCallback((e) => {
+    if (!pointerDownPos.current) return;
+    const dx = e.clientX - pointerDownPos.current.x;
+    const dy = e.clientY - pointerDownPos.current.y;
+    if (dx * dx + dy * dy > 9) { // > 3px = drag
+      draggingRef.current = true;
+    }
+  }, []);
+
   const effectivePlanet = (embedded && onSelectPlanet) ? externalSelectedPlanet : selectedPlanet;
   const currentData = selectedPlanet ? mergedData[selectedPlanet] || null : null;
   const isMountain = mode === 'mountain';
@@ -217,13 +256,14 @@ export default function ArtBookViewer({ embedded = false, externalMode, onSelect
   return (
     <>
       {/* 3D Canvas */}
-      <div className="artbook-canvas-wrapper">
+      <div className="artbook-canvas-wrapper" onPointerDown={handleCanvasPointerDown} onPointerMove={handleCanvasPointerMove}>
         <SceneErrorBoundary>
           <Canvas
-            camera={{ position: [0, 8, 18], fov: 55, near: 1, far: 100 }}
+            camera={{ position: isMountain ? CAMERA_MOUNTAIN : CAMERA_BOOK, fov: 55, near: 1, far: 100 }}
             gl={{ antialias: true }}
             dpr={[1, 2]}
           >
+            <CameraReset mode={mode} controlsRef={controlsRef} />
             <Suspense fallback={null}>
               <ArtBookScene
                 mode={mode}
@@ -233,10 +273,11 @@ export default function ArtBookViewer({ embedded = false, externalMode, onSelect
                 selectedPlanet={effectivePlanet}
                 videoTexRef={videoTexRef}
                 draggingRef={draggingRef}
-                onSelectSign={onSelectSign}
+                onSelectSign={onSelectSign ? (sign) => { if (!draggingRef.current) onSelectSign(sign); } : undefined}
                 selectedSign={externalSelectedSign}
               />
               <OrbitControls
+                ref={controlsRef}
                 autoRotate
                 autoRotateSpeed={0.4}
                 enableDamping
@@ -245,8 +286,8 @@ export default function ArtBookViewer({ embedded = false, externalMode, onSelect
                 maxDistance={50}
                 maxPolarAngle={Math.PI}
                 target={[0, 0, 0]}
-                onStart={() => { draggingRef.current = true; }}
-                onEnd={() => { draggingRef.current = false; }}
+                onStart={() => {}}
+                onEnd={() => { pointerDownPos.current = null; }}
               />
             </Suspense>
           </Canvas>

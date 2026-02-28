@@ -335,6 +335,7 @@
 /* ===== COMPASS TOGGLE (fixed bottom-left, mirrors btn-row on right) ===== */
 
 .compass-toggle {
+  display: none;
   position: fixed;
   bottom: 72px;
   left: 24px;
@@ -375,15 +376,91 @@
   transform: scale(0.92);
 }
 
+/* Inline compass button — next to month heading */
+.compass-toggle-inline {
+  display: flex;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: none;
+  border: 1px solid rgba(139, 195, 170, 0.4);
+  color: rgba(139, 195, 170, 0.7);
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  opacity: 0.7;
+  flex-shrink: 0;
+  position: absolute;
+  right: calc(100% + 10px);
+  top: 50%;
+  transform: translateY(-50%);
+}
+.compass-toggle-inline.active {
+  border-color: rgba(139, 195, 170, 0.9);
+  color: rgba(139, 195, 170, 1);
+  opacity: 1;
+  box-shadow: 0 0 12px rgba(139, 195, 170, 0.4);
+  background: rgba(139, 195, 170, 0.08);
+}
+.compass-toggle-inline.denied {
+  border-color: rgba(200, 100, 80, 0.6);
+  color: rgba(200, 100, 80, 0.8);
+  opacity: 1;
+}
+
 @media (max-width: 600px) {
-  .compass-toggle {
-    bottom: 56px;
-    left: 16px;
-    width: 44px;
-    height: 44px;
-    background: rgba(10, 10, 20, 0.5);
-    -webkit-tap-highlight-color: rgba(139, 195, 170, 0.3);
+  .compass-toggle-inline {
+    width: 28px;
+    height: 28px;
   }
+  .view3d-toggle-inline {
+    width: 28px;
+    height: 28px;
+    font-size: 0.6rem;
+  }
+}
+
+/* Inline 3D button — positioned to the right of heading keyword */
+.view3d-toggle-inline {
+  display: flex;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: none;
+  border: 1px solid rgba(139, 157, 195, 0.4);
+  color: rgba(139, 157, 195, 0.8);
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  opacity: 0.7;
+  flex-shrink: 0;
+  position: absolute;
+  left: calc(100% + 10px);
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.view3d-toggle-inline:hover { opacity: 1; }
+.view3d-toggle-inline:active {
+  opacity: 1;
+  background: rgba(139, 157, 195, 0.15);
+  transform: translateY(-50%) scale(0.92);
+}
+
+.view3d-below-arc {
+  display: flex;
+  justify-content: center;
+  margin-top: 4px;
+  margin-bottom: 8px;
+}
+.view3d-below-arc .view3d-toggle-inline {
+  position: static;
+  transform: none;
 }
 
 /* ===== ORBITAL MODE TOGGLE (cycle: orbiting → live → aligned) ===== */
@@ -687,11 +764,16 @@
   display: inline-flex;
   align-items: center;
   gap: 10px;
+  position: relative;
 }
 
 .chrono-heading-next {
   cursor: pointer;
   transition: opacity 0.2s ease;
+  position: absolute;
+  left: calc(100% + 10px);
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 .chrono-heading-next:hover {
@@ -1601,6 +1683,49 @@
 .chrono-dodec-active .chrono-content-fade {
   display: none;
 }
+
+/* ===== RING FULL-BLEED LAYER ===== */
+.chrono-ring-layer { position: fixed; inset: 0; z-index: 1; display: flex; flex-direction: column; }
+.chrono-ring-layer canvas, .chrono-ring-layer .ring2d-container { flex: 1; }
+.chrono-ring-active .chrono-diagram-center { position: relative; z-index: 2; pointer-events: none; }
+.chrono-ring-active .orbital-svg { display: none; }
+.chrono-ring-active .compass-toggle { display: none; }
+.chrono-ring-active .orbital-btn-row { pointer-events: auto; }
+.chrono-ring-active .chrono-content-fade { display: none; }
+.chrono-ring-active .chrono-toggle-strip { display: none; }
+.chrono-ring-toolbar { position: fixed; bottom: 0; left: 0; right: 0; z-index: 3; background: linear-gradient(transparent, rgba(6,6,15,0.85) 30%, rgba(6,6,15,0.95)); padding: 8px 12px 12px; }
+.chrono-ring-toolbar-inner { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; justify-content: center; max-width: 1000px; margin: 0 auto; }
+.chrono-ring-picker { position: relative; }
+.chrono-ring-trigger { background: rgba(201,169,97,0.08); border: 1px solid rgba(201,169,97,0.3); color: rgba(201,169,97,0.8); padding: 4px 10px; border-radius: 6px; font-size: 0.78rem; cursor: pointer; white-space: nowrap; display: flex; align-items: center; gap: 4px; }
+.chrono-ring-trigger:hover { border-color: rgba(201,169,97,0.6); background: rgba(201,169,97,0.15); }
+.chrono-ring-chevron { font-size: 0.7rem; opacity: 0.6; }
+.chrono-ring-dropdown { position: absolute; bottom: 100%; left: 0; background: rgba(15,15,30,0.95); border: 1px solid rgba(201,169,97,0.3); border-radius: 6px; padding: 4px; margin-bottom: 4px; z-index: 10; min-width: 100%; }
+.chrono-ring-option { display: block; width: 100%; background: none; border: none; color: rgba(201,169,97,0.7); padding: 4px 10px; font-size: 0.78rem; text-align: left; cursor: pointer; border-radius: 4px; white-space: nowrap; }
+.chrono-ring-option:hover { background: rgba(201,169,97,0.12); }
+.chrono-ring-option.active { color: #c9a961; background: rgba(201,169,97,0.15); }
+.chrono-ring-dot { display: inline-block; width: 5px; height: 5px; border-radius: 50%; background: #c9a961; margin-left: 6px; vertical-align: middle; }
+.chrono-ring-divider { display: inline-block; width: 1px; height: 18px; background: rgba(201,169,97,0.2); margin: 0 2px; }
+.chrono-ring-date-input { background: rgba(201,169,97,0.08); border: 1px solid rgba(201,169,97,0.3); color: rgba(201,169,97,0.8); padding: 4px 8px; border-radius: 6px; font-size: 0.78rem; width: 130px; }
+.chrono-ring-date-input::-webkit-calendar-picker-indicator { filter: invert(0.7) sepia(1) hue-rotate(10deg); }
+.chrono-ring-clear { background: none; border: 1px solid rgba(201,169,97,0.2); color: rgba(201,169,97,0.6); padding: 4px 8px; border-radius: 6px; font-size: 0.72rem; cursor: pointer; }
+.chrono-ring-clear:hover { border-color: rgba(201,169,97,0.4); color: rgba(201,169,97,0.9); }
+.chrono-ring-zodiac-toggle { text-transform: capitalize; }
+.chrono-ring-layout-btn { background: rgba(201,169,97,0.08); border: 1px solid rgba(201,169,97,0.3); color: rgba(201,169,97,0.8); padding: 4px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; }
+.chrono-ring-layout-btn:hover { border-color: rgba(201,169,97,0.6); }
+.chrono-ring-layout-btn.navaratna { border-color: rgba(240,192,64,0.5); }
+.chrono-ring-mode-toggle { display: flex; gap: 2px; }
+.chrono-ring-mode-btn { background: rgba(201,169,97,0.06); border: 1px solid rgba(201,169,97,0.2); padding: 3px; border-radius: 5px; cursor: pointer; display: flex; align-items: center; }
+.chrono-ring-mode-btn:hover { border-color: rgba(201,169,97,0.5); }
+.chrono-ring-mode-btn.active { border-color: rgba(201,169,97,0.6); background: rgba(201,169,97,0.12); }
+.chrono-ring-mode-btn.disabled { opacity: 0.3; cursor: not-allowed; }
+.chrono-ring-size { display: flex; align-items: center; gap: 4px; }
+.chrono-ring-size-label { color: rgba(201,169,97,0.5); font-size: 0.72rem; }
+.chrono-ring-size-input { width: 48px; background: rgba(201,169,97,0.08); border: 1px solid rgba(201,169,97,0.3); color: rgba(201,169,97,0.8); padding: 4px 6px; border-radius: 6px; font-size: 0.78rem; text-align: center; }
+.chrono-ring-store-btn { background: rgba(201,169,97,0.08); border: 1px solid rgba(201,169,97,0.3); padding: 4px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; }
+.chrono-ring-store-btn:hover { border-color: rgba(201,169,97,0.6); background: rgba(201,169,97,0.15); }
+.chrono-ring-view-toggle { background: rgba(201,169,97,0.08); border: 1px solid rgba(201,169,97,0.3); color: rgba(201,169,97,0.8); padding: 4px 10px; border-radius: 6px; font-size: 0.78rem; font-weight: 600; cursor: pointer; }
+.chrono-ring-view-toggle:hover { border-color: rgba(201,169,97,0.6); background: rgba(201,169,97,0.15); }
+.clock-toggle.ring { color: #c9a961; background: rgba(201,169,97,0.12); }
 
 /* ===== MYTHIC EARTH (embedded in diagram area) ===== */
 
@@ -3084,64 +3209,51 @@
   }
 }
 
-/* ===== SIDEREAL / TROPICAL TOGGLE ===== */
+/* ===== TOGGLE STRIP (Tropical/Sidereal, 12hr/24hr, Helio/Geo) ===== */
 
-.zodiac-mode-switch {
+.chrono-toggle-strip {
   display: flex;
-  align-items: center;
   justify-content: center;
-  gap: 10px;
-  margin: 6px 0 2px;
+  align-items: center;
+  gap: 16px;
+  padding: 6px 0 10px;
+  flex-wrap: wrap;
 }
 
-.zodiac-mode-switch span {
+.chrono-toggle-pair {
+  display: flex;
+  border: 1px solid rgba(100, 160, 170, 0.3);
+  border-radius: 6px;
+  overflow: hidden;
+  background: rgba(15, 15, 35, 0.6);
+}
+
+.chrono-toggle-btn {
   font-family: 'Cinzel', serif;
   font-variant: small-caps;
-  font-size: 0.72rem;
+  font-size: 0.68rem;
   letter-spacing: 0.06em;
+  padding: 4px 12px;
+  border: none;
+  background: transparent;
   color: rgba(100, 160, 170, 0.5);
-  transition: color 0.3s;
-  user-select: none;
-}
-
-.zodiac-mode-switch span.active {
-  color: rgba(201, 169, 97, 0.9);
-}
-
-.zodiac-toggle-track {
-  position: relative;
-  width: 44px;
-  height: 22px;
-  border-radius: 11px;
-  border: 1px solid rgba(100, 160, 170, 0.3);
-  background: rgba(15, 15, 35, 0.8);
   cursor: pointer;
-  padding: 0;
-  transition: border-color 0.3s, background 0.3s;
+  transition: color 0.3s, background 0.3s;
+  user-select: none;
+  white-space: nowrap;
 }
 
-.zodiac-toggle-track:hover {
-  border-color: rgba(201, 169, 97, 0.5);
+.chrono-toggle-btn:hover {
+  color: rgba(139, 195, 170, 0.8);
 }
 
-.zodiac-toggle-knob {
-  position: absolute;
-  top: 2px;
-  left: 2px;
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  background: rgba(100, 160, 170, 0.7);
-  transition: transform 0.3s, background 0.3s;
+.chrono-toggle-btn.active {
+  color: rgba(201, 169, 97, 0.95);
+  background: rgba(201, 169, 97, 0.08);
 }
 
-.zodiac-toggle-track.sidereal .zodiac-toggle-knob {
-  transform: translateX(22px);
-  background: rgba(201, 169, 97, 0.9);
-}
-
-.zodiac-toggle-track.tropical .zodiac-toggle-knob {
-  transform: translateX(0);
+.chrono-toggle-pair .chrono-toggle-btn + .chrono-toggle-btn {
+  border-left: 1px solid rgba(100, 160, 170, 0.2);
 }
 
 /* ── Perspective Cycling Button ── */
