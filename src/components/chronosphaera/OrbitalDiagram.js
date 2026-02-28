@@ -256,7 +256,7 @@ function ensureYTApi() {
   });
 }
 
-export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPlanet, hoveredPlanet, selectedSign, onSelectSign, selectedCardinal, onSelectCardinal, selectedEarth, onSelectEarth, showCalendar, onToggleCalendar, selectedMonth, onSelectMonth, showMedicineWheel, selectedWheelItem, onSelectWheelItem, chakraViewMode, onToggleBodyWheel, onClickOrderLabel, orderLabel, videoUrl, onCloseVideo, ybrActive, ybrCurrentStopIndex, ybrStopProgress, ybrJourneySequence, onToggleYBR, ybrAutoStart, clockMode, layoutMode, onEnterClock, compassHeading, compassSupported, compassDenied, onRequestCompass, onStopCompass, seasonalSign, seasonalMonth, seasonalStageIndex, showMonomyth, showMeteorSteel, monomythStages, selectedMonomythStage, onSelectMonomythStage, onToggleMonomyth, monomythModel, showCycles, onSelectCycleSegment, activeCulture, showFallenStarlight, showStoryOfStories, onToggleStarlight, starlightStages, selectedStarlightStage, onSelectStarlightStage, selectedConstellation, onSelectConstellation, zodiacMode, onSelectBeyondRing, beyondRings, activeBeyondRing, showDodecahedron, dodecMode, onToggleDodecahedron, showArtBook, artBookMode, onToggleArtBook, view3D, onToggle3D, showRing, targetDate }) {
+export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPlanet, hoveredPlanet, selectedSign, onSelectSign, selectedCardinal, onSelectCardinal, selectedEarth, onSelectEarth, showCalendar, onToggleCalendar, selectedMonth, onSelectMonth, showMedicineWheel, selectedWheelItem, onSelectWheelItem, chakraViewMode, onToggleBodyWheel, onClickOrderLabel, orderLabel, videoUrl, onCloseVideo, ybrActive, ybrCurrentStopIndex, ybrStopProgress, ybrJourneySequence, onToggleYBR, ybrAutoStart, clockMode, layoutMode, onEnterClock, compassHeading, compassSupported, compassDenied, onRequestCompass, onStopCompass, seasonalSign, seasonalMonth, seasonalStageIndex, showMonomyth, showMeteorSteel, monomythStages, selectedMonomythStage, onSelectMonomythStage, onToggleMonomyth, monomythModel, showCycles, onSelectCycleSegment, activeCulture, showFallenStarlight, showStoryOfStories, onToggleStarlight, starlightStages, selectedStarlightStage, onSelectStarlightStage, selectedConstellation, onSelectConstellation, zodiacMode, onSelectBeyondRing, beyondRings, activeBeyondRing, showDodecahedron, dodecMode, showArtBook, artBookMode, onToggleArtBook, showRing, targetDate }) {
   const wrapperRef = useRef(null);
   const [tooltip, setTooltip] = useState(null);
   const { hasPurchase, hasSubscription } = useProfile();
@@ -893,21 +893,21 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
 
   const moonPhaseAngle = useMemo(() => MoonPhase(effectiveDate), [targetDate]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Live geocentric planet angles for 24h clock mode
+  // Live geocentric planet angles for clock mode (12h and 24h)
   // Each planet orbits once per 24h (like the sun), offset by its real ecliptic longitude difference from the sun
   const geoClockAngles = useMemo(() => {
-    if (clockMode !== '24h') return null;
+    if (!clockMode || heliocentric) return null;
     const sunLon = getEclipticLongitude('Sun', effectiveDate);
     const sunClockDeg = clockTime.h * 15 + clockTime.m * 0.25 + 90; // sun's clock angle (matches hour hand)
     const angles = {};
     for (const planet of Object.keys(BODY_MAP)) {
-      if (planet === 'Sun') continue; // Sun rides the hour hand
+      if (planet === 'Sun' && clockMode === '24h') continue; // Sun rides the hour hand in 24h only
       const lon = getEclipticLongitude(planet, effectiveDate);
       angles[planet] = sunClockDeg + (lon - sunLon); // same daily rotation, real angular offset
     }
     return angles;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [clockMode, clockTime, targetDate]); // recompute each second when clock ticks
+  }, [clockMode, heliocentric, clockTime, targetDate]); // recompute each second when clock ticks
 
   // Ecliptic longitudes for cycle rings (Solar Year ring + Lunar Month ring)
   const eclipticAngles = useMemo(() => {
@@ -920,11 +920,11 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [showCycles, clockTime, targetDate]);
 
-  // Rotation for zodiac/month rings in 24h mode so Sun's sign aligns with hour hand
+  // Rotation for zodiac/month rings in clock mode so Sun's sign aligns with hour hand
   const zodiacRotationDeg = useMemo(() => {
     const siderealOffset = zodiacMode === 'sidereal' ? -getLahiriAyanamsa(effectiveDate) : 0;
     if (chakraViewMode || showMonomyth) return siderealOffset;
-    if (clockMode !== '24h') return siderealOffset;
+    if (!clockMode) return siderealOffset;
     const sunLon = getEclipticLongitude('Sun', effectiveDate);
     const hDeg24 = clockTime.h * 15 + clockTime.m * 0.25 + 90;
     return hDeg24 + sunLon + siderealOffset;
@@ -2422,7 +2422,7 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
           <>
         {/* Orbital rings (hidden when cycles active) */}
         {!showCycles && (heliocentric ? HELIO_ORBITS
-          : clockMode === '24h' ? ORBITS.filter(o => o.planet !== 'Sun')
+          : clockMode === '24h' && geoClockAngles ? ORBITS.filter(o => o.planet !== 'Sun')
           : ORBITS
         ).map(o => (
           <circle
@@ -2500,7 +2500,7 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
             </text>
           </g>
         ) : (() => {
-          const sunAngle = clockMode === '24h'
+          const sunAngle = geoClockAngles
             ? (clockTime.h * 15 + clockTime.m * 0.25 + 90)
             : aligned ? ALIGN_ANGLE : liveAngles ? liveAngles['Sun'].svgAngle : orbitAngles['Sun'];
           const er = 14;
@@ -2610,9 +2610,9 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
               );
             })}
           </>
-        ) : clockMode === '24h' ? (
-          /* 24h mode: planets at real geocentric positions (no Sun — it's on the hour hand) */
-          geoClockAngles && ORBITS.filter(o => o.planet !== 'Sun').map(o => {
+        ) : geoClockAngles ? (
+          /* Geo clock mode (12h or 24h): planets at real geocentric positions */
+          (clockMode === '24h' ? ORBITS.filter(o => o.planet !== 'Sun') : ORBITS).map(o => {
             const angle = geoClockAngles[o.planet];
             if (angle == null) return null;
             const rad = (angle * Math.PI) / 180;
@@ -2620,7 +2620,7 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
             const py = CY + o.r * Math.sin(rad);
             return (
               <PlanetNode
-                key={`geo24-${o.planet}`}
+                key={`geo-${o.planet}`}
                 planet={o.planet}
                 metal={o.metal}
                 cx={px}
@@ -2965,15 +2965,15 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
           </svg>
         </button>
         <button
-          className={`clock-toggle${clockMode ? ' active' : ''}${showRing ? ' ring' : ''}`}
+          className={`clock-toggle${clockMode ? ' active' : ''}${showDodecahedron ? ' dodec' : ''}`}
           onClick={() => { onEnterClock && onEnterClock(); }}
-          title={showRing ? 'Ring view — click for clock' : clockMode ? 'Clock view — click for ring' : 'Show clock view'}
+          title={showDodecahedron ? 'Dodecahedron — click for clock' : clockMode ? 'Clock view — click for dodecahedron' : 'Show clock view'}
         >
           <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            {showRing ? (
+            {showDodecahedron ? (
               <>
-                <ellipse cx="12" cy="12" rx="7" ry="7" />
-                <ellipse cx="12" cy="5.5" rx="2.5" ry="1.5" fill="currentColor" stroke="none" />
+                <path d="M12 3 L21 9.5 L18 20 L6 20 L3 9.5 Z" fill="white" fillOpacity="0.15" strokeWidth="1.6" />
+                <path d="M12 3 L12 10 M21 9.5 L15 11.5 M18 20 L14 14 M6 20 L10 14 M3 9.5 L9 11.5" strokeWidth="0.7" opacity="0.4" />
               </>
             ) : (
               <>
@@ -2986,15 +2986,20 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
         </button>
         <span style={{ position: 'relative' }}>
           <button
-            className={`body-wheel-toggle${chakraViewMode ? ' active body' : ''}${showMedicineWheel ? ' active wheel' : ''}${!hasMedicineWheel && chakraViewMode && !showMedicineWheel ? ' gate' : ''}`}
+            className={`body-wheel-toggle${chakraViewMode ? ' active body' : ''}${showMedicineWheel ? ' active wheel' : ''}${showRing ? ' active ring' : ''}${!hasMedicineWheel && chakraViewMode && !showMedicineWheel && !showRing ? ' gate' : ''}`}
             onClick={() => {
-              if (chakraViewMode && !showMedicineWheel && !hasMedicineWheel) { setMedicineWheelGateId('medicine-wheel'); return; }
-              if (chakraViewMode && !showMedicineWheel) triggerStormFlash();
+              if (chakraViewMode && !showMedicineWheel && !showRing && !hasMedicineWheel) { setMedicineWheelGateId('medicine-wheel'); return; }
+              if (chakraViewMode && !showMedicineWheel && !showRing) triggerStormFlash();
               onToggleBodyWheel && onToggleBodyWheel();
             }}
-            title={showMedicineWheel ? 'Medicine wheel — click for body view' : chakraViewMode ? 'Body view — click for medicine wheel' : 'Show body viewer'}
+            title={showRing ? 'Ring — click for body view' : showMedicineWheel ? 'Medicine wheel — click for ring' : chakraViewMode ? 'Body view — click for medicine wheel' : 'Show body viewer'}
           >
-            {showMedicineWheel ? (
+            {showRing ? (
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <ellipse cx="12" cy="12" rx="7" ry="7" />
+                <ellipse cx="12" cy="5.5" rx="2.5" ry="1.5" fill="currentColor" stroke="none" />
+              </svg>
+            ) : showMedicineWheel ? (
               <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <circle cx="12" cy="12" r="9" />
                 <line x1="12" y1="3" x2="12" y2="21" />
@@ -3087,19 +3092,6 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
         )}
 
         <button
-          className={`dodec-nav-toggle${showDodecahedron ? ` active dodec-${dodecMode || 'stars'}` : ''}`}
-          onClick={() => onToggleDodecahedron && onToggleDodecahedron()}
-          title={showDodecahedron ? `${dodecMode === 'stars' ? 'Lantern of Phanes' : dodecMode === 'roman' ? 'Roman Dodecahedron' : 'Die'} — click to cycle` : 'Dodecahedron'}
-        >
-          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-            {/* Pentagon (dodecahedron face) */}
-            <path d="M12 3 L21 9.5 L18 20 L6 20 L3 9.5 Z" fill="white" fillOpacity="0.15" />
-            {/* Inner edge hints */}
-            <path d="M12 3 L12 10 M21 9.5 L15 11.5 M18 20 L14 14 M6 20 L10 14 M3 9.5 L9 11.5" strokeWidth="0.7" opacity="0.4" />
-          </svg>
-        </button>
-
-        <button
           className={`artbook-nav-toggle${showArtBook ? ` active artbook-${artBookMode || 'mountain'}` : ''}`}
           onClick={() => onToggleArtBook && onToggleArtBook()}
           title={showArtBook ? `${artBookMode === 'mountain' ? 'Mountain' : 'Book'} — click to toggle` : 'Art Book'}
@@ -3117,29 +3109,6 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
           )}
         </button>
 
-        <button
-          className={`view3d-nav-toggle${view3D ? ' active' : ''}`}
-          onClick={() => {
-            if (!view3D) onToggle3D && onToggle3D('3d');
-            else onToggle3D && onToggle3D('vr');
-          }}
-          title={view3D ? '3D active — click for VR' : 'Enter 3D view'}
-        >
-          {view3D ? (
-            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-              <rect x="2" y="7" width="20" height="10" rx="3" />
-              <path d="M12 7 L12 17" strokeWidth="0.8" opacity="0.5" />
-              <circle cx="7.5" cy="12" r="2.5" />
-              <circle cx="16.5" cy="12" r="2.5" />
-            </svg>
-          ) : (
-            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M12 3 L20 7.5 L20 16.5 L12 21 L4 16.5 L4 7.5 Z" />
-              <path d="M12 3 L12 21" strokeWidth="0.8" opacity="0.5" />
-              <path d="M4 7.5 L12 12 L20 7.5" strokeWidth="0.8" opacity="0.5" />
-            </svg>
-          )}
-        </button>
 
       </div>
       {starlightGateId && (

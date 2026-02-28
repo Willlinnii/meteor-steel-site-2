@@ -155,7 +155,7 @@
 |---|---|
 | Lazy-loaded page imports (41 tests) | Every lazy-loaded route component can be dynamically imported without error |
 
-### `src/tests/featureExistence.test.js` (181 tests)
+### `src/tests/featureExistence.test.js` (185 tests)
 
 | Test Group | What It Protects |
 |---|---|
@@ -163,6 +163,7 @@
 | Core shared components exist (15 tests) | ChatPanel, CircleNav, OrbitalDiagram, MetalDetailPanel, RingButton — file exists, can be required, exports default |
 | Core contexts exist (12 tests) | AuthContext, ProfileContext, CourseworkContext, WritingsContext — file exists, can be required, exports provider + hook |
 | Layout structure integrity (10 tests) | SiteHeader, SiteNav, SiteFooter defined with correct HTML elements and CSS classes; ErrorBoundary wraps Routes; layout order enforced (header → nav → boundary → footer); ChatPanel included |
+| OrbitalDiagram structural invariants (4 tests) | zodiacRotationDeg depends on clockMode (not geoClockAngles/layoutMode/heliocentric); early-return gates on clockMode; prevents Helio/Geo toggle from snapping zodiac ring |
 
 ### `src/hooks/__tests__/useMultiLevelJourney.test.js` (22 tests)
 
@@ -199,7 +200,7 @@
 | planets, zodiac, monomyth, elements, cardinals, figures | Core ontology entities | Dev-mode console warnings via `validateCanonicalData.js` |
 | steelProcess, synthesis, stageOverviews, psychles, fallenStarlight, cycles, models | Octave pattern files | Dev-mode console warnings via `validateCanonicalData.js` |
 
-**Total: 661 tests across 9 suites + 13 runtime schemas**
+**Total: 665 tests across 9 suites + 13 runtime schemas**
 
 **Status: ENFORCED in CI** — GitHub Actions runs all tests on push/PR to main. Pre-commit hooks (lint-staged) run related tests on staged files.
 

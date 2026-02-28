@@ -262,3 +262,49 @@ describe('Layout structure integrity', () => {
     expect(appSource).toMatch(/<ChatPanel \/>/);
   });
 });
+
+// ---------------------------------------------------------------------------
+// 5. OrbitalDiagram structural invariants
+// ---------------------------------------------------------------------------
+describe('OrbitalDiagram structural invariants', () => {
+  const orbitalSource = fs.readFileSync(
+    path.resolve(__dirname, '..', 'components', 'chronosphaera', 'OrbitalDiagram.js'),
+    'utf-8'
+  );
+
+  // Extract the zodiacRotationDeg useMemo block (from declaration to closing paren)
+  const zodiacMemoMatch = orbitalSource.match(
+    /const zodiacRotationDeg\s*=\s*useMemo\(\s*\(\)\s*=>\s*\{[\s\S]*?\},\s*\[([^\]]*)\]\s*\)/
+  );
+
+  test('zodiacRotationDeg useMemo block exists', () => {
+    expect(zodiacMemoMatch).not.toBeNull();
+  });
+
+  test('zodiacRotationDeg depends on clockMode, not geoClockAngles', () => {
+    // The zodiac ring rotation is a celestial reference frame question.
+    // It must depend only on clockMode (whether a clock is active), NOT on
+    // geoClockAngles (which couples to heliocentric toggle). If this test
+    // fails, toggling Helio/Geo will incorrectly snap the zodiac ring.
+    const depsString = zodiacMemoMatch[1];
+    expect(depsString).toContain('clockMode');
+    expect(depsString).not.toContain('geoClockAngles');
+  });
+
+  test('zodiacRotationDeg does not depend on layoutMode or heliocentric', () => {
+    const depsString = zodiacMemoMatch[1];
+    expect(depsString).not.toContain('layoutMode');
+    expect(depsString).not.toContain('heliocentric');
+  });
+
+  test('zodiacRotationDeg early-return gates on clockMode', () => {
+    // The body of the memo must check !clockMode, not !geoClockAngles
+    const bodyMatch = orbitalSource.match(
+      /const zodiacRotationDeg\s*=\s*useMemo\(\s*\(\)\s*=>\s*\{([\s\S]*?)\},\s*\[/
+    );
+    expect(bodyMatch).not.toBeNull();
+    const body = bodyMatch[1];
+    expect(body).toContain('if (!clockMode)');
+    expect(body).not.toContain('if (!geoClockAngles)');
+  });
+});
