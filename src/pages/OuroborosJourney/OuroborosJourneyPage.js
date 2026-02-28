@@ -5,6 +5,7 @@ import useMultiLevelJourney from '../../hooks/useMultiLevelJourney';
 import useVoice, { SpeechRecognition } from '../../hooks/useVoice';
 import useYellowBrickRoad from '../../components/chronosphaera/useYellowBrickRoad';
 import challengeData from '../../data/yellowBrickRoad.json';
+import artbookChallengeData from '../../data/fallenStarlightChallenges.json';
 import JOURNEY_DEFS from '../../data/journeyDefs';
 import { useCoursework } from '../../coursework/CourseworkContext';
 import { useWritings } from '../../writings/WritingsContext';
@@ -14,6 +15,7 @@ import ShareCompletionModal from '../../components/fellowship/ShareCompletionMod
 import StageMoments from '../../components/fellowship/StageMoments';
 
 const { challenges } = challengeData;
+const { challenges: artbookChallenges } = artbookChallengeData;
 
 /* ── Game modes ── */
 
@@ -87,10 +89,11 @@ function getDragonRotation(stageIndex, total) {
 
 /* ── Cosmic challenge lookup ── */
 
-function getCosmicChallenge(entity, phase, level) {
+function getCosmicChallenge(entity, phase, level, journeyId) {
+  const challengeSource = journeyId === 'fallen-starlight-journey' ? artbookChallenges : challenges;
   const phaseKey = phase === 'ascending' ? 'ascending'
     : phase === 'descending' ? 'descending' : 'zodiac';
-  return challenges[entity]?.[phaseKey]?.[level - 1] || null;
+  return challengeSource[entity]?.[phaseKey]?.[level - 1] || null;
 }
 
 /* ── Cosmic adapter hook (maps useYellowBrickRoad → unified shape) ── */
@@ -263,7 +266,7 @@ export default function OuroborosJourneyPage() {
   );
 
   const cosmicChallenge = isMultiLevel && stop
-    ? getCosmicChallenge(stop.entity, stop.phase, cosmicLevel)
+    ? getCosmicChallenge(stop.entity, stop.phase, cosmicLevel, journeyId)
     : null;
 
   const isIntro = idx === -1;

@@ -1,0 +1,180 @@
+{
+  "challenges": {
+    "Golden Surface": {
+      "ascending": [
+        {
+          "level": 1,
+          "theme": "Wholeness before the fall",
+          "prompt": "I am the Golden Surface — the world before the crack. Everything is whole, ordered, luminous. Describe this place. What does wholeness look like before something disrupts it?",
+          "evaluationHint": "Look for recognition that the golden age is not static perfection but a living wholeness — a state that contains the seeds of its own disruption. The traveler should describe fullness, not emptiness waiting to be filled."
+        },
+        {
+          "level": 2,
+          "theme": "The surface and the monomyth",
+          "prompt": "The Golden Surface maps to the Ordinary World — the place the hero occupies before the call. In the metallurgical cycle, it is the ore still buried, unworked. How do these two frames illuminate each other? What does it mean that the raw material must already exist before the forge can begin?",
+          "evaluationHint": "Look for pattern recognition connecting the monomyth's ordinary world with the metallurgical concept of raw material. The traveler should see that potential precedes transformation — the gold was always there, waiting to be disturbed."
+        },
+        {
+          "level": 3,
+          "theme": "Your own golden surface",
+          "prompt": "Think of a time in your own life when things felt whole — before a disruption arrived. Not paradise, but a settled state. What was that surface made of? And looking back, can you see what was already forming beneath it?",
+          "evaluationHint": "Look for honest personal reflection that avoids nostalgia. The traveler should name a specific time and recognize, in hindsight, that the disruption was already brewing beneath the apparent wholeness."
+        }
+      ]
+    },
+    "Calling Star": {
+      "ascending": [
+        {
+          "level": 1,
+          "theme": "The disruption arrives",
+          "prompt": "I am the Calling Star — the meteor that falls from the sky and cracks the golden surface. Something from outside the known world arrives uninvited. What is this disruption? What does the call look like when it first appears?",
+          "evaluationHint": "Look for understanding that the call is external, unexpected, and disruptive — not chosen but received. The traveler should describe the moment of interruption, not the decision to respond."
+        },
+        {
+          "level": 2,
+          "theme": "The call across traditions",
+          "prompt": "Campbell called it the Call to Adventure. In the meteor steel cycle, it is the falling star — iron from heaven striking earth. Why does transformation require something from outside the system? Why can't the ore refine itself?",
+          "evaluationHint": "Look for understanding that transformation requires an external catalyst. The traveler should connect the mythic call with the metallurgical disruption — both require something foreign to break the existing equilibrium."
+        },
+        {
+          "level": 3,
+          "theme": "Your own calling star",
+          "prompt": "What fell into your life uninvited and changed everything? Not something you sought — something that arrived. A diagnosis, a meeting, a loss, a sentence someone said. What was your falling star, and did you recognize it when it hit?",
+          "evaluationHint": "Look for a specific, concrete disruption the traveler did not choose. The best answers acknowledge that the call was not recognized immediately — that understanding came later."
+        }
+      ]
+    },
+    "Crater Crossing": {
+      "ascending": [
+        {
+          "level": 1,
+          "theme": "Crossing the threshold",
+          "prompt": "I am the Crater Crossing — the wound left by the star's impact. To go forward, you must descend into the crater. What does it mean to cross a threshold you cannot uncross? What do you leave behind at the rim?",
+          "evaluationHint": "Look for understanding that the threshold is irreversible. The traveler should recognize that crossing means something is permanently left behind — innocence, comfort, the old self's certainties."
+        },
+        {
+          "level": 2,
+          "theme": "The threshold in structure",
+          "prompt": "In the monomyth, crossing the threshold separates the known from the unknown world. In metallurgy, it is the moment ore enters the furnace — the point of no return. Why do so many traditions place a guardian at the threshold? What is being tested at the crossing?",
+          "evaluationHint": "Look for recognition that the threshold tests commitment, not capability. The guardian is not there to defeat you but to ensure you are ready to be changed. The traveler should connect mythic guardians with the irreversibility of entering the furnace."
+        },
+        {
+          "level": 3,
+          "theme": "Your own crater crossing",
+          "prompt": "When did you step into a crater you couldn't climb back out of? A decision, a conversation, a moment where the ground changed under your feet and there was no returning to the rim. What did you leave behind, and did you grieve it?",
+          "evaluationHint": "Look for a specific irreversible moment and honest acknowledgment of what was lost. The best answers include grief — not dramatic, but the quiet recognition that something ended when the crossing began."
+        }
+      ]
+    },
+    "Belly of the Furnace": {
+      "ascending": [
+        {
+          "level": 1,
+          "theme": "Trials and transformation",
+          "prompt": "I am the Belly of the Furnace — the place where heat and pressure do their work. You are inside now. The fire is not punishment; it is process. What happens to material in the furnace? What is being burned away, and what remains?",
+          "evaluationHint": "Look for understanding that the furnace is transformative, not punitive. The traveler should describe a process of purification — impurities burning off, essential qualities being revealed, not destroyed."
+        },
+        {
+          "level": 2,
+          "theme": "The furnace across cycles",
+          "prompt": "Campbell's Road of Trials. The alchemist's calcination. The ore in the hottest part of the fire. Every tradition says the same thing: you must be broken down before you can be remade. Why can't transformation happen gently? What does heat accomplish that patience cannot?",
+          "evaluationHint": "Look for recognition that some transformations require intensity — that gentleness preserves form while heat dissolves it. The traveler should understand that the furnace creates something genuinely new, not a modified version of the old."
+        },
+        {
+          "level": 3,
+          "theme": "Your own furnace",
+          "prompt": "When were you in the furnace? Not a difficult day — a sustained period where you were being reshaped by forces you couldn't control. What burned away? What survived that you didn't expect to survive?",
+          "evaluationHint": "Look for a sustained trial, not a single event. The best answers name something that burned away that the traveler once thought was essential, and something that survived that surprised them."
+        }
+      ]
+    },
+    "Elixir at the Nadir": {
+      "ascending": [
+        {
+          "level": 1,
+          "theme": "The lowest point and the gift",
+          "prompt": "I am the Elixir at the Nadir — the treasure found at the very bottom. The deepest point of the journey is not empty; it holds something precious. What is waiting at the lowest point? Why can this gift only be found here?",
+          "evaluationHint": "Look for understanding that the nadir is not just suffering but discovery. The traveler should recognize that certain knowledge or gifts are only accessible at the bottom — they cannot be reached from above."
+        },
+        {
+          "level": 2,
+          "theme": "The nadir in myth and metal",
+          "prompt": "In the monomyth, this is the Ordeal and the Reward — death and rebirth at the center of the journey. In metallurgy, the quenching — plunging white-hot metal into cold water. The shock that sets the new structure. Why does every tradition place the greatest gift at the point of greatest danger?",
+          "evaluationHint": "Look for understanding of the paradox: the gift and the danger occupy the same place. The traveler should connect the mythic ordeal with the metallurgical quench — both are moments where destruction and creation are simultaneous."
+        },
+        {
+          "level": 3,
+          "theme": "Your own nadir",
+          "prompt": "What did you find at your lowest point that you could not have found anywhere else? Not a lesson you learned from hardship — something that was only available in the dark. A clarity, a surrender, a gift that the depths held and the heights could not.",
+          "evaluationHint": "Look for a genuine nadir discovery — not a silver lining or a lesson, but something that could only exist at the bottom. The best answers describe a qualitative shift, not a compensatory benefit."
+        }
+      ]
+    },
+    "Return Reflection": {
+      "ascending": [
+        {
+          "level": 1,
+          "theme": "Integration and carrying it back",
+          "prompt": "I am the Return Reflection — the journey homeward, carrying what was found. The return is not a reversal; it is a new road. What does it mean to carry something from the underworld back into the daylight? What must change about the carrier?",
+          "evaluationHint": "Look for understanding that the return transforms the traveler as much as the descent did. The traveler should recognize that bringing something back requires integration — the gift must become part of you, not just something you hold."
+        },
+        {
+          "level": 2,
+          "theme": "The return in structure",
+          "prompt": "Campbell called this the Magic Flight — the difficult return. In metallurgy, it is the tempering — gentle reheating to release brittleness. Why is the return its own ordeal? Why can't the hero simply walk home?",
+          "evaluationHint": "Look for recognition that the return is a second transformation. The traveler should understand that the person who descended is not the same person who must now re-enter the ordinary world, and that re-entry requires its own kind of work."
+        },
+        {
+          "level": 3,
+          "theme": "Your own return",
+          "prompt": "When you came back from something that changed you — a journey, a loss, an experience that remade you — what was hardest about returning? Not the experience itself, but the re-entry. How did you carry what you'd found into a world that hadn't changed with you?",
+          "evaluationHint": "Look for honest reflection on the difficulty of re-entry. The best answers acknowledge the gap between the transformed self and the unchanged world — the loneliness of carrying knowledge that others haven't earned."
+        }
+      ]
+    },
+    "Arrive Assembled": {
+      "ascending": [
+        {
+          "level": 1,
+          "theme": "Emergence as changed",
+          "prompt": "I am Arrive Assembled — the moment of emergence. You are no longer who you were, and you are no longer becoming. You have arrived. What does it feel like to stand as a completed thing — not perfect, but whole in a new way?",
+          "evaluationHint": "Look for a sense of arrival that is quiet rather than triumphant. The traveler should describe wholeness that includes scars — not perfection, but integration. Assembled means all the pieces are present, even the broken ones."
+        },
+        {
+          "level": 2,
+          "theme": "Arrival across traditions",
+          "prompt": "In the monomyth, this is the Master of Two Worlds — the hero who stands in both the ordinary and the extraordinary. In metallurgy, the finished blade after polishing — all the fire, all the hammering, resolved into form. What does it mean to be a thing that has been through the forge and come out the other side?",
+          "evaluationHint": "Look for understanding that mastery of two worlds means holding both simultaneously, not choosing between them. The traveler should connect the mythic return with the metallurgical finish — both produce something that remembers the fire but is no longer in it."
+        },
+        {
+          "level": 3,
+          "theme": "Your own arrival",
+          "prompt": "Is there a moment when you arrived — not at a destination, but as yourself? A moment when the scattered pieces assembled into a coherent whole? What did that feel like, and how did you know?",
+          "evaluationHint": "Look for a specific moment of self-recognition. The best answers describe a quiet arrival — not a dramatic climax but a steady realization that the pieces fit, that the journey produced something real."
+        }
+      ]
+    },
+    "Life in the Dirt": {
+      "ascending": [
+        {
+          "level": 1,
+          "theme": "Living the new world",
+          "prompt": "I am Life in the Dirt — the world after the journey. Not a golden surface but rich, dark earth. The hero does not return to paradise; the hero returns to the ground, changed. What does the new world look like when it is made of dirt instead of gold?",
+          "evaluationHint": "Look for understanding that the new world is humbler and more real than the golden surface. The traveler should describe earthiness — not a return to innocence but an arrival at maturity, where the dirt is valued precisely because it is not gold."
+        },
+        {
+          "level": 2,
+          "theme": "The renewal in cycle",
+          "prompt": "In the monomyth, this is the Freedom to Live — the hero released from the fear of death. In the meteor steel cycle, the blade in use — not displayed, but working. The cycle is complete, and it is also beginning again. How does the end of a journey become the ground for the next one?",
+          "evaluationHint": "Look for recognition that completion is not static — it feeds the next cycle. The traveler should understand that life in the dirt means the blade is used, not preserved. The journey's value is proven by what comes after."
+        },
+        {
+          "level": 3,
+          "theme": "Your own life in the dirt",
+          "prompt": "Where are you now — not on a golden surface and not in a furnace, but in the dirt? What does your daily life look like after what you've been through? Not the dramatic version, but the Tuesday morning version. How does the journey live in the ordinary?",
+          "evaluationHint": "Look for grounded, daily-life integration. The best answers are mundane and specific — a changed relationship with a morning routine, a different way of listening, a patience that wasn't there before. The journey should be visible in the small, not the spectacular."
+        }
+      ]
+    }
+  }
+}

@@ -49,6 +49,18 @@ const ZODIAC_STAGES = [
 ];
 
 // Consulting engagement stages mapped as journey stops
+const FALLEN_STARLIGHT_STAGES = [
+  { id: 'golden-surface', label: 'Golden Surface', entity: 'Golden Surface', phase: 'ascending', type: 'chapter' },
+  { id: 'calling-star', label: 'Calling Star', entity: 'Calling Star', phase: 'ascending', type: 'chapter' },
+  { id: 'crater-crossing', label: 'Crater Crossing', entity: 'Crater Crossing', phase: 'ascending', type: 'chapter' },
+  { id: 'belly-of-the-furnace', label: 'Belly of the Furnace', entity: 'Belly of the Furnace', phase: 'ascending', type: 'chapter' },
+  { id: 'elixir-at-the-nadir', label: 'Elixir at the Nadir', entity: 'Elixir at the Nadir', phase: 'ascending', type: 'chapter' },
+  { id: 'return-reflection', label: 'Return Reflection', entity: 'Return Reflection', phase: 'ascending', type: 'chapter' },
+  { id: 'arrive-assembled', label: 'Arrive Assembled', entity: 'Arrive Assembled', phase: 'ascending', type: 'chapter' },
+  { id: 'life-in-the-dirt', label: 'Life in the Dirt', entity: 'Life in the Dirt', phase: 'ascending', type: 'chapter' },
+];
+
+// Consulting engagement stages mapped as journey stops
 const CONSULTING_STORYTELLER_STAGES = [
   { id: 'seed', label: 'The Seed' },
   { id: 'call', label: 'The Call' },
@@ -202,6 +214,26 @@ const JOURNEY_DEFS = {
     ],
     completion: "You have traversed all twelve signs of the zodiac. From Aries through Pisces, the wheel has turned full circle. The ouroboros turns.",
     completionElement: 'journeys.zodiac.completed',
+  },
+
+  'fallen-starlight-journey': {
+    id: 'fallen-starlight-journey',
+    label: 'Fallen Starlight Journey',
+    challengeMode: 'cosmic',
+    levelsPerStop: 3,
+    autoStart: true,
+    isFused: false,
+    stages: FALLEN_STARLIGHT_STAGES,
+    dotRadius: 31,
+    cssClass: 'cosmic',
+    title: 'The Fallen Starlight Journey',
+    intro: [
+      "Atlas invites you to walk the arc of Fallen Starlight — eight chapters of the meteor's story.",
+      "From Golden Surface to Life in the Dirt. Each chapter will test you three times — surface, pattern, and personal resonance.",
+      "The dragon coils through the artbook. Walk it.",
+    ],
+    completion: "You have walked the full arc of Fallen Starlight — from the Golden Surface through Life in the Dirt. The meteor fell, the forge burned, and the blade lives in the world. The ouroboros turns.",
+    completionElement: 'journeys.fallen-starlight-journey.completed',
   },
 
   // Consulting journeys — map engagement stages as Ouroboros stops

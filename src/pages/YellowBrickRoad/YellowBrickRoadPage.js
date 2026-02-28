@@ -113,6 +113,25 @@ const JOURNEYS = [
       </svg>
     ),
   },
+  {
+    id: 'fallen-starlight-journey',
+    label: 'Fallen Starlight Journey',
+    description: 'Walk the eight chapters of Fallen Starlight — from Golden Surface to Life in the Dirt. Each chapter tests you three times.',
+    path: '/fallen-starlight',
+    storyPath: '/journey/fallen-starlight-journey',
+    stages: '8 chapters, 3 levels each',
+    icon: (
+      <svg viewBox="0 0 40 40" width="36" height="36" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M20,4 L20,14" opacity="0.4" />
+        <circle cx="20" cy="4" r="2" fill="currentColor" opacity="0.7" />
+        <path d="M14,16 L26,16 L24,36 L16,36 Z" opacity="0.3" />
+        <path d="M17,20 L23,20" opacity="0.5" />
+        <path d="M17,24 L23,24" opacity="0.5" />
+        <path d="M17,28 L23,28" opacity="0.5" />
+        <path d="M18,32 L22,32" opacity="0.5" />
+      </svg>
+    ),
+  },
 ];
 
 export default function YellowBrickRoadPage() {

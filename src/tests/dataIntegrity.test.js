@@ -449,7 +449,7 @@ describe('Journey pattern integrity', () => {
     expect(yellowBrickRoad.journeySequence).toHaveLength(26);
   });
 
-  test('9 total journey definitions', () => {
-    expect(Object.keys(JOURNEY_DEFS)).toHaveLength(9);
+  test('10 total journey definitions', () => {
+    expect(Object.keys(JOURNEY_DEFS)).toHaveLength(10);
   });
 });

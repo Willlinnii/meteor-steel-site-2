@@ -108,6 +108,13 @@ const YELLOW_BRICK_ROADS = [
     description: 'Walk monomyth and meteor steel fused into one wheel. Two questions per stage.',
     ouroborosPath: '/journey/fused',
   },
+  {
+    id: 'fallen-starlight-journey',
+    label: 'Fallen Starlight Journey',
+    description: 'Walk the eight chapters of Fallen Starlight — from Golden Surface to Life in the Dirt. 8 chapters. 3 levels each.',
+    externalPath: '/fallen-starlight',
+    ouroborosPath: '/journey/fallen-starlight-journey',
+  },
 ];
 
 const XR_EXPERIENCES = [
