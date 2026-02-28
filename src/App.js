@@ -738,6 +738,26 @@ function StoryForgeHome() {
     };
   }, [currentStage, trackTime]);
 
+  // Register Atlas situational context
+  const { setPageContext } = useAtlasContext();
+  useEffect(() => {
+    const stageObj = FORGE_STAGES.find(s => s.id === currentStage);
+    const focus = currentStage === 'overview' || currentStage === 'bio'
+      ? { type: 'overview', id: null }
+      : { type: 'stage', id: currentStage, label: stageObj?.label || currentStage };
+    const visited = FORGE_STAGES.filter(s => isElementCompleted(`story-forge.stage.${s.id}`));
+    setPageContext({
+      area: 'story-forge',
+      focus,
+      pageStatus: {
+        visited: visited.length,
+        visitedLabels: visited.map(s => s.label),
+        totalItems: FORGE_STAGES.length,
+      },
+    });
+    return () => setPageContext(null);
+  }, [currentStage, template, isElementCompleted, setPageContext]);
+
   const handleSelectStage = useCallback((stage) => {
     setCurrentStage(stage);
     if (stage !== 'overview' && stage !== 'bio') trackElement(`story-forge.stage.${stage}`);
