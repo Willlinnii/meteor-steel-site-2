@@ -1,4 +1,4 @@
-import React, { useRef, useCallback, useEffect, useMemo } from 'react';
+import React, { useRef, useCallback, useEffect, useMemo, useState } from 'react';
 
 /* ── Age Definitions ── */
 export const MYTHIC_AGES = [
@@ -14,7 +14,21 @@ export const MYTHIC_AGES = [
 
 export const TIMELINE_MIN = -13000;
 export const TIMELINE_MAX = 2026;
-const TIMELINE_SPAN = TIMELINE_MAX - TIMELINE_MIN; // 12026
+const TIMELINE_SPAN = TIMELINE_MAX - TIMELINE_MIN;
+
+// Year values at each age boundary: [-13000, -10000, -5000, -4500, -4000, -3300, -1800, -1200, 2026]
+const AGE_BOUNDARY_YEARS = [
+  MYTHIC_AGES[0].startYear,
+  ...MYTHIC_AGES.slice(0, -1).map(a => a.endYear),
+  MYTHIC_AGES[MYTHIC_AGES.length - 1].endYear,
+];
+
+const DEFAULT_BOUNDARIES = AGE_BOUNDARY_YEARS.slice(1, -1).map(
+  y => ((y - TIMELINE_MIN) / TIMELINE_SPAN) * 100
+);
+
+const MIN_SEGMENT_PCT = 3;
+const MIN_GAP = 100; // minimum year gap between range handles
 
 /* ── Era String Parser ── */
 const CENTURY_WORDS = {
@@ -28,28 +42,23 @@ function parseSingleDate(s) {
   if (!s) return null;
   s = s.trim().replace(/^c\.\s*/, '').replace(/^~\s*/, '').replace(/\(.*?\)/g, '').trim();
 
-  // "present"
   if (/present/i.test(s)) return 2026;
 
-  // Century: "3rd century BCE", "8th century CE", "6th century BCE"
   const centuryMatch = s.match(/(\d+(?:st|nd|rd|th))\s+century\s*(BCE|BC|CE|AD)?/i);
   if (centuryMatch) {
     const num = CENTURY_WORDS[centuryMatch[1].toLowerCase()] || parseInt(centuryMatch[1]);
     const isBCE = /BCE|BC/i.test(centuryMatch[2] || '');
-    if (isBCE) return -(num * 100) + 50; // midpoint of century
-    return (num - 1) * 100 + 50; // e.g. 3rd century CE → 250
+    if (isBCE) return -(num * 100) + 50;
+    return (num - 1) * 100 + 50;
   }
 
-  // Decade: "1920s"
   const decadeMatch = s.match(/(\d{4})s/);
   if (decadeMatch) return parseInt(decadeMatch[1]) + 5;
 
-  // Plain year: "447 BCE", "1010 CE", "1933", "4 BCE"
   const yearMatch = s.match(/(\d{1,5})\s*(BCE|BC|CE|AD)?/i);
   if (yearMatch) {
     const yr = parseInt(yearMatch[1]);
-    const isBCE = /BCE|BC/i.test(yearMatch[2] || '');
-    return isBCE ? -yr : yr;
+    return /BCE|BC/i.test(yearMatch[2] || '') ? -yr : yr;
   }
 
   return null;
@@ -59,10 +68,8 @@ export function parseEraString(raw) {
   if (!raw) return null;
   const cleaned = raw.replace(/^c\.\s*/, '').replace(/^~\s*/, '').replace(/\(traditionally\)/g, '');
 
-  // Range with separator: "–", "—", "-", "to"
   const parts = cleaned.split(/\s*[–—]\s*|\s+-\s+|\s+to\s+/);
   if (parts.length >= 2) {
-    // Carry BCE/CE from second part to first if first lacks it
     const secondHasEra = /BCE|BC|CE|AD/i.test(parts[1]);
     const firstHasEra = /BCE|BC|CE|AD/i.test(parts[0]);
     let first = parts[0];
@@ -78,7 +85,6 @@ export function parseEraString(raw) {
     return null;
   }
 
-  // Single date/century
   const yr = parseSingleDate(cleaned);
   if (yr != null) return { startYear: yr, endYear: yr };
   return null;
@@ -89,105 +95,144 @@ export function formatYear(year) {
   return `${year} CE`;
 }
 
-/* ── Helpers ── */
-function yearToPct(year) {
-  return ((year - TIMELINE_MIN) / TIMELINE_SPAN) * 100;
+/* ── Piecewise-linear mapping ── */
+function yearToPctScaled(year, pctArr) {
+  for (let i = 0; i < AGE_BOUNDARY_YEARS.length - 1; i++) {
+    const yStart = AGE_BOUNDARY_YEARS[i];
+    const yEnd = AGE_BOUNDARY_YEARS[i + 1];
+    if (year <= yEnd || i === AGE_BOUNDARY_YEARS.length - 2) {
+      const t = (year - yStart) / (yEnd - yStart);
+      return pctArr[i] + t * (pctArr[i + 1] - pctArr[i]);
+    }
+  }
+  return 100;
 }
 
-function pctToYear(pct) {
-  return Math.round(TIMELINE_MIN + (pct / 100) * TIMELINE_SPAN);
+function pctToYearScaled(pct, pctArr) {
+  for (let i = 0; i < pctArr.length - 1; i++) {
+    const pStart = pctArr[i];
+    const pEnd = pctArr[i + 1];
+    if (pct <= pEnd || i === pctArr.length - 2) {
+      const segWidth = pEnd - pStart;
+      const t = segWidth > 0 ? (pct - pStart) / segWidth : 0;
+      return Math.round(AGE_BOUNDARY_YEARS[i] + t * (AGE_BOUNDARY_YEARS[i + 1] - AGE_BOUNDARY_YEARS[i]));
+    }
+  }
+  return TIMELINE_MAX;
 }
-
-const MIN_GAP = 100; // minimum 100-year gap between handles
 
 /* ── Component ── */
-export default function MythicAgesTimeline({ rangeStart, rangeEnd, onRangeChange, pins = [], onPinClick }) {
+export default function MythicAgesTimeline({ rangeStart, rangeEnd, onRangeChange, pins = [], onPinClick, highlightedPinId }) {
   const barRef = useRef(null);
-  const draggingHandle = useRef(null); // 'start' | 'end' | null
+  const dragRef = useRef(null);      // { type: 'handle', which } | { type: 'boundary', idx } | null
+  const didDragRef = useRef(false);  // prevents click-after-drag
 
-  const startPct = yearToPct(rangeStart);
-  const endPct = yearToPct(rangeEnd);
+  const [boundaries, setBoundaries] = useState(DEFAULT_BOUNDARIES);
+  const pctArr = useMemo(() => [0, ...boundaries, 100], [boundaries]);
 
-  const getYearFromEvent = useCallback((e) => {
+  // Ref-sync volatile props so event listeners stay stable
+  const live = useRef({ rangeStart, rangeEnd, onRangeChange, pctArr });
+  live.current = { rangeStart, rangeEnd, onRangeChange, pctArr };
+
+  const startPct = yearToPctScaled(rangeStart, pctArr);
+  const endPct = yearToPctScaled(rangeEnd, pctArr);
+
+  // Stable: barRef never changes
+  const getPct = useCallback((e) => {
     if (!barRef.current) return null;
     const rect = barRef.current.getBoundingClientRect();
-    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-    const pct = Math.max(0, Math.min(100, ((clientX - rect.left) / rect.width) * 100));
-    return pctToYear(pct);
+    const x = e.touches ? e.touches[0].clientX : e.clientX;
+    return Math.max(0, Math.min(100, ((x - rect.left) / rect.width) * 100));
   }, []);
 
-  const handleMove = useCallback((e) => {
-    if (!draggingHandle.current) return;
-    const year = getYearFromEvent(e);
-    if (year == null) return;
-
-    if (draggingHandle.current === 'start') {
-      const clamped = Math.max(TIMELINE_MIN, Math.min(year, rangeEnd - MIN_GAP));
-      onRangeChange(clamped, rangeEnd);
-    } else {
-      const clamped = Math.min(TIMELINE_MAX, Math.max(year, rangeStart + MIN_GAP));
-      onRangeChange(rangeStart, clamped);
-    }
-  }, [rangeStart, rangeEnd, onRangeChange, getYearFromEvent]);
-
-  const handleUp = useCallback(() => {
-    if (!draggingHandle.current) return;
-    draggingHandle.current = null;
-    document.body.style.userSelect = '';
-  }, []);
-
+  // Document-level drag listeners — registered once
   useEffect(() => {
-    document.addEventListener('mousemove', handleMove);
-    document.addEventListener('mouseup', handleUp);
-    document.addEventListener('touchmove', handleMove, { passive: false });
-    document.addEventListener('touchend', handleUp);
-    return () => {
-      document.removeEventListener('mousemove', handleMove);
-      document.removeEventListener('mouseup', handleUp);
-      document.removeEventListener('touchmove', handleMove);
-      document.removeEventListener('touchend', handleUp);
-    };
-  }, [handleMove, handleUp]);
+    const onMove = (e) => {
+      const drag = dragRef.current;
+      if (!drag) return;
 
-  const onHandleDown = useCallback((which) => (e) => {
+      const pct = getPct(e);
+      if (pct == null) return;
+
+      if (drag.type === 'boundary') {
+        setBoundaries(prev => {
+          const next = [...prev];
+          const { idx } = drag;
+          const lo = idx === 0 ? MIN_SEGMENT_PCT : prev[idx - 1] + MIN_SEGMENT_PCT;
+          const hi = idx === prev.length - 1 ? 100 - MIN_SEGMENT_PCT : prev[idx + 1] - MIN_SEGMENT_PCT;
+          next[idx] = Math.max(lo, Math.min(hi, pct));
+          return next;
+        });
+        return;
+      }
+
+      const { rangeStart: rs, rangeEnd: re, onRangeChange: cb, pctArr: pa } = live.current;
+      const year = pctToYearScaled(pct, pa);
+      if (drag.which === 'start') {
+        cb(Math.max(TIMELINE_MIN, Math.min(year, re - MIN_GAP)), re);
+      } else {
+        cb(rs, Math.min(TIMELINE_MAX, Math.max(year, rs + MIN_GAP)));
+      }
+    };
+
+    const onUp = () => {
+      if (dragRef.current) didDragRef.current = true;
+      dragRef.current = null;
+      document.body.style.userSelect = '';
+    };
+
+    document.addEventListener('mousemove', onMove);
+    document.addEventListener('mouseup', onUp);
+    document.addEventListener('touchmove', onMove, { passive: false });
+    document.addEventListener('touchend', onUp);
+    return () => {
+      document.removeEventListener('mousemove', onMove);
+      document.removeEventListener('mouseup', onUp);
+      document.removeEventListener('touchmove', onMove);
+      document.removeEventListener('touchend', onUp);
+    };
+  }, [getPct]);
+
+  const startDrag = useCallback((drag) => (e) => {
     e.preventDefault();
-    draggingHandle.current = which;
+    if (drag.type === 'boundary') e.stopPropagation();
+    dragRef.current = drag;
     document.body.style.userSelect = 'none';
   }, []);
 
   const onBarClick = useCallback((e) => {
-    if (draggingHandle.current) return;
-    const year = getYearFromEvent(e);
-    if (year == null) return;
-    // Move whichever handle is closer
-    const distStart = Math.abs(year - rangeStart);
-    const distEnd = Math.abs(year - rangeEnd);
-    if (distStart <= distEnd) {
-      const clamped = Math.max(TIMELINE_MIN, Math.min(year, rangeEnd - MIN_GAP));
-      onRangeChange(clamped, rangeEnd);
-    } else {
-      const clamped = Math.min(TIMELINE_MAX, Math.max(year, rangeStart + MIN_GAP));
-      onRangeChange(rangeStart, clamped);
-    }
-  }, [rangeStart, rangeEnd, onRangeChange, getYearFromEvent]);
+    // Swallow click that follows a drag
+    if (didDragRef.current) { didDragRef.current = false; return; }
 
-  // Group overlapping pins
-  const pinElements = useMemo(() => {
-    return pins.map(pin => {
-      const midYear = (pin.startYear + pin.endYear) / 2;
-      const pct = yearToPct(midYear);
-      return { ...pin, pct };
-    });
-  }, [pins]);
+    const pct = getPct(e);
+    if (pct == null) return;
+    const { rangeStart: rs, rangeEnd: re, onRangeChange: cb, pctArr: pa } = live.current;
+    const year = pctToYearScaled(pct, pa);
+    if (Math.abs(year - rs) <= Math.abs(year - re)) {
+      cb(Math.max(TIMELINE_MIN, Math.min(year, re - MIN_GAP)), re);
+    } else {
+      cb(rs, Math.min(TIMELINE_MAX, Math.max(year, rs + MIN_GAP)));
+    }
+  }, [getPct]);
+
+  const isCustom = boundaries.some((b, i) => Math.abs(b - DEFAULT_BOUNDARIES[i]) > 0.5);
+
+  const pinElements = useMemo(() =>
+    pins.map(pin => ({
+      ...pin,
+      pct: yearToPctScaled((pin.startYear + pin.endYear) / 2, pctArr),
+    })),
+    [pins, pctArr]
+  );
 
   return (
     <div className="mythic-ages-timeline">
       <span className="mythic-ages-label">{formatYear(TIMELINE_MIN)}</span>
       <div className="mythic-ages-bar" ref={barRef} onClick={onBarClick}>
         {/* Age segments */}
-        {MYTHIC_AGES.map(age => {
-          const left = yearToPct(age.startYear);
-          const width = yearToPct(age.endYear) - left;
+        {MYTHIC_AGES.map((age, i) => {
+          const left = pctArr[i];
+          const width = pctArr[i + 1] - left;
           const isSelected = rangeStart === age.startYear && rangeEnd === age.endYear;
           return (
             <div
@@ -196,11 +241,7 @@ export default function MythicAgesTimeline({ rangeStart, rangeEnd, onRangeChange
               style={{ left: `${left}%`, width: `${width}%`, backgroundColor: age.color }}
               onClick={(e) => {
                 e.stopPropagation();
-                if (isSelected) {
-                  onRangeChange(TIMELINE_MIN, TIMELINE_MAX);
-                } else {
-                  onRangeChange(age.startYear, age.endYear);
-                }
+                onRangeChange(isSelected ? TIMELINE_MIN : age.startYear, isSelected ? TIMELINE_MAX : age.endYear);
               }}
             >
               <span className="mythic-ages-segment-label">{age.label}</span>
@@ -208,44 +249,63 @@ export default function MythicAgesTimeline({ rangeStart, rangeEnd, onRangeChange
           );
         })}
 
+        {/* Draggable boundary dividers */}
+        {boundaries.map((bPct, i) => (
+          <div
+            key={`b${i}`}
+            className="mythic-ages-boundary"
+            style={{ left: `${bPct}%` }}
+            onMouseDown={startDrag({ type: 'boundary', idx: i })}
+            onTouchStart={startDrag({ type: 'boundary', idx: i })}
+            title={formatYear(AGE_BOUNDARY_YEARS[i + 1])}
+          />
+        ))}
+
         {/* Dim overlays outside selected range */}
-        {startPct > 0 && (
-          <div className="mythic-ages-dim" style={{ left: 0, width: `${startPct}%` }} />
-        )}
-        {endPct < 100 && (
-          <div className="mythic-ages-dim" style={{ left: `${endPct}%`, width: `${100 - endPct}%` }} />
-        )}
+        {startPct > 0 && <div className="mythic-ages-dim" style={{ left: 0, width: `${startPct}%` }} />}
+        {endPct < 100 && <div className="mythic-ages-dim" style={{ left: `${endPct}%`, width: `${100 - endPct}%` }} />}
 
         {/* Pins */}
         {pinElements.map(pin => (
           <div
             key={pin.id}
-            className="mythic-ages-pin"
+            className={`mythic-ages-pin${pin.id === highlightedPinId ? ' highlighted' : ''}`}
             style={{ left: `${pin.pct}%`, backgroundColor: pin.color }}
-            title={`${pin.name} (${formatYear(pin.startYear)}${pin.endYear !== pin.startYear ? ' – ' + formatYear(pin.endYear) : ''})`}
+            title={`${pin.name} (${formatYear(pin.startYear)}${pin.endYear !== pin.startYear ? ' \u2013 ' + formatYear(pin.endYear) : ''})`}
             onClick={(e) => { e.stopPropagation(); onPinClick?.(pin); }}
           />
         ))}
 
-        {/* Handles */}
+        {/* Range handles */}
         <div
           className="mythic-ages-handle"
           style={{ left: `${startPct}%` }}
-          onMouseDown={onHandleDown('start')}
-          onTouchStart={onHandleDown('start')}
+          onMouseDown={startDrag({ type: 'handle', which: 'start' })}
+          onTouchStart={startDrag({ type: 'handle', which: 'start' })}
         >
           <span className="mythic-ages-handle-label">{formatYear(rangeStart)}</span>
         </div>
         <div
           className="mythic-ages-handle"
           style={{ left: `${endPct}%` }}
-          onMouseDown={onHandleDown('end')}
-          onTouchStart={onHandleDown('end')}
+          onMouseDown={startDrag({ type: 'handle', which: 'end' })}
+          onTouchStart={startDrag({ type: 'handle', which: 'end' })}
         >
           <span className="mythic-ages-handle-label">{formatYear(rangeEnd)}</span>
         </div>
       </div>
-      <span className="mythic-ages-label">2026</span>
+      <span className="mythic-ages-label">
+        2026
+        {isCustom && (
+          <button
+            className="mythic-ages-reset"
+            onClick={(e) => { e.stopPropagation(); setBoundaries(DEFAULT_BOUNDARIES); }}
+            title="Reset timeline scaling"
+          >
+            {'\u21BA'}
+          </button>
+        )}
+      </span>
     </div>
   );
 }

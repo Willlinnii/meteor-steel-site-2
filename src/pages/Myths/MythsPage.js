@@ -8,6 +8,9 @@ import treasuresData from '../../data/treasuresData';
 import mythicEarthSites from '../../data/mythicEarthSites.json';
 import ancientLibraries from '../../data/ancientLibraries.json';
 import ancientTemples from '../../data/ancientTemples.json';
+import { getAllBooks } from '../../data/bookOriginsUtils';
+import { resolveOrigin } from '../../data/bookOrigins';
+import libraryData from '../../data/mythSalonLibrary.json';
 import mythsSynthesis from '../../data/mythsSynthesis.json';
 import worldData from '../../data/normalOtherWorld.json';
 import {
@@ -433,7 +436,26 @@ function TextReader({ readUrl, wikisourcePage }) {
   );
 }
 
-/* ── Ancient Libraries Panel (3-level: library grid → text grid → text detail) ── */
+/* ── Libraries Panel (3-level: library grid → text grid → text detail) ── */
+const LIBRARY_COORDS = {
+  alexandria:      { lat: 31.20, lng: 29.92 },
+  ashurbanipal:    { lat: 36.36, lng: 43.15 },
+  'house-of-wisdom': { lat: 33.34, lng: 44.40 },
+  nalanda:         { lat: 25.14, lng: 85.45 },
+  constantinople:  { lat: 41.01, lng: 28.98 },
+  dunhuang:        { lat: 40.04, lng: 94.80 },
+  tibetan:         { lat: 29.32, lng: 91.11 },
+  pergamon:        { lat: 39.13, lng: 27.18 },
+  celsus:          { lat: 37.94, lng: 27.34 },
+  timbuktu:        { lat: 16.77, lng: -3.01 },
+  qarawiyyin:      { lat: 34.06, lng: -4.97 },
+  maya:            { lat: 17.22, lng: -89.62 },
+  quipu:           { lat: -13.52, lng: -71.97 },
+  ugarit:          { lat: 35.60, lng: 35.78 },
+  ebla:            { lat: 35.80, lng: 36.80 },
+  'myth-salon':    { lat: 34.57, lng: -85.58 },
+};
+
 const ALL_CATEGORIES = [
   { id: 'all', label: 'All' },
   { id: 'scripture', label: 'Scripture' },
@@ -449,16 +471,18 @@ const ALL_CATEGORIES = [
   { id: 'archive', label: 'Archive' },
 ];
 
-function LibrariesPanel({ trackElement, timelineRange }) {
+function LibrariesPanel({ trackElement, timelineRange, onFlyTo }) {
   const [selectedLibrary, setSelectedLibrary] = useState(null);
   const [activeFilter, setActiveFilter] = useState('all');
   const [selectedText, setSelectedText] = useState(null);
+  const [librarySubTab, setLibrarySubTab] = useState('libraries');
+  const [selectedShelf, setSelectedShelf] = useState(null);
 
-  // Level 3: Text detail
+  // Level 3: Text detail (ancient libraries)
   if (selectedText) {
     return (
       <div className="alexandria-detail">
-        <button className="mythic-earth-back" onClick={() => setSelectedText(null)}>
+        <button className="mythic-earth-back" onClick={() => { setSelectedText(null); if (onFlyTo) onFlyTo(LIBRARY_COORDS[selectedLibrary.id] || null, `lib-${selectedLibrary.id}`); }}>
           {'\u2190'} Back to {selectedLibrary.name}
         </button>
         <h3>{selectedText.title}</h3>
@@ -490,7 +514,7 @@ function LibrariesPanel({ trackElement, timelineRange }) {
     );
   }
 
-  // Level 2: Text grid for selected library
+  // Level 2: Text grid for selected ancient library
   if (selectedLibrary) {
     const libCategories = [...new Set(selectedLibrary.texts.map(t => t.category))];
     const filters = ALL_CATEGORIES.filter(c => c.id === 'all' || libCategories.includes(c.id));
@@ -500,7 +524,7 @@ function LibrariesPanel({ trackElement, timelineRange }) {
 
     return (
       <div className="alexandria-panel libraries-panel">
-        <button className="mythic-earth-back" onClick={() => { setSelectedLibrary(null); setActiveFilter('all'); }}>
+        <button className="mythic-earth-back" onClick={() => { setSelectedLibrary(null); setActiveFilter('all'); if (onFlyTo) onFlyTo(null, null); }}>
           {'\u2190'} Back to Libraries
         </button>
         <div className="alexandria-header libraries-header">
@@ -527,7 +551,7 @@ function LibrariesPanel({ trackElement, timelineRange }) {
             <button
               key={text.id}
               className="mythic-earth-site-card alexandria-card"
-              onClick={() => { setSelectedText(text); trackElement(`myths.library.${selectedLibrary.id}.text.${text.id}`); }}
+              onClick={() => { setSelectedText(text); trackElement(`myths.library.${selectedLibrary.id}.text.${text.id}`); if (onFlyTo) onFlyTo(LIBRARY_COORDS[selectedLibrary.id] || null, `lib-${selectedLibrary.id}`); }}
             >
               <span className="site-card-name">{text.title}</span>
               <span className="site-card-region">{text.author}</span>
@@ -543,30 +567,269 @@ function LibrariesPanel({ trackElement, timelineRange }) {
     );
   }
 
-  // Level 1: Library grid
+  // Shelves sub-tab: shelf detail
+  if (librarySubTab === 'shelves' && selectedShelf) {
+    const items = selectedShelf.books || selectedShelf.films || selectedShelf.artists || selectedShelf.works || [];
+    return (
+      <div className="libraries-panel">
+        <button className="mythic-earth-back" onClick={() => { setSelectedShelf(null); if (onFlyTo) onFlyTo(null, null); }}>
+          {'\u2190'} Back to Shelves
+        </button>
+        <div className="alexandria-header libraries-header">
+          <h3>{selectedShelf.name}</h3>
+          <p>{selectedShelf.description}</p>
+        </div>
+        <div className="mythic-earth-site-grid">
+          {items.map((item, i) => {
+            const origin = resolveOrigin(item, selectedShelf.id);
+            const matchedBook = item.title ? getAllBooks().find(b => b.title === item.title) : null;
+            const pinId = matchedBook ? `book-${matchedBook.id}` : null;
+            return (
+              <button
+                key={i}
+                className="mythic-earth-site-card literature-card"
+                onClick={() => {
+                  trackElement(`myths.library.shelf.${selectedShelf.id}.item.${i}`);
+                  if (onFlyTo) onFlyTo(origin || null, pinId);
+                }}
+              >
+                <span className="site-card-name">{item.title || item.subject || item.name}</span>
+                {(item.author || item.creator || item.director) && (
+                  <span className="site-card-region">{item.author || item.creator || item.director}</span>
+                )}
+                {item.tradition && <span className="site-card-region">{item.tradition}</span>}
+                <div className="literature-card-footer">
+                  <span className="alexandria-card-date">{item.year}</span>
+                  {item.medium && <span className="literature-card-region-badge">{item.medium}</span>}
+                </div>
+                {item.note && <span className="library-card-tagline">{item.note}</span>}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+    );
+  }
+
+  // Level 1: Library grid with sub-tabs
   return (
     <div className="libraries-panel">
+      <div className="library-sub-tabs">
+        <button
+          className={`mythic-earth-cat-btn${librarySubTab === 'libraries' ? ' active' : ''}`}
+          style={{ '--cat-color': '#a89060' }}
+          onClick={() => { setLibrarySubTab('libraries'); trackElement('myths.library.subtab.libraries'); }}
+        >
+          Libraries
+        </button>
+        <button
+          className={`mythic-earth-cat-btn${librarySubTab === 'shelves' ? ' active' : ''}`}
+          style={{ '--cat-color': '#a89060' }}
+          onClick={() => { setLibrarySubTab('shelves'); trackElement('myths.library.subtab.shelves'); }}
+        >
+          Shelves
+        </button>
+      </div>
+
+      {librarySubTab === 'libraries' ? (
+        <>
+          <div className="alexandria-header libraries-header">
+            <h3>Libraries</h3>
+            <p>Libraries spanning four thousand years and five continents — the great repositories of human knowledge from cuneiform to quipu.</p>
+          </div>
+
+          <div className="mythic-earth-site-grid">
+            {ancientLibraries.filter(lib => {
+              const era = parseEraString(lib.era);
+              if (!era) return true;
+              return era.endYear >= timelineRange[0] && era.startYear <= timelineRange[1];
+            }).map(lib => (
+              <button
+                key={lib.id}
+                className="mythic-earth-site-card library-card"
+                onClick={() => { setSelectedLibrary(lib); trackElement(`myths.library.${lib.id}`); if (onFlyTo && LIBRARY_COORDS[lib.id]) onFlyTo(LIBRARY_COORDS[lib.id], `lib-${lib.id}`); }}
+              >
+                <span className="site-card-name">{lib.name}</span>
+                <span className="site-card-region">{lib.location}</span>
+                <span className="library-card-era">{lib.era}</span>
+                <span className="library-card-tagline">{lib.tagline}</span>
+                <span className="library-card-count">{lib.texts.length} texts</span>
+              </button>
+            ))}
+            <button
+              key="myth-salon"
+              className="mythic-earth-site-card library-card"
+              onClick={() => { setLibrarySubTab('shelves'); trackElement('myths.library.myth-salon'); if (onFlyTo) onFlyTo({ lat: 34.5667, lng: -85.5811 }, 'lib-myth-salon'); }}
+            >
+              <span className="site-card-name">Myth Salon Library</span>
+              <span className="site-card-region">Mentone, Alabama</span>
+              <span className="library-card-era">2020 – present</span>
+              <span className="library-card-tagline">A living archive of mythological, spiritual, and cultural wisdom at the Mentone Mythouse Retreat.</span>
+              <span className="library-card-count">{libraryData.libraries.find(l => l.id === 'myth-salon').shelves.length} shelves</span>
+            </button>
+          </div>
+        </>
+      ) : (
+        <>
+          <div className="alexandria-header libraries-header">
+            <h3>Myth Salon Library</h3>
+            <p>{libraryData.libraries.find(l => l.id === 'myth-salon').shelves.length} shelves of books, films, art, and music that form the foundation of the mythic tradition.</p>
+          </div>
+
+          <div className="mythic-earth-site-grid">
+            {libraryData.libraries.find(l => l.id === 'myth-salon').shelves.map(shelf => {
+              const itemCount = (shelf.books || shelf.films || shelf.artists || shelf.works || []).length;
+              return (
+                <button
+                  key={shelf.id}
+                  className="mythic-earth-site-card library-card"
+                  onClick={() => { setSelectedShelf(shelf); trackElement(`myths.library.shelf.${shelf.id}`); }}
+                >
+                  <span className="site-card-name">{shelf.name}</span>
+                  <span className="library-card-tagline">{shelf.description.slice(0, 100)}{shelf.description.length > 100 ? '...' : ''}</span>
+                  <span className="library-card-count">{itemCount} {shelf.type === 'films' ? 'films' : 'items'}</span>
+                </button>
+              );
+            })}
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
+/* ── Literature Panel (flat book grid with sort/filter/detail) ── */
+const REGION_OPTIONS = ['All', 'Near East', 'Mediterranean', 'Europe', 'Africa', 'Asia', 'Americas', 'Unknown'];
+
+function LiteraturePanel({ trackElement, timelineRange, onFlyTo }) {
+  const [selectedBook, setSelectedBook] = useState(null);
+  const [sortBy, setSortBy] = useState('date');
+  const [regionFilter, setRegionFilter] = useState('All');
+
+  const allBooks = getAllBooks();
+
+  const filteredBooks = useMemo(() => {
+    let books = allBooks;
+    // Timeline filter
+    if (timelineRange) {
+      books = books.filter(b => {
+        if (!b.era) return true;
+        return b.era.endYear >= timelineRange[0] && b.era.startYear <= timelineRange[1];
+      });
+    }
+    // Region filter
+    if (regionFilter !== 'All') {
+      books = books.filter(b => b.region === regionFilter);
+    }
+    // Sort
+    const sorted = [...books];
+    if (sortBy === 'date') {
+      sorted.sort((a, b) => {
+        const aY = a.era ? a.era.startYear : Infinity;
+        const bY = b.era ? b.era.startYear : Infinity;
+        return aY - bY;
+      });
+    } else if (sortBy === 'title') {
+      sorted.sort((a, b) => a.title.localeCompare(b.title));
+    } else if (sortBy === 'region') {
+      sorted.sort((a, b) => a.region.localeCompare(b.region) || a.title.localeCompare(b.title));
+    }
+    return sorted;
+  }, [allBooks, timelineRange, regionFilter, sortBy]);
+
+  // Book detail
+  if (selectedBook) {
+    return (
+      <div className="literature-panel">
+        <button className="mythic-earth-back" onClick={() => { setSelectedBook(null); if (onFlyTo) onFlyTo(null, null); }}>
+          {'\u2190'} Back to Literature
+        </button>
+        <h3>{selectedBook.title}</h3>
+        <div className="literature-detail-meta">
+          {selectedBook.author && <span className="literature-detail-author">{selectedBook.author}</span>}
+          {selectedBook.tradition && <span className="literature-detail-tradition">{selectedBook.tradition}</span>}
+          <span className="literature-detail-date">{selectedBook.year}</span>
+          <span className="literature-detail-origin">{selectedBook.originLabel}</span>
+          <span className="literature-detail-region-badge">{selectedBook.region}</span>
+        </div>
+        {selectedBook.note && (
+          <div className="literature-detail-note">{selectedBook.note}</div>
+        )}
+        <div className="literature-detail-actions">
+          {selectedBook.freeUrl && (
+            <a href={selectedBook.freeUrl} target="_blank" rel="noopener noreferrer" className="mythic-earth-reader-btn">
+              Read Online
+            </a>
+          )}
+          <a
+            href={`/library?shelf=${selectedBook.shelves[0]}&book=${encodeURIComponent(selectedBook.title)}`}
+            className="mythic-earth-reader-btn literature-library-link"
+          >
+            View in Library
+          </a>
+        </div>
+      </div>
+    );
+  }
+
+  // Book grid
+  return (
+    <div className="literature-panel">
       <div className="alexandria-header libraries-header">
-        <h3>Ancient Libraries</h3>
-        <p>Fifteen libraries spanning four thousand years and five continents — the great repositories of human knowledge from cuneiform to quipu.</p>
+        <h3>Literature</h3>
+        <p>~{allBooks.length} foundational texts spanning five millennia — sacred epics, mystical treatises, philosophical dialogues, and the works that shaped the study of myth.</p>
+      </div>
+
+      <div className="literature-controls">
+        <div className="literature-sort-buttons">
+          <button
+            className={`mythic-earth-cat-btn${sortBy === 'date' ? ' active' : ''}`}
+            style={{ '--cat-color': '#8b9dc3' }}
+            onClick={() => { setSortBy('date'); trackElement('myths.literature.sort.date'); }}
+          >
+            Date
+          </button>
+          <button
+            className={`mythic-earth-cat-btn${sortBy === 'title' ? ' active' : ''}`}
+            style={{ '--cat-color': '#8b9dc3' }}
+            onClick={() => { setSortBy('title'); trackElement('myths.literature.sort.title'); }}
+          >
+            Title
+          </button>
+          <button
+            className={`mythic-earth-cat-btn${sortBy === 'region' ? ' active' : ''}`}
+            style={{ '--cat-color': '#8b9dc3' }}
+            onClick={() => { setSortBy('region'); trackElement('myths.literature.sort.region'); }}
+          >
+            Region
+          </button>
+        </div>
+        <div className="literature-region-filter">
+          <select
+            value={regionFilter}
+            onChange={e => { setRegionFilter(e.target.value); trackElement(`myths.literature.filter.${e.target.value}`); }}
+          >
+            {REGION_OPTIONS.map(r => (
+              <option key={r} value={r}>{r === 'All' ? 'All Regions' : r}</option>
+            ))}
+          </select>
+        </div>
       </div>
 
       <div className="mythic-earth-site-grid">
-        {ancientLibraries.filter(lib => {
-          const era = parseEraString(lib.era);
-          if (!era) return true;
-          return era.endYear >= timelineRange[0] && era.startYear <= timelineRange[1];
-        }).map(lib => (
+        {filteredBooks.map(book => (
           <button
-            key={lib.id}
-            className="mythic-earth-site-card library-card"
-            onClick={() => { setSelectedLibrary(lib); trackElement(`myths.library.${lib.id}`); }}
+            key={book.id}
+            className="mythic-earth-site-card literature-card"
+            onClick={() => { setSelectedBook(book); trackElement(`myths.literature.book.${book.id}`); if (onFlyTo) onFlyTo(book, `book-${book.id}`); }}
           >
-            <span className="site-card-name">{lib.name}</span>
-            <span className="site-card-region">{lib.location}</span>
-            <span className="library-card-era">{lib.era}</span>
-            <span className="library-card-tagline">{lib.tagline}</span>
-            <span className="library-card-count">{lib.texts.length} texts</span>
+            <span className="site-card-name">{book.title}</span>
+            {book.author && <span className="site-card-region">{book.author}</span>}
+            {book.tradition && <span className="site-card-region">{book.tradition}</span>}
+            <div className="literature-card-footer">
+              <span className="alexandria-card-date">{book.year}</span>
+              <span className="literature-card-region-badge">{book.region}</span>
+            </div>
           </button>
         ))}
       </div>
@@ -2353,6 +2616,16 @@ function MythsPage() {
   const [treasuresEpisode, setTreasuresEpisode] = useState('overview');
   const [selectedMythicSite, setSelectedMythicSite] = useState(null);
   const [selectedPantheonDeity, setSelectedPantheonDeity] = useState(null);
+  const flyToSeq = useRef(0);
+  const [flyToTarget, setFlyToTarget] = useState(null);
+  const [highlightedTimelinePin, setHighlightedTimelinePin] = useState(null);
+  const handlePanelFlyTo = useCallback((coords, pinId) => {
+    if (coords?.lat != null && coords?.lng != null) {
+      flyToSeq.current += 1;
+      setFlyToTarget({ ...coords, _seq: flyToSeq.current });
+    }
+    setHighlightedTimelinePin(pinId || null);
+  }, []);
   const [mythicEarthCategory, setMythicEarthCategory] = useState('sacred-site');
   const [activeEarthFilters, setActiveEarthFilters] = useState(
     () => new Set(MYTHIC_EARTH_CATEGORIES.map(c => c.id))
@@ -2423,7 +2696,66 @@ function MythsPage() {
       const era = parseEraString(m.founded);
       if (era) pins.push({ id: `movement-${m.id}`, name: m.name, ...era, type: 'movement', color: m.color || '#b07acc' });
     });
+    getAllBooks().forEach(book => {
+      if (book.era) {
+        pins.push({
+          id: `book-${book.id}`, name: book.title,
+          ...book.era, type: 'book', color: '#8b9dc3',
+        });
+      }
+    });
+    ancientLibraries.forEach(lib => {
+      const era = parseEraString(lib.era);
+      if (era) pins.push({ id: `lib-${lib.id}`, name: lib.name, ...era, type: 'library', color: '#a89060' });
+    });
+    ancientTemples.forEach(temple => {
+      const era = parseEraString(temple.era);
+      if (era) pins.push({ id: `temple-${temple.id}`, name: temple.name, ...era, type: 'temple', color: '#c47a5a' });
+    });
     return pins;
+  }, []);
+
+  const bookSites = useMemo(() =>
+    getAllBooks()
+      .filter(b => b.lat != null && b.lng != null)
+      .map(b => ({
+        id: `book-${b.id}`, name: b.title,
+        lat: b.lat, lng: b.lng, era: b.year,
+        category: 'literary-location', region: b.region,
+        description: b.note || '', isBook: true,
+      })),
+    []
+  );
+
+  const librarySites = useMemo(() => {
+    const sites = ancientLibraries
+      .filter(lib => LIBRARY_COORDS[lib.id])
+      .map(lib => ({
+        id: `library-${lib.id}`,
+        name: lib.name,
+        lat: LIBRARY_COORDS[lib.id].lat,
+        lng: LIBRARY_COORDS[lib.id].lng,
+        era: lib.era,
+        category: 'library',
+        isLibrary: true,
+        region: lib.location,
+        description: lib.tagline || '',
+      }));
+    const mythSalonCoords = LIBRARY_COORDS['myth-salon'];
+    if (mythSalonCoords) {
+      sites.push({
+        id: 'library-myth-salon',
+        name: 'Myth Salon Library',
+        lat: mythSalonCoords.lat,
+        lng: mythSalonCoords.lng,
+        era: '2020 – present',
+        category: 'library',
+        isLibrary: true,
+        region: 'Mentone, Alabama',
+        description: 'A living archive of mythological, spiritual, and cultural wisdom at the Mentone Mythouse Retreat.',
+      });
+    }
+    return sites;
   }, []);
 
   useEffect(() => { trackElement('myths.page.visited'); }, []); // eslint-disable-line react-hooks/exhaustive-deps
@@ -2479,10 +2811,16 @@ function MythsPage() {
               onSiteSelect={(site) => {
                 setSelectedMythicSite(site);
                 setDisplayPantheonOverride(null);
-                if (site?.isTemple) setMythicEarthCategory('temple');
-                else if (site?.isLibrary) setMythicEarthCategory('library');
+                if (site?.category === 'temple') setMythicEarthCategory('temple');
+                else if (site?.category === 'library') setMythicEarthCategory('library');
+                setHighlightedTimelinePin(site ? (site.isBook ? site.id : `site-${site.id}`) : null);
               }}
               externalSite={selectedMythicSite}
+              externalFlyTo={flyToTarget}
+              externalExtraSites={[
+                ...librarySites,
+                ...(selectedMythicSite?.category === 'library' ? bookSites : []),
+              ]}
             />
           </Suspense>
 
@@ -2513,6 +2851,7 @@ function MythsPage() {
                     setMythicEarthCategory(cat.id);
                     setSelectedMythicSite(null);
                     setActiveTour(null);
+                    setHighlightedTimelinePin(null);
                     trackElement(`myths.earth.category.${cat.id}`);
                   }}
                 >
@@ -2581,18 +2920,41 @@ function MythsPage() {
               </div>
             )}
 
-            {!selectedMythicSite && mythicEarthCategory !== 'tours' && mythicEarthCategory !== 'my-sites' && (
+            {mythicEarthCategory !== 'tours' && mythicEarthCategory !== 'my-sites' && (
               <MythicAgesTimeline
                 rangeStart={timelineRange[0]}
                 rangeEnd={timelineRange[1]}
                 onRangeChange={(s, e) => setTimelineRange([s, e])}
                 pins={timelinePins}
+                highlightedPinId={highlightedTimelinePin}
                 onPinClick={(pin) => {
-                  if (pin.type === 'movement') return; // movements don't have detail views
+                  setHighlightedTimelinePin(pin.id);
+                  if (pin.type === 'movement') return;
+                  if (pin.type === 'book') {
+                    const book = getAllBooks().find(b => `book-${b.id}` === pin.id);
+                    if (book) {
+                      setMythicEarthCategory('literary-location');
+                      if (book.lat != null) handlePanelFlyTo(book, pin.id);
+                      trackElement(`myths.earth.pin.book.${book.id}`);
+                    }
+                    return;
+                  }
+                  if (pin.type === 'library') {
+                    setMythicEarthCategory('library');
+                    const libId = pin.id.slice(4); // strip 'lib-'
+                    if (libId && LIBRARY_COORDS[libId]) handlePanelFlyTo(LIBRARY_COORDS[libId], pin.id);
+                    trackElement(`myths.earth.pin.${pin.id}`);
+                    return;
+                  }
+                  if (pin.type === 'temple') {
+                    setMythicEarthCategory('temple');
+                    trackElement(`myths.earth.pin.${pin.id}`);
+                    return;
+                  }
                   const site = mythicEarthSites.find(s => `site-${s.id}` === pin.id);
                   if (site) {
                     setMythicEarthCategory(site.category);
-                    setSelectedMythicSite(site.isTemple ? { ...site, isTemple: true } : site.isLibrary ? { ...site, isLibrary: true } : site);
+                    setSelectedMythicSite(site);
                     trackElement(`myths.earth.pin.${site.id}`);
                   }
                 }}
@@ -2692,13 +3054,15 @@ function MythsPage() {
                   </button>
                 )}
               </div>
-            ) : mythicEarthCategory === 'temple' || selectedMythicSite?.isTemple ? (
+            ) : mythicEarthCategory === 'literary-location' && !selectedMythicSite ? (
+              <LiteraturePanel trackElement={trackElement} timelineRange={timelineRange} onFlyTo={handlePanelFlyTo} />
+            ) : mythicEarthCategory === 'temple' || selectedMythicSite?.category === 'temple' ? (
               <TemplesPanel trackElement={trackElement} timelineRange={timelineRange} />
-            ) : mythicEarthCategory === 'library' || selectedMythicSite?.isLibrary ? (
-              <LibrariesPanel trackElement={trackElement} timelineRange={timelineRange} />
+            ) : mythicEarthCategory === 'library' || selectedMythicSite?.category === 'library' ? (
+              <LibrariesPanel trackElement={trackElement} timelineRange={timelineRange} onFlyTo={handlePanelFlyTo} />
             ) : selectedMythicSite ? (
               <div className="mythic-earth-site-detail">
-                <button className="mythic-earth-back" onClick={() => { setSelectedMythicSite(null); setSelectedPantheonDeity(null); setDisplayPantheonOverride(null); }}>
+                <button className="mythic-earth-back" onClick={() => { setSelectedMythicSite(null); setSelectedPantheonDeity(null); setDisplayPantheonOverride(null); setHighlightedTimelinePin(null); }}>
                   {'\u2190'} Back to {activeTradition !== 'all' ? (TRADITION_REGIONS.flatMap(r => r.traditions).find(t => t.id === activeTradition)?.label || 'Sites') : mythicEarthCategory === 'my-sites' ? 'My Sites' : (MYTHIC_EARTH_CATEGORIES.find(c => c.id === mythicEarthCategory)?.label || 'Sites')}
                 </button>
                 <h3>{selectedMythicSite.name}</h3>

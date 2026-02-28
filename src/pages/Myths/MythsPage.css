@@ -2768,6 +2768,52 @@
   transition: width 0.05s linear, left 0.05s linear;
 }
 
+.mythic-ages-boundary {
+  position: absolute;
+  top: 0;
+  width: 2px;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.25);
+  cursor: col-resize;
+  z-index: 3;
+  transform: translateX(-50%);
+  transition: background 0.15s ease;
+  touch-action: none;
+}
+
+.mythic-ages-boundary::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -6px;
+  width: 14px;
+  height: 100%;
+}
+
+.mythic-ages-boundary:hover {
+  background: rgba(255, 255, 255, 0.6);
+  box-shadow: 0 0 4px rgba(255, 255, 255, 0.3);
+}
+
+.mythic-ages-reset {
+  background: none;
+  border: 1px solid rgba(201, 169, 97, 0.5);
+  color: #c9a961;
+  font-size: 0.7rem;
+  cursor: pointer;
+  padding: 1px 4px;
+  margin-left: 4px;
+  border-radius: 3px;
+  line-height: 1;
+  vertical-align: middle;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.mythic-ages-reset:hover {
+  border-color: #c9a961;
+  color: #e8d7a0;
+}
+
 .mythic-ages-pin {
   position: absolute;
   top: 50%;
@@ -2785,6 +2831,19 @@
   transform: translate(-50%, -50%) scale(1.6);
   z-index: 5;
   border-color: rgba(255, 255, 255, 0.7);
+}
+
+.mythic-ages-pin.highlighted {
+  transform: translate(-50%, -50%) scale(2.2);
+  z-index: 6;
+  border: 2px solid #fff;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.6), 0 0 16px currentColor;
+  animation: mythic-pin-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes mythic-pin-pulse {
+  0%, 100% { box-shadow: 0 0 8px rgba(255, 255, 255, 0.6), 0 0 16px currentColor; }
+  50% { box-shadow: 0 0 12px rgba(255, 255, 255, 0.9), 0 0 24px currentColor; }
 }
 
 .mythic-ages-handle {
@@ -3176,4 +3235,157 @@
   color: var(--accent-gold);
   border-color: var(--accent-gold);
   background: rgba(201, 169, 97, 0.08);
+}
+
+/* ── Literature Panel ── */
+
+.literature-panel {
+  animation: myths-fade-in 0.4s ease;
+}
+
+.literature-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.literature-sort-buttons {
+  display: flex;
+  gap: 6px;
+}
+
+.literature-region-filter select {
+  font-family: 'Cinzel', serif;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent-steel);
+  background: var(--bg-medium);
+  border: 1px solid var(--border-subtle);
+  padding: 9px 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%238b9dc3'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  padding-right: 28px;
+}
+
+.literature-region-filter select:hover {
+  border-color: var(--accent-steel);
+}
+
+.literature-card {
+  border-left: 3px solid #8b9dc3 !important;
+}
+
+.literature-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 6px;
+  gap: 8px;
+}
+
+.literature-card-region-badge {
+  font-family: 'Cinzel', serif;
+  font-size: 0.58rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #8b9dc3;
+  background: rgba(139, 157, 195, 0.1);
+  padding: 2px 8px;
+}
+
+.literature-detail-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.literature-detail-author {
+  font-family: 'Crimson Pro', serif;
+  font-size: 1rem;
+  color: var(--text-primary);
+}
+
+.literature-detail-tradition {
+  font-family: 'Cinzel', serif;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent-gold);
+}
+
+.literature-detail-date {
+  font-family: 'Cinzel', serif;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--text-secondary);
+}
+
+.literature-detail-origin {
+  font-family: 'Crimson Pro', serif;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+.literature-detail-region-badge {
+  font-family: 'Cinzel', serif;
+  font-size: 0.58rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #8b9dc3;
+  background: rgba(139, 157, 195, 0.1);
+  padding: 3px 10px;
+}
+
+.literature-detail-note {
+  font-family: 'Crimson Pro', serif;
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: var(--text-primary);
+  padding: 12px 16px;
+  background: rgba(139, 157, 195, 0.05);
+  border-left: 3px solid #8b9dc3;
+  margin-bottom: 20px;
+}
+
+.literature-detail-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.literature-library-link {
+  background: rgba(168, 144, 96, 0.08) !important;
+  border-color: var(--accent-gold) !important;
+  color: var(--accent-gold) !important;
+}
+
+.literature-library-link:hover {
+  background: rgba(168, 144, 96, 0.18) !important;
+}
+
+/* ── Library Sub-Tabs ── */
+
+.library-sub-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 16px;
 }

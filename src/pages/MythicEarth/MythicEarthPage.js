@@ -91,6 +91,19 @@ const PIN_SVGS = Object.fromEntries(
   CATEGORIES.map(c => [c.id, c.id === 'temple' ? makeTemplePinSvg(c.color) : c.id === 'library' ? makeLibraryPinSvg(c.color) : makePinSvg(c.color)])
 );
 
+function makeBookPinSvg(color) {
+  return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(
+    `<svg xmlns="http://www.w3.org/2000/svg" width="28" height="40" viewBox="0 0 28 40">
+      <path d="M14 0C6.27 0 0 6.27 0 14c0 10.5 14 26 14 26s14-15.5 14-26C28 6.27 21.73 0 14 0z" fill="${color}" stroke="#0a0a0f" stroke-width="1.5"/>
+      <path d="M8 8 L14 10 L20 8 L20 19 L14 17 L8 19 Z" fill="#0a0a0f" opacity="0.3"/>
+      <path d="M9 9 L14 10.8 L19 9 L19 18 L14 16.2 L9 18 Z" fill="#fff" opacity="0.9"/>
+      <line x1="14" y1="10.8" x2="14" y2="16.2" stroke="#0a0a0f" stroke-width="0.6" opacity="0.4"/>
+    </svg>`
+  )}`;
+}
+
+const BOOK_PIN_SVG = makeBookPinSvg('#8b9dc3');
+
 function makeUserPinSvg(color) {
   return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(
     `<svg xmlns="http://www.w3.org/2000/svg" width="28" height="40" viewBox="0 0 28 40">
@@ -396,7 +409,7 @@ function SiteDetail({ site, isPilgrimage, onTogglePilgrimage, isLoggedIn, onDele
 
 function MovementDetail({ movement }) {
   const collections = (movement.connectedCollections || [])
-    .map(id => libraryData.shelves.find(s => s.id === id))
+    .map(id => libraryData.libraries.flatMap(l => l.shelves).find(s => s.id === id))
     .filter(Boolean);
 
   return (
@@ -473,7 +486,14 @@ function MythicEarthGlobe({ activeFilters, timelineRange, traditionFilter, onSel
       }
       return true;
     });
-    const userList = (extraSites || []).filter(s => activeFilters.has(s.category));
+    const userList = (extraSites || []).filter(s => {
+      if (!activeFilters.has(s.category)) return false;
+      if (timelineRange) {
+        const era = parseEraString(s.era);
+        if (era && (era.endYear < timelineRange[0] || era.startYear > timelineRange[1])) return false;
+      }
+      return true;
+    });
     return [...curated, ...userList];
   }, [activeFilters, showPilgrimagesOnly, pilgrimageIds, extraSites, timelineRange, traditionFilter]);
 
@@ -682,7 +702,7 @@ function MythicEarthGlobe({ activeFilters, timelineRange, traditionFilter, onSel
             onClick={() => handleClick(site)}
           >
             <BillboardGraphics
-              image={isUser ? (USER_PIN_SVGS[site.category] || USER_PIN_SVGS['sacred-site']) : PIN_SVGS[site.category]}
+              image={site.isBook ? BOOK_PIN_SVG : isUser ? (USER_PIN_SVGS[site.category] || USER_PIN_SVGS['sacred-site']) : PIN_SVGS[site.category]}
               width={highlighted ? 38 : 28}
               height={highlighted ? 54 : 40}
               verticalOrigin={VerticalOrigin.BOTTOM}
@@ -1019,7 +1039,7 @@ function AddSiteForm({ onAdd, onCancel }) {
   );
 }
 
-function MythicEarthPage({ embedded, onSiteSelect: onSiteSelectExternal, externalSite, externalFilters, externalTourSiteIds, externalTimelineRange, externalTradition }) {
+function MythicEarthPage({ embedded, onSiteSelect: onSiteSelectExternal, externalSite, externalFlyTo, externalFilters, externalTourSiteIds, externalTimelineRange, externalTradition, externalExtraSites }) {
   const { track } = usePageTracking('mythic-earth');
   const { xrMode } = useXRMode();
   const { user } = useAuth();
@@ -1298,6 +1318,13 @@ function MythicEarthPage({ embedded, onSiteSelect: onSiteSelectExternal, externa
     }
   }, [externalSite, embedded]);
 
+  // Fly globe to coordinates from panel interactions (without changing selected site)
+  useEffect(() => {
+    if (embedded && externalFlyTo && globeApi.current) {
+      globeApi.current.flyTo(externalFlyTo);
+    }
+  }, [externalFlyTo, embedded]);
+
   useEffect(() => {
     if ((selectedSite || selectedMovement) && detailRef.current) {
       detailRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -1345,7 +1372,7 @@ function MythicEarthPage({ embedded, onSiteSelect: onSiteSelectExternal, externa
             onSelectMovement={handleSelectMovement}
             showPilgrimagesOnly={embedded && externalTourSiteIds ? true : showPilgrimagesOnly}
             pilgrimageIds={embedded && externalTourSiteIds ? externalTourSiteIds : pilgrimageIdSet}
-            extraSites={userSitesList}
+            extraSites={[...userSitesList, ...(embedded && externalExtraSites ? externalExtraSites : [])]}
           />
 
           {!cameraAR && (
