@@ -256,7 +256,7 @@ function ensureYTApi() {
   });
 }
 
-export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPlanet, hoveredPlanet, selectedSign, onSelectSign, selectedCardinal, onSelectCardinal, selectedEarth, onSelectEarth, showCalendar, onToggleCalendar, selectedMonth, onSelectMonth, showMedicineWheel, selectedWheelItem, onSelectWheelItem, chakraViewMode, onToggleBodyWheel, onClickOrderLabel, orderLabel, videoUrl, onCloseVideo, ybrActive, ybrCurrentStopIndex, ybrStopProgress, ybrJourneySequence, onToggleYBR, ybrAutoStart, clockMode, onToggleClock, compassHeading, compassSupported, compassDenied, onRequestCompass, onStopCompass, seasonalSign, seasonalMonth, seasonalStageIndex, showMonomyth, showMeteorSteel, monomythStages, selectedMonomythStage, onSelectMonomythStage, onToggleMonomyth, monomythModel, showCycles, onSelectCycleSegment, activeCulture, showFallenStarlight, showStoryOfStories, onToggleStarlight, starlightStages, selectedStarlightStage, onSelectStarlightStage, selectedConstellation, onSelectConstellation, zodiacMode, onSelectBeyondRing, beyondRings, activeBeyondRing, showDodecahedron, dodecMode, onToggleDodecahedron, showArtBook, artBookMode, onToggleArtBook, onToggle3D, targetDate }) {
+export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPlanet, hoveredPlanet, selectedSign, onSelectSign, selectedCardinal, onSelectCardinal, selectedEarth, onSelectEarth, showCalendar, onToggleCalendar, selectedMonth, onSelectMonth, showMedicineWheel, selectedWheelItem, onSelectWheelItem, chakraViewMode, onToggleBodyWheel, onClickOrderLabel, orderLabel, videoUrl, onCloseVideo, ybrActive, ybrCurrentStopIndex, ybrStopProgress, ybrJourneySequence, onToggleYBR, ybrAutoStart, clockMode, layoutMode, onEnterClock, compassHeading, compassSupported, compassDenied, onRequestCompass, onStopCompass, seasonalSign, seasonalMonth, seasonalStageIndex, showMonomyth, showMeteorSteel, monomythStages, selectedMonomythStage, onSelectMonomythStage, onToggleMonomyth, monomythModel, showCycles, onSelectCycleSegment, activeCulture, showFallenStarlight, showStoryOfStories, onToggleStarlight, starlightStages, selectedStarlightStage, onSelectStarlightStage, selectedConstellation, onSelectConstellation, zodiacMode, onSelectBeyondRing, beyondRings, activeBeyondRing, showDodecahedron, dodecMode, onToggleDodecahedron, showArtBook, artBookMode, onToggleArtBook, showRing, targetDate }) {
   const wrapperRef = useRef(null);
   const [tooltip, setTooltip] = useState(null);
   const { hasPurchase, hasSubscription } = useProfile();
@@ -593,7 +593,7 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
 
   const [aligned, setAligned] = useState(false);
   const [livePositions, setLivePositions] = useState(false);
-  const [heliocentric, setHeliocentric] = useState(false);
+  const heliocentric = layoutMode === 'helio';
   const [orbitAngles, setOrbitAngles] = useState(() => {
     const init = {};
     ORBITS.forEach(o => { init[o.planet] = o.angle; });
@@ -853,22 +853,19 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
     };
   }, [aligned, livePositions, heliocentric, chakraViewMode]);
 
-  // When calendar/clock mode is activated, switch view mode.
-  // Only '12h' triggers heliocentric; '24h' and null are both geocentric.
+  // When calendar/clock mode or layout changes, reset view state.
   useEffect(() => {
     if (showCalendar || showClock) {
-      setHeliocentric(clockMode === '12h');
       setLivePositions(false);
       setAligned(false);
     }
-  }, [showCalendar, showClock, clockMode]);
+  }, [showCalendar, showClock, clockMode, layoutMode]);
 
   // Auto-align when Yellow Brick Road activates
   useEffect(() => {
     if (ybrActive) {
       setAligned(true);
       setLivePositions(false);
-      setHeliocentric(false);
     }
   }, [ybrActive]);
 
@@ -2229,8 +2226,8 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
                 </text>
               ))}
 
-              {/* Sun at its orbital radius — conceptually the hour hand tip (hidden when cycles active) */}
-              {!showCycles && (<g
+              {/* Sun at its orbital radius — conceptually the hour hand tip (hidden when helio or cycles active) */}
+              {!heliocentric && !showCycles && (<g
                 style={{ cursor: 'pointer' }}
                 onClick={() => onSelectPlanet('Sun')}
                 onMouseEnter={(e) => handleTooltipEnter('planet', 'Sun', e)}
@@ -2424,9 +2421,9 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
         ) : (
           <>
         {/* Orbital rings (hidden when cycles active) */}
-        {!showCycles && (clockMode === '24h'
-          ? ORBITS.filter(o => o.planet !== 'Sun')
-          : heliocentric ? HELIO_ORBITS : ORBITS
+        {!showCycles && (heliocentric ? HELIO_ORBITS
+          : clockMode === '24h' ? ORBITS.filter(o => o.planet !== 'Sun')
+          : ORBITS
         ).map(o => (
           <circle
             key={o.planet}
@@ -2564,32 +2561,7 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
         })()}
 
         {/* Planet nodes — rendered last so they're on top for clicks (hidden when cycles active) */}
-        {!showCycles && (clockMode === '24h' ? (
-          /* 24h mode: planets at real geocentric positions (no Sun — it's on the hour hand) */
-          geoClockAngles && ORBITS.filter(o => o.planet !== 'Sun').map(o => {
-            const angle = geoClockAngles[o.planet];
-            if (angle == null) return null;
-            const rad = (angle * Math.PI) / 180;
-            const px = CX + o.r * Math.cos(rad);
-            const py = CY + o.r * Math.sin(rad);
-            return (
-              <PlanetNode
-                key={`geo24-${o.planet}`}
-                planet={o.planet}
-                metal={o.metal}
-                cx={px}
-                cy={py}
-                selected={selectedPlanet === o.planet}
-                hovered={hoveredPlanet === o.planet}
-                onClick={() => onSelectPlanet(o.planet)}
-                onMouseEnter={(e) => handleTooltipEnter('planet', o.planet, e)}
-                onMouseLeave={handleTooltipLeave}
-                moonPhase={o.planet === 'Moon' ? moonPhaseAngle : undefined}
-                smooth={true}
-              />
-            );
-          })
-        ) : heliocentric ? (
+        {!showCycles && (heliocentric ? (
           <>
             {HELIO_ORBITS.map(o => {
               const angle = helioLiveAngles ? helioLiveAngles[o.planet] : (orbitAngles[o.planet] || 0);
@@ -2638,6 +2610,31 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
               );
             })}
           </>
+        ) : clockMode === '24h' ? (
+          /* 24h mode: planets at real geocentric positions (no Sun — it's on the hour hand) */
+          geoClockAngles && ORBITS.filter(o => o.planet !== 'Sun').map(o => {
+            const angle = geoClockAngles[o.planet];
+            if (angle == null) return null;
+            const rad = (angle * Math.PI) / 180;
+            const px = CX + o.r * Math.cos(rad);
+            const py = CY + o.r * Math.sin(rad);
+            return (
+              <PlanetNode
+                key={`geo24-${o.planet}`}
+                planet={o.planet}
+                metal={o.metal}
+                cx={px}
+                cy={py}
+                selected={selectedPlanet === o.planet}
+                hovered={hoveredPlanet === o.planet}
+                onClick={() => onSelectPlanet(o.planet)}
+                onMouseEnter={(e) => handleTooltipEnter('planet', o.planet, e)}
+                onMouseLeave={handleTooltipLeave}
+                moonPhase={o.planet === 'Moon' ? moonPhaseAngle : undefined}
+                smooth={true}
+              />
+            );
+          })
         ) : ORBITS.map(o => {
           const angle = aligned ? ALIGN_ANGLE : liveAngles ? liveAngles[o.planet].svgAngle : orbitAngles[o.planet];
           const rad = (angle * Math.PI) / 180;
@@ -2968,14 +2965,23 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
           </svg>
         </button>
         <button
-          className="clock-toggle"
-          onClick={() => { onToggleClock && onToggleClock(); }}
-          title={!clockMode ? 'Show 12-hour heliocentric clock' : clockMode === '12h' ? '12-hour heliocentric — click for 24-hour geocentric' : '24-hour geocentric — click for 12-hour heliocentric'}
+          className={`clock-toggle${clockMode ? ' active' : ''}${showRing ? ' ring' : ''}`}
+          onClick={() => { onEnterClock && onEnterClock(); }}
+          title={showRing ? 'Ring view — click for clock' : clockMode ? 'Clock view — click for ring' : 'Show clock view'}
         >
           <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <circle cx="12" cy="12" r="9" />
-            <path d="M12 6 L12 12 L16 14" />
-            {clockMode && <circle cx="12" cy="12" r="2.5" fill={clockMode === '12h' ? '#f0c040' : '#4a9bd9'} stroke="none" />}
+            {showRing ? (
+              <>
+                <ellipse cx="12" cy="12" rx="7" ry="7" />
+                <ellipse cx="12" cy="5.5" rx="2.5" ry="1.5" fill="currentColor" stroke="none" />
+              </>
+            ) : (
+              <>
+                <circle cx="12" cy="12" r="9" />
+                <path d="M12 6 L12 12 L16 14" />
+                {clockMode && <circle cx="12" cy="12" r="2.5" fill={clockMode === '12h' ? '#f0c040' : '#4a9bd9'} stroke="none" />}
+              </>
+            )}
           </svg>
         </button>
         <span style={{ position: 'relative' }}>
@@ -3111,15 +3117,6 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
           )}
         </button>
 
-        {hasSubscription('monomyth') && (
-          <button
-            className="view3d-toggle"
-            onClick={() => onToggle3D && onToggle3D('3d')}
-            title="Switch to 3D view"
-          >
-            3D
-          </button>
-        )}
 
       </div>
       {starlightGateId && (

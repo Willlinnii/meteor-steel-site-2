@@ -660,9 +660,17 @@ function RingToolbar({ ringForm, updateRingForm, ringMetal, updateRingMetal, rin
         }}>
           <svg viewBox="0 0 24 24" width="18" height="18" fill="none"><path d="M6 2L3 7v13a1 1 0 001 1h16a1 1 0 001-1V7l-3-5H6z" stroke="#c9a961" strokeWidth="1.5" strokeLinejoin="round" /><line x1="3" y1="7" x2="21" y2="7" stroke="#c9a961" strokeWidth="1.5" /><path d="M16 11a4 4 0 01-8 0" stroke="#c9a961" strokeWidth="1.5" strokeLinecap="round" /></svg>
         </button>
-        <button className="chrono-ring-view-toggle" title={ringViewMode === '3d' ? 'Switch to 2D' : 'Switch to 3D'}
-          onClick={() => setRingViewMode(prev => prev === '3d' ? '2d' : '3d')}>
-          {ringViewMode === '3d' ? '2D' : '3D'}
+        <button className="chrono-ring-view-toggle"
+          title={ringViewMode === '2d' ? 'Switch to 3D' : ringViewMode === '3d' ? 'Switch to VR' : 'Switch to 2D'}
+          onClick={() => {
+            if (ringViewMode === '2d') setRingViewMode('3d');
+            else if (ringViewMode === '3d') {
+              const isMobile = /Mobi|Android|iPad|iPhone|iPod/i.test(navigator.userAgent);
+              if (!isMobile) { navigate('/ring'); }
+              else { navigate('/ring', { state: { autoAR: true } }); }
+            } else setRingViewMode('2d');
+          }}>
+          {ringViewMode === '2d' ? '3D' : ringViewMode === '3d' ? 'VR' : '2D'}
         </button>
       </div>
     </div>
@@ -753,7 +761,7 @@ export default function ChronosphaeraPage() {
   const [artBookMonomythTab, setArtBookMonomythTab] = useState('overview');
 
   // Ring embed state
-  const [ringViewMode, setRingViewMode] = useState('3d');
+  const [ringViewMode, setRingViewMode] = useState('2d');
   const [ringDates, setRingDates] = useState({ birthday: '', engagement: '', wedding: '', anniversary: '', secret: '', other: '' });
   const [ringActiveDateType, setRingActiveDateType] = useState('birthday');
   const [ringDateDropOpen, setRingDateDropOpen] = useState(false);
@@ -1262,19 +1270,14 @@ export default function ChronosphaeraPage() {
   }, [mode, clearAllSelections, navigate]);
 
   const handleToggleDodecahedron = useCallback(() => {
-    const DODEC_MODES = ['stars', 'roman', 'die'];
     if (mode !== 'dodecahedron') {
-      // First click — enter dodecahedron at 'stars'
       clearAllSelections();
       setMode('dodecahedron');
       setDodecMode('stars');
       navigate('/chronosphaera/dodecahedron');
     } else {
-      // Already in dodecahedron — cycle to next sub-mode
-      setDodecMode(prev => {
-        const idx = DODEC_MODES.indexOf(prev);
-        return DODEC_MODES[(idx + 1) % DODEC_MODES.length];
-      });
+      // Exit dodecahedron mode
+      clearAllSelections();
     }
   }, [mode, clearAllSelections, navigate]);
 
@@ -1560,25 +1563,37 @@ export default function ChronosphaeraPage() {
     );
   }
 
-  const view3DBtn = !view3D && hasSubscription('monomyth') && (
-    <button
-      className="view3d-toggle-inline"
-      onClick={() => handleToggle3D('3d')}
-      title="Switch to 3D view"
-    >
-      3D
-    </button>
-  );
-
-  const view3DBtnRow = !view3D && hasSubscription('monomyth') && (
-    <div className="view3d-below-arc">
+  const viewModeButtons = hasSubscription('monomyth') && (
+    <span className="view-mode-group">
       <button
-        className="view3d-toggle-inline"
-        onClick={() => handleToggle3D('3d')}
-        title="Switch to 3D view"
+        className={`view3d-toggle-inline${!view3D ? ' active' : ''}`}
+        onClick={() => view3D && handleToggle3D(false)}
+        title="2D view"
+      >
+        2D
+      </button>
+      <button
+        className={`view3d-toggle-inline${view3D ? ' active' : ''}`}
+        onClick={() => !view3D && handleToggle3D('3d')}
+        title="3D view"
       >
         3D
       </button>
+      <button
+        className="view3d-toggle-inline"
+        onClick={() => handleToggle3D('vr')}
+        title="VR experience"
+      >
+        VR
+      </button>
+    </span>
+  );
+
+  const view3DBtn = viewModeButtons;
+
+  const view3DBtnRow = hasSubscription('monomyth') && (
+    <div className="view3d-below-arc">
+      {viewModeButtons}
     </div>
   );
 
@@ -1862,51 +1877,11 @@ export default function ChronosphaeraPage() {
       {showDodecahedron && (
         <div className="chrono-dodec-layer">
           <Suspense fallback={<div className="chrono-empty">Loading Dodecahedron...</div>}>
-            <DodecahedronPage embedded externalMode={dodecMode} />
+            <DodecahedronPage embedded externalMode={dodecMode} onModeChange={setDodecMode} />
           </Suspense>
         </div>
       )}
       <div className="chrono-diagram-center">
-        {view3D && hasSubscription('monomyth') && (
-          <div className="chrono-view3d-controls">
-            <button
-              className="view3d-icon-btn"
-              onClick={() => setClockMode(cm => cm === '24h' ? '12h' : '24h')}
-              title={clockMode === '24h' ? 'Geocentric (Earth-centered) — click for Heliocentric' : 'Heliocentric (Sun-centered) — click for Geocentric'}
-            >
-              {clockMode === '24h' ? '\u{1F30D}' : '\u2600\uFE0F'}
-            </button>
-            <button
-              className="view3d-icon-btn"
-              onClick={() => setShowClock3D(v => !v)}
-              title={showClock3D ? 'Hide clock hands' : 'Show clock hands'}
-              style={{ opacity: showClock3D ? 0.85 : 0.4 }}
-            >
-              {'\u{1F551}'}
-            </button>
-            <button
-              className="view3d-toggle"
-              onClick={() => setZodiacMode(zm => zm === 'sidereal' ? 'tropical' : 'sidereal')}
-              title={`Switch to ${zodiacMode === 'sidereal' ? 'tropical' : 'sidereal'}`}
-            >
-              {zodiacMode === 'sidereal' ? 'Sidereal' : 'Tropical'}
-            </button>
-            <button
-              className="view3d-toggle active"
-              onClick={() => handleToggle3D('vr')}
-              title="Enter VR experience"
-            >
-              VR
-            </button>
-            <button
-              className="back2d-toggle"
-              onClick={() => handleToggle3D(false)}
-              title="Return to 2D view"
-            >
-              2D
-            </button>
-          </div>
-        )}
         {view3D ? (
           <Suspense fallback={<div className="chrono-3d-container chrono-3d-loading">Loading 3D...</div>}>
             <InlineScene3D
