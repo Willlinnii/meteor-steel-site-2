@@ -31,6 +31,11 @@ const AREA_LABELS = {
 };
 
 const PATH_LABELS = {
+  '/chronosphaera/body': 'Chronosphaera (Body & Chakra)',
+  '/chronosphaera/medicine-wheel': 'Chronosphaera (Medicine Wheel)',
+  '/chronosphaera/dodecahedron': 'Chronosphaera (Dodecahedron)',
+  '/chronosphaera/artbook': 'Chronosphaera (Art Book)',
+  '/chronosphaera/ring': 'Chronosphaera (Celestial Ring)',
   '/chronosphaera': 'Chronosphaera',
   '/monomyth': 'Monomyth',
   '/home': 'Home',
@@ -233,6 +238,23 @@ export function AtlasContextProvider({ children }) {
         }
         const timePart = totalTime > 0 ? `, ${formatSeconds(totalTime)} total` : '';
         sectionSummaries.push(`  ${sectionId}: ${count} tracked elements${timePart}`);
+
+        // Break down chronosphaera into sub-area engagement
+        if (sectionId === 'chronosphaera') {
+          const subAreas = {
+            'planets/clock': k => /^chronosphaera\.(planet|zodiac|tab|culture|calendar|beyond|persona-chat|page)\./.test(k) || k.endsWith('.time'),
+            'body/chakra': k => /^chronosphaera\.body\./.test(k),
+            'medicine-wheel': k => /^chronosphaera\.medicine-wheel\./.test(k),
+            'monomyth': k => /^chronosphaera\.monomyth\./.test(k),
+            'constellations': k => /^chronosphaera\.constellation\./.test(k),
+          };
+          for (const [subLabel, matcher] of Object.entries(subAreas)) {
+            const subKeys = elementKeys.filter(matcher);
+            if (subKeys.length > 0) {
+              sectionSummaries.push(`    ↳ ${subLabel}: ${subKeys.length} elements`);
+            }
+          }
+        }
       }
       if (sectionSummaries.length > 0) {
         lines.push('Engagement by section:');
