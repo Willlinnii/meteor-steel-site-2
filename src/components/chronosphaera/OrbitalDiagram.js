@@ -256,7 +256,7 @@ function ensureYTApi() {
   });
 }
 
-export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPlanet, hoveredPlanet, selectedSign, onSelectSign, selectedCardinal, onSelectCardinal, selectedEarth, onSelectEarth, showCalendar, onToggleCalendar, selectedMonth, onSelectMonth, showMedicineWheel, selectedWheelItem, onSelectWheelItem, chakraViewMode, onToggleBodyWheel, onClickOrderLabel, orderLabel, videoUrl, onCloseVideo, ybrActive, ybrCurrentStopIndex, ybrStopProgress, ybrJourneySequence, onToggleYBR, ybrAutoStart, clockMode, layoutMode, onEnterClock, compassHeading, compassSupported, compassDenied, onRequestCompass, onStopCompass, seasonalSign, seasonalMonth, seasonalStageIndex, showMonomyth, showMeteorSteel, monomythStages, selectedMonomythStage, onSelectMonomythStage, onToggleMonomyth, monomythModel, showCycles, onSelectCycleSegment, activeCulture, showFallenStarlight, showStoryOfStories, onToggleStarlight, starlightStages, selectedStarlightStage, onSelectStarlightStage, selectedConstellation, onSelectConstellation, zodiacMode, onSelectBeyondRing, beyondRings, activeBeyondRing, showDodecahedron, dodecMode, onToggleDodecahedron, showArtBook, artBookMode, onToggleArtBook, showRing, targetDate }) {
+export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPlanet, hoveredPlanet, selectedSign, onSelectSign, selectedCardinal, onSelectCardinal, selectedEarth, onSelectEarth, showCalendar, onToggleCalendar, selectedMonth, onSelectMonth, showMedicineWheel, selectedWheelItem, onSelectWheelItem, chakraViewMode, onToggleBodyWheel, onClickOrderLabel, orderLabel, videoUrl, onCloseVideo, ybrActive, ybrCurrentStopIndex, ybrStopProgress, ybrJourneySequence, onToggleYBR, ybrAutoStart, clockMode, layoutMode, onEnterClock, compassHeading, compassSupported, compassDenied, onRequestCompass, onStopCompass, seasonalSign, seasonalMonth, seasonalStageIndex, showMonomyth, showMeteorSteel, monomythStages, selectedMonomythStage, onSelectMonomythStage, onToggleMonomyth, monomythModel, showCycles, onSelectCycleSegment, activeCulture, showFallenStarlight, showStoryOfStories, onToggleStarlight, starlightStages, selectedStarlightStage, onSelectStarlightStage, selectedConstellation, onSelectConstellation, zodiacMode, onSelectBeyondRing, beyondRings, activeBeyondRing, showDodecahedron, dodecMode, onToggleDodecahedron, showArtBook, artBookMode, onToggleArtBook, view3D, onToggle3D, showRing, targetDate }) {
   const wrapperRef = useRef(null);
   const [tooltip, setTooltip] = useState(null);
   const { hasPurchase, hasSubscription } = useProfile();
@@ -3117,6 +3117,29 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
           )}
         </button>
 
+        <button
+          className={`view3d-nav-toggle${view3D ? ' active' : ''}`}
+          onClick={() => {
+            if (!view3D) onToggle3D && onToggle3D('3d');
+            else onToggle3D && onToggle3D('vr');
+          }}
+          title={view3D ? '3D active — click for VR' : 'Enter 3D view'}
+        >
+          {view3D ? (
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+              <rect x="2" y="7" width="20" height="10" rx="3" />
+              <path d="M12 7 L12 17" strokeWidth="0.8" opacity="0.5" />
+              <circle cx="7.5" cy="12" r="2.5" />
+              <circle cx="16.5" cy="12" r="2.5" />
+            </svg>
+          ) : (
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M12 3 L20 7.5 L20 16.5 L12 21 L4 16.5 L4 7.5 Z" />
+              <path d="M12 3 L12 21" strokeWidth="0.8" opacity="0.5" />
+              <path d="M4 7.5 L12 12 L20 7.5" strokeWidth="0.8" opacity="0.5" />
+            </svg>
+          )}
+        </button>
 
       </div>
       {starlightGateId && (

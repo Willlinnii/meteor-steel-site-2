@@ -565,7 +565,7 @@ function StageArrow({ items, currentId, onSelect, getId = x => x, getLabel = x =
   );
 }
 
-function RingToolbar({ ringForm, updateRingForm, ringMetal, updateRingMetal, ringLayout, updateRingLayout, ringMode, updateRingMode, ringZodiacMode, updateRingZodiacMode, ringActiveInput, ringActiveDate, ringActiveDateType, setRingActiveDateType, ringDates, ringDateDropOpen, setRingDateDropOpen, ringFormDropOpen, setRingFormDropOpen, ringMetalDropOpen, setRingMetalDropOpen, ringDatePickerRef, ringFormPickerRef, ringMetalPickerRef, ringBirthstone, ringFormConfig, ringViewMode, setRingViewMode, handleRingDateChange, handleRingClear, updateJewelryConfig, navigate }) {
+function RingToolbar({ ringForm, updateRingForm, ringMetal, updateRingMetal, ringLayout, updateRingLayout, ringMode, updateRingMode, ringZodiacMode, updateRingZodiacMode, ringActiveInput, ringActiveDate, ringActiveDateType, setRingActiveDateType, ringDates, ringDateDropOpen, setRingDateDropOpen, ringFormDropOpen, setRingFormDropOpen, ringMetalDropOpen, setRingMetalDropOpen, ringDatePickerRef, ringFormPickerRef, ringMetalPickerRef, ringBirthstone, ringFormConfig, handleRingDateChange, handleRingClear, updateJewelryConfig, navigate }) {
   return (
     <div className="chrono-ring-toolbar">
       <div className="chrono-ring-toolbar-inner">
@@ -660,18 +660,6 @@ function RingToolbar({ ringForm, updateRingForm, ringMetal, updateRingMetal, rin
         }}>
           <svg viewBox="0 0 24 24" width="18" height="18" fill="none"><path d="M6 2L3 7v13a1 1 0 001 1h16a1 1 0 001-1V7l-3-5H6z" stroke="#c9a961" strokeWidth="1.5" strokeLinejoin="round" /><line x1="3" y1="7" x2="21" y2="7" stroke="#c9a961" strokeWidth="1.5" /><path d="M16 11a4 4 0 01-8 0" stroke="#c9a961" strokeWidth="1.5" strokeLinecap="round" /></svg>
         </button>
-        <button className="chrono-ring-view-toggle"
-          title={ringViewMode === '2d' ? 'Switch to 3D' : ringViewMode === '3d' ? 'Switch to VR' : 'Switch to 2D'}
-          onClick={() => {
-            if (ringViewMode === '2d') setRingViewMode('3d');
-            else if (ringViewMode === '3d') {
-              const isMobile = /Mobi|Android|iPad|iPhone|iPod/i.test(navigator.userAgent);
-              if (!isMobile) { navigate('/ring'); }
-              else { navigate('/ring', { state: { autoAR: true } }); }
-            } else setRingViewMode('2d');
-          }}>
-          {ringViewMode === '2d' ? '3D' : ringViewMode === '3d' ? 'VR' : '2D'}
-        </button>
       </div>
     </div>
   );
@@ -761,7 +749,6 @@ export default function ChronosphaeraPage() {
   const [artBookMonomythTab, setArtBookMonomythTab] = useState('overview');
 
   // Ring embed state
-  const [ringViewMode, setRingViewMode] = useState('2d');
   const [ringDates, setRingDates] = useState({ birthday: '', engagement: '', wedding: '', anniversary: '', secret: '', other: '' });
   const [ringActiveDateType, setRingActiveDateType] = useState('birthday');
   const [ringDateDropOpen, setRingDateDropOpen] = useState(false);
@@ -1332,17 +1319,21 @@ export default function ChronosphaeraPage() {
   const handleToggle3D = useCallback((value) => {
     if (value === 'vr') {
       const isMobile = /Mobi|Android|iPad|iPhone|iPod/i.test(navigator.userAgent);
-      if (!isMobile) {
-        alert('VR/AR mode is available on mobile devices — open this page on your phone or tablet.');
-        return;
+      if (mode === 'ring') {
+        navigate('/ring', isMobile ? { state: { autoAR: true } } : undefined);
+      } else {
+        if (!isMobile) {
+          alert('VR/AR mode is available on mobile devices — open this page on your phone or tablet.');
+          return;
+        }
+        navigate('/chronosphaera/vr', { state: { autoAR: true } });
       }
-      navigate('/chronosphaera/vr', { state: { autoAR: true } });
     } else if (value === '3d') {
       setView3D(true);
     } else {
       setView3D(false);
     }
-  }, [navigate]);
+  }, [navigate, mode]);
 
   const handleSelectMonomythModel = useCallback((theoristKey) => {
     const modelId = THEORIST_TO_MODEL[theoristKey];
@@ -1873,7 +1864,7 @@ export default function ChronosphaeraPage() {
           )}
         </div>
       )}
-      {showRing && (<div className="chrono-ring-layer"><Suspense fallback={<div className="chrono-empty">Loading Ring...</div>}>{ringViewMode === '3d' ? (<RingSceneEmbed birthDate={ringActiveDate} selectedPlanet={ringSelectedPlanet} onSelectPlanet={(p) => setRingSelectedPlanet(ringSelectedPlanet === p ? null : p)} selectedCardinal={ringSelectedCardinal} onSelectCardinal={setRingSelectedCardinal} mode={ringMode} zodiacMode={ringZodiacMode} birthstoneKey={ringBirthstone?.key || null} metal={ringMetal} form={ringForm} layout={ringLayout} />) : (<RingDiagram2D birthDate={ringActiveDate} mode={ringMode} zodiacMode={ringZodiacMode} selectedPlanet={ringSelectedPlanet} onSelectPlanet={(p) => setRingSelectedPlanet(ringSelectedPlanet === p ? null : p)} hoveredPlanet={null} onHoverPlanet={() => {}} selectedSign={null} onSelectSign={() => {}} selectedCardinal={ringSelectedCardinal} onSelectCardinal={setRingSelectedCardinal} />)}</Suspense><RingToolbar ringForm={ringForm} updateRingForm={updateRingForm} ringMetal={ringMetal} updateRingMetal={updateRingMetal} ringLayout={ringLayout} updateRingLayout={updateRingLayout} ringMode={ringMode} updateRingMode={updateRingMode} ringZodiacMode={ringZodiacMode} updateRingZodiacMode={updateRingZodiacMode} ringActiveInput={ringActiveInput} ringActiveDate={ringActiveDate} ringActiveDateType={ringActiveDateType} setRingActiveDateType={setRingActiveDateType} ringDates={ringDates} ringDateDropOpen={ringDateDropOpen} setRingDateDropOpen={setRingDateDropOpen} ringFormDropOpen={ringFormDropOpen} setRingFormDropOpen={setRingFormDropOpen} ringMetalDropOpen={ringMetalDropOpen} setRingMetalDropOpen={setRingMetalDropOpen} ringDatePickerRef={ringDatePickerRef} ringFormPickerRef={ringFormPickerRef} ringMetalPickerRef={ringMetalPickerRef} ringBirthstone={ringBirthstone} ringFormConfig={ringFormConfig} ringViewMode={ringViewMode} setRingViewMode={setRingViewMode} handleRingDateChange={handleRingDateChange} handleRingClear={handleRingClear} updateJewelryConfig={updateJewelryConfig} navigate={navigate} /></div>)}
+      {showRing && (<div className="chrono-ring-layer"><Suspense fallback={<div className="chrono-empty">Loading Ring...</div>}>{view3D ? (<RingSceneEmbed birthDate={ringActiveDate} selectedPlanet={ringSelectedPlanet} onSelectPlanet={(p) => setRingSelectedPlanet(ringSelectedPlanet === p ? null : p)} selectedCardinal={ringSelectedCardinal} onSelectCardinal={setRingSelectedCardinal} mode={ringMode} zodiacMode={ringZodiacMode} birthstoneKey={ringBirthstone?.key || null} metal={ringMetal} form={ringForm} layout={ringLayout} />) : (<RingDiagram2D birthDate={ringActiveDate} mode={ringMode} zodiacMode={ringZodiacMode} selectedPlanet={ringSelectedPlanet} onSelectPlanet={(p) => setRingSelectedPlanet(ringSelectedPlanet === p ? null : p)} hoveredPlanet={null} onHoverPlanet={() => {}} selectedSign={null} onSelectSign={() => {}} selectedCardinal={ringSelectedCardinal} onSelectCardinal={setRingSelectedCardinal} />)}</Suspense><RingToolbar ringForm={ringForm} updateRingForm={updateRingForm} ringMetal={ringMetal} updateRingMetal={updateRingMetal} ringLayout={ringLayout} updateRingLayout={updateRingLayout} ringMode={ringMode} updateRingMode={updateRingMode} ringZodiacMode={ringZodiacMode} updateRingZodiacMode={updateRingZodiacMode} ringActiveInput={ringActiveInput} ringActiveDate={ringActiveDate} ringActiveDateType={ringActiveDateType} setRingActiveDateType={setRingActiveDateType} ringDates={ringDates} ringDateDropOpen={ringDateDropOpen} setRingDateDropOpen={setRingDateDropOpen} ringFormDropOpen={ringFormDropOpen} setRingFormDropOpen={setRingFormDropOpen} ringMetalDropOpen={ringMetalDropOpen} setRingMetalDropOpen={setRingMetalDropOpen} ringDatePickerRef={ringDatePickerRef} ringFormPickerRef={ringFormPickerRef} ringMetalPickerRef={ringMetalPickerRef} ringBirthstone={ringBirthstone} ringFormConfig={ringFormConfig} handleRingDateChange={handleRingDateChange} handleRingClear={handleRingClear} updateJewelryConfig={updateJewelryConfig} navigate={navigate} /></div>)}
       {showDodecahedron && (
         <div className="chrono-dodec-layer">
           <Suspense fallback={<div className="chrono-empty">Loading Dodecahedron...</div>}>
@@ -2067,6 +2058,8 @@ export default function ChronosphaeraPage() {
             showArtBook={showArtBook}
             artBookMode={artBookMode}
             onToggleArtBook={handleToggleArtBook}
+            view3D={view3D}
+            onToggle3D={handleToggle3D}
             targetDate={targetDate}
           />
         )}
