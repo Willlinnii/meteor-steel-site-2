@@ -7,6 +7,29 @@ import {
 import { db, firebaseConfigured } from '../auth/firebase';
 import { useAuth } from '../auth/AuthContext';
 
+// Pure derivation helpers — exported for testing
+export function deriveFriends(sentDocs, receivedDocs) {
+  const list = [];
+  sentDocs.filter(d => d.status === 'accepted').forEach(d => {
+    list.push({ uid: d.recipientUid, handle: d.recipientHandle, requestId: d.id, relationship: d.relationship || 'friend' });
+  });
+  receivedDocs.filter(d => d.status === 'accepted').forEach(d => {
+    list.push({ uid: d.senderUid, handle: d.senderHandle, requestId: d.id, relationship: d.relationship || 'friend' });
+  });
+  return list;
+}
+
+export function deriveFamilyMembers(friends) {
+  return friends.filter(f => f.relationship === 'family');
+}
+
+export function deriveConnectedUids(sentDocs, receivedDocs) {
+  const set = new Set();
+  sentDocs.forEach(d => { if (d.status !== 'declined') set.add(d.recipientUid); });
+  receivedDocs.forEach(d => { if (d.status !== 'declined') set.add(d.senderUid); });
+  return set;
+}
+
 const FriendRequestsContext = createContext(null);
 
 export function useFriendRequests() {
@@ -54,21 +77,8 @@ export function FriendRequestsProvider({ children }) {
   }, [user]);
 
   // Derived state
-  const friends = useMemo(() => {
-    const list = [];
-    sentDocs.filter(d => d.status === 'accepted').forEach(d => {
-      list.push({ uid: d.recipientUid, handle: d.recipientHandle, requestId: d.id, relationship: d.relationship || 'friend' });
-    });
-    receivedDocs.filter(d => d.status === 'accepted').forEach(d => {
-      list.push({ uid: d.senderUid, handle: d.senderHandle, requestId: d.id, relationship: d.relationship || 'friend' });
-    });
-    return list;
-  }, [sentDocs, receivedDocs]);
-
-  // Family members (friends marked as family)
-  const familyMembers = useMemo(() => friends.filter(f => f.relationship === 'family'), [friends]);
-
-  // Quick-lookup Sets
+  const friends = useMemo(() => deriveFriends(sentDocs, receivedDocs), [sentDocs, receivedDocs]);
+  const familyMembers = useMemo(() => deriveFamilyMembers(friends), [friends]);
   const friendUids = useMemo(() => new Set(friends.map(f => f.uid)), [friends]);
   const familyUids = useMemo(() => new Set(familyMembers.map(f => f.uid)), [familyMembers]);
 
@@ -83,12 +93,7 @@ export function FriendRequestsProvider({ children }) {
   );
 
   // All UIDs the user has a relationship with (pending or accepted)
-  const connectedUids = useMemo(() => {
-    const set = new Set();
-    sentDocs.forEach(d => { if (d.status !== 'declined') set.add(d.recipientUid); });
-    receivedDocs.forEach(d => { if (d.status !== 'declined') set.add(d.senderUid); });
-    return set;
-  }, [sentDocs, receivedDocs]);
+  const connectedUids = useMemo(() => deriveConnectedUids(sentDocs, receivedDocs), [sentDocs, receivedDocs]);
 
   const sendRequest = useCallback(async (recipientUid, recipientHandle, senderHandle) => {
     if (!user || !db) return;

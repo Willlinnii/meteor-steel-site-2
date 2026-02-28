@@ -177,8 +177,8 @@ export function useStoryCardSync() {
   return { cards, loaded, syncing, vaultCardIds, toggleVaultCard };
 }
 
-// Compare relevant fields to detect changes
-function hasChanged(existing, desired) {
+// Compare relevant fields to detect changes — exported for testing
+export function hasChanged(existing, desired) {
   return (
     existing.title !== desired.title ||
     existing.subtitle !== desired.subtitle ||

@@ -8,6 +8,27 @@ import { db, storage, firebaseConfigured } from '../auth/firebase';
 import { useAuth } from '../auth/AuthContext';
 import { useFriendRequests } from './FriendRequestsContext';
 
+// Pure filtering helpers — exported for testing
+export function filterFeedItems(rawItems, userUid, familyUids) {
+  return rawItems.filter(item => {
+    const vis = item.visibility || 'friends';
+    if (vis === 'vault' || vis === 'profile') return false;
+    if (vis === 'family') {
+      if (item.authorUid === userUid) return true;
+      return familyUids.has(item.authorUid);
+    }
+    return true; // friends + public pass through
+  });
+}
+
+export function filterMyVaultPosts(rawItems, userUid) {
+  return userUid ? rawItems.filter(i => i.authorUid === userUid && i.visibility === 'vault') : [];
+}
+
+export function filterMyProfilePosts(rawItems, userUid) {
+  return userUid ? rawItems.filter(i => i.authorUid === userUid && i.visibility === 'profile') : [];
+}
+
 const FellowshipContext = createContext(null);
 
 export function useFellowship() {
@@ -81,28 +102,9 @@ export function FellowshipProvider({ children }) {
   }, [user, feedUids]);
 
   // Derived views from rawItems
-  const feedItems = useMemo(() =>
-    rawItems.filter(item => {
-      const vis = item.visibility || 'friends';
-      if (vis === 'vault' || vis === 'profile') return false;
-      if (vis === 'family') {
-        if (item.authorUid === user?.uid) return true;
-        return familyUids.has(item.authorUid);
-      }
-      return true; // friends + public pass through
-    }),
-    [rawItems, user, familyUids]
-  );
-
-  const myVaultPosts = useMemo(() =>
-    user ? rawItems.filter(i => i.authorUid === user.uid && i.visibility === 'vault') : [],
-    [user, rawItems]
-  );
-
-  const myProfilePosts = useMemo(() =>
-    user ? rawItems.filter(i => i.authorUid === user.uid && i.visibility === 'profile') : [],
-    [user, rawItems]
-  );
+  const feedItems = useMemo(() => filterFeedItems(rawItems, user?.uid, familyUids), [rawItems, user, familyUids]);
+  const myVaultPosts = useMemo(() => filterMyVaultPosts(rawItems, user?.uid), [user, rawItems]);
+  const myProfilePosts = useMemo(() => filterMyProfilePosts(rawItems, user?.uid), [user, rawItems]);
 
   // Check if user already posted for a given completion
   const hasPostedCompletion = useCallback((completionType, completionId) => {
