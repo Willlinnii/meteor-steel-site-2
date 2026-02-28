@@ -249,6 +249,11 @@ export default function ArtBookViewer({ embedded = false, externalMode, onSelect
     }
   }, []);
 
+  const handleCanvasPointerUp = useCallback(() => {
+    pointerDownPos.current = null;
+    draggingRef.current = false;
+  }, []);
+
   const effectivePlanet = (embedded && onSelectPlanet) ? externalSelectedPlanet : selectedPlanet;
   const currentData = selectedPlanet ? mergedData[selectedPlanet] || null : null;
   const isMountain = mode === 'mountain';
@@ -256,7 +261,7 @@ export default function ArtBookViewer({ embedded = false, externalMode, onSelect
   return (
     <>
       {/* 3D Canvas */}
-      <div className="artbook-canvas-wrapper" onPointerDown={handleCanvasPointerDown} onPointerMove={handleCanvasPointerMove}>
+      <div className="artbook-canvas-wrapper" onPointerDown={handleCanvasPointerDown} onPointerMove={handleCanvasPointerMove} onPointerUp={handleCanvasPointerUp}>
         <SceneErrorBoundary>
           <Canvas
             camera={{ position: isMountain ? CAMERA_MOUNTAIN : CAMERA_BOOK, fov: 55, near: 1, far: 100 }}
@@ -287,7 +292,7 @@ export default function ArtBookViewer({ embedded = false, externalMode, onSelect
                 maxPolarAngle={Math.PI}
                 target={[0, 0, 0]}
                 onStart={() => {}}
-                onEnd={() => { pointerDownPos.current = null; }}
+                onEnd={() => { pointerDownPos.current = null; draggingRef.current = false; }}
               />
             </Suspense>
           </Canvas>

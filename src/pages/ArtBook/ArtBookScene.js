@@ -339,6 +339,7 @@ const WEEKDAY_ORBITS = [
 function WeekdayPlanet({ planet, orbitRadius, size, planetAnglesRef, sunFactorRef, islandAngleRef }) {
   const groupRef = useRef();
   const moonWrapRef = useRef();
+  const moonLightRef = useRef();
   const [moonPhase, setMoonPhase] = useState(135);
   const planetColor = PLANET_COLORS[planet] || '#aaa';
 
@@ -356,9 +357,16 @@ function WeekdayPlanet({ planet, orbitRadius, size, planetAnglesRef, sunFactorRe
 
     // Moon phase: full (180°) at top, new (0°) at bottom
     if (planet === 'Moon') {
-      const raw = (((-angle + Math.PI / 2) % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI);
+      const raw = (((angle + Math.PI / 2) % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI);
       const deg = Math.round((raw / (2 * Math.PI)) * 360) % 360;
       setMoonPhase(prev => prev === deg ? prev : deg);
+
+      // Moon brightness tracks illumination: 0 at new, 1/4 sun intensity at full
+      // illumination = (1 - cos(phase)) / 2  → 0 at 0°, 1 at 180°
+      if (moonLightRef.current) {
+        const illum = (1 - Math.cos(deg * Math.PI / 180)) / 2;
+        moonLightRef.current.intensity = illum * (35 / 4);
+      }
 
       // Counter-rotate so MoonPhase3D shadow faces the camera correctly
       // Undo parent's Ry(theta) * Rx(PI/2) so Moon's local Y = world Y
@@ -379,6 +387,7 @@ function WeekdayPlanet({ planet, orbitRadius, size, planetAnglesRef, sunFactorRe
       )}
       {/* Glow light on every planet */}
       <pointLight
+        ref={planet === 'Moon' ? moonLightRef : undefined}
         color={planet === 'Sun' ? '#fff4d0' : planetColor}
         intensity={planet === 'Sun' ? 35 : 2}
         distance={planet === 'Sun' ? 200 : 15}
@@ -398,6 +407,9 @@ function ArtBookPlanets({ islandAngleRef, draggingRef, sunFactorRef }) {
       // Sun starts at -PI/2 (top of arc, near the ruby); others spaced from there
       init[o.planet] = -Math.PI / 2 + (i / WEEKDAY_ORBITS.length) * Math.PI * 2;
     });
+    // Mars & Jupiter are slowest — start them in visible positions
+    init['Mars'] = 0;            // right side, immediately visible
+    init['Jupiter'] = -Math.PI / 4; // upper-right, close to visible
     planetAnglesRef.current = init;
   }
 
@@ -686,7 +698,7 @@ function FogRing() {
 
 // ── Pine Forest — replaces the flat green disk with instanced pine trees ──
 const LAND_RADIUS = 10; // leaves a water gap before islands at 12
-const TREE_COUNT = 260;
+const TREE_COUNT = 520;
 const FOREST_INNER = BASE_RADIUS + 0.6; // clear of mountain base
 const FOREST_OUTER = LAND_RADIUS - 0.15;
 
@@ -714,9 +726,9 @@ function PineForest() {
 
     // Generate tree placements via Poisson-ish scatter
     const placed = [];
-    const minDist = 0.55;
+    const minDist = 0.30;
     let attempts = 0;
-    while (placed.length < TREE_COUNT && attempts < 3000) {
+    while (placed.length < TREE_COUNT && attempts < 6000) {
       attempts++;
       const angle = rng() * Math.PI * 2;
       // Bias distribution toward outer ring for density
@@ -733,8 +745,8 @@ function PineForest() {
       }
       if (!ok) continue;
 
-      const height = 1.2 + rng() * 1.8; // 1.2 – 3.0 units tall
-      const width = 0.35 + rng() * 0.35; // canopy radius 0.35 – 0.7
+      const height = 0.6 + rng() * 0.9; // 0.6 – 1.5 units tall (half size)
+      const width = 0.175 + rng() * 0.175; // canopy radius 0.175 – 0.35 (half size)
       const shade = rng(); // for color variation
       placed.push({ x, z, height, width, shade });
     }
@@ -743,7 +755,7 @@ function PineForest() {
 
   // Instanced trunks
   const trunkRef = useRef();
-  const trunkGeo = useMemo(() => new THREE.CylinderGeometry(0.04, 0.06, 1, 5), []);
+  const trunkGeo = useMemo(() => new THREE.CylinderGeometry(0.02, 0.03, 1, 5), []);
   const trunkMat = useMemo(() => new THREE.MeshStandardMaterial({
     color: '#4a3020', roughness: 0.9, metalness: 0.0,
   }), []);

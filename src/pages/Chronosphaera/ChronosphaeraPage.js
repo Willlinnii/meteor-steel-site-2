@@ -565,7 +565,7 @@ function StageArrow({ items, currentId, onSelect, getId = x => x, getLabel = x =
   );
 }
 
-function RingToolbar({ ringForm, updateRingForm, ringMetal, updateRingMetal, ringLayout, updateRingLayout, ringMode, updateRingMode, ringZodiacMode, updateRingZodiacMode, ringActiveInput, ringActiveDate, ringActiveDateType, setRingActiveDateType, ringDates, ringDateDropOpen, setRingDateDropOpen, ringFormDropOpen, setRingFormDropOpen, ringMetalDropOpen, setRingMetalDropOpen, ringDatePickerRef, ringFormPickerRef, ringMetalPickerRef, ringBirthstone, ringFormConfig, handleRingDateChange, handleRingClear, updateJewelryConfig, navigate }) {
+function RingToolbar({ ringForm, updateRingForm, ringMetal, updateRingMetal, ringLayout, updateRingLayout, ringMode, updateRingMode, ringZodiacMode, updateRingZodiacMode, ringActiveInput, ringActiveDate, ringActiveDateType, setRingActiveDateType, ringDates, ringDateDropOpen, setRingDateDropOpen, ringFormDropOpen, setRingFormDropOpen, ringMetalDropOpen, setRingMetalDropOpen, ringDatePickerRef, ringFormPickerRef, ringMetalPickerRef, ringBirthstone, ringFormConfig, ringViewMode, setRingViewMode, handleRingDateChange, handleRingClear, updateJewelryConfig, navigate }) {
   return (
     <div className="chrono-ring-toolbar">
       <div className="chrono-ring-toolbar-inner">
@@ -660,6 +660,11 @@ function RingToolbar({ ringForm, updateRingForm, ringMetal, updateRingMetal, rin
         }}>
           <svg viewBox="0 0 24 24" width="18" height="18" fill="none"><path d="M6 2L3 7v13a1 1 0 001 1h16a1 1 0 001-1V7l-3-5H6z" stroke="#c9a961" strokeWidth="1.5" strokeLinejoin="round" /><line x1="3" y1="7" x2="21" y2="7" stroke="#c9a961" strokeWidth="1.5" /><path d="M16 11a4 4 0 01-8 0" stroke="#c9a961" strokeWidth="1.5" strokeLinecap="round" /></svg>
         </button>
+        <button className="chrono-ring-view-toggle"
+          title={ringViewMode === '2d' ? 'Switch to 3D' : 'Switch to 2D'}
+          onClick={() => setRingViewMode(ringViewMode === '2d' ? '3d' : '2d')}>
+          {ringViewMode === '2d' ? '3D' : '2D'}
+        </button>
       </div>
     </div>
   );
@@ -749,6 +754,7 @@ export default function ChronosphaeraPage() {
   const [artBookMonomythTab, setArtBookMonomythTab] = useState('overview');
 
   // Ring embed state
+  const [ringViewMode, setRingViewMode] = useState('3d');
   const [ringDates, setRingDates] = useState({ birthday: '', engagement: '', wedding: '', anniversary: '', secret: '', other: '' });
   const [ringActiveDateType, setRingActiveDateType] = useState('birthday');
   const [ringDateDropOpen, setRingDateDropOpen] = useState(false);
@@ -1089,7 +1095,8 @@ export default function ChronosphaeraPage() {
     const isStarlight = sub === '/fallen-starlight' || sub === '/story-of-stories';
     const isMono = sub === '/monomyth' || sub === '/meteor-steel';
     setShowCalendar(isCal || sub === '' || isStarlight || isMono); // root chronosphaera also shows calendar
-    if (!isCal && !isStarlight && !isMono && sub !== '') { setClockMode(prev => prev === null ? prev : null); }
+    const isRing = sub === '/ring';
+    if (!isCal && !isStarlight && !isMono && !isRing && sub !== '') { setClockMode(prev => prev === null ? prev : null); }
     if ((isCal || sub === '') && !selectedMonth) {
       setSelectedMonth(MONTHS[new Date().getMonth()]);
       setActiveMonthTab('stone');
@@ -1195,7 +1202,7 @@ export default function ChronosphaeraPage() {
   }, [mode, clearAllSelections, navigate]);
 
   const handleToggleBodyWheel = useCallback(() => {
-    if (mode !== 'chakra' && mode !== 'medicine-wheel') {
+    if (mode !== 'chakra' && mode !== 'medicine-wheel' && mode !== 'ring') {
       // off → body
       clearAllSelections();
       setMode('chakra');
@@ -1213,8 +1220,12 @@ export default function ChronosphaeraPage() {
       setShowCalendar(false);
       setClockMode(null);
       navigate('/chronosphaera/medicine-wheel');
+    } else if (mode === 'medicine-wheel') {
+      // medicine-wheel → ring
+      setMode('ring');
+      navigate('/chronosphaera/ring');
     } else {
-      // medicine-wheel → body
+      // ring → body
       clearAllSelections();
       setMode('chakra');
       setSelectedPlanet('Sun');
@@ -1256,18 +1267,6 @@ export default function ChronosphaeraPage() {
     }
   }, [mode, clearAllSelections, navigate]);
 
-  const handleToggleDodecahedron = useCallback(() => {
-    if (mode !== 'dodecahedron') {
-      clearAllSelections();
-      setMode('dodecahedron');
-      setDodecMode('stars');
-      navigate('/chronosphaera/dodecahedron');
-    } else {
-      // Exit dodecahedron mode
-      clearAllSelections();
-    }
-  }, [mode, clearAllSelections, navigate]);
-
   const handleToggleArtBook = useCallback(() => {
     const ARTBOOK_MODES = ['mountain', 'book'];
     if (mode !== 'artbook') {
@@ -1283,27 +1282,38 @@ export default function ChronosphaeraPage() {
     }
   }, [mode, clearAllSelections, navigate]);
 
-  const handleToggleClockRing = useCallback(() => {
-    if (!clockMode) {
-      // From body/chakra → enter clock
+  const handleToggleClockDodec = useCallback(() => {
+    const pClockMode = perspective.clockMode;
+    const pLayoutMode = perspective.centerModel === 'heliocentric' ? 'helio' : 'geo';
+    if (!clockMode && mode !== 'dodecahedron') {
+      // off → clock
       clearAllSelections();
       setMode('default');
-      setClockMode('12h');
-      setLayoutMode('geo');
+      setClockMode(pClockMode);
+      setLayoutMode(pLayoutMode);
       setShowCalendar(true);
       setSelectedMonth(MONTHS[new Date().getMonth()]);
       setActiveMonthTab('stone');
       navigate('/chronosphaera/calendar');
-    } else if (mode !== 'ring') {
-      // From clock → enter ring
-      setMode('ring');
-      navigate('/chronosphaera/ring');
+    } else if (mode !== 'dodecahedron') {
+      // clock → dodecahedron
+      setMode('dodecahedron');
+      setClockMode(null);
+      setShowCalendar(false);
+      setDodecMode('stars');
+      navigate('/chronosphaera/dodecahedron');
     } else {
-      // From ring → back to clock
+      // dodecahedron → clock
+      clearAllSelections();
       setMode('default');
+      setClockMode(pClockMode);
+      setLayoutMode(pLayoutMode);
+      setShowCalendar(true);
+      setSelectedMonth(MONTHS[new Date().getMonth()]);
+      setActiveMonthTab('stone');
       navigate('/chronosphaera/calendar');
     }
-  }, [clockMode, mode, clearAllSelections, navigate]);
+  }, [clockMode, mode, clearAllSelections, navigate, perspective.clockMode, perspective.centerModel]);
 
   const handleRingDateChange = useCallback((e) => {
     const val = e.target.value;
@@ -1319,21 +1329,17 @@ export default function ChronosphaeraPage() {
   const handleToggle3D = useCallback((value) => {
     if (value === 'vr') {
       const isMobile = /Mobi|Android|iPad|iPhone|iPod/i.test(navigator.userAgent);
-      if (mode === 'ring') {
-        navigate('/ring', isMobile ? { state: { autoAR: true } } : undefined);
-      } else {
-        if (!isMobile) {
-          alert('VR/AR mode is available on mobile devices — open this page on your phone or tablet.');
-          return;
-        }
-        navigate('/chronosphaera/vr', { state: { autoAR: true } });
+      if (!isMobile) {
+        alert('VR/AR mode is available on mobile devices — open this page on your phone or tablet.');
+        return;
       }
+      navigate('/chronosphaera/vr', { state: { autoAR: true } });
     } else if (value === '3d') {
       setView3D(true);
     } else {
       setView3D(false);
     }
-  }, [navigate, mode]);
+  }, [navigate]);
 
   const handleSelectMonomythModel = useCallback((theoristKey) => {
     const modelId = THEORIST_TO_MODEL[theoristKey];
@@ -1638,7 +1644,6 @@ export default function ChronosphaeraPage() {
     setActiveTab('overview');
     setArtBookMonomythTab('overview');
     setArtBookPanelCollapsed(false);
-    setTimeout(() => artBookContentRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
   }, [trackElement]);
 
   const handleArtBookSignSelect = useCallback((sign) => {
@@ -1648,7 +1653,6 @@ export default function ChronosphaeraPage() {
     setSelectedMonth(null); setVideoUrl(null); setPersonaChatOpen(null);
     setArtBookMonomythTab('overview');
     setArtBookPanelCollapsed(false);
-    setTimeout(() => artBookContentRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
   }, [trackElement]);
 
   const handleArtBookGemSelect = useCallback((sel) => {
@@ -1660,7 +1664,6 @@ export default function ChronosphaeraPage() {
     setActiveCulture('Vedic');
     setArtBookMonomythTab('overview');
     setArtBookPanelCollapsed(false);
-    setTimeout(() => artBookContentRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
   }, [trackElement]);
 
   let wheelAlignmentData = null;
@@ -1864,7 +1867,7 @@ export default function ChronosphaeraPage() {
           )}
         </div>
       )}
-      {showRing && (<div className="chrono-ring-layer"><Suspense fallback={<div className="chrono-empty">Loading Ring...</div>}>{view3D ? (<RingSceneEmbed birthDate={ringActiveDate} selectedPlanet={ringSelectedPlanet} onSelectPlanet={(p) => setRingSelectedPlanet(ringSelectedPlanet === p ? null : p)} selectedCardinal={ringSelectedCardinal} onSelectCardinal={setRingSelectedCardinal} mode={ringMode} zodiacMode={ringZodiacMode} birthstoneKey={ringBirthstone?.key || null} metal={ringMetal} form={ringForm} layout={ringLayout} />) : (<RingDiagram2D birthDate={ringActiveDate} mode={ringMode} zodiacMode={ringZodiacMode} selectedPlanet={ringSelectedPlanet} onSelectPlanet={(p) => setRingSelectedPlanet(ringSelectedPlanet === p ? null : p)} hoveredPlanet={null} onHoverPlanet={() => {}} selectedSign={null} onSelectSign={() => {}} selectedCardinal={ringSelectedCardinal} onSelectCardinal={setRingSelectedCardinal} />)}</Suspense><RingToolbar ringForm={ringForm} updateRingForm={updateRingForm} ringMetal={ringMetal} updateRingMetal={updateRingMetal} ringLayout={ringLayout} updateRingLayout={updateRingLayout} ringMode={ringMode} updateRingMode={updateRingMode} ringZodiacMode={ringZodiacMode} updateRingZodiacMode={updateRingZodiacMode} ringActiveInput={ringActiveInput} ringActiveDate={ringActiveDate} ringActiveDateType={ringActiveDateType} setRingActiveDateType={setRingActiveDateType} ringDates={ringDates} ringDateDropOpen={ringDateDropOpen} setRingDateDropOpen={setRingDateDropOpen} ringFormDropOpen={ringFormDropOpen} setRingFormDropOpen={setRingFormDropOpen} ringMetalDropOpen={ringMetalDropOpen} setRingMetalDropOpen={setRingMetalDropOpen} ringDatePickerRef={ringDatePickerRef} ringFormPickerRef={ringFormPickerRef} ringMetalPickerRef={ringMetalPickerRef} ringBirthstone={ringBirthstone} ringFormConfig={ringFormConfig} handleRingDateChange={handleRingDateChange} handleRingClear={handleRingClear} updateJewelryConfig={updateJewelryConfig} navigate={navigate} /></div>)}
+      {showRing && (<div className="chrono-ring-layer"><Suspense fallback={<div className="chrono-empty">Loading Ring...</div>}>{ringViewMode === '3d' ? (<RingSceneEmbed birthDate={ringActiveDate} selectedPlanet={ringSelectedPlanet} onSelectPlanet={(p) => setRingSelectedPlanet(ringSelectedPlanet === p ? null : p)} selectedCardinal={ringSelectedCardinal} onSelectCardinal={setRingSelectedCardinal} mode={ringMode} zodiacMode={ringZodiacMode} birthstoneKey={ringBirthstone?.key || null} metal={ringMetal} form={ringForm} layout={ringLayout} />) : (<RingDiagram2D birthDate={ringActiveDate} mode={ringMode} zodiacMode={ringZodiacMode} selectedPlanet={ringSelectedPlanet} onSelectPlanet={(p) => setRingSelectedPlanet(ringSelectedPlanet === p ? null : p)} hoveredPlanet={null} onHoverPlanet={() => {}} selectedSign={null} onSelectSign={() => {}} selectedCardinal={ringSelectedCardinal} onSelectCardinal={setRingSelectedCardinal} />)}</Suspense><RingToolbar ringForm={ringForm} updateRingForm={updateRingForm} ringMetal={ringMetal} updateRingMetal={updateRingMetal} ringLayout={ringLayout} updateRingLayout={updateRingLayout} ringMode={ringMode} updateRingMode={updateRingMode} ringZodiacMode={ringZodiacMode} updateRingZodiacMode={updateRingZodiacMode} ringActiveInput={ringActiveInput} ringActiveDate={ringActiveDate} ringActiveDateType={ringActiveDateType} setRingActiveDateType={setRingActiveDateType} ringDates={ringDates} ringDateDropOpen={ringDateDropOpen} setRingDateDropOpen={setRingDateDropOpen} ringFormDropOpen={ringFormDropOpen} setRingFormDropOpen={setRingFormDropOpen} ringMetalDropOpen={ringMetalDropOpen} setRingMetalDropOpen={setRingMetalDropOpen} ringDatePickerRef={ringDatePickerRef} ringFormPickerRef={ringFormPickerRef} ringMetalPickerRef={ringMetalPickerRef} ringBirthstone={ringBirthstone} ringFormConfig={ringFormConfig} ringViewMode={ringViewMode} setRingViewMode={setRingViewMode} handleRingDateChange={handleRingDateChange} handleRingClear={handleRingClear} updateJewelryConfig={updateJewelryConfig} navigate={navigate} /></div>)}
       {showDodecahedron && (
         <div className="chrono-dodec-layer">
           <Suspense fallback={<div className="chrono-empty">Loading Dodecahedron...</div>}>
@@ -1965,7 +1968,7 @@ export default function ChronosphaeraPage() {
             onSelectMonth={(m) => { if (m) trackElement(`chronosphaera.calendar.month.${m}`); setSelectedMonth(m); setActiveMonthTab('stone'); if (m) { setSelectedSign(null); setSelectedCardinal(null); setSelectedEarth(null); } }}
             clockMode={clockMode}
             layoutMode={layoutMode}
-            onEnterClock={handleToggleClockRing}
+            onEnterClock={handleToggleClockDodec}
             showRing={showRing}
             compassHeading={compass.active ? compass.heading : null}
             compassSupported={compass.supported}
@@ -2054,12 +2057,10 @@ export default function ChronosphaeraPage() {
             }
             showDodecahedron={showDodecahedron}
             dodecMode={dodecMode}
-            onToggleDodecahedron={handleToggleDodecahedron}
+
             showArtBook={showArtBook}
             artBookMode={artBookMode}
             onToggleArtBook={handleToggleArtBook}
-            view3D={view3D}
-            onToggle3D={handleToggle3D}
             targetDate={targetDate}
           />
         )}
