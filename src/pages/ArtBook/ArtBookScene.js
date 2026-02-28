@@ -1281,11 +1281,41 @@ function GoldenAppleTree() {
   const canopyGeo = useMemo(() => new THREE.SphereGeometry(0.4, 12, 10), []);
   const appleGeo = useMemo(() => new THREE.SphereGeometry(0.06, 8, 6), []);
 
+  // Snake coiled around the trunk
+  const snakeGeo = useMemo(() => {
+    const pts = [];
+    const coils = 2.5;
+    const segments = 60;
+    for (let i = 0; i <= segments; i++) {
+      const t = i / segments;
+      const angle = t * coils * Math.PI * 2;
+      const r = 0.065 + t * 0.005; // slightly wider than trunk
+      const y = t * 0.5 + 0.05; // climb from near trunk base to near canopy
+      pts.push(new THREE.Vector3(Math.cos(angle) * r, y, Math.sin(angle) * r));
+    }
+    const curve = new THREE.CatmullRomCurve3(pts);
+    return new THREE.TubeGeometry(curve, 48, 0.012, 6, false);
+  }, []);
+  const snakeHeadGeo = useMemo(() => new THREE.SphereGeometry(0.02, 6, 5), []);
+  // Head position: top of coil, slightly raised and outward
+  const snakeHeadPos = useMemo(() => {
+    const endAngle = 2.5 * Math.PI * 2;
+    const r = 0.07;
+    return [Math.cos(endAngle) * r * 1.3, 0.57, Math.sin(endAngle) * r * 1.3];
+  }, []);
+
   return (
     <group position={[0, 0.075, 0]}>
       {/* Trunk */}
       <mesh geometry={trunkGeo} position={[0, 0.3, 0]}>
         <meshStandardMaterial color="#5a3a1a" roughness={0.9} metalness={0.0} />
+      </mesh>
+      {/* Snake coiled around trunk */}
+      <mesh geometry={snakeGeo} position={[0, 0, 0]}>
+        <meshStandardMaterial color="#2a4a2a" roughness={0.7} metalness={0.15} emissive="#1a3a1a" emissiveIntensity={0.1} />
+      </mesh>
+      <mesh geometry={snakeHeadGeo} position={snakeHeadPos}>
+        <meshStandardMaterial color="#2a4a2a" roughness={0.6} metalness={0.2} emissive="#1a3a1a" emissiveIntensity={0.1} />
       </mesh>
       {/* Canopy */}
       <mesh geometry={canopyGeo} position={[0, 0.75, 0]}>

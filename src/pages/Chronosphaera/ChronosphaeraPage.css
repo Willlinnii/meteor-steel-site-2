@@ -283,14 +283,14 @@
   z-index: 1;
 }
 
-/* ===== BUTTON ROW (fixed bottom-right, stacked above Atlas chat) ===== */
+/* ===== BUTTON ROW (fixed bottom-right — hidden, modes accessible via routes/nav) ===== */
 
 .orbital-btn-row {
+  display: none;
   position: fixed;
   bottom: 72px;
   right: 24px;
   z-index: 999;
-  display: flex;
   flex-direction: column;
   gap: 8px;
   align-items: center;
