@@ -61,7 +61,7 @@ const DEFAULT_DODEC_R_MM = 34;
 
 export { MODE_CYCLE, MODE_LABELS };
 
-export default function DodecahedronPage({ embedded, externalMode }) {
+export default function DodecahedronPage({ embedded, externalMode, onModeChange }) {
   const navigate = useNavigate();
   const [selectedFace, setSelectedFace] = useState(null);
   const [lit, setLit] = useState(true);
@@ -286,8 +286,8 @@ export default function DodecahedronPage({ embedded, externalMode }) {
 
       <button
         className={`dodec-mode-btn ${mode !== 'stars' ? 'dodec-mode-active' : ''} dodec-mode-${mode}`}
-        onClick={cycleMode}
-        aria-label={`Current: ${MODE_LABELS[mode]}. Click to switch.`}
+        onClick={() => {}}
+        aria-label={`Current: ${MODE_LABELS[mode]}.`}
       >
         <span className="dodec-mode-tooltip">{MODE_LABELS[mode]}</span>
         <svg viewBox="0 0 40 40" width="24" height="24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -498,8 +498,9 @@ export default function DodecahedronPage({ embedded, externalMode }) {
           <button
             className="dodec-store-btn"
             onClick={() => navigate('/store?highlight=dice')}
+            title="View in store"
           >
-            Store
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none"><path d="M6 2L3 7v13a1 1 0 001 1h16a1 1 0 001-1V7l-3-5H6z" stroke="#c9a961" strokeWidth="1.5" strokeLinejoin="round" /><line x1="3" y1="7" x2="21" y2="7" stroke="#c9a961" strokeWidth="1.5" /><path d="M16 11a4 4 0 01-8 0" stroke="#c9a961" strokeWidth="1.5" strokeLinecap="round" /></svg>
           </button>
         </div>
       )}
@@ -510,6 +511,7 @@ export default function DodecahedronPage({ embedded, externalMode }) {
         calcOpen={calcOpen}
         onCalcToggle={handleCalcToggle}
         onSolutionSelect={handleSolutionSelect}
+        onModeChange={onModeChange}
       />
     </div>
   );

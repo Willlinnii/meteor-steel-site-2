@@ -543,25 +543,19 @@
 }
 
 .dodec-store-btn {
-  padding: 0.5rem 1.2rem;
-  background: rgba(10, 10, 30, 0.65);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: rgba(201, 169, 97, 0.08);
   border: 1px solid rgba(201, 169, 97, 0.3);
-  border-radius: 999px;
-  color: #c9a961;
-  font-family: inherit;
-  font-size: 0.82rem;
-  font-weight: 600;
+  padding: 4px;
+  border-radius: 6px;
   cursor: pointer;
-  transition: border-color 0.3s, box-shadow 0.3s, color 0.3s;
-  letter-spacing: 0.04em;
+  display: flex;
+  align-items: center;
+  transition: border-color 0.3s, background 0.3s;
 }
 
 .dodec-store-btn:hover {
-  border-color: rgba(201, 169, 97, 0.7);
-  box-shadow: 0 0 10px rgba(201, 169, 97, 0.25);
-  color: #e0c878;
+  border-color: rgba(201, 169, 97, 0.6);
+  background: rgba(201, 169, 97, 0.15);
 }
 
 .dodec-roll-btn:hover:not(:disabled) {
@@ -621,6 +615,41 @@
 
 .dodec-content-handle:hover .dodec-content-handle-bar {
   background: rgba(201, 169, 97, 0.6);
+}
+
+/* ── Mode Selector (Lantern / Roman / Dice) ───────────────────────── */
+
+.dodec-mode-selector {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0 1.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.dodec-mode-sel-btn {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 999px;
+  padding: 0.35rem 1.1rem;
+  color: #7a7a8a;
+  font-family: inherit;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: color 0.25s, border-color 0.25s, background 0.25s;
+}
+
+.dodec-mode-sel-btn:hover {
+  color: #b0a090;
+  border-color: rgba(201, 169, 97, 0.3);
+}
+
+.dodec-mode-sel-btn.dodec-mode-sel-active {
+  color: #c9a961;
+  border-color: rgba(201, 169, 97, 0.5);
+  background: rgba(201, 169, 97, 0.08);
 }
 
 .dodec-content-heading {
@@ -964,6 +993,11 @@
     padding: 0 1rem;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
+  }
+
+  .dodec-mode-sel-btn {
+    font-size: 0.72rem;
+    padding: 0.3rem 0.85rem;
   }
 
   .dodec-content-tab {

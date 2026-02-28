@@ -133,6 +133,14 @@ function DodecGallery() {
   );
 }
 
+// ── Mode selector (top-level buttons) ────────────────────────────────
+
+const MODE_SELECTOR = [
+  { id: 'stars', label: 'Lantern' },
+  { id: 'roman', label: 'Roman' },
+  { id: 'die',   label: 'Dice' },
+];
+
 // ── Per-mode configuration ──────────────────────────────────────────
 
 const MODE_CONFIG = {
@@ -823,7 +831,7 @@ const TAB_COMPONENTS = {
 
 // ── Main component ──────────────────────────────────────────────────
 
-export default function DodecahedronContent({ mode = 'stars', calcOpen, onCalcToggle, onSolutionSelect }) {
+export default function DodecahedronContent({ mode = 'stars', calcOpen, onCalcToggle, onSolutionSelect, onModeChange }) {
   const config = MODE_CONFIG[mode] || MODE_CONFIG.stars;
   const [activeTab, setActiveTab] = useState(config.tabs[0].id);
 
@@ -858,6 +866,18 @@ export default function DodecahedronContent({ mode = 'stars', calcOpen, onCalcTo
     <div className="dodec-content">
       <div className="dodec-content-handle">
         <div className="dodec-content-handle-bar" />
+      </div>
+
+      <div className="dodec-mode-selector">
+        {MODE_SELECTOR.map(m => (
+          <button
+            key={m.id}
+            className={`dodec-mode-sel-btn${mode === m.id ? ' dodec-mode-sel-active' : ''}`}
+            onClick={() => onModeChange?.(m.id)}
+          >
+            {m.label}
+          </button>
+        ))}
       </div>
 
       <h2 className="dodec-content-heading">{config.heading}</h2>
