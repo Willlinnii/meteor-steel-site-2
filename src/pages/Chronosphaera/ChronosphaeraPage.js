@@ -35,7 +35,7 @@ import fallenStarlightData from '../../data/fallenStarlight.json';
 import storyOfStoriesData from '../../data/storyOfStoriesData';
 import DevelopmentPanel from '../../components/DevelopmentPanel';
 import ChapterAudioPlayer, { CHAPTER_AUDIO } from '../../components/ChapterAudioPlayer';
-import { useYBRHeader, useStoryForge } from '../../App';
+import { useYBRHeader, useStoryForge, useXRMode } from '../../App';
 import { useAtlasContext } from '../../contexts/AtlasContext';
 import resolveBodyPosition from '../../data/resolveBodyPosition';
 import { CHAKRA_ORDERINGS } from '../../data/chronosphaeraBodyPositions';
@@ -731,6 +731,7 @@ export default function ChronosphaeraPage() {
     const params = new URLSearchParams(location.search);
     return params.get('view') === '3d';
   });
+  const [mobileMenuOpen3D, setMobileMenuOpen3D] = useState(() => typeof window === 'undefined' || window.innerWidth > 600);
   // Single mode enum replaces 8 separate boolean/enum state variables
   const [mode, setMode] = useState(() => {
     if (location.pathname.endsWith('/medicine-wheel') && hasPurchase('medicine-wheel')) return 'medicine-wheel';
@@ -858,6 +859,21 @@ export default function ChronosphaeraPage() {
 
   // Page visit tracking
   useEffect(() => { trackElement('chronosphaera.page.visited'); }, [trackElement]);
+
+  // XR Mode: auto-enable 3D when global xrMode is on
+  const { xrMode } = useXRMode();
+  useEffect(() => { if (xrMode) setView3D(true); }, [xrMode]);
+
+  // XR Mode: auto-redirect to VR page on headset
+  useEffect(() => {
+    if (!xrMode) return;
+    const isHeadset = /Quest|Pico|Vive|XR/i.test(navigator.userAgent);
+    if (isHeadset && navigator.xr) {
+      navigator.xr.isSessionSupported('immersive-vr').then(ok => {
+        if (ok) navigate('/chronosphaera/vr', { replace: true });
+      }).catch(() => {});
+    }
+  }, [xrMode, navigate]);
 
   // Reset active tab and auto-switch clock when perspective changes
   useEffect(() => {
@@ -1158,6 +1174,7 @@ export default function ChronosphaeraPage() {
   }, [location.pathname]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleColumnClick = useCallback((columnKey) => {
+    trackElement(`chronosphaera.column.${columnKey}`);
     const sequence = perspective.getColumnSequence(columnKey);
     setColumnSequencePopup({
       columnKey,
@@ -1171,6 +1188,7 @@ export default function ChronosphaeraPage() {
   }, [perspective.getColumnSequence, perspective.activeTradition, perspective.activePerspective, perspective.orderLabel, perspective.displayReversed]);
 
   const handleYBRToggle = useCallback(() => {
+    trackElement('chronosphaera.ybr.toggle');
     if (ybr.active) {
       ybr.exitGame();
       navigate('/chronosphaera');
@@ -1178,11 +1196,12 @@ export default function ChronosphaeraPage() {
       ybr.startGame();
       navigate('/chronosphaera/yellow-brick-road');
     }
-  }, [ybr, navigate]);
+  }, [ybr, trackElement, navigate]);
 
   const handleToggleMonomyth = useCallback(() => {
     if (mode !== 'monomyth' && mode !== 'meteor-steel') {
       // Enter monomyth mode
+      trackElement('chronosphaera.mode.monomyth');
       clearAllSelections();
       setMode('monomyth');
       setClockMode('24h');
@@ -1191,6 +1210,7 @@ export default function ChronosphaeraPage() {
       navigate('/chronosphaera/monomyth');
     } else if (mode === 'monomyth') {
       // Toggle to meteor steel
+      trackElement('chronosphaera.mode.meteor-steel');
       setMode('meteor-steel');
       setSelectedMonomythStage(null);
       setMonomythModel(null);
@@ -1200,6 +1220,7 @@ export default function ChronosphaeraPage() {
       navigate('/chronosphaera/meteor-steel');
     } else {
       // Toggle back to monomyth
+      trackElement('chronosphaera.mode.monomyth');
       setMode('monomyth');
       setSelectedMonomythStage(null);
       setMonomythModel(null);
@@ -1208,11 +1229,12 @@ export default function ChronosphaeraPage() {
       setVideoUrl(null); setPersonaChatOpen(null);
       navigate('/chronosphaera/monomyth');
     }
-  }, [mode, clearAllSelections, navigate]);
+  }, [mode, clearAllSelections, trackElement, navigate]);
 
   const handleToggleBodyWheel = useCallback(() => {
     if (mode !== 'chakra' && mode !== 'medicine-wheel' && mode !== 'ring') {
       // off → body
+      trackElement('chronosphaera.mode.body');
       clearAllSelections();
       setMode('chakra');
       setSelectedPlanet('Sun');
@@ -1231,10 +1253,12 @@ export default function ChronosphaeraPage() {
       navigate('/chronosphaera/medicine-wheel');
     } else if (mode === 'medicine-wheel') {
       // medicine-wheel → ring
+      trackElement('chronosphaera.mode.ring');
       setMode('ring');
       navigate('/chronosphaera/ring');
     } else {
       // ring → body
+      trackElement('chronosphaera.mode.body');
       clearAllSelections();
       setMode('chakra');
       setSelectedPlanet('Sun');
@@ -1249,6 +1273,7 @@ export default function ChronosphaeraPage() {
   const handleToggleStarlight = useCallback(() => {
     if (mode !== 'fallen-starlight' && mode !== 'story-of-stories') {
       // Enter Fallen Starlight mode
+      trackElement('chronosphaera.mode.fallen-starlight');
       clearAllSelections();
       setMode('fallen-starlight');
       setClockMode('24h');
@@ -1257,6 +1282,7 @@ export default function ChronosphaeraPage() {
       navigate('/chronosphaera/fallen-starlight');
     } else if (mode === 'fallen-starlight') {
       // Switch to Story of Stories
+      trackElement('chronosphaera.mode.story-of-stories');
       setMode('story-of-stories');
       setClockMode('12h');
       setLayoutMode('helio');
@@ -1266,6 +1292,7 @@ export default function ChronosphaeraPage() {
       navigate('/chronosphaera/story-of-stories');
     } else {
       // Back to Fallen Starlight
+      trackElement('chronosphaera.mode.fallen-starlight');
       setMode('fallen-starlight');
       setClockMode('24h');
       setLayoutMode('geo');
@@ -1274,11 +1301,12 @@ export default function ChronosphaeraPage() {
       setStarlightSectionId(null);
       navigate('/chronosphaera/fallen-starlight');
     }
-  }, [mode, clearAllSelections, navigate]);
+  }, [mode, clearAllSelections, trackElement, navigate]);
 
   const handleToggleArtBook = useCallback(() => {
     const ARTBOOK_MODES = ['mountain', 'book'];
     if (mode !== 'artbook') {
+      trackElement('chronosphaera.mode.artbook');
       clearAllSelections();
       setMode('artbook');
       setArtBookMode('book');
@@ -1286,16 +1314,19 @@ export default function ChronosphaeraPage() {
     } else {
       setArtBookMode(prev => {
         const idx = ARTBOOK_MODES.indexOf(prev);
-        return ARTBOOK_MODES[(idx + 1) % ARTBOOK_MODES.length];
+        const next = ARTBOOK_MODES[(idx + 1) % ARTBOOK_MODES.length];
+        trackElement(`chronosphaera.artbook.mode.${next}`);
+        return next;
       });
     }
-  }, [mode, clearAllSelections, navigate]);
+  }, [mode, clearAllSelections, trackElement, navigate]);
 
   const handleToggleClockDodec = useCallback(() => {
     const pClockMode = perspective.clockMode;
     const pLayoutMode = perspective.centerModel === 'heliocentric' ? 'helio' : 'geo';
     if (!clockMode && mode !== 'dodecahedron') {
       // off → clock
+      trackElement('chronosphaera.mode.calendar');
       clearAllSelections();
       setMode('default');
       setClockMode(pClockMode);
@@ -1306,6 +1337,7 @@ export default function ChronosphaeraPage() {
       navigate('/chronosphaera/calendar');
     } else if (mode !== 'dodecahedron') {
       // clock → dodecahedron
+      trackElement('chronosphaera.mode.dodecahedron');
       setMode('dodecahedron');
       setClockMode(null);
       setShowCalendar(false);
@@ -1316,6 +1348,7 @@ export default function ChronosphaeraPage() {
       }, 100);
     } else {
       // dodecahedron → clock
+      trackElement('chronosphaera.mode.calendar');
       clearAllSelections();
       setMode('default');
       setClockMode(pClockMode);
@@ -1325,7 +1358,7 @@ export default function ChronosphaeraPage() {
       setActiveMonthTab('stone');
       navigate('/chronosphaera/calendar');
     }
-  }, [clockMode, mode, clearAllSelections, navigate, perspective.clockMode, perspective.centerModel]);
+  }, [clockMode, mode, clearAllSelections, trackElement, navigate, perspective.clockMode, perspective.centerModel]);
 
   const handleRingDateChange = useCallback((e) => {
     const val = e.target.value;
@@ -1338,7 +1371,7 @@ export default function ChronosphaeraPage() {
     updateJewelryConfig(ringForm, { date: '' });
   }, [ringActiveDateType, ringForm, updateJewelryConfig]);
 
-  const handleToggle3D = useCallback(() => setView3D(v => !v), []);
+  const handleToggle3D = useCallback(() => { trackElement('chronosphaera.view.3d-toggle'); setView3D(v => !v); }, [trackElement]);
 
   const handleSelectMonomythModel = useCallback((theoristKey) => {
     const modelId = THEORIST_TO_MODEL[theoristKey];
@@ -1753,7 +1786,7 @@ export default function ChronosphaeraPage() {
                         videoActive={!!videoUrl}
                         onToggleVideo={() => {
                           if (videoUrl) { setVideoUrl(null); }
-                          else { setVideoUrl(PLANET_PLAYLISTS[selectedPlanet]); }
+                          else { trackElement(`chronosphaera.video.planet.${selectedPlanet}`); setVideoUrl(PLANET_PLAYLISTS[selectedPlanet]); }
                         }}
                         onTogglePersonaChat={() => togglePersonaChat('planet', selectedPlanet)}
                         personaChatActive={personaChatOpen === `planet:${selectedPlanet}`}
@@ -1814,7 +1847,7 @@ export default function ChronosphaeraPage() {
                           <button
                             className={`metal-tab playlist-tab${videoUrl ? ' active' : ''}`}
                             title={`Watch ${selectedSign} playlist`}
-                            onClick={() => { if (videoUrl) { setVideoUrl(null); } else { setVideoUrl(ZODIAC_PLAYLISTS[selectedSign]); } }}
+                            onClick={() => { if (videoUrl) { setVideoUrl(null); } else { trackElement(`chronosphaera.video.zodiac.${selectedSign}`); setVideoUrl(ZODIAC_PLAYLISTS[selectedSign]); } }}
                           >
                             {videoUrl ? '\u25A0' : '\u25B6'}
                           </button>
@@ -1909,6 +1942,7 @@ export default function ChronosphaeraPage() {
               compassHeading={compass.active ? compass.heading : null}
               clockMode={clockMode}
               zodiacMode={zodiacMode}
+              layoutMode={layoutMode}
               showClock={showClock3D}
               selectedPlanet={selectedPlanet}
               onSelectPlanet={(p) => { trackElement(`chronosphaera.planet.${p}`); setSelectedPlanet(p); setSelectedSign(null); setSelectedCardinal(null); setSelectedEarth(null); setSelectedMonth(null); setVideoUrl(null); setPersonaChatOpen(null); if (chakraViewMode) setActiveTab('body'); if (showMonomyth) { setSelectedMonomythStage(null); setMonomythModel(null); } setSelectedStarlightStage(null); setSelectedConstellation(null); }}
@@ -1952,6 +1986,7 @@ export default function ChronosphaeraPage() {
               starlightStages={showStoryOfStories ? STORY_OF_STORIES_STAGES : FALLEN_STARLIGHT_STAGES}
               selectedStarlightStage={selectedStarlightStage}
               onSelectStarlightStage={(id) => {
+                if (id) trackElement(`chronosphaera.fallen-starlight.stage.${id}`);
                 setSelectedStarlightStage(selectedStarlightStage === id ? null : id);
                 setStarlightSectionId(null);
                 setSelectedPlanet(null);
@@ -2051,6 +2086,7 @@ export default function ChronosphaeraPage() {
             starlightStages={showStoryOfStories ? STORY_OF_STORIES_STAGES : FALLEN_STARLIGHT_STAGES}
             selectedStarlightStage={selectedStarlightStage}
             onSelectStarlightStage={(id) => {
+              if (id) trackElement(`chronosphaera.fallen-starlight.stage.${id}`);
               setSelectedStarlightStage(selectedStarlightStage === id ? null : id);
               setStarlightSectionId(null);
               setSelectedPlanet(null);
@@ -2093,6 +2129,47 @@ export default function ChronosphaeraPage() {
           />
         )}
       </div>
+
+      {/* Mode-switch button stack for 3D view (normally lives inside OrbitalDiagram in 2D) */}
+      {view3D && (
+        <div className="orbital-btn-row" data-expanded={mobileMenuOpen3D || undefined}>
+          <button className="mobile-mode-toggle" onClick={() => setMobileMenuOpen3D(prev => !prev)} title={mobileMenuOpen3D ? 'Collapse buttons' : 'Show mode buttons'}>
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              {mobileMenuOpen3D ? <path d="M18 6L6 18M6 6l12 12" /> : <><circle cx="12" cy="5" r="1.5" fill="currentColor" stroke="none" /><circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none" /><circle cx="12" cy="19" r="1.5" fill="currentColor" stroke="none" /></>}
+            </svg>
+          </button>
+          <button className={`clock-toggle${clockMode ? ' active' : ''}${showDodecahedron ? ' dodec' : ''}`} onClick={handleToggleClockDodec} title={showDodecahedron ? 'Dodecahedron — click for clock' : clockMode ? 'Clock view — click for dodecahedron' : 'Show clock view'}>
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              {showDodecahedron ? <><path d="M12 3 L21 9.5 L18 20 L6 20 L3 9.5 Z" fill="white" fillOpacity="0.15" strokeWidth="1.6" /><path d="M12 3 L12 10 M21 9.5 L15 11.5 M18 20 L14 14 M6 20 L10 14 M3 9.5 L9 11.5" strokeWidth="0.7" opacity="0.4" /></> : <><circle cx="12" cy="12" r="9" /><path d="M12 6 L12 12 L16 14" />{clockMode && <circle cx="12" cy="12" r="2.5" fill={clockMode === '12h' ? '#f0c040' : '#4a9bd9'} stroke="none" />}</>}
+            </svg>
+          </button>
+          <button className={`body-wheel-toggle${chakraViewMode ? ' active body' : ''}${showMedicineWheel ? ' active wheel' : ''}${showRing ? ' active ring' : ''}`} onClick={handleToggleBodyWheel} title={showRing ? 'Ring — click for body view' : showMedicineWheel ? 'Medicine wheel — click for ring' : chakraViewMode ? 'Body view — click for medicine wheel' : 'Show body viewer'}>
+            {showRing ? (
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><ellipse cx="12" cy="12" rx="7" ry="7" /><ellipse cx="12" cy="5.5" rx="2.5" ry="1.5" fill="currentColor" stroke="none" /></svg>
+            ) : showMedicineWheel ? (
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="9" /><line x1="12" y1="3" x2="12" y2="21" /><line x1="3" y1="12" x2="21" y2="12" /></svg>
+            ) : (
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" stroke="none"><circle cx="12" cy="4" r="2.5" /><path d="M12 8 C9 8 7 10 7 12 L7 16 L9.5 16 L9.5 23 L14.5 23 L14.5 16 L17 16 L17 12 C17 10 15 8 12 8Z" /></svg>
+            )}
+          </button>
+          {hasSubscription('monomyth') && (
+            <button className={`monomyth-toggle${showMonomyth ? ' active' : ''}${showCycles ? ' cycles' : ''}${showMeteorSteel ? ' steel' : ''}`} onClick={handleToggleMonomyth} title={showMeteorSteel ? 'Meteor steel — click for monomyth' : showMonomyth ? 'Monomyth — click for meteor steel' : 'Show monomyth journey ring'} style={showCycles && !showMeteorSteel ? { color: '#6ecf8a' } : undefined}>
+              {showMeteorSteel ? (
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" stroke="none"><path d="M1 1 L10 12 L6.5 10.5 Z" opacity="0.55" /><path d="M4.5 0 L11 11 L8.5 12.5 Z" opacity="0.75" /><circle cx="15" cy="15" r="5.5" /><path d="M9.5 19 C11.5 22.5 18.5 22.5 21.5 17" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" /></svg>
+              ) : (
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="9" /><path d="M12 3 L14 6 L10 6 Z" fill="currentColor" stroke="none" /></svg>
+              )}
+            </button>
+          )}
+          <button className={`artbook-nav-toggle${showArtBook ? ` active artbook-${artBookMode || 'mountain'}` : ''}`} onClick={handleToggleArtBook} title={showArtBook ? `${artBookMode === 'mountain' ? 'Mountain' : 'Book'} — click to toggle` : 'Art Book'}>
+            {artBookMode === 'book' && showArtBook ? (
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M2 16 L10 4 L18 16 Z" /><path d="M6 10 L10 6 L14 10" /></svg>
+            ) : (
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M3 3 C3 3 5 2 10 2 C15 2 17 3 17 3 L17 17 C17 17 15 16 10 16 C5 16 3 17 3 17 Z" /><path d="M10 2 L10 16" /></svg>
+            )}
+          </button>
+        </div>
+      )}
 
       <div key={`${mode}|${selectedPlanet}|${selectedSign}|${selectedCardinal}|${selectedEarth}|${selectedMonth}|${selectedMonomythStage}|${selectedStarlightStage}|${selectedConstellation}|${selectedWheelItem}|${selectedBeyondRing}`} className="chrono-content-fade">
       {ybr.active ? (
@@ -2164,7 +2241,7 @@ export default function ChronosphaeraPage() {
                             <button
                               key={section.id}
                               className={`metal-tab${starlightSectionId === section.id ? ' active' : ''}`}
-                              onClick={() => setStarlightSectionId(starlightSectionId === section.id ? null : section.id)}
+                              onClick={() => { if (starlightSectionId !== section.id) trackElement(`chronosphaera.fallen-starlight.section.${section.id}`); setStarlightSectionId(starlightSectionId === section.id ? null : section.id); }}
                             >
                               {section.label}
                             </button>
@@ -2176,7 +2253,7 @@ export default function ChronosphaeraPage() {
                             <button
                               key={section.id}
                               className={`metal-tab${starlightSectionId === section.id ? ' active' : ''}`}
-                              onClick={() => setStarlightSectionId(starlightSectionId === section.id ? null : section.id)}
+                              onClick={() => { if (starlightSectionId !== section.id) trackElement(`chronosphaera.fallen-starlight.section.${section.id}`); setStarlightSectionId(starlightSectionId === section.id ? null : section.id); }}
                             >
                               {section.label}
                             </button>
@@ -2307,7 +2384,7 @@ export default function ChronosphaeraPage() {
                         <button
                           className={`metal-tab playlist-tab${videoUrl ? ' active' : ''}`}
                           title={`Watch ${selectedSign} playlist`}
-                          onClick={() => { if (videoUrl) { setVideoUrl(null); } else { setVideoUrl(ZODIAC_PLAYLISTS[selectedSign]); } }}
+                          onClick={() => { if (videoUrl) { setVideoUrl(null); } else { trackElement(`chronosphaera.video.zodiac.${selectedSign}`); setVideoUrl(ZODIAC_PLAYLISTS[selectedSign]); } }}
                         >
                           {videoUrl ? '\u25A0' : '\u25B6'}
                         </button>
@@ -2386,7 +2463,7 @@ export default function ChronosphaeraPage() {
                     videoActive={!!videoUrl}
                     onToggleVideo={() => {
                       if (videoUrl) { setVideoUrl(null); }
-                      else { setVideoUrl(PLANET_PLAYLISTS[selectedPlanet]); }
+                      else { trackElement(`chronosphaera.video.planet.${selectedPlanet}`); setVideoUrl(PLANET_PLAYLISTS[selectedPlanet]); }
                     }}
                     onTogglePersonaChat={() => togglePersonaChat('planet', selectedPlanet)}
                     personaChatActive={personaChatOpen === `planet:${selectedPlanet}`}
@@ -2459,7 +2536,7 @@ export default function ChronosphaeraPage() {
                             <button
                               key={section.id}
                               className={`metal-tab${starlightSectionId === section.id ? ' active' : ''}`}
-                              onClick={() => setStarlightSectionId(starlightSectionId === section.id ? null : section.id)}
+                              onClick={() => { if (starlightSectionId !== section.id) trackElement(`chronosphaera.fallen-starlight.section.${section.id}`); setStarlightSectionId(starlightSectionId === section.id ? null : section.id); }}
                             >
                               {section.label}
                             </button>
@@ -2471,7 +2548,7 @@ export default function ChronosphaeraPage() {
                             <button
                               key={section.id}
                               className={`metal-tab${starlightSectionId === section.id ? ' active' : ''}`}
-                              onClick={() => setStarlightSectionId(starlightSectionId === section.id ? null : section.id)}
+                              onClick={() => { if (starlightSectionId !== section.id) trackElement(`chronosphaera.fallen-starlight.section.${section.id}`); setStarlightSectionId(starlightSectionId === section.id ? null : section.id); }}
                             >
                               {section.label}
                             </button>
@@ -2520,7 +2597,7 @@ export default function ChronosphaeraPage() {
                         <button
                           className={`metal-tab playlist-tab${videoUrl ? ' active' : ''}`}
                           title={`Watch ${selectedSign} playlist`}
-                          onClick={() => { if (videoUrl) { setVideoUrl(null); } else { setVideoUrl(ZODIAC_PLAYLISTS[selectedSign]); } }}
+                          onClick={() => { if (videoUrl) { setVideoUrl(null); } else { trackElement(`chronosphaera.video.zodiac.${selectedSign}`); setVideoUrl(ZODIAC_PLAYLISTS[selectedSign]); } }}
                         >
                           {videoUrl ? '\u25A0' : '\u25B6'}
                         </button>
@@ -2599,7 +2676,7 @@ export default function ChronosphaeraPage() {
                     videoActive={!!videoUrl}
                     onToggleVideo={() => {
                       if (videoUrl) { setVideoUrl(null); }
-                      else { setVideoUrl(PLANET_PLAYLISTS[selectedPlanet]); }
+                      else { trackElement(`chronosphaera.video.planet.${selectedPlanet}`); setVideoUrl(PLANET_PLAYLISTS[selectedPlanet]); }
                     }}
                     onTogglePersonaChat={() => togglePersonaChat('planet', selectedPlanet)}
                     personaChatActive={personaChatOpen === `planet:${selectedPlanet}`}
@@ -2675,7 +2752,7 @@ export default function ChronosphaeraPage() {
                             <button
                               key={section.id}
                               className={`metal-tab${starlightSectionId === section.id ? ' active' : ''}`}
-                              onClick={() => setStarlightSectionId(starlightSectionId === section.id ? null : section.id)}
+                              onClick={() => { if (starlightSectionId !== section.id) trackElement(`chronosphaera.fallen-starlight.section.${section.id}`); setStarlightSectionId(starlightSectionId === section.id ? null : section.id); }}
                             >
                               {section.label}
                             </button>
@@ -2687,7 +2764,7 @@ export default function ChronosphaeraPage() {
                             <button
                               key={section.id}
                               className={`metal-tab${starlightSectionId === section.id ? ' active' : ''}`}
-                              onClick={() => setStarlightSectionId(starlightSectionId === section.id ? null : section.id)}
+                              onClick={() => { if (starlightSectionId !== section.id) trackElement(`chronosphaera.fallen-starlight.section.${section.id}`); setStarlightSectionId(starlightSectionId === section.id ? null : section.id); }}
                             >
                               {section.label}
                             </button>
@@ -2981,7 +3058,7 @@ export default function ChronosphaeraPage() {
                       title={`Watch ${selectedSign} playlist`}
                       onClick={() => {
                         if (videoUrl) { setVideoUrl(null); }
-                        else { setVideoUrl(ZODIAC_PLAYLISTS[selectedSign]); }
+                        else { trackElement(`chronosphaera.video.zodiac.${selectedSign}`); setVideoUrl(ZODIAC_PLAYLISTS[selectedSign]); }
                       }}
                     >
                       {videoUrl ? '\u25A0' : '\u25B6'}
@@ -3086,7 +3163,7 @@ export default function ChronosphaeraPage() {
                     videoActive={!!videoUrl}
                     onToggleVideo={() => {
                       if (videoUrl) { setVideoUrl(null); }
-                      else { setVideoUrl(PLANET_PLAYLISTS[selectedPlanet]); }
+                      else { trackElement(`chronosphaera.video.planet.${selectedPlanet}`); setVideoUrl(PLANET_PLAYLISTS[selectedPlanet]); }
                     }}
                     onTogglePersonaChat={() => togglePersonaChat('planet', selectedPlanet)}
                     personaChatActive={personaChatOpen === `planet:${selectedPlanet}`}

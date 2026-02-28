@@ -1,5 +1,6 @@
-import React, { useState, useMemo, useCallback } from 'react';
+import React, { useState, useMemo, useCallback, useEffect } from 'react';
 import { usePageTracking } from '../../coursework/CourseworkContext';
+import { useXRMode } from '../../App';
 import { BODY_SYSTEMS } from '../../components/microcosmos/BodySystemDefs';
 import BodyScene from '../../components/microcosmos/BodyScene';
 import BodyButtonStack from '../../components/microcosmos/BodyButtonStack';
@@ -11,6 +12,10 @@ export default function MicrocosmosPage() {
   const [activeSystem, setActiveSystem] = useState(null);
   const [selectedPart, setSelectedPart] = useState(null);
   const [is2D, setIs2D] = useState(false);
+
+  // XR Mode: auto-enable 3D when global xrMode is on
+  const { xrMode } = useXRMode();
+  useEffect(() => { if (xrMode) setIs2D(false); }, [xrMode]);
 
   const systemColorMap = useMemo(
     () => Object.fromEntries(BODY_SYSTEMS.map((s) => [s.id, s.color])),

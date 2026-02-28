@@ -2033,16 +2033,8 @@ function SiteHeader() {
           </button>
           <button
             className={`header-xr-toggle${xrMode ? ' active' : ''}`}
-            onClick={() => {
-              if (!xrMode) {
-                setXrMode(true);
-              } else if (location.pathname !== '/xr') {
-                navigate('/xr');
-              } else {
-                setXrMode(false);
-              }
-            }}
-            title={xrMode ? (location.pathname === '/xr' ? 'Turn off XR Mode' : 'Open XR Experiences') : 'VR / XR'}
+            onClick={() => setXrMode(v => !v)}
+            title={xrMode ? 'Disable XR Mode' : 'Enable XR Mode (prefer 3D)'}
           >
             <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
               <rect x="1" y="7" width="22" height="11" rx="3" />
@@ -2296,6 +2288,12 @@ function AppContent() {
     _setXrMode(val);
     try { localStorage.setItem('mythouse_xr_mode', val ? '1' : '0'); } catch {}
   }, [xrMode]);
+
+  // Auto-detect VR headset on mount → enable xrMode
+  useEffect(() => {
+    const isHeadset = /Quest|Pico|Vive|XR/i.test(navigator.userAgent);
+    if (isHeadset && !xrMode) setXrMode(true);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const storyForgeValue = useMemo(() => ({ forgeMode, setForgeMode }), [forgeMode, setForgeMode]);
   const ybrModeValue = useMemo(() => ({ ybrMode, setYbrMode }), [ybrMode, setYbrMode]);

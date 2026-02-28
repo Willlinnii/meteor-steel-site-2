@@ -59,14 +59,17 @@ export default function ModeAwareScene({
   clockMode,
   zodiacMode,
   showClock,
+  layoutMode,
   // Beyond ring props
   beyondRings,
   selectedBeyondRing,
   onSelectBeyondRing,
   activePerspective,
 }) {
-  // Derive orbital mode from clockMode when present
-  const derivedMode = clockMode === '12h' ? 'heliocentric' : 'geocentric';
+  // Use explicit layoutMode when provided, otherwise derive from clockMode
+  const derivedMode = layoutMode === 'helio' ? 'heliocentric'
+    : layoutMode === 'geo' ? 'geocentric'
+    : clockMode === '12h' ? 'heliocentric' : 'geocentric';
 
   // Common orbital props
   const orbitalProps = {

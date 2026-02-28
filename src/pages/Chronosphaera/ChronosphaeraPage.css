@@ -1704,6 +1704,16 @@
   display: none;
 }
 
+/* In combined 3D + artbook mode, layer art book above 3D and hide the scene */
+.chrono-3d-active.chrono-artbook-active .chrono-artbook-layer {
+  z-index: 3;
+  background: var(--bg, #0a0a14);
+}
+
+.chrono-3d-active.chrono-artbook-active .chrono-diagram-center {
+  display: none;
+}
+
 /* ===== DODECAHEDRON FULL-BLEED LAYER ===== */
 
 .chrono-dodec-layer {
@@ -1734,6 +1744,16 @@
   display: none;
 }
 
+/* Dodecahedron layer sits above the 3D scene in combined 3D + dodec mode */
+.chrono-3d-active.chrono-dodec-active .chrono-dodec-layer {
+  z-index: 3;
+  background: var(--bg, #0a0a14);
+}
+
+.chrono-3d-active.chrono-dodec-active .chrono-diagram-center {
+  display: none;
+}
+
 /* ===== RING FULL-BLEED LAYER ===== */
 .chrono-ring-layer { position: fixed; inset: 0; z-index: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; }
 .chrono-ring-layer canvas { flex: 1; width: 100%; align-self: stretch; }
@@ -1744,6 +1764,11 @@
 .chrono-ring-active .orbital-btn-row { pointer-events: auto; }
 .chrono-ring-active .chrono-content-fade { display: none; }
 .chrono-ring-active .chrono-toggle-strip { display: none; }
+
+/* Ring layer sits above the 3D scene in combined 3D + ring mode */
+.chrono-3d-active.chrono-ring-active .chrono-ring-layer { z-index: 3; background: var(--bg, #0a0a14); }
+.chrono-3d-active.chrono-ring-active .chrono-diagram-center { display: none; }
+
 .chrono-ring-toolbar { position: fixed; bottom: 0; left: 0; right: 0; z-index: 3; background: linear-gradient(transparent, rgba(6,6,15,0.85) 30%, rgba(6,6,15,0.95)); padding: 8px 12px 12px; }
 .chrono-ring-toolbar-inner { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; justify-content: center; max-width: 1000px; margin: 0 auto; }
 .chrono-ring-picker { position: relative; }
