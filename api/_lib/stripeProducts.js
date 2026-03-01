@@ -10,6 +10,19 @@
  * donation: true = user chooses amount (minimum 100 cents / $1)
  */
 const STRIPE_PRODUCTS = {
+  // Usage tiers
+  'tier-journeyer': {
+    mode: 'subscription',
+    name: 'Journeyer Plan',
+    amount: 1200,
+    interval: 'month',
+  },
+  'tier-keeper': {
+    mode: 'subscription',
+    name: 'Keeper Plan',
+    amount: 4900,
+    interval: 'month',
+  },
   // Subscriptions
   'developer-api': {
     mode: 'subscription',
@@ -120,7 +133,7 @@ const STRIPE_PRODUCTS = {
  */
 const BUNDLE_EXPANSIONS = {
   'master-key': {
-    subscriptions: ['ybr', 'forge', 'coursework', 'monomyth'],
+    subscriptions: ['ybr', 'forge', 'coursework', 'monomyth', 'tier-keeper'],
     purchases: ['starlight-bundle', 'fallen-starlight', 'story-of-stories'],
   },
   'starlight-bundle': {

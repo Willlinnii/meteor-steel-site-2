@@ -937,6 +937,52 @@ export function ProfileProvider({ children }) {
     return true;
   }, []);
 
+  // --- Usage tracking (real-time listener on usage doc) ---
+  // NOTE: Usage tiers control Atlas message limits only, not content access.
+  // Content access bypass (above) is separate and stays active until manually removed.
+  const JOURNEYER_SUBS = useMemo(() => ['ybr', 'forge', 'coursework', 'monomyth', 'teaching'], []);
+  const USAGE_TIERS = useMemo(() => ({
+    free:      { label: 'Explorer',  monthlyMessages: 30,   storageMB: 50 },
+    journeyer: { label: 'Journeyer', monthlyMessages: 500,  storageMB: 500 },
+    keeper:    { label: 'Keeper',    monthlyMessages: 3000, storageMB: 5000 },
+  }), []);
+
+  const [usageData, setUsageData] = useState(null);
+
+  useEffect(() => {
+    if (!user || !firebaseConfigured || !db) { setUsageData(null); return; }
+    const ref = doc(db, 'users', user.uid, 'meta', 'usage');
+    const unsub = onSnapshot(ref, (snap) => {
+      setUsageData(snap.exists() ? snap.data() : {});
+    }, () => setUsageData({}));
+    return unsub;
+  }, [user]);
+
+  // Tier resolution uses REAL subscriptions only (not the content bypass flags)
+  const realSubscriptions = useMemo(() => (profileData?.subscriptions || {}), [profileData?.subscriptions]);
+  const userTier = useMemo(() => {
+    if (realSubscriptions['tier-keeper']) return 'keeper';
+    if (realSubscriptions['tier-journeyer']) return 'journeyer';
+    if (JOURNEYER_SUBS.some(id => realSubscriptions[id])) return 'journeyer';
+    return 'free';
+  }, [realSubscriptions, JOURNEYER_SUBS]);
+
+  const tierConfig = useMemo(() => USAGE_TIERS[userTier] || USAGE_TIERS.free, [userTier, USAGE_TIERS]);
+
+  const messagesUsed = useMemo(() => {
+    if (!usageData) return 0;
+    const now = new Date();
+    const monthKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+    if (usageData.monthKey !== monthKey) return 0;
+    return usageData.messagesThisMonth || 0;
+  }, [usageData]);
+
+  const messagesRemaining = useMemo(() => {
+    return Math.max(0, tierConfig.monthlyMessages - messagesUsed);
+  }, [tierConfig.monthlyMessages, messagesUsed]);
+
+  const isByok = useMemo(() => !!(apiKeys?.anthropicKey), [apiKeys]);
+
   // Refresh profile data (e.g. after handle registration, free purchase activation)
   const refreshProfile = useCallback(async () => {
     if (!user || !firebaseConfigured || !db) return;
@@ -1562,6 +1608,13 @@ export function ProfileProvider({ children }) {
     requestJoinPartner,
     respondToPartnerMembership,
     endPartnerMembership,
+    // Usage tier system
+    userTier,
+    tierConfig,
+    usageData,
+    messagesUsed,
+    messagesRemaining,
+    isByok,
   }), [
     profileData, earnedRanks, highestRank, activeCredentials, hasProfile, loaded, handle,
     natalChart, numerologyName, subscriptions, hasSubscription, purchases, hasPurchase,
@@ -1582,6 +1635,7 @@ export function ProfileProvider({ children }) {
     partnerData, partnerStatus, partnerDisplay, partnerMemberships, partnerMembershipCategories,
     submitPartnerApplication, updatePartnerProfile, publishPartnerDirectory, unpublishPartnerDirectory,
     inviteRepresentative, requestJoinPartner, respondToPartnerMembership, endPartnerMembership,
+    userTier, tierConfig, usageData, messagesUsed, messagesRemaining, isByok,
   ]);
 
   return (

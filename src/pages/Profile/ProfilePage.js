@@ -183,7 +183,7 @@ const PURCHASES = [
 export default function ProfilePage() {
   const { user, signOut } = useAuth();
   const { getCourseStates, completedCourses, certificateData, allCourses } = useCoursework();
-  const { earnedRanks, highestRank, activeCredentials, hasProfile, loaded: profileLoaded, handle, natalChart, updateNatalChart, numerologyName, updateNumerologyName, luckyNumber, updateLuckyNumber, subscriptions, purchases, hasStripeAccount, initiateCheckout, openBillingPortal, refreshProfile, guildData, qualifiedGuildTypes, guildEligible, guildCoursesComplete, effectiveGuildStatus, pairingCategories, updateGuildBio, updateGuildCapacity, publishToDirectory, unpublishFromDirectory, respondToPairing, endPairing, photoURL, consultingData, consultingCategories, updateProfilePhoto, respondToConsulting, apiKeys, saveApiKey, removeApiKey, hasAnthropicKey, hasOpenaiKey, mythouseApiKey, hasMythouseKey, generateMythouseKey, regenerateMythouseKey, social, updateSocial, pilgrimages, pilgrimagesLoaded, removePilgrimage, personalStory, savePersonalStory, curatorApproved, ringSize, updateRingSize, partnerData, partnerStatus, partnerDisplay, partnerMembershipCategories, submitPartnerApplication, updatePartnerProfile, publishPartnerDirectory, unpublishPartnerDirectory, inviteRepresentative, requestJoinPartner, respondToPartnerMembership, endPartnerMembership } = useProfile();
+  const { earnedRanks, highestRank, activeCredentials, hasProfile, loaded: profileLoaded, handle, natalChart, updateNatalChart, numerologyName, updateNumerologyName, luckyNumber, updateLuckyNumber, subscriptions, purchases, hasStripeAccount, initiateCheckout, openBillingPortal, refreshProfile, guildData, qualifiedGuildTypes, guildEligible, guildCoursesComplete, effectiveGuildStatus, pairingCategories, updateGuildBio, updateGuildCapacity, publishToDirectory, unpublishFromDirectory, respondToPairing, endPairing, photoURL, consultingData, consultingCategories, updateProfilePhoto, respondToConsulting, apiKeys, saveApiKey, removeApiKey, hasAnthropicKey, hasOpenaiKey, mythouseApiKey, hasMythouseKey, generateMythouseKey, regenerateMythouseKey, social, updateSocial, pilgrimages, pilgrimagesLoaded, removePilgrimage, personalStory, savePersonalStory, curatorApproved, ringSize, updateRingSize, partnerData, partnerStatus, partnerDisplay, partnerMembershipCategories, submitPartnerApplication, updatePartnerProfile, publishPartnerDirectory, unpublishPartnerDirectory, inviteRepresentative, requestJoinPartner, respondToPartnerMembership, endPartnerMembership, userTier, tierConfig, usageData, messagesUsed, messagesRemaining, isByok } = useProfile();
 const { cards: storyCards, loaded: storyCardsLoaded, vaultCardIds, toggleVaultCard } = useStoryCardSync();
   const { myVaultPosts, myProfilePosts, deletePost: deleteFellowshipPost } = useFellowship();
   const navigate = useNavigate();
@@ -634,6 +634,100 @@ const { cards: storyCards, loaded: storyCardsLoaded, vaultCardIds, toggleVaultCa
               Less <span className="profile-section-chevron open">&#9662;</span>
             </button>
           </>
+        )}
+      </div>
+
+      {/* ── Usage & Plan ── */}
+      <div className="profile-usage-dashboard">
+        <div className="profile-usage-header">
+          <div className="profile-usage-plan">
+            <span className="profile-usage-plan-name">{tierConfig.label}</span>
+            <span className="profile-usage-plan-price">
+              {userTier === 'free' ? 'Free' : userTier === 'journeyer' ? '$12/mo' : '$49/mo'}
+            </span>
+          </div>
+          {isByok && <span className="profile-usage-byok-badge">BYOK — Unlimited</span>}
+        </div>
+
+        {/* Messages progress */}
+        <div className="profile-usage-meter">
+          <div className="profile-usage-meter-label">
+            <span>Messages</span>
+            <span className={`profile-usage-meter-count${messagesRemaining <= Math.ceil(tierConfig.monthlyMessages * 0.2) ? (messagesRemaining <= 0 ? ' at-limit' : ' low') : ''}`}>
+              {isByok ? `${messagesUsed} used (unlimited)` : `${messagesUsed} / ${tierConfig.monthlyMessages} this month`}
+            </span>
+          </div>
+          {!isByok && (
+            <div className="profile-usage-bar">
+              <div
+                className={`profile-usage-bar-fill${messagesRemaining <= 0 ? ' at-limit' : messagesRemaining <= Math.ceil(tierConfig.monthlyMessages * 0.2) ? ' low' : ''}`}
+                style={{ width: `${Math.min(100, (messagesUsed / tierConfig.monthlyMessages) * 100)}%` }}
+              />
+            </div>
+          )}
+          {!isByok && (
+            <div className="profile-usage-meter-sub">
+              Resets on the 1st of each month
+            </div>
+          )}
+        </div>
+
+        {/* Storage estimate */}
+        {usageData?.storageEstimateMB != null && (
+          <div className="profile-usage-meter">
+            <div className="profile-usage-meter-label">
+              <span>Storage</span>
+              <span>~{usageData.storageEstimateMB} MB / {tierConfig.storageMB >= 1000 ? `${tierConfig.storageMB / 1000} GB` : `${tierConfig.storageMB} MB`}</span>
+            </div>
+            <div className="profile-usage-bar">
+              <div
+                className={`profile-usage-bar-fill${usageData.storageEstimateMB >= tierConfig.storageMB * 0.9 ? ' low' : ''}`}
+                style={{ width: `${Math.min(100, (usageData.storageEstimateMB / tierConfig.storageMB) * 100)}%` }}
+              />
+            </div>
+          </div>
+        )}
+
+        {/* Tier selection cards */}
+        {userTier !== 'keeper' && !isByok && (
+          <div className="profile-tier-cards">
+            {userTier === 'free' && (
+              <button
+                className="profile-tier-card upgrade"
+                onClick={() => { setCheckoutLoading('tier-journeyer'); initiateCheckout('tier-journeyer').finally(() => setCheckoutLoading(null)); }}
+                disabled={checkoutLoading === 'tier-journeyer'}
+              >
+                <span className="profile-tier-card-name">Journeyer</span>
+                <span className="profile-tier-card-price">$12/mo</span>
+                <span className="profile-tier-card-detail">500 messages/mo, 500 MB storage</span>
+                {checkoutLoading === 'tier-journeyer' ? 'Loading...' : 'Upgrade'}
+              </button>
+            )}
+            <button
+              className="profile-tier-card upgrade"
+              onClick={() => { setCheckoutLoading('tier-keeper'); initiateCheckout('tier-keeper').finally(() => setCheckoutLoading(null)); }}
+              disabled={checkoutLoading === 'tier-keeper'}
+            >
+              <span className="profile-tier-card-name">Keeper</span>
+              <span className="profile-tier-card-price">$49/mo</span>
+              <span className="profile-tier-card-detail">3,000 messages/mo, 5 GB storage</span>
+              {checkoutLoading === 'tier-keeper' ? 'Loading...' : 'Upgrade'}
+            </button>
+          </div>
+        )}
+
+        {/* BYOK tip */}
+        {!isByok && (
+          <div className="profile-usage-tip" onClick={() => { openSection('ai'); setTimeout(() => document.getElementById('section-ai')?.scrollIntoView({ behavior: 'smooth' }), 50); }}>
+            Add your own API key below for unlimited messages on any plan.
+          </div>
+        )}
+
+        {/* Billing portal */}
+        {hasStripeAccount && (
+          <button className="profile-billing-link" onClick={openBillingPortal}>
+            Manage billing &amp; subscriptions
+          </button>
         )}
       </div>
 

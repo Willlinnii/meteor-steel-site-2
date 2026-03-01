@@ -18,9 +18,15 @@ service cloud.firestore {
           && request.auth != null
           && request.auth.uid == userId;
 
+        // Usage doc: owner can read, server-only writes (via Admin SDK)
+        allow read: if docId == 'usage'
+          && request.auth != null
+          && request.auth.uid == userId;
+        allow write: if docId == 'usage' && false;
+
         // All other meta docs: any auth user can read (player cards, opponent search), owner can write
-        allow read: if docId != 'secrets' && request.auth != null;
-        allow write: if docId != 'secrets' && request.auth != null && request.auth.uid == userId;
+        allow read: if docId != 'secrets' && docId != 'usage' && request.auth != null;
+        allow write: if docId != 'secrets' && docId != 'usage' && request.auth != null && request.auth.uid == userId;
       }
 
       match /writings/{docId} {

@@ -2,6 +2,8 @@ const admin = require('firebase-admin');
 const { getAnthropicClient, getOpenAIClient, getUserKeys } = require('./_lib/llm');
 const { ensureFirebaseAdmin, getUidFromRequest } = require('./_lib/auth');
 const { computeNatalChart } = require('./_lib/natalChart');
+const { getUserTier, getTierConfig, getCurrentMonthKey } = require('./_lib/usageTiers');
+const { shouldReestimate, updateStorageEstimate } = require('./_lib/storageEstimate');
 
 // Shared engine — data, formatters, prompt builders
 const {
@@ -470,14 +472,84 @@ module.exports = async function handler(req, res) {
   }
 
   const uid = await getUidFromRequest(req);
-  const userKeys = uid ? await getUserKeys(uid) : {};
+  if (!uid) {
+    return res.status(401).json({ error: 'Authentication required.' });
+  }
+
+  const userKeys = await getUserKeys(uid);
   const isByok = !!userKeys.anthropicKey;
 
   if (!isByok) {
-    const rateLimitKey = uid || req.headers['x-forwarded-for'] || req.socket?.remoteAddress || 'unknown';
-    if (!checkRateLimit(rateLimitKey)) {
+    if (!checkRateLimit(uid)) {
       return res.status(429).json({ error: 'Too many requests. Please wait a moment before asking another question.' });
     }
+  }
+
+  // --- Usage tier enforcement ---
+  let usageTier = 'free';
+  let usageTierConfig = getTierConfig('free');
+  let usageMonthKey = null;
+  let messagesUsedThisMonth = 0;
+
+  if (ensureFirebaseAdmin()) {
+    const firestore = admin.firestore();
+    const [usageSnap, profileSnap] = await Promise.all([
+      firestore.doc(`users/${uid}/meta/usage`).get(),
+      firestore.doc(`users/${uid}/meta/profile`).get(),
+    ]);
+    const usageData = usageSnap.exists ? usageSnap.data() : {};
+    const profileData = profileSnap.exists ? profileSnap.data() : {};
+    usageTier = getUserTier(profileData);
+    usageTierConfig = getTierConfig(usageTier);
+    const monthKey = getCurrentMonthKey();
+    usageMonthKey = usageData.monthKey || null;
+    messagesUsedThisMonth = usageData.messagesThisMonth || 0;
+    if (usageMonthKey !== monthKey) messagesUsedThisMonth = 0;
+
+    if (!isByok && messagesUsedThisMonth >= usageTierConfig.monthlyMessages) {
+      return res.status(429).json({
+        limitReached: true,
+        tier: usageTier,
+        tierLabel: usageTierConfig.label,
+        used: messagesUsedThisMonth,
+        limit: usageTierConfig.monthlyMessages,
+        error: `You've reached your monthly message limit of ${usageTierConfig.monthlyMessages} messages on the ${usageTierConfig.label} plan. Upgrade for more messages, or add your own API key for unlimited use.`,
+      });
+    }
+  }
+
+  // Helper: send 200 response and fire-and-forget usage increment
+  function sendAndTrack(body) {
+    if (ensureFirebaseAdmin()) {
+      const monthKey = getCurrentMonthKey();
+      const firestore = admin.firestore();
+      const chatMode = (req.body || {}).mode || 'atlas';
+      const safeMode = String(chatMode).replace(/[^a-zA-Z0-9_-]/g, '_');
+      const needsReset = usageMonthKey !== monthKey;
+
+      const update = {
+        totalMessages: admin.firestore.FieldValue.increment(1),
+        monthKey,
+        updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+      };
+
+      if (needsReset) {
+        update.messagesThisMonth = 1;
+        update.modeBreakdown = { [safeMode]: 1 };
+      } else {
+        update.messagesThisMonth = admin.firestore.FieldValue.increment(1);
+        update[`modeBreakdown.${safeMode}`] = admin.firestore.FieldValue.increment(1);
+      }
+
+      firestore.doc(`users/${uid}/meta/usage`).set(update, { merge: true })
+        .catch(err => console.error('Usage tracking failed:', err?.message));
+
+      // Periodically re-estimate storage (every 100 messages)
+      if ((messagesUsedThisMonth + 1) % 100 === 0) {
+        updateStorageEstimate(uid).catch(() => {});
+      }
+    }
+    return sendAndTrack(body);
   }
 
   const { messages, area, persona, mode, challengeStop, level, journeyId, stageId, gameMode, stageData, aspect, courseSummary, episodeContext, situationalContext, existingCredentials, existingNatalChart, qualifiedMentorTypes, uploadedDocument, tarotPhase, tarotCards, tarotIntention, culture, template, stageContent, targetStage, stageEntries, adjacentDrafts, requestDraft, drafts, completionType, completionData, currentSummary, currentFullStory, clientType, engagementContext } = req.body || {};
@@ -495,7 +567,7 @@ module.exports = async function handler(req, res) {
     const openai = getOpenAIClient(userKeys.openaiKey);
     try {
       const completion = await openai.chat.completions.create({ model: MODELS.narrative, messages: [{ role: 'system', content: forgeSystemPrompt }, { role: 'user', content: userContent }], max_tokens: 4000, temperature: 0.8 });
-      return res.status(200).json({ story: completion.choices[0]?.message?.content || '' });
+      return sendAndTrack({ story: completion.choices[0]?.message?.content || '' });
     } catch (err) {
       console.error('Forge API error:', err?.message, err?.status);
       if (err.status === 401 && !!userKeys.openaiKey) return res.status(401).json({ error: 'Your OpenAI API key is invalid or expired. Please update it in your profile settings.', keyError: true });
@@ -524,7 +596,7 @@ module.exports = async function handler(req, res) {
       const response = await anthropic.messages.create({ model: isByok ? MODELS.quality : MODELS.fast, max_tokens: 2000, system: draftSystemPrompt, messages: trimmed, tools: [{ name: 'suggest_mythic_parallel', description: 'Surface a striking parallel between the writer\'s material and a mythic tradition. Use sparingly — at most once per exchange.', input_schema: { type: 'object', properties: { parallel: { type: 'string', description: 'The mythic parallel observed' }, source: { type: 'string', description: 'The mythic tradition or source' }, suggestion: { type: 'string', description: 'A brief suggestion for how this parallel could enrich the writing' } }, required: ['parallel', 'source', 'suggestion'] } }, { name: 'produce_draft', description: 'Produce a polished 200-400 word draft passage for this stage.', input_schema: { type: 'object', properties: { draft: { type: 'string', description: 'The polished draft passage (200-400 words)' } }, required: ['draft'] } }] });
       let reply = '', draft = null, mythicParallel = null;
       for (const block of response.content) { if (block.type === 'text') { reply += block.text; } else if (block.type === 'tool_use') { if (block.name === 'suggest_mythic_parallel') mythicParallel = block.input; else if (block.name === 'produce_draft') draft = block.input.draft; } }
-      return res.status(200).json({ reply, draft, mythicParallel });
+      return sendAndTrack({ reply, draft, mythicParallel });
     } catch (err) {
       console.error('Forge draft API error:', err?.message, err?.status);
       if (err.status === 401 && isByok) return res.status(401).json({ error: 'Your Anthropic API key is invalid or expired. Please update it in your profile settings.', keyError: true });
@@ -541,7 +613,7 @@ module.exports = async function handler(req, res) {
     const anthropic = getAnthropicClient(userKeys.anthropicKey);
     try {
       const response = await anthropic.messages.create({ model: isByok ? MODELS.quality : MODELS.fast, max_tokens: 4000, system: assemblePrompt, messages: [{ role: 'user', content: draftContent }] });
-      return res.status(200).json({ story: response.content.map(b => b.text || '').join('') });
+      return sendAndTrack({ story: response.content.map(b => b.text || '').join('') });
     } catch (err) {
       console.error('Forge assemble API error:', err?.message, err?.status);
       if (err.status === 401 && isByok) return res.status(401).json({ error: 'Your Anthropic API key is invalid or expired. Please update it in your profile settings.', keyError: true });
@@ -558,7 +630,7 @@ module.exports = async function handler(req, res) {
     const anthropic = getAnthropicClient(userKeys.anthropicKey);
     try {
       const response = await anthropic.messages.create({ model: MODELS.quality, max_tokens: 1500, system: polarityPrompt, messages: trimmed });
-      return res.status(200).json({ reply: response.content.map(b => b.text || '').join('') });
+      return sendAndTrack({ reply: response.content.map(b => b.text || '').join('') });
     } catch (err) {
       console.error(`${mode} API error:`, err?.message, err?.status);
       if (err.status === 401 && isByok) return res.status(401).json({ error: 'Your Anthropic API key is invalid or expired. Please update it in your profile settings.', keyError: true });
@@ -579,8 +651,8 @@ module.exports = async function handler(req, res) {
     try {
       const response = await anthropic.messages.create({ model: MODELS.fast, system: systemPrompt, messages: tarotTrimmed, max_tokens: isInterpretation ? 2048 : 512 });
       let reply = response.content?.find(c => c.type === 'text')?.text || 'No response generated.';
-      if (!isInterpretation) { const hasReadyTag = /<tarot-ready><\/tarot-ready>/.test(reply); reply = reply.replace(/<tarot-ready><\/tarot-ready>/g, '').trim(); return res.status(200).json({ reply, readyToDraw: hasReadyTag || undefined }); }
-      return res.status(200).json({ reply });
+      if (!isInterpretation) { const hasReadyTag = /<tarot-ready><\/tarot-ready>/.test(reply); reply = reply.replace(/<tarot-ready><\/tarot-ready>/g, '').trim(); return sendAndTrack({ reply, readyToDraw: hasReadyTag || undefined }); }
+      return sendAndTrack({ reply });
     } catch (err) {
       console.error('Tarot Reading API error:', err?.message, err?.status);
       return res.status(500).json({ error: `Something went wrong: ${err?.message || 'Unknown error'}` });
@@ -598,7 +670,7 @@ module.exports = async function handler(req, res) {
     const anthropic = getAnthropicClient(userKeys.anthropicKey);
     try {
       const response = await anthropic.messages.create({ model: MODELS.quality, system: systemPrompt, messages: [{ role: 'user', content: 'Please weave my journey into a complete narrative.' }], max_tokens: 4096 });
-      return res.status(200).json({ story: response.content?.find(c => c.type === 'text')?.text || 'No narrative generated.' });
+      return sendAndTrack({ story: response.content?.find(c => c.type === 'text')?.text || 'No narrative generated.' });
     } catch (err) { console.error('Synthesis API error:', err?.message, err?.status); return res.status(500).json({ error: `Something went wrong: ${err?.message || 'Unknown error'}` }); }
   }
 
@@ -622,11 +694,11 @@ module.exports = async function handler(req, res) {
       else if (myMode === 'romantic') { const targetMode = targetProfileSnap.data()?.mode || 'friends'; if (targetMode !== 'romantic' && targetMode !== 'new-friends') return res.status(403).json({ error: 'Target is not in a compatible mode.' }); const frFamily = firestore.collection('friend-requests'); const [sFam, rFam] = await Promise.all([frFamily.where('senderUid', '==', uid).where('recipientUid', '==', targetUid).where('status', '==', 'accepted').where('relationship', '==', 'family').limit(1).get(), frFamily.where('senderUid', '==', targetUid).where('recipientUid', '==', uid).where('status', '==', 'accepted').where('relationship', '==', 'family').limit(1).get()]); if (!sFam.empty || !rFam.empty) return res.status(403).json({ error: 'Cannot romantically match with family members.' }); }
       const cacheRef = firestore.doc(`match-profiles/${uid}/comparisons/${targetUid}`);
       const cached = await cacheRef.get();
-      if (cached.exists) { const data = cached.data(); const expiresAt = data.expiresAt?.toMillis?.() || 0; if (expiresAt > Date.now()) return res.status(200).json(data); }
+      if (cached.exists) { const data = cached.data(); const expiresAt = data.expiresAt?.toMillis?.() || 0; if (expiresAt > Date.now()) return sendAndTrack(data); }
       const [myCardsSnap, theirCardsSnap] = await Promise.all([firestore.collection(`users/${uid}/story-cards`).get(), firestore.collection(`users/${targetUid}/story-cards`).get()]);
       const serialize = (snap, ownerUid) => { const cards = []; snap.forEach(d => { const data = d.data(); cards.push({ title: data.title || '', category: data.category || '', summary: (data.summary || '').substring(0, SUMMARY_CHARS), visibility: data.visibility || 'public', sourceId: d.id, ownerUid }); }); return cards.slice(0, MAX_CARDS); };
       const myCards = serialize(myCardsSnap, uid), theirCards = serialize(theirCardsSnap, targetUid);
-      if (myCards.length === 0 || theirCards.length === 0) return res.status(200).json({ score: 0, summary: 'Not enough story cards to compare.', highlights: [], computedAt: new Date().toISOString(), expiresAt: new Date(Date.now() + CACHE_DAYS * 86400000).toISOString() });
+      if (myCards.length === 0 || theirCards.length === 0) return sendAndTrack({ score: 0, summary: 'Not enough story cards to compare.', highlights: [], computedAt: new Date().toISOString(), expiresAt: new Date(Date.now() + CACHE_DAYS * 86400000).toISOString() });
       const hasVault = myCards.some(c => c.visibility === 'vault') || theirCards.some(c => c.visibility === 'vault');
       const vaultInstructions = hasVault ? `\n\nIMPORTANT: Some cards are marked [VAULT]. For any match involving a vault card, do NOT reveal the card's actual content. Instead, generate a vague thematic hint about the connection. Mark vault highlights with "isVault": true, the "ownerUid" of the vault card owner, and the "cardSourceId".` : '';
       const matchPrompt = `Compare these two users' story card collections and find thematic connections, shared archetypes, and narrative patterns.${vaultInstructions}\n\nUser A's cards:\n${myCards.map(c => `- [${c.category}]${c.visibility === 'vault' ? ' [VAULT]' : ''} ${c.title}: ${c.summary}`).join('\n')}\n\nUser B's cards:\n${theirCards.map(c => `- [${c.category}]${c.visibility === 'vault' ? ' [VAULT]' : ''} ${c.title}: ${c.summary}`).join('\n')}\n\nRespond with valid JSON only, no markdown:\n{\n  "score": <0-100 story resonance score>,\n  "summary": "<2-3 sentence narrative about their shared themes>",\n  "highlights": [\n    { "category": "<theme category>", "label": "<short label>", "detail": "<one sentence>"${hasVault ? ', "isVault": <boolean>, "ownerUid": "<uid or null>", "cardSourceId": "<sourceId or null>"' : ''} }\n  ]\n}`;
@@ -648,7 +720,7 @@ module.exports = async function handler(req, res) {
       const result = { score: Math.min(100, Math.max(0, parsed.score || 0)), summary: (parsed.summary || '').substring(0, 500), highlights, vaultHints, computedAt: now, expiresAt };
       await cacheRef.set(result);
       if (conversationId && typeof conversationId === 'string') { try { const convRef = firestore.doc(`match-conversations/${conversationId}`); const convSnap = await convRef.get(); if (convSnap.exists) { const storyText = result.summary + (result.highlights?.length ? '\n\n' + result.highlights.map(h => `${h.label}: ${h.detail}`).join('\n') : ''); await firestore.collection(`match-conversations/${conversationId}/messages`).add({ senderUid: 'system', senderHandle: 'Atlas', text: storyText, type: 'ai-match', createdAt: admin.firestore.FieldValue.serverTimestamp() }); await convRef.update({ lastMessage: result.summary.substring(0, 100), lastMessageAt: admin.firestore.FieldValue.serverTimestamp(), lastMessageBy: 'system' }); } } catch (convErr) { console.error('Failed to write AI match message to conversation:', convErr); } }
-      return res.status(200).json({ ...result, computedAt: now.toDate().toISOString(), expiresAt: expiresAt.toDate().toISOString() });
+      return sendAndTrack({ ...result, computedAt: now.toDate().toISOString(), expiresAt: expiresAt.toDate().toISOString() });
     } catch (err) { console.error('Story match error:', err); return res.status(500).json({ error: 'Failed to compute story match.' }); }
   }
 
@@ -660,7 +732,7 @@ module.exports = async function handler(req, res) {
     const anthropic = getAnthropicClient(userKeys.anthropicKey);
     try {
       const response = await anthropic.messages.create({ model: MODELS.quality, system: transmutePrompt, messages: [{ role: 'user', content: 'Please transmute my story.' }], max_tokens: 2048 });
-      return res.status(200).json({ transmuted: response.content?.find(c => c.type === 'text')?.text || '' });
+      return sendAndTrack({ transmuted: response.content?.find(c => c.type === 'text')?.text || '' });
     } catch (err) { console.error('Story Transmute API error:', err?.message, err?.status); return res.status(500).json({ error: `Something went wrong: ${err?.message || 'Unknown error'}` }); }
   }
 
@@ -684,8 +756,8 @@ module.exports = async function handler(req, res) {
     try {
       const response = await anthropic.messages.create({ model: MODELS.fast, system: systemPrompt, messages: trimmed, max_tokens: 1024 });
       let reply = response.content?.find(c => c.type === 'text')?.text || 'No response generated.';
-      if (mode === 'ybr-challenge') { const resultMatch = reply.match(/<ybr-result>\s*(\{[^}]+\})\s*<\/ybr-result>/); let passed = null; if (resultMatch) { try { passed = !!JSON.parse(resultMatch[1]).passed; } catch {} reply = reply.replace(/<ybr-result>[\s\S]*?<\/ybr-result>/, '').trim(); } return res.status(200).json({ reply, passed, level: level || 1 }); }
-      return res.status(200).json({ reply });
+      if (mode === 'ybr-challenge') { const resultMatch = reply.match(/<ybr-result>\s*(\{[^}]+\})\s*<\/ybr-result>/); let passed = null; if (resultMatch) { try { passed = !!JSON.parse(resultMatch[1]).passed; } catch {} reply = reply.replace(/<ybr-result>[\s\S]*?<\/ybr-result>/, '').trim(); } return sendAndTrack({ reply, passed, level: level || 1 }); }
+      return sendAndTrack({ reply });
     } catch (err) { console.error('YBR API error:', err?.message, err?.status); return res.status(500).json({ error: `Something went wrong: ${err?.message || 'Unknown error'}` }); }
   }
 
@@ -698,7 +770,7 @@ module.exports = async function handler(req, res) {
       const response = await anthropic.messages.create({ model: MODELS.fast, system: systemPrompt, messages: trimmed, max_tokens: 1024 });
       let reply = response.content?.find(c => c.type === 'text')?.text || 'No response generated.';
       const resultMatch = reply.match(/<ybr-result>\s*(\{[^}]+\})\s*<\/ybr-result>/); let passed = null; if (resultMatch) { try { passed = !!JSON.parse(resultMatch[1]).passed; } catch {} reply = reply.replace(/<ybr-result>[\s\S]*?<\/ybr-result>/, '').trim(); }
-      return res.status(200).json({ reply, passed });
+      return sendAndTrack({ reply, passed });
     } catch (err) { console.error('Wheel Journey API error:', err?.message, err?.status); return res.status(500).json({ error: `Something went wrong: ${err?.message || 'Unknown error'}` }); }
   }
 
@@ -721,7 +793,7 @@ module.exports = async function handler(req, res) {
         reply = followUp.content?.find(c => c.type === 'text')?.text || 'Story updated.';
         for (const tb of followUp.content.filter(c => c.type === 'tool_use')) { if (tb.name === 'update_story' && tb.input) { if (!storyUpdate) storyUpdate = {}; if (tb.input.name) storyUpdate.name = tb.input.name; if (tb.input.stageEntries) storyUpdate.stageEntries = { ...(storyUpdate.stageEntries || {}), ...tb.input.stageEntries }; } }
       } else { reply = textBlock?.text || 'No response generated.'; }
-      return res.status(200).json({ reply, storyUpdate: storyUpdate && Object.keys(storyUpdate).length > 0 ? storyUpdate : undefined });
+      return sendAndTrack({ reply, storyUpdate: storyUpdate && Object.keys(storyUpdate).length > 0 ? storyUpdate : undefined });
     } catch (err) { console.error('Story Interview API error:', err?.message, err?.status); return res.status(500).json({ error: `Something went wrong: ${err?.message || 'Unknown error'}` }); }
   }
 
@@ -736,7 +808,7 @@ module.exports = async function handler(req, res) {
     const anthropic = getAnthropicClient(userKeys.anthropicKey);
     try {
       const response = await anthropic.messages.create({ model: MODELS.quality, system: synthPrompt, messages: [{ role: 'user', content: 'Please synthesize my stories.' }], max_tokens: 4096 });
-      return res.status(200).json({ synthesis: response.content?.find(c => c.type === 'text')?.text || 'No synthesis generated.' });
+      return sendAndTrack({ synthesis: response.content?.find(c => c.type === 'text')?.text || 'No synthesis generated.' });
     } catch (err) { console.error('Story Synthesis API error:', err?.message, err?.status); return res.status(500).json({ error: `Something went wrong: ${err?.message || 'Unknown error'}` }); }
   }
 
@@ -756,7 +828,7 @@ module.exports = async function handler(req, res) {
         currentMessages = [...currentMessages, { role: 'assistant', content: response.content }, { role: 'user', content: toolResults }];
       }
       const result = { reply }; if (Object.keys(credentialUpdates).length > 0) result.credentialUpdates = credentialUpdates; if (natalChartUpdate) result.natalChart = natalChartUpdate; if (curatorApproved !== undefined) result.curatorApproved = curatorApproved;
-      return res.status(200).json(result);
+      return sendAndTrack(result);
     } catch (err) { console.error('Profile Onboarding API error:', err?.message, err?.status); return res.status(500).json({ error: `Something went wrong: ${err?.message || 'Unknown error'}` }); }
   }
 
@@ -776,7 +848,7 @@ module.exports = async function handler(req, res) {
         currentMessages = [...currentMessages, { role: 'assistant', content: response.content }, { role: 'user', content: toolResults }];
       }
       const result = { reply }; if (guildApplication) result.guildApplication = guildApplication;
-      return res.status(200).json(result);
+      return sendAndTrack(result);
     } catch (err) { console.error('Guild Application API error:', err?.message, err?.status); return res.status(500).json({ error: `Something went wrong: ${err?.message || 'Unknown error'}` }); }
   }
 
@@ -795,7 +867,7 @@ module.exports = async function handler(req, res) {
         currentMessages = [...currentMessages, { role: 'assistant', content: response.content }, { role: 'user', content: toolResults }];
       }
       const result = { reply }; if (consultingProfile) result.consultingProfile = consultingProfile;
-      return res.status(200).json(result);
+      return sendAndTrack(result);
     } catch (err) { console.error('Consulting Setup API error:', err?.message, err?.status); return res.status(500).json({ error: `Something went wrong: ${err?.message || 'Unknown error'}` }); }
   }
 
@@ -865,7 +937,7 @@ IMPORTANT: Do not rush to the assessment. Let the conversation breathe. But once
       }
       const result = { reply };
       if (intakeAssessment) result.intakeAssessment = intakeAssessment;
-      return res.status(200).json(result);
+      return sendAndTrack(result);
     } catch (err) { console.error('Consulting Intake API error:', err?.message, err?.status); if (err.status === 401 && isByok) return res.status(401).json({ error: 'Your Anthropic API key is invalid or expired.', keyError: true }); return res.status(500).json({ error: `Something went wrong: ${err?.message || 'Unknown error'}` }); }
   }
 
@@ -963,7 +1035,7 @@ TOOLS: Use capture_artifact when the conversation produces something worth prese
       const result = { reply };
       if (artifacts.length > 0) result.artifacts = artifacts;
       if (stageComplete) result.stageComplete = stageComplete;
-      return res.status(200).json(result);
+      return sendAndTrack(result);
     } catch (err) { console.error('Consulting Session API error:', err?.message, err?.status); if (err.status === 401 && isByok) return res.status(401).json({ error: 'Your Anthropic API key is invalid or expired.', keyError: true }); return res.status(500).json({ error: `Something went wrong: ${err?.message || 'Unknown error'}` }); }
   }
 
@@ -1004,7 +1076,7 @@ IMPORTANT: Never inflate the client into a hero who conquered or decoded. They w
     try {
       const response = await anthropic.messages.create({ model: MODELS.quality, system: synthesisPrompt, messages: [{ role: 'user', content: 'Please weave my consulting journey into a mythic narrative.' }], max_tokens: 4096 });
       const text = response.content?.find(c => c.type === 'text')?.text || 'No synthesis generated.';
-      return res.status(200).json({ synthesis: text });
+      return sendAndTrack({ synthesis: text });
     } catch (err) { console.error('Consulting Synthesis API error:', err?.message, err?.status); if (err.status === 401 && isByok) return res.status(401).json({ error: 'Your Anthropic API key is invalid or expired.', keyError: true }); return res.status(500).json({ error: `Something went wrong: ${err?.message || 'Unknown error'}` }); }
   }
 
@@ -1057,7 +1129,7 @@ VOICE: Warm, editorial, mythic. You are helping them find the shape of their sto
       });
       let reply = '', draft = null, mythicParallel = null;
       for (const block of response.content) { if (block.type === 'text') { reply += block.text; } else if (block.type === 'tool_use') { if (block.name === 'suggest_mythic_parallel') mythicParallel = block.input; else if (block.name === 'produce_draft') draft = block.input.draft; } }
-      return res.status(200).json({ reply, draft, mythicParallel });
+      return sendAndTrack({ reply, draft, mythicParallel });
     } catch (err) { console.error('Consulting Forge API error:', err?.message, err?.status); if (err.status === 401 && isByok) return res.status(401).json({ error: 'Your Anthropic API key is invalid or expired.', keyError: true }); return res.status(500).json({ error: `Something went wrong: ${err?.message || 'Unknown error'}` }); }
   }
 
@@ -1070,7 +1142,7 @@ VOICE: Warm, editorial, mythic. You are helping them find the shape of their sto
       const response = await anthropic.messages.create({ model: MODELS.quality, system: fellowshipSystemPrompt, messages: [{ role: 'user', content: 'Please write the celebration for this achievement.' }], max_tokens: 1500 });
       const text = response.content?.find(c => c.type === 'text')?.text || '';
       let parsed; try { const jsonMatch = text.match(/\{[\s\S]*\}/); parsed = JSON.parse(jsonMatch ? jsonMatch[0] : text); } catch { parsed = { summary: text.slice(0, 300), fullStory: text }; }
-      return res.status(200).json({ summary: parsed.summary || '', fullStory: parsed.fullStory || '' });
+      return sendAndTrack({ summary: parsed.summary || '', fullStory: parsed.fullStory || '' });
     } catch (err) { console.error('Fellowship summary API error:', err?.message, err?.status); if (err.status === 401 && isByok) return res.status(401).json({ error: 'Your Anthropic API key is invalid or expired.', keyError: true }); return res.status(500).json({ error: `Something went wrong: ${err?.message || 'Unknown error'}` }); }
   }
 
@@ -1085,8 +1157,8 @@ VOICE: Warm, editorial, mythic. You are helping them find the shape of their sto
       const response = await anthropic.messages.create({ model: isByok ? MODELS.quality : MODELS.fast, system: reviseSystemPrompt, messages: trimmed, max_tokens: 1500 });
       const text = response.content?.find(c => c.type === 'text')?.text || '';
       const jsonMatch = text.match(/\{[\s\S]*"summary"[\s\S]*\}/);
-      if (jsonMatch) { try { const parsed = JSON.parse(jsonMatch[0]); return res.status(200).json({ reply: text, revised: true, summary: parsed.summary, fullStory: parsed.fullStory || '' }); } catch {} }
-      return res.status(200).json({ reply: text, revised: false });
+      if (jsonMatch) { try { const parsed = JSON.parse(jsonMatch[0]); return sendAndTrack({ reply: text, revised: true, summary: parsed.summary, fullStory: parsed.fullStory || '' }); } catch {} }
+      return sendAndTrack({ reply: text, revised: false });
     } catch (err) { console.error('Fellowship revise API error:', err?.message, err?.status); if (err.status === 401 && isByok) return res.status(401).json({ error: 'Your Anthropic API key is invalid or expired.', keyError: true }); return res.status(500).json({ error: `Something went wrong: ${err?.message || 'Unknown error'}` }); }
   }
 
@@ -1123,7 +1195,7 @@ VOICE: Warm, editorial, mythic. You are helping them find the shape of their sto
       const storyId = `story-${Date.now()}`;
       const followUp = await anthropic.messages.create({ model: MODELS.fast, system: systemPrompt, messages: [...trimmed, { role: 'assistant', content: response.content }, { role: 'user', content: [{ type: 'tool_result', tool_use_id: toolBlock.id, content: JSON.stringify({ success: true, storyId, message: 'Story seed saved. Give the user a brief readout of what you captured and offer the Story Forge link.' }) }] }], max_tokens: 1024 });
       reply = followUp.content?.find(c => c.type === 'text')?.text || 'Story seed saved.';
-      return res.status(200).json({ reply, storySeed: { ...seed, storyId } });
+      return sendAndTrack({ reply, storySeed: { ...seed, storyId } });
     } else if (response.stop_reason === 'tool_use' && toolBlock?.name === 'highlight_sites') {
       const validSiteIds = new Set(mythicEarthSites.map(s => s.id));
       const requestedIds = toolBlock.input.site_ids || [];
@@ -1131,11 +1203,11 @@ VOICE: Warm, editorial, mythic. You are helping them find the shape of their sto
       const matchedSites = mythicEarthSites.filter(s => matchedIds.includes(s.id));
       const followUp = await anthropic.messages.create({ model: MODELS.fast, system: systemPrompt, messages: [...trimmed, { role: 'assistant', content: response.content }, { role: 'user', content: [{ type: 'tool_result', tool_use_id: toolBlock.id, content: JSON.stringify({ highlighted: matchedIds.length, sites: matchedSites.map(s => s.name) }) }] }], max_tokens: 1024 });
       reply = followUp.content?.find(c => c.type === 'text')?.text || 'Here are the sites I found.';
-      return res.status(200).json({ reply, sites: matchedSites });
+      return sendAndTrack({ reply, sites: matchedSites });
     } else {
       reply = response.content?.find(c => c.type === 'text')?.text || response.content?.[0]?.text || 'No response generated.';
     }
-    return res.status(200).json({ reply });
+    return sendAndTrack({ reply });
   } catch (err) {
     console.error('Anthropic API error:', err?.message, err?.status);
     if (err.status === 401) { if (isByok) return res.status(401).json({ error: 'Your Anthropic API key is invalid or expired. Please update it in your profile settings.', keyError: true }); return res.status(500).json({ error: 'API configuration error.' }); }

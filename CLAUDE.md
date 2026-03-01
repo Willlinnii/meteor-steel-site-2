@@ -69,4 +69,4 @@ Before making structural changes, always check these files:
 6. **Naming: "Chronosphaera" not "metals" or "seven-metals."** This rename is complete and permanent.
 7. **Generative content (AI output) must never write back into canonical data automatically.** Atlas chat, persona dialogues, and natal interpretations are ephemeral unless the user promotes them.
 8. **Vercel function limit: 12.** Do not add new api/*.js files without consolidating an existing one first. Current count: exactly 12.
-9. **Paywall bypass is active.** `ProfileContext.js` has `hasSubscription`/`hasPurchase` returning `true`. This is temporary. Do not remove the TODO comment or the override pattern until explicitly told to restore enforcement.
+9. **Paywall bypass is active for content access.** `ProfileContext.js` has `hasSubscription`/`hasPurchase` returning `true`. This is temporary. Do not remove the TODO comment or the override pattern until explicitly told to restore enforcement. **Usage tiers are live** — they control Atlas message limits only (not content access). Tier config lives in `api/_lib/usageTiers.js`.

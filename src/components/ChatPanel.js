@@ -42,7 +42,7 @@ export default function ChatPanel() {
   const { voiceEnabled, recording, speaking, toggleVoice, startListening, stopListening, speak } = useVoice(setInput);
   const { trackElement, buildCourseSummary } = useCoursework();
   const { getConversation, saveConversation, addStory, addStoryEntry, loaded: writingsLoaded } = useWritings();
-  const { profileData, loaded: profileLoaded, completeOnboarding } = useProfile();
+  const { profileData, loaded: profileLoaded, completeOnboarding, messagesUsed, messagesRemaining, tierConfig, isByok, userTier } = useProfile();
   const { area: areaOverride, meta: areaMeta } = useAreaOverride();
   const { buildAtlasContext } = useAtlasContext();
   const onboardingTriggered = useRef(false);
@@ -139,6 +139,16 @@ export default function ChatPanel() {
     const text = input.trim();
     if (!text || loading) return;
 
+    // Pre-send limit check (avoid hitting server if already at limit)
+    if (!isByok && messagesRemaining <= 0) {
+      setMessages(prev => [...prev,
+        { role: 'user', content: text },
+        { role: 'assistant', content: `You've reached your monthly message limit of ${tierConfig.monthlyMessages} on the ${tierConfig.label} plan. Visit your [[Profile|/profile]] to upgrade, or add your own API key for unlimited messages.` },
+      ]);
+      setInput('');
+      return;
+    }
+
     const userMsg = { role: 'user', content: text };
     const updated = [...messages, userMsg];
     setMessages(updated);
@@ -162,7 +172,12 @@ export default function ChatPanel() {
       const data = await res.json();
 
       if (!res.ok) {
-        setMessages([...updated, { role: 'assistant', content: data.error || 'Something went wrong.' }]);
+        // Handle usage limit reached from server
+        if (data.limitReached) {
+          setMessages([...updated, { role: 'assistant', content: `You've reached your monthly limit of ${data.limit} messages on the ${data.tierLabel} plan. Visit your [[Profile|/profile]] to upgrade, or add your own API key for unlimited messaging.` }]);
+        } else {
+          setMessages([...updated, { role: 'assistant', content: data.error || 'Something went wrong.' }]);
+        }
       } else {
         setMessages([...updated, { role: 'assistant', content: data.reply }]);
         speak(data.reply);
@@ -204,6 +219,14 @@ export default function ChatPanel() {
         <div className="chat-panel">
           <div className="chat-header">
             <span className="chat-title" onClick={() => window.open('/atlas', '_blank')} style={{ cursor: 'pointer' }} title="Open Atlas AI Chat">Atlas</span>
+            {!isByok && tierConfig && (
+              <span
+                className={`chat-usage-counter${messagesRemaining <= 0 ? ' at-limit' : messagesRemaining <= Math.ceil(tierConfig.monthlyMessages * 0.2) ? ' low' : ''}`}
+                title={`${messagesUsed} of ${tierConfig.monthlyMessages} messages used this month`}
+              >
+                {messagesUsed}/{tierConfig.monthlyMessages}
+              </span>
+            )}
             <div className="chat-header-controls">
               <button
                 className={`chat-voice-toggle${voiceEnabled ? ' active' : ''}`}
