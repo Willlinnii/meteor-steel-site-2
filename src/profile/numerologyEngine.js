@@ -1,6 +1,9 @@
 /**
  * Pythagorean Numerology Engine
- * Computes Expression, Soul Urge, and Personality numbers from a full name.
+ * Digit reduction and letter-to-number mapping: standard Pythagorean table.
+ * Number symbolism: Theologumena Arithmeticae (attr. Iamblichus, c. 300 CE,
+ * compiled from Nicomachus of Gerasa, c. 100 CE).
+ * Master numbers (11, 22, 33): modern addition (L. Dow Balliett, c. 1900).
  */
 
 // Pythagorean letter-to-number mapping (A=1 ... I=9, J=1 ... R=9, S=1 ... Z=8)
@@ -61,20 +64,24 @@ export function computeNumerology(fullName) {
   };
 }
 
-/** One-line interpretation for each reduced number */
+/**
+ * Number symbolism from the Pythagorean Decad.
+ * Greek names and associations from the Theologumena Arithmeticae.
+ * The ancient system covers 1–10; numbers beyond 10 recombine these principles.
+ */
 export const NUMBER_MEANINGS = {
-  1: 'The Leader — independent, pioneering, self-reliant.',
-  2: 'The Diplomat — cooperative, sensitive, harmonious.',
-  3: 'The Creator — expressive, joyful, artistic.',
-  4: 'The Builder — disciplined, practical, grounded.',
-  5: 'The Adventurer — freedom-loving, adaptable, curious.',
-  6: 'The Nurturer — responsible, caring, community-minded.',
-  7: 'The Seeker — introspective, analytical, spiritual.',
-  8: 'The Powerhouse — ambitious, authoritative, material mastery.',
-  9: 'The Humanitarian — compassionate, wise, selfless.',
-  11: 'The Visionary — intuitive, inspired, spiritually attuned.',
-  22: 'The Master Builder — visionary architect, manifests large-scale dreams.',
-  33: 'The Master Teacher — uplifting, healing, selfless service.',
+  1: 'Monas. The point. Seed, chaos, foundation, axis, Prometheus, Atropos. Neither odd nor even.',
+  2: 'Dyas. The line. Audacity (tolma), anguish, opinion, movement, generation, matter.',
+  3: 'Trias. The triangle. Beginning, middle, end. Friendship, peace, justice, prudence, piety, harmony.',
+  4: 'Tetras. The square. Justice, Heracles, key-bearer of nature. 1+2+3+4=10.',
+  5: 'Pentas. The pentagram. Marriage (gamos), Aphrodite. Union of 2 and 3.',
+  6: 'Hexas. The hexagon. Perfection of parts. First perfect number: 1+2+3=6=1\u00D72\u00D73. Creation of the world, form of form.',
+  7: 'Heptas. The virgin (parthenos), Athena. Motherless, fatherless. Veneration (sebasmos), fortune, occasion (kairos).',
+  8: 'Ogdoas. The cube. Love, counsel, prudence, law. Universal harmony. Rhea, Cybele.',
+  9: 'Enneas. Ocean (Okeanos), horizon. Concord, Prometheus, Hephaestus. Boundary of the Decad.',
+  11: 'Monad + Decad. (Master number designation is modern, Balliett c. 1900.)',
+  22: 'Dyas + two Decads. (Master number designation is modern, Balliett c. 1900.)',
+  33: 'Trias + three Decads. (Master number designation is modern, Balliett c. 1900.)',
 };
 
 /** Label, subtitle, and description for each of the three number types */

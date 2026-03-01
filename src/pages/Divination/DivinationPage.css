@@ -1,0 +1,1018 @@
+/* ── Divination Page ────────────────────────────────────────── */
+
+.divination-page {
+  min-height: 100vh;
+  background: var(--bg-dark);
+  padding-top: 80px;
+}
+
+/* ── Divination Toggle — segmented control ─────────────────── */
+
+.divination-toggle {
+  display: flex;
+  background: rgba(201, 169, 97, 0.06);
+  border: 1px solid rgba(201, 169, 97, 0.25);
+  border-radius: 10px;
+  overflow: hidden;
+  flex-shrink: 0;
+  max-width: 700px;
+  margin: 0 auto 8px;
+}
+
+.divination-toggle-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  background: none;
+  border: none;
+  border-right: 1px solid rgba(201, 169, 97, 0.15);
+  color: rgba(200, 200, 210, 0.5);
+  padding: 10px 12px;
+  font-family: 'Cinzel', serif;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: color 0.25s, background 0.25s;
+  white-space: nowrap;
+}
+
+.divination-toggle-btn:last-child {
+  border-right: none;
+}
+
+.divination-toggle-btn:hover {
+  color: rgba(200, 200, 210, 0.75);
+}
+
+.divination-toggle-btn.active {
+  color: rgba(201, 169, 97, 0.95);
+  background: rgba(201, 169, 97, 0.15);
+}
+
+/* ── Divination Sub-toggle — second row for grouped tools ──── */
+
+.divination-subtoggle {
+  display: flex;
+  justify-content: center;
+  gap: 2px;
+  max-width: 400px;
+  margin: 0 auto 24px;
+  background: rgba(201, 169, 97, 0.04);
+  border: 1px solid rgba(201, 169, 97, 0.15);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.divination-subtoggle-btn {
+  flex: 1;
+  background: none;
+  border: none;
+  border-right: 1px solid rgba(201, 169, 97, 0.1);
+  color: rgba(200, 200, 210, 0.4);
+  padding: 7px 10px;
+  font-family: 'Cinzel', serif;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: color 0.25s, background 0.25s;
+  white-space: nowrap;
+}
+
+.divination-subtoggle-btn:last-child {
+  border-right: none;
+}
+
+.divination-subtoggle-btn:hover {
+  color: rgba(200, 200, 210, 0.65);
+}
+
+.divination-subtoggle-btn.active {
+  color: rgba(201, 169, 97, 0.9);
+  background: rgba(201, 169, 97, 0.12);
+}
+
+/* ── Padding override for RecursiveChartPage inside divination ── */
+
+.divination-page .recursive-page {
+  padding-top: 0;
+}
+
+/* ── Traditional Astrology wrapper ─────────────────────────── */
+
+.divination-traditional {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 20px 60px;
+}
+
+/* ── Dice Roller Page ──────────────────────────────────────── */
+
+.divination-dice {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 0 20px 60px;
+  text-align: center;
+}
+
+.divination-dice-selector {
+  display: flex;
+  background: rgba(201, 169, 97, 0.06);
+  border: 1px solid rgba(201, 169, 97, 0.25);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 32px;
+}
+
+.divination-dice-selector-btn {
+  flex: 1;
+  background: none;
+  border: none;
+  border-right: 1px solid rgba(201, 169, 97, 0.15);
+  color: rgba(200, 200, 210, 0.5);
+  padding: 10px 8px;
+  font-family: 'Cinzel', serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color 0.25s, background 0.25s;
+}
+
+.divination-dice-selector-btn:last-child {
+  border-right: none;
+}
+
+.divination-dice-selector-btn:hover {
+  color: rgba(200, 200, 210, 0.75);
+}
+
+.divination-dice-selector-btn.active {
+  color: rgba(201, 169, 97, 0.95);
+  background: rgba(201, 169, 97, 0.15);
+}
+
+.divination-dice-selector-btn .dice-solid-name {
+  display: block;
+  font-size: 0.55rem;
+  font-weight: 400;
+  opacity: 0.5;
+  margin-top: 2px;
+  font-family: 'Crimson Pro', serif;
+}
+
+.dice-count-pips {
+  display: flex;
+  gap: 4px;
+  justify-content: center;
+  margin-top: 4px;
+}
+
+.dice-count-pip {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  border: 1px solid rgba(201, 169, 97, 0.4);
+  background: transparent;
+  transition: background 0.2s;
+}
+
+.dice-count-pip.filled {
+  background: rgba(201, 169, 97, 0.85);
+  border-color: rgba(201, 169, 97, 0.85);
+}
+
+.divination-dice-display {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  min-height: 180px;
+  margin-bottom: 24px;
+}
+
+.divination-dice-result {
+  font-family: 'Cinzel', serif;
+  font-size: 3.5rem;
+  font-weight: 700;
+  color: var(--accent-gold);
+  opacity: 0.9;
+}
+
+.divination-dice-tray {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.divination-dice-tray-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.divination-dice-tray-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  opacity: 0.6;
+  letter-spacing: 0.05em;
+}
+
+.divination-dice-total {
+  font-family: 'Cinzel', serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--accent-gold);
+  margin-bottom: 20px;
+  opacity: 0.9;
+}
+
+.divination-dice-total.rolling {
+  animation: diceFlicker 0.12s infinite alternate;
+}
+
+@keyframes diceFlicker {
+  0% { opacity: 0.3; transform: scale(0.95); }
+  100% { opacity: 0.8; transform: scale(1.05); }
+}
+
+.divination-roll-btn {
+  display: inline-block;
+  background: rgba(201, 169, 97, 0.12);
+  border: 1px solid rgba(201, 169, 97, 0.35);
+  color: var(--accent-gold);
+  padding: 14px 48px;
+  font-family: 'Cinzel', serif;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.25s, transform 0.15s;
+  margin-bottom: 32px;
+}
+
+.divination-roll-btn:hover:not(:disabled) {
+  background: rgba(201, 169, 97, 0.22);
+  transform: scale(1.02);
+}
+
+.divination-roll-btn:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+.divination-roll-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+/* ── Numerology reading after roll ──────────────────────────── */
+
+.divination-dice-numerology {
+  margin-bottom: 28px;
+  padding: 16px 20px;
+  background: rgba(201, 169, 97, 0.06);
+  border: 1px solid rgba(201, 169, 97, 0.2);
+  border-radius: 10px;
+  animation: numerologyFadeIn 0.5s ease-out;
+}
+
+@keyframes numerologyFadeIn {
+  0% { opacity: 0; transform: translateY(8px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.divination-dice-numerology-number {
+  font-family: 'Cinzel', serif;
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: var(--accent-gold);
+  margin-bottom: 4px;
+}
+
+.divination-dice-numerology-reduction {
+  font-family: 'Crimson Pro', serif;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  opacity: 0.5;
+  margin-bottom: 8px;
+}
+
+.divination-dice-numerology-meaning {
+  font-family: 'Crimson Pro', serif;
+  font-size: 1rem;
+  color: var(--text-primary);
+  line-height: 1.5;
+  opacity: 0.85;
+}
+
+.divination-dice-history {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  flex-wrap: wrap;
+  min-height: 32px;
+}
+
+.divination-dice-history-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+  height: 32px;
+  padding: 0 8px;
+  border-radius: 6px;
+  background: rgba(201, 169, 97, 0.08);
+  border: 1px solid rgba(201, 169, 97, 0.15);
+  color: var(--text-secondary);
+  font-family: 'Cinzel', serif;
+  font-size: 0.65rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.divination-dice-history-item:first-child {
+  color: var(--accent-gold);
+  border-color: rgba(201, 169, 97, 0.35);
+}
+
+/* ── Dice SVG displays inside divination tray ──────────────── */
+
+.divination-dice-tray .dice-svg.d4,
+.divination-dice-tray .dice-svg.d6,
+.divination-dice-tray .dice-svg.d8,
+.divination-dice-tray .dice-svg.d12,
+.divination-dice-tray .dice-svg.d20 {
+  width: 100px;
+  height: 100px;
+}
+
+.divination-dice-tray .dice-svg.dice-rolling {
+  animation: diceFlicker 0.12s infinite alternate;
+}
+
+/* ── Shared Oracle Layout ─────────────────────────────────── */
+
+.divination-oracle {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 0 20px 60px;
+  text-align: center;
+}
+
+.divination-oracle-tray {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  min-height: 160px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.divination-oracle-empty {
+  font-family: 'Crimson Pro', serif;
+  font-size: 1rem;
+  color: var(--text-secondary);
+  opacity: 0.35;
+  font-style: italic;
+}
+
+.divination-oracle-reading {
+  margin-bottom: 28px;
+  padding: 16px 20px;
+  background: rgba(201, 169, 97, 0.06);
+  border: 1px solid rgba(201, 169, 97, 0.2);
+  border-radius: 10px;
+  animation: numerologyFadeIn 0.5s ease-out;
+}
+
+.divination-oracle-title {
+  font-family: 'Cinzel', serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--accent-gold);
+  margin-bottom: 6px;
+}
+
+.divination-oracle-count {
+  font-family: 'Crimson Pro', serif;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  opacity: 0.5;
+  margin-bottom: 10px;
+  letter-spacing: 0.15em;
+}
+
+.divination-oracle-text {
+  font-family: 'Crimson Pro', serif;
+  font-size: 1.05rem;
+  color: var(--text-primary);
+  line-height: 1.6;
+  opacity: 0.85;
+}
+
+.divination-oracle-history {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  flex-wrap: wrap;
+  min-height: 32px;
+}
+
+.divination-oracle-history-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+  height: 32px;
+  padding: 0 10px;
+  border-radius: 6px;
+  background: rgba(201, 169, 97, 0.08);
+  border: 1px solid rgba(201, 169, 97, 0.15);
+  color: var(--text-secondary);
+  font-family: 'Cinzel', serif;
+  font-size: 0.6rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.divination-oracle-history-item:first-child {
+  color: var(--accent-gold);
+  border-color: rgba(201, 169, 97, 0.35);
+}
+
+.divination-oracle-source {
+  margin-top: 32px;
+  font-family: 'Crimson Pro', serif;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  opacity: 0.35;
+  line-height: 1.5;
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ── Cowrie Shells ────────────────────────────────────────── */
+
+.divination-cowrie-shell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.divination-cowrie-body {
+  width: 56px;
+  height: 72px;
+  border-radius: 50%;
+  background: rgba(201, 169, 97, 0.12);
+  border: 2px solid rgba(201, 169, 97, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.3s, border-color 0.3s;
+  position: relative;
+}
+
+.divination-cowrie-shell.open .divination-cowrie-body {
+  background: rgba(201, 169, 97, 0.22);
+  border-color: rgba(201, 169, 97, 0.6);
+}
+
+.divination-cowrie-slit {
+  width: 60%;
+  height: 3px;
+  background: var(--accent-gold);
+  border-radius: 2px;
+  opacity: 0.8;
+}
+
+.divination-cowrie-shell.casting .divination-cowrie-body {
+  animation: diceFlicker 0.12s infinite alternate;
+}
+
+.divination-cowrie-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.6rem;
+  color: var(--text-secondary);
+  opacity: 0.5;
+  letter-spacing: 0.05em;
+}
+
+/* ── Throwing Sticks ──────────────────────────────────────── */
+
+.divination-stick {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.divination-stick-body {
+  width: 20px;
+  height: 90px;
+  background: rgba(201, 169, 97, 0.15);
+  border: 2px solid rgba(201, 169, 97, 0.35);
+  transition: background 0.3s, border-radius 0.3s, border-color 0.3s;
+}
+
+.divination-stick.flat .divination-stick-body {
+  border-radius: 3px;
+  background: rgba(201, 169, 97, 0.1);
+}
+
+.divination-stick.round .divination-stick-body {
+  border-radius: 10px;
+  background: rgba(201, 169, 97, 0.25);
+  border-color: rgba(201, 169, 97, 0.6);
+}
+
+.divination-stick.casting .divination-stick-body {
+  animation: diceFlicker 0.12s infinite alternate;
+}
+
+.divination-stick-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.6rem;
+  color: var(--text-secondary);
+  opacity: 0.5;
+  letter-spacing: 0.05em;
+}
+
+/* ── Spinning Top ─────────────────────────────────────────── */
+
+.divination-top-stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 24px;
+  min-height: 180px;
+  justify-content: center;
+  position: relative;
+}
+
+.divination-top-shape {
+  width: 110px;
+  height: 110px;
+  background: rgba(201, 169, 97, 0.08);
+  border: 2px solid rgba(201, 169, 97, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform-origin: center center;
+  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+}
+
+.divination-top-face {
+  font-size: 2.5rem;
+  color: var(--accent-gold);
+  line-height: 1;
+}
+
+.divination-top-pointer {
+  color: var(--accent-gold);
+  font-size: 1rem;
+  opacity: 0.6;
+  margin-top: -4px;
+}
+
+.divination-top-symbol {
+  font-size: 1.8rem;
+  vertical-align: middle;
+  margin-right: 6px;
+}
+
+/* ── I Ching ──────────────────────────────────────────────── */
+
+.divination-iching {
+  max-width: 700px;
+}
+
+.iching-coins-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 24px;
+}
+
+.iching-coin-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.35s ease-out, transform 0.35s ease-out;
+}
+
+.iching-coin-row.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.iching-coin-line-num {
+  font-family: 'Cinzel', serif;
+  font-size: 0.65rem;
+  color: var(--text-secondary);
+  opacity: 0.4;
+  width: 16px;
+  text-align: right;
+}
+
+.iching-coin {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  font-family: 'Cinzel', serif;
+  font-size: 0.65rem;
+  font-weight: 700;
+}
+
+.iching-coin.heads {
+  background: rgba(201, 169, 97, 0.2);
+  color: var(--accent-gold);
+  border: 1px solid rgba(201, 169, 97, 0.4);
+}
+
+.iching-coin.tails {
+  background: rgba(120, 120, 140, 0.12);
+  color: var(--text-secondary);
+  border: 1px solid rgba(120, 120, 140, 0.25);
+}
+
+.iching-coin-sum {
+  font-family: 'Cinzel', serif;
+  font-size: 0.65rem;
+  color: var(--text-secondary);
+  opacity: 0.5;
+  width: 28px;
+}
+
+.iching-reading {
+  display: flex;
+  gap: 24px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+
+.iching-hexagram-block {
+  flex: 1;
+  min-width: 240px;
+  max-width: 320px;
+  padding: 16px 20px;
+  background: rgba(201, 169, 97, 0.06);
+  border: 1px solid rgba(201, 169, 97, 0.2);
+  border-radius: 10px;
+  animation: numerologyFadeIn 0.5s ease-out;
+}
+
+.iching-hex-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  opacity: 0.5;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.iching-hex-lines {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.iching-line {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  max-width: 160px;
+  height: 12px;
+}
+
+.iching-line.empty {
+  border: 1px dashed rgba(201, 169, 97, 0.12);
+  border-radius: 3px;
+}
+
+.iching-line-solid {
+  width: 100%;
+  height: 6px;
+  background: var(--accent-gold);
+  border-radius: 2px;
+  opacity: 0.8;
+}
+
+.iching-line-broken {
+  display: flex;
+  width: 100%;
+  gap: 16px;
+  justify-content: center;
+}
+
+.iching-line-broken span {
+  flex: 1;
+  height: 6px;
+  background: var(--accent-gold);
+  border-radius: 2px;
+  opacity: 0.8;
+}
+
+.iching-line-mark {
+  font-size: 0.7rem;
+  color: rgba(220, 120, 100, 0.8);
+  font-weight: 700;
+  width: 16px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.iching-line.changing .iching-line-solid,
+.iching-line.changing .iching-line-broken span {
+  opacity: 0.5;
+  background: rgba(220, 120, 100, 0.6);
+}
+
+.iching-hex-name {
+  font-family: 'Cinzel', serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--accent-gold);
+  margin-bottom: 4px;
+}
+
+.iching-hex-trigrams {
+  font-family: 'Crimson Pro', serif;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  opacity: 0.5;
+  margin-bottom: 10px;
+}
+
+.iching-hex-judgment {
+  font-family: 'Crimson Pro', serif;
+  font-size: 0.95rem;
+  color: var(--text-primary);
+  line-height: 1.6;
+  opacity: 0.85;
+}
+
+/* ── Geomancy ─────────────────────────────────────────────── */
+
+.geomancy-figure-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  min-height: 160px;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+
+.geomancy-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.35s ease-out, transform 0.35s ease-out;
+}
+
+.geomancy-row.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.geomancy-row-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.6rem;
+  color: var(--text-secondary);
+  opacity: 0.4;
+  width: 40px;
+  text-align: right;
+  letter-spacing: 0.04em;
+}
+
+.geomancy-dots {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  min-width: 60px;
+}
+
+.geomancy-dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--accent-gold);
+  opacity: 0.8;
+}
+
+.geomancy-dot.placeholder {
+  opacity: 0.1;
+  border: 1px dashed rgba(201, 169, 97, 0.3);
+  background: transparent;
+}
+
+.geomancy-meta {
+  font-family: 'Crimson Pro', serif;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  opacity: 0.5;
+  margin-bottom: 10px;
+}
+
+/* ── Geomancy attributes ──────────────────────────────────── */
+
+.geomancy-attrs {
+  font-family: 'Crimson Pro', serif;
+  font-size: 0.95rem;
+  color: var(--text-primary);
+  line-height: 1.6;
+  opacity: 0.85;
+  text-align: left;
+  margin-top: 8px;
+}
+
+.geomancy-attrs strong {
+  color: var(--accent-gold);
+  opacity: 0.8;
+  font-weight: 600;
+}
+
+/* ── Sortes ───────────────────────────────────────────────── */
+
+.sortes-mode-toggle {
+  display: flex;
+  justify-content: center;
+  gap: 2px;
+  max-width: 280px;
+  margin: 0 auto 16px;
+  background: rgba(201, 169, 97, 0.04);
+  border: 1px solid rgba(201, 169, 97, 0.15);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.sortes-questions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: center;
+  margin-bottom: 20px;
+  max-height: 160px;
+  overflow-y: auto;
+  padding: 4px;
+}
+
+.sortes-question-btn {
+  background: rgba(201, 169, 97, 0.06);
+  border: 1px solid rgba(201, 169, 97, 0.15);
+  border-radius: 6px;
+  color: var(--text-secondary);
+  font-family: 'Crimson Pro', serif;
+  font-size: 0.8rem;
+  padding: 6px 12px;
+  cursor: pointer;
+  transition: color 0.2s, background 0.2s, border-color 0.2s;
+}
+
+.sortes-question-btn:hover {
+  color: var(--text-primary);
+  border-color: rgba(201, 169, 97, 0.3);
+}
+
+.sortes-question-btn.active {
+  color: var(--accent-gold);
+  background: rgba(201, 169, 97, 0.15);
+  border-color: rgba(201, 169, 97, 0.4);
+}
+
+.sortes-question {
+  font-family: 'Crimson Pro', serif;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  opacity: 0.6;
+  margin-bottom: 10px;
+  font-style: italic;
+}
+
+.divination-sortes .divination-oracle-tray {
+  min-height: 120px;
+}
+
+.sortes-oracle-card {
+  max-width: 440px;
+  padding: 24px 28px;
+  background: rgba(201, 169, 97, 0.06);
+  border: 1px solid rgba(201, 169, 97, 0.25);
+  border-radius: 10px;
+  animation: numerologyFadeIn 0.5s ease-out;
+}
+
+.sortes-oracle-card.flickering {
+  animation: diceFlicker 0.1s infinite alternate;
+}
+
+.sortes-number {
+  font-family: 'Cinzel', serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--accent-gold);
+  opacity: 0.7;
+  margin-bottom: 12px;
+}
+
+.sortes-text {
+  font-family: 'Crimson Pro', serif;
+  font-size: 1.1rem;
+  color: var(--text-primary);
+  line-height: 1.7;
+  opacity: 0.9;
+  font-style: italic;
+}
+
+/* ── Responsive ────────────────────────────────────────────── */
+
+@media (max-width: 700px) {
+  .divination-toggle {
+    margin: 0 12px 6px;
+    border-radius: 8px;
+  }
+
+  .divination-toggle-btn {
+    padding: 8px 6px;
+    font-size: 0.6rem;
+  }
+
+  .divination-subtoggle {
+    margin: 0 24px 16px;
+  }
+
+  .divination-subtoggle-btn {
+    padding: 6px 6px;
+    font-size: 0.55rem;
+  }
+
+  .divination-page {
+    padding-top: 70px;
+  }
+
+  .divination-dice-selector {
+    margin: 0 0 24px;
+  }
+
+  .divination-dice-selector-btn {
+    padding: 8px 4px;
+    font-size: 0.65rem;
+  }
+
+  .divination-dice-selector-btn .dice-solid-name {
+    display: none;
+  }
+
+  .divination-oracle {
+    padding: 0 12px 40px;
+  }
+
+  .iching-reading {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .iching-hexagram-block {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .divination-cowrie-body {
+    width: 44px;
+    height: 56px;
+  }
+
+  .divination-stick-body {
+    height: 70px;
+  }
+
+  .divination-top-shape {
+    width: 100px;
+    height: 100px;
+  }
+}
