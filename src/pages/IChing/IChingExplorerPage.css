@@ -1,0 +1,452 @@
+/* ── I Ching Explorer ───────────────────────────────────────── */
+
+.iching-explorer-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+  color: var(--text-primary);
+}
+
+.iching-explorer-title {
+  text-align: center;
+  font-size: 2rem;
+  color: var(--accent-gold);
+  margin-bottom: 0.25rem;
+  letter-spacing: 0.05em;
+}
+
+.iching-explorer-subtitle {
+  text-align: center;
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  margin-bottom: 2rem;
+}
+
+/* ── Top section: compass + detail side by side ────────────── */
+
+.iching-explorer-top {
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+  margin-bottom: 2.5rem;
+}
+
+/* ── Arrangement Toggle ────────────────────────────────────── */
+
+.iching-explorer-arrangement-toggle {
+  display: flex;
+  justify-content: center;
+  gap: 0;
+  margin-bottom: 0.75rem;
+}
+
+.iching-explorer-arrangement-toggle button {
+  background: var(--bg-medium);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  padding: 0.35rem 0.9rem;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: color 0.15s, background 0.15s;
+}
+
+.iching-explorer-arrangement-toggle button:first-child {
+  border-radius: 4px 0 0 4px;
+}
+
+.iching-explorer-arrangement-toggle button:last-child {
+  border-radius: 0 4px 4px 0;
+  border-left: none;
+}
+
+.iching-explorer-arrangement-toggle button:hover {
+  color: var(--text-primary);
+}
+
+.iching-explorer-arrangement-toggle button.iching-toggle-active {
+  background: rgba(212, 175, 55, 0.15);
+  color: var(--accent-gold);
+  border-color: var(--accent-gold);
+}
+
+.iching-explorer-arrangement-toggle button.iching-toggle-active + button {
+  border-left: none;
+}
+
+.iching-explorer-arrangement-label {
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  font-style: italic;
+  margin-top: 0.4rem;
+}
+
+/* ── Bagua Compass ─────────────────────────────────────────── */
+
+.iching-explorer-compass-wrap {
+  flex: 0 0 420px;
+}
+
+.iching-explorer-compass {
+  width: 100%;
+  max-width: 420px;
+  cursor: default;
+}
+
+.iching-explorer-compass text {
+  font-family: inherit;
+}
+
+.iching-explorer-compass .iching-compass-direction {
+  fill: var(--text-secondary);
+  font-size: 13px;
+}
+
+.iching-explorer-compass .iching-compass-trigram-group {
+  cursor: pointer;
+  transition: filter 0.2s;
+}
+
+.iching-explorer-compass .iching-compass-trigram-group:hover {
+  filter: brightness(1.3);
+}
+
+.iching-explorer-compass .iching-compass-trigram-group.iching-compass-selected {
+  filter: drop-shadow(0 0 8px var(--accent-gold));
+}
+
+.iching-explorer-compass .iching-compass-trigram-symbol {
+  font-size: 22px;
+  fill: var(--text-primary);
+}
+
+.iching-explorer-compass .iching-compass-trigram-name {
+  font-size: 11px;
+  fill: var(--text-secondary);
+}
+
+.iching-explorer-compass .iching-compass-trigram-group.iching-compass-selected .iching-compass-trigram-symbol,
+.iching-explorer-compass .iching-compass-trigram-group.iching-compass-selected .iching-compass-trigram-name {
+  fill: var(--accent-gold);
+}
+
+.iching-explorer-compass .iching-compass-taijitu {
+  opacity: 0.9;
+  transition: opacity 0.2s;
+}
+
+.iching-explorer-compass .iching-compass-taijitu:hover {
+  opacity: 1;
+}
+
+.iching-explorer-compass .iching-compass-line-yang {
+  fill: var(--text-primary);
+}
+
+.iching-explorer-compass .iching-compass-line-yin {
+  fill: var(--text-primary);
+}
+
+.iching-explorer-compass .iching-compass-trigram-group.iching-compass-selected .iching-compass-line-yang,
+.iching-explorer-compass .iching-compass-trigram-group.iching-compass-selected .iching-compass-line-yin {
+  fill: var(--accent-gold);
+}
+
+/* ── Detail Panel ──────────────────────────────────────────── */
+
+.iching-explorer-detail {
+  flex: 1;
+  min-width: 0;
+}
+
+.iching-explorer-detail-placeholder {
+  color: var(--text-secondary);
+  font-style: italic;
+  padding: 2rem 0;
+  text-align: center;
+}
+
+/* Trigram Detail */
+
+.iching-explorer-trigram-detail {
+  background: var(--bg-medium);
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  padding: 1.5rem;
+}
+
+.iching-explorer-trigram-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.iching-explorer-trigram-symbol {
+  font-size: 2.5rem;
+  color: var(--accent-gold);
+  line-height: 1;
+}
+
+.iching-explorer-trigram-title {
+  font-size: 1.4rem;
+  color: var(--accent-gold);
+  margin: 0;
+}
+
+.iching-explorer-trigram-pinyin {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+.iching-explorer-trigram-fields {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.35rem 1rem;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+}
+
+.iching-explorer-trigram-label {
+  color: var(--accent-steel);
+  font-weight: 600;
+}
+
+.iching-explorer-trigram-value {
+  color: var(--text-primary);
+}
+
+.iching-explorer-trigram-quality {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  border-top: 1px solid var(--border-subtle);
+  padding-top: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+/* Hexagram Detail */
+
+.iching-explorer-hex-detail {
+  background: var(--bg-medium);
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  padding: 1.5rem;
+}
+
+.iching-explorer-hex-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.iching-explorer-hex-number {
+  font-size: 1.6rem;
+  color: var(--accent-steel);
+  font-weight: 700;
+  min-width: 2rem;
+  text-align: center;
+}
+
+.iching-explorer-hex-title {
+  font-size: 1.3rem;
+  color: var(--accent-gold);
+  margin: 0;
+}
+
+.iching-explorer-hex-pinyin {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+.iching-explorer-hex-trigrams-info {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-bottom: 1rem;
+}
+
+.iching-explorer-hex-trigrams-info span {
+  color: var(--accent-steel);
+}
+
+.iching-explorer-hex-drawing {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  margin-bottom: 1rem;
+}
+
+.iching-explorer-hex-line {
+  height: 6px;
+  border-radius: 2px;
+}
+
+.iching-explorer-hex-line-yang {
+  width: 60px;
+  background: var(--accent-gold);
+}
+
+.iching-explorer-hex-line-yin {
+  width: 60px;
+  display: flex;
+  gap: 8px;
+}
+
+.iching-explorer-hex-line-yin span {
+  flex: 1;
+  height: 6px;
+  background: var(--accent-gold);
+  border-radius: 2px;
+}
+
+.iching-explorer-hex-section-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--accent-steel);
+  margin-bottom: 0.35rem;
+  margin-top: 0.75rem;
+}
+
+.iching-explorer-hex-text {
+  font-size: 0.9rem;
+  color: var(--text-primary);
+  line-height: 1.6;
+  margin-bottom: 0.5rem;
+}
+
+/* ── Hexagram Grid ─────────────────────────────────────────── */
+
+.iching-explorer-grid-section {
+  margin-top: 1rem;
+}
+
+.iching-explorer-grid-title {
+  font-size: 1.1rem;
+  color: var(--accent-gold);
+  margin-bottom: 0.75rem;
+  text-align: center;
+}
+
+.iching-explorer-grid-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.iching-explorer-grid {
+  border-collapse: collapse;
+  margin: 0 auto;
+  min-width: 540px;
+}
+
+.iching-explorer-grid th,
+.iching-explorer-grid td {
+  text-align: center;
+  padding: 0.3rem 0.4rem;
+  font-size: 0.8rem;
+  border: 1px solid var(--border-subtle);
+}
+
+.iching-explorer-grid th {
+  background: var(--bg-medium);
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+.iching-explorer-grid .iching-grid-corner {
+  border: none;
+  background: transparent;
+}
+
+.iching-explorer-grid .iching-grid-upper-label {
+  font-size: 0.65rem;
+  color: var(--text-secondary);
+  text-align: center;
+  border: none;
+  background: transparent;
+  padding-bottom: 0;
+}
+
+.iching-explorer-grid .iching-grid-lower-label {
+  font-size: 0.65rem;
+  color: var(--text-secondary);
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  border: none;
+  background: transparent;
+  padding: 0.5rem 0.2rem;
+}
+
+.iching-explorer-grid .iching-grid-header-cell {
+  cursor: pointer;
+  transition: color 0.15s;
+  white-space: nowrap;
+}
+
+.iching-explorer-grid .iching-grid-header-cell:hover {
+  color: var(--accent-gold);
+}
+
+.iching-explorer-grid .iching-grid-header-highlight {
+  color: var(--accent-gold);
+  background: rgba(212, 175, 55, 0.08);
+}
+
+.iching-explorer-grid td.iching-grid-cell {
+  cursor: pointer;
+  color: var(--text-secondary);
+  transition: background 0.15s, color 0.15s;
+  min-width: 2.2rem;
+}
+
+.iching-explorer-grid td.iching-grid-cell:hover {
+  background: rgba(212, 175, 55, 0.12);
+  color: var(--text-primary);
+}
+
+.iching-explorer-grid td.iching-grid-cell-highlight {
+  background: rgba(212, 175, 55, 0.08);
+}
+
+.iching-explorer-grid td.iching-grid-cell-selected {
+  background: var(--accent-gold);
+  color: var(--bg-dark);
+  font-weight: 700;
+}
+
+/* ── Responsive ────────────────────────────────────────────── */
+
+@media (max-width: 900px) {
+  .iching-explorer-top {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .iching-explorer-compass-wrap {
+    flex: none;
+    width: 100%;
+    max-width: 360px;
+  }
+
+  .iching-explorer-detail {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .iching-explorer-page {
+    padding: 1rem 0.75rem 3rem;
+  }
+
+  .iching-explorer-title {
+    font-size: 1.5rem;
+  }
+
+  .iching-explorer-compass-wrap {
+    max-width: 300px;
+  }
+}

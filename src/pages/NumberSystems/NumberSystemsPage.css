@@ -1,0 +1,576 @@
+/* ===== NUMBER SYSTEMS VISUALIZER ===== */
+
+.numbers-page {
+  --np-bg1: #06060f;
+  --np-bg2: #0a0a18;
+  --np-bg3: #0d0d1a;
+  --np-bg4: #08080f;
+  --np-gold: rgba(201, 169, 97, 0.8);
+  --np-gold-dim: rgba(201, 169, 97, 0.35);
+  --np-gold-border: rgba(201, 169, 97, 0.5);
+  --np-teal: rgba(139, 195, 170, 0.7);
+  --np-teal-dim: rgba(139, 195, 170, 0.3);
+  --np-text: rgba(220, 220, 230, 0.9);
+  --np-text-dim: rgba(180, 180, 195, 0.6);
+  --np-cell-bg: rgba(15, 15, 30, 0.6);
+  --np-cell-hover: rgba(201, 169, 97, 0.12);
+
+  padding: 24px 20px 80px;
+  max-width: 1400px;
+  margin: 0 auto;
+  position: relative;
+  min-height: 100vh;
+  color: var(--np-text);
+  background:
+    radial-gradient(1px 1px at 10% 15%, rgba(255,255,255,0.7) 50%, transparent 50%),
+    radial-gradient(1px 1px at 25% 35%, rgba(255,255,255,0.5) 50%, transparent 50%),
+    radial-gradient(1.5px 1.5px at 40% 8%, rgba(255,255,255,0.8) 50%, transparent 50%),
+    radial-gradient(1px 1px at 55% 22%, rgba(255,255,255,0.4) 50%, transparent 50%),
+    radial-gradient(1px 1px at 70% 45%, rgba(255,255,255,0.6) 50%, transparent 50%),
+    radial-gradient(1.5px 1.5px at 85% 12%, rgba(255,255,255,0.7) 50%, transparent 50%),
+    radial-gradient(1px 1px at 15% 55%, rgba(255,255,255,0.5) 50%, transparent 50%),
+    radial-gradient(1px 1px at 35% 70%, rgba(255,255,255,0.4) 50%, transparent 50%),
+    radial-gradient(1.5px 1.5px at 50% 50%, rgba(255,255,255,0.6) 50%, transparent 50%),
+    radial-gradient(1px 1px at 65% 65%, rgba(255,255,255,0.5) 50%, transparent 50%),
+    radial-gradient(1px 1px at 80% 38%, rgba(255,255,255,0.3) 50%, transparent 50%),
+    radial-gradient(1px 1px at 92% 55%, rgba(255,255,255,0.6) 50%, transparent 50%),
+    radial-gradient(ellipse at 50% 0%, rgba(30,30,60,0.4) 0%, transparent 70%),
+    radial-gradient(ellipse at 20% 50%, rgba(15,15,40,0.3) 0%, transparent 60%),
+    linear-gradient(to bottom, var(--np-bg1) 0%, var(--np-bg2) 40%, var(--np-bg3) 70%, var(--np-bg4) 100%);
+  background-attachment: fixed;
+}
+
+/* ===== HEADING ===== */
+
+.numbers-heading {
+  font-family: 'Cinzel', serif;
+  font-size: 1.6rem;
+  text-align: center;
+  color: var(--np-gold);
+  margin: 0 0 6px;
+  letter-spacing: 0.05em;
+}
+
+.numbers-subtitle {
+  text-align: center;
+  color: var(--np-text-dim);
+  font-size: 0.85rem;
+  margin: 0 0 20px;
+}
+
+/* ===== CONTROLS ===== */
+
+.numbers-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.numbers-control-group {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.numbers-control-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--np-text-dim);
+  align-self: center;
+  margin-right: 4px;
+  font-family: 'Cinzel', serif;
+}
+
+/* ===== TOGGLE BUTTONS ===== */
+
+.numbers-toggle-btn {
+  font-family: 'Cinzel', serif;
+  font-size: 0.72rem;
+  padding: 5px 12px;
+  border: 1px solid var(--np-gold-dim);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--np-text-dim);
+  cursor: pointer;
+  transition: all 200ms ease;
+  white-space: nowrap;
+}
+
+.numbers-toggle-btn:hover {
+  border-color: var(--np-gold-border);
+  color: var(--np-gold);
+}
+
+.numbers-toggle-btn.active {
+  border-color: var(--np-gold);
+  color: var(--np-gold);
+  background: rgba(201, 169, 97, 0.1);
+  box-shadow: 0 0 8px rgba(201, 169, 97, 0.15);
+}
+
+.numbers-toggle-btn.trad-off {
+  opacity: 0.4;
+}
+
+/* ===== TABLE VIEW ===== */
+
+.numbers-table-wrap {
+  overflow-x: auto;
+  margin-bottom: 16px;
+  -webkit-overflow-scrolling: touch;
+}
+
+.numbers-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8rem;
+}
+
+.numbers-table th {
+  font-family: 'Cinzel', serif;
+  font-size: 0.68rem;
+  color: var(--np-gold);
+  padding: 8px 6px;
+  text-align: left;
+  border-bottom: 1px solid var(--np-gold-dim);
+  white-space: nowrap;
+  position: sticky;
+  top: 0;
+  background: var(--np-bg1);
+  z-index: 2;
+}
+
+.numbers-table th:first-child {
+  width: 40px;
+  text-align: center;
+}
+
+.numbers-table td {
+  padding: 6px;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  vertical-align: top;
+}
+
+.numbers-table tr:hover td {
+  background: rgba(201, 169, 97, 0.04);
+}
+
+.numbers-cell {
+  cursor: pointer;
+  padding: 4px 6px;
+  border-radius: 3px;
+  transition: background 150ms;
+  font-size: 0.78rem;
+  line-height: 1.35;
+}
+
+.numbers-cell:hover {
+  background: var(--np-cell-hover);
+}
+
+.numbers-cell.selected {
+  background: rgba(201, 169, 97, 0.15);
+  outline: 1px solid var(--np-gold-border);
+}
+
+.numbers-cell-empty {
+  color: var(--np-text-dim);
+  opacity: 0.3;
+  font-size: 0.7rem;
+  padding: 4px 6px;
+}
+
+.numbers-row-num {
+  font-family: 'Cinzel', serif;
+  color: var(--np-gold);
+  text-align: center;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: text-shadow 150ms;
+}
+
+.numbers-row-num:hover {
+  text-shadow: 0 0 8px rgba(201, 169, 97, 0.6);
+}
+
+/* ===== NUMBER POPUP OVERLAY ===== */
+
+.numbers-popup-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 60px 16px 40px;
+  overflow-y: auto;
+  animation: numbers-overlay-in 150ms ease-out;
+}
+
+@keyframes numbers-overlay-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.numbers-popup {
+  background: rgba(8, 8, 18, 0.96);
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--np-gold-border);
+  border-radius: 10px;
+  padding: 28px 28px 24px;
+  max-width: 640px;
+  width: 100%;
+  animation: numbers-popup-in 200ms ease-out;
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5), 0 0 20px rgba(201, 169, 97, 0.08);
+}
+
+@keyframes numbers-popup-in {
+  from { opacity: 0; transform: translateY(-12px) scale(0.97); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.numbers-popup-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.numbers-popup-number {
+  font-family: 'Cinzel', serif;
+  font-size: 2rem;
+  color: var(--np-gold);
+  line-height: 1;
+}
+
+.numbers-popup-close {
+  background: none;
+  border: 1px solid var(--np-gold-dim);
+  color: var(--np-text-dim);
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 4px 10px;
+  border-radius: 4px;
+  transition: all 150ms;
+}
+
+.numbers-popup-close:hover {
+  color: var(--np-gold);
+  border-color: var(--np-gold-border);
+}
+
+.numbers-popup-entries {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.numbers-popup-entry {
+  padding-bottom: 14px;
+  border-bottom: 1px solid rgba(201, 169, 97, 0.12);
+}
+
+.numbers-popup-entry:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.numbers-popup-entry-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.numbers-popup-entry-name {
+  font-family: 'Cinzel', serif;
+  font-size: 0.92rem;
+  color: var(--np-gold);
+}
+
+.numbers-popup-entry-tradition {
+  font-size: 0.68rem;
+  color: var(--np-teal);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  flex-shrink: 0;
+}
+
+.numbers-popup-entry-summary {
+  color: var(--np-text);
+  font-size: 0.84rem;
+  line-height: 1.65;
+}
+
+.numbers-popup-empty {
+  color: var(--np-text-dim);
+  text-align: center;
+  font-size: 0.85rem;
+  padding: 12px 0;
+}
+
+/* ===== DETAIL PANEL ===== */
+
+.numbers-detail {
+  background: rgba(6, 6, 15, 0.85);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--np-gold-dim);
+  border-radius: 8px;
+  padding: 20px 24px;
+  margin: 12px 0 20px;
+  animation: numbers-fade-in 200ms ease-out;
+}
+
+@keyframes numbers-fade-in {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.numbers-detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.numbers-detail-title {
+  font-family: 'Cinzel', serif;
+  font-size: 1.1rem;
+  color: var(--np-gold);
+  margin: 0;
+}
+
+.numbers-detail-tradition {
+  font-size: 0.72rem;
+  color: var(--np-teal);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+}
+
+.numbers-detail-close {
+  background: none;
+  border: 1px solid var(--np-gold-dim);
+  color: var(--np-text-dim);
+  font-size: 0.8rem;
+  cursor: pointer;
+  padding: 2px 8px;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+
+.numbers-detail-close:hover {
+  color: var(--np-gold);
+  border-color: var(--np-gold-border);
+}
+
+.numbers-detail-summary {
+  color: var(--np-text);
+  line-height: 1.6;
+  margin-bottom: 14px;
+  font-size: 0.88rem;
+}
+
+.numbers-detail-fields {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 6px 14px;
+  font-size: 0.82rem;
+}
+
+.numbers-detail-label {
+  color: var(--np-gold);
+  font-family: 'Cinzel', serif;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding-top: 2px;
+}
+
+.numbers-detail-value {
+  color: var(--np-text);
+  line-height: 1.55;
+}
+
+.numbers-detail-teaching {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(201, 169, 97, 0.15);
+  color: var(--np-text);
+  line-height: 1.7;
+  font-size: 0.86rem;
+}
+
+/* ===== CARD VIEW (By Number / By Tradition) ===== */
+
+.numbers-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.numbers-card {
+  background: rgba(6, 6, 15, 0.75);
+  border: 1px solid var(--np-gold-dim);
+  border-radius: 8px;
+  padding: 16px 20px;
+  cursor: pointer;
+  transition: border-color 200ms, background 200ms;
+}
+
+.numbers-card:hover {
+  border-color: var(--np-gold-border);
+  background: rgba(6, 6, 15, 0.9);
+}
+
+.numbers-card.expanded {
+  border-color: var(--np-gold);
+  background: rgba(6, 6, 15, 0.9);
+}
+
+.numbers-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.numbers-card-name {
+  font-family: 'Cinzel', serif;
+  font-size: 0.95rem;
+  color: var(--np-gold);
+}
+
+.numbers-card-num {
+  font-family: 'Cinzel', serif;
+  font-size: 0.82rem;
+  color: var(--np-teal);
+  flex-shrink: 0;
+}
+
+.numbers-card-tradition {
+  font-size: 0.7rem;
+  color: var(--np-teal);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-top: 2px;
+}
+
+.numbers-card-summary {
+  color: var(--np-text-dim);
+  font-size: 0.82rem;
+  margin-top: 8px;
+  line-height: 1.5;
+}
+
+.numbers-card-body {
+  margin-top: 12px;
+  animation: numbers-fade-in 200ms ease-out;
+}
+
+/* ===== PICKER (By Number / By Tradition selectors) ===== */
+
+.numbers-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.numbers-picker-btn {
+  font-family: 'Cinzel', serif;
+  font-size: 0.75rem;
+  padding: 5px 10px;
+  min-width: 32px;
+  border: 1px solid var(--np-gold-dim);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--np-text-dim);
+  cursor: pointer;
+  transition: all 150ms;
+  text-align: center;
+}
+
+.numbers-picker-btn:hover {
+  border-color: var(--np-gold-border);
+  color: var(--np-gold);
+}
+
+.numbers-picker-btn.active {
+  border-color: var(--np-gold);
+  color: var(--np-gold);
+  background: rgba(201, 169, 97, 0.12);
+}
+
+.numbers-picker-btn.has-entries {
+  color: var(--np-text);
+}
+
+/* ===== NUMBER GROUP HEADER ===== */
+
+.numbers-group-header {
+  font-family: 'Cinzel', serif;
+  font-size: 1.15rem;
+  color: var(--np-gold);
+  margin: 0 0 14px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--np-gold-dim);
+}
+
+/* ===== RESPONSIVE ===== */
+
+@media (max-width: 768px) {
+  .numbers-page {
+    padding: 16px 12px 60px;
+  }
+  .numbers-heading {
+    font-size: 1.3rem;
+  }
+  .numbers-detail {
+    padding: 16px;
+  }
+  .numbers-detail-fields {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+  .numbers-detail-label {
+    margin-top: 6px;
+  }
+}
+
+@media (max-width: 600px) {
+  .numbers-heading {
+    font-size: 1.1rem;
+  }
+  .numbers-toggle-btn {
+    font-size: 0.65rem;
+    padding: 4px 8px;
+  }
+  .numbers-controls {
+    gap: 6px;
+  }
+  .numbers-control-group {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    max-width: 100%;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 4px;
+  }
+  .numbers-card {
+    padding: 12px 14px;
+  }
+  .numbers-detail {
+    padding: 14px;
+  }
+}

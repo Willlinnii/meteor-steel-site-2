@@ -109,6 +109,8 @@ const WillLinnPage = lazy(() => import('./pages/WillLinn/WillLinnPage'));
 const MicrocosmosPage = lazy(() => import('./pages/Microcosmos/MicrocosmosPage'));
 const RecursiveChartPage = lazy(() => import('./pages/RecursiveChart/RecursiveChartPage'));
 const DivinationPage = lazy(() => import('./pages/Divination/DivinationPage'));
+const IChingExplorerPage = lazy(() => import('./pages/IChing/IChingExplorerPage'));
+const NumberSystemsPage = lazy(() => import('./pages/NumberSystems/NumberSystemsPage'));
 
 const STAGES = [
   { id: 'golden-age', label: 'Golden Age' },
@@ -1748,11 +1750,12 @@ const NAV_ITEMS = [
   { path: '/mythology-channel', label: 'Mythology Channel' },
   { path: '/mythosophia', label: 'Mythosophia' },
   { path: '/fellowship', label: 'Fellowship' },
-  { path: '/atlas', label: 'Atlas' },
   { path: '/story-forge', label: 'Story Forge' },
   { path: '/games', label: 'Game Room' },
-  { path: '/divination', label: 'Divination' },
   { path: '/library', label: 'Library' },
+  { path: '/atlas', label: 'Atlas' },
+  { path: '/i-ching', label: 'I Ching' },
+  { path: '/divination', label: 'Divination' },
   { path: '/', label: 'Creation Story' },
 ];
 
@@ -2343,6 +2346,8 @@ function AppContent() {
         <Route path="/mythosophia" element={<MythosophiaPage />} />
         <Route path="/store" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><StorePageWithProfile /></Suspense>} />
         <Route path="/profile" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><ProfilePage /></Suspense>} />
+        <Route path="/i-ching" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><IChingExplorerPage /></Suspense>} />
+        <Route path="/numbers" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><NumberSystemsPage /></Suspense>} />
         <Route path="/divination/*" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><DivinationPage /></Suspense>} />
         <Route path="/recursive-chart" element={<Navigate to="/divination/mythouse-astrology" replace />} />
         <Route path="/atlas" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><AtlasPage /></Suspense>} />

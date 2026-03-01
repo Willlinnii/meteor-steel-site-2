@@ -3978,3 +3978,234 @@
   color: var(--cp-teal-color);
   transition: border-color 3s ease, color 3s ease;
 }
+
+/* ===== TRADITION SELECTOR (DROPDOWN) ===== */
+
+.chrono-tradition-selector {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 8px;
+  z-index: 15;
+}
+
+.chrono-tradition-trigger {
+  font-family: 'Cinzel', serif;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--accent-gold);
+  background: rgba(6, 6, 15, 0.7);
+  border: 1px solid rgba(201, 169, 97, 0.25);
+  border-radius: 6px;
+  padding: 6px 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.chrono-tradition-trigger:hover {
+  color: #ddc06e;
+  border-color: var(--accent-gold);
+  background: rgba(201, 169, 97, 0.08);
+}
+
+.chrono-tradition-trigger.has-tradition {
+  color: var(--accent-ember);
+  border-color: var(--accent-ember);
+  background: rgba(196, 113, 58, 0.1);
+}
+
+.chrono-tradition-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: rgba(10, 10, 20, 0.96);
+  border: 1px solid rgba(201, 169, 97, 0.3);
+  border-radius: 6px;
+  padding: 4px;
+  margin-top: 4px;
+  z-index: 20;
+  min-width: 100%;
+  max-height: 320px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(201, 169, 97, 0.2) transparent;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+}
+
+.chrono-tradition-option {
+  display: block;
+  width: 100%;
+  font-family: 'Cinzel', serif;
+  font-size: 0.62rem;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  text-align: left;
+  color: rgba(201, 169, 97, 0.75);
+  background: none;
+  border: none;
+  padding: 7px 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  border-radius: 3px;
+}
+
+.chrono-tradition-option:hover {
+  color: #ddc06e;
+  background: rgba(201, 169, 97, 0.08);
+}
+
+.chrono-tradition-option.active {
+  color: var(--accent-ember);
+  background: rgba(196, 113, 58, 0.1);
+}
+
+/* ===== TRADITION CONTENT ===== */
+
+.chrono-tradition-assoc {
+  margin-top: 12px;
+  padding: 10px 0;
+  border-top: 1px solid rgba(201, 169, 97, 0.1);
+}
+
+.chrono-tradition-assoc p {
+  margin: 4px 0;
+  font-size: 0.88rem;
+  color: rgba(220, 190, 120, 0.85);
+}
+
+.chrono-tradition-assoc strong {
+  color: rgba(201, 169, 97, 0.7);
+  font-weight: 600;
+}
+
+.chrono-tradition-caveat {
+  margin-top: 14px;
+  font-style: italic;
+  font-size: 0.82rem;
+  color: rgba(180, 160, 120, 0.55);
+  line-height: 1.5;
+}
+
+.chrono-tradition-source {
+  margin-top: 10px;
+  font-size: 0.75rem;
+  color: rgba(180, 160, 120, 0.4);
+}
+
+.chrono-color-swatch {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 1px solid rgba(201, 169, 97, 0.3);
+  vertical-align: middle;
+}
+
+/* ===== TRADITION CATEGORY TABS ===== */
+
+.chrono-tradition-cat-tabs {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 4px;
+  margin: 12px 0 8px;
+  padding: 6px 0;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(201, 169, 97, 0.15) transparent;
+  border-top: 1px solid rgba(201, 169, 97, 0.1);
+  border-bottom: 1px solid rgba(201, 169, 97, 0.1);
+}
+
+.chrono-tradition-cat-tab {
+  font-family: 'Cinzel', serif;
+  font-size: 0.55rem;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: rgba(201, 169, 97, 0.6);
+  background: none;
+  border: 1px solid rgba(201, 169, 97, 0.15);
+  border-radius: 3px;
+  padding: 3px 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.chrono-tradition-cat-tab:hover {
+  color: rgba(220, 190, 120, 0.9);
+  border-color: rgba(201, 169, 97, 0.4);
+}
+
+.chrono-tradition-cat-tab.active {
+  color: #f0c040;
+  border-color: #f0c040;
+  background: rgba(240, 192, 64, 0.08);
+}
+
+/* ===== COUNT TOGGLE (10/20) ===== */
+
+.chrono-count-toggle {
+  display: inline-flex;
+  gap: 0;
+  margin-left: 8px;
+  margin-bottom: 8px;
+  vertical-align: top;
+}
+
+.chrono-count-btn {
+  font-family: 'Cinzel', serif;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: rgba(220, 190, 120, 0.5);
+  background: rgba(6, 6, 15, 0.7);
+  border: 1px solid rgba(201, 169, 97, 0.2);
+  padding: 5px 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.chrono-count-btn:first-child {
+  border-radius: 6px 0 0 6px;
+  border-right: none;
+}
+
+.chrono-count-btn:last-child {
+  border-radius: 0 6px 6px 0;
+}
+
+.chrono-count-btn:hover {
+  color: rgba(220, 190, 120, 0.8);
+  background: rgba(201, 169, 97, 0.06);
+}
+
+.chrono-count-btn.active {
+  color: var(--accent-gold);
+  border-color: rgba(201, 169, 97, 0.4);
+  background: rgba(201, 169, 97, 0.1);
+}
+
+@media (max-width: 600px) {
+  .chrono-tradition-trigger {
+    font-size: 0.62rem;
+    padding: 5px 10px;
+  }
+  .chrono-tradition-cat-tab {
+    font-size: 0.5rem;
+    padding: 2px 6px;
+  }
+  .chrono-count-btn {
+    font-size: 0.58rem;
+    padding: 4px 8px;
+  }
+}

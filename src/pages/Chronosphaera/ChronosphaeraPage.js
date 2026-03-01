@@ -498,7 +498,8 @@ function DayNightContent({ side, activeCulture }) {
   );
 }
 
-const MW_NUM_TO_DIR = { 1: 'E', 2: 'W', 3: 'S', 4: 'N', 5: 'C5', 6: 'SE', 7: 'SW', 8: 'NW', 9: 'NE', 10: 'C10' };
+const MW_NUM_TO_DIR = { 1: 'E', 2: 'W', 3: 'S', 4: 'N', 5: 'C5', 6: 'SE', 7: 'SW', 8: 'NW', 9: 'NE', 10: 'C10', 11: 'E', 12: 'W', 13: 'S', 14: 'N', 15: 'C5', 16: 'SE', 17: 'SW', 18: 'NW', 19: 'NE', 20: 'C10' };
+const MW_NUM_HIGHER_LABELS = { 11: 'Stars', 12: 'Planets', 13: 'White Buffalo Woman', 14: 'Sweet Medicine', 15: 'Collective Consciousness', 16: 'Great Teachers', 17: 'Kachinas', 18: 'Balancers', 19: 'Pure Science', 20: 'Completion' };
 const MW_DIR_NAMES = { N: 'North', E: 'East', S: 'South', W: 'West', NE: 'Northeast', SE: 'Southeast', SW: 'Southwest', NW: 'Northwest', C5: 'Center', C10: 'Center' };
 const CARDINAL_TO_MW_DIR = { 'vernal-equinox': 'E', 'summer-solstice': 'S', 'autumnal-equinox': 'W', 'winter-solstice': 'N' };
 const WHEEL_SHORT_NAMES = { humanSelf: 'Self', perspective: 'Perspective', elements: 'Elements', sacredElements: 'Four Elements', earthCount: 'Earth Count', bodySpheres: 'Body', mathematics: 'Mathematics' };
@@ -725,6 +726,7 @@ export default function ChronosphaeraPage() {
   const [activeWheelTab, setActiveWheelTab] = useState(null);
   const [activeTradition, setActiveTradition] = useState(null);
   const [traditionDropOpen, setTraditionDropOpen] = useState(false);
+  const [countMode, setCountMode] = useState(10);
   const [videoUrl, setVideoUrl] = useState(null);
   const [personaChatOpen, setPersonaChatOpen] = useState(null);
   const [personaChatHistory, setPersonaChatHistory] = useState({});
@@ -1831,12 +1833,31 @@ export default function ChronosphaeraPage() {
   }
 
   let wheelAlignmentData = null;
+  let higherCountData = null;
   if (!activeTradition && (selectedWheelItem?.startsWith('num:') || selectedWheelItem?.startsWith('dir:'))) {
     const isNum = selectedWheelItem.startsWith('num:');
     const value = selectedWheelItem.split(':')[1];
-    const targetDir = isNum ? MW_NUM_TO_DIR[parseInt(value)] : value;
+    const numVal = parseInt(value);
+    const targetDir = isNum ? MW_NUM_TO_DIR[numVal] : value;
     const dirName = MW_DIR_NAMES[targetDir] || targetDir;
-    wheelAlignmentData = { targetDir, heading: isNum ? value : value, sub: `${dirName} · Alignments Across All Wheels` };
+
+    if (isNum && numVal > 10) {
+      // 11-20: show dedicated higherCount content
+      const ecWheel = wheelData.wheels.find(w => w.id === 'earthCount');
+      const ecPos = ecWheel?.positions.find(p => p.dir === targetDir);
+      const hcContent = wheelContent[`higherCount:${targetDir}`] || null;
+      higherCountData = {
+        numVal,
+        label: MW_NUM_HIGHER_LABELS[numVal],
+        dirName,
+        targetDir,
+        pos: ecPos,
+        content: hcContent,
+      };
+    } else {
+      const sub = `${dirName} · Alignments Across All Wheels`;
+      wheelAlignmentData = { targetDir, heading: isNum ? value : value, sub };
+    }
   }
 
   let wheelContentData = null;
@@ -2152,6 +2173,7 @@ export default function ChronosphaeraPage() {
             onSelectWheelItem={(item) => { if (item) trackElement(`chronosphaera.medicine-wheel.${item}`); setSelectedWheelItem(item); setActiveWheelTab(null); if (item) { setSelectedSign(null); setSelectedCardinal(null); setSelectedEarth(null); setSelectedMonth(null); } }}
             wheelDataOverride={activeWheelData}
             isTraditionView={!!activeTradition}
+            countMode={countMode}
             chakraViewMode={chakraViewMode}
             orderLabel={perspective.orderLabel}
             onToggleBodyWheel={handleToggleBodyWheel}
@@ -2950,6 +2972,14 @@ export default function ChronosphaeraPage() {
             </div>
           )}
         </div>
+        {!activeTradition && (
+          <div className="chrono-count-toggle">
+            <button className={`chrono-count-btn${countMode === 10 ? ' active' : ''}`}
+              onClick={() => { setCountMode(10); setSelectedWheelItem(null); }}>10</button>
+            <button className={`chrono-count-btn${countMode === 20 ? ' active' : ''}`}
+              onClick={() => { trackElement('chronosphaera.medicine-wheel.countMode.20'); setCountMode(20); setSelectedWheelItem(null); }}>20</button>
+          </div>
+        )}
         {activeTradition && traditionContentData ? (
           <>
             <h2 className="chrono-heading">
@@ -3046,6 +3076,33 @@ export default function ChronosphaeraPage() {
                       );
                     })()}
                     <p className="attr-list" style={{ marginTop: '1rem' }}>Select a direction on the wheel above to explore its teachings.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </>
+        ) : higherCountData ? (
+          <>
+            <h2 className="chrono-heading">
+              {higherCountData.numVal} — {higherCountData.label}
+              <span className="chrono-sub">{higherCountData.dirName} · Higher Earth Count</span>
+            </h2>
+            <div className="container">
+              <div id="content-container">
+                <div className="metal-detail-panel">
+                  <div className="tab-content">
+                    {higherCountData.pos?.sublabel && <h5>{higherCountData.pos.sublabel}</h5>}
+                    {higherCountData.content ? (
+                      <div className="modern-section">
+                        <p><em>{higherCountData.content.summary}</em></p>
+                        <p>{higherCountData.content.teaching}</p>
+                        {higherCountData.content.pages && (
+                          <p className="attr-list">Lightningbolt pp. {higherCountData.content.pages.join(', ')}</p>
+                        )}
+                      </div>
+                    ) : (
+                      <p className="chrono-empty">Content coming soon.</p>
+                    )}
                   </div>
                 </div>
               </div>

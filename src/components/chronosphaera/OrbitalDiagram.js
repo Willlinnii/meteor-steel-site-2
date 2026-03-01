@@ -175,7 +175,22 @@ const WHEEL_RINGS = [
 ];
 const MW_OUTER_R = 300;
 const NUM_RING_R = 290;
-const NUM_TO_DIR = { 1: 'E', 2: 'W', 3: 'S', 4: 'N', 5: 'C5', 6: 'SE', 7: 'SW', 8: 'NW', 9: 'NE', 10: 'C10' };
+const NUM_TO_DIR = {
+  1:'E', 2:'W', 3:'S', 4:'N', 5:'C5', 6:'SE', 7:'SW', 8:'NW', 9:'NE', 10:'C10',
+  11:'E', 12:'W', 13:'S', 14:'N', 15:'C5', 16:'SE', 17:'SW', 18:'NW', 19:'NE', 20:'C10'
+};
+const NUM_HIGHER = {
+  1: { num: 11, label: 'Stars' },
+  2: { num: 12, label: 'Planets' },
+  3: { num: 13, label: 'White Buffalo Woman' },
+  4: { num: 14, label: 'Sweet Medicine' },
+  5: { num: 15, label: 'Collective Consciousness' },
+  6: { num: 16, label: 'Great Teachers' },
+  7: { num: 17, label: 'Kachinas' },
+  8: { num: 18, label: 'Balancers' },
+  9: { num: 19, label: 'Pure Science' },
+  10: { num: 20, label: 'Completion' },
+};
 const NUM_ANGLES = [
   { num: 1, angle: 0 },
   { num: 2, angle: 180 },
@@ -289,7 +304,7 @@ function getRingSegmentLabel(tab, itemId, stageIndex) {
   return '';
 }
 
-export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPlanet, hoveredPlanet, selectedSign, onSelectSign, selectedCardinal, onSelectCardinal, selectedEarth, onSelectEarth, showCalendar, onToggleCalendar, selectedMonth, onSelectMonth, showMedicineWheel, selectedWheelItem, onSelectWheelItem, chakraViewMode, onToggleBodyWheel, onClickOrderLabel, orderLabel, videoUrl, onCloseVideo, ybrActive, ybrCurrentStopIndex, ybrStopProgress, ybrJourneySequence, onToggleYBR, ybrAutoStart, clockMode, layoutMode, onEnterClock, compassHeading, compassSupported, compassDenied, onRequestCompass, onStopCompass, seasonalSign, seasonalMonth, seasonalStageIndex, showMonomyth, showMeteorSteel, monomythStages, selectedMonomythStage, onSelectMonomythStage, onToggleMonomyth, monomythModel, showCycles, onSelectCycleSegment, monomythTab, theoristGroup, onSelectRingSegment, ringSelections, activeCulture, showFallenStarlight, showStoryOfStories, onToggleStarlight, starlightStages, selectedStarlightStage, onSelectStarlightStage, selectedConstellation, onSelectConstellation, zodiacMode, onSelectBeyondRing, beyondRings, activeBeyondRing, showDodecahedron, dodecMode, showArtBook, artBookMode, onToggleArtBook, showRing, targetDate, wheelDataOverride, isTraditionView }) {
+export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPlanet, hoveredPlanet, selectedSign, onSelectSign, selectedCardinal, onSelectCardinal, selectedEarth, onSelectEarth, showCalendar, onToggleCalendar, selectedMonth, onSelectMonth, showMedicineWheel, selectedWheelItem, onSelectWheelItem, chakraViewMode, onToggleBodyWheel, onClickOrderLabel, orderLabel, videoUrl, onCloseVideo, ybrActive, ybrCurrentStopIndex, ybrStopProgress, ybrJourneySequence, onToggleYBR, ybrAutoStart, clockMode, layoutMode, onEnterClock, compassHeading, compassSupported, compassDenied, onRequestCompass, onStopCompass, seasonalSign, seasonalMonth, seasonalStageIndex, showMonomyth, showMeteorSteel, monomythStages, selectedMonomythStage, onSelectMonomythStage, onToggleMonomyth, monomythModel, showCycles, onSelectCycleSegment, monomythTab, theoristGroup, onSelectRingSegment, ringSelections, activeCulture, showFallenStarlight, showStoryOfStories, onToggleStarlight, starlightStages, selectedStarlightStage, onSelectStarlightStage, selectedConstellation, onSelectConstellation, zodiacMode, onSelectBeyondRing, beyondRings, activeBeyondRing, showDodecahedron, dodecMode, showArtBook, artBookMode, onToggleArtBook, showRing, targetDate, wheelDataOverride, isTraditionView, countMode }) {
   const wrapperRef = useRef(null);
   const [tooltip, setTooltip] = useState(null);
   const { hasPurchase, hasSubscription } = useProfile();
@@ -1161,7 +1176,9 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
                   fontWeight="400" letterSpacing="0.5"
                   transform={`rotate(${-1.2 * 180 / Math.PI}, ${CX + titleR * Math.cos(-1.2)}, ${CY + titleR * Math.sin(-1.2)})`}
                 >
-                  {wheel.id === 'humanSelf' ? '' : wheel.title.replace('The Medicine Wheel of ', '').replace('The ', '')}
+                  {wheel.id === 'humanSelf' ? ''
+                    : countMode === 20 && wheel.id === 'earthCount' ? 'Higher Earth Count (11–20)'
+                    : wheel.title.replace('The Medicine Wheel of ', '').replace('The ', '')}
                 </text>
               );
             })}
@@ -1192,7 +1209,10 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
                       (selectedWheelItem.startsWith('dir:') && selectedWheelItem.split(':')[1] === pos.dir)
                     );
                     const isActive = isSelected || isHighlighted;
-                    const displayLabel = pos.shortLabel || pos.label;
+                    const baseLabel = pos.shortLabel || pos.label;
+                    const displayLabel = (countMode === 20 && wheel.id === 'earthCount' && pos.num && NUM_HIGHER[pos.num])
+                      ? NUM_HIGHER[pos.num].label
+                      : baseLabel;
                     const rot = pos.isCenter ? 0 : tangentRotation(pos.angle);
 
                     // Split long labels into two stacked lines
@@ -1230,15 +1250,6 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
                             <animate attributeName="opacity" values="0.6;0.2;0.6" dur="2s" repeatCount="indefinite" />
                           </circle>
                         )}
-                        {isTraditionView && (
-                          <rect
-                            x={tx - bgW / 2} y={ty - bgH / 2}
-                            width={bgW} height={bgH}
-                            rx={2} ry={2}
-                            fill="rgba(18, 16, 14, 0.88)"
-                            transform={rot ? `rotate(${rot}, ${tx}, ${ty})` : undefined}
-                          />
-                        )}
                         <text x={tx} y={ty}
                           textAnchor="middle" dominantBaseline="central"
                           fill={isActive ? '#f0c040' : 'rgb(225, 195, 120)'}
@@ -1265,34 +1276,57 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
             {!isTraditionView && (<>
             <circle cx={CX} cy={CY} r={NUM_RING_R} fill="none" stroke="rgba(180, 140, 80, 0.2)" strokeWidth="0.6" strokeDasharray="3 2" />
             {NUM_ANGLES.map(({ num, angle }) => {
+              const is20 = countMode === 20;
+              const displayNum = is20 ? NUM_HIGHER[num].num : num;
+              const displayLabel = is20 ? NUM_HIGHER[num].label : null;
+              const numKey = `num:${displayNum}`;
               const rad = (angle * Math.PI) / 180;
-              const nx = CX + NUM_RING_R * Math.cos(rad);
-              const ny = CY + NUM_RING_R * Math.sin(rad);
-              const numKey = `num:${num}`;
+              const circleR = is20 ? 22 : 16;
+              const nx = CX + (is20 ? NUM_RING_R + 4 : NUM_RING_R) * Math.cos(rad);
+              const ny = CY + (is20 ? NUM_RING_R + 4 : NUM_RING_R) * Math.sin(rad);
               const isNumSelected = selectedWheelItem === numKey;
-              const isNumActive = isNumSelected || (selectedWheelItem?.startsWith('dir:') && selectedWheelItem.split(':')[1] === NUM_TO_DIR[num]);
+              const isNumActive = isNumSelected || (selectedWheelItem?.startsWith('dir:') && selectedWheelItem.split(':')[1] === NUM_TO_DIR[displayNum]);
+              // For long labels, compute a smaller font size
+              const labelFontSize = displayLabel && displayLabel.length > 10 ? 4 : 5;
               return (
                 <g key={numKey}
                   className={`mw-position${isNumActive ? ' active' : ''}`}
                   onClick={() => onSelectWheelItem && onSelectWheelItem(isNumSelected ? null : numKey)}
                   style={{ cursor: 'pointer' }}
                 >
-                  <circle cx={nx} cy={ny} r="16"
+                  <circle cx={nx} cy={ny} r={circleR}
                     fill={isNumActive ? 'rgba(218, 165, 32, 0.15)' : 'rgba(180, 140, 80, 0.06)'}
                     stroke={isNumActive ? 'rgba(218, 165, 32, 0.5)' : 'rgba(180, 140, 80, 0.2)'}
                     strokeWidth="0.8" />
                   {isNumActive && (
-                    <circle cx={nx} cy={ny} r="18" fill="none" stroke="rgba(218, 165, 32, 0.5)" strokeWidth="0.6">
-                      <animate attributeName="r" values="16;22;16" dur="2s" repeatCount="indefinite" />
+                    <circle cx={nx} cy={ny} r={circleR + 2} fill="none" stroke="rgba(218, 165, 32, 0.5)" strokeWidth="0.6">
+                      <animate attributeName="r" values={`${circleR};${circleR + 6};${circleR}`} dur="2s" repeatCount="indefinite" />
                       <animate attributeName="opacity" values="0.5;0.2;0.5" dur="2s" repeatCount="indefinite" />
                     </circle>
                   )}
-                  <text x={nx} y={ny} textAnchor="middle" dominantBaseline="central"
-                    fill={isNumActive ? '#f0c040' : 'rgb(225, 195, 120)'}
-                    fontSize="16" fontFamily="Cinzel, serif" fontWeight={isNumActive ? '700' : '600'}
-                    style={{ transition: 'fill 0.3s' }}>
-                    {num}
-                  </text>
+                  {is20 ? (
+                    <>
+                      <text x={nx} y={ny - 5} textAnchor="middle" dominantBaseline="central"
+                        fill={isNumActive ? '#f0c040' : 'rgb(225, 195, 120)'}
+                        fontSize="12" fontFamily="Cinzel, serif" fontWeight={isNumActive ? '700' : '600'}
+                        style={{ transition: 'fill 0.3s' }}>
+                        {displayNum}
+                      </text>
+                      <text x={nx} y={ny + 6} textAnchor="middle" dominantBaseline="central"
+                        fill={isNumActive ? '#f0c040' : 'rgba(220, 190, 120, 0.7)'}
+                        fontSize={labelFontSize} fontFamily="Cinzel, serif" fontWeight="500"
+                        style={{ transition: 'fill 0.3s' }}>
+                        {displayLabel}
+                      </text>
+                    </>
+                  ) : (
+                    <text x={nx} y={ny} textAnchor="middle" dominantBaseline="central"
+                      fill={isNumActive ? '#f0c040' : 'rgb(225, 195, 120)'}
+                      fontSize="16" fontFamily="Cinzel, serif" fontWeight={isNumActive ? '700' : '600'}
+                      style={{ transition: 'fill 0.3s' }}>
+                      {displayNum}
+                    </text>
+                  )}
                 </g>
               );
             })}
@@ -1302,11 +1336,14 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
             {isTraditionView ? (() => {
               const centerLabel = effectiveWheelData.wheels[0]?.center || '';
               const showCenter = hoveredRing === -1;
+              const centerFontSize = 11;
+              const approxTextW = centerLabel.length * centerFontSize * 0.5;
+              const centerR = Math.max(30, approxTextW / 2 + 12);
               return (
                 <g style={{ opacity: showCenter ? 1 : 0, transition: 'opacity 0.3s' }}>
-                  <circle cx={CX} cy={CY} r={20} fill="rgba(18, 16, 14, 0.92)" />
+                  <circle cx={CX} cy={CY} r={centerR} fill="rgba(18, 16, 14, 0.88)" stroke="rgba(180, 140, 80, 0.2)" strokeWidth="0.6" />
                   <text x={CX} y={CY} textAnchor="middle" dominantBaseline="central"
-                    fill="rgba(220, 190, 120, 0.9)" fontSize="11" fontFamily="Cinzel, serif" fontWeight="700">
+                    fill="rgba(220, 190, 120, 0.9)" fontSize={centerFontSize} fontFamily="Cinzel, serif" fontWeight="700">
                     {centerLabel}
                   </text>
                 </g>
@@ -1322,8 +1359,12 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
                   { text: 'Beauty', size: 7.5, key: 'elements:center' },
                   { text: 'Fifth Element', size: 7, key: 'sacredElements:center' },
                   { text: 'WahKahn · SsKwan', size: 7, key: 'mathematics:center' },
-                  { text: 'Humans · Voice', size: 7, key: 'num:5' },
-                  { text: 'Intellect · Higher Self', size: 7, key: 'num:10' },
+                  countMode === 20
+                    ? { text: 'Collective Consciousness', size: 6.5, key: 'num:15' }
+                    : { text: 'Humans · Voice', size: 7, key: 'num:5' },
+                  countMode === 20
+                    ? { text: 'Completion', size: 7, key: 'num:20' }
+                    : { text: 'Intellect · Higher Self', size: 7, key: 'num:10' },
                 ];
               } else {
                 const wheel = wheelData.wheels[hoveredRing];
@@ -1335,7 +1376,10 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
                 }
                 if (wheel) {
                   wheel.positions.filter(p => p.isCenter).forEach(p => {
-                    items.push({ text: p.shortLabel || p.label, size: 9, key: `${wheel.id}:${p.dir}` });
+                    const centerLabel = (countMode === 20 && wheel.id === 'earthCount' && p.num && NUM_HIGHER[p.num])
+                      ? NUM_HIGHER[p.num].label
+                      : (p.shortLabel || p.label);
+                    items.push({ text: centerLabel, size: 9, key: `${wheel.id}:${p.dir}` });
                   });
                 }
                 if (items.length === 0) items = [{ text: 'Self', size: 11, bold: true }];
@@ -1343,25 +1387,28 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
               const lh = hoveredRing === 0 ? 10 : 13;
               const totalH = items.length * lh;
               const startY = CY - totalH / 2 + lh / 2;
-              const backR = hoveredRing != null ? Math.max(78, totalH / 2 + 8) : 78;
+              const longestText = items.reduce((a, b) => a.text.length > b.text.length ? a : b, items[0]);
+              const approxTextW = longestText.text.length * longestText.size * 0.5;
+              const centerR = Math.max(30, Math.max(approxTextW / 2 + 12, totalH / 2 + 10));
               return (
                 <g>
-                  <circle cx={CX} cy={CY} r={backR} fill="rgba(18, 16, 14, 0.92)"
-                    stroke={hoveredRing != null ? 'rgba(180, 140, 80, 0.2)' : 'none'} strokeWidth="0.6"
-                    opacity={hoveredRing != null ? 1 : 0}
-                    style={{ transition: 'r 0.3s, opacity 0.3s' }} />
+                  {hoveredRing != null && (
+                    <circle cx={CX} cy={CY} r={centerR} fill="rgba(18, 16, 14, 0.88)" stroke="rgba(180, 140, 80, 0.2)" strokeWidth="0.6" />
+                  )}
                   {items.map((item, i) => {
                     const isSel = item.key && selectedWheelItem === item.key;
                     return (
-                      <text key={i} x={CX} y={startY + i * lh}
-                        textAnchor="middle" dominantBaseline="central"
-                        fill={isSel ? '#f0c040' : 'rgba(220, 190, 120, 0.9)'}
-                        fontSize={item.size} fontFamily="Cinzel, serif"
-                        fontWeight={item.bold ? '700' : '500'}
+                      <g key={i}
                         style={{ cursor: item.key ? 'pointer' : 'default' }}
                         onClick={item.key ? (e) => { e.stopPropagation(); onSelectWheelItem && onSelectWheelItem(isSel ? null : item.key); } : undefined}>
-                        {item.text}
-                      </text>
+                        <text x={CX} y={startY + i * lh}
+                          textAnchor="middle" dominantBaseline="central"
+                          fill={isSel ? '#f0c040' : 'rgba(220, 190, 120, 0.9)'}
+                          fontSize={item.size} fontFamily="Cinzel, serif"
+                          fontWeight={item.bold ? '700' : '500'}>
+                          {item.text}
+                        </text>
+                      </g>
                     );
                   })}
                 </g>
