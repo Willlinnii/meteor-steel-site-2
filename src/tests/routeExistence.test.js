@@ -124,6 +124,8 @@ describe('Route component imports', () => {
     { name: 'PractitionerDashboardPage', path: '../pages/Consulting/PractitionerDashboardPage' },
     { name: 'ConsultingForgePage', path: '../pages/Consulting/ConsultingForgePage' },
     { name: 'CrownPage',           path: '../pages/Crown/CrownPage' },
+    { name: 'FriendsManagePage',  path: '../pages/FriendsManage/FriendsManagePage' },
+    { name: 'FamilyManagePage',   path: '../pages/FamilyManage/FamilyManagePage' },
     { name: 'Ring2DPage',          path: '../pages/Ring2D/Ring2DPage' },
     { name: 'DodecahedronPage',    path: '../pages/Dodecahedron/DodecahedronPage' },
     { name: 'ArtBookPage',         path: '../pages/ArtBook/ArtBookPage' },
