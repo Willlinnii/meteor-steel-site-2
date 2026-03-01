@@ -52,6 +52,8 @@ export default function ModeAwareScene({
   wheels,
   selectedWheelItem,
   onSelectWheelItem,
+  quadrantColorHexes,
+  isTraditionView,
   // Chakra props
   orderLabel,
   chakraOrdering,
@@ -98,6 +100,8 @@ export default function ModeAwareScene({
         wheels={wheels}
         selectedWheelItem={selectedWheelItem}
         onSelectWheelItem={onSelectWheelItem}
+        quadrantColorHexes={quadrantColorHexes}
+        isTraditionView={isTraditionView}
       />
     );
   }

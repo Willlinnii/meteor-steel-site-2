@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { SELF_KEYS, DANTE_REALM_KEYS, TAB_LABEL_OVERRIDES, camelToTitle } from './usePerspective';
 import { ARCANA_POSITIONS } from '../../games/mythouse/majorArcanaData';
+import { getLibraryBooks } from '../../data/vaultLibraryMap';
+import SourceBookPopup from './SourceBookPopup';
 
 function labelFor(key) {
   return TAB_LABEL_OVERRIDES[key] || camelToTitle(key);
@@ -13,6 +15,29 @@ for (const pos of ARCANA_POSITIONS) {
   if (pos.type === 'planet') {
     PLANET_ARCANA[pos.correspondence] = pos;
   }
+}
+
+function SourceBlock({ activeTradition }) {
+  const [showPopup, setShowPopup] = useState(false);
+  if (!activeTradition?.sourceText) return null;
+
+  const books = getLibraryBooks(activeTradition.id);
+
+  return (
+    <div className="perspective-source-block">
+      <p className="astrology-note">
+        {activeTradition.sourceText} ({activeTradition.period})
+        {books.length > 0 && (
+          <button className="source-library-icon" onClick={() => setShowPopup(true)} title="View in Library">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+          </button>
+        )}
+      </p>
+      {showPopup && (
+        <SourceBookPopup books={books} tradition={activeTradition.tradition} onClose={() => setShowPopup(false)} />
+      )}
+    </div>
+  );
 }
 
 function TarotOverview({ data, planet, activeTradition }) {
@@ -51,11 +76,7 @@ function TarotOverview({ data, planet, activeTradition }) {
           <p className="tarot-waite-desc">{arcana.waiteDesc}</p>
         </div>
       )}
-      {activeTradition?.sourceText && (
-        <div className="perspective-source-block">
-          <p className="astrology-note">{activeTradition.sourceText} ({activeTradition.period})</p>
-        </div>
-      )}
+      <SourceBlock activeTradition={activeTradition} />
     </div>
   );
 }
@@ -121,11 +142,7 @@ function DanteRealmContent({ realmId, data, activeTradition }) {
           <p className="astrology-note">{order.note}</p>
         </div>
       )}
-      {activeTradition?.sourceText && (
-        <div className="perspective-source-block">
-          <p className="astrology-note">{activeTradition.sourceText} ({activeTradition.period})</p>
-        </div>
-      )}
+      <SourceBlock activeTradition={activeTradition} />
     </div>
   );
 }
@@ -200,11 +217,7 @@ export default function PerspectiveTabContent({ columnKey, perspectiveData, acti
         <p className="chrono-empty">No {columnLabel.toLowerCase()} data for {planet} in this tradition.</p>
       )}
 
-      {activeTradition?.sourceText && (
-        <div className="perspective-source-block">
-          <p className="astrology-note">{activeTradition.sourceText} ({activeTradition.period})</p>
-        </div>
-      )}
+      <SourceBlock activeTradition={activeTradition} />
     </div>
   );
 }

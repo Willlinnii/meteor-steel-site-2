@@ -1,0 +1,1194 @@
+{
+  "_schema": { "version": "1.0" },
+  "traditions": [
+    {
+      "id": "lakota",
+      "name": "Lakota",
+      "region": "Northern Great Plains (Dakotas, Montana, Minnesota, Nebraska)",
+      "source": "Akta Lakota Museum; Sinte Gleska University; St. Joseph's Indian School cultural programs",
+      "caveat": "Color and season assignments vary significantly between communities and teaching lineages. Two major variants are documented: Variant A places Spring in the East; Variant B places it in the South. Neither is more correct — they reflect different traditions of oral transmission. The associations shown here follow Variant A as the more commonly published arrangement, with Variant B noted where it differs.",
+      "directionCount": 4,
+      "center": {
+        "label": "Wakan Tanka / Self",
+        "description": "The Great Spirit (Wakan Tanka) and the Self occupy the center of the wheel. All four directions meet and are held in balance here."
+      },
+      "additional": [
+        {
+          "dir": "Above",
+          "label": "Sky / Father Sky (Mahpíya Até)",
+          "description": "The sky world, realm of Wakan Tanka and the Thunder Beings (Wakíŋyaŋ). Associated with the color blue and the spiritual realm above."
+        },
+        {
+          "dir": "Below",
+          "label": "Earth / Mother Earth (Uŋčí Makȟá)",
+          "description": "The earth beneath, source of all physical sustenance. Associated with the color green and the grounding power of the land."
+        },
+        {
+          "dir": "Center",
+          "label": "Self (Miyé)",
+          "description": "The individual standing at the crossroads of all directions, responsible for seeking balance among the four powers."
+        }
+      ],
+      "quadrantColors": {
+        "N": "rgba(178, 34, 34, 0.08)",
+        "E": "rgba(218, 165, 32, 0.08)",
+        "S": "rgba(255, 255, 255, 0.08)",
+        "W": "rgba(30, 30, 30, 0.12)"
+      },
+      "directions": [
+        {
+          "dir": "E",
+          "label": "East",
+          "angle": 0,
+          "color": { "name": "Yellow", "hex": "#DAA520", "rgba": "rgba(218, 165, 32, 0.08)" },
+          "nativeTerm": "Wiyóhiyaŋpata",
+          "meaning": "Where the sun rises",
+          "associations": {
+            "animal": "Eagle (Waŋblí)",
+            "plant": "Tobacco (Chaŋšháša)",
+            "element": "Air / Light",
+            "season": "Spring (Variant A) / Fall (Variant B)",
+            "lifeStage": "Birth (Variant A) / Adulthood (Variant B)",
+            "timeOfDay": "Dawn",
+            "virtue": "Bravery (Wóohitika)",
+            "celestialBody": "Morning Star (Aŋpó Wičháhpi)",
+            "humanAspect": null,
+            "sacredMountain": null,
+            "gemstone": null,
+            "clan": null
+          },
+          "description": "East is the direction of dawn, illumination, and new beginnings. The eagle carries prayers upward toward the light. Tobacco is offered in this direction to open communication with the spirit world. The East asks: What is being born? What new understanding is arriving?"
+        },
+        {
+          "dir": "S",
+          "label": "South",
+          "angle": 90,
+          "color": { "name": "White", "hex": "#FFFFFF", "rgba": "rgba(255, 255, 255, 0.08)" },
+          "nativeTerm": "Itókaga",
+          "meaning": "The direction of warmth and growth",
+          "associations": {
+            "animal": "Mouse (Itȟúŋkala) or Coyote (Šuŋgmánitu)",
+            "plant": "Sweetgrass (Wačháŋǧa Peží)",
+            "element": "Water / Earth",
+            "season": "Summer (Variant A) / Spring (Variant B)",
+            "lifeStage": "Youth (Variant A) / Birth (Variant B)",
+            "timeOfDay": "Midday",
+            "virtue": "Generosity (Wačháŋtognaka)",
+            "celestialBody": "Sun (Wí)",
+            "humanAspect": null,
+            "sacredMountain": null,
+            "gemstone": null,
+            "clan": null
+          },
+          "description": "South is the direction of trust, innocence, and close-up perception. The mouse sees things intimately, near the ground. Sweetgrass braids carry the scent of kindness. This is where youth and openness reside — the willingness to look at the world without preconception."
+        },
+        {
+          "dir": "W",
+          "label": "West",
+          "angle": 180,
+          "color": { "name": "Black", "hex": "#1E1E1E", "rgba": "rgba(30, 30, 30, 0.12)" },
+          "nativeTerm": "Wiyóhpeyata",
+          "meaning": "Where the sun sets",
+          "associations": {
+            "animal": "Bear (Mathó)",
+            "plant": "Sage (Pȟeží hóta)",
+            "element": "Earth",
+            "season": "Autumn (Variant A) / Summer (Variant B)",
+            "lifeStage": "Adulthood (Variant A) / Youth (Variant B)",
+            "timeOfDay": "Evening / Sunset",
+            "virtue": "Fortitude (Wówačhiŋthaŋka)",
+            "celestialBody": "Evening Star",
+            "humanAspect": null,
+            "sacredMountain": null,
+            "gemstone": null,
+            "clan": null
+          },
+          "description": "West is the direction of introspection, dreams, and looking within. The bear retreats into the dark to hibernate and emerge renewed. Sage purifies and clears the way for inner sight. The West holds the power of mature reflection — the willingness to sit with darkness and find what it has to teach."
+        },
+        {
+          "dir": "N",
+          "label": "North",
+          "angle": -90,
+          "color": { "name": "Red", "hex": "#B22222", "rgba": "rgba(178, 34, 34, 0.08)" },
+          "nativeTerm": "Wazíyata",
+          "meaning": "Where the cold wind comes from",
+          "associations": {
+            "animal": "Buffalo (Tȟatȟáŋka)",
+            "plant": "Cedar (Haŋté)",
+            "element": "Fire / Wind",
+            "season": "Winter (Variant A) / Autumn (Variant B)",
+            "lifeStage": "Elder (Variant A) / Adulthood (Variant B)",
+            "timeOfDay": "Night",
+            "virtue": "Wisdom (Wóksape)",
+            "celestialBody": "North Star (Wičháhpi Owáŋžila)",
+            "humanAspect": null,
+            "sacredMountain": null,
+            "gemstone": null,
+            "clan": null
+          },
+          "description": "North is the direction of wisdom, endurance, and the knowledge that comes with age. The buffalo represents the provision and resilience needed to survive the hardest season. Cedar is burned for protection and purification. The North wind tests everything — what remains standing has earned its place."
+        }
+      ]
+    },
+    {
+      "id": "cherokee",
+      "name": "Cherokee (Tsalagi)",
+      "region": "Southeast Appalachian highlands (Carolinas, Tennessee, Georgia, Alabama)",
+      "source": "Cherokee Nation Cultural Resource Center; Mooney (1900) Myths of the Cherokee; Kilpatrick & Kilpatrick (1967) Run Toward the Nightland",
+      "caveat": "The Cherokee system is closely tied to ceremonial practice. Color associations are well documented in ethnographic and Cherokee-authored sources, but deeper teachings belong to community and ceremony rather than text. The seven clans are a social and ceremonial structure; their directional associations shown here follow commonly published accounts but are not universally standardized.",
+      "directionCount": 4,
+      "center": {
+        "label": "Sacred Fire (Atsila Galvkawetiyu)",
+        "description": "The eternal flame that burned at the center of every Cherokee council house. It represents the enduring spirit of the Cherokee people and the meeting point of all directions."
+      },
+      "additional": [
+        {
+          "dir": "Above",
+          "label": "Upper World (Galvlati)",
+          "description": "The sky vault, realm of order, structure, and celestial beings. Associated with the color yellow. The Upper World balances the chaos of the Under World."
+        },
+        {
+          "dir": "Below",
+          "label": "Under World (Elohi)",
+          "description": "The world beneath the waters, realm of change, chaos, and powerful spirits. Associated with the color brown. Not evil, but unpredictable — a source of transformation."
+        },
+        {
+          "dir": "Center",
+          "label": "This World (Elohi)",
+          "description": "The middle world where humans live, balanced between the Upper and Under Worlds. Associated with green — the living earth. Maintaining balance here is the central task."
+        }
+      ],
+      "quadrantColors": {
+        "N": "rgba(65, 105, 225, 0.08)",
+        "E": "rgba(178, 34, 34, 0.08)",
+        "S": "rgba(255, 255, 255, 0.08)",
+        "W": "rgba(30, 30, 30, 0.12)"
+      },
+      "directions": [
+        {
+          "dir": "E",
+          "label": "East",
+          "angle": 0,
+          "color": { "name": "Red", "hex": "#B22222", "rgba": "rgba(178, 34, 34, 0.08)" },
+          "nativeTerm": "Digalvlatiyi",
+          "meaning": "Where it is light / Where the sun comes from",
+          "associations": {
+            "animal": "Red-tailed Hawk",
+            "plant": "Tobacco (Tsola)",
+            "element": "Fire",
+            "season": "Spring",
+            "lifeStage": "Birth / Infancy",
+            "timeOfDay": "Dawn",
+            "virtue": "Victory / Success",
+            "celestialBody": "Sun (Nvda)",
+            "humanAspect": null,
+            "sacredMountain": null,
+            "gemstone": null,
+            "clan": "Ani-Waya (Wolf Clan)"
+          },
+          "description": "East is the direction of success, triumph, and power. Red is the color of victory in Cherokee tradition — warriors prayed to the Red Spirit of the East before battle. The rising sun brings renewed strength. Sacred formulas frequently invoke the East for health, success, and spiritual potency."
+        },
+        {
+          "dir": "S",
+          "label": "South",
+          "angle": 90,
+          "color": { "name": "White", "hex": "#FFFFFF", "rgba": "rgba(255, 255, 255, 0.08)" },
+          "nativeTerm": "Uganawa",
+          "meaning": "The warm direction / Where it is warm",
+          "associations": {
+            "animal": "Rabbit (Tsisdu)",
+            "plant": "Corn (Selu)",
+            "element": "Earth",
+            "season": "Summer",
+            "lifeStage": "Youth",
+            "timeOfDay": "Midday",
+            "virtue": "Peace / Happiness",
+            "celestialBody": null,
+            "humanAspect": null,
+            "sacredMountain": null,
+            "gemstone": null,
+            "clan": "Ani-Gatogewi (Wild Potato Clan)"
+          },
+          "description": "South is the direction of peace, warmth, and contentment. White represents happiness and well-being. The warm winds from the South carry ease and good fortune. In sacred formulas, the White Spirit of the South is invoked for peace and healing."
+        },
+        {
+          "dir": "W",
+          "label": "West",
+          "angle": 180,
+          "color": { "name": "Black", "hex": "#1E1E1E", "rgba": "rgba(30, 30, 30, 0.12)" },
+          "nativeTerm": "Wudeliigv",
+          "meaning": "Where it darkens / Where the sun goes down",
+          "associations": {
+            "animal": "Bear (Yona)",
+            "plant": "Blackberry (Kanvsdagwa)",
+            "element": "Water",
+            "season": "Autumn",
+            "lifeStage": "Adulthood",
+            "timeOfDay": "Sunset / Evening",
+            "virtue": "Death / Transformation",
+            "celestialBody": null,
+            "humanAspect": null,
+            "sacredMountain": null,
+            "gemstone": null,
+            "clan": "Ani-Gilohi (Long Hair Clan)"
+          },
+          "description": "West is the direction of death, transition, and the Darkening Land where spirits travel after death. Black is not evil but represents the deep mystery of transformation. The Black Spirit of the West is invoked in formulas for calling upon powerful change. It is the direction souls travel toward."
+        },
+        {
+          "dir": "N",
+          "label": "North",
+          "angle": -90,
+          "color": { "name": "Blue", "hex": "#4169E1", "rgba": "rgba(65, 105, 225, 0.08)" },
+          "nativeTerm": "Uyohanvhi",
+          "meaning": "The cold direction / Where the cold comes from",
+          "associations": {
+            "animal": "Panther / Cougar (Tlvdatsi)",
+            "plant": "Holly / Evergreen",
+            "element": "Wind",
+            "season": "Winter",
+            "lifeStage": "Elder",
+            "timeOfDay": "Night",
+            "virtue": "Defeat / Trouble (spiritual challenge)",
+            "celestialBody": "North Star",
+            "humanAspect": null,
+            "sacredMountain": null,
+            "gemstone": null,
+            "clan": "Ani-Sahoni (Blue Clan)"
+          },
+          "description": "North is the direction of trouble, cold, and spiritual challenge. Blue represents difficulty and sorrow in Cherokee tradition — the Blue Spirit of the North brings hardship that tests resolve. But this is not purely negative: the North is where strength is forged. The panther embodies the fierce power needed to survive the cold."
+        }
+      ]
+    },
+    {
+      "id": "ojibwe",
+      "name": "Ojibwe (Anishinaabe)",
+      "region": "Great Lakes (Michigan, Wisconsin, Minnesota, Ontario, Manitoba)",
+      "source": "Benton-Banai (1988) The Mishomis Book; Three Fires Midewiwin Lodge; Johnston (1976) Ojibway Heritage",
+      "caveat": "The Seven Grandfather Teachings are widely shared but their specific directional placements vary by community and teacher. The four sacred medicines (tobacco, cedar, sage, sweetgrass) are consistently linked to the four directions, though exact pairings differ. The arrangement shown here reflects a commonly published version from Three Fires Lodge teachings.",
+      "directionCount": 4,
+      "center": {
+        "label": "Creator / Self (Gichi-Manidoo)",
+        "description": "The Great Spirit (Gichi-Manidoo) and the individual self at the center. The fire at the center of the lodge represents the presence of the Creator in all things."
+      },
+      "additional": [
+        {
+          "dir": "Above",
+          "label": "Sky World (Ishpiming)",
+          "description": "The upper realm of Father Sky, the Thunderbirds, and the star nations. The sky world holds the patterns of creation that are reflected on earth."
+        },
+        {
+          "dir": "Below",
+          "label": "Earth (Aki)",
+          "description": "Mother Earth, the foundation that sustains all life. Everything that lives depends on and returns to the earth."
+        },
+        {
+          "dir": "Center",
+          "label": "Sacred Fire (Ishkode)",
+          "description": "The sacred fire at the center of ceremony, representing the spark of life within each person and the presence of the Creator."
+        }
+      ],
+      "quadrantColors": {
+        "N": "rgba(255, 255, 255, 0.08)",
+        "E": "rgba(218, 165, 32, 0.08)",
+        "S": "rgba(178, 34, 34, 0.08)",
+        "W": "rgba(30, 30, 30, 0.12)"
+      },
+      "directions": [
+        {
+          "dir": "E",
+          "label": "East",
+          "angle": 0,
+          "color": { "name": "Yellow", "hex": "#DAA520", "rgba": "rgba(218, 165, 32, 0.08)" },
+          "nativeTerm": "Waabanong",
+          "meaning": "Where the light comes from / Place of the dawn",
+          "associations": {
+            "animal": "Eagle (Migizi)",
+            "plant": "Tobacco (Semaa)",
+            "element": "Fire",
+            "season": "Spring (Ziigwan)",
+            "lifeStage": "Birth / Infancy",
+            "timeOfDay": "Dawn",
+            "virtue": "Truth (Debwewin) and Love (Zaagi'idiwin)",
+            "celestialBody": "Sun (Giizis)",
+            "humanAspect": "Spiritual",
+            "sacredMountain": null,
+            "gemstone": null,
+            "clan": null
+          },
+          "description": "East is where each new day begins, the direction of spiritual renewal and vision. The eagle flies highest and sees farthest, carrying prayers to the Creator. Tobacco (Semaa) is the first of the four sacred medicines, offered to open communication with the spirit world. The East teaches the Grandfather virtues of Truth and Love."
+        },
+        {
+          "dir": "S",
+          "label": "South",
+          "angle": 90,
+          "color": { "name": "Red", "hex": "#B22222", "rgba": "rgba(178, 34, 34, 0.08)" },
+          "nativeTerm": "Zhaawanong",
+          "meaning": "The warm direction",
+          "associations": {
+            "animal": "Deer (Waawaashkeshi)",
+            "plant": "Cedar (Giizhik)",
+            "element": "Earth",
+            "season": "Summer (Niibin)",
+            "lifeStage": "Youth / Childhood",
+            "timeOfDay": "Midday",
+            "virtue": "Respect (Manaaji'idiwin)",
+            "celestialBody": null,
+            "humanAspect": "Emotional",
+            "sacredMountain": null,
+            "gemstone": null,
+            "clan": null
+          },
+          "description": "South is the direction of warmth, growth, and the fullness of youth. The deer moves through the world with gentleness and awareness. Cedar (Giizhik) is used for purification and protection. The South teaches Respect — the recognition that all beings have a place and a purpose."
+        },
+        {
+          "dir": "W",
+          "label": "West",
+          "angle": 180,
+          "color": { "name": "Black", "hex": "#1E1E1E", "rgba": "rgba(30, 30, 30, 0.12)" },
+          "nativeTerm": "Ningaabi'anong",
+          "meaning": "Where the sun goes down",
+          "associations": {
+            "animal": "Bear (Makwa)",
+            "plant": "Sage (Mashkodewashk)",
+            "element": "Water",
+            "season": "Autumn (Dagwaagin)",
+            "lifeStage": "Adulthood",
+            "timeOfDay": "Sunset / Evening",
+            "virtue": "Bravery (Aakode'ewin) and Honesty (Gwayakwaadiziwin)",
+            "celestialBody": "Evening Star",
+            "humanAspect": "Physical",
+            "sacredMountain": null,
+            "gemstone": null,
+            "clan": null
+          },
+          "description": "West is the direction of reflection, maturity, and the gathering of experience. The bear embodies strength and introspection, retreating into the earth to dream and emerge transformed. Sage (Mashkodewashk) clears negative energy and prepares the way for honest seeing. The West teaches Bravery and Honesty — the courage to face what is true."
+        },
+        {
+          "dir": "N",
+          "label": "North",
+          "angle": -90,
+          "color": { "name": "White", "hex": "#FFFFFF", "rgba": "rgba(255, 255, 255, 0.08)" },
+          "nativeTerm": "Giiwedinong",
+          "meaning": "The place of the north wind / Where it is cold",
+          "associations": {
+            "animal": "Buffalo (Mashkode-bizhiki)",
+            "plant": "Sweetgrass (Wiingashk)",
+            "element": "Air / Wind",
+            "season": "Winter (Biboon)",
+            "lifeStage": "Elder",
+            "timeOfDay": "Night",
+            "virtue": "Wisdom (Nibwaakaawin) and Humility (Dbaadendiziwin)",
+            "celestialBody": "North Star (Giiwedinaang)",
+            "humanAspect": "Mental",
+            "sacredMountain": null,
+            "gemstone": null,
+            "clan": null
+          },
+          "description": "North is the direction of wisdom, patience, and the hard-earned knowledge of the elders. The buffalo provides everything needed for survival — nothing wasted. Sweetgrass (Wiingashk) is braided like a grandmother's hair and calls in kindness and good spirits. The North teaches Wisdom and Humility — knowing what you know, and knowing what you do not."
+        }
+      ]
+    },
+    {
+      "id": "navajo",
+      "name": "Diné (Navajo)",
+      "region": "Four Corners region (Arizona, New Mexico, Utah, Colorado)",
+      "source": "Witherspoon (1977) Language and Art in the Navajo Universe; Navajo Nation Division of Education; Zolbrod (1984) Diné Bahane'",
+      "caveat": "Diné directional knowledge is deeply embedded in ceremony, language, and daily life. The four sacred mountains define Dinétah (the Navajo homeland), and their teachings are multilayered. What is shared publicly represents only the outermost layer. Some knowledge is restricted to specific ceremonies and not appropriate for public documentation. The associations here reflect widely published, non-restricted information.",
+      "directionCount": 4,
+      "center": {
+        "label": "Hózhó (Beauty, Balance, Harmony)",
+        "description": "The central principle of Diné philosophy. Hózhó encompasses beauty, balance, order, and harmony — the ideal state toward which all life moves. To walk in beauty (Hózhóogo naasháa doo) is to live in right relationship with all things."
+      },
+      "additional": [],
+      "quadrantColors": {
+        "N": "rgba(30, 30, 30, 0.12)",
+        "E": "rgba(255, 255, 255, 0.08)",
+        "S": "rgba(64, 224, 208, 0.08)",
+        "W": "rgba(218, 165, 32, 0.08)"
+      },
+      "directions": [
+        {
+          "dir": "E",
+          "label": "East",
+          "angle": 0,
+          "color": { "name": "White", "hex": "#FFFFFF", "rgba": "rgba(255, 255, 255, 0.08)" },
+          "nativeTerm": "Ha'a'aah",
+          "meaning": "The direction of dawn",
+          "associations": {
+            "animal": "White Shell Deer / Spotted Elk",
+            "plant": "Corn (Naadą́ą́')",
+            "element": "Air / Dawn light",
+            "season": "Spring",
+            "lifeStage": "Birth / Infancy (Áwéé')",
+            "timeOfDay": "Dawn (Hayoołkááł)",
+            "virtue": "Thinking (Nitsáhákees)",
+            "celestialBody": null,
+            "humanAspect": null,
+            "sacredMountain": "Sisnaajiní (Blanca Peak, CO)",
+            "gemstone": "White Shell (Yoołgaii)",
+            "clan": "Kinyaa'áanii (Towering House)"
+          },
+          "description": "East is the direction of dawn and the beginning of thought. Nitsáhákees (Thinking) is the first stage of all creation — every action begins with a thought, as every day begins with dawn light on Sisnaajiní. White shell adorns this mountain, reflecting the purity of first light. Corn, the sustainer of life, is planted with prayers facing east."
+        },
+        {
+          "dir": "S",
+          "label": "South",
+          "angle": 90,
+          "color": { "name": "Turquoise / Blue", "hex": "#40E0D0", "rgba": "rgba(64, 224, 208, 0.08)" },
+          "nativeTerm": "Shádí'ááh",
+          "meaning": "The direction of midday sun",
+          "associations": {
+            "animal": "Mountain Lion / Horned Toad",
+            "plant": "Tobacco (Natʼoh)",
+            "element": "Water",
+            "season": "Summer",
+            "lifeStage": "Youth / Adolescence",
+            "timeOfDay": "Midday (Ałní'ní'ą́)",
+            "virtue": "Planning (Nahat'á)",
+            "celestialBody": null,
+            "humanAspect": null,
+            "sacredMountain": "Tsoodził (Mount Taylor, NM)",
+            "gemstone": "Turquoise (Dootł'izhii)",
+            "clan": "Honágháahnii (One-Walks-Around)"
+          },
+          "description": "South is the direction of planning and organizing what the mind has conceived. Nahat'á (Planning) turns thought into structure. Tsoodził stands draped in turquoise, the stone of protection and communication with the Holy People. The blue of midday sky mirrors the turquoise that adorns this direction."
+        },
+        {
+          "dir": "W",
+          "label": "West",
+          "angle": 180,
+          "color": { "name": "Yellow", "hex": "#DAA520", "rgba": "rgba(218, 165, 32, 0.08)" },
+          "nativeTerm": "E'e'aah",
+          "meaning": "The direction of evening twilight",
+          "associations": {
+            "animal": "Magpie / Yellow-breasted Chat",
+            "plant": "Squash (Naayízí)",
+            "element": "Twilight / Evening light",
+            "season": "Autumn",
+            "lifeStage": "Adulthood",
+            "timeOfDay": "Evening (Nahiiłtį́h)",
+            "virtue": "Living / Implementing (Iiná)",
+            "celestialBody": null,
+            "humanAspect": null,
+            "sacredMountain": "Dook'o'oosłííd (San Francisco Peaks, AZ)",
+            "gemstone": "Abalone (Diichííł)",
+            "clan": "Tódích'íi'nii (Bitter Water)"
+          },
+          "description": "West is the direction of living and putting plans into action. Iiná (Life/Living) is thought and plan made real in the world. Dook'o'oosłííd wears abalone, its iridescent surface catching the yellow-orange light of sunset. The West is where maturity resides — knowledge applied, not merely held."
+        },
+        {
+          "dir": "N",
+          "label": "North",
+          "angle": -90,
+          "color": { "name": "Black", "hex": "#1E1E1E", "rgba": "rgba(30, 30, 30, 0.12)" },
+          "nativeTerm": "Náhookǫs",
+          "meaning": "The direction of darkness and reflection",
+          "associations": {
+            "animal": "Bear / Porcupine",
+            "plant": "Beans (Nóó')",
+            "element": "Darkness / Night",
+            "season": "Winter",
+            "lifeStage": "Elder",
+            "timeOfDay": "Night (Tł'éé')",
+            "virtue": "Hope / Reflection (Siihasin)",
+            "celestialBody": "North Star (Náhookǫs)",
+            "humanAspect": null,
+            "sacredMountain": "Dibé Nitsaa (Hesperus Peak, CO)",
+            "gemstone": "Jet / Obsidian (Bááshzhinii)",
+            "clan": "Áshįįhí (Salt)"
+          },
+          "description": "North is the direction of fulfillment, rest, and assurance in what has been accomplished. Siihasin (Hope/Assurance) is the culmination — thought, plan, and life resolved into confident understanding. Dibé Nitsaa stands in jet black, the color of the night sky that holds all the stars. The North completes the cycle that dawn began."
+        }
+      ]
+    },
+    {
+      "id": "zuni",
+      "name": "Zuni (A:shiwi)",
+      "region": "Zuni Pueblo, western New Mexico",
+      "source": "Cushing (1883) Zuñi Fetishes; Stevenson (1904) The Zuñi Indians; Bunzel (1932) Zuñi Ceremonialism",
+      "caveat": "Zuni directional knowledge is inseparable from Zuni ceremonial life. The published sources (primarily Cushing, Stevenson, and Bunzel) date from the late 19th and early 20th centuries, and contemporary Zuni people may regard some of this information as incomplete or inappropriately shared. The prey-god fetish system has both a healing set and a hunting set with different animals; both are noted. Presented with respect for these limitations.",
+      "directionCount": 6,
+      "center": {
+        "label": "Center / Middle Place (Halona:wa Idiwana'a)",
+        "description": "The Center of the World — Zuni Pueblo itself, understood as the Middle Place where the Zuni people settled after their long migration. All six directions radiate from and return to this center."
+      },
+      "additional": [],
+      "quadrantColors": {
+        "N": "rgba(218, 165, 32, 0.08)",
+        "E": "rgba(255, 255, 255, 0.08)",
+        "S": "rgba(178, 34, 34, 0.08)",
+        "W": "rgba(65, 105, 225, 0.08)"
+      },
+      "directions": [
+        {
+          "dir": "N",
+          "label": "North",
+          "angle": -90,
+          "color": { "name": "Yellow", "hex": "#DAA520", "rgba": "rgba(218, 165, 32, 0.08)" },
+          "nativeTerm": "Upo'yanne",
+          "meaning": "The upper direction / North",
+          "associations": {
+            "animal": "Mountain Lion (prey god of the North; hunting set: Mountain Lion)",
+            "plant": "Yellow Corn",
+            "element": "Air / Breath",
+            "season": "Winter",
+            "lifeStage": "Elder",
+            "timeOfDay": "Night",
+            "virtue": null,
+            "celestialBody": null,
+            "humanAspect": null,
+            "sacredMountain": null,
+            "gemstone": null,
+            "clan": null
+          },
+          "description": "North is the region of wind, force, and the mountain lion whose power governs the hunt. In the Zuni six-direction system, the mountain lion is the most powerful of the prey gods, the master of all others. Yellow is the color of the North — the color of aged corn and autumn light before winter."
+        },
+        {
+          "dir": "E",
+          "label": "East",
+          "angle": 0,
+          "color": { "name": "White", "hex": "#FFFFFF", "rgba": "rgba(255, 255, 255, 0.08)" },
+          "nativeTerm": "Telashinna",
+          "meaning": "The direction of dawn",
+          "associations": {
+            "animal": "Wolf (prey god of the East; hunting set: Wolf)",
+            "plant": "White Corn",
+            "element": "Earth / Frost",
+            "season": "Spring",
+            "lifeStage": "Birth / Infancy",
+            "timeOfDay": "Dawn",
+            "virtue": null,
+            "celestialBody": null,
+            "humanAspect": null,
+            "sacredMountain": null,
+            "gemstone": null,
+            "clan": null
+          },
+          "description": "East is the region of the wolf, who hunts in packs and knows the land. White is the color of the East — the pale light before sunrise, the color of white corn and frost. The wolf prey god governs this direction's hunting and healing powers."
+        },
+        {
+          "dir": "S",
+          "label": "South",
+          "angle": 90,
+          "color": { "name": "Red", "hex": "#B22222", "rgba": "rgba(178, 34, 34, 0.08)" },
+          "nativeTerm": "Maik'yanna",
+          "meaning": "The warm direction / South",
+          "associations": {
+            "animal": "Badger (prey god of the South; hunting set: Coyote)",
+            "plant": "Red Corn",
+            "element": "Fire / Heat",
+            "season": "Summer",
+            "lifeStage": "Youth",
+            "timeOfDay": "Midday",
+            "virtue": null,
+            "celestialBody": null,
+            "humanAspect": null,
+            "sacredMountain": null,
+            "gemstone": null,
+            "clan": null
+          },
+          "description": "South is the region of the badger, who knows the earth intimately and digs to the roots. Red is the color of the South — the heat of summer and the red of fire. In the healing set, the badger guards this direction; in the hunting set, the coyote takes its place."
+        },
+        {
+          "dir": "W",
+          "label": "West",
+          "angle": 180,
+          "color": { "name": "Blue", "hex": "#4169E1", "rgba": "rgba(65, 105, 225, 0.08)" },
+          "nativeTerm": "K'yalits'anna",
+          "meaning": "The direction of sunset / West",
+          "associations": {
+            "animal": "Bear (prey god of the West; hunting set: Bear)",
+            "plant": "Blue Corn",
+            "element": "Water",
+            "season": "Autumn",
+            "lifeStage": "Adulthood",
+            "timeOfDay": "Sunset / Evening",
+            "virtue": null,
+            "celestialBody": null,
+            "humanAspect": null,
+            "sacredMountain": null,
+            "gemstone": null,
+            "clan": null
+          },
+          "description": "West is the region of the bear, associated with healing and herbal medicine. Blue is the color of the West — the deep blue of twilight and water. The bear prey god is considered the great curer among the Zuni, and bear fetishes are central to healing ceremonies."
+        },
+        {
+          "dir": "Above",
+          "label": "Above / Zenith",
+          "angle": null,
+          "color": { "name": "Multi-colored", "hex": "#9370DB", "rgba": "rgba(147, 112, 219, 0.08)" },
+          "nativeTerm": "Iyatiku",
+          "meaning": "The upper region / Sky",
+          "associations": {
+            "animal": "Eagle (prey god of the Above; or Knife-wing, a mythic raptor)",
+            "plant": null,
+            "element": "Sky / Light",
+            "season": null,
+            "lifeStage": null,
+            "timeOfDay": null,
+            "virtue": null,
+            "celestialBody": "Sun (Yatokka Taccu)",
+            "humanAspect": null,
+            "sacredMountain": null,
+            "gemstone": null,
+            "clan": null
+          },
+          "description": "Above is the zenith, the sky region governed by the eagle or the mythic Knife-wing bird. Multi-colored or speckled, this direction holds all colors. The eagle sees everything from above and carries messages between the worlds."
+        },
+        {
+          "dir": "Below",
+          "label": "Below / Nadir",
+          "angle": null,
+          "color": { "name": "Black", "hex": "#1E1E1E", "rgba": "rgba(30, 30, 30, 0.12)" },
+          "nativeTerm": "Manłe'a",
+          "meaning": "The lower region / Underground",
+          "associations": {
+            "animal": "Mole (prey god of the Below; knows the underworld paths)",
+            "plant": null,
+            "element": "Underground / Inner Earth",
+            "season": null,
+            "lifeStage": null,
+            "timeOfDay": null,
+            "virtue": null,
+            "celestialBody": null,
+            "humanAspect": null,
+            "sacredMountain": null,
+            "gemstone": null,
+            "clan": null
+          },
+          "description": "Below is the nadir, the underground region governed by the mole who navigates in darkness. Black is the color of the deep earth. The mole prey god knows all the subterranean paths and sees without light — a different kind of knowing than the eagle's vision above."
+        }
+      ]
+    },
+    {
+      "id": "mikmaq",
+      "name": "Mi'kmaq (Wabanaki)",
+      "region": "Atlantic Canada (Nova Scotia, New Brunswick, Prince Edward Island, Québec Gaspé, Maine)",
+      "source": "Mi'kmaw Elders; Battiste (2000) Reclaiming Indigenous Voice and Vision; Augustine (2008) Mi'kmaq and Maliseet cultural teachings",
+      "caveat": "The Mi'kmaq are part of the broader Wabanaki Confederacy — 'People of the Dawnland.' Red in the East is distinctive and reflects the dawn connection central to Wabanaki identity. Directional teachings carry regional variation across the confederacy. The seven-direction system (four cardinals plus Above, Below, Center) parallels but is not identical to other Algonquian-family systems like the Ojibwe.",
+      "directionCount": 4,
+      "center": {
+        "label": "Glooscap / Creator (Kisu'lk)",
+        "description": "Glooscap, the culture hero and transformer, is closely associated with the center. Kisu'lk, the Creator, made the world and placed all beings in their directions. The center is where the human stands, responsible for maintaining balance."
+      },
+      "additional": [
+        {
+          "dir": "Above",
+          "label": "Sky World (Wasóq)",
+          "description": "The sky realm, home of the star people and the Thunder Beings. The Mi'kmaq star stories map the sky as a great bear hunt that cycles through the year."
+        },
+        {
+          "dir": "Below",
+          "label": "Earth / Water World",
+          "description": "The earth and waters below, source of sustenance. The ocean is especially significant to the Mi'kmaq as a coastal people — the tides are the breathing of the world."
+        },
+        {
+          "dir": "Center",
+          "label": "Sacred Fire / Self",
+          "description": "The individual at the center of the directions, tending the inner fire of awareness and responsibility to all relations."
+        }
+      ],
+      "quadrantColors": {
+        "N": "rgba(255, 255, 255, 0.08)",
+        "E": "rgba(178, 34, 34, 0.08)",
+        "S": "rgba(218, 165, 32, 0.08)",
+        "W": "rgba(30, 30, 30, 0.12)"
+      },
+      "directions": [
+        {
+          "dir": "E",
+          "label": "East",
+          "angle": 0,
+          "color": { "name": "Red", "hex": "#B22222", "rgba": "rgba(178, 34, 34, 0.08)" },
+          "nativeTerm": "Oqwatnuq",
+          "meaning": "Where the sun rises / Direction of the dawn",
+          "associations": {
+            "animal": "Eagle",
+            "plant": "Tobacco",
+            "element": "Fire / Light",
+            "season": "Spring",
+            "lifeStage": "Birth / Infancy",
+            "timeOfDay": "Dawn",
+            "virtue": "Courage",
+            "celestialBody": "Sun",
+            "humanAspect": "Spiritual",
+            "sacredMountain": null,
+            "gemstone": null,
+            "clan": null
+          },
+          "description": "East is red — the color of the dawn that gives the Wabanaki their name, 'People of the Dawnland.' The Mi'kmaq territories face the sunrise across the Atlantic, and the East carries the energy of new life, spiritual awakening, and the courage to begin. The eagle carries prayers toward the rising light."
+        },
+        {
+          "dir": "S",
+          "label": "South",
+          "angle": 90,
+          "color": { "name": "Yellow", "hex": "#DAA520", "rgba": "rgba(218, 165, 32, 0.08)" },
+          "nativeTerm": "Opgoetasin",
+          "meaning": "The warm direction",
+          "associations": {
+            "animal": "Coyote / Mouse",
+            "plant": "Cedar",
+            "element": "Water / Rain",
+            "season": "Summer",
+            "lifeStage": "Youth",
+            "timeOfDay": "Midday",
+            "virtue": "Trust",
+            "celestialBody": null,
+            "humanAspect": "Emotional",
+            "sacredMountain": null,
+            "gemstone": null,
+            "clan": null
+          },
+          "description": "South is the direction of warmth, emotion, and the openness of youth. The warm winds bring rain and growth. Cedar is used for purification and protection. The South teaches trust — the ability to be close to the world without guarding against it."
+        },
+        {
+          "dir": "W",
+          "label": "West",
+          "angle": 180,
+          "color": { "name": "Black", "hex": "#1E1E1E", "rgba": "rgba(30, 30, 30, 0.12)" },
+          "nativeTerm": "Oqapskw",
+          "meaning": "Where the sun goes down",
+          "associations": {
+            "animal": "Bear",
+            "plant": "Sage",
+            "element": "Earth",
+            "season": "Autumn",
+            "lifeStage": "Adulthood",
+            "timeOfDay": "Sunset / Evening",
+            "virtue": "Introspection",
+            "celestialBody": "Evening Star",
+            "humanAspect": "Physical",
+            "sacredMountain": null,
+            "gemstone": null,
+            "clan": null
+          },
+          "description": "West is the direction of the setting sun, introspection, and the physical body. The bear retreats into the earth, going inward to find renewal. Sage clears the way for honest self-examination. The West holds the power of looking within — the maturity to examine what one has built and what must change."
+        },
+        {
+          "dir": "N",
+          "label": "North",
+          "angle": -90,
+          "color": { "name": "White", "hex": "#FFFFFF", "rgba": "rgba(255, 255, 255, 0.08)" },
+          "nativeTerm": "Oqotignoq",
+          "meaning": "The cold direction / Where the cold wind comes from",
+          "associations": {
+            "animal": "Moose / Buffalo",
+            "plant": "Sweetgrass",
+            "element": "Air / Wind",
+            "season": "Winter",
+            "lifeStage": "Elder",
+            "timeOfDay": "Night",
+            "virtue": "Wisdom",
+            "celestialBody": "North Star",
+            "humanAspect": "Mental",
+            "sacredMountain": null,
+            "gemstone": null,
+            "clan": null
+          },
+          "description": "North is the direction of wisdom, endurance, and the knowledge earned through long winters. The moose — enormous, patient, adapted to the cold — embodies the quiet power of the North. Sweetgrass calls in kindness and good spirits. The elders sit in the North, their knowledge tested by time and weather."
+        }
+      ]
+    },
+    {
+      "id": "hopi",
+      "name": "Hopi",
+      "region": "Hopi Mesas, northeastern Arizona",
+      "source": "Waters (1963) Book of the Hopi; Hopi Cultural Preservation Office; Sekaquaptewa & Washburn (2004)",
+      "caveat": "Hopi directional axes are traditionally oriented to solstice sunrise and sunset points, not true geographic cardinal directions. The NE–SW and NW–SE axes follow summer and winter solstice sun positions respectively. The cardinal mappings shown here (N, E, S, W) are approximate for display purposes. Hopi cultural knowledge is closely guarded; publicly available information represents only what has been authorized for sharing. Corn colors are central to Hopi directional symbolism.",
+      "directionCount": 6,
+      "center": {
+        "label": "Tuuwanasavi (Center of the Universe)",
+        "description": "The Hopi Mesas are understood as Tuuwanasavi — the center of the universe, the spiritual navel of the world. The sipapuni (emergence hole) connects to the underworld from which the Hopi people emerged."
+      },
+      "additional": [],
+      "quadrantColors": {
+        "N": "rgba(218, 165, 32, 0.08)",
+        "E": "rgba(255, 255, 255, 0.08)",
+        "S": "rgba(178, 34, 34, 0.08)",
+        "W": "rgba(65, 105, 225, 0.08)"
+      },
+      "directions": [
+        {
+          "dir": "N",
+          "label": "North (solstice-approximate)",
+          "angle": -90,
+          "color": { "name": "Yellow", "hex": "#DAA520", "rgba": "rgba(218, 165, 32, 0.08)" },
+          "nativeTerm": "Kwiniwi",
+          "meaning": "The north / Direction of yellow corn",
+          "associations": {
+            "animal": "Mountain Lion",
+            "plant": "Yellow Corn",
+            "element": "Air / Wind",
+            "season": null,
+            "lifeStage": "Infancy (First World)",
+            "timeOfDay": "Dawn",
+            "virtue": null,
+            "celestialBody": null,
+            "humanAspect": null,
+            "sacredMountain": null,
+            "gemstone": null,
+            "clan": null
+          },
+          "description": "North-northeast is the direction of the summer solstice sunrise. Yellow corn is planted for this direction, and the mountain lion guards it. In Hopi cosmology, this direction relates to the First World (Tokpela) — the beginning of existence. Kachina masks for this direction bear yellow markings."
+        },
+        {
+          "dir": "E",
+          "label": "East (solstice-approximate)",
+          "angle": 0,
+          "color": { "name": "White", "hex": "#FFFFFF", "rgba": "rgba(255, 255, 255, 0.08)" },
+          "nativeTerm": "Hoopaqw",
+          "meaning": "The east / Direction of white corn",
+          "associations": {
+            "animal": "Eagle",
+            "plant": "White Corn",
+            "element": "Light / Dawn",
+            "season": null,
+            "lifeStage": null,
+            "timeOfDay": null,
+            "virtue": null,
+            "celestialBody": "Sun (Taawa)",
+            "humanAspect": null,
+            "sacredMountain": null,
+            "gemstone": null,
+            "clan": null
+          },
+          "description": "East-southeast is associated with the winter solstice sunrise direction. White corn marks this direction. The eagle carries prayers upward. In some Hopi villages, the winter solstice ceremony (Soyal) is oriented toward this direction to welcome the sun's return."
+        },
+        {
+          "dir": "S",
+          "label": "South (solstice-approximate)",
+          "angle": 90,
+          "color": { "name": "Red", "hex": "#B22222", "rgba": "rgba(178, 34, 34, 0.08)" },
+          "nativeTerm": "Tatyuqwa",
+          "meaning": "The south / Direction of red corn",
+          "associations": {
+            "animal": "Badger",
+            "plant": "Red Corn",
+            "element": "Fire / Heat",
+            "season": null,
+            "lifeStage": null,
+            "timeOfDay": "Midday",
+            "virtue": null,
+            "celestialBody": null,
+            "humanAspect": null,
+            "sacredMountain": null,
+            "gemstone": null,
+            "clan": null
+          },
+          "description": "South-southwest corresponds to the winter solstice sunset. Red corn is planted for this direction. The badger, a burrower, connects the surface to the underground worlds. Kachina masks for this direction bear red markings."
+        },
+        {
+          "dir": "W",
+          "label": "West (solstice-approximate)",
+          "angle": 180,
+          "color": { "name": "Blue / Green", "hex": "#4682B4", "rgba": "rgba(65, 105, 225, 0.08)" },
+          "nativeTerm": "Taavang",
+          "meaning": "The west / Direction of blue corn",
+          "associations": {
+            "animal": "Bear",
+            "plant": "Blue Corn (Sakwaqa'ö)",
+            "element": "Water",
+            "season": null,
+            "lifeStage": null,
+            "timeOfDay": "Sunset",
+            "virtue": null,
+            "celestialBody": null,
+            "humanAspect": null,
+            "sacredMountain": null,
+            "gemstone": null,
+            "clan": null
+          },
+          "description": "West-northwest corresponds to the summer solstice sunset. Blue corn is one of the most culturally important Hopi crops, and its color marks this direction. The bear is the guardian of the West. In Hopi, blue and green are expressed by the same word (sakwa), reflecting their unity."
+        },
+        {
+          "dir": "Above",
+          "label": "Above / Zenith",
+          "angle": null,
+          "color": { "name": "Black (all colors combined)", "hex": "#1E1E1E", "rgba": "rgba(30, 30, 30, 0.12)" },
+          "nativeTerm": "Oomiq",
+          "meaning": "Above / The sky",
+          "associations": {
+            "animal": "Eagle (or Swallow)",
+            "plant": "Sweet Corn",
+            "element": "Sky / Cosmos",
+            "season": null,
+            "lifeStage": null,
+            "timeOfDay": null,
+            "virtue": null,
+            "celestialBody": "Sun (Taawa) and Stars",
+            "humanAspect": null,
+            "sacredMountain": null,
+            "gemstone": null,
+            "clan": null
+          },
+          "description": "Above is the zenith, the sky realm. In Hopi symbolism, black or dark represents the totality of all colors combined — the night sky that contains all the stars. The eagle and swallow move between earth and sky, carrying messages to the spirit world."
+        },
+        {
+          "dir": "Below",
+          "label": "Below / Nadir",
+          "angle": null,
+          "color": { "name": "Gray (all colors muted)", "hex": "#808080", "rgba": "rgba(128, 128, 128, 0.08)" },
+          "nativeTerm": "Aatkyam",
+          "meaning": "Below / The underworld",
+          "associations": {
+            "animal": "Mole (or Snake)",
+            "plant": "Speckled Corn",
+            "element": "Inner Earth",
+            "season": null,
+            "lifeStage": null,
+            "timeOfDay": null,
+            "virtue": null,
+            "celestialBody": null,
+            "humanAspect": null,
+            "sacredMountain": null,
+            "gemstone": null,
+            "clan": null
+          },
+          "description": "Below is the nadir — the underworld from which the Hopi people emerged through the sipapuni. Gray or mixed colors represent this direction. The mole and snake know the underground paths. The Hopi emergence story tells of ascending through four worlds, each one below the next."
+        }
+      ]
+    },
+    {
+      "id": "cree",
+      "name": "Cree (Nehiyawak)",
+      "region": "Boreal and Subarctic Canada (Alberta, Saskatchewan, Manitoba, Ontario, Québec)",
+      "source": "Cardinal & Hildebrandt (2000) Treaty Elders of Saskatchewan; Plains Cree Elders' teachings; Christensen (2000) Ahtahkakoop",
+      "caveat": "Cree territory spans an enormous area, and teachings vary significantly between Plains Cree, Woodland Cree, Swampy Cree, and other communities. A notable distinction: many Cree teachings avoid using black as a directional color, substituting blue or green for the West. This reflects a philosophical difference, not an error. The 15-pole tipi teachings are an important vehicle for directional knowledge in Plains Cree tradition.",
+      "directionCount": 4,
+      "center": {
+        "label": "Creator / Sacred Fire (Kihci-Manitow)",
+        "description": "The Creator (Kihci-Manitow) is at the center of all things. The sacred fire at the center of the tipi and the sweat lodge represents the Creator's presence and the warmth that sustains life through the long northern winters."
+      },
+      "additional": [
+        {
+          "dir": "Above",
+          "label": "Sky / Father Sky (Kîsik)",
+          "description": "The sky world above, realm of the Thunderbirds, the Sun, Moon, and Stars. The northern lights (Cîpay Sîhkos — spirits dancing) bridge sky and earth."
+        },
+        {
+          "dir": "Below",
+          "label": "Earth / Mother Earth (Askiy)",
+          "description": "Mother Earth who sustains all life. The Cree relationship to the land is foundational — askiy (the land) is not a possession but a relative."
+        },
+        {
+          "dir": "Center",
+          "label": "Sacred Fire / Heart",
+          "description": "The fire at the center of the tipi, the lodge, and the self. The 15 poles of the tipi each carry a teaching, and together they create the space where all directions meet."
+        }
+      ],
+      "quadrantColors": {
+        "N": "rgba(255, 255, 255, 0.08)",
+        "E": "rgba(218, 165, 32, 0.08)",
+        "S": "rgba(178, 34, 34, 0.08)",
+        "W": "rgba(65, 105, 225, 0.08)"
+      },
+      "directions": [
+        {
+          "dir": "E",
+          "label": "East",
+          "angle": 0,
+          "color": { "name": "Yellow", "hex": "#DAA520", "rgba": "rgba(218, 165, 32, 0.08)" },
+          "nativeTerm": "Sâkâstênohk",
+          "meaning": "Where the sun rises",
+          "associations": {
+            "animal": "Eagle (Mikisow)",
+            "plant": "Tobacco (Cistêmâw)",
+            "element": "Fire / Light",
+            "season": "Spring (Miyoskamin)",
+            "lifeStage": "Birth / Infancy",
+            "timeOfDay": "Dawn",
+            "virtue": "Honesty (Kwayaskâtisiwin)",
+            "celestialBody": "Sun (Pîsim)",
+            "humanAspect": "Spiritual",
+            "sacredMountain": null,
+            "gemstone": null,
+            "clan": null
+          },
+          "description": "East is the direction of new light, spiritual awakening, and the gift of each new day. The eagle flies closest to the Creator and carries prayers upward. Tobacco is offered at dawn to greet the sun. In the tipi, the door faces East so that the morning light enters first."
+        },
+        {
+          "dir": "S",
+          "label": "South",
+          "angle": 90,
+          "color": { "name": "Red", "hex": "#B22222", "rgba": "rgba(178, 34, 34, 0.08)" },
+          "nativeTerm": "Sâwanohk",
+          "meaning": "The warm direction",
+          "associations": {
+            "animal": "Mouse or Coyote",
+            "plant": "Cedar or Rat Root (Wîhkês)",
+            "element": "Water",
+            "season": "Summer (Nîpin)",
+            "lifeStage": "Youth / Childhood",
+            "timeOfDay": "Midday",
+            "virtue": "Kindness / Sharing (Kistêyimisowin)",
+            "celestialBody": null,
+            "humanAspect": "Emotional",
+            "sacredMountain": null,
+            "gemstone": null,
+            "clan": null
+          },
+          "description": "South is the direction of warmth, emotion, and the time of growth. The South wind brings the warm weather that makes life possible in the North. Youth and energy live here — the close-up perception of the mouse who sees every detail. Red is the color of vitality and the lifeblood."
+        },
+        {
+          "dir": "W",
+          "label": "West",
+          "angle": 180,
+          "color": { "name": "Black, Blue, or Green (varies by community)", "hex": "#4169E1", "rgba": "rgba(65, 105, 225, 0.08)" },
+          "nativeTerm": "Pahkisimotâhk",
+          "meaning": "Where the sun goes down",
+          "associations": {
+            "animal": "Bear (Maskwa)",
+            "plant": "Sage (Mâskêkomina)",
+            "element": "Earth",
+            "season": "Autumn (Takwâkin)",
+            "lifeStage": "Adulthood",
+            "timeOfDay": "Sunset / Evening",
+            "virtue": "Bravery / Strength (Sohkâtisiwin)",
+            "celestialBody": "Evening Star",
+            "humanAspect": "Physical",
+            "sacredMountain": null,
+            "gemstone": null,
+            "clan": null
+          },
+          "description": "West is the direction of introspection, strength, and the physical realm. Many Cree communities assign blue or green rather than black to the West — a distinctive choice that sets Cree teachings apart from neighboring traditions. The bear retreats westward into the earth, embodying the courage to look within."
+        },
+        {
+          "dir": "N",
+          "label": "North",
+          "angle": -90,
+          "color": { "name": "White", "hex": "#FFFFFF", "rgba": "rgba(255, 255, 255, 0.08)" },
+          "nativeTerm": "Kîwêtinohk",
+          "meaning": "The north wind / Where it is cold",
+          "associations": {
+            "animal": "Buffalo (Paskwâwi-mostos) or White Buffalo",
+            "plant": "Sweetgrass (Wîhkaskwa)",
+            "element": "Air / Wind",
+            "season": "Winter (Pipon)",
+            "lifeStage": "Elder",
+            "timeOfDay": "Night",
+            "virtue": "Wisdom (Kiskêyihtamowin)",
+            "celestialBody": "North Star and the Stars (Atâhk)",
+            "humanAspect": "Mental",
+            "sacredMountain": null,
+            "gemstone": null,
+            "clan": null
+          },
+          "description": "North is the direction of wisdom, endurance, and the elders who have survived many winters. White is the color of snow and the North wind (Kîwêtin) that shapes everything in Cree country. The buffalo represents provision and resilience. Sweetgrass braided like an elder's hair calls in good spirits and reminds of the sweetness in life."
+        }
+      ]
+    },
+    {
+      "id": "apache",
+      "name": "Apache (Ndee)",
+      "region": "Southwest (Arizona, New Mexico, with bands extending into Texas, Oklahoma, and northern Mexico)",
+      "source": "Opler (1941) An Apache Life-Way; White Mountain Apache Cultural Center; Basso (1996) Wisdom Sits in Places",
+      "caveat": "Apache directional knowledge is closely tied to ceremonial life, especially the Sunrise Ceremony (na'ii'ees) and other sacred practices. Only the most basic color and mountain associations are widely documented in public sources. Many specific associations are held within ceremonial contexts and are not shared publicly. The numerous Apache bands (Western Apache, Chiricahua, Mescalero, Jicarilla, Lipan, Plains Apache) each have their own variations. This entry follows the most commonly published Western Apache pattern.",
+      "directionCount": 4,
+      "center": {
+        "label": null,
+        "description": null
+      },
+      "additional": [],
+      "quadrantColors": {
+        "N": "rgba(255, 255, 255, 0.08)",
+        "E": "rgba(30, 30, 30, 0.12)",
+        "S": "rgba(64, 224, 208, 0.08)",
+        "W": "rgba(218, 165, 32, 0.08)"
+      },
+      "directions": [
+        {
+          "dir": "E",
+          "label": "East",
+          "angle": 0,
+          "color": { "name": "Black", "hex": "#1E1E1E", "rgba": "rgba(30, 30, 30, 0.12)" },
+          "nativeTerm": "Ha'a'ah",
+          "meaning": "The direction of dawn",
+          "associations": {
+            "animal": null,
+            "plant": null,
+            "element": null,
+            "season": "Spring",
+            "lifeStage": "Birth / Infancy",
+            "timeOfDay": "Dawn",
+            "virtue": null,
+            "celestialBody": null,
+            "humanAspect": null,
+            "sacredMountain": "Dził Łigai (Sierra Blanca, NM)",
+            "gemstone": null,
+            "clan": null
+          },
+          "description": "East is the direction of dawn and the beginning. Black in the East represents the darkness just before sunrise — the moment of potential before light arrives. Sierra Blanca (Dził Łigai) stands as the sacred mountain of this direction. The Apache color-direction pattern mirrors the Diné system but with East and North colors swapped."
+        },
+        {
+          "dir": "S",
+          "label": "South",
+          "angle": 90,
+          "color": { "name": "Blue / Turquoise", "hex": "#40E0D0", "rgba": "rgba(64, 224, 208, 0.08)" },
+          "nativeTerm": "Shádí'ááh",
+          "meaning": "The direction of midday",
+          "associations": {
+            "animal": null,
+            "plant": null,
+            "element": null,
+            "season": "Summer",
+            "lifeStage": "Youth",
+            "timeOfDay": "Midday",
+            "virtue": null,
+            "celestialBody": null,
+            "humanAspect": null,
+            "sacredMountain": "Dził Nchaa Si An (Mount Graham, AZ)",
+            "gemstone": null,
+            "clan": null
+          },
+          "description": "South is the direction of growth and the full light of day. Blue or turquoise marks this direction, as it does in the closely related Diné system. Mount Graham (Dził Nchaa Si An) is the sacred mountain of the South, a place of great spiritual significance to the Western Apache."
+        },
+        {
+          "dir": "W",
+          "label": "West",
+          "angle": 180,
+          "color": { "name": "Yellow", "hex": "#DAA520", "rgba": "rgba(218, 165, 32, 0.08)" },
+          "nativeTerm": "E'e'aah",
+          "meaning": "The direction of sunset",
+          "associations": {
+            "animal": null,
+            "plant": null,
+            "element": null,
+            "season": "Autumn",
+            "lifeStage": "Adulthood",
+            "timeOfDay": "Sunset / Evening",
+            "virtue": null,
+            "celestialBody": null,
+            "humanAspect": null,
+            "sacredMountain": "Dook'o'oosłííd (San Francisco Peaks, AZ)",
+            "gemstone": null,
+            "clan": null
+          },
+          "description": "West is the direction of the setting sun. Yellow marks this direction, reflecting the golden light of evening. The San Francisco Peaks (Dook'o'oosłííd) are shared as a sacred site with the Diné and Hopi peoples — a mountain that belongs to the land rather than to any single people."
+        },
+        {
+          "dir": "N",
+          "label": "North",
+          "angle": -90,
+          "color": { "name": "White", "hex": "#FFFFFF", "rgba": "rgba(255, 255, 255, 0.08)" },
+          "nativeTerm": "Nahookǫs",
+          "meaning": "The direction of cold / darkness",
+          "associations": {
+            "animal": null,
+            "plant": null,
+            "element": null,
+            "season": "Winter",
+            "lifeStage": "Elder",
+            "timeOfDay": "Night",
+            "virtue": null,
+            "celestialBody": null,
+            "humanAspect": null,
+            "sacredMountain": "Dibé Nitsaa (La Plata Mountains / Hesperus Peak, CO)",
+            "gemstone": null,
+            "clan": null
+          },
+          "description": "North is the direction of cold, completion, and the wisdom of age. White represents the snow and the clarity of winter. The La Plata Mountains (Dibé Nitsaa) are the sacred mountain of the North, also recognized by the Diné. Apache and Diné share deep linguistic and cultural connections as Athabaskan peoples."
+        }
+      ]
+    }
+  ]
+}

@@ -70,7 +70,7 @@ function CrossHairLines() {
   );
 }
 
-function WheelLabel({ label, angleDeg, radius, selected, onClick, isCenter, centerY }) {
+function WheelLabel({ label, angleDeg, radius, selected, onClick, isCenter, centerY, fontSize: fsProp }) {
   const [hovered, setHovered] = useState(false);
 
   let x, z;
@@ -103,7 +103,7 @@ function WheelLabel({ label, angleDeg, radius, selected, onClick, isCenter, cent
 
       <Text
         position={[0, 0, 0.01]}
-        fontSize={0.35}
+        fontSize={fsProp || 0.35}
         color={color}
         anchorX="center"
         anchorY="middle"
@@ -137,13 +137,31 @@ function WheelLabel({ label, angleDeg, radius, selected, onClick, isCenter, cent
  *   selectedWheelItem: string|null (e.g. "humanSelf:N" or "num:1" or "dir:N")
  *   onSelectWheelItem: (itemId) => void
  */
-export default function MedicineWheel3D({ wheels, selectedWheelItem, onSelectWheelItem }) {
+export default function MedicineWheel3D({ wheels, selectedWheelItem, onSelectWheelItem, quadrantColorHexes, isTraditionView }) {
+  const qColors = useMemo(() => {
+    if (!quadrantColorHexes) return QUADRANT_COLORS;
+    return {
+      N: new THREE.Color(quadrantColorHexes.N),
+      E: new THREE.Color(quadrantColorHexes.E),
+      S: new THREE.Color(quadrantColorHexes.S),
+      W: new THREE.Color(quadrantColorHexes.W),
+    };
+  }, [quadrantColorHexes]);
+
+  const ringRadii = useMemo(() => {
+    if (!isTraditionView || !wheels?.length) return RING_RADII;
+    const count = wheels.length;
+    const minR = 2, maxR = 11;
+    const gap = (maxR - minR) / count;
+    return Array.from({ length: count }, (_, i) => minR + (i + 0.5) * gap);
+  }, [isTraditionView, wheels]);
+
   // Place labels from all wheels at different ring radii
   const allLabels = useMemo(() => {
     if (!wheels) return [];
     const labels = [];
     wheels.forEach((wheel, wIdx) => {
-      const ringR = RING_RADII[wIdx] || RING_RADII[RING_RADII.length - 1];
+      const ringR = ringRadii[wIdx] || ringRadii[ringRadii.length - 1];
       wheel.positions.forEach(pos => {
         const itemId = `${wheel.id}:${pos.dir}`;
         labels.push({
@@ -158,7 +176,7 @@ export default function MedicineWheel3D({ wheels, selectedWheelItem, onSelectWhe
       });
     });
     return labels;
-  }, [wheels]);
+  }, [wheels, ringRadii]);
 
   return (
     <>
@@ -172,12 +190,12 @@ export default function MedicineWheel3D({ wheels, selectedWheelItem, onSelectWhe
           dir={q.dir}
           startDeg={q.startDeg}
           endDeg={q.endDeg}
-          color={QUADRANT_COLORS[q.dir]}
+          color={qColors[q.dir]}
         />
       ))}
 
       {/* Concentric rings */}
-      {RING_RADII.map(r => (
+      {ringRadii.map(r => (
         <ConcentricRing key={r} radius={r} />
       ))}
 
@@ -198,6 +216,7 @@ export default function MedicineWheel3D({ wheels, selectedWheelItem, onSelectWhe
           radius={lbl.radius}
           isCenter={lbl.isCenter}
           centerY={lbl.centerY}
+          fontSize={isTraditionView ? Math.max(0.25, 0.55 - (wheels?.length || 0) * 0.03) : 0.35}
           selected={selectedWheelItem === lbl.itemId}
           onClick={() => onSelectWheelItem(selectedWheelItem === lbl.itemId ? null : lbl.itemId)}
         />

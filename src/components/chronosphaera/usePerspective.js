@@ -391,6 +391,7 @@ export default function usePerspective(selectedPlanet) {
     if (activePerspective === 'mythouse') return null;
     if (!activeChart) return null;
     const base = {
+      id: activePerspective,
       tradition: activeChart.tradition,
       sourceText: activeChart.sourceText,
       period: activeChart.period,
