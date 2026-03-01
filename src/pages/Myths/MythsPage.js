@@ -24,6 +24,7 @@ import { useProfile } from '../../profile/ProfileContext';
 import MYTHIC_EARTH_TOURS from '../../data/mythicEarthTours';
 import mythicEarthMovements from '../../data/mythicEarthMovements.json';
 import MythicAgesTimeline, { parseEraString } from '../../components/MythicAgesTimeline';
+import HistoricalCoreTimeline from '../../components/HistoricalCoreTimeline';
 import '../Treasures/TreasuresPage.css';
 import ArchetypesPanel from '../../components/ArchetypesPanel';
 import olympianPantheon from '../../data/olympianPantheon.json';
@@ -1266,6 +1267,7 @@ function TreasuresContent({ currentEpisode, onSelectEpisode, viewToggle }) {
   const [activeTab, setActiveTab] = useState('overview');
   const [activeTheme, setActiveTheme] = useState(null);
   const [playlistActive, setPlaylistActive] = useState(false);
+  const [hcIndex, setHcIndex] = useState(0);
 
   const episodeData = treasuresData.episodes.find(ep => ep.id === currentEpisode);
   const isPlaceholder = episodeData && episodeData.themes.length === 0;
@@ -1285,7 +1287,9 @@ function TreasuresContent({ currentEpisode, onSelectEpisode, viewToggle }) {
       prevEp.current = currentEpisode;
       setActiveTab('overview');
       setActiveTheme(null);
-      setPlaylistActive(false);
+      setHcIndex(0);
+      const ep = treasuresData.episodes.find(e => e.id === currentEpisode);
+      setPlaylistActive(!!ep?.playlist);
     }
   }, [currentEpisode]);
 
@@ -1373,12 +1377,18 @@ function TreasuresContent({ currentEpisode, onSelectEpisode, viewToggle }) {
 
                     {activeTab === 'historical-core' && (
                       <div className="treasures-historical-core">
-                        {episodeData.historicalCore ? (
-                          <div className="treasures-body">
-                            {episodeData.historicalCore.split('\n\n').map((p, i) => (
-                              <p key={i}>{p}</p>
-                            ))}
-                          </div>
+                        {Array.isArray(episodeData.historicalCore) && episodeData.historicalCore.length > 0 ? (
+                          <>
+                            <div className="treasures-hc-label">{episodeData.historicalCore[hcIndex]?.label}</div>
+                            <HistoricalCoreTimeline
+                              stops={episodeData.historicalCore}
+                              activeIndex={hcIndex}
+                              onSelect={setHcIndex}
+                            />
+                            <div className="treasures-body" key={hcIndex}>
+                              <p>{episodeData.historicalCore[hcIndex]?.text}</p>
+                            </div>
+                          </>
                         ) : (
                           <p className="treasures-empty">Historical core coming soon.</p>
                         )}

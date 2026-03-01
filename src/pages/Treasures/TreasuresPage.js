@@ -1,5 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import CircleNav from '../../components/CircleNav';
+import HistoricalCoreTimeline from '../../components/HistoricalCoreTimeline';
 import data from '../../data/treasuresData';
 import { usePageTracking } from '../../coursework/CourseworkContext';
 import './TreasuresPage.css';
@@ -23,6 +24,8 @@ function TreasuresPage() {
   const [clockwise, setClockwise] = useState(false);
   const [activeTab, setActiveTab] = useState('overview');
   const [activeTheme, setActiveTheme] = useState(null);
+  const [playlistActive, setPlaylistActive] = useState(false);
+  const [hcIndex, setHcIndex] = useState(0);
 
   const episodeData = data.episodes.find(ep => ep.id === currentEpisode);
   const isPlaceholder = episodeData && episodeData.themes.length === 0;
@@ -31,16 +34,20 @@ function TreasuresPage() {
     setCurrentEpisode(stage);
     setActiveTab('overview');
     setActiveTheme(null);
+    setHcIndex(0);
+    const ep = data.episodes.find(e => e.id === stage);
+    setPlaylistActive(!!ep?.playlist);
     track(`episode.${stage}`);
   }, [track]);
 
   const handleTabClick = useCallback((tabId) => {
     setActiveTab(tabId);
     if (tabId !== 'myths') setActiveTheme(null);
+    if (tabId === 'playlist') setPlaylistActive(true);
     track(`tab.${tabId}`);
   }, [track]);
 
-  const videoUrl = activeTab === 'playlist' && episodeData?.playlist ? episodeData.playlist : null;
+  const videoUrl = playlistActive && episodeData?.playlist ? episodeData.playlist : null;
 
   return (
     <div className="treasures-page">
@@ -55,7 +62,7 @@ function TreasuresPage() {
         centerLine3=""
         showAuthor={false}
         videoUrl={videoUrl}
-        onCloseVideo={() => setActiveTab('themes')}
+        onCloseVideo={() => { setPlaylistActive(false); setActiveTab('overview'); }}
       />
 
       <div className="treasures-subtitle">{data.subtitle}</div>
@@ -122,12 +129,18 @@ function TreasuresPage() {
 
                     {activeTab === 'historical-core' && (
                       <div className="treasures-historical-core">
-                        {episodeData.historicalCore ? (
-                          <div className="treasures-body">
-                            {episodeData.historicalCore.split('\n\n').map((p, i) => (
-                              <p key={i}>{p}</p>
-                            ))}
-                          </div>
+                        {Array.isArray(episodeData.historicalCore) && episodeData.historicalCore.length > 0 ? (
+                          <>
+                            <div className="treasures-hc-label">{episodeData.historicalCore[hcIndex]?.label}</div>
+                            <HistoricalCoreTimeline
+                              stops={episodeData.historicalCore}
+                              activeIndex={hcIndex}
+                              onSelect={setHcIndex}
+                            />
+                            <div className="treasures-body" key={hcIndex}>
+                              <p>{episodeData.historicalCore[hcIndex]?.text}</p>
+                            </div>
+                          </>
                         ) : (
                           <p className="treasures-empty">Historical core coming soon.</p>
                         )}
