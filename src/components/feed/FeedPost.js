@@ -144,7 +144,7 @@ export default function FeedPost({ post, currentUid, onDelete, onCircle }) {
       {post.images?.length > 0 && (
         <div className="feed-post-images">
           {post.images.map((img, i) => (
-            <img key={i} src={img.url} alt={img.name || ''} className="feed-post-image" />
+            <img key={i} src={img.url} alt={img.name || ''} className="feed-post-image" loading="lazy" />
           ))}
         </div>
       )}

@@ -7,6 +7,25 @@
  * Limit is 300 chars per call, so longer text is split into chunks.
  */
 
+const { ensureFirebaseAdmin, getUidFromRequest } = require('./_lib/auth');
+
+// In-memory rate limiting (resets on cold start, matches chat.js pattern)
+const rateMap = new Map();
+const RATE_LIMIT = 5;             // TTS is expensive — tighter than chat
+const RATE_WINDOW_MS = 60 * 1000;
+
+function checkRateLimit(key) {
+  const now = Date.now();
+  const entry = rateMap.get(key);
+  if (!entry || now - entry.windowStart > RATE_WINDOW_MS) {
+    rateMap.set(key, { windowStart: now, count: 1 });
+    return true;
+  }
+  if (entry.count >= RATE_LIMIT) return false;
+  entry.count++;
+  return true;
+}
+
 // Voice ID → reference sample URL (relative to site root)
 const VOICE_SAMPLES = {
   atlas: '/voices/atlas.mp3',
@@ -93,6 +112,17 @@ async function generateChunk(text, voiceSampleUrl, apiToken) {
 module.exports = async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
+  }
+
+  // Require authenticated user
+  const uid = await getUidFromRequest(req);
+  if (!uid) {
+    return res.status(401).json({ error: 'Authentication required.' });
+  }
+
+  // Rate limit per user
+  if (!checkRateLimit(uid)) {
+    return res.status(429).json({ error: 'Too many TTS requests. Please wait a moment.' });
   }
 
   const { text, voiceId = 'atlas' } = req.body || {};

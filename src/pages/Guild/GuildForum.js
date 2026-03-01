@@ -9,13 +9,22 @@ import { useCoursework } from '../../coursework/CourseworkContext';
 const POSTS_PER_PAGE = 20;
 const MAX_NESTING = 3;
 
+function escapeHtml(str) {
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
 function renderMarkdown(text) {
   if (!text) return '';
-  // Minimal markdown: bold, italic, links, line breaks
-  return text
+  // HTML-escape first to prevent XSS, then apply markdown formatting
+  return escapeHtml(text)
     .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
     .replace(/\*(.+?)\*/g, '<em>$1</em>')
-    .replace(/\[(.+?)\]\((.+?)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>')
+    .replace(/\[(.+?)\]\((https?:\/\/[^\)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>')
     .replace(/\n/g, '<br />');
 }
 
@@ -464,7 +473,7 @@ function ExpandedPost({ post, userVotes, onVote, currentUid }) {
       {post.imageUrls?.length > 0 && (
         <div className="guild-post-images">
           {post.imageUrls.map((url, i) => (
-            <img key={i} src={url} alt="" className="guild-post-image" />
+            <img key={i} src={url} alt="" className="guild-post-image" loading="lazy" />
           ))}
         </div>
       )}

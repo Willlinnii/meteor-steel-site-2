@@ -913,7 +913,7 @@ export default function MythouseCards({ onExit, initialSection, initialCulture }
                   </span>
                   {revealed ? (
                     <div className={`mc-spread-card mc-spread-card-revealed${spreadImg ? ' has-img' : ''}`}>
-                      {spreadImg && <img className="mc-card-img" src={spreadImg} alt={card.name} />}
+                      {spreadImg && <img className="mc-card-img" src={spreadImg} alt={card.name} loading="lazy" />}
                       {spreadImg ? (
                         <div className="mc-card-img-overlay mc-spread-overlay">
                           <span className="mc-spread-card-name">{card.name}</span>
@@ -1407,6 +1407,7 @@ export default function MythouseCards({ onExit, initialSection, initialCulture }
                         className="mc-detail-img"
                         src={getTarotMajorImg(expandedCard.number)}
                         alt={expandedCard.name}
+                        loading="lazy"
                       />
                     </div>
                   )}

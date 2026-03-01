@@ -2122,6 +2122,16 @@ function MythosophiaPage() {
   );
 }
 
+function NotFoundPage() {
+  return (
+    <div style={{ padding: '80px 20px', textAlign: 'center', color: 'var(--text-secondary)', minHeight: '50vh' }}>
+      <h2 style={{ color: 'var(--accent-ember)', marginBottom: 12, fontSize: '2rem' }}>404</h2>
+      <p style={{ marginBottom: 20 }}>This page doesn't exist.</p>
+      <a href="/home" style={{ color: 'var(--accent-gold)', textDecoration: 'underline' }}>Return home</a>
+    </div>
+  );
+}
+
 function RequireAdmin({ children }) {
   const { user } = useAuth();
   const adminEmail = process.env.REACT_APP_ADMIN_EMAIL;
@@ -2381,6 +2391,7 @@ function AppContent() {
         <Route path="/app/*" element={<Navigate to="/fellowship" replace />} />
         <Route path="/will-linn" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><WillLinnPage /></Suspense>} />
         <Route path="/dragon/*" element={<RequireAdmin><Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" />Loading Admin...</div>}><AdminPage /></Suspense></RequireAdmin>} />
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
       </ErrorBoundary>
       {!isAtlas && <SiteFooter />}

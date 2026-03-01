@@ -21,7 +21,6 @@ function playAudioQueue(urls, audioRef, onEnd) {
 
 // --- AI Voice via Replicate Chatterbox ---
 async function speakAI(text, voiceId, audioRef, onEnd) {
-  console.log('[Atlas Voice] Calling TTS API with voiceId:', voiceId);
   try {
     const res = await apiFetch('/api/tts', {
       method: 'POST',
@@ -29,49 +28,32 @@ async function speakAI(text, voiceId, audioRef, onEnd) {
       body: JSON.stringify({ text, voiceId }),
     });
 
-    console.log('[Atlas Voice] TTS response status:', res.status);
-
     if (!res.ok) {
-      const errBody = await res.text().catch(() => '(no body)');
-      console.warn('[Atlas Voice] TTS API error:', res.status, errBody);
       speakBrowser(text, onEnd);
       return;
     }
 
     const data = await res.json();
-    console.log('[Atlas Voice] TTS response data:', JSON.stringify(data).slice(0, 200));
 
     // Single chunk response
     if (data.audioUrl) {
-      console.log('[Atlas Voice] Playing audio from:', data.audioUrl.slice(0, 80));
       const audio = new Audio(data.audioUrl);
       audioRef.current = audio;
-      audio.onended = () => { console.log('[Atlas Voice] Audio playback ended'); onEnd?.(); };
-      audio.onerror = (e) => {
-        console.warn('[Atlas Voice] Audio playback error:', e);
-        speakBrowser(text, onEnd);
-      };
-      audio.play().then(() => {
-        console.log('[Atlas Voice] Audio playing successfully');
-      }).catch((e) => {
-        console.warn('[Atlas Voice] Audio play() rejected:', e);
-        speakBrowser(text, onEnd);
-      });
+      audio.onended = () => onEnd?.();
+      audio.onerror = () => speakBrowser(text, onEnd);
+      audio.play().catch(() => speakBrowser(text, onEnd));
       return;
     }
 
     // Multi-chunk response
     if (data.audioUrls && data.audioUrls.length > 0) {
-      console.log('[Atlas Voice] Playing', data.audioUrls.length, 'audio chunks');
       playAudioQueue(data.audioUrls, audioRef, onEnd);
       return;
     }
 
-    // No audio returned
-    console.warn('[Atlas Voice] No audio URL in response');
+    // No audio returned — fall back to browser
     speakBrowser(text, onEnd);
-  } catch (err) {
-    console.warn('[Atlas Voice] TTS fetch error:', err);
+  } catch {
     speakBrowser(text, onEnd);
   }
 }

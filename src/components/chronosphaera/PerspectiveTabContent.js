@@ -52,7 +52,7 @@ function TarotOverview({ data, planet, activeTradition }) {
       <div className="tarot-overview-layout">
         {imgSrc && (
           <div className="tarot-overview-image">
-            <img src={imgSrc} alt={data.majorArcana} />
+            <img src={imgSrc} alt={data.majorArcana} loading="lazy" />
             <Link to="/games/cards-tarot" className="tarot-full-deck-link">See full deck &rarr;</Link>
           </div>
         )}

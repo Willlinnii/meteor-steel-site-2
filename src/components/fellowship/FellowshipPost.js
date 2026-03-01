@@ -126,7 +126,7 @@ export default function FellowshipPost({ post, currentUid, onDelete, onCircle })
       {post.images?.length > 0 && (
         <div className="fellowship-post-images">
           {post.images.map((img, i) => (
-            <img key={i} src={img.url} alt={img.name || ''} className="fellowship-post-image" />
+            <img key={i} src={img.url} alt={img.name || ''} className="fellowship-post-image" loading="lazy" />
           ))}
         </div>
       )}
