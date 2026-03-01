@@ -131,6 +131,8 @@ describe('Route component imports', () => {
     { name: 'TeacherPage',         path: '../pages/Teacher/TeacherPage' },
     { name: 'WillLinnPage',        path: '../pages/WillLinn/WillLinnPage' },
     { name: 'MicrocosmosPage',     path: '../pages/Microcosmos/MicrocosmosPage' },
+    { name: 'RecursiveChartPage', path: '../pages/RecursiveChart/RecursiveChartPage' },
+    { name: 'DivinationPage', path: '../pages/Divination/DivinationPage' },
   ];
 
   describe('Lazy-loaded pages resolve', () => {

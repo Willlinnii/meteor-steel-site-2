@@ -93,8 +93,9 @@ export default function SortesPage() {
       )}
 
       <div className="divination-oracle-source">
-        Question categories and answer style after the <em>Sortes Astrampsychi</em>{' '}
-        (Greco-Roman lot oracle, c. 3rd–5th century CE).
+        Lot oracle after the <em>Sortes Astrampsychi</em> (Greco-Roman,
+        c. 3rd–5th century CE). Question categories from attested papyrus
+        traditions. Answer pool composed in the traditional style.
       </div>
     </div>
   );

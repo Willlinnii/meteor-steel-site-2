@@ -147,6 +147,12 @@ export default function IChingPage() {
           ))}
         </div>
       )}
+
+      <div className="divination-oracle-source">
+        <em>I Ching</em> (Yìjīng, 易經). King Wen sequence, 64 hexagrams.
+        Judgment texts (guà cí) after Legge (1882). Trigram correspondences
+        from the Shuo Gua (Discussion of the Trigrams). Three-coin method.
+      </div>
     </div>
   );
 }

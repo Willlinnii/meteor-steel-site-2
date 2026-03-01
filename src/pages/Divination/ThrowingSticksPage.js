@@ -64,8 +64,8 @@ export default function ThrowingSticksPage() {
       )}
 
       <div className="divination-oracle-source">
-        Binary casting sticks. Ancient Egyptian and West African traditions.
-        Count-based reading (Senet convention).
+        Egyptian casting sticks. Movement values from Senet
+        (Kendall 1978, Piccione 1980). 0 marked = 5 (bonus throw).
       </div>
     </div>
   );

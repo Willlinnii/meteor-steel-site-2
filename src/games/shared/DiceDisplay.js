@@ -22,6 +22,60 @@ export function D6Display({ value, rolling }) {
   );
 }
 
+// D4 — Tetrahedron face (equilateral triangle with number)
+export function D4Display({ value, rolling }) {
+  return (
+    <svg className={`dice-svg d4${rolling ? ' dice-rolling' : ''}`} viewBox="0 0 60 60" width="48" height="48">
+      <polygon points="30,4 4,56 56,56"
+        fill="var(--bg-medium)" stroke="var(--accent-gold)" strokeWidth="1.5" />
+      <text x="30" y="42" textAnchor="middle" fill="var(--text-primary)"
+        fontSize="20" fontFamily="Cinzel, serif" fontWeight="700">{value}</text>
+    </svg>
+  );
+}
+
+// D8 — Octahedron face (diamond with number)
+export function D8Display({ value, rolling }) {
+  return (
+    <svg className={`dice-svg d8${rolling ? ' dice-rolling' : ''}`} viewBox="0 0 60 60" width="48" height="48">
+      <polygon points="30,2 58,30 30,58 2,30"
+        fill="var(--bg-medium)" stroke="var(--accent-gold)" strokeWidth="1.5" />
+      <text x="30" y="36" textAnchor="middle" fill="var(--text-primary)"
+        fontSize="18" fontFamily="Cinzel, serif" fontWeight="700">{value}</text>
+    </svg>
+  );
+}
+
+// D12 — Dodecahedron face (pentagon with number)
+export function D12Display({ value, rolling }) {
+  // Regular pentagon points
+  const cx = 30, cy = 30, r = 26;
+  const pts = Array.from({ length: 5 }, (_, i) => {
+    const angle = (i * 72 - 90) * Math.PI / 180;
+    return `${cx + r * Math.cos(angle)},${cy + r * Math.sin(angle)}`;
+  }).join(' ');
+  return (
+    <svg className={`dice-svg d12${rolling ? ' dice-rolling' : ''}`} viewBox="0 0 60 60" width="48" height="48">
+      <polygon points={pts}
+        fill="var(--bg-medium)" stroke="var(--accent-gold)" strokeWidth="1.5" />
+      <text x="30" y="36" textAnchor="middle" fill="var(--text-primary)"
+        fontSize="17" fontFamily="Cinzel, serif" fontWeight="700">{value}</text>
+    </svg>
+  );
+}
+
+// D20 — Icosahedron face (equilateral triangle with number)
+export function D20Display({ value, rolling }) {
+  return (
+    <svg className={`dice-svg d20${rolling ? ' dice-rolling' : ''}`} viewBox="0 0 60 60" width="48" height="48">
+      <polygon points="30,2 4,52 56,52"
+        fill="var(--bg-medium)" stroke="var(--accent-gold)" strokeWidth="1.5" />
+      <text x="30" y="40" textAnchor="middle" fill="var(--text-primary)"
+        fontSize="16" fontFamily="Cinzel, serif" fontWeight="700">{value}</text>
+    </svg>
+  );
+}
+
 // Stick dice for Senet (4 sticks)
 export function StickDiceDisplay({ sticks, result, rolling }) {
   const sticksArr = sticks || (result && result.sticks);
