@@ -14,6 +14,7 @@ import { checkAvailability, registerHandle } from '../../multiplayer/handleServi
 import { apiFetch } from '../../lib/chatApi';
 import { computeNumerology, NUMBER_MEANINGS, NUMBER_TYPES } from '../../profile/numerologyEngine';
 import FriendsSection from './FriendsSection';
+import YinYangSpinner from '../../components/YinYangSpinner';
 import MyStoryArc from './MyStoryArc';
 import StoryCardDeck from './StoryCardDeck';
 import { useFellowship } from '../../contexts/FellowshipContext';
@@ -872,51 +873,6 @@ const { cards: storyCards, loaded: storyCardsLoaded, vaultCardIds, toggleVaultCa
         </>
       )}
 
-      {/* My Story Cards (with Story Matching pop-down) */}
-      <StoryCardDeck cards={storyCards} loaded={storyCardsLoaded} vaultCardIds={vaultCardIds} onToggleVault={toggleVaultCard} />
-
-      {/* Social Media Links (click-to-expand) */}
-      <h2
-        className="profile-section-title profile-section-toggle"
-        onClick={() => setShowSocial(v => !v)}
-        role="button"
-        tabIndex={0}
-        onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') setShowSocial(v => !v); }}
-      >
-        Social Media
-        <span className={`profile-section-chevron${showSocial ? ' open' : ''}`}>&#9662;</span>
-      </h2>
-      {showSocial && (
-        <div className="profile-social-links">
-          {[
-            { key: 'instagram', label: 'Instagram', placeholder: 'username' },
-            { key: 'facebook', label: 'Facebook', placeholder: 'username or profile URL' },
-            { key: 'linkedin', label: 'LinkedIn', placeholder: 'username or profile URL' },
-            { key: 'youtube', label: 'YouTube', placeholder: 'channel name or URL' },
-          ].map(p => (
-            <div key={p.key} className="profile-social-row">
-              <div className="profile-social-label">{p.label}</div>
-              <input
-                className="profile-social-input"
-                type="text"
-                placeholder={p.placeholder}
-                value={socialInputs[p.key]}
-                onChange={e => handleSocialChange(p.key, e.target.value)}
-              />
-            </div>
-          ))}
-          {socialDirty && (
-            <button
-              className="profile-social-save-btn"
-              disabled={socialSaving}
-              onClick={handleSocialSave}
-            >
-              {socialSaving ? 'Saving...' : 'Save Social Links'}
-            </button>
-          )}
-        </div>
-      )}
-
       {/* Credentials Section */}
       <h2 id="section-credentials" className="profile-section-title profile-section-toggle" onClick={() => toggleSection('credentials')} role="button" tabIndex={0} onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') toggleSection('credentials'); }}>
         Credentials
@@ -1518,6 +1474,54 @@ All responses return { data, meta } JSON. GET /v1/ for full discovery.`}</pre>
           ))}
         </div>
       ))}
+
+      {/* Yin Yang Spinner */}
+      <YinYangSpinner />
+
+      {/* My Story Cards (with Story Matching pop-down) */}
+      <StoryCardDeck cards={storyCards} loaded={storyCardsLoaded} vaultCardIds={vaultCardIds} onToggleVault={toggleVaultCard} />
+
+      {/* Social Media Links (click-to-expand) */}
+      <h2
+        className="profile-section-title profile-section-toggle"
+        onClick={() => setShowSocial(v => !v)}
+        role="button"
+        tabIndex={0}
+        onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') setShowSocial(v => !v); }}
+      >
+        Social Media
+        <span className={`profile-section-chevron${showSocial ? ' open' : ''}`}>&#9662;</span>
+      </h2>
+      {showSocial && (
+        <div className="profile-social-links">
+          {[
+            { key: 'instagram', label: 'Instagram', placeholder: 'username' },
+            { key: 'facebook', label: 'Facebook', placeholder: 'username or profile URL' },
+            { key: 'linkedin', label: 'LinkedIn', placeholder: 'username or profile URL' },
+            { key: 'youtube', label: 'YouTube', placeholder: 'channel name or URL' },
+          ].map(p => (
+            <div key={p.key} className="profile-social-row">
+              <div className="profile-social-label">{p.label}</div>
+              <input
+                className="profile-social-input"
+                type="text"
+                placeholder={p.placeholder}
+                value={socialInputs[p.key]}
+                onChange={e => handleSocialChange(p.key, e.target.value)}
+              />
+            </div>
+          ))}
+          {socialDirty && (
+            <button
+              className="profile-social-save-btn"
+              disabled={socialSaving}
+              onClick={handleSocialSave}
+            >
+              {socialSaving ? 'Saving...' : 'Save Social Links'}
+            </button>
+          )}
+        </div>
+      )}
 
       {/* Friends Section */}
       <FriendsSection />

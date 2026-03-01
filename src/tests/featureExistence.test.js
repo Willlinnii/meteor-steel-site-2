@@ -308,3 +308,25 @@ describe('OrbitalDiagram structural invariants', () => {
     expect(body).not.toContain('if (!geoClockAngles)');
   });
 });
+
+// ---------------------------------------------------------------------------
+// 6. Friend messaging feature files exist
+// ---------------------------------------------------------------------------
+describe('Friend messaging feature files exist', () => {
+  const friendMessagingFiles = [
+    { name: 'friendConversationService', relPath: '../hooks/friendConversationService.js' },
+    { name: 'useFriendConversations',    relPath: '../hooks/useFriendConversations.js' },
+    { name: 'useFriendConversation',     relPath: '../hooks/useFriendConversation.js' },
+    { name: 'FriendConversationList',    relPath: '../pages/Profile/FriendConversationList.js' },
+    { name: 'FriendConversationThread',  relPath: '../pages/Profile/FriendConversationThread.js' },
+    { name: 'FriendMessagesPanel',       relPath: '../pages/Profile/FriendMessagesPanel.js' },
+  ];
+
+  test.each(friendMessagingFiles)(
+    '$name file exists on disk',
+    ({ relPath }) => {
+      const absPath = path.resolve(__dirname, relPath);
+      expect(fs.existsSync(absPath)).toBe(true);
+    }
+  );
+});

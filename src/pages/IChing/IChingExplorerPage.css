@@ -68,8 +68,18 @@
 }
 
 .iching-explorer-compass-wrap {
-  max-width: 420px;
+  max-width: 560px;
   width: 100%;
+}
+
+/* ── Arrangement Controls (below compass) ─────────────────── */
+
+.iching-explorer-arrangement-controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+  margin-top: 0.5rem;
 }
 
 /* ── Arrangement Toggle ────────────────────────────────────── */
@@ -78,7 +88,6 @@
   display: flex;
   justify-content: center;
   gap: 0;
-  margin-bottom: 0.75rem;
 }
 
 .iching-explorer-arrangement-toggle button {
@@ -95,8 +104,8 @@
   border-radius: 4px 0 0 4px;
 }
 
-.iching-explorer-arrangement-toggle button:last-child {
-  border-radius: 0 4px 4px 0;
+.iching-explorer-arrangement-toggle button:nth-child(2) {
+  border-radius: 0;
   border-left: none;
 }
 
@@ -119,14 +128,13 @@
   font-size: 0.75rem;
   color: var(--text-secondary);
   font-style: italic;
-  margin-top: 0.4rem;
 }
 
 /* ── Bagua Compass ─────────────────────────────────────────── */
 
 .iching-explorer-compass {
   width: 100%;
-  max-width: 420px;
+  max-width: 560px;
   cursor: default;
 }
 
@@ -153,12 +161,12 @@
 }
 
 .iching-explorer-compass .iching-compass-trigram-symbol {
-  font-size: 22px;
+  font-size: 32px;
   fill: var(--text-primary);
 }
 
 .iching-explorer-compass .iching-compass-trigram-name {
-  font-size: 11px;
+  font-size: 13px;
   fill: var(--text-secondary);
 }
 
@@ -170,23 +178,80 @@
 .iching-explorer-compass .iching-compass-taijitu {
   opacity: 0.9;
   transition: opacity 0.2s;
+  transform-origin: 200px 200px;
 }
 
 .iching-explorer-compass .iching-compass-taijitu:hover {
   opacity: 1;
 }
 
-.iching-explorer-compass .iching-compass-line-yang {
-  fill: var(--text-primary);
+/* ── Taijitu Spin ─────────────────────────────────────────── */
+
+@keyframes iching-taijitu-spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
 }
 
-.iching-explorer-compass .iching-compass-line-yin {
-  fill: var(--text-primary);
+.iching-explorer-compass .iching-compass-spinning {
+  animation: iching-taijitu-spin 0.24s linear infinite;
+  opacity: 1;
 }
 
-.iching-explorer-compass .iching-compass-trigram-group.iching-compass-selected .iching-compass-line-yang,
-.iching-explorer-compass .iching-compass-trigram-group.iching-compass-selected .iching-compass-line-yin {
-  fill: var(--accent-fire);
+.iching-spin-btn {
+  background: var(--bg-medium);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  padding: 0.35rem 0.6rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  border-radius: 0 4px 4px 0;
+  border-left: none;
+  transition: color 0.15s, background 0.15s;
+  line-height: 1;
+}
+
+.iching-spin-btn:hover {
+  color: var(--text-primary);
+}
+
+.iching-spin-btn.iching-spin-active {
+  background: rgba(212, 164, 116, 0.15);
+  color: var(--accent-fire);
+  border-color: var(--accent-fire);
+}
+
+/* ── Tabs ──────────────────────────────────────────────────── */
+
+.iching-explorer-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  max-width: 700px;
+  margin: 0 auto 16px;
+}
+
+.iching-tab {
+  font-family: 'Cinzel', serif;
+  font-size: 0.7rem;
+  letter-spacing: 0.05em;
+  border: 1px solid rgba(139,157,195,0.4);
+  background: transparent;
+  color: var(--text-secondary);
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.iching-tab:hover {
+  background: rgba(139,157,195,0.1);
+}
+
+.iching-tab.active {
+  color: var(--accent-fire);
+  border-color: var(--accent-fire);
+  background: rgba(212,164,116,0.1);
+  box-shadow: 0 0 6px rgba(212,164,116,0.15);
 }
 
 /* ── Content Fade ─────────────────────────────────────────── */
@@ -207,6 +272,20 @@
   font-style: italic;
   padding: 2rem 0;
   text-align: center;
+}
+
+/* ── Info Intro (empty state for Info tab) ─────────────────── */
+
+.iching-explorer-info-intro {
+  font-style: normal;
+  text-align: left;
+}
+
+.iching-explorer-info-intro p {
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: var(--text-secondary);
+  margin: 0 0 1rem;
 }
 
 /* ── Trigram Detail ───────────────────────────────────────── */
@@ -271,6 +350,16 @@
   border-top: none;
   padding-top: 0;
   margin-top: 0.75rem;
+}
+
+/* ── Trigram Line Drawing ─────────────────────────────────── */
+
+.iching-explorer-trigram-drawing {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  margin-top: 1rem;
 }
 
 /* ── Hexagram Detail ──────────────────────────────────────── */
@@ -369,6 +458,16 @@
   margin-bottom: 0.5rem;
   border-left: 3px solid var(--accent-fire);
   padding-left: 0.75rem;
+}
+
+/* ── Hexagram Structure Grid ──────────────────────────────── */
+
+.iching-explorer-hex-structure-grid {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.35rem 1rem;
+  font-size: 0.9rem;
+  margin-top: 1rem;
 }
 
 /* ── Hexagram Grid ─────────────────────────────────────────── */
@@ -471,6 +570,209 @@
   font-weight: 700;
 }
 
+/* ── Term Label (clickable glossary popover) ──────────────── */
+
+.iching-term-wrap {
+  position: relative;
+  display: inline-block;
+}
+
+.iching-term-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  font-family: inherit;
+  font-weight: inherit;
+  font-size: inherit;
+  letter-spacing: inherit;
+  cursor: help;
+  transition: color 0.15s, text-shadow 0.15s;
+}
+
+.iching-term-btn:hover {
+  color: var(--accent-gold, #d4af37);
+  text-shadow: 0 0 8px rgba(212, 175, 55, 0.45);
+}
+
+.iching-term-popover {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: 20;
+  min-width: 220px;
+  max-width: 320px;
+  padding: 0.65rem 0.85rem;
+  background: var(--bg-medium, #14142a);
+  border: 1px solid var(--accent-fire);
+  border-radius: 4px;
+  font-family: 'Crimson Pro', serif;
+  font-size: 0.85rem;
+  font-weight: 400;
+  line-height: 1.55;
+  color: var(--text-primary);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.5);
+  animation: iching-popover-in 120ms ease-out;
+}
+
+.iching-term-popover-title {
+  display: block;
+  font-family: 'Cinzel', serif;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--accent-fire);
+  margin-bottom: 0.3rem;
+}
+
+@keyframes iching-popover-in {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Link Button (inline clickable hex/trigram reference) ──── */
+
+.iching-explorer-link-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  font-size: inherit;
+  color: var(--accent-fire);
+  text-decoration: underline dotted;
+  text-underline-offset: 2px;
+  cursor: pointer;
+  transition: color 0.15s;
+}
+
+.iching-explorer-link-btn:hover {
+  color: var(--accent-gold);
+}
+
+/* ── Chinese Label (inline muted term) ─────────────────────── */
+
+.iching-explorer-chinese-label {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin-left: 0.35rem;
+  opacity: 0.7;
+}
+
+/* ── Trigram Complement Row ────────────────────────────────── */
+
+.iching-explorer-trigram-complement {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.iching-explorer-trigram-complement .iching-explorer-trigram-label {
+  font-size: 0.9rem;
+}
+
+/* ── Structural Relationships (Info tab) ──────────────────── */
+
+.iching-explorer-relationships {
+  margin-top: 1.25rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.iching-explorer-relationships-title {
+  font-family: 'Cinzel', serif;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--accent-fire);
+  margin-bottom: 0.75rem;
+}
+
+.iching-explorer-relationships-grid {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.4rem 1rem;
+  font-size: 0.9rem;
+}
+
+.iching-explorer-relationships-grid .iching-explorer-trigram-label {
+  white-space: nowrap;
+}
+
+.iching-explorer-relationships-grid .iching-explorer-trigram-value {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
+.iching-explorer-self-label {
+  font-style: italic;
+  color: var(--text-secondary);
+}
+
+/* ── Line Texts (Oracle tab) ──────────────────────────────── */
+
+.iching-explorer-hex-lines-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.25rem;
+}
+
+.iching-explorer-hex-line-text {
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-start;
+}
+
+.iching-explorer-hex-line-num {
+  font-family: 'Cinzel', serif;
+  font-size: 0.75rem;
+  color: var(--accent-fire);
+  min-width: 1.2rem;
+  text-align: center;
+  flex-shrink: 0;
+  padding-top: 0.15rem;
+}
+
+.iching-explorer-hex-line-indicator {
+  font-size: 0.85rem;
+  flex-shrink: 0;
+  min-width: 1rem;
+  text-align: center;
+  padding-top: 0.1rem;
+}
+
+.iching-explorer-hex-line-indicator.yang {
+  color: var(--accent-fire);
+}
+
+.iching-explorer-hex-line-indicator.yin {
+  color: var(--text-secondary);
+}
+
+.iching-explorer-hex-line-body {
+  flex: 1;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--text-primary);
+}
+
+.iching-explorer-hex-all-lines {
+  font-style: italic;
+  color: var(--text-secondary);
+  border-left: 3px solid var(--border-subtle);
+  padding-left: 0.75rem;
+  margin-top: 0.5rem;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
 /* ── Responsive ────────────────────────────────────────────── */
 
 @media (max-width: 600px) {
@@ -483,10 +785,15 @@
   }
 
   .iching-explorer-compass-wrap {
-    max-width: 300px;
+    max-width: 340px;
   }
 
   .iching-explorer-diagram-center {
     padding: 10px 0 16px;
+  }
+
+  .iching-tab {
+    font-size: 0.6rem;
+    padding: 6px 10px;
   }
 }

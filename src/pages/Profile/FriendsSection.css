@@ -207,3 +207,195 @@
   color: #7b8ec9;
   background: rgba(123, 142, 201, 0.1);
 }
+
+/* ===== Friend Messaging Panel ===== */
+
+.friends-msg-btn {
+  padding: 2px 10px;
+  border-radius: 10px;
+  border: 1px solid var(--accent-gold, #d4a55a);
+  background: transparent;
+  color: var(--accent-gold, #d4a55a);
+  font-family: 'Cinzel', serif;
+  font-size: 0.65rem;
+  letter-spacing: 0.03em;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.friends-msg-btn:hover {
+  background: rgba(212, 165, 90, 0.15);
+}
+
+.friends-messages-container {
+  display: flex;
+  height: 400px;
+  border: 1px solid var(--border-subtle, #2a2a3a);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--bg-light, #14141c);
+}
+
+.friends-conv-list {
+  width: 240px;
+  min-width: 240px;
+  border-right: 1px solid var(--border-subtle, #2a2a3a);
+  overflow-y: auto;
+}
+
+.friends-conv-empty {
+  color: var(--text-secondary, #6a6a7a);
+  font-size: 0.8rem;
+  font-style: italic;
+  padding: 16px 12px;
+  margin: 0;
+}
+
+.friends-conv-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  cursor: pointer;
+  border-bottom: 1px solid var(--border-subtle, #1e1e2e);
+  transition: background 0.12s;
+}
+
+.friends-conv-item:hover {
+  background: rgba(212, 165, 90, 0.06);
+}
+
+.friends-conv-item.active {
+  background: rgba(212, 165, 90, 0.12);
+}
+
+.friends-conv-item.unread {
+  background: rgba(139, 157, 195, 0.08);
+}
+
+.friends-conv-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.friends-conv-avatar-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(212, 165, 90, 0.15);
+  color: var(--accent-gold, #d4a55a);
+  font-family: 'Cinzel', serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.friends-conv-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.friends-conv-handle {
+  color: var(--accent-gold, #d4a55a);
+  font-family: 'Cinzel', serif;
+  font-size: 0.75rem;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.friends-conv-preview {
+  color: var(--text-secondary, #6a6a7a);
+  font-size: 0.7rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: 2px;
+}
+
+.friends-conv-unread-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent-ember, #c4713a);
+  flex-shrink: 0;
+}
+
+.friends-conv-thread {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.friends-conv-thread-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  color: var(--text-secondary, #6a6a7a);
+  font-size: 0.85rem;
+  font-style: italic;
+}
+
+.friends-conv-thread-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border-subtle, #2a2a3a);
+}
+
+.friends-conv-thread-back {
+  background: none;
+  border: none;
+  color: var(--text-secondary, #8a8a9a);
+  font-size: 1.1rem;
+  cursor: pointer;
+  padding: 0 4px;
+  display: none;
+}
+
+.friends-conv-thread-handle {
+  color: var(--accent-gold, #d4a55a);
+  font-family: 'Cinzel', serif;
+  font-size: 0.85rem;
+  letter-spacing: 0.02em;
+}
+
+.friends-conv-thread-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px;
+}
+
+/* Mobile: single-panel toggle at 640px */
+@media (max-width: 640px) {
+  .friends-messages-container {
+    height: 350px;
+  }
+
+  .friends-conv-list {
+    width: 100%;
+    min-width: 100%;
+  }
+
+  .friends-messages-container.mobile-thread-open .friends-conv-list {
+    display: none;
+  }
+
+  .friends-conv-thread {
+    display: none;
+  }
+
+  .friends-messages-container.mobile-thread-open .friends-conv-thread {
+    display: flex;
+  }
+
+  .friends-conv-thread-back {
+    display: block;
+  }
+}

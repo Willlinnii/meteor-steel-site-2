@@ -1,16 +1,22 @@
 import React, { useState, useCallback, useRef, useMemo } from 'react';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../../auth/AuthContext';
 import { useFriendRequests } from '../../contexts/FriendRequestsContext';
 import { useProfile } from '../../profile/ProfileContext';
 import { searchHandles } from '../../multiplayer/handleService';
+import { useFriendConversations } from '../../hooks/useFriendConversations';
+import { getOrCreateFriendConversation } from '../../hooks/friendConversationService';
+import FriendMessagesPanel from './FriendMessagesPanel';
 import './FriendsSection.css';
 
 export default function FriendsSection() {
+  const { user } = useAuth();
   const { handle } = useProfile();
   const {
     friends, incomingRequests, outgoingRequests, connectedUids,
     sendRequest, acceptRequest, declineRequest, removeFriend, setRelationship,
   } = useFriendRequests();
+  const { unreadCount } = useFriendConversations();
 
   const [sectionCollapsed, setSectionCollapsed] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
@@ -18,6 +24,7 @@ export default function FriendsSection() {
   const [searching, setSearching] = useState(false);
   const [sendingTo, setSendingTo] = useState(null);
   const [confirmRemove, setConfirmRemove] = useState(null);
+  const [activeConvId, setActiveConvId] = useState(null);
   const searchTimer = useRef(null);
 
   // Pending outgoing UIDs for disabling "Send Invite" on search results
@@ -57,6 +64,19 @@ export default function FriendsSection() {
     setConfirmRemove(null);
   }, [removeFriend]);
 
+  const handleMessageFriend = useCallback(async (friend) => {
+    if (!user) return;
+    const convId = await getOrCreateFriendConversation({
+      myUid: user.uid,
+      myHandle: handle || '',
+      myPhotoURL: user.photoURL || null,
+      friendUid: friend.uid,
+      friendHandle: friend.handle || '',
+      friendPhotoURL: null,
+    });
+    setActiveConvId(convId);
+  }, [user, handle]);
+
   // No handle set — prompt user
   if (!handle) {
     return (
@@ -78,14 +98,25 @@ export default function FriendsSection() {
     <>
       <h2 className="profile-section-title profile-section-toggle" onClick={() => setSectionCollapsed(v => !v)} role="button" tabIndex={0} onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') setSectionCollapsed(v => !v); }}>
         Friends
-        {incomingRequests.length > 0 && (
-          <span className="friends-badge">{incomingRequests.length}</span>
+        {(incomingRequests.length + unreadCount) > 0 && (
+          <span className="friends-badge">{incomingRequests.length + unreadCount}</span>
         )}
         <span className={`profile-section-chevron${!sectionCollapsed ? ' open' : ''}`}>&#9662;</span>
       </h2>
 
       {!sectionCollapsed && (
       <>
+      {/* Messages */}
+      <div className="friends-subsection">
+        <h3 className="profile-subsection-title">
+          Messages{unreadCount > 0 ? ` (${unreadCount} unread)` : ''}
+        </h3>
+        <FriendMessagesPanel
+          activeConversationId={activeConvId}
+          onSelectConversation={setActiveConvId}
+        />
+      </div>
+
       {/* Find Friends */}
       <div className="friends-subsection">
         <h3 className="profile-subsection-title">Find Friends</h3>
@@ -186,6 +217,12 @@ export default function FriendsSection() {
             <div key={f.requestId} className="friends-list-row">
               <span className="friends-handle">@{f.handle}</span>
               <div className="friends-list-actions">
+                <button
+                  className="friends-msg-btn"
+                  onClick={() => handleMessageFriend(f)}
+                >
+                  Message
+                </button>
                 <button
                   className={`friends-rel-btn${f.relationship === 'family' ? ' friends-rel-family' : ''}`}
                   onClick={() => setRelationship(f.requestId, f.relationship === 'family' ? 'friend' : 'family')}
