@@ -23,6 +23,13 @@ const STRIPE_PRODUCTS = {
     amount: 4900,
     interval: 'month',
   },
+  // Friends & family (hidden — activated via launch key or admin)
+  'friends': {
+    mode: 'subscription',
+    name: 'Friends of Mythouse',
+    amount: 0,
+    free: true,
+  },
   // Subscriptions
   'developer-api': {
     mode: 'subscription',
@@ -135,6 +142,10 @@ const BUNDLE_EXPANSIONS = {
   'master-key': {
     subscriptions: ['ybr', 'forge', 'coursework', 'monomyth', 'tier-keeper'],
     purchases: ['starlight-bundle', 'fallen-starlight', 'story-of-stories'],
+  },
+  'friends': {
+    subscriptions: ['ybr', 'forge', 'coursework', 'monomyth', 'teaching', 'tier-keeper'],
+    purchases: ['starlight-bundle', 'fallen-starlight', 'story-of-stories', 'medicine-wheel'],
   },
   'starlight-bundle': {
     purchases: ['fallen-starlight', 'story-of-stories'],
