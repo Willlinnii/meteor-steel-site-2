@@ -2,7 +2,7 @@ const admin = require('firebase-admin');
 const { getAnthropicClient, getOpenAIClient, getUserKeys } = require('./_lib/llm');
 const { ensureFirebaseAdmin, getUidFromRequest } = require('./_lib/auth');
 const { computeNatalChart } = require('./_lib/natalChart');
-const { getUserTier, getTierConfig, getCurrentMonthKey } = require('./_lib/usageTiers');
+const { getUserTier, getTierConfig, getCurrentMonthKey, JOURNEYER_SUBS } = require('./_lib/usageTiers');
 const { shouldReestimate, updateStorageEstimate } = require('./_lib/storageEstimate');
 
 // Shared engine — data, formatters, prompt builders
@@ -501,6 +501,15 @@ module.exports = async function handler(req, res) {
     const profileData = profileSnap.exists ? profileSnap.data() : {};
     usageTier = getUserTier(profileData);
     usageTierConfig = getTierConfig(usageTier);
+
+    // TODO: Pre-paywall auto-grant — permanently write tier-journeyer for active users.
+    // Remove this block when ready to enforce paid tiers.
+    const subs = profileData?.subscriptions || {};
+    if (!subs['tier-keeper'] && !subs['tier-journeyer'] && !JOURNEYER_SUBS.some(id => subs[id])) {
+      firestore.doc(`users/${uid}/meta/profile`).set({
+        subscriptions: { 'tier-journeyer': true },
+      }, { merge: true }).catch(err => console.error('Auto-grant tier failed:', err?.message));
+    }
     const monthKey = getCurrentMonthKey();
     usageMonthKey = usageData.monthKey || null;
     messagesUsedThisMonth = usageData.messagesThisMonth || 0;

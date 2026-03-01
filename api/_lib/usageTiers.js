@@ -22,7 +22,9 @@ function getUserTier(profileData) {
   if (subs['tier-keeper']) return 'keeper';
   if (subs['tier-journeyer']) return 'journeyer';
   if (JOURNEYER_SUBS.some(id => subs[id])) return 'journeyer';
-  return 'free';
+  // TODO: Pre-paywall window — default everyone to Journeyer.
+  // Change back to 'free' when ready to enforce paid tiers.
+  return 'journeyer';
 }
 
 /**

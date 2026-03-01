@@ -964,7 +964,9 @@ export function ProfileProvider({ children }) {
     if (realSubscriptions['tier-keeper']) return 'keeper';
     if (realSubscriptions['tier-journeyer']) return 'journeyer';
     if (JOURNEYER_SUBS.some(id => realSubscriptions[id])) return 'journeyer';
-    return 'free';
+    // TODO: Pre-paywall window — default everyone to Journeyer.
+    // Change back to 'free' when ready to enforce paid tiers.
+    return 'journeyer';
   }, [realSubscriptions, JOURNEYER_SUBS]);
 
   const tierConfig = useMemo(() => USAGE_TIERS[userTier] || USAGE_TIERS.free, [userTier, USAGE_TIERS]);

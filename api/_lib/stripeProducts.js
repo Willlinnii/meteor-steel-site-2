@@ -144,7 +144,7 @@ const BUNDLE_EXPANSIONS = {
     purchases: ['starlight-bundle', 'fallen-starlight', 'story-of-stories'],
   },
   'friends': {
-    subscriptions: ['ybr', 'forge', 'coursework', 'monomyth', 'teaching', 'tier-keeper'],
+    subscriptions: ['ybr', 'forge', 'coursework', 'monomyth', 'teaching', 'tier-journeyer'],
     purchases: ['starlight-bundle', 'fallen-starlight', 'story-of-stories', 'medicine-wheel'],
   },
   'starlight-bundle': {
