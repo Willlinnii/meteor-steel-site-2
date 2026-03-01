@@ -1273,14 +1273,107 @@
     "lat": 29.9352,
     "lng": 52.8914,
     "category": "sacred-site",
-    "description": "Ceremonial capital of the Achaemenid Empire, where Darius and Xerxes held court. Delegations from every corner of the known world climbed its great staircase to honor the King of Kings at the New Year.",
+    "description": "Ceremonial capital of the Achaemenid Empire, where Darius and Xerxes held court. Delegations from every corner of the known world climbed its great staircase to honor the King of Kings at the New Year. The Apadana reliefs depict twenty-three subject nations bringing tribute — the most comprehensive portrait of the ancient world's diversity carved in stone. Persepolis was not a city for daily governance; it was a stage for Nowruz, the spring equinox celebration where the empire renewed its covenant with cosmic order. Alexander burned it in 330 BCE, and the ruins still stand as Iran's most potent symbol of civilizational memory.",
     "region": "Iran",
     "streetView": {
       "heading": 0,
       "pitch": 10
     },
     "pantheons": [
-      "zoroastrian"
+      "zoroastrian",
+      "persian"
+    ]
+  },
+  {
+    "id": "naqsh-e-rostam",
+    "name": "Naqsh-e Rostam",
+    "era": "c. 1000 BCE – 3rd century CE",
+    "lat": 29.9881,
+    "lng": 52.8739,
+    "category": "sacred-site",
+    "description": "A sheer cliff face six kilometers north of Persepolis, carved with the cruciform tombs of four Achaemenid kings — Darius I, Xerxes I, Artaxerxes I, and Darius II — each flanked by registers of the empire's subject peoples holding the platform of the king aloft. Below the tombs, Sasanian rock reliefs depict the investiture of Ardashir I by Ahura Mazda and the triumph of Shapur I over the Roman emperor Valerian. The name means 'Picture of Rostam' — local tradition attributed the colossal carvings to the Shahnameh's hero, because who else could have carved so high? The Ka'ba-ye Zartosht, a mysterious Achaemenid-era tower structure, stands opposite the cliff. Its purpose remains debated: fire temple, royal archive, or astronomical observatory. The site spans over a thousand years of Persian sacred and imperial art, from Elamite reliefs to Sasanian triumphs.",
+    "region": "Iran",
+    "streetView": {
+      "heading": 180,
+      "pitch": 15
+    },
+    "pantheons": [
+      "zoroastrian",
+      "persian"
+    ]
+  },
+  {
+    "id": "pasargadae",
+    "name": "Pasargadae",
+    "era": "c. 546–530 BCE",
+    "lat": 30.1936,
+    "lng": 53.1678,
+    "category": "sacred-site",
+    "description": "The first capital of the Achaemenid Empire, built by Cyrus the Great after his conquest of Media. The Tomb of Cyrus — a simple gabled stone structure on a stepped plinth — still stands in the plain, and Alexander the Great is said to have wept when he found it looted, ordering its restoration. An inscription once read: 'O man, whoever you are and wherever you come from, for I know you will come, I am Cyrus who won the Persians their empire. Do not grudge me this bit of earth that covers my bones.' Cyrus's Cylinder, found at Babylon, is sometimes called the first declaration of human rights. Pasargadae's gardens are considered the oldest known example of the Persian chahar bagh — the fourfold garden divided by water channels that became the template for Islamic paradise gardens.",
+    "region": "Iran",
+    "streetView": {
+      "heading": 0,
+      "pitch": 5
+    },
+    "pantheons": [
+      "zoroastrian",
+      "persian"
+    ]
+  },
+  {
+    "id": "kangavar",
+    "name": "Temple of Anahita, Kangavar",
+    "era": "c. 200 BCE (Seleucid/Parthian)",
+    "lat": 34.5042,
+    "lng": 47.9567,
+    "category": "temple",
+    "isTemple": true,
+    "description": "The largest known temple dedicated to Anahita, the Zoroastrian goddess of water, fertility, and wisdom. Situated on the ancient Royal Road between Ecbatana and Babylon, this massive stone platform and colonnade complex covered an area comparable to the Parthenon. Isidore of Charax described it as a temple to 'Artemis' — the Greek interpretation of Anahita, whose worship blended with Mesopotamian Ishtar and Greek Aphrodite as cultures mixed along the Silk Road. The temple's scale testifies to Anahita's importance: she was not a minor deity but one of the most widely worshipped figures in the Achaemenid and Parthian empires, invoked by warriors and kings before every major undertaking.",
+    "region": "Iran",
+    "streetView": {
+      "heading": 0,
+      "pitch": 10
+    },
+    "pantheons": [
+      "zoroastrian",
+      "persian"
+    ]
+  },
+  {
+    "id": "takht-e-soleyman",
+    "name": "Takht-e Soleyman",
+    "era": "c. 5th century BCE – 13th century CE",
+    "lat": 36.6036,
+    "lng": 47.2353,
+    "category": "temple",
+    "isTemple": true,
+    "description": "A volcanic crater lake at 2,400 meters in the mountains of northwestern Iran, surrounded by the ruins of one of the three great Zoroastrian fire temples — the Adur Gushnasp, the fire of warriors and kings. Every Sasanian king made pilgrimage here on foot after his coronation to pay homage at the eternal flame. The site combines geological wonder with sacred architecture: the artesian lake has no visible inlet or outlet, its waters rising from deep underground through volcanic rock, depositing a steadily growing rim of calcium carbonate. The Bundahishn names this as one of the three fires created by Ahura Mazda at the beginning of the world. The Mongol Ilkhanids later built a palace over the Sasanian ruins, recognizing the site's numinous power even after the fire was extinguished.",
+    "region": "Iran",
+    "streetView": {
+      "heading": 0,
+      "pitch": 10
+    },
+    "pantheons": [
+      "zoroastrian",
+      "persian"
+    ]
+  },
+  {
+    "id": "yazd",
+    "name": "Yazd",
+    "era": "c. 3000 BCE – present",
+    "lat": 31.8974,
+    "lng": 54.3569,
+    "category": "sacred-site",
+    "description": "The living heart of Zoroastrianism, a desert city in central Iran where the Atash Behram fire temple has maintained a sacred flame said to have burned continuously since 470 CE — over 1,500 years. Yazd's wind towers (badgirs) and qanats (underground water channels) represent thousands of years of engineering adapted to one of the driest inhabited places on earth. The city's Towers of Silence (dakhma), where Zoroastrians traditionally exposed their dead to birds rather than contaminate earth or fire, stand on the hills overlooking the old city. After the Arab conquest, Yazd became a refuge for Zoroastrians fleeing forced conversion, and its community preserved the faith, the rituals, and the fire through centuries of pressure. The Zoroastrian population of Yazd remains the largest in Iran. The city itself is a UNESCO World Heritage Site — one of the oldest continuously inhabited cities on earth.",
+    "region": "Iran",
+    "streetView": {
+      "heading": 0,
+      "pitch": 5
+    },
+    "pantheons": [
+      "zoroastrian",
+      "persian"
     ]
   },
   {
@@ -2964,7 +3057,8 @@
     "description": "The highest peak in Iran and the Middle East at 5,610 meters, a dormant stratovolcano in the Alborz range still venting sulfurous fumes from its summit. In Zoroastrian mythology, the three-headed dragon Azi Dahaka is chained inside it until the end of time. In the Shahnameh, the hero Fereydun defeats the tyrant Zahhak and imprisons him within the mountain. Damavand is the Persian Olympus — the place where cosmic evil is contained, not destroyed, because even the gods knew some forces can only be bound.",
     "region": "Iran",
     "pantheons": [
-      "zoroastrian"
+      "zoroastrian",
+      "persian"
     ]
   },
   {

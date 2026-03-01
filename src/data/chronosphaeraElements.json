@@ -1,6 +1,10 @@
 {
   "Fire": {
-    "signs": ["Aries", "Leo", "Sagittarius"],
+    "signs": [
+      "Aries",
+      "Leo",
+      "Sagittarius"
+    ],
     "qualities": "Passion, energy, will, transformation",
     "cultures": {
       "roman": {
@@ -33,6 +37,11 @@
         "description": "Fire (Nār) in Islamic cosmology is the substance from which the jinn were created, as stated in the Quran. Fire represents both illumination and trial. The concept of divine light (Nūr) is distinguished from worldly fire, with Nūr representing God's guidance and Nār representing purification through tribulation.",
         "symbols": "Lamp of guidance, purifying flame"
       },
+      "persian": {
+        "name": "Ātar",
+        "description": "Ātar is the sacred fire of Zoroastrianism, the most visible manifestation of Asha (Truth/Righteousness) in the material world. Fire temples (ātash bahrām) maintain eternal flames that have burned for centuries. Fire purifies, illuminates, and mediates between the human and divine. The Amesha Spenta Asha Vahishta guards this element. To let a fire die is sacrilege; to defile it with impure matter is among the gravest sins.",
+        "symbols": "Eternal flame (ātash bahrām), fire altar, Asha Vahishta"
+      },
       "medieval": {
         "name": "Ignis",
         "description": "Medieval Christian thought associated fire with the Holy Spirit, divine inspiration, and purification. The tongues of fire at Pentecost symbolized God's transformative presence. Fire was also linked to the choleric temperament — hot and dry — producing courage, ambition, and leadership.",
@@ -41,7 +50,11 @@
     }
   },
   "Earth": {
-    "signs": ["Taurus", "Virgo", "Capricorn"],
+    "signs": [
+      "Taurus",
+      "Virgo",
+      "Capricorn"
+    ],
     "qualities": "Stability, material form, patience, endurance",
     "cultures": {
       "roman": {
@@ -74,6 +87,11 @@
         "description": "The Earth (Arḍ) in Islamic tradition was created by God as a place of trust (amānah) for humanity. Humans were formed from clay (ṭīn) and are stewards (khalīfah) of the earth. The Quran speaks of the earth as spread out and stable, with mountains as pegs to anchor it.",
         "symbols": "Clay, mountain pegs, garden"
       },
+      "persian": {
+        "name": "Zamīn (Spandārmad)",
+        "description": "Earth is guarded by the Amesha Spenta Spandārmad (Spenta Ārmaiti — Holy Devotion), who embodies patience, nurturing, and the sacred ground itself. In Zoroastrian cosmology, earth is one of the seven creations of Ahura Mazda — not inert matter but a living being deserving reverence. The dead are not buried (to avoid polluting earth) but placed in towers of silence (dakhma). Agricultural fertility is a sacred duty.",
+        "symbols": "Plowed field, Spandārmad, tower of silence"
+      },
       "medieval": {
         "name": "Terra",
         "description": "Medieval cosmology placed Earth at the center of the universe, the densest and lowest of the four elements. Earth corresponded to the melancholic temperament — cold and dry — producing contemplation, endurance, and gravity. The earth was God's footstool, the stage of salvation history.",
@@ -82,7 +100,11 @@
     }
   },
   "Air": {
-    "signs": ["Gemini", "Libra", "Aquarius"],
+    "signs": [
+      "Gemini",
+      "Libra",
+      "Aquarius"
+    ],
     "qualities": "Intellect, communication, connection, freedom",
     "cultures": {
       "roman": {
@@ -115,6 +137,11 @@
         "description": "Wind (Rīḥ) in the Quran is a sign of God's power — it carries rain, drives ships, and can destroy transgressors. The angels were created from light (Nūr) which is associated with the airy, luminous realm. Air represents the unseen world (al-ghayb) and the spirit (rūḥ).",
         "symbols": "Wind, breath, cloud"
       },
+      "persian": {
+        "name": "Bād (Vāyu)",
+        "description": "Vāyu is the Zoroastrian divinity of wind and the atmosphere, operating at the boundary between the material and spiritual worlds. In the Avesta, Vāyu is invoked as both a benevolent force carrying prayers upward and a fearsome power at the threshold of death. The breath (vāyu) connects the soul to the body. At the Chinvat Bridge, the wind carries the soul's fragrance — sweet for the righteous, foul for the wicked.",
+        "symbols": "Wind, breath, Chinvat Bridge, cypress tree"
+      },
       "medieval": {
         "name": "Aer",
         "description": "In medieval cosmology, Air was the element above water and below fire, corresponding to the sanguine temperament — hot and moist — producing optimism, sociability, and intellectual agility. Air was the medium of sound, speech, and divine revelation; angels moved through it.",
@@ -123,7 +150,11 @@
     }
   },
   "Water": {
-    "signs": ["Cancer", "Scorpio", "Pisces"],
+    "signs": [
+      "Cancer",
+      "Scorpio",
+      "Pisces"
+    ],
     "qualities": "Emotion, intuition, depth, adaptability",
     "cultures": {
       "roman": {
@@ -155,6 +186,11 @@
         "name": "Māʾ",
         "description": "Water (Māʾ) is the origin of all life in the Quran: 'We made from water every living thing.' Rain is a sign of God's mercy and provision. Ritual ablution (wuḍūʾ) purifies the body before prayer; the rivers of Paradise flow with water, milk, honey, and wine.",
         "symbols": "Rain, river, ablution vessel"
+      },
+      "persian": {
+        "name": "Āb (Ābān)",
+        "description": "Water is guarded by the Amesha Spenta Haurvatāt (Wholeness/Health) and the yazata Anāhitā, the immaculate goddess of all waters. Ābān (waters) is honored in the month of Ābān with prayers at rivers and streams. Like fire, water must never be polluted — the Vendidad prescribes elaborate purification for any contamination. Rivers flow from the cosmic sea Vourukasha, where the rain-star Tishtrya battles the demon of drought Apaosha.",
+        "symbols": "Vourukasha sea, Anāhitā, Tishtrya star"
       },
       "medieval": {
         "name": "Aqua",

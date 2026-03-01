@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useMemo, useRef, useEffect, lazy, Suspense } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, Navigate } from 'react-router-dom';
 import { useCoursework } from '../../coursework/CourseworkContext';
 import { useAreaOverride } from '../../App';
 import CircleNav from '../../components/CircleNav';
@@ -42,6 +42,7 @@ import celticIrishPantheon from '../../data/celticIrishPantheon.json';
 import romanPantheon from '../../data/romanPantheon.json';
 import mayaPantheon from '../../data/mayaPantheon.json';
 import zoroastrianPantheon from '../../data/zoroastrianPantheon.json';
+import persianPantheon from '../../data/persianPantheon.json';
 import slavicPantheon from '../../data/slavicPantheon.json';
 import finnishPantheon from '../../data/finnishPantheon.json';
 import canaanitePantheon from '../../data/canaanitePantheon.json';
@@ -123,6 +124,7 @@ const PANTHEONS = {
   roman: romanPantheon,
   maya: mayaPantheon,
   zoroastrian: zoroastrianPantheon,
+  persian: persianPantheon,
   slavic: slavicPantheon,
   finnish: finnishPantheon,
   canaanite: canaanitePantheon,
@@ -196,9 +198,20 @@ const MYTHIC_EARTH_CATEGORIES = [
   { id: 'library', label: 'Libraries', color: '#a89060' },
 ];
 
+/* Meta-groups: selecting a group ID matches all member pantheon IDs */
+const TRADITION_GROUPS = {
+  iranian: ['zoroastrian', 'persian', 'elamite'],
+};
+
 const TRADITION_REGIONS = [
   { region: 'Global', traditions: [
     { id: 'global', label: 'Global' },
+  ]},
+  { region: 'Iranian', traditions: [
+    { id: 'iranian', label: 'Iranian' },
+    { id: 'zoroastrian', label: 'Zoroastrian' },
+    { id: 'persian', label: 'Persian' },
+    { id: 'elamite', label: 'Elamite' },
   ]},
   { region: 'Mediterranean', traditions: [
     { id: 'olympian', label: 'Greek' },
@@ -213,10 +226,8 @@ const TRADITION_REGIONS = [
     { id: 'sumerian', label: 'Sumerian' },
     { id: 'babylonian', label: 'Babylonian' },
     { id: 'hittite', label: 'Hittite' },
-    { id: 'elamite', label: 'Elamite' },
     { id: 'canaanite', label: 'Canaanite' },
     { id: 'arabian', label: 'Arabian' },
-    { id: 'zoroastrian', label: 'Zoroastrian' },
   ]},
   { region: 'Europe', traditions: [
     { id: 'norse', label: 'Norse' },
@@ -2670,6 +2681,11 @@ function MythsPage() {
         counts[pid] = (counts[pid] || 0) + 1;
       });
     });
+    Object.entries(TRADITION_GROUPS).forEach(([groupId, memberIds]) => {
+      counts[groupId] = mythicEarthSites.filter(s =>
+        (s.pantheons || []).some(pid => memberIds.includes(pid))
+      ).length;
+    });
     return counts;
   }, []);
 
@@ -2677,7 +2693,14 @@ function MythsPage() {
     const p = selectedMythicSite?.pantheons;
     if (!p?.length) return null;
     if (displayPantheonOverride && p.includes(displayPantheonOverride)) return displayPantheonOverride;
-    if (activeTradition !== 'all' && p.includes(activeTradition)) return activeTradition;
+    if (activeTradition !== 'all') {
+      if (p.includes(activeTradition)) return activeTradition;
+      const groupIds = TRADITION_GROUPS[activeTradition];
+      if (groupIds) {
+        const match = p.find(pid => groupIds.includes(pid));
+        if (match) return match;
+      }
+    }
     return p[0];
   }, [selectedMythicSite, activeTradition, displayPantheonOverride]);
 
@@ -3148,7 +3171,8 @@ function MythsPage() {
               <div className="mythic-earth-site-grid">
                 {mythicEarthSites.filter(s => {
                   if (activeTradition !== 'all') {
-                    if (!s.pantheons || !s.pantheons.includes(activeTradition)) return false;
+                    const matchIds = TRADITION_GROUPS[activeTradition] || [activeTradition];
+                    if (!s.pantheons || !s.pantheons.some(pid => matchIds.includes(pid))) return false;
                   }
                   if (activeTradition === 'all' && s.category !== mythicEarthCategory) return false;
                   const era = parseEraString(s.era);
@@ -3189,7 +3213,7 @@ function MythsPage() {
       ) : activeView === 'motifs' ? (
         <MotifIndex />
       ) : activeView === 'tarot' ? (
-        <TarotContent />
+        <Navigate to="/divination/tarot" replace />
       ) : activeView === 'cosmology' ? (
         <CosmologyView trackElement={trackElement} />
       ) : activeView === 'cosmology-cycles' ? (

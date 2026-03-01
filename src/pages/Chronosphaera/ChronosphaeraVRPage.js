@@ -43,7 +43,8 @@ function findBySin(arr, sin) {
 
 const CULTURE_KEY_MAP = {
   Roman: 'roman', Greek: 'greek', Norse: 'norse',
-  Babylonian: 'babylonian', Vedic: 'vedic', Islamic: 'islamic', Medieval: 'medieval',
+  Babylonian: 'babylonian', Vedic: 'vedic', Persian: 'persian',
+  Islamic: 'islamic', Medieval: 'medieval',
   Tarot: 'tarot',
 };
 

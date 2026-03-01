@@ -16,6 +16,7 @@ import elementsData from '../../data/chronosphaeraElements.json';
 import calendarData from '../../data/mythicCalendar.json';
 import wheelData from '../../data/medicineWheels.json';
 import wheelContent from '../../data/medicineWheelContent.json';
+import traditionsData from '../../data/wheelTraditions.json';
 import dayNightData from '../../data/dayNight.json';
 import useYellowBrickRoad from '../../components/chronosphaera/useYellowBrickRoad';
 import useCompass from '../../hooks/useCompass';
@@ -25,7 +26,7 @@ import useHapticFeedback from '../../hooks/useHapticFeedback';
 import YellowBrickRoadPanel from '../../components/chronosphaera/YellowBrickRoadPanel';
 import StageContent from '../../components/monomyth/StageContent';
 import MeteorSteelContent from '../../components/meteorSteel/MeteorSteelContent';
-import { MONOMYTH_STAGES, THEORIST_TO_MODEL, CYCLE_TO_MODEL, getModelById, getCycleById } from '../../data/monomythConstants';
+import { MONOMYTH_STAGES, THEORIST_TO_MODEL, CYCLE_TO_MODEL, getModelById, getCycleById, getInnerRingModel, INNER_RING_SETS } from '../../data/monomythConstants';
 import worldData from '../../data/normalOtherWorld.json';
 import { useCoursework } from '../../coursework/CourseworkContext';
 import { useWritings } from '../../writings/WritingsContext';
@@ -180,6 +181,9 @@ const STAR_SPHERE_TRADITIONS = new Set([
   'al-farabi', 'ikhwan-al-safa',
 ]);
 
+// Chronological order by archaeological/cultural record (Southwest → Eastern Woodlands → Great Lakes → Plains)
+const TRADITION_CHRONOLOGICAL_ORDER = ['hopi', 'zuni', 'navajo', 'apache', 'cherokee', 'mikmaq', 'ojibwe', 'cree', 'lakota'];
+
 const CARDINALS = ['vernal-equinox', 'summer-solstice', 'autumnal-equinox', 'winter-solstice'];
 const ZODIAC_SIGNS = zodiacData.map(z => z.sign);
 const CONSTELLATION_IDS = Object.keys(constellationContent);
@@ -221,6 +225,7 @@ const CULTURE_KEY_MAP = {
   Norse: 'norse',
   Babylonian: 'babylonian',
   Vedic: 'vedic',
+  Persian: 'persian',
   Islamic: 'islamic',
   Medieval: 'medieval',
   Tarot: 'tarot',
@@ -683,7 +688,12 @@ export default function ChronosphaeraPage() {
   const season = useSeason();
   useHapticFeedback(compass.heading, compass.active);
   const mergedData = usePlanetData();
-  const [selectedPlanet, setSelectedPlanet] = useState('Sun');
+  const [selectedPlanet, setSelectedPlanet] = useState(() => {
+    const p = location.pathname;
+    if (p.endsWith('/monomyth') || p.endsWith('/meteor-steel') ||
+        p.endsWith('/fallen-starlight') || p.endsWith('/story-of-stories')) return null;
+    return 'Sun';
+  });
   const [hoveredPlanet, setHoveredPlanet] = useState(null);
   const [activeTab, setActiveTab] = useState('overview');
   const [activeCulture, setActiveCulture] = useState('Atlas');
@@ -713,6 +723,8 @@ export default function ChronosphaeraPage() {
   const [activeMonthTab, setActiveMonthTab] = useState('stone');
   const [selectedWheelItem, setSelectedWheelItem] = useState(null);
   const [activeWheelTab, setActiveWheelTab] = useState(null);
+  const [activeTradition, setActiveTradition] = useState(null);
+  const [traditionDropOpen, setTraditionDropOpen] = useState(false);
   const [videoUrl, setVideoUrl] = useState(null);
   const [personaChatOpen, setPersonaChatOpen] = useState(null);
   const [personaChatHistory, setPersonaChatHistory] = useState({});
@@ -720,6 +732,24 @@ export default function ChronosphaeraPage() {
   const [monomythTab, setMonomythTab] = useState('overview');
   const [monomythModel, setMonomythModel] = useState(null);
   const [monomythWorld, setMonomythWorld] = useState(null);
+  const [theoristGroup, setTheoristGroup] = useState('mythological');
+  const [ringSelections, setRingSelections] = useState(() => ({
+    cycles: ['wakingDreaming', 'procreation', 'lifeDeath'],
+    mythological: (INNER_RING_SETS.mythological || []).slice(0, 3).map(i => i.id),
+    screenplay: (INNER_RING_SETS.screenplay || []).slice(0, 3).map(i => i.id),
+    myths: (INNER_RING_SETS.myths || []).slice(0, 3).map(i => i.id),
+    films: (INNER_RING_SETS.films || []).slice(0, 3).map(i => i.id),
+  }));
+  const handleToggleRingItem = useCallback((category, itemId) => {
+    setRingSelections(prev => {
+      const current = prev[category] || [];
+      if (current.includes(itemId)) {
+        return { ...prev, [category]: current.filter(id => id !== itemId) };
+      }
+      if (current.length >= 3) return prev;
+      return { ...prev, [category]: [...current, itemId] };
+    });
+  }, []);
   const [meteorSteelTab, setMeteorSteelTab] = useState('technology');
   const [selectedStarlightStage, setSelectedStarlightStage] = useState(null);
   const [starlightSectionId, setStarlightSectionId] = useState(null);
@@ -734,8 +764,14 @@ export default function ChronosphaeraPage() {
   const [mobileMenuOpen3D, setMobileMenuOpen3D] = useState(() => typeof window === 'undefined' || window.innerWidth > 600);
   // Single mode enum replaces 8 separate boolean/enum state variables
   const [mode, setMode] = useState(() => {
-    if (location.pathname.endsWith('/medicine-wheel') && hasPurchase('medicine-wheel')) return 'medicine-wheel';
-    if (location.pathname.endsWith('/artbook')) return 'artbook';
+    const p = location.pathname;
+    if (p.endsWith('/monomyth') && hasSubscription('monomyth')) return 'monomyth';
+    if (p.endsWith('/meteor-steel') && hasSubscription('monomyth')) return 'meteor-steel';
+    if (p.endsWith('/medicine-wheel') && hasPurchase('medicine-wheel')) return 'medicine-wheel';
+    if (p.endsWith('/fallen-starlight') && hasPurchase('fallen-starlight')) return 'fallen-starlight';
+    if (p.endsWith('/story-of-stories') && hasPurchase('story-of-stories')) return 'story-of-stories';
+    if (p.endsWith('/dodecahedron')) return 'dodecahedron';
+    if (p.endsWith('/artbook')) return 'artbook';
     return 'default';
   });
   // Derived flags — same names for minimal render-logic changes
@@ -767,6 +803,7 @@ export default function ChronosphaeraPage() {
   const ringDatePickerRef = useRef(null);
   const ringFormPickerRef = useRef(null);
   const ringMetalPickerRef = useRef(null);
+  const traditionPickerRef = useRef(null);
 
   const ybr = useYellowBrickRoad();
   const { forgeMode } = useStoryForge();
@@ -838,6 +875,16 @@ export default function ChronosphaeraPage() {
     document.addEventListener('mousedown', handleClick);
     return () => document.removeEventListener('mousedown', handleClick);
   }, [ringDateDropOpen, ringFormDropOpen, ringMetalDropOpen]);
+
+  // Tradition dropdown: close on outside click
+  useEffect(() => {
+    if (!traditionDropOpen) return;
+    const handleClick = (e) => {
+      if (traditionPickerRef.current && !traditionPickerRef.current.contains(e.target)) setTraditionDropOpen(false);
+    };
+    document.addEventListener('mousedown', handleClick);
+    return () => document.removeEventListener('mousedown', handleClick);
+  }, [traditionDropOpen]);
 
   // Ring: derive birthstone from active date
   const ringFormConfig = jewelryConfig?.[ringForm] || { size: null, date: '', dateType: 'birthday' };
@@ -1404,6 +1451,14 @@ export default function ChronosphaeraPage() {
     }
   }, [trackElement]);
 
+  const handleSelectRingSegment = useCallback((stageId, tab, itemId) => {
+    trackElement(`chronosphaera.monomyth.ring.${tab}.${itemId}.${stageId}`);
+    setSelectedMonomythStage(stageId);
+    setSelectedPlanet(null);
+    const model = getInnerRingModel(tab, itemId);
+    if (model) setMonomythModel(prev => prev?.id === model.id ? null : model);
+  }, [trackElement]);
+
   // Register YBR toggle with the site header
   const { register: registerYBR } = useYBRHeader();
   useEffect(() => {
@@ -1726,8 +1781,57 @@ export default function ChronosphaeraPage() {
     setArtBookPanelCollapsed(false);
   }, [trackElement]);
 
+  // Canonical ring order — shared categories align across all traditions
+  const TRADITION_RING_ORDER = useMemo(() => [
+    { key: 'element', title: 'Elements' },
+    { key: 'season', title: 'Seasons' },
+    { key: 'animal', title: 'Animals' },
+    { key: 'plant', title: 'Plants' },
+    { key: 'virtue', title: 'Virtues' },
+    { key: 'lifeStage', title: 'Life Stages' },
+    { key: 'timeOfDay', title: 'Time of Day' },
+    { key: 'celestialBody', title: 'Celestial Bodies' },
+    { key: 'sacredMountain', title: 'Sacred Mountains' },
+    { key: 'gemstone', title: 'Gemstones' },
+    { key: 'clan', title: 'Clans' },
+  ], []);
+
+  // Transform tradition data into multi-ring wheel-compatible shape
+  const activeWheelData = useMemo(() => {
+    if (!activeTradition) return null;
+    const t = traditionsData.traditions.find(tr => tr.id === activeTradition);
+    if (!t) return null;
+    const cardinalDirs = t.directions.filter(d => d.angle !== null);
+    const wheels = TRADITION_RING_ORDER
+      .filter(cat => cardinalDirs.some(d => d.associations[cat.key] != null))
+      .map(cat => ({
+        id: cat.key,
+        title: cat.title,
+        center: t.center?.label || t.name,
+        positions: cardinalDirs.map(d => ({
+          dir: d.dir,
+          label: d.associations[cat.key] || '\u2014',
+          shortLabel: d.associations[cat.key] || '\u2014',
+          angle: d.angle,
+        })),
+      }));
+    return {
+      wheels,
+      quadrantColors: t.quadrantColors,
+    };
+  }, [activeTradition, TRADITION_RING_ORDER]);
+
+  // Tradition-specific content resolution — key is category:dir (e.g. animal:E)
+  let traditionContentData = null;
+  if (activeTradition && selectedWheelItem) {
+    const t = traditionsData.traditions.find(tr => tr.id === activeTradition);
+    const [catKey, tDir] = selectedWheelItem.split(':');
+    const direction = t?.directions.find(d => d.dir === tDir);
+    if (t && direction) traditionContentData = { tradition: t, direction, categoryKey: catKey };
+  }
+
   let wheelAlignmentData = null;
-  if (selectedWheelItem?.startsWith('num:') || selectedWheelItem?.startsWith('dir:')) {
+  if (!activeTradition && (selectedWheelItem?.startsWith('num:') || selectedWheelItem?.startsWith('dir:'))) {
     const isNum = selectedWheelItem.startsWith('num:');
     const value = selectedWheelItem.split(':')[1];
     const targetDir = isNum ? MW_NUM_TO_DIR[parseInt(value)] : value;
@@ -1736,7 +1840,7 @@ export default function ChronosphaeraPage() {
   }
 
   let wheelContentData = null;
-  if (selectedWheelItem && !wheelAlignmentData) {
+  if (!activeTradition && selectedWheelItem && !wheelAlignmentData) {
     const [wId, wDir] = selectedWheelItem.split(':');
     const wheel = wheelData.wheels.find(w => w.id === wId);
     const pos = wheel?.positions.find(p => p.dir === wDir);
@@ -1956,9 +2060,11 @@ export default function ChronosphaeraPage() {
               selectedMonth={selectedMonth}
               onSelectMonth={(m) => { if (m) trackElement(`chronosphaera.calendar.month.${m}`); setSelectedMonth(m); setActiveMonthTab('stone'); if (m) { setSelectedSign(null); setSelectedCardinal(null); setSelectedEarth(null); } }}
               showMedicineWheel={showMedicineWheel}
-              wheels={wheelData.wheels}
+              wheels={activeWheelData ? activeWheelData.wheels : wheelData.wheels}
               selectedWheelItem={selectedWheelItem}
               onSelectWheelItem={(item) => { if (item) trackElement(`chronosphaera.medicine-wheel.${item}`); setSelectedWheelItem(item); setActiveWheelTab(null); if (item) { setSelectedSign(null); setSelectedCardinal(null); setSelectedEarth(null); setSelectedMonth(null); } }}
+              quadrantColorHexes={activeTradition ? (() => { const t = traditionsData.traditions.find(tr => tr.id === activeTradition); if (!t) return undefined; const hexes = {}; t.directions.filter(d => d.angle !== null).forEach(d => { hexes[d.dir] = d.color.hex; }); return hexes; })() : undefined}
+              isTraditionView={!!activeTradition}
               chakraViewMode={chakraViewMode}
               chakraOrdering={chakraViewMode ? CHAKRA_ORDERINGS[chakraViewMode] : null}
               orderLabel={perspective.orderLabel}
@@ -2044,6 +2150,8 @@ export default function ChronosphaeraPage() {
             showMedicineWheel={showMedicineWheel}
             selectedWheelItem={selectedWheelItem}
             onSelectWheelItem={(item) => { if (item) trackElement(`chronosphaera.medicine-wheel.${item}`); setSelectedWheelItem(item); setActiveWheelTab(null); if (item) { setSelectedSign(null); setSelectedCardinal(null); setSelectedEarth(null); setSelectedMonth(null); } }}
+            wheelDataOverride={activeWheelData}
+            isTraditionView={!!activeTradition}
             chakraViewMode={chakraViewMode}
             orderLabel={perspective.orderLabel}
             onToggleBodyWheel={handleToggleBodyWheel}
@@ -2079,6 +2187,10 @@ export default function ChronosphaeraPage() {
             monomythModel={monomythModel}
             showCycles={showCycles}
             onSelectCycleSegment={handleSelectCycleSegment}
+            monomythTab={monomythTab}
+            theoristGroup={theoristGroup}
+            onSelectRingSegment={handleSelectRingSegment}
+            ringSelections={ringSelections}
             activeCulture={activeCulture}
             showFallenStarlight={showFallenStarlight}
             showStoryOfStories={showStoryOfStories}
@@ -2171,7 +2283,7 @@ export default function ChronosphaeraPage() {
         </div>
       )}
 
-      <div key={`${mode}|${selectedPlanet}|${selectedSign}|${selectedCardinal}|${selectedEarth}|${selectedMonth}|${selectedMonomythStage}|${selectedStarlightStage}|${selectedConstellation}|${selectedWheelItem}|${selectedBeyondRing}`} className="chrono-content-fade">
+      <div key={`${mode}|${selectedPlanet}|${selectedSign}|${selectedCardinal}|${selectedEarth}|${selectedMonth}|${selectedMonomythStage}|${selectedStarlightStage}|${selectedConstellation}|${selectedWheelItem}|${selectedBeyondRing}|${activeTradition}`} className="chrono-content-fade">
       {ybr.active ? (
         <YellowBrickRoadPanel
           currentStopIndex={ybr.currentStopIndex}
@@ -2727,6 +2839,10 @@ export default function ChronosphaeraPage() {
                     selectedModelId={monomythModel?.id}
                     devEntries={devEntries}
                     setDevEntries={setDevEntries}
+                    activeGroup={theoristGroup}
+                    onGroupChange={setTheoristGroup}
+                    ringSelections={ringSelections}
+                    onToggleRingItem={handleToggleRingItem}
                   />
                 </div>
               </div>
@@ -2793,7 +2909,149 @@ export default function ChronosphaeraPage() {
           )
         )
       ) : showMedicineWheel ? (
-        wheelAlignmentData ? (
+        <>
+        {/* Tradition selector dropdown */}
+        <div className="chrono-tradition-selector" ref={traditionPickerRef}>
+          <button
+            className={`chrono-tradition-trigger${activeTradition ? ' has-tradition' : ''}`}
+            onClick={() => setTraditionDropOpen(prev => !prev)}
+          >
+            {activeTradition
+              ? traditionsData.traditions.find(tr => tr.id === activeTradition)?.name || 'Tradition'
+              : 'Medicine Wheels'}
+            <span className="chrono-ring-chevron">&#x25BE;</span>
+          </button>
+          {traditionDropOpen && (
+            <div className="chrono-tradition-dropdown">
+              <button
+                className={`chrono-tradition-option${!activeTradition ? ' active' : ''}`}
+                onClick={() => { setActiveTradition(null); setSelectedWheelItem(null); setTraditionDropOpen(false); }}
+              >
+                Medicine Wheels
+              </button>
+              {TRADITION_CHRONOLOGICAL_ORDER.map(tid => {
+                const t = traditionsData.traditions.find(tr => tr.id === tid);
+                if (!t) return null;
+                return (
+                  <button
+                    key={t.id}
+                    className={`chrono-tradition-option${activeTradition === t.id ? ' active' : ''}`}
+                    onClick={() => {
+                      trackElement('chronosphaera.tradition.' + t.id);
+                      setActiveTradition(activeTradition === t.id ? null : t.id);
+                      setSelectedWheelItem(null);
+                      setTraditionDropOpen(false);
+                    }}
+                  >
+                    {t.name}
+                  </button>
+                );
+              })}
+            </div>
+          )}
+        </div>
+        {activeTradition && traditionContentData ? (
+          <>
+            <h2 className="chrono-heading">
+              {(() => {
+                const catDef = TRADITION_RING_ORDER.find(c => c.key === traditionContentData.categoryKey);
+                return catDef ? `${catDef.title} \u2014 ${traditionContentData.direction.label}` : traditionContentData.direction.label;
+              })()}
+              {traditionContentData.direction.nativeTerm && (
+                <span className="chrono-sub">{traditionContentData.direction.nativeTerm}</span>
+              )}
+            </h2>
+            <div className="container">
+              <div id="content-container">
+                <div className="metal-detail-panel">
+                  <div className="tab-content">
+                    {/* Focused category value */}
+                    {traditionContentData.direction.associations[traditionContentData.categoryKey] && (
+                      <p style={{ fontSize: '1.15rem', color: '#f0c040', fontWeight: 600, marginBottom: 8 }}>
+                        {traditionContentData.direction.associations[traditionContentData.categoryKey]}
+                      </p>
+                    )}
+                    <p className="attr-list">{traditionContentData.tradition.name} · {traditionContentData.tradition.region}</p>
+                    {traditionContentData.direction.color && (
+                      <p style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 4 }}>
+                        <span className="chrono-color-swatch" style={{ background: traditionContentData.direction.color.hex }} />
+                        <span style={{ color: 'rgba(220, 190, 120, 0.7)', fontSize: '0.85rem' }}>{traditionContentData.direction.color.name}</span>
+                      </p>
+                    )}
+                    {traditionContentData.direction.meaning && (
+                      <p style={{ marginTop: 8 }}><em>{traditionContentData.direction.meaning}</em></p>
+                    )}
+                    {/* Category tabs — switch categories for same direction */}
+                    <div className="chrono-tradition-cat-tabs">
+                      {TRADITION_RING_ORDER
+                        .filter(cat => traditionContentData.direction.associations[cat.key] != null)
+                        .map(cat => (
+                          <button
+                            key={cat.key}
+                            className={`chrono-tradition-cat-tab${traditionContentData.categoryKey === cat.key ? ' active' : ''}`}
+                            onClick={() => setSelectedWheelItem(`${cat.key}:${traditionContentData.direction.dir}`)}
+                          >
+                            {cat.title}
+                          </button>
+                        ))}
+                    </div>
+                    <div className="modern-section">
+                      <p>{traditionContentData.direction.description}</p>
+                    </div>
+                    {traditionContentData.tradition.additional && traditionContentData.tradition.additional.length > 0 && (
+                      <div className="modern-section" style={{ marginTop: 12 }}>
+                        <h5>Additional Directions</h5>
+                        {traditionContentData.tradition.additional.map(a => (
+                          <p key={a.dir}><strong>{a.label}:</strong> {a.description}</p>
+                        ))}
+                      </div>
+                    )}
+                    {traditionContentData.tradition.caveat && (
+                      <p className="chrono-tradition-caveat">{traditionContentData.tradition.caveat}</p>
+                    )}
+                    <p className="chrono-tradition-source">{traditionContentData.tradition.source}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </>
+        ) : activeTradition ? (
+          <>
+            <h2 className="chrono-heading">
+              {(() => { const t = traditionsData.traditions.find(tr => tr.id === activeTradition); return t?.name || activeTradition; })()}
+              <span className="chrono-sub">{(() => { const t = traditionsData.traditions.find(tr => tr.id === activeTradition); return t?.region || ''; })()}</span>
+            </h2>
+            <div className="container">
+              <div id="content-container">
+                <div className="metal-detail-panel">
+                  <div className="tab-content chrono-tradition-overview">
+                    {(() => {
+                      const t = traditionsData.traditions.find(tr => tr.id === activeTradition);
+                      if (!t) return null;
+                      return (
+                        <div className="modern-section">
+                          <p><em>{t.center?.label}</em></p>
+                          <p>{t.center?.description}</p>
+                          {t.additional && t.additional.length > 0 && (
+                            <div style={{ marginTop: 12 }}>
+                              <h5>Additional Directions</h5>
+                              {t.additional.map(a => (
+                                <p key={a.dir}><strong>{a.label}:</strong> {a.description}</p>
+                              ))}
+                            </div>
+                          )}
+                          {t.caveat && <p className="chrono-tradition-caveat">{t.caveat}</p>}
+                          <p className="chrono-tradition-source">{t.source}</p>
+                        </div>
+                      );
+                    })()}
+                    <p className="attr-list" style={{ marginTop: '1rem' }}>Select a direction on the wheel above to explore its teachings.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </>
+        ) : wheelAlignmentData ? (
           <>
             <h2 className="chrono-heading">
               {wheelAlignmentData.heading}
@@ -2888,7 +3146,8 @@ export default function ChronosphaeraPage() {
               </div>
             </div>
           </>
-        )
+        )}
+        </>
       ) : selectedMonth ? (
         <>
           {clockMode && (

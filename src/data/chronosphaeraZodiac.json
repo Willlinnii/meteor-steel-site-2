@@ -41,6 +41,11 @@
         "myth": "The Ram",
         "description": "Al-Ḥamal (the Ram) is the first sign of the zodiac, a Fire sign noted for its energy and initiative. Ruled by Mars, it imparts courage and assertiveness. As the Spring equinox sign, Aries heralds the start of the astrological year with a burst of activity."
       },
+      "persian": {
+        "name": "Varrak (The Ram)",
+        "myth": "Bahrām's Fire at Nowruz",
+        "description": "Varrak marks the beginning of the Zoroastrian year at Nowruz, when the Sun enters Aries and light overcomes darkness. Ruled by Bahrām (Mars), this sign carries the warrior spirit of Verethragna, the yazata of victory. In the Bundahishn, the Ram leads the zodiacal procession, and the Amesha Spenta Asha Vahishta — Best Righteousness — guards its sacred fire."
+      },
       "medieval": {
         "name": "Aries",
         "myth": "The Ram of Spring",
@@ -93,6 +98,11 @@
         "name": "al-Thawr",
         "myth": "The Bull",
         "description": "Al-Thawr (the Bull) is an Earth sign associated with practicality and groundedness. Ruled by Venus, it carries an affinity for comfort, art, and sensual pleasures. Taurus represents stability, endurance, and the fruitful abundance of the earth."
+      },
+      "persian": {
+        "name": "Gāv (The Bull)",
+        "myth": "Gāv-e Evdād, the Primordial Bull",
+        "description": "In Zoroastrian creation myth, Gāv-e Evdād was the first living creature, a primordial bull whose sacrifice released the seeds of all animal and plant life. Ruled by Nāhīd (Venus/Anāhitā), this sign embodies fertility, abundance, and the sacred bond between humanity and the earth. The bull's endurance reflects the Zoroastrian virtue of patience in the face of Ahriman's assaults on creation."
       },
       "medieval": {
         "name": "Taurus (Luke – Ox)",
@@ -147,6 +157,11 @@
         "myth": "The Twins",
         "description": "Al-Jawzāʾ (the Twins) is an Air sign noted for versatility and intellect. Ruled by Mercury, Gemini embodies adaptability and curiosity. Also called Al-Tawʾamān ('the Two Twins'), aligning with the Greek concept of Castor and Pollux."
       },
+      "persian": {
+        "name": "Dō-pahikar (The Two Figures)",
+        "myth": "The Twin Spirits",
+        "description": "Dō-pahikar evokes the foundational Zoroastrian dualism of Spenta Mainyu (the Beneficent Spirit) and Angra Mainyu (the Destructive Spirit), the twin choices that define all existence. Ruled by Tīr (Mercury), the sign governs communication, discernment, and the intellect needed to choose between asha (truth) and druj (falsehood). The Gathas teach that each soul must choose between the two paths."
+      },
       "medieval": {
         "name": "Gemini",
         "myth": "The Twins of Duality",
@@ -199,6 +214,11 @@
         "name": "al-Saraṭān",
         "myth": "The Crab",
         "description": "Al-Saraṭān (the Crab) is a Water sign ruled by the Moon, imbued with sensitive and nurturing qualities. Cancer governs home, family, and deep emotions. Cancer marked the summer solstice in ancient times, associated with the gateway of life."
+      },
+      "persian": {
+        "name": "Kalakang (The Crab)",
+        "myth": "Māh and the Lunar Hearth",
+        "description": "Kalakang is ruled by Māh (the Moon), guardian of cattle and the rhythms of growth. In Persian tradition, the Moon governs the tides of emotion, the cycles of planting and harvest, and the protective enclosure of home and family. The crab's shell mirrors the karshvar — the seven regions of the earth in Zoroastrian geography — each a nested enclosure of sacred space."
       },
       "medieval": {
         "name": "Cancer",
@@ -253,6 +273,11 @@
         "myth": "The Lion",
         "description": "Al-Asad (the Lion) is a Fire sign ruled by the Sun, imbued with radiance and confidence. Leo is characterized by creativity, leadership, and generosity. Pre-Islamic Arabian stargazers also saw a lion in these stars."
       },
+      "persian": {
+        "name": "Shēr (The Lion)",
+        "myth": "The Farr of Kings",
+        "description": "The lion is the supreme royal symbol of Iran, appearing on thrones, crowns, and the flag itself. Ruled by Mehr (the Sun/Mithra), Shēr embodies khvarenah (farr) — the divine glory that descends upon righteous kings. In the Shahnameh, the hero Rostam wears a lion-skin helmet. Mithra, yazata of covenant and light, rides a lion-drawn chariot across the sky, dispensing justice."
+      },
       "medieval": {
         "name": "Leo",
         "myth": "The Lion of St. Mark",
@@ -305,6 +330,11 @@
         "name": "al-ʿAdhrāʾ",
         "myth": "The Virgin",
         "description": "Al-ʿAdhrāʾ (the Virgin) is an Earth sign ruled by Mercury. Associated with analysis, meticulousness, and service to others. In Islamic astronomical manuscripts, Virgo was illustrated as a maiden on a throne or holding plants."
+      },
+      "persian": {
+        "name": "Khūshak (The Ear of Grain)",
+        "myth": "Spandārmad's Harvest",
+        "description": "Khūshak represents the harvest and the purity of the earth, governed by the Amesha Spenta Spandārmad (Holy Devotion), guardian of the earth. In Zoroastrian teaching, agriculture is a sacred act — to cultivate grain is to push back the barrenness that Ahriman inflicted on creation. The ear of grain symbolizes Ahura Mazda's promise that righteousness will bear fruit."
       },
       "medieval": {
         "name": "Virgo",
@@ -359,6 +389,11 @@
         "myth": "The Balance/Scales",
         "description": "Al-Mīzān (the Scales) denotes balance and justice. An Air sign governed by Venus, with refined aesthetic sense and love of fairness. In Arabic, al-Mīzān refers to weighing scales, a concept tied to justice appearing in the Qur'an."
       },
+      "persian": {
+        "name": "Tarāzūk (The Balance)",
+        "myth": "The Scales of Rashnu",
+        "description": "Tarāzūk invokes the golden scales of Rashnu, the yazata of justice who weighs every soul's deeds at the Chinvat Bridge after death. Ruled by Nāhīd (Venus), this sign balances beauty with truth, desire with righteousness. The Mehregān festival falls in Libra's season — a feast of Mithra where oaths are honored, debts settled, and the cosmic balance between asha and druj is ritually reaffirmed."
+      },
       "medieval": {
         "name": "Libra",
         "myth": "Archangel Michael's Scales",
@@ -411,6 +446,11 @@
         "name": "al-ʿAqrab",
         "myth": "The Scorpion",
         "description": "Al-ʿAqrab (the Scorpion) is a Water sign traditionally ruled by Mars. Associated with depth, secrets, death and rebirth, and power. Scorpios possess keen insight into psychology and unwavering determination."
+      },
+      "persian": {
+        "name": "Gazdum (The Scorpion)",
+        "myth": "Creature of Ahriman",
+        "description": "In Zoroastrian cosmology, scorpions are among the noxious creatures (khrafstra) created by Angra Mainyu to afflict the good creation. Gazdum represents the shadow side — the test of facing evil directly. Ruled by Bahrām (Mars), this sign demands the warrior's courage to confront darkness without becoming it. The Vendidad prescribes the killing of scorpions as a righteous act of cosmic housekeeping."
       },
       "medieval": {
         "name": "Scorpio (John – Eagle)",
@@ -465,6 +505,11 @@
         "myth": "The Archer",
         "description": "Al-Rāmī (the Archer), also known as al-Qaws (the Bow), is a Fire sign ruled by Jupiter. Sagittarians are philosophical, freedom-loving, and bluntly honest, seeking knowledge from the wider world. The arrow represents aiming for lofty goals."
       },
+      "persian": {
+        "name": "Nēmāsp (The Centaur-Archer)",
+        "myth": "Ārash the Archer",
+        "description": "Nēmāsp calls to mind Ārash-e Kamāngīr, the legendary Persian archer who sacrificed his life-force to shoot an arrow from Mount Damāvand to the Oxus River, fixing the border between Iran and Turan. Ruled by Ohrmazd (Jupiter), this sign embodies the quest for truth across vast distances — the arrow of asha that flies straight toward its mark regardless of cost."
+      },
       "medieval": {
         "name": "Sagittarius",
         "myth": "The Centaur Archer of Advent",
@@ -517,6 +562,11 @@
         "name": "al-Jadī",
         "myth": "The Kid/Goat",
         "description": "Al-Jadī (the Goat) is an Earth sign ruled by Saturn, lending a serious, disciplined nature. Capricorn embodies ambition, responsibility, and endurance. Like a mountain goat climbing to a lofty summit, it represents climbing steadily toward mastery."
+      },
+      "persian": {
+        "name": "Vahīk (The Sea-Goat)",
+        "myth": "Keyvān's Endurance",
+        "description": "Vahīk is ruled by Keyvān (Saturn/Zurvan), the planet of time, discipline, and endurance. In Zurvanite theology, Zurvan is Infinite Time itself — the father of both Ohrmazd and Ahriman, who existed before the cosmic struggle began. The sea-goat's dual nature reflects the Zoroastrian teaching that the material and spiritual worlds are intertwined, and that patience through suffering is the path to frashokereti (the final renovation)."
       },
       "medieval": {
         "name": "Capricorn",
@@ -571,6 +621,11 @@
         "myth": "Pourer of Water",
         "description": "Sākib al-māʾ (Pourer of Water), also called al-Dalw (the Bucket). An Air sign ruled by Saturn. Known for progressive, independent, and humanitarian qualities. Sometimes identified with the biblical figure Idris (Enoch) in Islamic tradition."
       },
+      "persian": {
+        "name": "Dōl (The Water-Bearer)",
+        "myth": "Tishtrya's Rain",
+        "description": "Dōl invokes the cosmic waters released by Tishtrya (Sirius), the star-yazata who battles the demon of drought Apaosha in the form of a white horse. When Tishtrya prevails, the rains come and the Vourukasha sea swells, nourishing all creation. Ruled by Keyvān (Saturn), this sign connects discipline with generosity — the patient labor that brings life-giving water to a thirsty world."
+      },
       "medieval": {
         "name": "Aquarius (Matthew – Man/Angel)",
         "myth": "The Water-Bearer of the Holy Spirit",
@@ -623,6 +678,11 @@
         "name": "al-Ḥūt",
         "myth": "The Fish",
         "description": "Al-Ḥūt (the Fish) is a Water sign ruled by Jupiter. Pisces represents transcendence, unity, and the dissolution of boundaries. In Islamic folklore, the pair of fishes connects to the story of Jonah and the great fish that carries the earth."
+      },
+      "persian": {
+        "name": "Māhīg (The Fish)",
+        "myth": "The Kara Fish of Vourukasha",
+        "description": "In the Bundahishn, the Kara fish circles the cosmic sea Vourukasha, guarding the sacred Haoma tree (Gaokerena) whose fruit grants immortality. Māhīg is ruled by Ohrmazd (Jupiter) and represents the dissolution of boundaries at the cycle's end — the moment before Nowruz, when the old year dissolves into the waters of renewal. The fish swims in the depths where the seeds of frashokereti (cosmic renovation) are kept."
       },
       "medieval": {
         "name": "Pisces",

@@ -39,6 +39,11 @@
         "description": "The Quran speaks of the alternation of night and day as among the greatest signs (āyāt) of God's power. Day (Nahār) is the time of seeking God's bounty through work, trade, and righteous effort. The five daily prayers mark the architecture of the day — Fajr at dawn, Dhuhr at noon, Asr in the afternoon — structuring daylight as a rhythm of devotion and labor.",
         "symbols": "The minaret's shadow, the open market, the prayer mat"
       },
+      "persian": {
+        "name": "Rūz",
+        "description": "In Zoroastrian cosmology, day belongs to Ahura Mazda — the Lord of Light and Wisdom whose very essence is luminous. Each of the thirty days of the Persian month bears the name of a yazata (divine being), making every sunrise a fresh invocation. The Gāh prayers divide daylight into five watches: Hāvan (dawn), Rapithwin (noon), Uzērin (afternoon), Aiwisruthrim (evening), and Ushahina (pre-dawn). Noon — Rapithwin — is the holiest moment, when the sun stands directly overhead and Ahura Mazda's power is at its zenith.",
+        "symbols": "The sun disk of Mehr, the winged Faravahar, the fire altar"
+      },
       "medieval": {
         "name": "Dies",
         "description": "Medieval Christianity structured the day through the Liturgy of the Hours — Lauds at dawn, Terce, Sext, None through the afternoon — transforming daylight into a scaffolding of prayer. Day represented the active life (vita activa): work, pilgrimage, crusade, and charitable labor. Christ called himself the Light of the World; to walk in day was to walk in grace.",
@@ -85,6 +90,11 @@
         "name": "Layl",
         "description": "The Quran devotes an entire surah to the Night (Al-Layl, 92). Laylat al-Qadr — the Night of Power — is the holiest night of the year, 'better than a thousand months,' when the Quran was first revealed. Night is the time of tahajjud (voluntary prayer), when the believer rises in darkness to seek closeness to God. The Islamic day begins at sunset, honoring the primacy of night.",
         "symbols": "The crescent moon, the night prayer, the lamp"
+      },
+      "persian": {
+        "name": "Shab",
+        "description": "Night in Zoroastrian thought is the domain of Angra Mainyu (Ahriman), the destructive spirit who assaults creation under cover of darkness. Yet the night is not surrendered — it is contested. The faithful keep fires burning through the night to hold darkness at bay. Shab-e Yaldā, the longest night of the year, is celebrated precisely because it marks the turning point when light begins its return. The pre-dawn watch (Ushahina) is especially sacred, as the righteous rise to pray before first light, joining their voices to the cosmic struggle against the Lie.",
+        "symbols": "The eternal flame, pomegranate of Yaldā, the star Tishtrya"
       },
       "medieval": {
         "name": "Nox",

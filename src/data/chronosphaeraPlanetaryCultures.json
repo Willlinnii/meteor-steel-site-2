@@ -36,6 +36,12 @@
       "symbols": "Crescent moon",
       "myth": "The Moon epitomizes changeability and reflection, as it reflects the sun's light. It stands for inner knowledge and intuitive wisdom."
     },
+    "persian": {
+      "name": "Māh",
+      "description": "Māh is the Middle Persian name for the Moon and the yazata who governs it. In the Bundahishn, Māh is the keeper of the seed of cattle — when the primordial bull Gavaevodata was slain by Angra Mainyu, its seed was carried to the Moon for purification, and from it all beneficial animals were created. The Moon governs growth, fertility, and the rhythms of pastoral life. The Zoroastrian calendar dedicates the twelfth day of each month to Māh.",
+      "symbols": "Crescent, cattle seed, silver light",
+      "myth": "Māh purified the seed of the first bull after its death, generating all beneficial animals on earth. The Moon's waxing and waning mirrors the cosmic struggle between creation and corruption."
+    },
     "medieval": {
       "name": "Gabriel",
       "description": "Gabriel is the archangel associated with the Moon, the divine messenger who announced the birth of Christ. The Moon's qualities of changeability and reflection resonate with Gabriel's function in delivering prophetic messages and nurturing new beginnings.",
@@ -79,6 +85,12 @@
       "description": "ʿUtārid (Mercury) governs communication, intellect, and travel. Arabic scholars noted its rapid motion and visibility only near sunrise or sunset. Mercury's influence was linked to learning, writing, and eloquence.",
       "symbols": "Swift motion, dawn/dusk visibility",
       "myth": "ʿUtārid represents intelligence, messages, and the power of words — the planet of scribes and knowledge."
+    },
+    "persian": {
+      "name": "Tīr",
+      "description": "Tīr is the Middle Persian name for the planet Mercury, derived from the yazata Tishtrya (the star Sirius), though the planetary association shifted over time. Tīr governs communication, scribal arts, and swift intelligence. The month of Tir in the Persian calendar (June–July) is named for this yazata. In the Tir Yasht, Tishtrya battles the demon of drought Apaosha in three forms — youth, bull, and white horse — to release the cosmic rains. The planet Mercury's rapid orbit and fleeting visibility echo this quality of speed and transformation.",
+      "symbols": "Swift motion, three transformations, rain",
+      "myth": "Tishtrya transforms through three forms over thirty nights to battle the drought-demon Apaosha at the shores of the cosmic sea Vourukasha, releasing rain for the seven lands."
     },
     "medieval": {
       "name": "Raphael",
@@ -124,6 +136,12 @@
       "symbols": "Morning/evening star, brightness",
       "myth": "Al-Zuhara represents affection, beauty, and desire — the gentle forces that draw people and pleasures together."
     },
+    "persian": {
+      "name": "Nāhīd (Anāhitā)",
+      "description": "Nāhīd is the Middle Persian name for the planet Venus, derived from the great yazata Aredvi Sura Anahita — 'the Moist, Mighty, Immaculate One' — goddess of all the waters on earth, fertility, healing, and wisdom. The Aban Yasht describes her as a beautiful maiden wearing a golden crown with a hundred stars, driving a chariot drawn by four horses: wind, rain, cloud, and sleet. She is the source of the cosmic river flowing from Mount Hukairya into the sea Vourukasha. Warriors, kings, and even Zarathustra prayed to her before great undertakings. Her temples stood across the Achaemenid and Sasanian empires, most famously at Kangavar.",
+      "symbols": "Golden crown with hundred stars, beaver-skin mantle, cosmic river",
+      "myth": "Anahita refused the sacrifices of Angra Mainyu and the demon Azi Dahaka — she will not serve evil regardless of the offering. Kings and heroes sought her blessing for fertility, victory, and flowing waters."
+    },
     "medieval": {
       "name": "Haniel",
       "description": "Haniel (Joy of God) is the archangel of Venus, embodying grace, beauty, and love. Depicted in emerald green robes with roses and a lit lantern. Haniel nurtures compassion and creativity.",
@@ -167,6 +185,12 @@
       "description": "Al-Shams represents the core self, vitality, and ego. The Sun's Arabic name is feminine and features prominently in Islamic culture (Sūrat ash-Shams in the Qur'an). The Sun governs Leo and signifies leadership, creativity, and life force.",
       "symbols": "Golden light, illumination",
       "myth": "Al-Shams brings illumination and clarity — the solar power of enlightenment, representing the divine spark within each being."
+    },
+    "persian": {
+      "name": "Mehr (Mithra)",
+      "description": "Mehr is the Middle Persian name for the Sun, derived from the yazata Mithra — god of covenant, light, and truth. The Mehr Yasht describes him driving a chariot drawn by four white horses whose hooves never touch the ground, wielding a silver mace and a thousand-pointed weapon, with ten thousand eyes and ten thousand ears that witness every oath and broken promise. Mithra is the judge of the dead at the Chinvat Bridge alongside Rashnu and Sraosha. His name literally means 'contract' — he is the sacred binding force of the promise itself. The month of Mehr and the festival Mehregan (autumn equinox) honor him. His worship spread west as the Roman mystery cult of Mithras.",
+      "symbols": "Silver mace (vazra), four white horses, ten thousand eyes, Varegan feather",
+      "myth": "Mithra never sleeps. He sees every lie and hears every betrayal. The social fabric — trust between people, the reliability of the spoken word — is divine infrastructure under his protection."
     },
     "medieval": {
       "name": "Michael",
@@ -212,6 +236,12 @@
       "symbols": "Red color, blazing light",
       "myth": "Al-Mirrīkh stands for strength, initiative, and the purifying fire of challenge — the warrior spirit and desire to conquer obstacles."
     },
+    "persian": {
+      "name": "Bahrām (Verethragna)",
+      "description": "Bahrām is the Middle Persian name for Mars, derived from the yazata Verethragna — the god of aggressive victory who smashes every obstacle. The Bahram Yasht describes him appearing in ten successive forms of escalating power: fierce wind, golden-horned bull, white horse, rutting camel, charging boar with iron tusks, a beautiful youth, the Varegan falcon, a wild ram, a fighting buck, and finally a man with a golden sword. Several Sasanian kings took the name Bahram. His feather — from the Varegan falcon — was a talisman worn by warriors. Mars's red color and martial associations align perfectly with Verethragna's domain of breaking through resistance and paralysis.",
+      "symbols": "Ten forms, Varegan falcon feather, golden sword, iron-tusked boar",
+      "myth": "Verethragna appears in ten forms because there is always another way to attack the obstacle. His khvarenah settles on anyone who fights in a righteous cause — the divine force that ensures the just prevail."
+    },
     "medieval": {
       "name": "Camael",
       "description": "Camael is the archangel of Mars, a fierce warrior of God embodying divine severity and courage. Called the 'Archangel of Divine Justice,' entrusted with carrying out God's judgments and protecting the faithful.",
@@ -256,6 +286,12 @@
       "symbols": "Greatness, richness, patronage",
       "myth": "Al-Mushtarī represents growth, fortune, and higher learning — Zeus's thunderbolt of enlightenment and authority."
     },
+    "persian": {
+      "name": "Ohrmazd (Hormozd)",
+      "description": "Ohrmazd is the Middle Persian form of Ahura Mazda, the uncreated creator and supreme god of Zoroastrianism, associated with the planet Jupiter. His name means 'Lord of Wisdom' — not power, not war, but wisdom as the primary divine attribute. In the Gathas, he is the originator of Asha (cosmic truth) who created existence through thought. He is represented by fire and light — the eternal flame in fire temples is his presence. He created the six Amesha Spentas as emanations of his own nature, distributing his character across creation so every element of the material world has a divine guardian. Jupiter's qualities of expansion, benevolence, and sovereign order mirror Ohrmazd's role as the wise ruler of the cosmos.",
+      "symbols": "Faravahar (winged disc), eternal flame, divine light (khvarenah)",
+      "myth": "Ahura Mazda dwells in endless light, separated from Angra Mainyu's darkness, with the material world as the battleground between them. His claim: the supreme power in the universe operates through wisdom rather than force."
+    },
     "medieval": {
       "name": "Zadkiel",
       "description": "Zadkiel is the archangel of Jupiter, revered as the angel of mercy, benevolence, and memory. The name derives from zedek (Hebrew for 'righteousness'), historically used as a name for the planet Jupiter.",
@@ -299,6 +335,12 @@
       "description": "Zuhal (Saturn) embodies structure, limitation, discipline, and wisdom through hardship. Often called the Greater Malefic because it brings challenges, lessons, and karmic consequences — much like time and gravity impose limits.",
       "symbols": "Slow movement, fate, forethought",
       "myth": "Zuhal stands for completion, worldly wisdom, and the tests that forge strength — time, effort, and the structure of the cosmos."
+    },
+    "persian": {
+      "name": "Keyvān (Zurvan)",
+      "description": "Keyvān is the Middle Persian name for Saturn, associated in Zurvanite theology with Zurvan — Infinite Time, the primordial god who existed before Ahura Mazda and Angra Mainyu and who fathered both of them. In the Zurvanite creation myth, Zurvan sacrificed for a thousand years to produce a son; from his doubt, Angra Mainyu was born alongside Ahura Mazda. This makes Saturn/Keyvān the planet of deep time, cosmic patience, and the ambiguity at the root of existence — the force that contains both good and evil within its infinite span. Saturn's slow orbit and association with limitation, endurance, and melancholy align with Zurvan's domain over the weight of time itself. The Bundahishn describes the cosmic battle lasting 12,000 years — four ages of 3,000 years each — with Saturn marking the outermost boundary of the visible cosmos.",
+      "symbols": "Infinite time, the outermost sphere, cosmic patience",
+      "myth": "Zurvan sacrificed for a thousand years. From his faith came Ahura Mazda; from his doubt came Angra Mainyu. Time contains both creation and destruction within its infinite span."
     },
     "medieval": {
       "name": "Cassiel",

@@ -26,6 +26,7 @@ const mythicEarthSites = require('../data/mythicEarthSites.json');
 const mythSalonLibrary = require('../data/mythSalonLibrary.json');
 const mythicCalendar = require('../data/mythicCalendar.json');
 const medicineWheels = require('../data/medicineWheels.json');
+const wheelTraditions = require('../data/wheelTraditions.json');
 
 // Octave pattern files (8-sequences)
 const steelProcess = require('../data/steelProcess.json');
@@ -77,9 +78,17 @@ describe('Canonical entity counts', () => {
     expect(mythicCalendar).toHaveLength(12);
   });
 
-  test('library has shelves array', () => {
-    expect(Array.isArray(mythSalonLibrary.shelves)).toBe(true);
-    expect(mythSalonLibrary.shelves.length).toBeGreaterThan(0);
+  test('library has libraries array with valid entries', () => {
+    expect(Array.isArray(mythSalonLibrary.libraries)).toBe(true);
+    expect(mythSalonLibrary.libraries.length).toBeGreaterThan(0);
+    mythSalonLibrary.libraries.forEach(lib => {
+      expect(lib.id).toBeTruthy();
+      expect(lib.name).toBeTruthy();
+      expect(typeof lib.lat).toBe('number');
+      expect(typeof lib.lng).toBe('number');
+      expect(Array.isArray(lib.shelves)).toBe(true);
+      expect(lib.shelves.length).toBeGreaterThan(0);
+    });
   });
 
   test('medicine wheels has wheels array', () => {
@@ -191,8 +200,8 @@ describe('Pantheon files integrity', () => {
   const pantheonFiles = fs.readdirSync(dataDir)
     .filter(f => f.endsWith('Pantheon.json'));
 
-  test('all 78 pantheon files are discovered', () => {
-    expect(pantheonFiles).toHaveLength(78);
+  test('all 79 pantheon files are discovered', () => {
+    expect(pantheonFiles).toHaveLength(79);
   });
 
   test.each(pantheonFiles)('%s is valid JSON with a deities array', (filename) => {
@@ -451,5 +460,145 @@ describe('Journey pattern integrity', () => {
 
   test('10 total journey definitions', () => {
     expect(Object.keys(JOURNEY_DEFS)).toHaveLength(10);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// 11. Wheel traditions integrity
+// ---------------------------------------------------------------------------
+describe('Wheel traditions integrity', () => {
+  const EXPECTED_IDS = [
+    'lakota', 'cherokee', 'ojibwe', 'navajo', 'zuni',
+    'mikmaq', 'hopi', 'cree', 'apache',
+  ];
+
+  const ASSOCIATION_KEYS = [
+    'animal', 'plant', 'element', 'season', 'lifeStage', 'timeOfDay',
+    'virtue', 'celestialBody', 'humanAspect', 'sacredMountain', 'gemstone', 'clan',
+  ];
+
+  const CARDINAL_ANGLES = { N: -90, E: 0, S: 90, W: 180 };
+
+  test('schema version is 1.0', () => {
+    expect(wheelTraditions._schema).toBeDefined();
+    expect(wheelTraditions._schema.version).toBe('1.0');
+  });
+
+  test('exactly 9 traditions', () => {
+    expect(wheelTraditions.traditions).toHaveLength(9);
+  });
+
+  test('tradition IDs match the expected set', () => {
+    const actualIds = wheelTraditions.traditions.map(t => t.id);
+    expect(actualIds).toEqual(expect.arrayContaining(EXPECTED_IDS));
+    expect(EXPECTED_IDS).toEqual(expect.arrayContaining(actualIds));
+  });
+
+  test('tradition IDs are unique', () => {
+    const ids = wheelTraditions.traditions.map(t => t.id);
+    expect(new Set(ids).size).toBe(ids.length);
+  });
+
+  test('each tradition has required top-level fields', () => {
+    const requiredFields = ['id', 'name', 'region', 'source', 'directionCount', 'center', 'quadrantColors', 'directions'];
+    wheelTraditions.traditions.forEach((t) => {
+      requiredFields.forEach((f) => {
+        expect(t).toHaveProperty(f);
+      });
+    });
+  });
+
+  test('quadrantColors has exactly N, E, S, W with rgba format', () => {
+    const rgbaPattern = /^rgba\(\d+,\s*\d+,\s*\d+,\s*[\d.]+\)$/;
+    wheelTraditions.traditions.forEach((t) => {
+      const keys = Object.keys(t.quadrantColors);
+      expect(keys).toHaveLength(4);
+      expect(keys).toEqual(expect.arrayContaining(['N', 'E', 'S', 'W']));
+      keys.forEach((k) => {
+        expect(t.quadrantColors[k]).toMatch(rgbaPattern);
+      });
+    });
+  });
+
+  test('each direction has required fields', () => {
+    const requiredFields = ['dir', 'label', 'color', 'meaning', 'associations', 'description'];
+    wheelTraditions.traditions.forEach((t) => {
+      t.directions.forEach((d) => {
+        requiredFields.forEach((f) => {
+          expect(d).toHaveProperty(f);
+        });
+      });
+    });
+  });
+
+  test('every direction has all 12 association keys (no extras, no missing)', () => {
+    wheelTraditions.traditions.forEach((t) => {
+      t.directions.forEach((d) => {
+        const keys = Object.keys(d.associations);
+        expect(keys).toHaveLength(12);
+        expect(keys).toEqual(expect.arrayContaining(ASSOCIATION_KEYS));
+        expect(ASSOCIATION_KEYS).toEqual(expect.arrayContaining(keys));
+      });
+    });
+  });
+
+  test('cardinal directions use correct angles (N=-90, E=0, S=90, W=180)', () => {
+    wheelTraditions.traditions.forEach((t) => {
+      t.directions.forEach((d) => {
+        if (CARDINAL_ANGLES[d.dir] !== undefined) {
+          expect(d.angle).toBe(CARDINAL_ANGLES[d.dir]);
+        }
+      });
+    });
+  });
+
+  test('non-cardinal directions (Above, Below) have null angles', () => {
+    wheelTraditions.traditions.forEach((t) => {
+      t.directions.forEach((d) => {
+        if (['Above', 'Below'].includes(d.dir)) {
+          expect(d.angle).toBeNull();
+        }
+      });
+    });
+  });
+
+  test('direction color objects have name, hex, and rgba', () => {
+    wheelTraditions.traditions.forEach((t) => {
+      t.directions.forEach((d) => {
+        expect(d.color).toHaveProperty('name');
+        expect(d.color).toHaveProperty('hex');
+        expect(d.color).toHaveProperty('rgba');
+        expect(typeof d.color.name).toBe('string');
+        expect(d.color.hex).toMatch(/^#[0-9A-Fa-f]{6}$/);
+      });
+    });
+  });
+
+  test('each tradition has at least 4 directions', () => {
+    wheelTraditions.traditions.forEach((t) => {
+      expect(t.directions.length).toBeGreaterThanOrEqual(4);
+    });
+  });
+
+  test('6-direction traditions (zuni, hopi) have Above and Below in directions', () => {
+    ['zuni', 'hopi'].forEach((id) => {
+      const tradition = wheelTraditions.traditions.find(t => t.id === id);
+      expect(tradition).toBeDefined();
+      expect(tradition.directions).toHaveLength(6);
+      const dirs = tradition.directions.map(d => d.dir);
+      expect(dirs).toContain('Above');
+      expect(dirs).toContain('Below');
+    });
+  });
+
+  test('each direction description is 2+ sentences', () => {
+    wheelTraditions.traditions.forEach((t) => {
+      t.directions.forEach((d) => {
+        expect(typeof d.description).toBe('string');
+        // At least 2 sentences (look for at least one period followed by a space or end)
+        const sentenceEnds = d.description.match(/[.!?]\s|[.!?]$/g);
+        expect(sentenceEnds.length).toBeGreaterThanOrEqual(2);
+      });
+    });
   });
 });

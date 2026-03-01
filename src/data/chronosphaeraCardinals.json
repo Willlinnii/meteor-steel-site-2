@@ -33,6 +33,10 @@
         "name": "Nowruz",
         "description": "Nowruz (New Day) marks the spring equinox and the Persian New Year, celebrated across the Islamic world from Iran to Central Asia. Though pre-Islamic in origin, it is embraced as a celebration of renewal, hospitality, and gratitude. The Haft-sin table arranges seven symbolic items beginning with the letter S."
       },
+      "persian": {
+        "name": "Nowruz (New Day)",
+        "description": "Nowruz, the most important festival of the Persian calendar, celebrates the spring equinox as the moment when Ahura Mazda's light triumphs over Angra Mainyu's darkness. The Haft-sin table is set with seven symbolic items beginning with the letter S. Bonfires are leapt over on Chaharshanbe Suri, and the spirits of ancestors (fravashis) return to visit the living during the last days of the old year."
+      },
       "medieval": {
         "name": "Lady Day / Annunciation",
         "description": "March 25, the Feast of the Annunciation (Lady Day), fell near the vernal equinox and was the start of the legal and financial year in medieval England. The angel Gabriel's announcement to Mary mirrored the cosmic renewal of spring — the moment when the Word entered the world as seed enters soil."
@@ -72,6 +76,10 @@
       "islamic": {
         "name": "Longest Day",
         "description": "While not a formal Islamic holiday, the summer solstice was recognized by Islamic astronomers and scholars. Al-Biruni and other scientists precisely calculated solstice dates. The long days of Ramadan when it falls in summer are considered especially meritorious for fasting."
+      },
+      "persian": {
+        "name": "Tīrgān",
+        "description": "Tīrgān celebrates the summer solstice and honors Tīr (Tishtrya), the star-yazata of rain and fertility. The festival commemorates the mythic archer Ārash, who shot an arrow from Mount Damāvand to the Oxus River to fix the border between Iran and Turan, giving his life-force for his people. Water-splashing and tying rainbow-colored ribbons mark the longest day."
       },
       "medieval": {
         "name": "Feast of St. John",
@@ -113,6 +121,10 @@
         "name": "Harvest Balance",
         "description": "The equinox was important to Islamic agricultural calendars. Scholars like Ibn al-Baytar documented the harvest cycle. The concept of mīzān (balance/scales) in the Quran resonates with the equinox's perfect equilibrium and the autumnal sign of Libra."
       },
+      "persian": {
+        "name": "Mehregān",
+        "description": "Mehregān is the festival of Mithra (Mehr), the Zoroastrian yazata of covenant, light, and justice. Celebrated at the autumn equinox, it honors the day when Fereydun overthrew the tyrant Zahhāk and bound him inside Mount Damāvand. Tables are spread with fruits and flowers, and Mehr's scales weigh the deeds of the past year in cosmic judgment."
+      },
       "medieval": {
         "name": "Michaelmas",
         "description": "The Feast of St. Michael and All Angels (September 29) fell near the autumnal equinox. Michael, the warrior archangel, defends against darkness as the nights lengthen. Michaelmas was a quarter day for rents and contracts, a time of earthly and spiritual accounting."
@@ -152,6 +164,10 @@
       "islamic": {
         "name": "Shab-e Yalda / Longest Night",
         "description": "Shab-e Yalda (Night of Birth) is celebrated in Persian and Central Asian Muslim cultures on the winter solstice. Families gather to eat pomegranates and watermelon (red fruits symbolizing dawn), read Hafiz's poetry, and stay awake through the longest night to welcome the triumph of light over darkness."
+      },
+      "persian": {
+        "name": "Shab-e Yaldā (Night of Birth)",
+        "description": "Shab-e Yaldā, the longest night of the year, is among the oldest Persian celebrations. Families gather to eat pomegranates and watermelon — red fruits symbolizing the crimson of dawn — and read the poetry of Hafez by divination (fāl-e Hāfez). The night commemorates the birth of Mithra and the triumph of light over darkness, as from this moment the days begin to lengthen and Ahura Mazda's power grows."
       },
       "medieval": {
         "name": "Christmas / Nativity",

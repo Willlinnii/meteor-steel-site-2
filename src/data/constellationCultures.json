@@ -5,6 +5,7 @@
     "norse": "Friggjarokk",
     "babylonian": "SIPA.ZI.AN.NA",
     "vedic": "Mṛgaśirā",
+    "persian": "Shekārgar",
     "islamic": "al-Jabbār",
     "medieval": "Orion"
   },
@@ -14,6 +15,7 @@
     "norse": "Karlvagn",
     "babylonian": "MAR.GÍD.DA",
     "vedic": "Saptarṣi",
+    "persian": "Haftōrang",
     "islamic": "al-Dubb al-Akbar",
     "medieval": "Plaustrum"
   },
@@ -23,6 +25,7 @@
     "norse": "Kvennavagn",
     "babylonian": "MAR.GÍD.DA.AN.NA",
     "vedic": "Laghu Saptarṣi",
+    "persian": "Haftōrang-e Kehtar",
     "islamic": "al-Dubb al-Aṣghar",
     "medieval": "Cynosura"
   },
@@ -31,12 +34,14 @@
     "roman": "Cassiopeia",
     "babylonian": "LU.LIM",
     "islamic": "Dhāt al-Kursī",
+    "persian": "Bānū-ye Takht-neshīn",
     "medieval": "Cassiopeia"
   },
   "Cyg": {
     "greek": "Κύκνος",
     "roman": "Cycnus",
     "babylonian": "UD.KA.DU8.A",
+    "persian": "Morgh",
     "islamic": "al-Dajāja",
     "medieval": "Cycnus"
   },
@@ -44,6 +49,7 @@
     "greek": "Λύρα",
     "roman": "Lyra",
     "babylonian": "ÙZ",
+    "persian": "Vananand",
     "islamic": "al-Shulyāq",
     "medieval": "Lyra"
   },
@@ -51,6 +57,7 @@
     "greek": "Ἀετός",
     "roman": "Aquila",
     "babylonian": "A.MUSHEN",
+    "persian": "Shahbāz",
     "islamic": "al-ʿUqāb",
     "medieval": "Aquila"
   },
@@ -58,6 +65,7 @@
     "greek": "Περσεύς",
     "roman": "Perseus",
     "babylonian": "SHU.GI",
+    "persian": "Barsāvush",
     "islamic": "Barsāʾūs",
     "medieval": "Perseus"
   },
@@ -65,6 +73,7 @@
     "greek": "Ἀνδρομέδα",
     "roman": "Andromeda",
     "babylonian": "LU.LIM",
+    "persian": "Zan-e Barband",
     "islamic": "al-Marʾāh al-Musalsalah",
     "medieval": "Andromeda"
   },
@@ -72,6 +81,7 @@
     "greek": "Πήγασος",
     "roman": "Equus",
     "babylonian": "IKÛ",
+    "persian": "Asb-e Bozorg",
     "islamic": "al-Faras al-Aʿẓam",
     "medieval": "Pegasus"
   },
@@ -80,6 +90,7 @@
     "roman": "Canis Major",
     "babylonian": "KAK.SI.SÁ",
     "vedic": "Mṛgavyādha",
+    "persian": "Tishtar",
     "islamic": "al-Kalb al-Akbar",
     "medieval": "Canis Major"
   },
@@ -87,6 +98,7 @@
     "greek": "Κύων Μικρός",
     "roman": "Canis Minor",
     "babylonian": "DAR.LUGAL",
+    "persian": "Sag-e Kehtar",
     "islamic": "al-Kalb al-Aṣghar",
     "medieval": "Canis Minor"
   },
@@ -94,6 +106,7 @@
     "greek": "Δράκων",
     "roman": "Draco",
     "babylonian": "MUŠ",
+    "persian": "Azhidahāk",
     "islamic": "al-Tinnīn",
     "medieval": "Draco"
   },
@@ -102,18 +115,21 @@
     "roman": "Centaurus",
     "babylonian": "EN.TE.NA.BAR.HUM",
     "islamic": "al-Qīnṭūrus",
+    "persian": "Nīm-asp",
     "medieval": "Centaurus"
   },
   "Crv": {
     "greek": "Κόραξ",
     "roman": "Corvus",
     "babylonian": "UGA.MUSHEN",
+    "persian": "Kalāgh",
     "islamic": "al-Ghurāb",
     "medieval": "Corvus"
   },
   "Crt": {
     "greek": "Κρατήρ",
     "roman": "Crater",
+    "persian": "Jām",
     "islamic": "al-Bāṭiyah",
     "medieval": "Crater"
   },
@@ -122,12 +138,14 @@
     "roman": "Hercules",
     "babylonian": "SAL.PA",
     "islamic": "al-Jāthī",
+    "persian": "Zanū-zada",
     "medieval": "Hercules"
   },
   "Boo": {
     "greek": "Βοώτης",
     "roman": "Boötes",
     "babylonian": "SHUDUN",
+    "persian": "Gāvrān",
     "islamic": "al-ʿAwwāʾ",
     "medieval": "Arctophylax"
   },
@@ -136,6 +154,7 @@
     "roman": "Aries",
     "babylonian": "LU.HUN.GA",
     "vedic": "Meṣa",
+    "persian": "Varrak",
     "islamic": "al-Ḥamal",
     "medieval": "Aries"
   },
@@ -144,6 +163,7 @@
     "roman": "Taurus",
     "babylonian": "GU4.AN.NA",
     "vedic": "Vṛṣabha",
+    "persian": "Gāv",
     "islamic": "al-Thawr",
     "medieval": "Taurus"
   },
@@ -152,6 +172,7 @@
     "roman": "Gemini",
     "babylonian": "MAŠ.TAB.BA",
     "vedic": "Mithuna",
+    "persian": "Dō-pahikar",
     "islamic": "al-Tawʾamān",
     "medieval": "Gemini"
   },
@@ -160,6 +181,7 @@
     "roman": "Cancer",
     "babylonian": "AL.LUL",
     "vedic": "Karkaṭa",
+    "persian": "Kalakang",
     "islamic": "al-Saraṭān",
     "medieval": "Cancer"
   },
@@ -168,6 +190,7 @@
     "roman": "Leo",
     "babylonian": "UR.GU.LA",
     "vedic": "Siṃha",
+    "persian": "Shēr",
     "islamic": "al-Asad",
     "medieval": "Leo"
   },
@@ -176,6 +199,7 @@
     "roman": "Virgo",
     "babylonian": "AB.SÍN",
     "vedic": "Kanyā",
+    "persian": "Khūshak",
     "islamic": "al-Sunbulah",
     "medieval": "Virgo"
   },
@@ -184,6 +208,7 @@
     "roman": "Libra",
     "babylonian": "ZI.BA.AN.NA",
     "vedic": "Tulā",
+    "persian": "Tarāzūk",
     "islamic": "al-Mīzān",
     "medieval": "Libra"
   },
@@ -192,6 +217,7 @@
     "roman": "Scorpius",
     "babylonian": "GÍR.TAB",
     "vedic": "Vṛścika",
+    "persian": "Gazdum",
     "islamic": "al-ʿAqrab",
     "medieval": "Scorpius"
   },
@@ -200,6 +226,7 @@
     "roman": "Sagittarius",
     "babylonian": "PA.BIL.SAG",
     "vedic": "Dhanu",
+    "persian": "Nēmāsp",
     "islamic": "al-Qaws",
     "medieval": "Sagittarius"
   },
@@ -208,6 +235,7 @@
     "roman": "Capricornus",
     "babylonian": "SUḪUR.MAŠ",
     "vedic": "Makara",
+    "persian": "Vahīk",
     "islamic": "al-Jadī",
     "medieval": "Capricornus"
   },
@@ -216,6 +244,7 @@
     "roman": "Aquarius",
     "babylonian": "GU.LA",
     "vedic": "Kumbha",
+    "persian": "Dōl",
     "islamic": "al-Dalw",
     "medieval": "Aquarius"
   },
@@ -224,6 +253,7 @@
     "roman": "Pisces",
     "babylonian": "KUN.MEŠ",
     "vedic": "Mīna",
+    "persian": "Māhīg",
     "islamic": "al-Ḥūt",
     "medieval": "Pisces"
   }

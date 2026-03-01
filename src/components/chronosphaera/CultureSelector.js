@@ -1,6 +1,6 @@
 import React from 'react';
 
-const CULTURES = ['Atlas', 'Babylonian', 'Vedic', 'Greek', 'Roman', 'Islamic', 'Norse', 'Medieval'];
+const CULTURES = ['Atlas', 'Babylonian', 'Vedic', 'Greek', 'Roman', 'Persian', 'Islamic', 'Norse', 'Medieval'];
 
 export default function CultureSelector({ activeCulture, onSelectCulture }) {
   return (
