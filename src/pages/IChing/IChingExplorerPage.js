@@ -316,12 +316,16 @@ export default function IChingExplorerPage() {
     setSelectedHexagram(null);
   }, []);
 
+  const detailKey = selectedHexagram ? `hex-${selectedHexagram.n}` : selectedTrigram ? `tri-${selectedTrigram.id}` : 'empty';
+
   return (
     <div className="iching-explorer-page">
-      <h1 className="iching-explorer-title">I Ching</h1>
-      <p className="iching-explorer-subtitle">Book of Changes — 易經</p>
+      <div className="iching-explorer-heading">
+        <h1 className="iching-explorer-title">I Ching</h1>
+        <span className="iching-explorer-sub">Book of Changes — 易經</span>
+      </div>
 
-      <div className="iching-explorer-top">
+      <div className="iching-explorer-diagram-center">
         <div className="iching-explorer-compass-wrap">
           <div className="iching-explorer-arrangement-toggle">
             <button
@@ -350,18 +354,18 @@ export default function IChingExplorerPage() {
               : 'King Wen (後天) — directions, seasons, elements'}
           </div>
         </div>
+      </div>
 
-        <div className="iching-explorer-detail">
-          {selectedHexagram ? (
-            <HexagramDetail hexagram={selectedHexagram} />
-          ) : selectedTrigram ? (
-            <TrigramDetail trigram={selectedTrigram} />
-          ) : (
-            <div className="iching-explorer-detail-placeholder">
-              Select a trigram on the compass or a hexagram in the grid below.
-            </div>
-          )}
-        </div>
+      <div className="iching-explorer-content-fade" key={detailKey}>
+        {selectedHexagram ? (
+          <HexagramDetail hexagram={selectedHexagram} />
+        ) : selectedTrigram ? (
+          <TrigramDetail trigram={selectedTrigram} />
+        ) : (
+          <div className="iching-explorer-detail-placeholder">
+            Select a trigram on the compass or a hexagram in the grid below.
+          </div>
+        )}
       </div>
 
       <HexagramGrid
