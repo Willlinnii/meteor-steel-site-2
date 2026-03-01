@@ -24,6 +24,9 @@ const {
   monomythPsychles,
   yellowBrickRoad,
   mythicEarthSites,
+  // Celestial Drama
+  getMonomythStageFromMoonPhase,
+  buildCelestialDramaPrompt,
 } = require('./_lib/engine');
 
 // Model config — centralized for easy swapping and future BYOK support
@@ -743,6 +746,42 @@ module.exports = async function handler(req, res) {
       const response = await anthropic.messages.create({ model: MODELS.quality, system: transmutePrompt, messages: [{ role: 'user', content: 'Please transmute my story.' }], max_tokens: 2048 });
       return sendAndTrack({ transmuted: response.content?.find(c => c.type === 'text')?.text || '' });
     } catch (err) { console.error('Story Transmute API error:', err?.message, err?.status); return res.status(500).json({ error: `Something went wrong: ${err?.message || 'Unknown error'}` }); }
+  }
+
+  // --- Celestial Drama mode (daily cached mythic story) ---
+  if (mode === 'celestial-drama') {
+    const db = admin.firestore();
+    const cacheRef = db.collection('cache').doc('celestial-drama');
+    try {
+      const cacheDoc = await cacheRef.get();
+      if (cacheDoc.exists) {
+        const cached = cacheDoc.data();
+        if (cached.expiresAt && cached.expiresAt.toMillis() > Date.now()) {
+          return res.json({ story: cached.story, skyData: cached.skyData, moonPhaseAngle: cached.moonPhaseAngle, monomythStage: cached.monomythStage, monomythLabel: cached.monomythLabel, moonLabel: cached.moonLabel, generatedAt: cached.generatedAt, cached: true });
+        }
+      }
+    } catch (cacheErr) { console.error('Drama cache read error:', cacheErr?.message); }
+    try {
+      const { MoonPhase: AstroMoonPhase } = require('astronomy-engine');
+      const now = new Date();
+      const skyData = computeNatalChart({ year: now.getUTCFullYear(), month: now.getUTCMonth() + 1, day: now.getUTCDate(), hour: now.getUTCHours(), minute: now.getUTCMinutes(), latitude: 0, longitude: 0, utcOffset: 0 });
+      const moonPhaseAngle = AstroMoonPhase(now);
+      const monomythEntry = getMonomythStageFromMoonPhase(moonPhaseAngle);
+      const dramaPrompt = buildCelestialDramaPrompt(skyData, moonPhaseAngle, monomythEntry);
+      const anthropic = getAnthropicClient(userKeys.anthropicKey);
+      const response = await anthropic.messages.create({ model: MODELS.quality, system: dramaPrompt, messages: [{ role: 'user', content: 'Tell today\'s celestial story.' }], max_tokens: 1500 });
+      const story = response.content?.find(c => c.type === 'text')?.text || '';
+      const result = { story, skyData: { planets: skyData.planets, aspects: skyData.aspects }, moonPhaseAngle, monomythStage: monomythEntry.stage, monomythLabel: monomythEntry.label, moonLabel: monomythEntry.moon, generatedAt: now.toISOString() };
+      cacheRef.set({ ...result, expiresAt: admin.firestore.Timestamp.fromMillis(Date.now() + 24 * 60 * 60 * 1000) }).catch(e => console.error('Drama cache write error:', e?.message));
+      return res.json(result);
+    } catch (err) {
+      console.error('Celestial drama generation error:', err?.message, err?.status);
+      try {
+        const staleDoc = await cacheRef.get();
+        if (staleDoc.exists) { const stale = staleDoc.data(); return res.json({ story: stale.story, skyData: stale.skyData, moonPhaseAngle: stale.moonPhaseAngle, monomythStage: stale.monomythStage, monomythLabel: stale.monomythLabel, moonLabel: stale.moonLabel, generatedAt: stale.generatedAt, cached: true, stale: true }); }
+      } catch {}
+      return res.status(500).json({ error: 'Failed to generate celestial drama.' });
+    }
   }
 
   if (!Array.isArray(messages) || messages.length === 0) return res.status(400).json({ error: 'Messages array is required.' });

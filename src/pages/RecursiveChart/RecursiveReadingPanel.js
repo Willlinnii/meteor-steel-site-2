@@ -25,6 +25,7 @@ import {
   analyzeHouses, computePartOfFortune, detectMutualReceptions,
   computeProgressedAspects, detectProgressedIngresses,
 } from '../../astrology/chartAnalysis';
+import CelestialDramaPanel from '../../components/chronosphaera/CelestialDramaPanel';
 import { getDignity } from '../../data/planetCharacters';
 import {
   narratePosition,
@@ -1679,6 +1680,11 @@ export default function RecursiveReadingPanel({
               retrogrades={retrogrades}
               lunarPhase={lunarPhase}
             />
+          )}
+
+          {/* Celestial Drama — daily mythic story from the sky */}
+          {(perspective === 'geocentric' || perspective === 'heliocentric') && weatherData && mode !== 'personal' && (
+            <CelestialDramaPanel />
           )}
 
           {/* Planet perspective */}

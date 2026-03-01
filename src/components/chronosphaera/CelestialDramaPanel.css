@@ -1,0 +1,210 @@
+.celestial-drama-section {
+  margin: 20px 0 8px;
+}
+
+.celestial-drama-toggle-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  background: none;
+  border: 1px solid rgba(240, 192, 64, 0.2);
+  border-radius: 8px;
+  padding: 10px 14px;
+  color: rgba(240, 192, 64, 0.8);
+  cursor: pointer;
+  font-size: 0.88rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  transition: all 0.2s ease;
+}
+.celestial-drama-toggle-bar:hover {
+  background: rgba(240, 192, 64, 0.06);
+  border-color: rgba(240, 192, 64, 0.35);
+}
+.celestial-drama-toggle-bar.open {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  border-bottom-color: transparent;
+  background: rgba(240, 192, 64, 0.04);
+}
+
+.celestial-drama-toggle-icon {
+  font-size: 0.65rem;
+  opacity: 0.7;
+}
+
+.celestial-drama-toggle-label {
+  flex: 1;
+  text-align: left;
+}
+
+.celestial-drama-toggle-hint {
+  font-size: 0.72rem;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.4);
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.celestial-drama-panel {
+  background: rgba(15, 15, 25, 0.6);
+  border: 1px solid rgba(240, 192, 64, 0.2);
+  border-top: none;
+  border-radius: 0 0 8px 8px;
+  padding: 0;
+  overflow: hidden;
+  animation: celestial-drama-fadein 0.3s ease;
+}
+
+@keyframes celestial-drama-fadein {
+  from { opacity: 0; max-height: 0; }
+  to { opacity: 1; max-height: 2000px; }
+}
+
+.celestial-drama-header {
+  padding: 12px 16px 8px;
+}
+
+.celestial-drama-subheader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.celestial-drama-tag {
+  font-size: 0.72rem;
+  color: rgba(255, 255, 255, 0.65);
+  background: rgba(255, 255, 255, 0.07);
+  padding: 2px 8px;
+  border-radius: 10px;
+  letter-spacing: 0.02em;
+}
+
+.celestial-drama-date {
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.35);
+  margin-left: auto;
+}
+
+.celestial-drama-body {
+  padding: 8px 16px 16px;
+  min-height: 60px;
+}
+
+.celestial-drama-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 28px 0;
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 0.82rem;
+}
+
+.celestial-drama-spinner {
+  width: 24px;
+  height: 24px;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-top-color: rgba(240, 192, 64, 0.5);
+  border-radius: 50%;
+  animation: celestial-drama-spin 0.8s linear infinite;
+}
+
+@keyframes celestial-drama-spin {
+  to { transform: rotate(360deg); }
+}
+
+.celestial-drama-error {
+  text-align: center;
+  padding: 16px 0;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.85rem;
+}
+.celestial-drama-error-detail {
+  font-size: 0.72rem;
+  color: rgba(255, 255, 255, 0.3);
+  margin-top: 4px;
+}
+
+.celestial-drama-story-title {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #f0c040;
+  margin: 0 0 12px 0;
+  font-style: italic;
+  letter-spacing: 0.02em;
+}
+
+.celestial-drama-prose {
+  font-size: 0.88rem;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.82);
+}
+.celestial-drama-prose p {
+  margin: 0 0 10px 0;
+}
+.celestial-drama-prose p:last-child {
+  margin-bottom: 0;
+  color: rgba(255, 255, 255, 0.55);
+  font-style: italic;
+}
+
+.celestial-drama-footer {
+  padding: 10px 16px 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.celestial-drama-planets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-bottom: 6px;
+}
+
+.celestial-drama-planet-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.55);
+  background: rgba(255, 255, 255, 0.04);
+  padding: 2px 7px;
+  border-radius: 8px;
+}
+
+.celestial-drama-planet-symbol {
+  font-size: 0.82rem;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.celestial-drama-planet-sign {
+  font-size: 0.65rem;
+  opacity: 0.65;
+}
+
+.celestial-drama-aspects {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.celestial-drama-aspect-chip {
+  font-size: 0.65rem;
+  color: rgba(255, 255, 255, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 1px 6px;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+
+@media (max-width: 600px) {
+  .celestial-drama-body {
+    padding: 8px 12px 14px;
+  }
+  .celestial-drama-prose {
+    font-size: 0.85rem;
+  }
+}

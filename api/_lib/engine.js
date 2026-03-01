@@ -1306,6 +1306,92 @@ function getSystemPrompt(area, context) {
   return core + `\n\n---\nDEEP KNOWLEDGE — CURRENT AREA:\nThe user is currently browsing this area of the site. You have full detailed knowledge below. Draw on it for specific, precise answers.\n\n${areaData}\n---`;
 }
 
+// ── Celestial Drama — aspect & moon phase mappings + prompt builder ──
+
+const ASPECT_DRAMA = {
+  Conjunction: { role: 'Alliance', verb: 'their purposes fused' },
+  Sextile: { role: 'Opportunity', verb: 'sensing mutual gain' },
+  Square: { role: 'Conflict', verb: 'neither willing to yield' },
+  Trine: { role: 'Harmony', verb: 'remembering a shared song' },
+  Opposition: { role: 'Confrontation', verb: 'locked in the tension of mirrors' },
+};
+
+const MOON_PHASE_TO_STAGE = [
+  { max: 45, stage: 'quenching', label: 'Nadir', moon: 'New Moon' },
+  { max: 90, stage: 'integration', label: 'Return', moon: 'Waxing Crescent' },
+  { max: 135, stage: 'drawing', label: 'Arrival', moon: 'First Quarter' },
+  { max: 180, stage: 'new-age', label: 'Renewal', moon: 'Waxing Gibbous' },
+  { max: 225, stage: 'golden-age', label: 'Surface', moon: 'Full Moon' },
+  { max: 270, stage: 'falling-star', label: 'Calling', moon: 'Waning Gibbous' },
+  { max: 315, stage: 'impact-crater', label: 'Crossing', moon: 'Last Quarter' },
+  { max: 360, stage: 'forge', label: 'Initiating', moon: 'Waning Crescent' },
+];
+
+function getMonomythStageFromMoonPhase(angle) {
+  const a = ((angle % 360) + 360) % 360;
+  for (const entry of MOON_PHASE_TO_STAGE) {
+    if (a < entry.max) return entry;
+  }
+  return MOON_PHASE_TO_STAGE[0]; // fallback to New Moon
+}
+
+function buildCelestialDramaPrompt(skyData, moonPhaseAngle, monomythEntry) {
+  const SIGNS = ['Aries','Taurus','Gemini','Cancer','Leo','Virgo','Libra','Scorpio','Sagittarius','Capricorn','Aquarius','Pisces'];
+  const ELEMENT_MAP = { Aries:'Fire', Taurus:'Earth', Gemini:'Air', Cancer:'Water', Leo:'Fire', Virgo:'Earth', Libra:'Air', Scorpio:'Water', Sagittarius:'Fire', Capricorn:'Earth', Aquarius:'Air', Pisces:'Water' };
+
+  // Build character profiles from planet positions
+  const characters = skyData.planets.map(p => {
+    const core = sevenMetals.find(m => m.planet === p.name);
+    const arch = sevenMetalsArchetypes.find(a => a.sin === core?.sin);
+    const zodiac = sevenMetalsZodiac.find(z => z.sign === p.sign);
+    const tone = PLANET_TONES[p.name] || '';
+    return `${p.name} in ${p.sign} (${p.degree}°) — Metal: ${core?.metal || '?'}, Archetype: ${arch?.archetype || '?'}, Sign element: ${zodiac?.element || '?'}, Sign archetype: ${zodiac?.archetype || '?'}. Tone: ${truncate(tone, 100)}`;
+  }).join('\n');
+
+  // Build aspect relationships
+  const aspectLines = (skyData.aspects || []).map(a => {
+    const drama = ASPECT_DRAMA[a.aspect];
+    if (!drama) return null;
+    return `${a.planet1}–${a.planet2}: ${a.aspect} (${drama.role}) — "${drama.verb}" (orb ${a.orb}°)`;
+  }).filter(Boolean).join('\n');
+
+  // Count elements for dominant element
+  const elementCounts = {};
+  for (const p of skyData.planets) {
+    const el = ELEMENT_MAP[p.sign];
+    if (el) elementCounts[el] = (elementCounts[el] || 0) + 1;
+  }
+  const dominant = Object.entries(elementCounts).sort((a, b) => b[1] - a[1])[0];
+  const dominantElement = dominant ? dominant[0] : 'Fire';
+
+  // Stage overview
+  const stageOverview = stageOverviews[monomythEntry.stage] || '';
+
+  return `You are a mythic storyteller who reads the sky as narrative. Tonight the Moon is ${monomythEntry.moon} (phase angle ${moonPhaseAngle.toFixed(1)}°), placing us in the "${monomythEntry.label}" stage of the monomyth cycle.
+
+THE CHARACTERS (planets as mythic figures):
+${characters}
+
+THEIR RELATIONSHIPS (geometric aspects as dramatic bonds):
+${aspectLines || '(No major aspects — the planets move in solitude tonight.)'}
+
+DOMINANT ELEMENT: ${dominantElement} (${elementCounts[dominantElement] || 0} of 7 planets) — use this as atmospheric texture.
+
+MONOMYTH STAGE — ${monomythEntry.label} (${monomythEntry.stage}):
+${truncate(stageOverview, 400)}
+
+INSTRUCTIONS:
+- Write a 400–600 word mythic story. This is FICTION, not a horoscope, not advice, not prediction.
+- Each planet is a named character. Flavor their personality by the zodiac sign they currently occupy (e.g., Mars in Pisces acts differently than Mars in Aries).
+- The PLOT comes from the aspects: conjunctions are alliances, squares are conflicts, trines are harmonies, oppositions are confrontations, sextiles are opportunities. Build actual dramatic scenes from these geometric relationships.
+- Shape the narrative arc around the monomyth stage: if we are at Nadir, the story should feel like a dark passage; if at Surface, a golden apex; if at Calling, an unsettling summons.
+- The dominant element colors the world: Fire = heat, passion, urgency. Water = depth, emotion, flow. Air = thought, dialogue, wind. Earth = weight, texture, stillness.
+- Give the story a title on its own line.
+- End with a single closing line naming the moon phase and monomyth stage (e.g., "Under the Waning Gibbous — the Calling.").
+- Do NOT use bullet points, headers, or formatting. Write pure prose paragraphs.
+- Do NOT address the reader. This is a story, not a message to someone.`;
+}
+
 // ── Exports ──
 
 module.exports = {
@@ -1323,6 +1409,12 @@ module.exports = {
   PLANET_TONES,
   NATAL_CHART_GUIDANCE,
   loadCoreSummary,
+
+  // Celestial Drama
+  ASPECT_DRAMA,
+  MOON_PHASE_TO_STAGE,
+  getMonomythStageFromMoonPhase,
+  buildCelestialDramaPrompt,
 
   // Vault
   vaultIndex,
