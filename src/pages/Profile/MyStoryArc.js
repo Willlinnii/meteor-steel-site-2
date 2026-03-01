@@ -114,14 +114,11 @@ export default function MyStoryArc() {
   const hasAnyContent = Object.values(phaseStates).some(s => s.visited);
 
   return (
-    <div className="story-arc-section">
-      <button
-        className="story-arc-header"
-        onClick={() => setExpanded(!expanded)}
-      >
-        <span className="story-arc-title">My Story Arc</span>
-        <span className="story-arc-arrow">{expanded ? '\u25B2' : '\u25BC'}</span>
-      </button>
+    <>
+      <h2 className="profile-section-title profile-section-toggle" onClick={() => setExpanded(!expanded)} role="button" tabIndex={0} onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') setExpanded(!expanded); }}>
+        My Story Arc
+        <span className={`profile-section-chevron${expanded ? ' open' : ''}`}>&#9662;</span>
+      </h2>
 
       {expanded && (
         <div className="story-arc-content">
@@ -171,6 +168,6 @@ export default function MyStoryArc() {
           )}
         </div>
       )}
-    </div>
+    </>
   );
 }

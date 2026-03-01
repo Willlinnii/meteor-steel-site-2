@@ -1,41 +1,6 @@
 /* ===== MY STORY ARC ===== */
-.story-arc-section {
-  margin: 20px 0;
-  border: 1px solid var(--border-subtle);
-  border-radius: 10px;
-  overflow: hidden;
-}
-
-.story-arc-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  background: rgba(26, 26, 36, 0.5);
-  border: none;
-  padding: 14px 16px;
-  cursor: pointer;
-  color: var(--text-primary);
-}
-
-.story-arc-header:hover {
-  background: rgba(26, 26, 36, 0.7);
-}
-
-.story-arc-title {
-  font-family: 'Cinzel', serif;
-  font-size: 1rem;
-  color: var(--accent-gold);
-}
-
-.story-arc-arrow {
-  font-size: 0.7rem;
-  color: var(--text-secondary);
-}
-
 .story-arc-content {
-  padding: 16px;
-  background: rgba(26, 26, 36, 0.3);
+  padding: 16px 0;
 }
 
 .story-arc-empty {

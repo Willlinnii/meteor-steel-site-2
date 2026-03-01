@@ -60,18 +60,18 @@ export default function PartnerDirectoryPage() {
 
   if (loading) {
     return (
-      <div className="mentor-directory-page">
+      <div className="guild-member-directory-page">
         <div className="profile-empty">Loading partners...</div>
       </div>
     );
   }
 
   return (
-    <div className="mentor-directory-page">
+    <div className="guild-member-directory-page">
       {partners.length === 0 ? (
         <div className="profile-empty">No partners are currently listed.</div>
       ) : (
-        <div className="mentor-directory-grid">
+        <div className="guild-member-directory-grid">
           {partners.map(partner => {
             const isSelf = user && partner.uid === user.uid;
             const existingMembership = partnerMemberships?.find(
@@ -80,21 +80,21 @@ export default function PartnerDirectoryPage() {
             const canRequest = user && !isSelf && !existingMembership;
 
             return (
-              <div key={partner.id} className="mentor-card">
-                <div className="mentor-card-header">
-                  <span className="mentor-card-icon">{'\u{1F91D}'}</span>
+              <div key={partner.id} className="guild-member-card">
+                <div className="guild-member-card-header">
+                  <span className="guild-member-card-icon">{'\u{1F91D}'}</span>
                   <div>
-                    <div className="mentor-card-title">{partner.entityName}</div>
-                    {partner.handle && <div className="mentor-card-handle">@{partner.handle}</div>}
+                    <div className="guild-member-card-title">{partner.entityName}</div>
+                    {partner.handle && <div className="guild-member-card-handle">@{partner.handle}</div>}
                   </div>
                 </div>
 
                 {partner.description && (
-                  <div className="mentor-card-bio">{partner.description}</div>
+                  <div className="guild-member-card-bio">{partner.description}</div>
                 )}
 
                 {partner.websiteUrl && (
-                  <div className="mentor-card-bio" style={{ marginTop: 4 }}>
+                  <div className="guild-member-card-bio" style={{ marginTop: 4 }}>
                     <a href={partner.websiteUrl} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent)' }}>
                       {partner.websiteUrl}
                     </a>
@@ -102,57 +102,57 @@ export default function PartnerDirectoryPage() {
                 )}
 
                 {partner.mythicRelation && (
-                  <div className="mentor-card-bio" style={{ marginTop: 4, fontStyle: 'italic', opacity: 0.85 }}>
+                  <div className="guild-member-card-bio" style={{ marginTop: 4, fontStyle: 'italic', opacity: 0.85 }}>
                     {partner.mythicRelation}
                   </div>
                 )}
 
                 {partner.displayName && (
-                  <div className="mentor-card-slots" style={{ opacity: 0.7 }}>
+                  <div className="guild-member-card-slots" style={{ opacity: 0.7 }}>
                     Owner: {partner.displayName}
                   </div>
                 )}
 
-                <div className="mentor-card-slots">
+                <div className="guild-member-card-slots">
                   {(partner.representativeCount || 0)} representative{(partner.representativeCount || 0) === 1 ? '' : 's'}
                 </div>
 
                 {!isSelf && (
-                  <div className="mentor-card-actions">
+                  <div className="guild-member-card-actions">
                     {requestingPartner === partner.uid ? (
-                      <div className="mentor-card-request-form">
+                      <div className="guild-member-card-request-form">
                         <textarea
-                          className="mentor-request-textarea"
+                          className="guild-member-request-textarea"
                           placeholder="Optional: why would you like to represent this entity?"
                           value={requestMessage}
                           onChange={e => setRequestMessage(e.target.value)}
                           maxLength={500}
                           rows={3}
                         />
-                        <div className="mentor-request-form-actions">
+                        <div className="guild-member-request-form-actions">
                           <button
-                            className="mentor-card-request-btn"
+                            className="guild-member-card-request-btn"
                             disabled={submitting}
                             onClick={() => handleRequest(partner.uid)}
                           >
                             {submitting ? 'Sending...' : 'Send Request'}
                           </button>
                           <button
-                            className="mentor-card-cancel-btn"
+                            className="guild-member-card-cancel-btn"
                             onClick={() => { setRequestingPartner(null); setRequestMessage(''); setError(null); }}
                           >
                             Cancel
                           </button>
                         </div>
-                        {error && <div className="mentor-request-error">{error}</div>}
+                        {error && <div className="guild-member-request-error">{error}</div>}
                       </div>
                     ) : existingMembership ? (
-                      <span className="mentor-card-paired-label">
+                      <span className="guild-member-card-paired-label">
                         {existingMembership.status === 'accepted' ? 'Active Representative' : 'Request Pending'}
                       </span>
                     ) : canRequest ? (
                       <button
-                        className="mentor-card-request-btn"
+                        className="guild-member-card-request-btn"
                         onClick={() => { setRequestingPartner(partner.uid); setError(null); }}
                       >
                         Request to Join

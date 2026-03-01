@@ -81,7 +81,7 @@ export default function UserProfileCard({ uid, onClose }) {
     ? Object.entries(profile.credentials).slice(0, 3)
     : [];
 
-  const isMentor = profile?.mentorStatus === 'active';
+  const isGuildMember = profile?.guildStatus === 'active' || profile?.mentorStatus === 'active';
 
   return (
     <div className="user-profile-card" ref={cardRef}>
@@ -102,7 +102,7 @@ export default function UserProfileCard({ uid, onClose }) {
           <div className="user-profile-card-name">{displayName}</div>
           {handle && <div className="user-profile-card-handle">@{handle}</div>}
 
-          {isMentor && <div className="user-profile-card-badge">Mentor</div>}
+          {isGuildMember && <div className="user-profile-card-badge">Guild Member</div>}
 
           {credentials.length > 0 && (
             <div className="user-profile-card-credentials">

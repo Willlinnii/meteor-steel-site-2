@@ -11,6 +11,7 @@ export default function FriendsSection() {
     sendRequest, acceptRequest, declineRequest, removeFriend, setRelationship,
   } = useFriendRequests();
 
+  const [sectionCollapsed, setSectionCollapsed] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [searching, setSearching] = useState(false);
@@ -59,23 +60,31 @@ export default function FriendsSection() {
   if (!handle) {
     return (
       <>
-        <h2 className="profile-section-title">Friends</h2>
-        <p className="friends-empty">
-          Set a handle above to add friends and receive invites.
-        </p>
+        <h2 className="profile-section-title profile-section-toggle" onClick={() => setSectionCollapsed(v => !v)} role="button" tabIndex={0} onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') setSectionCollapsed(v => !v); }}>
+          Friends
+          <span className={`profile-section-chevron${!sectionCollapsed ? ' open' : ''}`}>&#9662;</span>
+        </h2>
+        {!sectionCollapsed && (
+          <p className="friends-empty">
+            Set a handle above to add friends and receive invites.
+          </p>
+        )}
       </>
     );
   }
 
   return (
     <>
-      <h2 className="profile-section-title">
+      <h2 className="profile-section-title profile-section-toggle" onClick={() => setSectionCollapsed(v => !v)} role="button" tabIndex={0} onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') setSectionCollapsed(v => !v); }}>
         Friends
         {incomingRequests.length > 0 && (
           <span className="friends-badge">{incomingRequests.length}</span>
         )}
+        <span className={`profile-section-chevron${!sectionCollapsed ? ' open' : ''}`}>&#9662;</span>
       </h2>
 
+      {!sectionCollapsed && (
+      <>
       {/* Find Friends */}
       <div className="friends-subsection">
         <h3 className="profile-subsection-title">Find Friends</h3>
@@ -211,6 +220,8 @@ export default function FriendsSection() {
           ))
         )}
       </div>
+      </>
+      )}
     </>
   );
 }

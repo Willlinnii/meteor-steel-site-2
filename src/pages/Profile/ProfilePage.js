@@ -196,8 +196,13 @@ const { cards: storyCards, loaded: storyCardsLoaded, vaultCardIds, toggleVaultCa
   const [photoUploading, setPhotoUploading] = useState(false);
   const [expandedCard, setExpandedCard] = useState(null); // 'ybr' | 'forge' | etc.
   const [showSocial, setShowSocial] = useState(false);
-  const [collapsedSections, setCollapsedSections] = useState({});
+  const [collapsedSections, setCollapsedSections] = useState({
+    story: true, astrology: true, credentials: true, curator: true,
+    certificates: true, ranks: true, addons: true, courses: true,
+    sites: true, ai: true, app: true,
+  });
   const toggleSection = useCallback((key) => setCollapsedSections(prev => ({ ...prev, [key]: !prev[key] })), []);
+  const openSection = useCallback((key) => setCollapsedSections(prev => ({ ...prev, [key]: false })), []);
   const [consultingRespondingId, setConsultingRespondingId] = useState(null);
   const [checkoutLoading, setCheckoutLoading] = useState(null); // itemId being checked out
   const [checkoutSuccess, setCheckoutSuccess] = useState(false);
@@ -375,16 +380,24 @@ const { cards: storyCards, loaded: storyCardsLoaded, vaultCardIds, toggleVaultCa
     setCertDownloading(null);
   }, [certificateData, user]);
 
-  // Scroll to #subscriptions or #purchases when navigated with hash
+  // Open section + scroll when navigated with hash
+  const HASH_TO_SECTION = useMemo(() => ({
+    subscriptions: 'addons', purchases: 'addons',
+    'section-natal-chart': 'astrology', 'section-numerology': 'astrology',
+    'section-credentials': 'credentials', 'section-ranks': 'ranks',
+    'section-guild': null, // handled by GuildSection's own state
+  }), []);
+
   useEffect(() => {
-    if (location.hash === '#subscriptions' || location.hash === '#purchases') {
-      const id = location.hash.slice(1);
-      const timer = setTimeout(() => {
-        document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
-      }, 100);
-      return () => clearTimeout(timer);
-    }
-  }, [location.hash]);
+    if (!location.hash) return;
+    const id = location.hash.slice(1);
+    const sectionKey = HASH_TO_SECTION[id];
+    if (sectionKey) openSection(sectionKey);
+    const timer = setTimeout(() => {
+      document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+    }, 150);
+    return () => clearTimeout(timer);
+  }, [location.hash, HASH_TO_SECTION, openSection]);
   const [handleInput, setHandleInput] = useState('');
   const [handleStatus, setHandleStatus] = useState(null); // null | 'checking' | 'available' | 'taken' | 'error'
   const [handleSaving, setHandleSaving] = useState(false);
@@ -561,23 +574,17 @@ const { cards: storyCards, loaded: storyCardsLoaded, vaultCardIds, toggleVaultCa
         {summaryLines.length > 0 && (
           <div className="profile-summary">
             <div className="profile-summary-line">{summaryLines[0]}</div>
-            {summaryLines.length > 1 && !showFullBio && (
-              <button className="profile-bio-toggle" onClick={() => setShowFullBio(true)}>
-                More <span className="profile-section-chevron">&#9662;</span>
-              </button>
-            )}
-            {showFullBio && (
-              <>
-                {summaryLines.slice(1).map((line, i) => (
-                  <div key={i} className="profile-summary-line">{line}</div>
-                ))}
-              </>
-            )}
+            {showFullBio && summaryLines.slice(1).map((line, i) => (
+              <div key={i} className="profile-summary-line">{line}</div>
+            ))}
           </div>
         )}
 
-        {/* Expanded details */}
-        {showFullBio && (
+        {!showFullBio ? (
+          <button className="profile-bio-toggle" onClick={() => setShowFullBio(true)}>
+            More <span className="profile-section-chevron">&#9662;</span>
+          </button>
+        ) : (
           <>
             {/* Admin shortcut */}
             {user?.email === process.env.REACT_APP_ADMIN_EMAIL && (
@@ -595,33 +602,28 @@ const { cards: storyCards, loaded: storyCardsLoaded, vaultCardIds, toggleVaultCa
             {/* ── Badges Row ── */}
             {(earnedRanks.length > 0 || activeCredentials.length > 0 || sunSymbol || luckyNumber != null || guildDisplay) && (
               <div className="profile-badges-row">
-                {/* Rank badges */}
                 {earnedRanks.map(rank => (
-                  <span key={rank.id} className="profile-badge" title={rank.name} onClick={() => document.getElementById('section-ranks')?.scrollIntoView({ behavior: 'smooth' })}>
+                  <span key={rank.id} className="profile-badge" title={rank.name} onClick={() => { openSection('ranks'); setTimeout(() => document.getElementById('section-ranks')?.scrollIntoView({ behavior: 'smooth' }), 50); }}>
                     {rank.icon}
                   </span>
                 ))}
-                {/* Credential badges */}
                 {activeCredentials.map(cred => (
-                  <span key={cred.category} className="profile-badge credential" title={`${cred.display.name} (L${cred.level})`} onClick={() => document.getElementById('section-credentials')?.scrollIntoView({ behavior: 'smooth' })}>
+                  <span key={cred.category} className="profile-badge credential" title={`${cred.display.name} (L${cred.level})`} onClick={() => { openSection('credentials'); setTimeout(() => document.getElementById('section-credentials')?.scrollIntoView({ behavior: 'smooth' }), 50); }}>
                     {cred.display.icon}
                   </span>
                 ))}
-                {/* Guild badge */}
                 {guildDisplay && (
-                  <span className="profile-badge guild-member" title={guildDisplay.title} onClick={() => document.getElementById('section-guild')?.scrollIntoView({ behavior: 'smooth' })}>
+                  <span className="profile-badge guild-member" title={guildDisplay.title} onClick={() => { setTimeout(() => document.getElementById('section-guild')?.scrollIntoView({ behavior: 'smooth' }), 50); }}>
                     {guildDisplay.icon}
                   </span>
                 )}
-                {/* Sun sign */}
                 {sunSymbol && (
-                  <span className="profile-badge sun-sign" title={`Sun in ${sunSign.sign}`} onClick={() => document.getElementById('section-natal-chart')?.scrollIntoView({ behavior: 'smooth' })}>
+                  <span className="profile-badge sun-sign" title={`Sun in ${sunSign.sign}`} onClick={() => { openSection('astrology'); setTimeout(() => document.getElementById('section-natal-chart')?.scrollIntoView({ behavior: 'smooth' }), 50); }}>
                     {sunSymbol}
                   </span>
                 )}
-                {/* Lucky number */}
                 {luckyNumber != null && (
-                  <span className="profile-badge lucky-number" title={`Lucky Number ${luckyNumber}`} onClick={() => document.getElementById('section-numerology')?.scrollIntoView({ behavior: 'smooth' })}>
+                  <span className="profile-badge lucky-number" title={`Lucky Number ${luckyNumber}`} onClick={() => { openSection('astrology'); setTimeout(() => document.getElementById('section-natal-chart')?.scrollIntoView({ behavior: 'smooth' }), 50); }}>
                     {luckyNumber}
                   </span>
                 )}
@@ -695,88 +697,85 @@ const { cards: storyCards, loaded: storyCardsLoaded, vaultCardIds, toggleVaultCa
         </div>
       ))}
 
-      {/* Natal Chart Section */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-        <h2 id="section-natal-chart" className="profile-section-title profile-section-toggle" style={{ margin: 0 }} onClick={() => toggleSection('natal')} role="button" tabIndex={0} onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') toggleSection('natal'); }}>
-          Natal Chart
-          <span className={`profile-section-chevron${!collapsedSections.natal ? ' open' : ''}`}>&#9662;</span>
-        </h2>
-        {natalChart?.birthData && (
-          <button
-            className="profile-ring-btn"
-            title="My Rings"
-            onClick={() => {
-              const bd = natalChart.birthData;
-              const mm = String(bd.month).padStart(2, '0');
-              const dd = String(bd.day).padStart(2, '0');
-              navigate(`/ring?birthday=${bd.year}-${mm}-${dd}`);
-            }}
-          >
-            <svg viewBox="0 0 24 24" width="20" height="20" fill="none">
-              <defs>
-                <linearGradient id="crGold" x1="4" y1="4" x2="20" y2="20">
-                  <stop offset="0%" stopColor="#f5e6a8" />
-                  <stop offset="35%" stopColor="#d4a830" />
-                  <stop offset="65%" stopColor="#8a6e1e" />
-                  <stop offset="100%" stopColor="#c9a040" />
-                </linearGradient>
-                <radialGradient id="crRuby" cx="50%" cy="35%">
-                  <stop offset="0%" stopColor="#ff3050" />
-                  <stop offset="100%" stopColor="#a00820" />
-                </radialGradient>
-              </defs>
-              <circle cx="12" cy="12" r="7.5" stroke="url(#crGold)" strokeWidth="2.2" />
-              <circle cx="12" cy="4.2" r="2" fill="url(#crRuby)" />
-              <circle cx="12" cy="4.2" r="2" fill="none" stroke="#f5e6a8" strokeWidth="0.3" opacity="0.5" />
-              <circle cx="17.3" cy="7.5" r="1.15" fill="#1ba34a" />
-              <circle cx="19.1" cy="13.5" r="1.15" fill="#d8deff" />
-              <circle cx="15" cy="18.4" r="1.15" fill="#e05030" />
-              <circle cx="9" cy="18.4" r="1.15" fill="#e8b820" />
-              <circle cx="4.9" cy="13.5" r="1.15" fill="#1838a0" />
-              <circle cx="6.7" cy="7.5" r="1.15" fill="#eae6de" />
-            </svg>
-            <span className="profile-ring-btn-label">My Rings</span>
-          </button>
-        )}
-        {natalChart?.birthData && (
-          <span className="profile-ring-size-inline">
-            <label className="profile-ring-size-label">Ring size</label>
-            <input
-              type="number"
-              className="profile-ring-size-input"
-              min="1"
-              max="16"
-              step="0.5"
-              placeholder="—"
-              value={ringSize ?? ''}
-              onChange={(e) => {
-                const v = e.target.value;
-                updateRingSize(v === '' ? null : parseFloat(v));
-              }}
-            />
-          </span>
-        )}
-      </div>
-      {!collapsedSections.natal && (
+      {/* Astrology Section — wraps Natal Chart + Numerology */}
+      <h2 id="section-natal-chart" className="profile-section-title profile-section-toggle" onClick={() => toggleSection('astrology')} role="button" tabIndex={0} onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') toggleSection('astrology'); }}>
+        Astrology
+        <span className={`profile-section-chevron${!collapsedSections.astrology ? ' open' : ''}`}>&#9662;</span>
+      </h2>
+      {!collapsedSections.astrology && (
         <>
+          {/* Natal Chart */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
+            <h3 className="profile-subsection-title" style={{ margin: 0 }}>Natal Chart</h3>
+            {natalChart?.birthData && (
+              <button
+                className="profile-ring-btn"
+                title="My Rings"
+                onClick={() => {
+                  const bd = natalChart.birthData;
+                  const mm = String(bd.month).padStart(2, '0');
+                  const dd = String(bd.day).padStart(2, '0');
+                  navigate(`/ring?birthday=${bd.year}-${mm}-${dd}`);
+                }}
+              >
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none">
+                  <defs>
+                    <linearGradient id="crGold" x1="4" y1="4" x2="20" y2="20">
+                      <stop offset="0%" stopColor="#f5e6a8" />
+                      <stop offset="35%" stopColor="#d4a830" />
+                      <stop offset="65%" stopColor="#8a6e1e" />
+                      <stop offset="100%" stopColor="#c9a040" />
+                    </linearGradient>
+                    <radialGradient id="crRuby" cx="50%" cy="35%">
+                      <stop offset="0%" stopColor="#ff3050" />
+                      <stop offset="100%" stopColor="#a00820" />
+                    </radialGradient>
+                  </defs>
+                  <circle cx="12" cy="12" r="7.5" stroke="url(#crGold)" strokeWidth="2.2" />
+                  <circle cx="12" cy="4.2" r="2" fill="url(#crRuby)" />
+                  <circle cx="12" cy="4.2" r="2" fill="none" stroke="#f5e6a8" strokeWidth="0.3" opacity="0.5" />
+                  <circle cx="17.3" cy="7.5" r="1.15" fill="#1ba34a" />
+                  <circle cx="19.1" cy="13.5" r="1.15" fill="#d8deff" />
+                  <circle cx="15" cy="18.4" r="1.15" fill="#e05030" />
+                  <circle cx="9" cy="18.4" r="1.15" fill="#e8b820" />
+                  <circle cx="4.9" cy="13.5" r="1.15" fill="#1838a0" />
+                  <circle cx="6.7" cy="7.5" r="1.15" fill="#eae6de" />
+                </svg>
+                <span className="profile-ring-btn-label">My Rings</span>
+              </button>
+            )}
+            {natalChart?.birthData && (
+              <span className="profile-ring-size-inline">
+                <label className="profile-ring-size-label">Ring size</label>
+                <input
+                  type="number"
+                  className="profile-ring-size-input"
+                  min="1"
+                  max="16"
+                  step="0.5"
+                  placeholder="—"
+                  value={ringSize ?? ''}
+                  onChange={(e) => {
+                    const v = e.target.value;
+                    updateRingSize(v === '' ? null : parseFloat(v));
+                  }}
+                />
+              </span>
+            )}
+          </div>
           <NatalChartDisplay chart={natalChart} />
           <NatalChartInput existingChart={natalChart} onSave={updateNatalChart} />
-        </>
-      )}
 
-      {/* Numerology Section */}
-      <h2 id="section-numerology" className="profile-section-title profile-section-toggle" onClick={() => toggleSection('numerology')} role="button" tabIndex={0} onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') toggleSection('numerology'); }}>
-        Numerology
-        <span className={`profile-section-chevron${!collapsedSections.numerology ? ' open' : ''}`}>&#9662;</span>
-      </h2>
-      {!collapsedSections.numerology && (
-        <NumerologyDisplay
-          savedName={numerologyName}
-          displayName={user?.displayName}
-          onSave={updateNumerologyName}
-          luckyNumber={luckyNumber}
-          onSaveLucky={updateLuckyNumber}
-        />
+          {/* Numerology */}
+          <h3 className="profile-subsection-title">Numerology</h3>
+          <NumerologyDisplay
+            savedName={numerologyName}
+            displayName={user?.displayName}
+            onSave={updateNumerologyName}
+            luckyNumber={luckyNumber}
+            onSaveLucky={updateLuckyNumber}
+          />
+        </>
       )}
 
       {/* My Story Cards (with Story Matching pop-down) */}
@@ -1751,7 +1750,7 @@ function GuildSection({ effectiveGuildStatus, guildEligible, qualifiedGuildTypes
   const display = getGuildDisplay(guildData);
   const courseChecklist = getGuildCourseChecklist(completedCourses);
   const navigate = useNavigate();
-  const [sectionCollapsed, setSectionCollapsed] = useState(false);
+  const [sectionCollapsed, setSectionCollapsed] = useState(true);
 
   // Bio editor state
   const [bioText, setBioText] = useState(guildData?.bio || '');
@@ -2383,7 +2382,7 @@ function MembershipListSection({ title, items, nameKey, actionButtons, loadingId
 }
 
 function PartnerSection({ partnerStatus, partnerData, partnerDisplay, partnerMembershipCategories, submitPartnerApplication, updatePartnerProfile, publishPartnerDirectory, unpublishPartnerDirectory, inviteRepresentative, respondToPartnerMembership, endPartnerMembership }) {
-  const [sectionCollapsed, setSectionCollapsed] = useState(false);
+  const [sectionCollapsed, setSectionCollapsed] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState(null);
