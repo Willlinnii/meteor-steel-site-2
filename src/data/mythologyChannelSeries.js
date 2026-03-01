@@ -223,7 +223,10 @@ const SERIES_INFO = {
       'The title echoes Campbell\'s Hero with a Thousand Faces, but shifts the lens from the hero\'s conquest to the healer\'s transformation — the wounded healer archetype that runs through shamanic traditions, depth psychology, and the lived experience of those called to serve.',
     ],
     people: [],
-    links: [],
+    links: [
+      { label: 'Listen on Spotify', url: 'https://open.spotify.com/show/4r1gfmbphIXH2VcAs9NWnY?si=QBe7A5srSuGSbAHZjhWb8Q' },
+      { label: 'Listen on Apple Podcasts', url: 'https://podcasts.apple.com/us/podcast/the-healer-with-a-thousand-faces/id1842982595' },
+    ],
     hasDetailPage: false,
   },
 };
