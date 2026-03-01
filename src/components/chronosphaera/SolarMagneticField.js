@@ -23,6 +23,7 @@ function formatNT(val) {
 export default function SolarMagneticField() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -30,7 +31,7 @@ export default function SolarMagneticField() {
     fetch('/api/celestial?type=solar-field')
       .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
       .then(d => { if (!cancelled) setData(d); })
-      .catch(() => {})
+      .catch(() => { if (!cancelled) setError(true); })
       .finally(() => { if (!cancelled) setLoading(false); });
     return () => { cancelled = true; };
   }, []);
@@ -39,6 +40,19 @@ export default function SolarMagneticField() {
     return (
       <div className="solar-mag solar-mag-collapsed">
         <p className="solar-mag-loading">Loading solar wind data…</p>
+      </div>
+    );
+  }
+
+  if (error && !data) {
+    return (
+      <div className="solar-mag solar-mag-collapsed">
+        <div className="solar-mag-header">
+          <span className="solar-mag-dot neutral" />
+          <span className="solar-mag-header-text">
+            Solar wind data temporarily unavailable
+          </span>
+        </div>
       </div>
     );
   }
@@ -56,6 +70,7 @@ export default function SolarMagneticField() {
         <span className={`solar-mag-dot ${alignment}`} />
         <span className="solar-mag-header-text">
           Solar Magnetic Field: <strong>{polarField.status.split('—')[0].trim()}</strong>
+          {data.stale && <span style={{ fontSize: '0.7rem', opacity: 0.6, marginLeft: 6 }}>(cached)</span>}
         </span>
         <span className={`solar-mag-chevron${open ? ' solar-mag-chevron-open' : ''}`}>&#9662;</span>
       </div>

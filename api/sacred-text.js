@@ -3,9 +3,40 @@
  * Two modes:
  *   ?mode=index&page=...  → get table of contents / sections
  *   ?mode=chapter&page=...&section=... → get chapter text
+ *
+ * Includes Firestore cache for resilience — if Wikisource is down,
+ * cached versions are returned with a { stale: true } flag.
  */
 
 const WIKISOURCE_API = 'https://en.wikisource.org/w/api.php';
+const { ensureFirebaseAdmin } = require('./_lib/auth');
+const admin = require('firebase-admin');
+
+function getCacheDocId(page, section, mode) {
+  const raw = `${mode || 'chapter'}:${page}:${section || ''}`;
+  return encodeURIComponent(raw).replace(/%/g, '_').slice(0, 1500);
+}
+
+async function readCache(docId) {
+  try {
+    ensureFirebaseAdmin();
+    const doc = await admin.firestore().collection('cache').doc('sacred-texts').collection('entries').doc(docId).get();
+    if (!doc.exists) return null;
+    return doc.data();
+  } catch { return null; }
+}
+
+async function writeCache(docId, payload) {
+  try {
+    ensureFirebaseAdmin();
+    await admin.firestore().collection('cache').doc('sacred-texts').collection('entries').doc(docId).set({
+      ...payload,
+      fetchedAt: Date.now(),
+    });
+  } catch (err) {
+    console.error('sacred-text cache write error:', err.message);
+  }
+}
 
 module.exports = async function handler(req, res) {
   res.setHeader('Cache-Control', 's-maxage=3600, stale-while-revalidate=86400');
@@ -16,16 +47,32 @@ module.exports = async function handler(req, res) {
     return res.status(400).json({ error: 'page parameter required' });
   }
 
+  const docId = getCacheDocId(page, section, mode);
+
   try {
+    let result;
     if (mode === 'index') {
       const chapters = await fetchIndex(page);
-      return res.json({ chapters });
+      result = { chapters };
     } else {
       const text = await fetchChapter(page, section);
-      return res.json({ text });
+      result = { text };
     }
+
+    // Cache successful response (fire-and-forget)
+    writeCache(docId, result);
+
+    return res.json(result);
   } catch (err) {
     console.error('sacred-text proxy error:', err.message);
+
+    // Try returning cached version on failure
+    const cached = await readCache(docId);
+    if (cached) {
+      const { fetchedAt, expiresAt, ...payload } = cached;
+      return res.json({ ...payload, stale: true, cachedAt: new Date(fetchedAt).toISOString() });
+    }
+
     return res.status(500).json({ error: 'Failed to fetch text' });
   }
 };
@@ -160,7 +207,15 @@ async function fetchChapter(page, section) {
   }
 
   const html = data.parse?.text?.['*'] || '';
-  return cleanHtml(html);
+  const cleaned = cleanHtml(html);
+
+  // Sanity check: if regex stripping removed nearly everything, return raw text
+  if (cleaned.length < 50 && html.length > 100) {
+    const rawText = html.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+    return rawText || cleaned;
+  }
+
+  return cleaned;
 }
 
 /**

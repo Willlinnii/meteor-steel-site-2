@@ -321,6 +321,7 @@ function TextReader({ readUrl, wikisourcePage }) {
   const [chapterText, setChapterText] = useState('');
   const [loadingChapter, setLoadingChapter] = useState(false);
   const [error, setError] = useState(null);
+  const [stale, setStale] = useState(false);
   const [readerOpen, setReaderOpen] = useState(false);
   const textRef = useRef(null);
 
@@ -329,9 +330,11 @@ function TextReader({ readUrl, wikisourcePage }) {
     if (chapters) return;
     setLoadingIndex(true);
     setError(null);
+    setStale(false);
     try {
       const res = await fetch(`/api/sacred-text?mode=index&page=${encodeURIComponent(wikisourcePage)}`);
       const data = await res.json();
+      if (data.stale) setStale(true);
       if (data.chapters && data.chapters.length > 0) {
         setChapters(data.chapters);
       } else {
@@ -348,10 +351,12 @@ function TextReader({ readUrl, wikisourcePage }) {
     setLoadingChapter(true);
     setChapterText('');
     setError(null);
+    setStale(false);
     try {
       const sectionParam = chapter.section != null ? `&section=${chapter.section}` : '';
       const res = await fetch(`/api/sacred-text?mode=chapter&page=${encodeURIComponent(chapter.page)}${sectionParam}`);
       const data = await res.json();
+      if (data.stale) setStale(true);
       if (data.text) {
         setChapterText(data.text);
         if (textRef.current) textRef.current.scrollTop = 0;
@@ -419,6 +424,11 @@ function TextReader({ readUrl, wikisourcePage }) {
               <div className="mythic-earth-reader-loading">Loading...</div>
             ) : chapterText ? (
               <div className="mythic-earth-reader-content">
+                {stale && (
+                  <div style={{ padding: '6px 12px', marginBottom: 8, background: 'rgba(196,113,58,0.15)', borderRadius: 4, fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
+                    Showing cached version — source temporarily unavailable
+                  </div>
+                )}
                 <h4 className="mythic-earth-reader-chapter-heading">{activeChapter?.label}</h4>
                 {chapterText.split('\n\n').map((p, i) => {
                   const trimmed = p.trim();

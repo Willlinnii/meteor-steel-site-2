@@ -1,4 +1,5 @@
 import React, { useState, useCallback, useRef, useMemo } from 'react';
+import { Link } from 'react-router-dom';
 import { useFriendRequests } from '../../contexts/FriendRequestsContext';
 import { useProfile } from '../../profile/ProfileContext';
 import { searchHandles } from '../../multiplayer/handleService';
@@ -219,6 +220,16 @@ export default function FriendsSection() {
             </div>
           ))
         )}
+      </div>
+
+      {/* Group management links */}
+      <div className="friends-subsection" style={{ display: 'flex', gap: 12 }}>
+        <Link to="/friend-groups" className="friends-action-btn" style={{ textDecoration: 'none', textAlign: 'center' }}>
+          Manage Friend Groups
+        </Link>
+        <Link to="/family-groups" className="friends-action-btn" style={{ textDecoration: 'none', textAlign: 'center' }}>
+          Manage Family Groups
+        </Link>
       </div>
       </>
       )}

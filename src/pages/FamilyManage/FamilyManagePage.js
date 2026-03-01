@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useFamily } from '../../contexts/FamilyContext';
 
 export default function FamilyManagePage() {
@@ -31,7 +32,8 @@ export default function FamilyManagePage() {
 
   return (
     <div style={{ padding: 24, maxWidth: 600, margin: '0 auto' }}>
-      <h1 style={{ fontFamily: 'Cinzel, serif', color: 'var(--accent-ember)' }}>My Families</h1>
+      <Link to="/profile" style={{ color: 'var(--text-secondary)', fontSize: '0.85rem' }}>&larr; Back to Profile</Link>
+      <h1 style={{ fontFamily: 'Cinzel, serif', color: 'var(--accent-ember)' }}>Family Groups</h1>
 
       {/* Existing families */}
       {families.length > 0 && (

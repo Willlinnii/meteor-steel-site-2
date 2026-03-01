@@ -100,6 +100,8 @@ const ConsultingDashboardPage = lazy(() => import('./pages/Consulting/Consulting
 const PractitionerDashboardPage = lazy(() => import('./pages/Consulting/PractitionerDashboardPage'));
 const ConsultingForgePage = lazy(() => import('./pages/Consulting/ConsultingForgePage'));
 const CrownPage = lazy(() => import('./pages/Crown/CrownPage'));
+const FriendsManagePage = lazy(() => import('./pages/FriendsManage/FriendsManagePage'));
+const FamilyManagePage = lazy(() => import('./pages/FamilyManage/FamilyManagePage'));
 const Ring2DPage = lazy(() => import('./pages/Ring2D/Ring2DPage'));
 const DodecahedronPage = lazy(() => import('./pages/Dodecahedron/DodecahedronPage'));
 const ArtBookPage = lazy(() => import('./pages/ArtBook/ArtBookPage'));
@@ -2386,6 +2388,8 @@ function AppContent() {
         <Route path="/fellowship" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><FellowshipPage /></Suspense>} />
         <Route path="/curated" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><CuratedProductsPage /></Suspense>} />
         <Route path="/matching" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><MatchingPage /></Suspense>} />
+        <Route path="/friend-groups" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><FriendsManagePage /></Suspense>} />
+        <Route path="/family-groups" element={<Suspense fallback={<div className="celestial-loading"><span className="celestial-loading-spinner" /></div>}><FamilyManagePage /></Suspense>} />
         <Route path="/feed" element={<Navigate to="/fellowship" replace />} />
         {/* Redirect legacy /app routes to /fellowship */}
         <Route path="/app/*" element={<Navigate to="/fellowship" replace />} />

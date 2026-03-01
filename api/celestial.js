@@ -8,6 +8,8 @@
  */
 
 const { computeNatalChart } = require('./_lib/natalChart');
+const { ensureFirebaseAdmin } = require('./_lib/auth');
+const admin = require('firebase-admin');
 
 // ─── Solar field constants ───
 
@@ -174,7 +176,7 @@ async function handleSolarField(req, res) {
     const alignment = hourAvg ? parseAlignment(hourAvg.bz) : parseAlignment(latest.bz);
     const sector = parseSector(latest.bx);
 
-    return res.status(200).json({
+    const responseData = {
       current: {
         time: latest.time,
         bx: latest.bx,
@@ -191,9 +193,43 @@ async function handleSolarField(req, res) {
         url: NOAA_MAG_URL,
         fetchedAt: new Date().toISOString(),
       },
-    });
+    };
+
+    // Cache successful response to Firestore (fire-and-forget)
+    try {
+      ensureFirebaseAdmin();
+      admin.firestore().collection('cache').doc('solar-field').set({
+        data: responseData,
+        fetchedAt: Date.now(),
+      }).catch(e => console.error('solar-field cache write error:', e.message));
+    } catch (cacheErr) {
+      console.error('solar-field cache init error:', cacheErr.message);
+    }
+
+    return res.status(200).json(responseData);
   } catch (err) {
     console.error('solar-field error:', err.message);
+
+    // Try returning cached version on NOAA failure
+    try {
+      ensureFirebaseAdmin();
+      const cacheDoc = await admin.firestore().collection('cache').doc('solar-field').get();
+      if (cacheDoc.exists) {
+        const cached = cacheDoc.data();
+        const ageMs = Date.now() - cached.fetchedAt;
+        const ageMinutes = Math.round(ageMs / 60000);
+        const sixHoursMs = 6 * 60 * 60 * 1000;
+        return res.status(200).json({
+          ...cached.data,
+          stale: true,
+          age: ageMinutes,
+          expired: ageMs > sixHoursMs,
+        });
+      }
+    } catch (cacheReadErr) {
+      console.error('solar-field cache read error:', cacheReadErr.message);
+    }
+
     return res.status(502).json({
       error: 'Unable to fetch solar wind data',
       detail: err.message,
