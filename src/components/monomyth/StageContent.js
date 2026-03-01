@@ -1,11 +1,11 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import TextBlock from '../chronosphaera/TextBlock';
 import DevelopmentPanel from '../DevelopmentPanel';
 import StageTest from '../StageTest';
 import useTest from '../../hooks/useTest';
 import { getSectionQuestions } from '../../coursework/tests';
 import CrossStageModal from '../CrossStageModal';
-import { THEORIST_TO_MODEL, CYCLE_TO_MODEL, MONOMYTH_STAGES } from '../../data/monomythConstants';
+import { THEORIST_TO_MODEL, CYCLE_TO_MODEL, MONOMYTH_STAGES, INNER_RING_SETS } from '../../data/monomythConstants';
 import { useStoryForge, useYBRMode } from '../../App';
 import { useCoursework } from '../../coursework/CourseworkContext';
 
@@ -56,7 +56,6 @@ const BASE_TABS = [
   { id: 'theorists', label: 'Theorists' },
   { id: 'myths', label: 'Myths' },
   { id: 'films', label: 'Films' },
-  { id: 'history', label: 'History' },
 ];
 
 const THEORIST_GROUPS = [
@@ -144,7 +143,7 @@ function OverviewTab({ stageId }) {
   );
 }
 
-function TheoristsTab({ stageId, activeGroup, onSelectModel, selectedModelId, onItemClick }) {
+function TheoristsTab({ stageId, activeGroup, onSelectModel, selectedModelId, onItemClick, ringSelections, onToggleRingItem }) {
   const stageData = theoristsData[stageId];
   if (!stageData) return <p className="chrono-empty">No theorist data available.</p>;
 
@@ -152,12 +151,19 @@ function TheoristsTab({ stageId, activeGroup, onSelectModel, selectedModelId, on
   if (!group) return <p className="chrono-empty">No {activeGroup} theorists for this stage.</p>;
 
   const depthPsych = depthData[stageId]?.depth;
+  const ringSet = INNER_RING_SETS[activeGroup] || [];
+  const ringIds = new Set(ringSet.map(i => i.id));
+  const selected = ringSelections?.[activeGroup] || [];
 
   return (
     <div className="tab-content">
       {Object.entries(group).map(([key, t]) => {
         const hasModel = !!THEORIST_TO_MODEL[key];
         const isActive = hasModel && selectedModelId === THEORIST_TO_MODEL[key];
+        const modelId = THEORIST_TO_MODEL[key];
+        const isRingToggleable = modelId && ringIds.has(modelId);
+        const isInRing = isRingToggleable && selected.includes(modelId);
+        const ringItem = isRingToggleable ? ringSet.find(i => i.id === modelId) : null;
         return (
         <div
           key={key}
@@ -166,6 +172,15 @@ function TheoristsTab({ stageId, activeGroup, onSelectModel, selectedModelId, on
         >
           <h4 className="mono-card-name">
             {t.name}
+            {isRingToggleable && onToggleRingItem && (
+              <span
+                className="mono-ring-toggle"
+                style={isInRing && ringItem?.color ? { color: ringItem.color } : undefined}
+                onClick={(e) => { e.stopPropagation(); onToggleRingItem(activeGroup, modelId); }}
+              >
+                {isInRing ? ' \u25CF' : ' \u25CB'}
+              </span>
+            )}
             {hasModel && (
               <span
                 className="mono-model-icon"
@@ -191,70 +206,92 @@ function TheoristsTab({ stageId, activeGroup, onSelectModel, selectedModelId, on
   );
 }
 
-function HistoryTab({ stageId }) {
-  const philosophy = depthData[stageId]?.philosophy;
-  if (!philosophy) return <p className="chrono-empty">No history data available.</p>;
-
-  return (
-    <div className="tab-content">
-      <div className="mono-card">
-        <h4 className="mono-card-name">{philosophy.title}</h4>
-        <p>{philosophy.description}</p>
-        {philosophy.themes && (
-          <p className="attr-list">{philosophy.themes.join(' \u00B7 ')}</p>
-        )}
-      </div>
-    </div>
-  );
-}
-
-function MythsTab({ stageId, onItemClick }) {
+function MythsTab({ stageId, onItemClick, ringSelections, onToggleRingItem }) {
   const stageData = mythsData[stageId];
   if (!stageData) return <p className="chrono-empty">No myth data available.</p>;
 
+  const ringSet = INNER_RING_SETS.myths || [];
+  const ringIds = new Set(ringSet.map(i => i.id));
+  const selected = ringSelections?.myths || [];
+
   return (
     <div className="tab-content">
-      {Object.entries(stageData).map(([key, m]) => (
+      {Object.entries(stageData).map(([key, m]) => {
+        const isRingToggleable = ringIds.has(key);
+        const isInRing = isRingToggleable && selected.includes(key);
+        const ringItem = isRingToggleable ? ringSet.find(i => i.id === key) : null;
+        return (
         <div
           key={key}
           className="mono-card mono-card-clickable"
           onClick={() => onItemClick('myth', key)}
         >
           <span className="mono-card-tradition">{m.tradition}</span>
-          <h4 className="mono-card-name">{m.title}</h4>
+          <h4 className="mono-card-name">
+            {m.title}
+            {isRingToggleable && onToggleRingItem && (
+              <span
+                className="mono-ring-toggle"
+                style={isInRing && ringItem?.color ? { color: ringItem.color } : undefined}
+                onClick={(e) => { e.stopPropagation(); onToggleRingItem('myths', key); }}
+              >
+                {isInRing ? ' \u25CF' : ' \u25CB'}
+              </span>
+            )}
+          </h4>
           <p>{m.description}</p>
         </div>
-      ))}
+      ); })}
     </div>
   );
 }
 
-function FilmsTab({ stageId, onItemClick }) {
+function FilmsTab({ stageId, onItemClick, ringSelections, onToggleRingItem }) {
   const stageData = filmsData[stageId];
   if (!stageData) return <p className="chrono-empty">No film data available.</p>;
 
+  const ringSet = INNER_RING_SETS.films || [];
+  const ringIds = new Set(ringSet.map(i => i.id));
+  const selected = ringSelections?.films || [];
+
   return (
     <div className="tab-content">
-      {Object.entries(stageData).map(([key, f]) => (
+      {Object.entries(stageData).map(([key, f]) => {
+        const isRingToggleable = ringIds.has(key);
+        const isInRing = isRingToggleable && selected.includes(key);
+        const ringItem = isRingToggleable ? ringSet.find(i => i.id === key) : null;
+        return (
         <div
           key={key}
           className="mono-card mono-card-clickable"
           onClick={() => onItemClick('film', key)}
         >
           <span className="mono-card-tradition">{f.year}</span>
-          <h4 className="mono-card-name">{f.title}</h4>
+          <h4 className="mono-card-name">
+            {f.title}
+            {isRingToggleable && onToggleRingItem && (
+              <span
+                className="mono-ring-toggle"
+                style={isInRing && ringItem?.color ? { color: ringItem.color } : undefined}
+                onClick={(e) => { e.stopPropagation(); onToggleRingItem('films', key); }}
+              >
+                {isInRing ? ' \u25CF' : ' \u25CB'}
+              </span>
+            )}
+          </h4>
           <p>{f.description}</p>
         </div>
-      ))}
+      ); })}
     </div>
   );
 }
 
-function CyclesTab({ stageId, onSelectCycle, selectedModelId, onItemClick }) {
+function CyclesTab({ stageId, onSelectCycle, selectedModelId, onItemClick, ringSelections, onToggleRingItem }) {
   const stageData = psychlesData[stageId];
   if (!stageData) return <p className="chrono-empty">No cycle data available.</p>;
 
   const { stageName, summary, cycles } = stageData;
+  const selected = ringSelections?.cycles || [];
 
   return (
     <div className="tab-content">
@@ -265,6 +302,7 @@ function CyclesTab({ stageId, onSelectCycle, selectedModelId, onItemClick }) {
         const cycleId = cycleKey ? CYCLE_TO_MODEL[cycleKey] : null;
         const hasCycle = !!cycleId;
         const isActive = hasCycle && selectedModelId === cycleId;
+        const isInRing = selected.includes(key);
         return (
         <div
           key={key}
@@ -273,6 +311,14 @@ function CyclesTab({ stageId, onSelectCycle, selectedModelId, onItemClick }) {
         >
           <h5 className="mono-card-concept">
             {c.label}
+            {onToggleRingItem && (
+              <span
+                className="mono-ring-toggle"
+                onClick={(e) => { e.stopPropagation(); onToggleRingItem('cycles', key); }}
+              >
+                {isInRing ? ' \u25CF' : ' \u25CB'}
+              </span>
+            )}
             {hasCycle && (
               <span
                 className="mono-model-icon"
@@ -355,8 +401,17 @@ export default function StageContent({
   setDevEntries,
   onToggleYBR,
   ybrActive,
+  activeGroup: activeGroupProp,
+  onGroupChange,
+  ringSelections,
+  onToggleRingItem,
 }) {
-  const [activeGroup, setActiveGroup] = useState('mythological');
+  const [activeGroupLocal, setActiveGroupLocal] = useState('mythological');
+  const activeGroup = activeGroupProp ?? activeGroupLocal;
+  const setActiveGroup = useCallback((g) => {
+    setActiveGroupLocal(g);
+    if (onGroupChange) onGroupChange(g);
+  }, [onGroupChange]);
   const [crossStageData, setCrossStageData] = useState(null);
   const { forgeMode } = useStoryForge();
   const { ybrMode } = useYBRMode();
@@ -386,7 +441,7 @@ export default function StageContent({
   const effectiveTabs = useMemo(() => {
     const worldTabs = WORLD_TABS_BY_STAGE[stageId] || [];
     if (worldTabs.length === 0) return BASE_TABS;
-    // Insert world tabs after the last base tab (history)
+    // Insert world tabs after the last base tab (films)
     return [...BASE_TABS, ...worldTabs];
   }, [stageId]);
 
@@ -473,11 +528,10 @@ export default function StageContent({
       <div className="metal-content-scroll">
         {activeTab === 'introduction' && <IntroductionTab stageId={stageId} />}
         {activeTab === 'overview' && <OverviewTab stageId={stageId} />}
-        {activeTab === 'cycles' && <CyclesTab stageId={stageId} onSelectCycle={onSelectCycle} selectedModelId={selectedModelId} onItemClick={handleItemClick} />}
-        {activeTab === 'theorists' && <TheoristsTab stageId={stageId} activeGroup={activeGroup} onSelectModel={onSelectModel} selectedModelId={selectedModelId} onItemClick={handleItemClick} />}
-        {activeTab === 'history' && <HistoryTab stageId={stageId} />}
-        {activeTab === 'myths' && <MythsTab stageId={stageId} onItemClick={handleItemClick} />}
-        {activeTab === 'films' && <FilmsTab stageId={stageId} onItemClick={handleItemClick} />}
+        {activeTab === 'cycles' && <CyclesTab stageId={stageId} onSelectCycle={onSelectCycle} selectedModelId={selectedModelId} onItemClick={handleItemClick} ringSelections={ringSelections} onToggleRingItem={onToggleRingItem} />}
+        {activeTab === 'theorists' && <TheoristsTab stageId={stageId} activeGroup={activeGroup} onSelectModel={onSelectModel} selectedModelId={selectedModelId} onItemClick={handleItemClick} ringSelections={ringSelections} onToggleRingItem={onToggleRingItem} />}
+        {activeTab === 'myths' && <MythsTab stageId={stageId} onItemClick={handleItemClick} ringSelections={ringSelections} onToggleRingItem={onToggleRingItem} />}
+        {activeTab === 'films' && <FilmsTab stageId={stageId} onItemClick={handleItemClick} ringSelections={ringSelections} onToggleRingItem={onToggleRingItem} />}
         {(activeTab === 'normal-world' || activeTab === 'threshold' || activeTab === 'other-world') && (() => {
           const worldTab = effectiveTabs.find(t => t.id === activeTab);
           return worldTab?.worldKey ? <WorldTab worldKey={worldTab.worldKey} /> : null;

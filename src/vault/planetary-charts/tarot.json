@@ -1,91 +1,218 @@
 {
-  "tradition": "Tarot",
-  "sourceText": "Visconti-Sforza Tarot (c. 1440–1450); Tarot de Marseille (c. 1499–1700s); Éliphas Lévi, Dogme et Rituel de la Haute Magie (1856); Golden Dawn Knowledge Lectures; A.E. Waite, The Pictorial Key to the Tarot (1911)",
+  "tradition": "Tarot — Major Arcana",
+  "sourceText": "Visconti-Sforza Tarot (c. 1440–1450); Tarot de Marseille (c. 1499–1700s); Éliphas Lévi, Dogme et Rituel de la Haute Magie (1856); Golden Dawn Knowledge Lectures (1888–); A.E. Waite, The Pictorial Key to the Tarot (1911); Aleister Crowley, The Book of Thoth (1944)",
   "period": "c. 1440–present",
   "origin": "tradition",
   "entered": "2026-02-23",
   "method": "dictation",
   "order": "ascending",
-  "centerModel": "geocentric",
-  "zodiacFrame": "tropical",
-  "note": "The seven planetary trumps of the Major Arcana. Planet-to-card assignments follow the Golden Dawn system (codified 1888), drawing on Éliphas Lévi's earlier Kabbalistic mapping. The order here is ascending (Moon to Saturn), matching the soul's ascent through the spheres. Each card's Hebrew letter and Tree of Life path derive from the Golden Dawn's 777 tables.",
+  "numberRange": [0, 21],
+  "note": "All twenty-two Major Arcana of the Tarot, numbered 0 through XXI. Each card carries a genuine number that is intrinsic to its identity and symbolic meaning — the Fool IS zero, the Magician IS one. The Hebrew letter, Tree of Life path, and planetary/zodiacal/elemental assignments follow the Golden Dawn system (codified 1888), which drew on Éliphas Lévi's earlier Kabbalistic mapping and became the standard for modern esoteric Tarot. The twenty-two cards correspond to the twenty-two letters of the Hebrew alphabet and the twenty-two paths connecting the ten Sephiroth on the Tree of Life.",
   "correspondences": {
-    "Moon": {
-      "number": 1,
-      "classicalPlanet": "Moon",
-      "metal": "Silver",
-      "majorArcana": "II — The High Priestess",
-      "arcanaNumber": 2,
-      "hebrewLetter": "Gimel (ג) — the camel, the carrier across the desert. Third letter of the Hebrew alphabet. It bridges the highest point of the Tree to its center, bearing what cannot be spoken across a vast interior distance.",
-      "treePath": "Kether → Tiphareth — the longest vertical path on the Tree of Life, connecting the Crown (pure divine unity) directly to Beauty (the heart, the seat of the soul). This is the path of the High Priestess because it crosses the Abyss without passing through any intermediate Sephirah. Only intuition, not intellect, can make this crossing.",
-      "esotericTitle": "Priestess of the Silver Star — the star is the light that shines in darkness without consuming it. She does not illuminate by force but by reflection, the way the Moon receives and returns what the Sun gives. The Silver Star is the hidden point of initiation that the aspirant can only approach in stillness.",
-      "overview": "Intuition, mystery, the unconscious, hidden knowledge, the veil between worlds.\n\nShe sits between the pillars of severity and mercy, guarding the threshold of the inner temple. The scroll in her lap is half-concealed — knowledge that reveals itself only to those who approach in silence."
+    "The Fool": {
+      "arcanaNumber": 0,
+      "romanNumeral": "0",
+      "element": "Air",
+      "hebrewLetter": "Aleph (א) — the ox, the breath, the primal life-force. First letter of the Hebrew alphabet. Aleph is silent — it has no sound of its own but takes on whatever vowel accompanies it. This silence before speech, this potential before act, is the Fool's nature: not empty but infinitely open.",
+      "treePath": "Kether → Chokmah — from the Crown (absolute unity) to Wisdom (the first flash of creative force). This is the first path on the Tree, the initial outpouring from the source. The Fool walks this path because the journey from undifferentiated potential into the first act of creation requires the leap that only innocence — or madness — can make. No calculation can initiate this step; it must be taken without knowing where the ground is.",
+      "esotericTitle": "The Spirit of Ether — ether here is not the chemical but the fifth element, the quintessence that pervades all things and is none of them. The Fool carries this spirit because he belongs to no fixed station. He is the animating breath that passes through every card without being captured by any.",
+      "overview": "Innocence, potential, the leap into the unknown, holy folly, the beginning before the beginning.\n\nThe Fool stands at a cliff's edge, face turned upward, pack slung carelessly. The dog at his heels is instinct — barking a warning or urging him on. He is numbered zero because he precedes the sequence and also completes it: after The World (XXI), the Fool steps off again. Zero contains all numbers and none."
     },
-    "Mercury": {
-      "number": 2,
+    "The Magician": {
+      "arcanaNumber": 1,
+      "romanNumeral": "I",
       "classicalPlanet": "Mercury",
       "metal": "Quicksilver",
-      "majorArcana": "I — The Magician",
-      "arcanaNumber": 1,
       "hebrewLetter": "Beth (ב) — the house, the first letter of Genesis (Bereshith). Second letter of the Hebrew alphabet. It is the container that makes creation possible — before there is a house, there is nothing to dwell in.",
       "treePath": "Kether → Binah — from the Crown to Understanding, the path descends from undifferentiated unity into the first act of form. This is the lightning flash's first diagonal stroke, the moment pure potential becomes directed will. The Magician stands at this juncture: he does not create the current, he gives it a channel.",
       "esotericTitle": "Magus of Power — not power as domination but as directed capacity. The Magus holds the wand upward because power flows through, not from, the practitioner. This title was adopted by the Golden Dawn's highest grade to signify mastery of the four elements through conscious will.",
       "overview": "Will, skill, communication, craft, the channel between above and below.\n\nOne hand raised to heaven, one pointing to earth — as above, so below. The four elemental tools on his table are the raw material of manifestation. He does not create from nothing; he conducts what already flows."
     },
-    "Venus": {
-      "number": 3,
+    "The High Priestess": {
+      "arcanaNumber": 2,
+      "romanNumeral": "II",
+      "classicalPlanet": "Moon",
+      "metal": "Silver",
+      "hebrewLetter": "Gimel (ג) — the camel, the carrier across the desert. Third letter of the Hebrew alphabet. It bridges the highest point of the Tree to its center, bearing what cannot be spoken across a vast interior distance.",
+      "treePath": "Kether → Tiphareth — the longest vertical path on the Tree of Life, connecting the Crown (pure divine unity) directly to Beauty (the heart, the seat of the soul). This is the path of the High Priestess because it crosses the Abyss without passing through any intermediate Sephirah. Only intuition, not intellect, can make this crossing.",
+      "esotericTitle": "Priestess of the Silver Star — the star is the light that shines in darkness without consuming it. She does not illuminate by force but by reflection, the way the Moon receives and returns what the Sun gives. The Silver Star is the hidden point of initiation that the aspirant can only approach in stillness.",
+      "overview": "Intuition, mystery, the unconscious, hidden knowledge, the veil between worlds.\n\nShe sits between the pillars of severity and mercy, guarding the threshold of the inner temple. The scroll in her lap is half-concealed — knowledge that reveals itself only to those who approach in silence."
+    },
+    "The Empress": {
+      "arcanaNumber": 3,
+      "romanNumeral": "III",
       "classicalPlanet": "Venus",
       "metal": "Copper",
-      "majorArcana": "III — The Empress",
-      "arcanaNumber": 3,
       "hebrewLetter": "Daleth (ד) — the door, the threshold between inside and outside. Fourth letter of the Hebrew alphabet. Every door implies two states: the known and the unknown. Venus dwells at the door because beauty is always an invitation to cross over.",
       "treePath": "Chokmah → Binah — the horizontal path uniting the two Supernal parents: Wisdom (the active, expansive father) and Understanding (the receptive, forming mother). The Empress is the door between them, the principle through which raw creative force takes living shape. This is the highest horizontal path on the Tree.",
       "esotericTitle": "Daughter of the Mighty Ones — the Mighty Ones are Chokmah and Binah, the primordial masculine and feminine. She is their offspring and their union made visible — nature itself, endlessly generating, the living evidence that the two great pillars meet.",
       "overview": "Fertility, beauty, abundance, sensory pleasure, the creative feminine.\n\nEnthroned in a field of grain beneath twelve stars, she is nature in its generative aspect — not passive, but ceaselessly producing. The stream at her feet is the living water that runs beneath all growth."
     },
-    "Sun": {
-      "number": 4,
-      "classicalPlanet": "Sun",
-      "metal": "Gold",
-      "majorArcana": "XIX — The Sun",
-      "arcanaNumber": 19,
-      "hebrewLetter": "Resh (ר) — the head, the face turned upward. Twentieth letter of the Hebrew alphabet. The head is where light enters and where recognition happens. Resh is consciousness itself — not what is seen, but the capacity to see.",
-      "treePath": "Hod → Yesod — from Splendor (the intellectual, mercurial sphere) to Foundation (the lunar, imaginative sphere). This path carries the clarity of rational understanding down into the body's instinctive knowing. The Sun card illuminates this passage: thought becomes felt, and what was grasped by the mind is finally lived.",
-      "esotericTitle": "Lord of the Fire of the World — not celestial fire but the fire that animates the physical world, the warmth in living things. This is the solar logos made manifest — consciousness descended fully into matter and shining there. The child on the card carries this fire without being burned by it.",
-      "overview": "Joy, vitality, clarity, success, the illuminated self, innocence restored.\n\nA child rides bareback beneath a blazing sun, arms open, unafraid. The wall behind marks the boundary of the garden — the child has passed beyond it. This is consciousness after the dark night: not naïve but renewed."
+    "The Emperor": {
+      "arcanaNumber": 4,
+      "romanNumeral": "IV",
+      "zodiacSign": "Aries",
+      "hebrewLetter": "Heh (ה) — the window, the opening through which one sees without crossing. Fifth letter of the Hebrew alphabet. A window frames a view and gives it structure. The Emperor does not create the landscape; he gives it borders, names, and order so that others can navigate it.",
+      "treePath": "Chokmah → Tiphareth — from Wisdom (the primal creative flash) down to Beauty (the harmonizing center of the Tree). This diagonal path carries the father-principle's authority into the realm where it can be felt and lived. The Emperor channels the raw force of Chokmah into governance — not distant abstraction but embodied rule that holds the center.",
+      "esotericTitle": "Son of the Morning, Chief among the Mighty — the morning is the moment when light first defines the edges of things. The Emperor is this defining force: the one who draws boundaries so that what has been created can be sustained. 'Chief among the Mighty' points to his position as the organizing principle among active powers.",
+      "overview": "Authority, structure, order, fatherhood, the shaping will, dominion through form.\n\nHe sits on a stone throne carved with ram's heads — Aries, the initiating fire now solidified into law. The orb and scepter are sovereignty, but his armor says he earned it. The Emperor is what happens after creation: someone must hold the territory."
     },
-    "Mars": {
-      "number": 5,
-      "classicalPlanet": "Mars",
-      "metal": "Iron",
-      "majorArcana": "XVI — The Tower",
-      "arcanaNumber": 16,
-      "hebrewLetter": "Peh (פ) — the mouth, speech, the power to break open. Seventeenth letter of the Hebrew alphabet. The mouth both speaks and devours. Peh is the utterance that shatters — the word that, once spoken, cannot be taken back.",
-      "treePath": "Netzach → Hod — from Victory (Venus, feeling, desire) to Splendor (Mercury, intellect, analysis). This horizontal path crosses the lower Tree at the level of personality. The Tower strikes here because this is where our constructed self-image lives — the structure we have built from desire and reason. Lightning reveals what that structure was actually standing on.",
-      "esotericTitle": "Lord of the Hosts of the Mighty — the hosts are the forces that dismantle false order. This is not destruction for its own sake but the overwhelming arrival of truth. The mighty do not negotiate with the tower; they pass through it. What remains standing afterward was real.",
-      "overview": "Sudden upheaval, destruction of the false, revelation, liberation through shock.\n\nLightning strikes the crown from the tower. The figures falling are not punished — they are freed from a structure that could not hold. What was built on false foundations must break so something true can stand."
+    "The Hierophant": {
+      "arcanaNumber": 5,
+      "romanNumeral": "V",
+      "zodiacSign": "Taurus",
+      "hebrewLetter": "Vav (ו) — the nail, the hook, the connector. Sixth letter of the Hebrew alphabet. In Hebrew grammar, vav is the conjunction 'and' — the word that links one thing to another. The Hierophant is this linking function: the one who connects above to below, teacher to student, tradition to the living moment.",
+      "treePath": "Chokmah → Chesed — from Wisdom (the Supernal father) to Mercy (the organizing love of the manifest world). This path carries the original insight downward into the structures that preserve and transmit it: lineage, teaching, institution, ritual. The Hierophant walks this path as the bridge between revelation and tradition.",
+      "esotericTitle": "Magus of the Eternal — not the eternity of unchanging stasis but the eternal that persists through transmission. What the Magus of Power (The Magician) channels in the moment, the Magus of the Eternal embeds in a form that can be passed from generation to generation. His magic is continuity.",
+      "overview": "Teaching, tradition, spiritual authority, the bridge between revelation and the community that receives it.\n\nSeated between two pillars — like the High Priestess but in the outer temple, not the inner — he raises his right hand in blessing. Two acolytes kneel before him. The crossed keys at his feet are the keys of doctrine and of experience: both are needed to unlock what the tradition holds."
     },
-    "Jupiter": {
-      "number": 6,
+    "The Lovers": {
+      "arcanaNumber": 6,
+      "romanNumeral": "VI",
+      "zodiacSign": "Gemini",
+      "hebrewLetter": "Zayin (ז) — the sword, the weapon that divides. Seventh letter of the Hebrew alphabet. The sword separates — it cuts one thing from another. The Lovers stand at the moment of choice, the cut that divides one life-path from another. To choose one beloved is to not-choose all others. Every union requires a prior discrimination.",
+      "treePath": "Binah → Tiphareth — from Understanding (the Supernal mother, the great form-giver) to Beauty (the heart-center where all forces meet). This path crosses the Abyss diagonally, carrying the principle of relationship itself — the knowledge that nothing exists in isolation, that every identity is defined through what it faces and what it chooses. The Lovers descend this path because love is the form understanding takes when it enters the heart.",
+      "esotericTitle": "Children of the Voice; Oracle of the Mighty Gods — the 'Voice' is the bat kol, the divine echo that speaks through events rather than direct prophecy. The Lovers hear this voice in the moment of choice: not a commandment but a resonance that tells them which union is true. They are 'children' of this voice because the choice makes them — they do not exist, as these particular beings, until they choose.",
+      "overview": "Choice, union, duality resolved, relationship as crucible, the moment of commitment.\n\nThe angel above the two figures is not commanding but witnessing. In older Marseille decks, a third figure stands between the lovers — the choice is triangulated, not simple. The garden behind them contains the trees of life and knowledge: after this choice, there is no return to the state before choosing."
+    },
+    "The Chariot": {
+      "arcanaNumber": 7,
+      "romanNumeral": "VII",
+      "zodiacSign": "Cancer",
+      "hebrewLetter": "Cheth (ח) — the fence, the enclosure, the protected field. Eighth letter of the Hebrew alphabet. A fence defines an interior: what is mine, what I will defend, what I carry with me. The Chariot is the moving enclosure — the self that has gathered its forces and now carries them forward into the world.",
+      "treePath": "Binah → Geburah — from Understanding to Severity, a path along the Pillar of Form (the left pillar). This descends from the great mother's comprehension into the warrior's discipline. The Chariot traverses this path because disciplined force — will gathered and directed — is Understanding in motion. It is not blind aggression but severity that knows what it protects.",
+      "esotericTitle": "Child of the Powers of the Waters, Lord of the Triumph of Light — Cancer is a water sign, and the chariot moves through the emotional field rather than above it. The 'Powers of the Waters' are the tidal forces of feeling; the charioteer must master them without suppressing them. The 'Triumph of Light' is the victory of directed will over the pull of dissolution.",
+      "overview": "Victory through will, controlled movement, the self armored and advancing, mastery of opposing forces.\n\nThe charioteer holds no reins. The two sphinxes — one black, one white — are steered by will alone, not by force. The city is behind him: he has left the walls. The canopy of stars above says he carries heaven with him. Seven is the number of the conqueror who does not destroy what he conquers."
+    },
+    "Strength": {
+      "arcanaNumber": 8,
+      "romanNumeral": "VIII",
+      "zodiacSign": "Leo",
+      "hebrewLetter": "Teth (ט) — the serpent, coiled energy, the life force in its most primal form. Ninth letter of the Hebrew alphabet. The serpent is neither good nor evil — it is power itself, requiring the one who encounters it to meet it with something other than force. Teth is the letter of vital energy that must be integrated, not conquered.",
+      "treePath": "Chesed → Geburah — from Mercy to Severity, the horizontal path that crosses the middle of the Tree. This is the balance beam between love and discipline, expansion and restraint. Strength walks this path because true strength is the capacity to hold both forces in equilibrium — the open hand and the closed hand, the embrace and the boundary, without one destroying the other.",
+      "esotericTitle": "Daughter of the Flaming Sword, Leader of the Lion — the Flaming Sword is the lightning flash of creation that descends through the Sephiroth. She is its daughter — born from the creative force but not identical to it. She leads the lion rather than killing it because the lion is her own vital nature. To destroy it would be to destroy herself.",
+      "overview": "Courage, patience, inner strength, the gentle mastery of instinct, endurance without domination.\n\nA woman opens or closes the jaws of a lion — gently, without strain. The infinity sign above her head (shared with The Magician) says this is not a single act but an ongoing relationship. The lion does not submit; it is met. This card was numbered XI in the Marseille tradition; the Golden Dawn and Waite moved it to VIII and shifted Justice to XI."
+    },
+    "The Hermit": {
+      "arcanaNumber": 9,
+      "romanNumeral": "IX",
+      "zodiacSign": "Virgo",
+      "hebrewLetter": "Yod (י) — the hand, the smallest letter of the Hebrew alphabet, the seed from which all other letters are formed. Tenth letter. Every Hebrew letter contains a yod; every act of creation begins with the hand's first gesture. The Hermit carries this seed-point — the essential, irreducible beginning — as his lantern.",
+      "treePath": "Chesed → Tiphareth — from Mercy (the great organizing love) to Beauty (the heart of the Tree). This diagonal path carries wisdom inward rather than outward. Where the Hierophant transmits to others, the Hermit withdraws to find what can only be found alone. The path descends from expansive benevolence into the solitary center where truth is met face to face.",
+      "esotericTitle": "The Magus of the Voice of Power, the Prophet of the Eternal — the 'Voice of Power' is the still, small voice that speaks only in solitude. This prophet does not address crowds; he goes into the mountain and returns with what he found. His prophecy is his presence — the lamp he carries, not the words he speaks.",
+      "overview": "Solitude, introspection, guidance from within, the lamp of inner knowing, the withdrawal that precedes illumination.\n\nThe old man stands on a peak, cloaked and alone, holding a lantern containing a six-pointed star. He is not lost — he chose this height. The staff in his other hand is both support and measure. Nine is the number of completion before return: the Hermit has reached the end of the single-digit journey and stands at the threshold."
+    },
+    "Wheel of Fortune": {
+      "arcanaNumber": 10,
+      "romanNumeral": "X",
       "classicalPlanet": "Jupiter",
       "metal": "Tin",
-      "majorArcana": "X — Wheel of Fortune",
-      "arcanaNumber": 10,
       "hebrewLetter": "Kaph (כ) — the palm of the hand, the grip. Eleventh letter of the Hebrew alphabet. The palm grasps and releases. Kaph is the hand on the wheel — holding on or letting go, the fundamental choice the turning of fortune demands.",
       "treePath": "Chesed → Netzach — from Mercy (Jupiter, expansion, benevolence) to Victory (Venus, desire, endurance). This diagonal path carries abundance downward into lived experience. The Wheel turns along this axis: what is given by grace must be received by the open hand, and what is lost was never truly held.",
       "esotericTitle": "Lord of the Forces of Life — life's forces are not static; they are cyclical, rising and falling. This title names the principle that animates the wheel itself — not any single position on it, but the turning. The lord of these forces is not the rider but the axis.",
       "overview": "Cycles, fate, expansion, turning points, the axis of becoming.\n\nThe wheel turns. Sphinx at the top, serpent descending, Anubis rising. No position on the rim is permanent. The still point is the hub — the one who watches the turning without being turned."
     },
-    "Saturn": {
-      "number": 7,
+    "Justice": {
+      "arcanaNumber": 11,
+      "romanNumeral": "XI",
+      "zodiacSign": "Libra",
+      "hebrewLetter": "Lamed (ל) — the ox-goad, the prod that teaches through correction. Twelfth letter of the Hebrew alphabet, and the tallest — it rises above the line. Lamed is the letter of learning through discipline: the goad does not punish the ox but directs it. Justice corrects not to harm but to align.",
+      "treePath": "Geburah → Tiphareth — from Severity (the power of judgment and limit) to Beauty (the heart where all is reconciled). This path carries the cutting force of discernment into the center of the self. Justice walks here because true justice is not external punishment but the inner work of seeing clearly and adjusting — the sword that separates the true from the false within one's own heart.",
+      "esotericTitle": "Daughter of the Lord of Truth, Ruler of the Balance — truth here is not opinion but the objective weight of what is. The Lord of Truth is the divine principle of measure; his daughter administers it in the manifest world. She rules the balance because balance is not a fixed state — it must be actively maintained, adjusted, ruled.",
+      "overview": "Truth, fairness, cause and consequence, the clear-eyed weighing of what is actual.\n\nShe sits between two pillars holding the sword upright and the scales level. Unlike the blindfolded figure of modern courthouses, the Tarot's Justice sees — her eyes are open. The sword cuts away what is not true; the scales weigh what remains. Eleven reduces to two (1+1=2), mirroring the High Priestess's threshold — but where the Priestess guards mystery, Justice demands clarity."
+    },
+    "The Hanged Man": {
+      "arcanaNumber": 12,
+      "romanNumeral": "XII",
+      "element": "Water",
+      "hebrewLetter": "Mem (מ) — water, the primordial element. Thirteenth letter of the Hebrew alphabet. Mem is one of the three 'mother letters' (Aleph, Mem, Shin — Air, Water, Fire) that the Sefer Yetzirah says generated the cosmos. Water is what yields, what reflects, what finds its level by surrendering to gravity. The Hanged Man is this surrender made conscious.",
+      "treePath": "Geburah → Hod — from Severity to Splendor, a path descending the Pillar of Form. This carries the discipline of judgment into the realm of intellect and analysis. The Hanged Man traverses it because he has submitted voluntarily to a reversal: what severity demands, he gives freely. The resulting illumination (Hod, Splendor) comes not from striving upward but from letting go.",
+      "esotericTitle": "The Spirit of the Mighty Waters — not a person but a spirit, because the Hanged Man has released his hold on personal will. The Mighty Waters are the primal sea that precedes and underlies all solid form. To hang suspended above this sea is to be remade by it — dissolved not into nothing but into the condition that precedes every new form.",
+      "overview": "Surrender, reversal, seeing from a new angle, sacrifice that opens the way, the pause that transforms.\n\nHe hangs by one foot from a living tree, arms behind his back forming a triangle, free leg crossed. His face is serene — this is not punishment. The halo around his head says the inversion has given him sight. Twelve is the number of completeness in time (months, zodiac signs, hours); the Hanged Man completes a cycle by stopping within it."
+    },
+    "Death": {
+      "arcanaNumber": 13,
+      "romanNumeral": "XIII",
+      "zodiacSign": "Scorpio",
+      "hebrewLetter": "Nun (נ) — the fish, the life that moves beneath the surface, invisible and fertile. Fourteenth letter of the Hebrew alphabet. The fish lives in the depths; it cannot survive above water. Nun is what persists in the hidden world — the seed-life that continues below the threshold of what appears to end.",
+      "treePath": "Tiphareth → Netzach — from Beauty (the heart, the seat of the conscious self) to Victory (the endurance of desire and vitality). This path descends from the center of self-awareness into the forces that persist beyond the death of any particular form. Death walks here because what truly lives in us — our desires, our loves, our deep vitality — outlasts the structures we built around them.",
+      "esotericTitle": "Child of the Great Transformers, Lord of the Gate of Death — the Great Transformers are the forces that dismantle form so that new form can arise. Death is their child because he serves their function without originating it. He lords over the gate — not the territory beyond it. His dominion is the threshold, the passage, not the destination.",
+      "overview": "Transformation, ending, release, the necessary clearing that precedes renewal.\n\nThe skeleton rides a white horse through a field where a king has fallen and a bishop pleads. A child offers flowers — only innocence does not resist the change. The sun rises between two towers on the horizon: beyond this gate, the light continues. Thirteen has always carried dread, but the Tarot names it simply: what does not transform, dies; what transforms, lives."
+    },
+    "Temperance": {
+      "arcanaNumber": 14,
+      "romanNumeral": "XIV",
+      "zodiacSign": "Sagittarius",
+      "hebrewLetter": "Samekh (ס) — the prop, the support, the tent-peg that holds the structure firm. Fifteenth letter of the Hebrew alphabet. Samekh supports from beneath — it is the structural principle that allows a tent to stand, an arch to hold, a mixture to stabilize. Temperance is this structural support: the art of holding different forces in dynamic balance.",
+      "treePath": "Tiphareth → Yesod — from Beauty (the conscious self, the heart of the Tree) to Foundation (the astral body, the dream-ground of manifestation). This is the direct vertical descent from self-awareness into the deep psyche where images form and desires take shape. Temperance walks this path because the passage from consciousness to the unconscious requires the art of mixing — neither drowning in the depths nor refusing to descend.",
+      "esotericTitle": "Daughter of the Reconcilers, Bringer Forth of Life — the Reconcilers are the forces that unite what seems opposed: fire and water, thought and feeling, the conscious and the unconscious. She brings forth life because life itself is this reconciliation — the impossible mixture that sustains.",
+      "overview": "Balance, patience, alchemy, the art of blending, the middle path, the angel of moderation.\n\nAn angel pours water between two cups in an endless flow — one foot on land, one in the stream. The triangle within the square on the angel's chest is spirit held within matter. The path behind leads to a distant crown of light. Fourteen is the double of seven (the Chariot); where the Chariot conquers through force of will, Temperance achieves through the patience of blending."
+    },
+    "The Devil": {
+      "arcanaNumber": 15,
+      "romanNumeral": "XV",
+      "zodiacSign": "Capricorn",
+      "hebrewLetter": "Ayin (ע) — the eye, the organ of surface perception. Sixteenth letter of the Hebrew alphabet. The eye sees what is in front of it and believes that is all there is. Ayin is the letter of materiality taken as the whole of reality — the illusion that the visible exhausts the real. The Devil is this illusion enthroned.",
+      "treePath": "Tiphareth → Hod — from Beauty (the true self) to Splendor (the intellect, analysis, the Mercury-mind). This diagonal path descends from the heart's truth into the mind's constructions. The Devil appears on this path because the intellect, unmoored from the heart, can build elaborate justifications for bondage — calling chains 'freedom' and compulsion 'choice.' The path is not evil; the danger is mistaking the construction for the truth.",
+      "esotericTitle": "Lord of the Gates of Matter, Child of the Forces of Time — matter and time are the two conditions of incarnation. The Devil lords over their gates because he represents what happens when the soul mistakes these conditions for prison walls rather than doorways. He is a child of these forces, not their master — he is as bound as those he binds.",
+      "overview": "Bondage, materialism, illusion, the shadow, that which holds through the belief that it cannot be escaped.\n\nThe horned figure sits enthroned above two chained figures — but the chains are loose. They could be lifted off. The inverted pentagram on the Devil's brow is spirit submerged beneath the four elements: matter ruling where spirit should. Fifteen is the sum of the magic square of Saturn (3×3); the Devil carries Saturn's weight — time, limitation, the heaviness that teaches through resistance."
+    },
+    "The Tower": {
+      "arcanaNumber": 16,
+      "romanNumeral": "XVI",
+      "classicalPlanet": "Mars",
+      "metal": "Iron",
+      "hebrewLetter": "Peh (פ) — the mouth, speech, the power to break open. Seventeenth letter of the Hebrew alphabet. The mouth both speaks and devours. Peh is the utterance that shatters — the word that, once spoken, cannot be taken back.",
+      "treePath": "Netzach → Hod — from Victory (Venus, feeling, desire) to Splendor (Mercury, intellect, analysis). This horizontal path crosses the lower Tree at the level of personality. The Tower strikes here because this is where our constructed self-image lives — the structure we have built from desire and reason. Lightning reveals what that structure was actually standing on.",
+      "esotericTitle": "Lord of the Hosts of the Mighty — the hosts are the forces that dismantle false order. This is not destruction for its own sake but the overwhelming arrival of truth. The mighty do not negotiate with the tower; they pass through it. What remains standing afterward was real.",
+      "overview": "Sudden upheaval, destruction of the false, revelation, liberation through shock.\n\nLightning strikes the crown from the tower. The figures falling are not punished — they are freed from a structure that could not hold. What was built on false foundations must break so something true can stand."
+    },
+    "The Star": {
+      "arcanaNumber": 17,
+      "romanNumeral": "XVII",
+      "zodiacSign": "Aquarius",
+      "hebrewLetter": "Tzaddi (צ) — the fishhook, the tool that draws what is hidden in the depths up into the light. Eighteenth letter of the Hebrew alphabet. The fishhook reaches into the unseen water and brings forth life. After the Tower's destruction, the Star is what is drawn up from the ruins — the essential thing that was always there beneath the false structure.",
+      "treePath": "Netzach → Yesod — from Victory (the enduring force of desire and beauty) to Foundation (the astral ground where images form and dreams take shape). This path descends from the living pulse of desire into the deep imaginative layer that gives it form. The Star pours herself along this path because after the Tower's destruction, what remains must be carried gently into the ground where new growth begins.",
+      "esotericTitle": "Daughter of the Firmament, Dweller between the Waters — the firmament in Genesis separates the waters above from the waters below. She dwells between them — between the celestial (Netzach's eternal desire) and the formative (Yesod's astral sea). She is the conduit, pouring from one into the other, holding nothing back.",
+      "overview": "Hope, renewal, inspiration, the calm after catastrophe, connection to the source, naked truth.\n\nA woman kneels by a pool, one foot on land, one in the water. She pours from two vessels — one into the pool (the unconscious), one onto the earth (the manifest). Seven smaller stars surround one great star. She is naked because after the Tower there is nothing left to hide behind. Seventeen reduces to eight (1+7=8), echoing Strength — the same quiet power, now purified."
+    },
+    "The Moon": {
+      "arcanaNumber": 18,
+      "romanNumeral": "XVIII",
+      "zodiacSign": "Pisces",
+      "hebrewLetter": "Qoph (ק) — the back of the head, the occiput, the part of the skull you cannot see. Nineteenth letter of the Hebrew alphabet. What is behind the head is what the mind cannot face directly — the fears, the ancestral memories, the dreams that rise unbidden. Qoph is the letter of the unconscious that does not answer to the conscious will.",
+      "treePath": "Netzach → Malkuth — from Victory (the deep persistence of desire) directly to the Kingdom (physical manifestation). This is a long diagonal path that bypasses the rational centers entirely, carrying the raw force of longing and instinct directly into the body and the material world. The Moon walks this path because she governs what acts on us without our understanding — the tidal pull, the dream, the irrational certainty.",
+      "esotericTitle": "Ruler of Flux and Reflux, Child of the Sons of the Mighty — flux and reflux are the tides: the Moon's domain is what rises and falls cyclically beyond conscious control. The 'Sons of the Mighty' are the divine forces in their most distant, most refracted form — by the time their influence reaches this path, it is dim, distorted, but still powerful. The Moon is their child: a pale reflection carrying real force.",
+      "overview": "Illusion, the unconscious, fear, the journey through darkness, the path between towers, dream-knowledge.\n\nA winding path leads between two towers and disappears over the horizon. A dog and a wolf howl at the moon. A crayfish emerges from the pool — the most ancient, least conscious life-form, crawling toward the light. The Moon does not illuminate clearly like the Sun; she shows shapes and shadows that may or may not be what they appear. Eighteen reduces to nine (1+8=9), echoing the Hermit — but where the Hermit chose his solitude, the Moon's darkness is not chosen. It must be crossed."
+    },
+    "The Sun": {
+      "arcanaNumber": 19,
+      "romanNumeral": "XIX",
+      "classicalPlanet": "Sun",
+      "metal": "Gold",
+      "hebrewLetter": "Resh (ר) — the head, the face turned upward. Twentieth letter of the Hebrew alphabet. The head is where light enters and where recognition happens. Resh is consciousness itself — not what is seen, but the capacity to see.",
+      "treePath": "Hod → Yesod — from Splendor (the intellectual, mercurial sphere) to Foundation (the lunar, imaginative sphere). This path carries the clarity of rational understanding down into the body's instinctive knowing. The Sun card illuminates this passage: thought becomes felt, and what was grasped by the mind is finally lived.",
+      "esotericTitle": "Lord of the Fire of the World — not celestial fire but the fire that animates the physical world, the warmth in living things. This is the solar logos made manifest — consciousness descended fully into matter and shining there. The child on the card carries this fire without being burned by it.",
+      "overview": "Joy, vitality, clarity, success, the illuminated self, innocence restored.\n\nA child rides bareback beneath a blazing sun, arms open, unafraid. The wall behind marks the boundary of the garden — the child has passed beyond it. This is consciousness after the dark night: not naïve but renewed."
+    },
+    "Judgement": {
+      "arcanaNumber": 20,
+      "romanNumeral": "XX",
+      "element": "Fire",
+      "hebrewLetter": "Shin (ש) — the tooth, fire, the three-pronged flame. Twenty-first letter of the Hebrew alphabet. Shin is the second of the three mother letters (Aleph, Mem, Shin — Air, Water, Fire). The tooth bites, divides, and breaks things down so they can be consumed and transformed. Fire is the element that converts form into energy and energy into new form. The triple flame of Shin points to the threefold nature of the spirit: the fire that destroys, the fire that purifies, and the fire that illuminates.",
+      "treePath": "Hod → Malkuth — from Splendor (the intellect, the analytical mind) to the Kingdom (physical reality, the manifest world). This path carries the mind's understanding into direct bodily reality. Judgement descends here because the final awakening is not an idea but a physical event — the call that shakes the body itself into recognition. The dead do not think their way out of the grave; they are called.",
+      "esotericTitle": "The Spirit of the Primal Fire — primal because this fire precedes all particular fires. It is the fire that existed before the first flame and will exist after the last one goes out. The trumpet blast on the card is this fire made audible: the sound that calls the dead to rise is the original creative command, 'Let there be light,' repeated at the end of time.",
+      "overview": "Resurrection, calling, awakening, the final accounting, rebirth from what was thought finished.\n\nAn angel blows a trumpet from the clouds. Below, the dead rise from their coffins — a man, a woman, a child — arms open to the sky. The flag on the trumpet bears a cross, marking the four elements unified. Twenty is the number of completion in Storm's Sacred Earth Count — the return to the Great Zero. Here, too, the cycle completes: the dead hear the call and rise, not into a new world but into the true one."
+    },
+    "The World": {
+      "arcanaNumber": 21,
+      "romanNumeral": "XXI",
       "classicalPlanet": "Saturn",
       "metal": "Lead",
-      "majorArcana": "XXI — The World",
-      "arcanaNumber": 21,
       "hebrewLetter": "Tav (ת) — the mark, the seal, the signature at the end. Twenty-second and final letter of the Hebrew alphabet. Tav completes the alphabet the way The World completes the Major Arcana — it is the last sign, the stamp that says: it is finished.",
-      "treePath": "Malkuth → Yesod — from the Kingdom (the physical, manifest world) back up to Foundation (the astral, dream-body). This is the first path of return — the moment the material world looks up and remembers it was dreamed. The World card dances at this threshold because completion is not an ending but a turning back toward the source.",
+      "treePath": "Yesod → Malkuth — from Foundation (the astral, dream-body) to the Kingdom (the physical, manifest world). This is the final path on the Tree — the last step from the invisible into the visible, from potential into the actual. The World card dances at this threshold because completion is not an ending but a turning back toward the source. The last path touches the earth, and from the earth the Fool steps off again.",
       "esotericTitle": "Great One of the Night of Time — Saturn rules time, and the night of time is what lies beyond its boundary. This title points past the last card to whatever precedes the Fool's first step. The dancer in the wreath has moved through all 21 stations and arrived at the edge of the cycle, where the only thing left is to begin again.",
-      "overview": "Completion, integration, cosmic dance, the end that is also the beginning.\n\nThe dancer within the wreath holds the two wands of polarity in perfect balance. The four fixed signs of the zodiac anchor the corners. This is the last card and the first — the completed circuit that dissolves back into the Fool's leap."
+      "overview": "Completion, integration, cosmic dance, the end that is also the beginning.\n\nThe dancer within the wreath holds the two wands of polarity in perfect balance. The four fixed signs of the zodiac anchor the corners — Lion, Eagle, Bull, Angel — the same four that appear around the Wheel of Fortune (X), but here they are still, not turning. This is the last card and the first — the completed circuit that dissolves back into the Fool's leap."
     }
   },
   "authorCommentary": []

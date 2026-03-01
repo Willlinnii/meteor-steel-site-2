@@ -1,44 +1,103 @@
 {
   "tradition": "Pythagorean",
-  "sourceText": "Pythagorean tradition; Nicomachus of Gerasa, Introduction to Arithmetic; Iamblichus, The Theology of Arithmetic",
-  "period": "6th century BCE – 2nd century CE",
+  "sourceText": "Pythagorean tradition; Nicomachus of Gerasa, Introduction to Arithmetic (c. 100 CE); Iamblichus of Chalcis, The Theology of Arithmetic (c. 300 CE); Theon of Smyrna, Mathematics Useful for Understanding Plato (c. 130 CE)",
+  "period": "6th century BCE – 4th century CE",
   "origin": "tradition",
   "entered": "2026-02-23",
   "method": "dictation",
   "order": "ascending",
-  "centerModel": "geocentric",
-  "zodiacFrame": "tropical",
-  "note": "The Pythagorean decad. These are numerical archetypes, not planetary correspondences. The Pythagoreans did not name the planets in this system.",
+  "numberRange": [1, 10],
+  "note": "The Pythagorean decad. These are numerical archetypes — the Pythagoreans treated numbers as the principles underlying all things. 'All is number' (panta arithmos). The content here draws primarily on Nicomachus and Iamblichus, who preserved and elaborated the older Pythagorean oral tradition. The Pythagoreans did not systematically assign planets to these numbers; the decad stands on its own as a philosophy of number.",
   "correspondences": {
     "Monad": {
-      "number": 1
+      "number": 1,
+      "greekName": "Monas",
+      "principle": "Unity. The source and root of all numbers. Not itself a number in the strict sense but the principle from which number arises.",
+      "epithets": ["God", "Mind", "the seed", "chaos", "the tower", "styx", "the sun", "Apollo", "Prometheus", "stability"],
+      "geometry": "The point — dimensionless, indivisible, the origin from which extension begins.",
+      "properties": "Neither odd nor even, or both. Multiplied by itself it remains itself. Added to any number it advances that number by one — the generator of sequence. All numbers are contained in it potentially.",
+      "teaching": "Nicomachus calls the monad the 'seed of all numbers.' It is not a number among numbers but the precondition for number. As the point is to geometry — without dimension yet the source of all dimension — so the monad is to arithmetic. Iamblichus records that the Pythagoreans called it 'intellect' because intellect grasps the many as one. They also called it 'chaos' — not disorder, but the undifferentiated potential prior to all form. It is stable because it cannot be divided or diminished. Whatever is multiplied by the monad remains unchanged; whatever is divided by the monad remains unchanged. It is the still point from which all counting begins."
     },
     "Dyad": {
-      "number": 2
+      "number": 2,
+      "greekName": "Dyas",
+      "principle": "Otherness, division, the first departure from unity. The principle of plurality and distinction.",
+      "epithets": ["daring", "opinion", "movement", "matter", "the indefinite", "Erato", "Isis", "Phanes", "audacity"],
+      "geometry": "The line — two points define extension in one dimension.",
+      "properties": "First even number. First feminine number in the Pythagorean scheme. The only even prime. 1+1=2: the first act of addition.",
+      "teaching": "The Pythagoreans called the dyad 'daring' (tolma) because it was the first to separate itself from the monad. This separation is the root of all multiplicity. Iamblichus says they called it 'opinion' because opinion, unlike knowledge, admits of two sides. They also called it 'matter' — not physical stuff, but the principle of indefiniteness and receptivity that, when united with form (the monad), produces all determinate things. The dyad is not evil but necessary: without it, nothing could be distinguished from anything else. It introduces movement where the monad was at rest, and from this movement all generation follows."
     },
     "Triad": {
-      "number": 3
+      "number": 3,
+      "greekName": "Trias",
+      "principle": "The first actual number, having beginning, middle, and end. Wholeness, completion of a first cycle.",
+      "epithets": ["wisdom", "prudence", "piety", "friendship", "peace", "harmony", "Athena", "Hecate", "marriage"],
+      "geometry": "The triangle — the first enclosed plane figure. Three points define a surface.",
+      "properties": "First odd number in the Pythagorean counting (they did not count the monad as odd). Sum of monad and dyad (1+2=3). The first number to have a beginning, middle, and end.",
+      "teaching": "Nicomachus calls the triad the first actual number because it is the first to possess the three parts that make a whole: beginning, middle, and end. The monad and dyad are principles rather than numbers proper. The triad resolves the opposition introduced by the dyad — it is the 'marriage' of odd and even, of the monad and the dyad, producing the first harmony. The Pythagoreans called it 'friendship' and 'peace' because it reconciles what was separated. Iamblichus records that it was sacred to Athena because Athena was born from Zeus (monad) by taking wisdom from Metis (dyad). It contains the first proportional mean: in the sequence 1, 2, 3, the arithmetic mean appears. Beginning, middle, end — this pattern structures narrative, music, and thought itself."
     },
     "Tetrad": {
-      "number": 4
+      "number": 4,
+      "greekName": "Tetras",
+      "principle": "Justice, solidity, the foundation. The first square and the base of the tetractys.",
+      "epithets": ["justice", "the square", "the keynote of nature", "Heracles", "Hermes", "the key-holder", "foundation"],
+      "geometry": "The square — four equal sides, four right angles. Also the tetrahedron: four triangular faces make the first solid figure, introducing three dimensions.",
+      "properties": "First square number (2×2). The tetractys: 1+2+3+4=10, the sacred sum. Four elements, four seasons, four cardinal directions. First number produced by multiplication of equals.",
+      "teaching": "The Pythagoreans called the tetrad 'justice' because it is the first square number — equal times equal — and justice is the rendering of equal for equal. Four is also the number that introduces solidity: a point, a line, and a plane are produced by one, two, and three points; but four points (not all in the same plane) are needed to define a solid body. This makes the tetrad the foundation of the physical world. Most sacred of all: 1+2+3+4=10, forming the tetractys, the triangular figure of ten dots that the Pythagoreans swore their oaths upon. The tetractys contains within itself all the harmonic ratios — 1:2 (the octave), 2:3 (the fifth), 3:4 (the fourth) — so that all of music, and therefore all cosmic order, is implicit in the first four numbers."
     },
     "Pentad": {
-      "number": 5
+      "number": 5,
+      "greekName": "Pentas",
+      "principle": "Marriage, nature, life, health. The union of the first masculine and first feminine numbers.",
+      "epithets": ["Nature", "Nemesis", "Aphrodite", "justice", "the mediator", "Hygieia", "the pentalpha"],
+      "geometry": "The pentagon and the pentagram (pentalpha). The pentagram contains the golden ratio in every intersection of its lines.",
+      "properties": "Sum of first masculine (3) and first feminine (2). The midpoint of the decad. Multiplied by itself, it always ends in 5. Divides the decad into two equal parts.",
+      "teaching": "The pentad is the 'marriage number' because it unites 2 (the first feminine) and 3 (the first masculine). The Pythagoreans associated it with Aphrodite for this reason. They also called it 'Nature' (physis) because when multiplied by itself it always returns to itself in the final digit — 5, 25, 125, 625 — and nature perpetually regenerates from itself in the same way. The pentagram was the recognition sign of the Pythagorean brotherhood, drawn as a continuous line forming five interlocking triangles. Each intersection of the pentagram divides the line in the golden ratio, and this ratio pervades living growth: the spiral of shells, the arrangement of leaves, the proportions of the body. They called it 'Hygieia' (health) because health is the balance of the body's elements, and 5 stands at the balance point of the first ten."
     },
     "Hexad": {
-      "number": 6
+      "number": 6,
+      "greekName": "Hexas",
+      "principle": "Perfection, creation, wholeness. The first perfect number.",
+      "epithets": ["perfection of parts", "form of form", "the whole", "time", "marriage", "Aphrodite", "the cosmos"],
+      "geometry": "The hexagon — the shape that tiles a plane without gaps. Six equilateral triangles fit exactly around a central point.",
+      "properties": "First perfect number: its divisors (1, 2, 3) sum to itself (1+2+3=6) and multiply to itself (1×2×3=6). Also the product of its prime factors sums to it. Six faces of a cube, six directions of space (up, down, and the four cardinals).",
+      "teaching": "Nicomachus calls the hexad 'perfect' in the technical sense: a number whose parts (proper divisors) add up exactly to itself. Such numbers are exceedingly rare — the next is 28, then 496. The hexad is also 'all-sufficient' because its factors both add and multiply to itself, making it complete in both ways of combination. The Pythagoreans called it 'form of form' because it articulates the cosmos: six directions define the spatial axes of any solid body. Iamblichus says it was called 'marriage' and 'Aphrodite' because it is the product of the first feminine (2) and the first masculine (3), their union made actual through multiplication rather than mere addition. Where the pentad is marriage as principle, the hexad is marriage as consummation."
     },
     "Heptad": {
-      "number": 7
+      "number": 7,
+      "greekName": "Heptas",
+      "principle": "The virgin number, the motherless. Opportunity, critical time, reverence.",
+      "epithets": ["Athena", "the virgin", "kairos", "fortune", "the motherless", "Ares", "the critical moment", "reverence"],
+      "geometry": "The heptagon — the first regular polygon that cannot be constructed with compass and straightedge alone.",
+      "properties": "Within the decad, 7 alone neither generates nor is generated: no number less than 7 multiplied by another within the decad produces 7, and 7 multiplied by 2 exceeds the decad. It is the only number in the decad with this property. Neither a product of any pair within the decad, nor does it produce any number within the decad by doubling.",
+      "teaching": "The Pythagoreans called the heptad 'motherless' and 'the virgin' because it stands alone within the decad — it has no factor and produces no product within the group. Iamblichus says they likened it to Athena, who was born from the head of Zeus without a mother. It is also called 'kairos' — the critical moment, the decisive instant when things can go one way or another. It governs time's turning points: the seventh day, the seventh year, the crises of fever on the seventh day that Hippocrates observed. Seven notes in the scale, seven visible planets, seven vowels in Greek. The heptad stands apart, cannot be reached by the operations of other numbers, and cannot be reduced to them. It is the number that must be encountered on its own terms."
     },
     "Octad": {
-      "number": 8
+      "number": 8,
+      "greekName": "Ogdoas",
+      "principle": "Harmony, solidity, safety, the first cube.",
+      "epithets": ["universal harmony", "Cadmeia", "Mother Rhea", "love", "friendship", "counsel", "the cube"],
+      "geometry": "The cube — the first number that expresses volume through identical factors (2×2×2). Eight vertices of the cube.",
+      "properties": "First cube number (2³). First number after the monad that is a perfect power. Related to the octave in music — the interval that returns to the same note at a higher register.",
+      "teaching": "The octad is the first cube, and the Pythagoreans associated it with solidity and safety because the cube is the most stable of solid forms — it sits immovable on any face. Nicomachus links it to harmony through the octave: the musical interval 2:1 spans eight notes and returns the ear to where it began, at a higher pitch. This return-through-doubling is the octad's essential character. Where the tetrad was the foundation (the square), the octad is the structure built upon it (the cube). Iamblichus records that it was called 'Cadmeia' after the citadel of Thebes, because a citadel provides safety, and 'Mother Rhea' because Rhea generated the Olympian gods from within herself — the cube holds all regular forms latent within its symmetry."
     },
     "Ennead": {
-      "number": 9
+      "number": 9,
+      "greekName": "Enneas",
+      "principle": "Completion, the horizon, the boundary of the single digits. That which brings all things to an end.",
+      "epithets": ["the horizon", "the ocean", "Prometheus", "concord", "Hephaestus", "the finishing post", "that which brings to completion"],
+      "geometry": "The enneagon. Also: 9 = 3×3, the square of the first actual number, so it carries the triad's properties raised to a higher power.",
+      "properties": "Square of the triad (3²). The highest single digit. Any multiple of 9 has digits summing to 9 (or a multiple of 9): 9, 18, 27, 36, 45, 54, 63, 72, 81 — and their digit sums are all 9. This makes it similar to the monad, which preserves identity through multiplication.",
+      "teaching": "The Pythagoreans called the ennead 'the horizon' because it is the boundary of the single digits — all numbers beyond it are repetitions and combinations of the first nine. They called it 'the ocean' because, as the ocean surrounds all land, so the ennead surrounds all single-digit numbers. Iamblichus notes its self-returning property: multiply 9 by any number, and the digits of the result always reduce back to 9. In this way it mirrors the monad — both are self-preserving through operation. Where the monad is the source from which all numbers arise, the ennead is the boundary to which all single-digit numbers lead before the cycle begins again. It is completion but not yet the return: that belongs to the decad."
     },
     "Decad": {
-      "number": 10
+      "number": 10,
+      "greekName": "Dekas",
+      "principle": "All-encompassing completeness. The return to unity at a higher order. The sacred sum of the tetractys.",
+      "epithets": ["the cosmos", "heaven", "fate", "eternity", "power", "faith", "necessity", "Atlas", "the unwearied", "memory", "Mnemosyne"],
+      "geometry": "The tetractys — a triangular arrangement of ten points in four rows (1, 2, 3, 4). This was the holiest symbol of the Pythagorean brotherhood.",
+      "properties": "1+2+3+4=10. Contains all numbers: after the decad, the cycle of units repeats (11=10+1, 12=10+2, etc.). Contains all harmonic ratios: 1:2 (octave), 2:3 (fifth), 3:4 (fourth). The tetractys encodes the musical consonances in its rows.",
+      "teaching": "The decad was the most sacred number in the Pythagorean tradition. The brotherhood swore their oath by the tetractys: 'By him who gave our generation the tetractys, which contains the fount and root of ever-flowing nature.' The ten dots arranged in four rows — one, two, three, four — encode the entire structure of harmonic reality. The first row (1) is the point, the second (2) is the line, the third (3) is the surface, the fourth (4) is the solid — so the tetractys maps the generation of the physical world from dimensionless origin to three-dimensional body. It also maps the harmonic series: the ratios between adjacent rows (1:2, 2:3, 3:4) are the octave, the fifth, and the fourth — the three fundamental consonances from which all Greek music was built. Nicomachus says the decad 'receives every nature, both odd and even, moving and unmoved, good and bad.' It is the return to unity: 10 = 1+0 = 1, the monad reappearing at a higher level. After the decad, everything is repetition — number has shown all its faces."
     }
   },
   "authorCommentary": []

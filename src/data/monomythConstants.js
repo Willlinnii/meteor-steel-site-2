@@ -59,6 +59,12 @@ const FILM_COLORS = {
   harryPotter: '#9a6a3a',
 };
 
+const FILM_STAGE_LABELS = {
+  starWars: ['Tatooine', 'Leia\'s Message', 'Millennium Falcon', 'Death Star', 'Trust the Force', 'Swinging Free', 'Trench Run', null],
+  matrix: ['Illusion', 'White Rabbit', 'Red Pill', 'The Oracle', 'Sacrifice', null, 'Resurrection', null],
+  harryPotter: [null, 'The Letters', 'Fluffy & Train', 'Runaway Broom', null, 'False Return', null, 'Platform 9¾'],
+};
+
 const MODEL_LABEL_OVERRIDES = { 'mckee-field': 'McKee/Field' };
 
 const STAGE_KEYS = MONOMYTH_STAGES.map(s => s.id);
@@ -136,9 +142,11 @@ export function buildMythModel(mythKey) {
 }
 
 export function buildFilmModel(filmKey) {
-  const stages = STAGE_KEYS.map(sid => {
+  const labels = FILM_STAGE_LABELS[filmKey];
+  const stages = STAGE_KEYS.map((sid, i) => {
     const entry = monomythFilms[sid]?.[filmKey];
-    return entry?.title || null;
+    if (!entry) return null;
+    return labels?.[i] || entry.title;
   });
   const firstEntry = STAGE_KEYS.reduce((acc, sid) => acc || monomythFilms[sid]?.[filmKey], null);
   return {

@@ -1,6 +1,8 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import libraryData from '../../data/mythSalonLibrary.json';
 import { useCoursework } from '../../coursework/CourseworkContext';
+import useGoogleMapsApi from '../../hooks/useGoogleMapsApi';
 import './MythSalonLibraryPage.css';
 
 /* ===== TRAIL OF THE LIBRARY ===== */
@@ -277,9 +279,12 @@ const SHELF_ICONS = {
   'poetry-visionary': '\u270E',
   'theology-mysticism': '\u2720',
   'depth-psychology': '\u2693',
+  'california-mystics': '\u2600',
+  'california-sacred-ground': '\u26F0',
   'artists-studio': '\u25CB',
   'screening-room': '\u25A0',
   'music-performance': '\u266B',
+  'alexandrian-scrolls': '\uD83D\uDCDC',
 };
 
 const SPINE_COLORS = [
@@ -406,7 +411,7 @@ function useOpenLibrary(title, author) {
 
 /* ===== BOOK DETAIL ===== */
 
-function BookDetail({ book, shelfType }) {
+function BookDetail({ book, shelfType, trackElement }) {
   const isSearchable = book && shelfType !== 'films' && !book.medium && !book.creator;
   const ol = useOpenLibrary(
     isSearchable ? book.title : null,
@@ -475,9 +480,36 @@ function BookDetail({ book, shelfType }) {
 
   const hasOL = ol.description || ol.coverUrl || ol.subjects?.length;
 
+  const showStore = isSearchable;
+
   return (
     <div className="book-detail">
       {content}
+      {(book.freeUrl || showStore) && (
+        <div className="detail-actions">
+          {book.freeUrl && (
+            <a
+              className="detail-action-btn detail-action-read"
+              href={book.freeUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => trackElement('library.read.clicked')}
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+              Read Free
+            </a>
+          )}
+          {showStore && (
+            <a
+              className="detail-action-btn detail-action-store"
+              href={`/store?book=${encodeURIComponent(book.title)}`}
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+              Store
+            </a>
+          )}
+        </div>
+      )}
       {isSearchable && (
         <div className="detail-ol-section">
           {ol.loading ? (
@@ -511,14 +543,138 @@ function BookDetail({ book, shelfType }) {
   );
 }
 
+/* ===== DARK MAP STYLES ===== */
+
+const DARK_MAP_STYLES = [
+  { elementType: 'geometry', stylers: [{ color: '#0a0a18' }] },
+  { elementType: 'labels.text.stroke', stylers: [{ color: '#0a0a18' }] },
+  { elementType: 'labels.text.fill', stylers: [{ color: '#5a5a7a' }] },
+  { featureType: 'water', elementType: 'geometry', stylers: [{ color: '#0d0d2a' }] },
+  { featureType: 'water', elementType: 'labels.text.fill', stylers: [{ color: '#3a3a5a' }] },
+  { featureType: 'road', stylers: [{ visibility: 'off' }] },
+  { featureType: 'transit', stylers: [{ visibility: 'off' }] },
+  { featureType: 'poi', stylers: [{ visibility: 'off' }] },
+  { featureType: 'administrative.country', elementType: 'geometry.stroke', stylers: [{ color: '#2a2a4a' }] },
+  { featureType: 'administrative.province', stylers: [{ visibility: 'off' }] },
+  { featureType: 'landscape', elementType: 'geometry', stylers: [{ color: '#0e0e1e' }] },
+];
+
+function makeLibraryPinSvg(isSelected) {
+  const fill = isSelected ? '%23c9a961' : '%23a89060';
+  const opacity = isSelected ? '1' : '0.7';
+  return `data:image/svg+xml,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="32" height="42" viewBox="0 0 32 42"><path d="M16 0C7.2 0 0 7.2 0 16c0 12 16 26 16 26s16-14 16-26C32 7.2 24.8 0 16 0z" fill="${fill}" opacity="${opacity}"/><circle cx="16" cy="14" r="6" fill="%230a0a18"/><text x="16" y="18" text-anchor="middle" font-size="11" fill="${fill}" font-family="serif">&#x1F4DA;</text></svg>`)}`;
+}
+
+/* ===== LIBRARY MAP ===== */
+
+function LibraryMap({ libraries, selectedId, onSelect }) {
+  const mapRef = useRef(null);
+  const mapInstanceRef = useRef(null);
+  const markersRef = useRef([]);
+  const mapsKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
+  const { isLoaded } = useGoogleMapsApi(mapsKey);
+
+  useEffect(() => {
+    if (!isLoaded || !mapRef.current || mapInstanceRef.current) return;
+    const map = new window.google.maps.Map(mapRef.current, {
+      center: { lat: 33, lng: 10 },
+      zoom: 2,
+      styles: DARK_MAP_STYLES,
+      disableDefaultUI: true,
+      zoomControl: true,
+      gestureHandling: 'cooperative',
+      backgroundColor: '#0a0a18',
+    });
+    mapInstanceRef.current = map;
+
+    libraries.forEach(lib => {
+      const marker = new window.google.maps.Marker({
+        position: { lat: lib.lat, lng: lib.lng },
+        map,
+        title: lib.name,
+        icon: {
+          url: makeLibraryPinSvg(lib.id === selectedId),
+          scaledSize: new window.google.maps.Size(32, 42),
+          anchor: new window.google.maps.Point(16, 42),
+        },
+      });
+      marker._libraryId = lib.id;
+      marker.addListener('click', () => onSelect(lib.id));
+      markersRef.current.push(marker);
+    });
+  }, [isLoaded]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Update marker icons when selection changes
+  useEffect(() => {
+    markersRef.current.forEach(m => {
+      const isSel = m._libraryId === selectedId;
+      m.setIcon({
+        url: makeLibraryPinSvg(isSel),
+        scaledSize: new window.google.maps.Size(32, 42),
+        anchor: new window.google.maps.Point(16, 42),
+      });
+    });
+  }, [selectedId]);
+
+  if (!mapsKey) {
+    // Fallback: library cards when no API key
+    return (
+      <div className="library-map-fallback">
+        {libraries.map(lib => (
+          <button
+            key={lib.id}
+            className={`library-card-btn${selectedId === lib.id ? ' active' : ''}`}
+            onClick={() => onSelect(lib.id)}
+          >
+            <span className="library-card-name">{lib.name}</span>
+            <span className="library-card-subtitle">{lib.subtitle}</span>
+          </button>
+        ))}
+      </div>
+    );
+  }
+
+  return (
+    <div className="library-map-container">
+      {!isLoaded && <div className="library-map-loading">Loading map...</div>}
+      <div ref={mapRef} className="library-google-map" />
+    </div>
+  );
+}
+
 /* ===== PAGE ===== */
 
 export default function MythSalonLibraryPage() {
+  const [selectedLibraryId, setSelectedLibraryId] = useState(null);
   const [activeTrailStop, setActiveTrailStop] = useState(null);
   const [selectedShelfId, setSelectedShelfId] = useState(null);
   const [selectedBook, setSelectedBook] = useState(null);
-  const shelves = libraryData.shelves;
+  const [searchParams, setSearchParams] = useSearchParams();
   const { trackElement, trackTime, isElementCompleted, courseworkMode } = useCoursework();
+
+  const libraries = libraryData.libraries;
+  const selectedLibrary = libraries.find(l => l.id === selectedLibraryId) || null;
+  const shelves = selectedLibrary?.shelves || [];
+
+  // Deep linking: ?shelf=X&book=Y (defaults to myth-salon for backward compat)
+  useEffect(() => {
+    const shelfParam = searchParams.get('shelf');
+    const libraryParam = searchParams.get('library');
+    const bookParam = searchParams.get('book');
+    if (shelfParam) {
+      const libId = libraryParam || 'myth-salon';
+      setSelectedLibraryId(libId);
+      setSelectedShelfId(shelfParam);
+      if (bookParam) {
+        const lib = libraries.find(l => l.id === libId);
+        const shelf = lib?.shelves.find(s => s.id === shelfParam);
+        const items = shelf?.books || shelf?.films || shelf?.works || shelf?.artists || [];
+        const idx = items.findIndex(b => (b.title || b.name) === bookParam);
+        if (idx >= 0) setSelectedBook(idx);
+      }
+      setSearchParams({}, { replace: true });
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Page visit tracking
   useEffect(() => { trackElement('library.page.visited'); }, [trackElement]);
@@ -537,6 +693,14 @@ export default function MythSalonLibraryPage() {
     };
   }, [activeTrailStop, trackTime]);
 
+  const handleSelectLibrary = useCallback((id) => {
+    setSelectedLibraryId(id);
+    setSelectedShelfId(null);
+    setSelectedBook(null);
+    setActiveTrailStop(null);
+    trackElement(`library.location.${id}`);
+  }, [trackElement]);
+
   const selectedShelf = shelves.find(s => s.id === selectedShelfId);
   const shelfItems = selectedShelf
     ? (selectedShelf.books || selectedShelf.films || selectedShelf.works || selectedShelf.artists || []).map(item => ({
@@ -553,76 +717,95 @@ export default function MythSalonLibraryPage() {
   return (
     <div className="myth-salon-library-page">
       <header className="library-header">
-        <h1 className="library-title">The Myth Salon Library</h1>
-        <p className="library-subtitle">Mentone, Alabama</p>
+        <h1 className="library-title">Libraries of the World</h1>
+        <p className="library-subtitle">Select a library to explore its collection</p>
       </header>
 
-      {/* Trail Loop */}
-      <section className="trail-section">
-        <TrailLoop
-          activeStop={activeTrailStop}
-          onSelectStop={(i) => {
-            const next = activeTrailStop === i ? null : i;
-            if (next !== null) trackElement(`library.trail.stop.${next}`);
-            setActiveTrailStop(next);
-          }}
-        />
-        <TrailContent stopIndex={activeTrailStop} />
-      </section>
+      {/* Library Map */}
+      <LibraryMap
+        libraries={libraries}
+        selectedId={selectedLibraryId}
+        onSelect={handleSelectLibrary}
+      />
 
-      {/* Divider */}
-      <div className="library-divider">
-        <span className="divider-label">The Collection</span>
-        <span className="divider-count">{shelves.length} shelves &middot; {totalItems} works</span>
-      </div>
-
-      {/* Shelf Tab Buttons */}
-      <div className="shelf-tab-bar">
-        {shelves.map(shelf => {
-          const count = (shelf.books || shelf.films || shelf.works || shelf.artists || []).length;
-          const icon = SHELF_ICONS[shelf.id] || '\u25CF';
-          const isActive = selectedShelfId === shelf.id;
-          return (
-            <button
-              key={shelf.id}
-              className={`shelf-tab${isActive ? ' active' : ''}${shelf.type === 'collected' ? ' collected' : ''}${courseworkMode ? (isElementCompleted(`library.shelf.${shelf.id}`) ? ' cw-completed' : ' cw-incomplete') : ''}`}
-              onClick={() => {
-                if (!isActive) trackElement(`library.shelf.${shelf.id}`);
-                setSelectedShelfId(isActive ? null : shelf.id);
-                setSelectedBook(null);
-              }}
-            >
-              <span className="shelf-tab-icon">{icon}</span>
-              <span className="shelf-tab-name">{shelf.name}</span>
-              <span className="shelf-tab-count">{count}</span>
-            </button>
-          );
-        })}
-      </div>
-
-      {/* Selected Shelf Display */}
-      {selectedShelf && (
-        <div className="shelf-display">
-          <h2 className="shelf-display-title">{selectedShelf.name}</h2>
-          <p className="shelf-display-description">{selectedShelf.description}</p>
-
-          <div className="shelf-rail">
-            <div className="bookshelf-row">
-              {shelfItems.map((item, i) => (
-                <BookSpine
-                  key={`${item.title}-${i}`}
-                  book={item}
-                  isSelected={selectedBook === i}
-                  onClick={() => { if (selectedBook !== i) trackElement(`library.shelf.${selectedShelfId}.book.${i}`); setSelectedBook(selectedBook === i ? null : i); }}
-                  colorIndex={i}
-                />
-              ))}
-            </div>
-            <div className="shelf-ledge" />
+      {/* Selected Library Content */}
+      {selectedLibrary && (
+        <div className="library-content">
+          <div className="library-content-header">
+            <h2 className="library-content-name">{selectedLibrary.name}</h2>
+            <p className="library-content-subtitle">{selectedLibrary.subtitle}</p>
           </div>
 
-          {selectedBook !== null && (
-            <BookDetail book={shelfItems[selectedBook]} shelfType={selectedShelf.type} />
+          {/* Trail Loop (only for libraries with a trail) */}
+          {selectedLibrary.hasTrail && (
+            <section className="trail-section">
+              <TrailLoop
+                activeStop={activeTrailStop}
+                onSelectStop={(i) => {
+                  const next = activeTrailStop === i ? null : i;
+                  if (next !== null) trackElement(`library.trail.stop.${next}`);
+                  setActiveTrailStop(next);
+                }}
+              />
+              <TrailContent stopIndex={activeTrailStop} />
+            </section>
+          )}
+
+          {/* Divider */}
+          <div className="library-divider">
+            <span className="divider-label">The Collection</span>
+            <span className="divider-count">{shelves.length} {shelves.length === 1 ? 'shelf' : 'shelves'} &middot; {totalItems} works</span>
+          </div>
+
+          {/* Shelf Tab Buttons */}
+          <div className="shelf-tab-bar">
+            {shelves.map(shelf => {
+              const count = (shelf.books || shelf.films || shelf.works || shelf.artists || []).length;
+              const icon = SHELF_ICONS[shelf.id] || '\u25CF';
+              const isActive = selectedShelfId === shelf.id;
+              return (
+                <button
+                  key={shelf.id}
+                  className={`shelf-tab${isActive ? ' active' : ''}${shelf.type === 'collected' ? ' collected' : ''}${courseworkMode ? (isElementCompleted(`library.shelf.${shelf.id}`) ? ' cw-completed' : ' cw-incomplete') : ''}`}
+                  onClick={() => {
+                    if (!isActive) trackElement(`library.shelf.${shelf.id}`);
+                    setSelectedShelfId(isActive ? null : shelf.id);
+                    setSelectedBook(null);
+                  }}
+                >
+                  <span className="shelf-tab-icon">{icon}</span>
+                  <span className="shelf-tab-name">{shelf.name}</span>
+                  <span className="shelf-tab-count">{count}</span>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Selected Shelf Display */}
+          {selectedShelf && (
+            <div className="shelf-display">
+              <h2 className="shelf-display-title">{selectedShelf.name}</h2>
+              <p className="shelf-display-description">{selectedShelf.description}</p>
+
+              <div className="shelf-rail">
+                <div className="bookshelf-row">
+                  {shelfItems.map((item, i) => (
+                    <BookSpine
+                      key={`${item.title}-${i}`}
+                      book={item}
+                      isSelected={selectedBook === i}
+                      onClick={() => { if (selectedBook !== i) trackElement(`library.shelf.${selectedShelfId}.book.${i}`); setSelectedBook(selectedBook === i ? null : i); }}
+                      colorIndex={i}
+                    />
+                  ))}
+                </div>
+                <div className="shelf-ledge" />
+              </div>
+
+              {selectedBook !== null && (
+                <BookDetail book={shelfItems[selectedBook]} shelfType={selectedShelf.type} trackElement={trackElement} />
+              )}
+            </div>
           )}
         </div>
       )}
