@@ -98,6 +98,12 @@ const SHOWS = [
     playlist: 'https://www.youtube.com/embed/videoseries?list=PLX31T_KS3jtrIDNF6v_WameHvlEQ3joMC',
     description: 'Mythic perspectives on the climate crisis and our relationship to Earth.',
   },
+  {
+    id: 'healer-thousand-faces',
+    label: 'Healer with a Thousand Faces',
+    playlist: 'https://www.youtube.com/embed/videoseries?list=PLX31T_KS3jtryJ0-Rg1OcpkJYpeZOPkFa',
+    description: 'Conversations about how our wounds lead us to our wandering, wondering, weird, wisdom, and work.',
+  },
 ];
 
 /* ── Show Detail Page (second click on a show card) ── */

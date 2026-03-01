@@ -214,6 +214,18 @@ const SERIES_INFO = {
     ],
     hasDetailPage: false,
   },
+
+  'healer-thousand-faces': {
+    title: 'Healer with a Thousand Faces',
+    tagline: 'Conversations with friends & teachers about how our wounds lead us to our wandering, our wondering, our weird, our wisdom, and our work in the world.',
+    description: [
+      'Healer with a Thousand Faces explores the ancient connection between wounding and healing — the idea that the path to becoming a healer begins with one\'s own wounds. Through conversations with friends and teachers, the series traces how suffering opens the door to wandering, wondering, weirdness, wisdom, and ultimately, our work in the world.',
+      'The title echoes Campbell\'s Hero with a Thousand Faces, but shifts the lens from the hero\'s conquest to the healer\'s transformation — the wounded healer archetype that runs through shamanic traditions, depth psychology, and the lived experience of those called to serve.',
+    ],
+    people: [],
+    links: [],
+    hasDetailPage: false,
+  },
 };
 
 export default SERIES_INFO;
