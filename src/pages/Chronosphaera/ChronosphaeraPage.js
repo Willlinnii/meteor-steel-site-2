@@ -52,6 +52,7 @@ const DodecahedronPage = lazy(() => import('../Dodecahedron/DodecahedronPage'));
 const ArtBookViewer = lazy(() => import('../../components/ArtBookViewer'));
 const RingSceneEmbed = lazy(() => import('../Crown/RingSceneEmbed'));
 const RingDiagram2D = lazy(() => import('../Ring2D/RingDiagram2D'));
+const IChingExplorerPage = lazy(() => import('../IChing/IChingExplorerPage'));
 
 const METEOR_STEEL_STAGES = [
   { id: 'golden-age', label: 'Golden Age' },
@@ -773,6 +774,8 @@ export default function ChronosphaeraPage() {
     if (p.endsWith('/fallen-starlight') && hasPurchase('fallen-starlight')) return 'fallen-starlight';
     if (p.endsWith('/story-of-stories') && hasPurchase('story-of-stories')) return 'story-of-stories';
     if (p.endsWith('/dodecahedron')) return 'dodecahedron';
+    if (p.endsWith('/ring')) return 'ring';
+    if (p.endsWith('/iching')) return 'iching';
     if (p.endsWith('/artbook')) return 'artbook';
     return 'default';
   });
@@ -781,6 +784,7 @@ export default function ChronosphaeraPage() {
   const showMeteorSteel = mode === 'meteor-steel';
   const showCycles = showMonomyth;
   const showMedicineWheel = mode === 'medicine-wheel';
+  const showIChing = mode === 'iching';
   const showFallenStarlight = mode === 'fallen-starlight' || mode === 'story-of-stories';
   const showStoryOfStories = mode === 'story-of-stories';
   const showDodecahedron = mode === 'dodecahedron';
@@ -951,6 +955,7 @@ export default function ChronosphaeraPage() {
       : selectedCardinal ? `cardinal.${selectedCardinal}`
       : selectedMonth ? `calendar.${selectedMonth}`
       : showMedicineWheel ? 'medicine-wheel'
+      : showIChing ? 'iching'
       : `planet.${selectedPlanet}.${activeTab}`;
     const prev = timeRef.current;
     const elapsed = Math.round((Date.now() - prev.start) / 1000);
@@ -1216,6 +1221,20 @@ export default function ChronosphaeraPage() {
       }, 100);
     }
 
+    // Ring
+    if (sub === '/ring' && mode !== 'ring') {
+      setMode('ring');
+      setClockMode(null);
+      setShowCalendar(false);
+    }
+
+    // I Ching
+    if (sub === '/iching' && mode !== 'iching') {
+      setMode('iching');
+      setClockMode(null);
+      setShowCalendar(false);
+    }
+
     // Yellow Brick Road
     if (sub === '/yellow-brick-road' && !ybr.active) {
       setYbrAutoStart(true);
@@ -1281,7 +1300,7 @@ export default function ChronosphaeraPage() {
   }, [mode, clearAllSelections, trackElement, navigate]);
 
   const handleToggleBodyWheel = useCallback(() => {
-    if (mode !== 'chakra' && mode !== 'medicine-wheel' && mode !== 'ring') {
+    if (mode !== 'chakra' && mode !== 'medicine-wheel' && mode !== 'iching') {
       // off → body
       trackElement('chronosphaera.mode.body');
       clearAllSelections();
@@ -1301,12 +1320,15 @@ export default function ChronosphaeraPage() {
       setClockMode(null);
       navigate('/chronosphaera/medicine-wheel');
     } else if (mode === 'medicine-wheel') {
-      // medicine-wheel → ring
-      trackElement('chronosphaera.mode.ring');
-      setMode('ring');
-      navigate('/chronosphaera/ring');
+      // medicine-wheel → i-ching
+      trackElement('chronosphaera.mode.iching');
+      clearAllSelections();
+      setMode('iching');
+      setShowCalendar(false);
+      setClockMode(null);
+      navigate('/chronosphaera/iching');
     } else {
-      // ring → body
+      // iching → body
       trackElement('chronosphaera.mode.body');
       clearAllSelections();
       setMode('chakra');
@@ -1373,7 +1395,7 @@ export default function ChronosphaeraPage() {
   const handleToggleClockDodec = useCallback(() => {
     const pClockMode = perspective.clockMode;
     const pLayoutMode = perspective.centerModel === 'heliocentric' ? 'helio' : 'geo';
-    if (!clockMode && mode !== 'dodecahedron') {
+    if (!clockMode && mode !== 'dodecahedron' && mode !== 'ring') {
       // off → clock
       trackElement('chronosphaera.mode.calendar');
       clearAllSelections();
@@ -1384,7 +1406,7 @@ export default function ChronosphaeraPage() {
       setSelectedMonth(MONTHS[new Date().getMonth()]);
       setActiveMonthTab('stone');
       navigate('/chronosphaera/calendar');
-    } else if (mode !== 'dodecahedron') {
+    } else if (clockMode && mode !== 'dodecahedron' && mode !== 'ring') {
       // clock → dodecahedron
       trackElement('chronosphaera.mode.dodecahedron');
       setMode('dodecahedron');
@@ -1395,8 +1417,15 @@ export default function ChronosphaeraPage() {
       setTimeout(() => {
         document.querySelector('.dodec-content-heading')?.scrollIntoView({ behavior: 'smooth', block: 'end' });
       }, 100);
+    } else if (mode === 'dodecahedron') {
+      // dodecahedron → ring
+      trackElement('chronosphaera.mode.ring');
+      setMode('ring');
+      setClockMode(null);
+      setShowCalendar(false);
+      navigate('/chronosphaera/ring');
     } else {
-      // dodecahedron → clock
+      // ring → clock
       trackElement('chronosphaera.mode.calendar');
       clearAllSelections();
       setMode('default');
@@ -1478,6 +1507,7 @@ export default function ChronosphaeraPage() {
       : mode === 'chakra' ? 'chrono-body'
       : mode === 'medicine-wheel' ? 'chrono-wheel'
       : mode === 'ring' ? 'store'
+      : mode === 'iching' ? 'chrono-iching'
       : mode === 'dodecahedron' ? 'chrono-dodecahedron'
       : mode === 'artbook' ? 'chrono-artbook'
       : 'celestial-clocks';
@@ -2053,6 +2083,13 @@ export default function ChronosphaeraPage() {
         </div>
       )}
       {showRing && (<div className="chrono-ring-layer"><Suspense fallback={<div className="chrono-empty">Loading Ring...</div>}>{ringViewMode === '3d' ? (<RingSceneEmbed birthDate={ringActiveDate} selectedPlanet={ringSelectedPlanet} onSelectPlanet={(p) => setRingSelectedPlanet(ringSelectedPlanet === p ? null : p)} selectedCardinal={ringSelectedCardinal} onSelectCardinal={setRingSelectedCardinal} mode={ringMode} zodiacMode={ringZodiacMode} birthstoneKey={ringBirthstone?.key || null} metal={ringMetal} form={ringForm} layout={ringLayout} />) : (<RingDiagram2D birthDate={ringActiveDate} mode={ringMode} zodiacMode={ringZodiacMode} selectedPlanet={ringSelectedPlanet} onSelectPlanet={(p) => setRingSelectedPlanet(ringSelectedPlanet === p ? null : p)} hoveredPlanet={null} onHoverPlanet={() => {}} selectedSign={null} onSelectSign={() => {}} selectedCardinal={ringSelectedCardinal} onSelectCardinal={setRingSelectedCardinal} />)}</Suspense><RingToolbar ringForm={ringForm} updateRingForm={updateRingForm} ringMetal={ringMetal} updateRingMetal={updateRingMetal} ringLayout={ringLayout} updateRingLayout={updateRingLayout} ringMode={ringMode} updateRingMode={updateRingMode} ringZodiacMode={ringZodiacMode} updateRingZodiacMode={updateRingZodiacMode} ringActiveInput={ringActiveInput} ringActiveDate={ringActiveDate} ringActiveDateType={ringActiveDateType} setRingActiveDateType={setRingActiveDateType} ringDates={ringDates} ringDateDropOpen={ringDateDropOpen} setRingDateDropOpen={setRingDateDropOpen} ringFormDropOpen={ringFormDropOpen} setRingFormDropOpen={setRingFormDropOpen} ringMetalDropOpen={ringMetalDropOpen} setRingMetalDropOpen={setRingMetalDropOpen} ringDatePickerRef={ringDatePickerRef} ringFormPickerRef={ringFormPickerRef} ringMetalPickerRef={ringMetalPickerRef} ringBirthstone={ringBirthstone} ringFormConfig={ringFormConfig} ringViewMode={ringViewMode} setRingViewMode={setRingViewMode} handleRingDateChange={handleRingDateChange} handleRingClear={handleRingClear} updateJewelryConfig={updateJewelryConfig} navigate={navigate} /></div>)}
+      {showIChing && (
+        <div className="chrono-iching-layer">
+          <Suspense fallback={<div className="chrono-empty">Loading I Ching...</div>}>
+            <IChingExplorerPage />
+          </Suspense>
+        </div>
+      )}
       {showDodecahedron && (
         <div className="chrono-dodec-layer">
           <Suspense fallback={<div className="chrono-empty">Loading Dodecahedron...</div>}>
@@ -2160,6 +2197,7 @@ export default function ChronosphaeraPage() {
             layoutMode={layoutMode}
             onEnterClock={handleToggleClockDodec}
             showRing={showRing}
+            showIChing={showIChing}
             compassHeading={compass.active ? compass.heading : null}
             compassSupported={compass.supported}
             compassDenied={compass.denied}
@@ -2272,14 +2310,14 @@ export default function ChronosphaeraPage() {
               {mobileMenuOpen3D ? <path d="M18 6L6 18M6 6l12 12" /> : <><circle cx="12" cy="5" r="1.5" fill="currentColor" stroke="none" /><circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none" /><circle cx="12" cy="19" r="1.5" fill="currentColor" stroke="none" /></>}
             </svg>
           </button>
-          <button className={`clock-toggle${clockMode ? ' active' : ''}${showDodecahedron ? ' dodec' : ''}`} onClick={handleToggleClockDodec} title={showDodecahedron ? 'Dodecahedron — click for clock' : clockMode ? 'Clock view — click for dodecahedron' : 'Show clock view'}>
+          <button className={`clock-toggle${clockMode ? ' active' : ''}${showDodecahedron ? ' dodec' : ''}${showRing ? ' ring' : ''}`} onClick={handleToggleClockDodec} title={showRing ? 'Ring — click for clock' : showDodecahedron ? 'Dodecahedron — click for ring' : clockMode ? 'Clock view — click for dodecahedron' : 'Show clock view'}>
             <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              {showDodecahedron ? <><path d="M12 3 L21 9.5 L18 20 L6 20 L3 9.5 Z" fill="white" fillOpacity="0.15" strokeWidth="1.6" /><path d="M12 3 L12 10 M21 9.5 L15 11.5 M18 20 L14 14 M6 20 L10 14 M3 9.5 L9 11.5" strokeWidth="0.7" opacity="0.4" /></> : <><circle cx="12" cy="12" r="9" /><path d="M12 6 L12 12 L16 14" />{clockMode && <circle cx="12" cy="12" r="2.5" fill={clockMode === '12h' ? '#f0c040' : '#4a9bd9'} stroke="none" />}</>}
+              {showRing ? <><ellipse cx="12" cy="12" rx="7" ry="7" /><ellipse cx="12" cy="5.5" rx="2.5" ry="1.5" fill="currentColor" stroke="none" /></> : showDodecahedron ? <><path d="M12 3 L21 9.5 L18 20 L6 20 L3 9.5 Z" fill="white" fillOpacity="0.15" strokeWidth="1.6" /><path d="M12 3 L12 10 M21 9.5 L15 11.5 M18 20 L14 14 M6 20 L10 14 M3 9.5 L9 11.5" strokeWidth="0.7" opacity="0.4" /></> : <><circle cx="12" cy="12" r="9" /><path d="M12 6 L12 12 L16 14" />{clockMode && <circle cx="12" cy="12" r="2.5" fill={clockMode === '12h' ? '#f0c040' : '#4a9bd9'} stroke="none" />}</>}
             </svg>
           </button>
-          <button className={`body-wheel-toggle${chakraViewMode ? ' active body' : ''}${showMedicineWheel ? ' active wheel' : ''}${showRing ? ' active ring' : ''}`} onClick={handleToggleBodyWheel} title={showRing ? 'Ring — click for body view' : showMedicineWheel ? 'Medicine wheel — click for ring' : chakraViewMode ? 'Body view — click for medicine wheel' : 'Show body viewer'}>
-            {showRing ? (
-              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><ellipse cx="12" cy="12" rx="7" ry="7" /><ellipse cx="12" cy="5.5" rx="2.5" ry="1.5" fill="currentColor" stroke="none" /></svg>
+          <button className={`body-wheel-toggle${chakraViewMode ? ' active body' : ''}${showMedicineWheel ? ' active wheel' : ''}${showIChing ? ' active iching' : ''}`} onClick={handleToggleBodyWheel} title={showIChing ? 'I Ching — click for body view' : showMedicineWheel ? 'Medicine wheel — click for I Ching' : chakraViewMode ? 'Body view — click for medicine wheel' : 'Show body viewer'}>
+            {showIChing ? (
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><line x1="5" y1="5" x2="19" y2="5" /><line x1="5" y1="9" x2="11" y2="9" /><line x1="13" y1="9" x2="19" y2="9" /><line x1="5" y1="13" x2="19" y2="13" /><line x1="5" y1="17" x2="11" y2="17" /><line x1="13" y1="17" x2="19" y2="17" /><line x1="5" y1="21" x2="19" y2="21" /><line x1="5" y1="3" x2="11" y2="3" /><line x1="13" y1="3" x2="19" y2="3" /></svg>
             ) : showMedicineWheel ? (
               <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="9" /><line x1="12" y1="3" x2="12" y2="21" /><line x1="3" y1="12" x2="21" y2="12" /></svg>
             ) : (

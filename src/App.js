@@ -1756,7 +1756,6 @@ const NAV_ITEMS = [
   { path: '/games', label: 'Game Room' },
   { path: '/library', label: 'Library' },
   { path: '/atlas', label: 'Atlas' },
-  { path: '/i-ching', label: 'I Ching' },
   { path: '/divination', label: 'Divination' },
   { path: '/', label: 'Creation Story' },
 ];

@@ -304,7 +304,7 @@ function getRingSegmentLabel(tab, itemId, stageIndex) {
   return '';
 }
 
-export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPlanet, hoveredPlanet, selectedSign, onSelectSign, selectedCardinal, onSelectCardinal, selectedEarth, onSelectEarth, showCalendar, onToggleCalendar, selectedMonth, onSelectMonth, showMedicineWheel, selectedWheelItem, onSelectWheelItem, chakraViewMode, onToggleBodyWheel, onClickOrderLabel, orderLabel, videoUrl, onCloseVideo, ybrActive, ybrCurrentStopIndex, ybrStopProgress, ybrJourneySequence, onToggleYBR, ybrAutoStart, clockMode, layoutMode, onEnterClock, compassHeading, compassSupported, compassDenied, onRequestCompass, onStopCompass, seasonalSign, seasonalMonth, seasonalStageIndex, showMonomyth, showMeteorSteel, monomythStages, selectedMonomythStage, onSelectMonomythStage, onToggleMonomyth, monomythModel, showCycles, onSelectCycleSegment, monomythTab, theoristGroup, onSelectRingSegment, ringSelections, activeCulture, showFallenStarlight, showStoryOfStories, onToggleStarlight, starlightStages, selectedStarlightStage, onSelectStarlightStage, selectedConstellation, onSelectConstellation, zodiacMode, onSelectBeyondRing, beyondRings, activeBeyondRing, showDodecahedron, dodecMode, showArtBook, artBookMode, onToggleArtBook, showRing, targetDate, wheelDataOverride, isTraditionView, countMode }) {
+export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPlanet, hoveredPlanet, selectedSign, onSelectSign, selectedCardinal, onSelectCardinal, selectedEarth, onSelectEarth, showCalendar, onToggleCalendar, selectedMonth, onSelectMonth, showMedicineWheel, selectedWheelItem, onSelectWheelItem, chakraViewMode, onToggleBodyWheel, onClickOrderLabel, orderLabel, videoUrl, onCloseVideo, ybrActive, ybrCurrentStopIndex, ybrStopProgress, ybrJourneySequence, onToggleYBR, ybrAutoStart, clockMode, layoutMode, onEnterClock, compassHeading, compassSupported, compassDenied, onRequestCompass, onStopCompass, seasonalSign, seasonalMonth, seasonalStageIndex, showMonomyth, showMeteorSteel, monomythStages, selectedMonomythStage, onSelectMonomythStage, onToggleMonomyth, monomythModel, showCycles, onSelectCycleSegment, monomythTab, theoristGroup, onSelectRingSegment, ringSelections, activeCulture, showFallenStarlight, showStoryOfStories, onToggleStarlight, starlightStages, selectedStarlightStage, onSelectStarlightStage, selectedConstellation, onSelectConstellation, zodiacMode, onSelectBeyondRing, beyondRings, activeBeyondRing, showDodecahedron, dodecMode, showArtBook, artBookMode, onToggleArtBook, showRing, showIChing, targetDate, wheelDataOverride, isTraditionView, countMode }) {
   const wrapperRef = useRef(null);
   const [tooltip, setTooltip] = useState(null);
   const { hasPurchase, hasSubscription } = useProfile();
@@ -3118,12 +3118,17 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
           </svg>
         </button>
         <button
-          className={`clock-toggle${clockMode ? ' active' : ''}${showDodecahedron ? ' dodec' : ''}`}
+          className={`clock-toggle${clockMode ? ' active' : ''}${showDodecahedron ? ' dodec' : ''}${showRing ? ' ring' : ''}`}
           onClick={() => { onEnterClock && onEnterClock(); }}
-          title={showDodecahedron ? 'Dodecahedron — click for clock' : clockMode ? 'Clock view — click for dodecahedron' : 'Show clock view'}
+          title={showRing ? 'Ring — click for clock' : showDodecahedron ? 'Dodecahedron — click for ring' : clockMode ? 'Clock view — click for dodecahedron' : 'Show clock view'}
         >
           <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            {showDodecahedron ? (
+            {showRing ? (
+              <>
+                <ellipse cx="12" cy="12" rx="7" ry="7" />
+                <ellipse cx="12" cy="5.5" rx="2.5" ry="1.5" fill="currentColor" stroke="none" />
+              </>
+            ) : showDodecahedron ? (
               <>
                 <path d="M12 3 L21 9.5 L18 20 L6 20 L3 9.5 Z" fill="white" fillOpacity="0.15" strokeWidth="1.6" />
                 <path d="M12 3 L12 10 M21 9.5 L15 11.5 M18 20 L14 14 M6 20 L10 14 M3 9.5 L9 11.5" strokeWidth="0.7" opacity="0.4" />
@@ -3139,18 +3144,22 @@ export default function OrbitalDiagram({ tooltipData, selectedPlanet, onSelectPl
         </button>
         <span style={{ position: 'relative' }}>
           <button
-            className={`body-wheel-toggle${chakraViewMode ? ' active body' : ''}${showMedicineWheel ? ' active wheel' : ''}${showRing ? ' active ring' : ''}${!hasMedicineWheel && chakraViewMode && !showMedicineWheel && !showRing ? ' gate' : ''}`}
+            className={`body-wheel-toggle${chakraViewMode ? ' active body' : ''}${showMedicineWheel ? ' active wheel' : ''}${showIChing ? ' active iching' : ''}${!hasMedicineWheel && chakraViewMode && !showMedicineWheel && !showIChing ? ' gate' : ''}`}
             onClick={() => {
-              if (chakraViewMode && !showMedicineWheel && !showRing && !hasMedicineWheel) { setMedicineWheelGateId('medicine-wheel'); return; }
-              if (chakraViewMode && !showMedicineWheel && !showRing) triggerStormFlash();
+              if (chakraViewMode && !showMedicineWheel && !showIChing && !hasMedicineWheel) { setMedicineWheelGateId('medicine-wheel'); return; }
+              if (chakraViewMode && !showMedicineWheel && !showIChing) triggerStormFlash();
               onToggleBodyWheel && onToggleBodyWheel();
             }}
-            title={showRing ? 'Ring — click for body view' : showMedicineWheel ? 'Medicine wheel — click for ring' : chakraViewMode ? 'Body view — click for medicine wheel' : 'Show body viewer'}
+            title={showIChing ? 'I Ching — click for body view' : showMedicineWheel ? 'Medicine wheel — click for I Ching' : chakraViewMode ? 'Body view — click for medicine wheel' : 'Show body viewer'}
           >
-            {showRing ? (
-              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <ellipse cx="12" cy="12" rx="7" ry="7" />
-                <ellipse cx="12" cy="5.5" rx="2.5" ry="1.5" fill="currentColor" stroke="none" />
+            {showIChing ? (
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+                <line x1="5" y1="5" x2="19" y2="5" />
+                <line x1="5" y1="9" x2="11" y2="9" /><line x1="13" y1="9" x2="19" y2="9" />
+                <line x1="5" y1="13" x2="19" y2="13" />
+                <line x1="5" y1="17" x2="11" y2="17" /><line x1="13" y1="17" x2="19" y2="17" />
+                <line x1="5" y1="21" x2="19" y2="21" />
+                <line x1="5" y1="3" x2="11" y2="3" /><line x1="13" y1="3" x2="19" y2="3" />
               </svg>
             ) : showMedicineWheel ? (
               <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
